@@ -34,6 +34,7 @@
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
     "chinese-englishSwitch": "Switch to Chinese(中文)",
+    "left-rightAngles": "Toggle left and right angles",
     "accountNoChange": "Account name cannot be changed after registration",
     "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
     "defaultAddress": "The defaulted personal website address:",
@@ -133,6 +134,7 @@
     "noSelfIntro": "No self intro."
   },
   "editor": {
+    "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
     "warningInput": "Please enter the correct link address",
 
     "notParacraft": "If your device does not automatically use Paracraft to start the 3D world, install Paracraft",
@@ -267,6 +269,7 @@
     "setWebsiteName": "You can also set the site name on the site settings page",
     "privatePermissions": "Open VIP, additional support for privileges such as private permissions and rights management",
     "createdSuccessfully": "Congratulations, the website was created successfully",
+    "webPageCreatedSuccessfully": "Successfully created a page.",
     "lowerCaseLetters": "Can use lowercase letters, numbers (example: mysite123)",
     "cannotBeginWithAnUnderscore": "Website name cannot start with an underscore",
 
@@ -341,7 +344,8 @@
     "clickToChange": "Click to switch",
     "ShowPreviewOnly": "Show preview only",
     "ShowBoth": "Show both",
-    "ShowCodeOnly": "Show code only"
+    "ShowCodeOnly": "Show code only",
+    "ShowZenMode": "Zen Mode"
   },
   "help": {
     "menu": "To add a set of buttons to the page, you can use the menu editor for content management.",
@@ -684,7 +688,7 @@
     "nothingHere": "Empty",
 
     "mediaLibrary": "Media Library",
-    "skyDrive": "Sky Drive",
+    "skyDrive": "Cloud Drive",
     "usage": "Usage",
 
     "filename": "Name",
@@ -1429,7 +1433,7 @@
     "contactUs": "Contact us",
     "joinUs": "Join us",
     "siteStatics": "Website statistics",
-    "update": "Update",
+    "update": "Change Log",
     "feedback": "Feedback"
   },
   "profile": {
@@ -1479,6 +1483,12 @@
     "noProjectToShow": "No projects to show.",
     "createNewProject": "Create New Project.",
     "noFriendsToShow": "No friends to show.",
-    "noFollowersToShow": "No followers to show."
+    "noFollowersToShow": "No followers to show.",
+    "createdProjects": "Created projects",
+    "contributedProjects": "Contributed projects",
+    "noProjectsToShow": "No projects to show.",
+    "noContributedProjectsToShow": "No contributed projects to show.",
+    "top": "Top",
+    "unTop": "Un-Top"
   }
 }

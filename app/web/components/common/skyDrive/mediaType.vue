@@ -40,7 +40,7 @@
         <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
         <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
       </div>
-      <div v-for='mediaItem in skyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' :class='{selected: selectedMediaItem === mediaItem}' @click='handleSelectMediaItem(mediaItem)'>
+      <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' :class='{selected: selectedMediaItem === mediaItem}' @click='handleSelectMediaItem(mediaItem)'>
         <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
         <img v-if="mediaItem.type==='images'" :src="mediaItem.downloadUrl" class="media-type-media-item-img" />
         <div class='media-type-media-item-cover'>
@@ -49,7 +49,7 @@
         </div>
         <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="handleRemove(mediaItem)"></span>
       </div>
-      <div v-if="!skyDriveMediaLibraryData.length && !uploadingFiles.length" class="media-type-media-library-placeholder">
+      <div v-if="!sortedSkyDriveMediaLibraryData.length && !uploadingFiles.length" class="media-type-media-library-placeholder">
         <img src="@/assets/img/media_library_empty.png">
         <span class="media-type-media-library-placeholder-tip">{{ $t('skydrive.nothingHere') }}</span>
         <label v-if="mediaFilterType === 'image'" class="el-button media-type-upload-btn el-button--primary el-button--small is-round">
@@ -70,6 +70,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'mediaType',
@@ -94,6 +95,9 @@ export default {
     }
   },
   computed: {
+    sortedSkyDriveMediaLibraryData() {
+      return _.sortBy(this.skyDriveMediaLibraryData, mediaItem => -moment(mediaItem.updatedAt).valueOf())
+    },
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90
@@ -146,7 +150,7 @@ export default {
         `<div>
           <style>.el-message-box__wrapper{background: black;}</style>
           <video id="${mediaItemVideoPreviewId}" src="${
-          mediaItem.downloadUrl
+        mediaItem.downloadUrl
         }" controls></video>
         </div>`,
         {
@@ -240,8 +244,6 @@ export default {
     height: 500px;
     overflow-x: hidden;
     overflow-x: auto;
-    display: flex;
-    flex-wrap: wrap;
     &-placeholder {
       width: 100%;
       height: 100%;
@@ -259,11 +261,10 @@ export default {
     width: 100px;
     height: 100px;
     margin: 5px 10px 5px 0px;
-    background-size: cover;
-    justify-content: space-between;
+    display: inline-block;
     background-color: #d1d1d1;
     position: relative;
-    [class*='icon'] {
+    [class*="icon"] {
       cursor: pointer;
     }
     &.selected {
@@ -309,7 +310,7 @@ export default {
       position: relative;
       cursor: pointer;
       &:after {
-        content: '';
+        content: "";
         display: block;
         position: relative;
         left: 2px;
@@ -320,6 +321,17 @@ export default {
         border-width: 8px 0px 8px 12px;
         border-color: transparent transparent transparent #90908b;
       }
+    }
+    .el-progress {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: 100px;
+    }
+    .el-progress-bar {
+      display: inline-block;
     }
     .el-icon-delete {
       color: white;
@@ -346,7 +358,7 @@ export default {
         top: 31.4px;
         right: 32px;
         &:after {
-          content: '';
+          content: "";
           display: block;
           position: relative;
           left: 1.7px;

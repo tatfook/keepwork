@@ -5,7 +5,9 @@ import mutations from './mutations'
 const state = {
   userFavoriteState: [],
   favoriteUsers: [],
-  followUsers: []
+  followUsers: [],
+  createdProjects: [],
+  joinedProjects: []
 }
 export default {
   namespaced: true,

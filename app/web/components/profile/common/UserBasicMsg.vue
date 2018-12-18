@@ -92,7 +92,7 @@ export default {
       profileUnFavoriteUser: 'profile/unFavoriteUser'
     }),
     async initFavoriteState() {
-      await this.profileGetFavoriteState({
+      this.isLogined && await this.profileGetFavoriteState({
         objectId: this.nowUserId,
         objectType: 0
       })

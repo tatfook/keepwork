@@ -34,6 +34,7 @@
     "accountSecurity": "账户安全",
     "realNameAuthentication": "实名认证",
     "chinese-englishSwitch": "切换为英文（English）",
+    "left-rightAngles": "切换左右视角",
     "accountNoChange": "账户名注册成功不可更改",
     "useLettersOrNumber": "推荐使用英文字母、数字组合(例如：keep123)",
     "defaultAddress": "系统默认个人网址地址:",
@@ -134,6 +135,7 @@
     "noSelfIntro": "这家伙很懒，没有简介！"
   },
   "editor": {
+    "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",
     "warningInput": "请输入正确的链接地址",
 
     "notParacraft": "如果您的设备没有自动使用Paracraft启动3D世界，请安装Paracraft",
@@ -342,7 +344,8 @@
     "clickToChange": "点击切换",
     "ShowPreviewOnly": "仅显示预览",
     "ShowBoth": "同时显示",
-    "ShowCodeOnly": "仅显示代码"
+    "ShowCodeOnly": "仅显示代码",
+    "ShowZenMode": "禅模式"
   },
   "help": {
     "menu": "为页面添加一组按钮，可以使用“菜单编辑器”来进行内容管理",
@@ -802,9 +805,9 @@
     "MicrosoftYaHei": "微软雅黑",
     "SimHei": "黑体",
     "STSong": "mac 华文宋体",
-    "Font": "字体:",
+    "Font": "网站字体:",
     "font": "字体",
-    "color": "颜色:",
+    "color": "网站颜色:",
     "fontSize": "字号:",
     "pleaseSelect": "请选择",
     "tips": "注意: 所选字体如浏览器不支持，会显示默认字体"
@@ -1484,6 +1487,12 @@
     "noProjectToShow": "你还没有项目，",
     "createNewProject": "立即创建新项目",
     "noFriendsToShow": "还未关注任何人~",
-    "noFollowersToShow": "还没有粉丝~"
+    "noFollowersToShow": "还没有粉丝~",
+    "createdProjects": "创建的项目",
+    "contributedProjects": "参与的项目",
+    "noProjectsToShow": "还没有创建项目~",
+    "noContributedProjectsToShow": "还没有参与项目~",
+    "top": "置顶",
+    "unTop": "取消置顶"
   }
 }

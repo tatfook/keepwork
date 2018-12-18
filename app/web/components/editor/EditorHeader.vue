@@ -81,8 +81,22 @@
             </el-dropdown-item>
             <el-dropdown-item divided>
               <div class="kp-menu">
+                <button :disabled='currentDisabled' @click='togglePreviewWin'>
+                  <i class="iconfont icon-preview1"></i>{{$t('tips.ShowPreviewOnly')}}
+                </button>
+                <button :disabled='currentDisabled' @click='toggleBoth'>
+                  <i class="iconfont icon-both"></i>{{$t('tips.ShowBoth')}}
+                </button>
                 <button :disabled='currentDisabled' @click='toggleCodeWin'>
-                  <i class="iconfont icon-code1"></i>{{$t('editor.showCode')}}</button>
+                  <i class="iconfont icon-code1"></i>{{$t('tips.ShowCodeOnly')}}
+                </button>
+                <button :disabled='currentDisabled' @click='openZenMode'>
+                  {{$t('tips.ShowZenMode')}}
+                </button>
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <div class="kp-menu">
                 <button>
                   <i class="iconfont icon-help"></i>
                   <a class="kp-menu-help" href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a>
@@ -90,6 +104,10 @@
                 <button :class=" isEnglish ? 'btn-language' : '' " @click="toggleLanguage">
                   <i :class="['iconfont', 'icon-Chinese-english', isEnglish ? 'icon-language' : '']"></i>
                   {{$t('common.chinese-englishSwitch')}}
+                </button>
+                <button :class=" isEnglish ? 'btn-angles' : '' " @click="toggleLeftAndRightAngles" :disabled="isWelcomeShow || !(isPreviewShow && isCodeShow)">
+                  <i class="iconfont icon-qiehuan"></i>
+                  {{$t('common.left-rightAngles')}}
                 </button>
               </div>
             </el-dropdown-item>
@@ -151,7 +169,7 @@
         <el-tooltip :content="$t('tips.ShowBoth')">
           <span class="iconfont icon-both" :class='{"switch-box-active": isPreviewShow && isCodeShow}' @click="toggleBoth()"></span>
         </el-tooltip>
-        <el-tooltip :content="$t('tips.ShowBoth')">
+        <el-tooltip :content="$t('tips.ShowCodeOnly')">
           <span class="iconfont icon-code1" :class='{"switch-box-active": !isPreviewShow && isCodeShow}' @click="toggleCodeWin()"></span>
         </el-tooltip>
       </el-menu-item>
@@ -226,6 +244,7 @@ export default {
       isCodeShow: 'isCodeShow',
       isPreviewShow: 'isPreviewShow',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
+      showAngle: 'showAngle',
       updateRecentUrlList: 'updateRecentUrlList'
     }),
     isWelcomeShow() {
@@ -306,8 +325,35 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
+      toggleAngles: 'toggleAngles',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
+    openZenMode() {
+      const dom = document.querySelector('#codeWin')
+
+      if (!dom) {
+        return false
+      }
+
+      this.resetShowingCol({
+        isZenMode: true
+      })
+
+      this.$fullscreen.toggle(dom, {
+        wrap: false,
+        fullscreenClass: 'zenmode',
+        callback: (state) => {
+          if (!state) {
+            this.resetShowingCol({
+              isZenMode: false
+            })
+            const vscroolbar = dom.querySelector(".CodeMirror-vscrollbar")
+            // Is very strange. when I set display none, scroolbar is normally
+            vscroolbar.style.display = 'none'
+          }
+        }
+      })
+    },
     toggleBoth() {
       this.resetShowingCol({
         isPreviewShow: true,
@@ -318,7 +364,8 @@ export default {
     toggleCodeWin() {
       this.resetShowingCol({
         isPreviewShow: false,
-        isCodeShow: true
+        isCodeShow: true,
+        isManagerShow: true
       })
     },
     togglePreviewWin() {
@@ -333,6 +380,13 @@ export default {
       //   this.$store.dispatch('setAddingArea', {
       //     area: this.gConst.ADDING_AREA_ADI
       //   })
+    },
+    toggleLeftAndRightAngles() {
+      if(!this.showAngle) {
+        this.toggleAngles({ showAngle: true })
+      } else {
+        this.toggleAngles({ showAngle: false })
+      }
     },
     async save() {
       let self = this
@@ -884,9 +938,10 @@ export default {
   }
 }
 .kp-menu {
-  .btn-language {
+  .btn-language, 
+  .btn-angles {
     height: 48px;
-    .icon-language {
+    .iconfont {
       line-height: 48px;
     }
   }

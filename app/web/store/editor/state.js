@@ -58,6 +58,7 @@ const state = () => ({
   isMultipleTextDialogShow: false,
   isSkyDriveManagerDialogShow: false,
   updateRecentUrlList: [],
+  isAnglesToggle: false,
   iframeDialog: {}
 })
 

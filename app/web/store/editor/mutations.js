@@ -57,6 +57,7 @@ const SAVE_HISTORY = 'SAVE_HISTORY'
 const INIT_UNDO = 'INIT_UNDO'
 const TOGGLE_SKY_DRIVE = 'TOGGLE_SKY_DRIVE'
 const ADD_RECENT_OPENED_SITE = 'ADD_RECENT_OPENED_SITE'
+const TOGGLE_ANGLES = 'TOGGLE_ANGLES'
 const TOGGLE_IFRAME_DIALOG = 'TOGGLE_IFRAME_DIALOG'
 
 export const props = {
@@ -108,6 +109,7 @@ export const props = {
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
   ADD_RECENT_OPENED_SITE,
+  TOGGLE_ANGLES,
   TOGGLE_IFRAME_DIALOG
 }
 
@@ -258,6 +260,10 @@ const mutations = {
     if (typeof showingColObj.isCodeShow === 'boolean') {
       Vue.set(state.showingCol, 'isCodeShow', showingColObj.isCodeShow)
     }
+
+    if (typeof showingColObj.isZenMode === 'boolean') {
+      Vue.set(state.showingCol, 'isZenMode', showingColObj.isZenMode)
+    }
   },
   [UPDATE_FILEMANAGER_TREE_NODE_EXPANDED](state, payload) {
     payload = _.isArray(payload) ? payload : [payload]
@@ -344,6 +350,9 @@ const mutations = {
       ...state.updateRecentUrlList,
       [username]: updateRecentUrlList
     })
+  },
+  [TOGGLE_ANGLES](state, { showAngle = false }) {
+    Vue.set(state, 'isAnglesToggle', showAngle)
   },
   [TOGGLE_IFRAME_DIALOG](state, payload) {
     Vue.set(state, 'iframeDialog', payload)

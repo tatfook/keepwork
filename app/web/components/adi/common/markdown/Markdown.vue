@@ -84,6 +84,7 @@ export default {
 
   p {
     word-wrap: break-word;
+    font-size: 14px;
   }
 
   .icon-link_:before{
