@@ -45,10 +45,10 @@
         <div @click="hasAccountToLogin" class="has-account">{{$t('common.alreadyOwnAccount')}}<span class="login-now">{{$t('common.fastLogin')}}</span></div>
       </div>
     </div>
-    <div v-show="isPerfectRegisterInfo">
+    <div v-show="isPerfectRegisterInfo"  class="register-tips">
       <perfect-register-info @close="handleClose" :userThreeService="userThreeService"></perfect-register-info>
     </div>
-    <div v-show="isShowPasswordResetForm">
+    <div v-show="isShowPasswordResetForm"  class="register-tips">
       <password-reset-form></password-reset-form>
       <div class="register-oprate">
         <div @click="backHome" class="back-home-page">{{$t('editor.backHomePage')}}</div>
@@ -247,6 +247,9 @@ export default {
         cursor: pointer;
       }
     }
+  }
+  .register-tips{
+    padding: 30px 0;
   }
   &-form {
     padding: 0 32px 20px;
