@@ -455,6 +455,7 @@ export default {
     .lesson-button {
       height: 36px;
       width: 190px;
+      position: static;
       &.class-is-over {
         background: #d2d2d2;
         border-color: #d2d2d2;
