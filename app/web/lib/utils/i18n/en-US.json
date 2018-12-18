@@ -271,6 +271,7 @@
     "setWebsiteName": "You can also set the site name on the site settings page",
     "privatePermissions": "Open VIP, additional support for privileges such as private permissions and rights management",
     "createdSuccessfully": "Congratulations, the website was created successfully",
+    "webPageCreatedSuccessfully": "Successfully created a page.",
     "lowerCaseLetters": "Can use lowercase letters, numbers (example: mysite123)",
     "cannotBeginWithAnUnderscore": "Website name cannot start with an underscore",
 
@@ -701,7 +702,7 @@
     "nothingHere": "Empty",
 
     "mediaLibrary": "Media Library",
-    "skyDrive": "Sky Drive",
+    "skyDrive": "Cloud Drive",
     "usage": "Usage",
 
     "filename": "Name",
@@ -1449,7 +1450,7 @@
     "contactUs": "Contact us",
     "joinUs": "Join us",
     "siteStatics": "Website statistics",
-    "update": "Update",
+    "update": "Change Log",
     "feedback": "Feedback"
   },
   "profile": {
@@ -1498,6 +1499,14 @@
     "noContentForProject": "No content.",
     "noProjectToShow": "No projects to show.",
     "createNewProject": "Create New Project.",
+    "noFriendsToShow": "No friends to show.",
+    "noFollowersToShow": "No followers to show.",
+    "createdProjects": "Created projects",
+    "contributedProjects": "Contributed projects",
+    "noProjectsToShow": "No projects to show.",
+    "noContributedProjectsToShow": "No contributed projects to show.",
+    "top": "Top",
+    "unTop": "Un-Top",
     "changePassword": "Change Password"
   }
 }

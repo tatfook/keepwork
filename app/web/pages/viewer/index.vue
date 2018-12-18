@@ -5,13 +5,13 @@
     </el-header>
     <el-main class="index-page-main">
       <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHomePage"></tool-header>
-      <router-view :pageLoading="pageLoading" v-if="presetLoaded"/>
+      <router-view :pageLoading="pageLoading" v-if="presetLoaded"></router-view>
     </el-main>
     <el-aside></el-aside>
     <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHomePage">
       <common-footer class="container"></common-footer>
     </el-footer>
-    <el-footer  class="home-page-footer" v-if='isHomePage'>
+    <el-footer class="home-page-footer" v-if='isHomePage'>
       <perfect-common-footer></perfect-common-footer>
     </el-footer>
   </el-container>
@@ -95,11 +95,7 @@ export default {
     await this.updateActivePage()
   },
   watch: {
-    $route: 'updateActivePage',
-    activePageInfo(activePageInfo) {
-      let { username, sitename, pagename } = activePageInfo
-      document.title = this.activePageDisplayName || pagename || sitename || username || 'KeepWork'
-    }
+    $route: 'updateActivePage'
   },
   components: {
     CommonHeader,
@@ -112,7 +108,6 @@ export default {
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
-      userInitPageDetail: 'user/initPageDetail',
       getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite'
     }),
     async getPathWithPagename(path) {
@@ -150,14 +145,15 @@ export default {
           this.$router.replace({ path })
         }
         await this.setActivePage({ path, editorMode: false })
-        await this.userInitPageDetail({
-          url: path,
-          visitor: this.username || ''
-        })
+        this.setDocumentTitle()
       } catch (error) {
         console.log(error)
       }
       this.pageLoading = false
+    },
+    setDocumentTitle() {
+      let { username, sitename, pagename } = this.activePageInfo
+      document.title = this.activePageDisplayName || pagename || sitename || username || 'KeepWork'
     }
   },
   computed: {
@@ -211,7 +207,7 @@ body {
   padding: 0;
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
@@ -229,7 +225,7 @@ body {
   align-items: center;
   background-color: #f9f9f9;
 }
-.home-page-footer{
+.home-page-footer {
   padding: 0;
 }
 .index-page-container {

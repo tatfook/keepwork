@@ -2,7 +2,13 @@ import _ from 'lodash'
 import { keepwork } from '@/api'
 import { props } from './mutations'
 
-let { GET_USER_FAVORITE_STATE_SUCCESS } = props
+let {
+  GET_USER_FAVORITE_STATE_SUCCESS,
+  GET_USER_FAVORITE_USERS_SUCCESS,
+  GET_USER_FOLLOW_USERS_SUCCESS,
+  GET_USER_CREATED_PROJECT_SUCCESS,
+  GET_USER_JOINED_PROJECT_SUCCESS
+} = props
 
 const actions = {
   async initProfileData(context, { userId }) {
@@ -73,6 +79,31 @@ const actions = {
       .catch(error => {
         return Promise.reject(error)
       })
+  },
+  async getFavoriteUsers({ commit }, { userId }) {
+    let favoriteUsers = await keepwork.favorites
+      .getUserFavorites({ objectType: 0, userId })
+      .catch(err => console.error(err))
+    commit(GET_USER_FAVORITE_USERS_SUCCESS, { favoriteUsers, userId })
+  },
+  async getFollowUsers({ commit }, { userId }) {
+    let objectId = userId
+    let followUsers = await keepwork.favorites
+      .getUserFollows({ objectType: 0, objectId })
+      .catch(err => console.error(err))
+    commit(GET_USER_FOLLOW_USERS_SUCCESS, { followUsers, userId })
+  },
+  async getUserCreatedProjects({ commit }, { userId }) {
+    let createdProjects = await keepwork.projects
+      .getPersonalProjectsByUserId({ userId })
+      .catch(err => console.error(err))
+    commit(GET_USER_CREATED_PROJECT_SUCCESS, { createdProjects, userId })
+  },
+  async getUserJoinedProjects({ commit }, { userId }) {
+    let joinedProjects = await keepwork.projects
+      .getContributeProjectsByUserId({ objectType: 0, userId })
+      .catch(err => console.error(err))
+    commit(GET_USER_JOINED_PROJECT_SUCCESS, { joinedProjects, userId })
   }
 }
 
