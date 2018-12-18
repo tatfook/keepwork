@@ -1,8 +1,8 @@
 <template>
-  <el-dialog v-loading='loading' title="" v-if='show' :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
+  <div class="login-page">
     <div v-show="isLoginForm">
       <h3 class="login-title">{{$t('common.login')}}</h3>
-      <el-form class="login-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+      <el-form class="login-page-form" :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item prop="username">
           <el-input v-model="ruleForm.username" :placeholder="$t('common.loginAccount')"></el-input>
         </el-form-item>
@@ -12,12 +12,12 @@
         <el-form-item>
           <el-button class="login-btn" type="primary" @click="login('ruleForm')">{{$t('common.login')}}</el-button>
         </el-form-item>
-        <div class="login-dialog-form-operate">
+        <div class="login-page-form-operate">
           <!-- <div class="forget-pwd"><a href="/wiki/find_pwd">{{$t('common.forgetPassword')}}?</a></div> -->
           <div class="forget-pwd" @click="handleShowResetForm">{{$t('common.forgetPassword')}}?</div>
           <div class="signIn">{{$t('common.noAccount')}}<a href="#" @click.stop.prevent="register">{{$t('common.clickRegister')}}</a></div>
         </div>
-        <div class="login-dialog-form-three-login">
+        <div class="login-page-form-three-login">
           <div class="title">
             <span>{{$t('common.usingFollowingAccount')}}</span>
           </div>
@@ -55,8 +55,7 @@
         <div @click="hasAccountToLogin" class="has-account">{{$t('common.alreadyOwnAccount')}}<span class="login-now">{{$t('common.fastLogin')}}</span></div>
       </div>
     </div>
-  </el-dialog>
-
+  </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
@@ -65,7 +64,7 @@ import RegisterDialog from '@/components/common/RegisterDialog'
 import PasswordResetForm from '@/components/common/PasswordResetForm'
 
 export default {
-  name: 'LoginDialog',
+  name: 'LoginPage',
   props: {
     show: Boolean,
     forceLogin: {
@@ -158,7 +157,11 @@ export default {
             )
           } else {
             this.$emit('close')
-            window.location.reload()
+            if(this.$route.name == 'Login'){
+              window.location.href = '/'
+            }else{
+              window.location.reload()
+            }
             return false
           }
         }
@@ -188,7 +191,11 @@ export default {
           this.handleClose()
           this.showMessage('success', this.$t('common.loginSuccess'))
           setTimeout(() => {
-            window.location.reload()
+            if(this.$route.name == 'Login'){
+              window.location.href = '/'
+            }else{
+              window.location.reload()
+            }
           },800)
         } else {
           this.isLoginForm = false
@@ -211,11 +218,13 @@ export default {
   }
 }
 </script>
-
 <style lang="scss">
-.login-dialog {
-  .login-title {
-    padding: 0 32px;
+.login-page{
+  max-width: 352px;
+  margin:  80px auto 10px;
+  box-shadow: 1px 1px 5px #ccc;
+   .login-title {
+    padding: 20px 32px 0;
     margin: 0 auto 30px;
     font-size: 18px;
     color: #303133;
@@ -239,26 +248,8 @@ export default {
       }
     }
   }
-  &.force-login {
-    .el-dialog__header {
-      .el-dialog__headerbtn {
-        display: none;
-      }
-    }
-  }
-  .el-dialog {
-    max-width: 100%;
-    .el-dialog__header {
-      padding: 0;
-    }
-    .el-dialog__body {
-      padding: 0;
-    }
-    max-width: 352px;
-    padding: 40px 0;
-  }
   &-form {
-    padding: 0 32px;
+    padding: 0 32px 20px;
     margin: 0 auto;
     .el-form-item {
       margin-bottom: 18px;
@@ -327,13 +318,6 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
-    }
-  }
-}
-@media screen and (max-width: 768px) {
-  .login-dialog {
-    .el-dialog {
-      width: 90%;
     }
   }
 }

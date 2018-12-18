@@ -11,6 +11,9 @@ const UserData = () => import('@/components/profile/PersonalCenterComponents/Use
 const ChangePassword = () => import('@/components/profile/PersonalCenterComponents/ChangePassword')
 const ThirdPartyAccountBinding = () => import('@/components/profile/PersonalCenterComponents/ThirdPartyAccountBinding')
 const RealNameAuthentication = () => import('@/components/profile/PersonalCenterComponents/RealNameAuthentication')
+const LoginPage = () => import('@/components/profile/LoginPage')
+const Login = () => import('@/components/profile/Login')
+const Register = () => import('@/components/profile/Register')
 
 Vue.use(Router)
 
@@ -27,6 +30,23 @@ export default new Router({
       path: '/set',
       name: 'PasswordResetPage',
       component: PasswordResetPage
+    },
+    {
+      path: '/r',
+      name: LoginPage,
+      component: LoginPage,
+      children: [
+        {
+          path: 'login',
+          name: 'Login',
+          component: Login
+        },
+        {
+          path: 'register',
+          name: 'Register',
+          component: Register
+        },
+      ]
     },
     {
       path: '/p',
