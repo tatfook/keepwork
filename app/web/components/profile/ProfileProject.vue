@@ -156,6 +156,9 @@ export default {
       this.pinedProjects = _.cloneDeep(
         _.get(this.nowUserDetail, 'extra.pinedProjects', [])
       )
+    },
+    activeName() {
+      this.initProjectsData()
     }
   },
   components: {
