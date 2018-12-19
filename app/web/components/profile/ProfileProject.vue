@@ -84,7 +84,9 @@ export default {
       let copiedProjects = _.cloneDeep(this.nowProfileCreatedProjects)
       _.map(this.pinedProjects, projectId => {
         let pinedProjectIndex = _.findIndex(copiedProjects, { 'id': projectId })
-        copiedProjects[pinedProjectIndex].isTopped = true
+        if (pinedProjectIndex !== -1) {
+          copiedProjects[pinedProjectIndex].isTopped = true
+        }
       })
       return copiedProjects
     },
