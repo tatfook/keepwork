@@ -28,12 +28,12 @@
             class="input-number-counter"
             v-model="count"
             :min="1"
-            :max="1000000"
+            :max="10000"
             size="small"
           ></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-          总价: 1000 人民币
+          总价: {{ totalCost }} 人民币
         </div>
       </div>
       <div class="order-confirm-main-discounts">
@@ -50,12 +50,13 @@
       <div class="order-confirm-main-submit">
         <div class="order-confirm-main-submit-total">
           <span class="order-confirm-main-submit-total-title">需支付: </span>
-          <span class="order-confirm-main-submit-total-cost">10000 人民币</span>
+          <span class="order-confirm-main-submit-total-cost">{{ finalCost }} 人民币</span>
         </div>
         <el-button
           type="danger"
           class="order-confirm-main-submit-button"
           :loading="isSubmiLoading"
+          @click="handleSubmitTradeOrder"
           round
         >提交订单</el-button>
       </div>
@@ -77,18 +78,15 @@ export default {
     return {
       isLoading: true,
       count: 1,
-      isSubmiLoading: false
+      isSubmiLoading: false,
+      discountId: null
     }
-  },
-  methods: {
-    ...mapActions({
-      createTradeOrder: 'account/createTradeOrder',
-      getDiscounts: 'account/getDiscounts'
-    })
   },
   async mounted() {
     document.title = '确认订单'
-    const { type, count = 1, id } = this.$route.query
+    let { type, count = 1, id } = this.$route.query
+    type = _.toNumber(type)
+    id = _.toNumber(id)
     console.warn(`type: ${type}, count: ${count}, goodsId: ${id}`)
     if (_.isNumber(count) && count > 1 && COUNT_REG.test(count)) {
       this.count = count
@@ -97,10 +95,34 @@ export default {
       return this.$message.error('缺少必要参数')
     }
     await Promise.all([
+      this.getBalance(),
       this.getDiscounts(),
       this.createTradeOrder({ type, count, goodsId: id })
     ])
     this.isLoading = false
+  },
+  methods: {
+    ...mapActions({
+      createTradeOrder: 'account/createTradeOrder',
+      getDiscounts: 'account/getDiscounts',
+      submitTradeOrder: 'account/submitTradeOrder',
+      getBalance: 'account/getBalance'
+    }),
+    handleSubmitTradeOrder() {
+      try {
+        let payload = { count: this.count, finalCost: this.finalCost, paymentWay: 'rmb' }
+        if (this.discountId) {
+          payload['discountId '] = this.discountId
+        }
+        payload = { ...payload, totalCost: this.totalCost, finalCost: this.finalCost }
+        console.warn(payload)
+        this.submitTradeOrder(payload)
+        this.$router.push({ name: 'OrderPay' })
+      } catch (error) {
+        console.error(error)
+        this.$message.error('提交订单失败')
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -116,14 +138,23 @@ export default {
     goodsDetail() {
       return _.get(this.tradeOrder, 'goodsDetail', {})
     },
+    goodsCost() {
+      return _.get(this.goodsDetail, 'rmb', 0)
+    },
     isPackageType() {
-      return this.goodsType === 'package'
+      return this.goodsType === 2
     },
     isExchangeType() {
-      return this.goodsType === 'exchange'
+      return this.goodsType === 1
     },
     isDisabledCount() {
       return false
+    },
+    totalCost() {
+      return this.goodsCost * this.count
+    },
+    finalCost() {
+      return this.totalCost - 0
     }
   },
 }
@@ -134,8 +165,7 @@ export default {
 <style lang="scss">
 .order-confirm {
   &-header {
-    background: url("../../assets/account/confirm-bg.jpg");
-    background-repeat: repeat-x;
+    background: url("../../assets/account/confirm-bg.jpg") repeat-x;
     height: 170px;
     &-center {
       max-width: 1145px;

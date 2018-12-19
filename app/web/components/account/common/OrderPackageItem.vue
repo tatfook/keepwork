@@ -26,7 +26,9 @@
         购买后返还XXX知识币
       </div>
     </div>
-    <div class="order-package-item-cost"></div>
+    <div class="order-package-item-cost">
+      {{ packageCostRmb }} {{ costUnit }}
+    </div>
   </div>
 </template>
 
@@ -69,6 +71,9 @@ export default {
     },
     includesLessonCount() {
       return _.get(this.data, 'lessons', []).length
+    },
+    costUnit() {
+      return '人民币'
     }
   }
 }
@@ -81,6 +86,7 @@ export default {
   padding: 20px;
   box-sizing: border-box;
   display: flex;
+  align-items: center;
   &-cover {
     width: 179px;
     height: 104px;
@@ -109,14 +115,17 @@ export default {
       }
       &.return {
         color: #55a7e8;
-        position: absolute;
-        bottom: 0;
+        margin-top: 20px;
       }
     }
   }
 
   &-cost {
     min-width: 100px;
+    height: 100%;
+    line-height: 100%;
+    color: #f20d0d;
+    margin-right: 120px;
   }
 }
 </style>

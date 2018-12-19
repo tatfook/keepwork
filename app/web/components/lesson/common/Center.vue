@@ -117,7 +117,6 @@ export default {
     let payload = { perPage: this.perPage, page: this.page };
     await this.getPackagesList(payload)
     this.loading = false;
-    console.warn(this.sortedPackagesList)
   },
   methods: {
     ...mapActions({

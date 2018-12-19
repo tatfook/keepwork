@@ -3,7 +3,7 @@ const { account } = keepwork
 import { props } from './mutations'
 import _ from 'lodash'
 
-const { GET_BALANCE_SUCCESS, GET_TRADES_SUCCESS, CREATE_RECHARGE_ORDER_SUCCESS, GET_DISCOUNTS_SUCCESS, CLEAR_RECHARGE_ORDER_RECORD, SET_RECHARGE_ORDER_STATE, CREATE_TRADE_ORDER } = props
+const { GET_BALANCE_SUCCESS, GET_TRADES_SUCCESS, CREATE_RECHARGE_ORDER_SUCCESS, GET_DISCOUNTS_SUCCESS, CLEAR_RECHARGE_ORDER_RECORD, SET_RECHARGE_ORDER_STATE, CREATE_TRADE_ORDER, SUBMIT_TRADE_ORDER } = props
 
 const actions = {
   async getBalance({ commit }) {
@@ -33,15 +33,24 @@ const actions = {
     }
     return order
   },
-  async createTradeOrder({ commit }, { type, goodsId, count = 1 }) {
-    if (type === 'package') {
+  async createTradeOrder({ commit }, payload) {
+    const { type, goodsId } = payload
+    if (type === 2) {
       const goodsDetail = await lesson.packages.packageDetail({ packageId: goodsId })
-      commit(CREATE_TRADE_ORDER, { type, goodsId, count, goodsDetail })
+      commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
       return
     }
-    if (type === 'exchange') {
+    if (type === 1) {
       console.warn('exchange ------------->')
     }
+  },
+  async submitTradeOrder({ commit }, payload) {
+    console.warn('submitTradeOrder', payload)
+    commit(SUBMIT_TRADE_ORDER, payload)
+  },
+  async payTradeOrder({ commit }, payload) {
+    console.log('完成订单')
+    // commit()
   }
 }
 
