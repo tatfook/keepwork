@@ -52,6 +52,7 @@ const LearningCenterPackages = () =>
 const OfflineGuidanceCourse = () =>
   import('@/components/lesson/student/OfflineGuidanceCourse')
 const TeachingVideo = () => import('@/components/lesson/student/TeachingVideo')
+const MentorService = () => import('@/components/lesson/student/MentorService')
 
 Vue.use(Router)
 
@@ -243,6 +244,11 @@ export default new Router({
               path: 'teachingvideo',
               name: 'TeachingVideo',
               component: TeachingVideo
+            },
+            {
+              path: 'mentor',
+              name: 'MentorService',
+              component: MentorService
             }
           ]
         },

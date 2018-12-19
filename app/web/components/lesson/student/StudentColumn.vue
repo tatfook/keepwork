@@ -8,10 +8,10 @@
           </div>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
-            <div class="learning-center-tutor">
+            <router-link :to="{name: 'MentorService'}" class="learning-center-tutor">
               <img v-if="isHaveTotur" src="@/assets/lessonImg/tutor_icon.png" alt="">
               {{isHaveTotur ? $t('lesson.mentorService') : $t('lesson.findMentor')}}
-            </div>
+            </router-link>
             <div class="learning-center-skill-info">
               <span>{{skillpointsCount}} {{$t('lesson.skillPoints')}}</span>
               <span class="learning-center-skill-info-link" v-loading='isLoadingSkills' @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span>
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="options-wrap">
-          <span v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]" @click="switchSelect(index)">{{option.name}}</span>
+          <router-link :to="{name: option.routerName}" v-for="(option,index) in optionArr" :key="index" :class="['options', {'selected': currOption == index}]">{{option.name}}</router-link>
         </div>
       </div>
       <div class="main">
@@ -54,11 +54,11 @@ export default {
       isLoadingSkills: false,
       loadingSkillsPoint: true,
       isSkillDetailShow: false,
-      currOption: 0,
+      currOption: undefined,
       optionArr: [
-        { name: this.$t('lesson.onlineLesson') },
-        { name: this.$t('lesson.offlineGuidingLesson') },
-        { name: this.$t('lesson.instructionalVideos') }
+        { name: this.$t('lesson.onlineLesson'), routerName: 'LearningCenterPackages' },
+        { name: this.$t('lesson.offlineGuidingLesson'), routerName: 'OfflineGuidanceCourse' },
+        { name: this.$t('lesson.instructionalVideos'), routerName: 'TeachingVideo' }
       ]
     }
   },
@@ -114,27 +114,12 @@ export default {
         'TeachingVideo': '2'
       }
       const { name } = this.$route
-      this.currOption = SWITCH_TAG[name] || '0'
-    },
-    switchSelect(index) {
-      this.currOption = index
-      let routerName = ''
-      switch (index) {
-        case 0:
-          routerName = 'LearningCenterPackages'
-          break
-        case 1:
-          routerName = 'OfflineGuidanceCourse'
-          break
-        case 2:
-          routerName = 'TeachingVideo'
-          break
-        default:
-          break
-      }
-      this.$router.push({
-        name: routerName
-      })
+      this.currOption = SWITCH_TAG[name] || undefined
+    }
+  },
+  watch: {
+    $route() {
+      this.setActiveItem()
     }
   }
 }
@@ -237,7 +222,7 @@ export default {
           border: solid 1px #bcbcbc;
           font-size: 16px;
           color: #333;
-          cursor: pointer;
+          text-decoration: none;
           &.selected {
             background: #409efe;
             color: #fff;
@@ -253,10 +238,10 @@ export default {
     }
   }
   &-tutor {
-    cursor: pointer;
     font-size: 14px;
     color: #409efe;
     margin: 4px 0;
+    text-decoration: none;
   }
   &-skill-info {
     font-size: 14px;
