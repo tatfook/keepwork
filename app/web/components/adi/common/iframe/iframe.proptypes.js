@@ -1,6 +1,5 @@
 export default {
-  src: 'link',
-  ratio: 'input',
+  src: 'iframeLink',
   width: 'input',
   height: 'input'
 }

@@ -39,6 +39,6 @@ const styles = [
 const templates = [[{ colIframe: 'iframe' }]]
 
 const properties = generateProperties(name, components)
-properties.styleID = undefined
+properties.styleID = 0
 
 export default { mod, name, components, properties, styles, templates }
