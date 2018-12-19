@@ -3,17 +3,19 @@ import Vue from 'vue'
 const GET_BALANCE_SUCCESS = 'GET_BALANCE_SUCCESS'
 const GET_TRADES_SUCCESS = 'GET_TRADES_SUCCESS'
 const GET_DISCOUNTS_SUCCESS = 'GET_DISCOUNTS_SUCCESS'
-const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS'
-const CLEAR_ORDER_RECORD = 'CLEAR_ORDER_RECORD'
-const SET_ORDER_STATE = 'SET_ORDER_STATE'
+const CREATE_RECHARGE_ORDER_SUCCESS = 'CREATE_RECHARGE_ORDER_SUCCESS'
+const CLEAR_RECHARGE_ORDER_RECORD = 'CLEAR_RECHARGE_ORDER_RECORD'
+const SET_RECHARGE_ORDER_STATE = 'SET_RECHARGE_ORDER_STATE'
+const CREATE_TRADE_ORDER = 'CREATE_TRADE_ORDER'
 
 export const props = {
   GET_BALANCE_SUCCESS,
   GET_TRADES_SUCCESS,
   GET_DISCOUNTS_SUCCESS,
-  CREATE_ORDER_SUCCESS,
-  SET_ORDER_STATE,
-  CLEAR_ORDER_RECORD
+  CREATE_RECHARGE_ORDER_SUCCESS,
+  SET_RECHARGE_ORDER_STATE,
+  CLEAR_RECHARGE_ORDER_RECORD,
+  CREATE_TRADE_ORDER
 }
 
 const mutations = {
@@ -26,17 +28,20 @@ const mutations = {
   [GET_DISCOUNTS_SUCCESS](state, discounts) {
     Vue.set(state, 'discounts', discounts)
   },
-  [CREATE_ORDER_SUCCESS](state, order) {
-    Vue.set(state, 'order', order)
+  [CREATE_RECHARGE_ORDER_SUCCESS](state, order) {
+    Vue.set(state, 'rechargeOrder', order)
   },
-  [CLEAR_ORDER_RECORD](state) {
-    Vue.set(state, 'order', {})
+  [CLEAR_RECHARGE_ORDER_RECORD](state) {
+    Vue.set(state, 'rechargeOrder', {})
   },
-  [SET_ORDER_STATE](state, code = 256) {
-    Vue.set(state, 'order', {
-      ...state.order,
+  [SET_RECHARGE_ORDER_STATE](state, code = 256) {
+    Vue.set(state, 'rechargeOrder', {
+      ...state.rechargeOrder,
       state: code
     })
+  },
+  [CREATE_TRADE_ORDER](state, payload) {
+    Vue.set(state, 'tradeOrder', payload)
   }
 }
 

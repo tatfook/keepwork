@@ -33,7 +33,7 @@
         <div class="recharge-confirm-main-content-qr">
           <div v-if="isOrderSuccess" class="recharge-confirm-main-content-qr-success">
             <i class="el-icon-success"></i>
-            充值成功
+            支付成功
           </div>
           <img
             v-if="qrData && !isOrderSuccess"
@@ -73,22 +73,22 @@ export default {
     this.intervalCheckOrder()
   },
   destroyed() {
-    this.clearOrderRecord()
+    this.clearRechargeOrderRecord()
     clearTimeout(this._interval)
   },
   methods: {
     ...mapActions({
-      getOrderState: 'account/getOrderState',
-      clearOrderRecord: 'account/clearOrderRecord',
+      getRechargeOrderState: 'account/getRechargeOrderState',
+      clearRechargeOrderRecord: 'account/clearRechargeOrderRecord',
       getBalance: 'account/getBalance'
     }),
     intervalCheckOrder() {
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
-        let order = await this.getOrderState({ id: this.orderId })
+        let order = await this.getRechargeOrderState({ id: this.orderId })
         if (order.state === 256) {
           await this.getBalance().catch(e => console.error(e))
-          setTimeout(() => this.$router.push({ name: 'Account' }), 1500)
+          // setTimeout(() => this.$router.push({ name: 'Account' }), 10000)
           return
         }
         this.intervalCheckOrder()
@@ -98,7 +98,7 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      order: 'account/order',
+      order: 'account/rechargeOrder',
     }),
     orderState() {
       return this.order.state
@@ -133,6 +133,8 @@ export default {
 
 <style lang="scss">
 .recharge-confirm {
+  max-width: 1230px;
+  margin: 0 auto;
   &-breadcrumb {
     margin: 22px 0;
   }

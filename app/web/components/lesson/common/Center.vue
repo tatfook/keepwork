@@ -2,6 +2,7 @@
   <div class="lesson-packages-wrap">
     <div
       class="lesson-packages"
+      v-if="!loading"
       v-loading='loading'
     >
       <div class="packages-sum">{{$t('lesson.include')}}:
@@ -18,11 +19,13 @@
             <div
               class="img-wrap"
               @click="enterPackageDetailPage(coursePackage.id)"
-            ><img
+            >
+            <img
                 class="subject-cover"
-                :src="coursePackage.extra.coverUrl"
+                :src="coursePackage.extra && coursePackage.extra.coverUrl"
                 alt=""
-              ></div>
+              >
+              </div>
             <h4
               :title="coursePackage.packageName"
               :class="['subject-title']"
@@ -112,8 +115,9 @@ export default {
   },
   async mounted() {
     let payload = { perPage: this.perPage, page: this.page };
-    await this.getPackagesList(payload);
+    await this.getPackagesList(payload)
     this.loading = false;
+    console.warn(this.sortedPackagesList)
   },
   methods: {
     ...mapActions({

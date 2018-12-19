@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      createOrder: 'account/createOrder'
+      createRechargeOrder: 'account/createRechargeOrder'
     }),
     handleSelectMoneyCard(type) {
       if (type !== this.moneyCard) {
@@ -182,7 +182,7 @@ export default {
       const channel = this.isWeixinPay ? 'wx_pub_qr' : 'alipay_qr'
       try {
         this.isCreateLoading = true
-        await this.createOrder({ amount, channel })
+        await this.createRechargeOrder({ amount, channel })
         this.$router.push({ name: 'RechargeConfirm' })
         this.isCreateLoading = false
       } catch (error) {
@@ -197,6 +197,8 @@ export default {
 
 <style lang="scss">
 .recharge-page {
+  max-width: 1230px;
+  margin: 0 auto;
   &-breadcrumb {
     margin: 22px 0;
   }

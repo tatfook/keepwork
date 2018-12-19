@@ -10,6 +10,10 @@ const DiscountCoupon = () => import('@/components/account/DiscountCoupon')
 const RechargePage = () => import('@/components/account/RechargePage')
 const RechargeConfirm = () => import('@/components/account/RechargeConfirm')
 
+const OrderConfirm = () => import('@/components/account/OrderConfirm')
+const OrderPay = () => import('@/components/account/OrderPay')
+const OrderCompletion = () => import('@/components/account/OrderCompletion')
+
 export default new Router({
   mode: 'history',
   base: '/a',
@@ -51,6 +55,21 @@ export default new Router({
       path: '/rechargeConfirm',
       name: 'RechargeConfirm',
       component: RechargeConfirm
+    },
+    {
+      path: '/orderConfirm',
+      name: 'OrderConfirm',
+      component: OrderConfirm
+    },
+    {
+      path: '/orderPay',
+      name: 'OrderPay',
+      component: OrderPay
+    },
+    {
+      path: '/orderCompletion',
+      name: 'OrderCompletion',
+      component: OrderCompletion
     }
   ]
 })

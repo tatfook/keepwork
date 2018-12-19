@@ -1,9 +1,9 @@
-import { keepwork } from '@/api'
+import { keepwork, lesson } from '@/api'
 const { account } = keepwork
 import { props } from './mutations'
 import _ from 'lodash'
 
-const { GET_BALANCE_SUCCESS, GET_TRADES_SUCCESS, GET_DISCOUNTS_SUCCESS, CLEAR_ORDER_RECORD, SET_ORDER_STATE } = props
+const { GET_BALANCE_SUCCESS, GET_TRADES_SUCCESS, CREATE_RECHARGE_ORDER_SUCCESS, GET_DISCOUNTS_SUCCESS, CLEAR_RECHARGE_ORDER_RECORD, SET_RECHARGE_ORDER_STATE, CREATE_TRADE_ORDER } = props
 
 const actions = {
   async getBalance({ commit }) {
@@ -16,23 +16,32 @@ const actions = {
   },
   async getDiscounts({ commit }) {
     const discounts = await account.getDiscounts()
-    console.warn(discounts)
     commit(GET_DISCOUNTS_SUCCESS, discounts)
   },
-  async createOrder({ commit }, payload) {
-    const order = await account.createOrder(payload)
-    commit('CREATE_ORDER_SUCCESS', order)
+  async createRechargeOrder({ commit }, payload) {
+    const order = await account.createRechargeOrder(payload)
+    commit('CREATE_RECHARGE_ORDER_SUCCESS', order)
     return order
   },
-  clearOrderRecord({ commit }) {
-    commit(CLEAR_ORDER_RECORD)
+  clearRechargeOrderRecord({ commit }) {
+    commit(CLEAR_RECHARGE_ORDER_RECORD)
   },
-  async getOrderState({ commit }, payload) {
-    const order = await account.getOrderState(payload)
+  async getRechargeOrderState({ commit }, payload) {
+    const order = await account.getRechargeOrderState(payload)
     if (order.state === 256) {
-      commit(SET_ORDER_STATE, 256)
+      commit(SET_RECHARGE_ORDER_STATE, 256)
     }
     return order
+  },
+  async createTradeOrder({ commit }, { type, goodsId, count = 1 }) {
+    if (type === 'package') {
+      const goodsDetail = await lesson.packages.packageDetail({ packageId: goodsId })
+      commit(CREATE_TRADE_ORDER, { type, goodsId, count, goodsDetail })
+      return
+    }
+    if (type === 'exchange') {
+      console.warn('exchange ------------->')
+    }
   }
 }
 

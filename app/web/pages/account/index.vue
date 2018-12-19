@@ -143,8 +143,8 @@ body {
     width: 100%;
     background: #f5f5f5;
     &-center {
-      max-width: 1230px;
-      margin: 0 auto;
+      // max-width: 1230px;
+      // margin: 0 auto;
     }
   }
 

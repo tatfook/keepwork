@@ -24,6 +24,8 @@ export default {
 .account-container {
   display: flex;
   padding-top: 20px;
+  max-width: 1230px;
+  margin: 0 auto;
   .account-tab-left {
     width: 265px;
   }

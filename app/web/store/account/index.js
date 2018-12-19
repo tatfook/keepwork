@@ -5,7 +5,8 @@ import mutations from './mutations'
 const state = {
   balance: {},
   trades: [],
-  order: {}
+  rechargeOrder: {},
+  tradeOrder: {}
 }
 
 export default {

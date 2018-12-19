@@ -2,7 +2,8 @@ const getters = {
   balance: state => state.balance,
   trades: state => state.trades,
   discounts: state => state.discounts,
-  order: state => state.order
+  rechargeOrder: state => state.rechargeOrder,
+  tradeOrder: state => state.tradeOrder
 }
 
 export default getters
