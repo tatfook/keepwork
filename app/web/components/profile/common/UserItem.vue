@@ -38,6 +38,9 @@ export default {
       isLogined: 'user/isLogined',
       loginUserId: 'user/userId'
     }),
+    originFollowState() {
+      return this.user.isFollowed
+    },
     nowUserId() {
       return this.user.id
     },
@@ -84,6 +87,11 @@ export default {
         this.isFavoriteButtonLoading = false
       }
       this.followState = !this.followState
+    }
+  },
+  watch: {
+    originFollowState(newVal) {
+      this.followState = newVal
     }
   },
   filters: {
