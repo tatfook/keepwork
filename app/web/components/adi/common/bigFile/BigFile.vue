@@ -76,6 +76,10 @@ export default {
         jsx: 'icon-jsx',
         js: 'icon-js',
         css: 'icon-css',
+        sketch: 'icon-sketch',
+        exe: 'icon-exe',
+        xmind: 'icon-xmind',
+        svga: 'icon-SVGA',
         md: 'icon-markdown',
         json: 'icon-json',
         doc: 'icon-word',
@@ -93,6 +97,18 @@ export default {
     }
   },
   methods: {
+    getStringLength(str) {
+      var len = 0
+      for (var i = 0; i<str.length; i++) {
+        var c = str.charCodeAt(i)
+        if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+          len ++
+        } else {
+          len += 2
+        }
+      }
+      return len
+    },
     getFileName() {
       if(!this.properties && !this.properties.filename) {
         return
@@ -101,12 +117,13 @@ export default {
       let name = this.properties.filename
       let lastCharacterIndex = name.lastIndexOf('.' + this.properties.ext)
       let realName = name.substring(0, lastCharacterIndex)
+      let l = this.getStringLength(realName)
 
-      if(realName.length <= 10) {
+      if(this.getStringLength(realName) <= 20) {
         return name
       } else {
-        let prefixName = name.substring(0, 3)
-        let suffixName = name.substring(lastCharacterIndex - 3)
+        let prefixName = name.substring(0, 5)
+        let suffixName = name.substring(lastCharacterIndex - 4)
         return prefixName + '---' + suffixName
       }
     },
@@ -383,6 +400,22 @@ export default {
         color: rgb(102, 188, 92);
       }
 
+      .icon-sketch {
+        color: rgb(249, 189, 15)
+      }
+
+      .icon-exe {
+        color: rgb(119, 149, 198)
+      }
+
+      .icon-xmind {
+        color: rgb(245, 90, 35)
+      }
+      
+      .icon-SVGA {
+        color: rgb(178, 193, 142)
+      }
+
       .icon-markdown {
         color: rgb(72, 79, 89);
       }
@@ -397,6 +430,10 @@ export default {
 
       .icon-sql {
         color: #333;
+      }
+
+      .icon-ukown_file {
+        color: rgb(86, 155, 255)
       }
     }
 
