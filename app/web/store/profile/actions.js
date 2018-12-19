@@ -115,9 +115,9 @@ const actions = {
       .catch(err => console.error(err))
     commit(GET_USER_CREATED_PROJECT_SUCCESS, { createdProjects, userId })
   },
-  async getUserJoinedProjects({ commit }, { userId }) {
+  async getUserJoinedProjects({ commit }, { userId, exclude = true }) {
     let joinedProjects = await keepwork.projects
-      .getContributeProjectsByUserId({ objectType: 0, userId })
+      .getContributeProjectsByUserId({ objectType: 0, userId, exclude })
       .catch(err => console.error(err))
     commit(GET_USER_JOINED_PROJECT_SUCCESS, { joinedProjects, userId })
   }
