@@ -26,7 +26,7 @@
           <el-button
             type="primary"
             class="account-item-button"
-            @click="toRechargePage"
+            @click="toRechargeConfirm"
           >去充值</el-button>
         </div>
       </div>
@@ -67,7 +67,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -101,8 +100,8 @@ export default {
     }
   },
   methods: {
-    toRechargePage() {
-      this.$router.push({ name: 'Recharge' })
+    toRechargeConfirm() {
+      this.$router.push({ name: 'RechargeConfirm' })
     }
   }
 

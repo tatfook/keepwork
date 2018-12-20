@@ -1,0 +1,80 @@
+<template>
+  <div class="recharge-pay">
+    <div class="recharge-pay-breadcrumb">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ name: 'Account' }">我的账户</el-breadcrumb-item>
+        <el-breadcrumb-item>充值</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+    <recharge-qr></recharge-qr>
+  </div>
+</template>
+
+<script>
+import RechargeQr from './common/RechargeQr'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  name: 'RechargePay',
+  components: {
+    RechargeQr
+  },
+  data() {
+    return {
+      _interval: null
+    }
+  },
+  mounted() {
+    if (!this.orderId) {
+      this.$message.error('找不到订单号')
+      setTimeout(() => {
+        this.$router.push({ name: 'RechargeConfirm' })
+      }, 1500)
+      return
+    }
+    this.intervalCheckOrder()
+  },
+  destroyed() {
+    this.clearRechargeOrderRecord()
+    clearTimeout(this._interval)
+  },
+  methods: {
+    ...mapActions({
+      getRechargeOrderState: 'account/getRechargeOrderState',
+      clearRechargeOrderRecord: 'account/clearRechargeOrderRecord',
+      getBalance: 'account/getBalance'
+    }),
+    intervalCheckOrder() {
+      clearTimeout(this._interval)
+      this._interval = setTimeout(async () => {
+        const order = await this.getRechargeOrderState({ id: this.orderId })
+        if (order.state === 256) {
+          await this.getBalance().catch(e => console.error(e))
+          // setTimeout(() => this.$router.push({ name: 'Account' }), 10000)
+          return
+        }
+        this.intervalCheckOrder()
+      }, 2000)
+    }
+  },
+  computed: {
+    ...mapGetters({
+      order: 'account/rechargeOrder',
+    }),
+    orderId() {
+      return this.order.id || ''
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.recharge-pay {
+  max-width: 1230px;
+  margin: 0 auto;
+  &-breadcrumb {
+    margin: 22px 0;
+  }
+}
+</style>
+
+

@@ -7,125 +7,155 @@
       </el-breadcrumb>
     </div>
     <div class="recharge-confirm-header">
-      请确认
+      充值账号: {{username}}
     </div>
-    <div class="recharge-confirm-message">
-      <div class="recharge-confirm-message-row">充值账号: <span class="message-bold">{{ username }}</span> </div>
-      <div class="recharge-confirm-message-row">充值金额: <span class="message-bold">{{money}}元</span> </div>
-    </div>
-    <div class="recharge-confirm-line">
-      <div class="line-1px"></div>
-    </div>
-    <div
-      v-if="isWeixin"
-      class="recharge-confirm-way"
-    >
-      请使用微信支付:
-    </div>
-    <div
-      v-if="isZhifubao"
-      class="recharge-confirm-way"
-    >
-      请使用支付宝支付: 
-    </div>
-    <div class="recharge-confirm-main">
-      <div class="recharge-confirm-main-content">
-        <div class="recharge-confirm-main-content-qr">
-          <div v-if="isOrderSuccess" class="recharge-confirm-main-content-qr-success">
-            <i class="el-icon-success"></i>
-            支付成功
-          </div>
-          <img
-            v-if="qrData && !isOrderSuccess"
-            :src="qrData"
+    <div class="recharge-confirm-money">
+      充值金额:
+      <div class="recharge-confirm-money-options">
+        <div
+          :class="['recharge-confirm-money-options-card', { 'selected': isCard50 } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_50)"
+        >
+          50元
+        </div>
+        <div
+          :class="['recharge-confirm-money-options-card', { 'selected': isCard100 } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_100)"
+        >
+          100元
+        </div>
+        <div
+          :class="['recharge-confirm-money-options-card', { 'selected': isCard500 } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_500)"
+        >
+          500元
+        </div>
+        <div
+          :class="['recharge-confirm-money-options-card', { 'selected': isCardOther } ]"
+          @click="handleSelectMoneyCard(CONF.CARD_OTHER)"
+        >
+          <div
+            class="recharge-confirm-money-options-card-input"
+            v-show="isCardOther"
           >
-        </div>
-        <div class="recharge-confirm-main-content-tips">
-          <div class="recharge-confirm-main-content-tips-money">
-            充值金额: <span class="highlight">{{ money }}元</span>
+            <input
+              class="recharge-confirm-money-options-card-input-inner"
+              type="number"
+              min="1"
+              ref="inputMoney"
+              autofocus="autofocus"
+              v-model="inputMoney"
+            >
+            元
           </div>
-          <div class="recharge-confirm-main-content-tips-app">
-            <p v-if="isWeixin">请用微信扫一扫</p>
-            <p v-if="isZhifubao">请用支付宝扫一扫</p>
-            <p>扫描二维码支付</p>
-          </div>
-        </div>
-        <div :class="['recharge-confirm-main-content-guide', {'zhifubao-guide': isZhifubao, 'weixin-guide': isWeixin}]">
+          <span v-show="!isCardOther">其他金额</span>
         </div>
       </div>
+      <div class="recharge-confirm-money-tips">
+        <i class="el-icon-warning"></i>
+        充值金额必须为正整数，单次最多不超过100万元。
+      </div>
     </div>
+    <payment-way
+      class="recharge-confirm-payment"
+      :handleCallback="toComfirmPayPage"
+    ></payment-way>
   </div>
 </template>
 
 <script>
+import PaymentWay from './common/PaymentWay'
 import { mapGetters, mapActions } from 'vuex'
+const MONEY_REG = /^[0-9]*[1-9][0-9]*$/
 export default {
   name: 'RechargeConfirm',
+  components: {
+    PaymentWay
+  },
   data() {
     return {
-      _interval: null
-    }
-  },
-  mounted() {
-    if (!this.orderId) {
-      return this.$router.push({ name: 'Recharge' })
-    }
-    this.intervalCheckOrder()
-  },
-  destroyed() {
-    this.clearRechargeOrderRecord()
-    clearTimeout(this._interval)
-  },
-  methods: {
-    ...mapActions({
-      getRechargeOrderState: 'account/getRechargeOrderState',
-      clearRechargeOrderRecord: 'account/clearRechargeOrderRecord',
-      getBalance: 'account/getBalance'
-    }),
-    intervalCheckOrder() {
-      clearTimeout(this._interval)
-      this._interval = setTimeout(async () => {
-        let order = await this.getRechargeOrderState({ id: this.orderId })
-        if (order.state === 256) {
-          await this.getBalance().catch(e => console.error(e))
-          // setTimeout(() => this.$router.push({ name: 'Account' }), 10000)
-          return
-        }
-        this.intervalCheckOrder()
-      }, 2000)
+      rechargeMoney: 0,
+      inputMoney: '',
+      moneyCard: '50',
+      payWay: 'weixin',
     }
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile',
-      order: 'account/rechargeOrder',
+      userProfile: 'user/profile'
     }),
-    orderState() {
-      return this.order.state
-    },
-    isOrderSuccess() {
-      return this.orderState === 256
-    },
-    orderId() {
-      return this.order.id || ''
-    },
-    isWeixin() {
-      return this.channel === 'wx_pub_qr'
-    },
-    isZhifubao() {
-      return this.channel === 'alipay_qr'
-    },
-    channel() {
-      return this.order.channel
-    },
-    qrData() {
-      return this.order.QR || ''
-    },
-    money() {
-      return this.order.amount || ''
-    },
     username() {
       return this.userProfile.username || ''
+    },
+    isCard50() {
+      return this.moneyCard === this.CONF.CARD_50
+    },
+    isCard100() {
+      return this.moneyCard === this.CONF.CARD_100
+    },
+    isCard500() {
+      return this.moneyCard === this.CONF.CARD_500
+    },
+    isCardOther() {
+      return this.moneyCard === this.CONF.CARD_OTHER
+    },
+    isWeixinPay() {
+      return this.payWay === this.CONF.WEIXIN_PAY
+    },
+    isZhifubaoPay() {
+      return this.payWay === this.CONF.ZHIFUBAO_PAY
+    },
+    CONF() {
+      return {
+        WEIXIN_PAY: 'weixin',
+        ZHIFUBAO_PAY: 'zhifubao',
+        CARD_50: '50',
+        CARD_100: '100',
+        CARD_500: '500',
+        CARD_OTHER: 'other',
+        MAX_MONEY: 1000000
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      createRechargeOrder: 'account/createRechargeOrder'
+    }),
+    handleSelectMoneyCard(type) {
+      if (type !== this.moneyCard) {
+        this.moneyCard = type
+        this.inputMoney = ''
+      }
+      if (type === this.CONF.CARD_OTHER) {
+        this.$nextTick(() => {
+          this.$refs.inputMoney.focus()
+        })
+      }
+    },
+    handleSelectPayWay(way) {
+      this.payWay = way
+    },
+    getRechargeMoney() {
+      if (this.isCardOther) {
+        return +this.inputMoney
+      }
+      return +this.CONF[`CARD_${this.moneyCard}`]
+    },
+    async toComfirmPayPage(channel) {
+      if (this.isCardOther && !MONEY_REG.test(this.inputMoney)) {
+        return this.$message.error('充值金额必须为正整数')
+      }
+      const amount = this.getRechargeMoney()
+      if (amount > this.CONF.MAX_MONEY) {
+        return this.$message.error('充值金额不能大于100万')
+      }
+      try {
+        await this.createRechargeOrder({ amount, channel })
+        this.$router.push({ name: 'RechargePay' })
+      } catch (error) {
+        console.error(error)
+        this.$message.error('创建订单失败')
+      }
     }
   }
 }
@@ -138,114 +168,74 @@ export default {
   &-breadcrumb {
     margin: 22px 0;
   }
-
   &-header {
     height: 61px;
     line-height: 61px;
-    font-size: 20px;
-    color: #333;
+    font-size: 16px;
+    color: #808080;
     background: #fff;
     border-bottom: 1px solid #f3f3f3;
     padding-left: 49px;
   }
 
-  &-message {
-    height: 132px;
+  &-money {
     background: #fff;
-    padding-left: 49px;
+    border-bottom: 1px solid #f3f3f3;
+    padding: 25px 0 19px 49px;
     color: #808080;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    &-row {
-      height: 40px;
-      line-height: 40px;
-    }
-    .message-bold {
-      margin-left: 2em;
-      color: #333;
-    }
-  }
-
-  &-line {
-    height: 1px;
-    background: #fff;
-    .line-1px {
-      margin: 0 49px;
-      height: 1px;
-      background: #f3f3f3;
-    }
-  }
-
-  &-way {
-    background: #fff;
-    padding-left: 49px;
-    height: 78px;
-    line-height: 78px;
-    font-size: 16px;
-    color: #333;
-  }
-
-  &-main {
-    background: #fff;
-    padding: 0 49px 49px;
-
-    &-content {
-      background: #f2f9ff;
-      min-height: 470px;
-      min-width: 956px;
+    border-bottom: 1px solid #f3f3f3;
+    &-options {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      &-qr {
-        margin-left: 67px;
-        height: 288px;
-        width: 288px;
+      margin-top: 18px;
+      &-card {
+        height: 141px;
+        width: 255px;
+        min-width: 141px;
+        box-sizing: border-box;
+        border: 2px solid #c1c1c1;
+        border-radius: 6px;
+        font-size: 30px;
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        background: url("../../assets/account/qr-bg.png");
-        &-success {
-          color: #67C23A;
-          font-size: 28px;
+        margin-right: 31px;
+        cursor: pointer;
+        &.selected {
+          background: #65cad9;
+          color: #fff;
+          border: none;
         }
-      }
-
-      &-tips {
-        color: #40444a;
-        margin-left: 31px;
-        &-money {
-          font-size: 24px;
-          border-bottom: 1px dashed #bec1c6;
-          padding-bottom: 22px;
-          .highlight {
-            color: #409efe;
+        &-input {
+          width: 100%;
+          text-align: center;
+          &-inner {
+            border: none;
+            border-bottom: 3px solid #fff;
+            background: none;
+            font-size: 30px;
+            max-width: 40%;
+            text-align: center;
+            color: #fff;
+            display: inline-block;
+            outline: none;
+            &::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
           }
-        }
-        &-app {
-          margin-top: 22px;
-          font-size: 18px;
-          p {
-            margin: 0;
-            line-height: 28px;
-            padding: 0;
-          }
-        }
-      }
-
-      &-guide {
-        margin-left: 131px;
-        height: 391px;
-        width: 267px;
-        &.weixin-guide {
-          background: url("../../assets/account/weixin-guide.png");
-        }
-        &.zhifubao-guide {
-          background: url("../../assets/account/zhifubao-guide.png");
         }
       }
     }
+    &-tips {
+      margin-top: 42px;
+      font-size: 16px;
+    }
+  }
+
+  &-payment {
+    padding: 22px 49px 20px;
+    min-height: 400px;
   }
 }
 </style>

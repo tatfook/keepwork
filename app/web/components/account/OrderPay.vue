@@ -17,11 +17,15 @@
           {{userBalanceByUnit}}
         </span>
       </div>
-      <div class="order-pay-main-tips">
+      <div class="order-pay-main-tips" v-if="isNeedRecharge">
         <i class="order-pay-main-tips-icon el-icon-warning"></i>
         <span class="order-pay-main-tips-text">人民币余额不足，还需要
           {{needRechargeNumberByUnit}}
           ，请先去充值。</span>
+      </div>
+      <div class="order-pay-main-verify">
+        <!-- <div class="order-pay-main-"></div> -->
+        <el-input></el-input>
       </div>
       <el-button
         v-if="!isNeedRecharge"
@@ -29,19 +33,43 @@
         class="order-pay-main-confirm-button"
       >确认支付</el-button>
       <el-button
-        v-if="isNeedRecharge"
+        v-else
         type="primary"
         class="order-pay-main-confirm-button"
+        @click="handleShowRechargeDialog"
       >去充值</el-button>
     </div>
+    <el-dialog
+      class="order-pay-main-dialog"
+      :visible.sync="isShowRechargeDialog"
+    >
+      <div
+        class="order-pay-main-dialog-title"
+        slot="title"
+      >充值</div>
+      <recharge-dialog
+        :needRechargeMoney="needRechargeNumber"
+        v-if="isShowRechargeDialog"
+        @handleCallback="handleHideRechargeDialog"
+      ></recharge-dialog>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import RechargeDialog from './common/RechargeDialog'
 import { mapActions, mapGetters } from 'vuex'
 import { locale } from "@/lib/utils/i18n";
 export default {
   name: 'OrderPay',
+  components: {
+    RechargeDialog
+  },
+  data() {
+    return {
+      isShowRechargeDialog: false
+    }
+  },
   mounted() {
     document.title = '支付页面'
   },
@@ -111,6 +139,13 @@ export default {
     }),
     handleBack() {
       this.$router.back(-1)
+    },
+    handleShowRechargeDialog() {
+      console.warn('handleShowRechargeDialog--->')
+      this.isShowRechargeDialog = true
+    },
+    handleHideRechargeDialog() {
+      this.isShowRechargeDialog = false
     }
   }
 }
@@ -202,6 +237,28 @@ export default {
     &-confirm-button {
       width: 306px;
       margin-top: 50px;
+    }
+
+    &-dialog {
+      .el-dialog {
+        width: 737px;
+        margin-top: 10vh;
+      }
+      .el-dialog__header {
+        padding: 0;
+      }
+      .el-dialog__body {
+        padding: 35px 50px;
+        box-sizing: border-box;
+      }
+      &-title {
+        border-bottom: 1px solid #f7f7f7;
+        text-align: center;
+        height: 73px;
+        line-height: 73px;
+        font-size: 20px;
+        color: #333;
+      }
     }
   }
 }

@@ -7,7 +7,7 @@ const AccountContainer = () => import('@/components/account/AccountContainer')
 const MyAccount = () => import('@/components/account/MyAccount')
 const TransactionDetail = () => import('@/components/account/TransactionDetail')
 const DiscountCoupon = () => import('@/components/account/DiscountCoupon')
-const RechargePage = () => import('@/components/account/RechargePage')
+const RechargePay = () => import('@/components/account/RechargePay')
 const RechargeConfirm = () => import('@/components/account/RechargeConfirm')
 
 const OrderConfirm = () => import('@/components/account/OrderConfirm')
@@ -47,14 +47,14 @@ export default new Router({
       ]
     },
     {
-      path: '/recharge',
-      name: 'Recharge',
-      component: RechargePage
-    },
-    {
       path: '/rechargeConfirm',
       name: 'RechargeConfirm',
       component: RechargeConfirm
+    },
+    {
+      path: '/rechargePay',
+      name: 'RechargePay',
+      component: RechargePay
     },
     {
       path: '/orderConfirm',
