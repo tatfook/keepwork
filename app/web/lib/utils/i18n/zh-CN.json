@@ -494,7 +494,9 @@
       "publish": "发布"
     },
     "iframe": {
-      "notice": "输入的站外链接将可能无法在iframe中加载成功, 是否继续?"
+      "notice": "输入的站外链接将可能无法在iframe中加载成功, 是否继续?",
+      "pleaseInput": "请输入https或者http的链接",
+      "formatError": "请输入带https/http的链接"
     }
   },
   "card": {
