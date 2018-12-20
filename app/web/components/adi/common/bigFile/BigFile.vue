@@ -142,7 +142,7 @@ export default {
         }
         let suffixName = realName.substring(index + 2)
 
-        return prefixName + '---' + suffixName
+        return prefixName + '---' + suffixName + '.' + this.properties.ext
       }
     },
     getSize() {
