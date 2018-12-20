@@ -1,6 +1,6 @@
 <template>
   <el-input
-    :placeholder="$t('editor.pleaseInput')"
+    :placeholder="$t('adi.iframe.pleaseInput')"
     v-model="linkTypeValue"
     @focus="updateFocus"
     @blur="updateFocus"
@@ -8,7 +8,7 @@
   >
     <el-button v-if="linkTypeValue" slot="prepend" icon="iconfont icon-link_"></el-button>
     <el-button v-else slot="prepend">{{$t('common.link')}}</el-button>
-    <el-button v-if="isFocus" slot="append">确定</el-button>
+    <el-button v-if="isFocus" slot="append" :style="getSureStyle">{{$t('common.Sure')}}</el-button>
     <el-select
       v-if="!isFocus"
       v-model="linkTypeValue"
@@ -57,6 +57,16 @@ export default {
       set(data) {
         this.iframeLinkValue = data
       }
+    },
+    getSureStyle() {
+      if (
+        this.iframeLinkValue.match(/(http|https):\/\/.+/) ||
+        this.iframeLinkValue === ''
+      ) {
+        return {color: '#3ba4ff'}
+      } else {
+        return {color: 'unset'}
+      }
     }
   },
   methods: {
@@ -73,7 +83,9 @@ export default {
     },
     updateFocus(val) {
       if (val && val.type === 'focus') {
-        this.iframeLinkValue = this.originValue
+        if (!this.iframeLinkValue) {
+          this.iframeLinkValue = this.originValue
+        }
         this.isFocus = true
       } else {
         this.checkUrl(() => {
@@ -91,30 +103,30 @@ export default {
       }
 
       if (
-        !this.iframeLinkValue.match(/(http|https):\/\//) 
+        !this.iframeLinkValue.match(/(http|https):\/\/.+/) &&
+        this.iframeLinkValue !== ''
       ) {
-        this.iframeLinkValue = ''
-        callback()
+        this.$message.error(this.$t('adi.iframe.formatError'))
         return false
       }
 
       if (
-        this.iframeLinkValue.match(/(http|https):\/\/(stage\.keepwork|release\.keepwork|keepwork|)(.com$|.com\/.+|localhost:7001$|localhost:7001\/.+)/)
+        this.iframeLinkValue.match(
+          /(http|https):\/\/(stage\.keepwork|release\.keepwork|keepwork|)(.com$|.com\/.+|localhost:7001$|localhost:7001\/.+)/
+        ) ||
+        this.iframeLinkValue === ''
       ) {
         callback()
         return true
       }
 
-      this.$confirm(
-        this.$t('adi.iframe.notice'),
-        this.$t('editor.hint'),
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
+      this.$confirm(this.$t('adi.iframe.notice'), this.$t('editor.hint'), {
+        confirmButtonText: this.$t('editor.confirm'),
+        cancelButtonText: this.$t('editor.cancel'),
+        type: 'warning'
+      }).then(() => {
         callback()
+        this.iframeLinkValue = ''
       })
     }
   }
