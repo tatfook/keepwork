@@ -79,10 +79,10 @@ export default {
       userProfile: 'user/profile',
       username: 'user/username',
       userinfo: 'lesson/userinfo',
-      lessonUserTutor: 'lesson/userTutor',
+      lessonTutorInfo: 'lesson/tutorInfo',
     }),
     isHaveTotur() {
-      return Boolean(this.lessonUserTutor && this.lessonUserTutor.tutorId)
+      return Boolean(this.lessonTutorInfo && this.lessonTutorInfo.tutorId)
     },
     beansCount() {
       return _.get(this.userinfo, 'bean', 0)

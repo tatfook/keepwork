@@ -1,6 +1,6 @@
 <template>
   <div class="new-package">
-    <package-editor-header :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
+    <package-editor-header :isSubmitable='isSubmitable' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
     <div class="new-package-container">
       <package-basic-info ref="basicInfoComponent" v-show="activeTab === 'basic'"></package-basic-info>
       <cover-media-setter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
@@ -13,7 +13,7 @@ import PackageEditorHeader from './PackageEditorHeader'
 import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
 import CatalogueManager from './CatalogueManager'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'NewPackage',
   mounted() {
@@ -27,6 +27,31 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      userIdenity: 'lesson/userIdenity',
+      teacherInfo: 'lesson/teacherInfo',
+      allianceInfo: 'lesson/allianceInfo'
+    }),
+    isTeacher() {
+      if (!this.teacherInfo) {
+        return this.userIdenity === 2 ? true : false
+      }
+      let { startTime, endTime } = this.teacherInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    },
+    isAlliance() {
+      if (!this.allianceInfo || this.isTeacher) {
+        return false
+      }
+      let { startTime, endTime } = this.allianceInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
+    isSubmitable() {
+      return !this.isLearner
+    },
     newPackageBasicInfo() {
       return this.$refs.basicInfoComponent.newPackageDetail
     },

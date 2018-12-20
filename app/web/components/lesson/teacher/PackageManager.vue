@@ -143,8 +143,28 @@ export default {
     ...mapGetters({
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
-      lessonSubjects: 'lesson/subjects'
+      lessonSubjects: 'lesson/subjects',
+      userIdenity: 'lesson/userIdenity',
+      teacherInfo: 'lesson/teacherInfo',
+      allianceInfo: 'lesson/allianceInfo'
     }),
+    isTeacher() {
+      if (!this.teacherInfo) {
+        return this.userIdenity === 2 ? true : false
+      }
+      let { startTime, endTime } = this.teacherInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    },
+    isAlliance() {
+      if (!this.allianceInfo || this.isTeacher) {
+        return false
+      }
+      let { startTime, endTime } = this.allianceInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
     filteredPackageList() {
       let subjectFilteredPackageList = this.getSubjectFilteredPackageList(
         this.lessonUserPackages
@@ -216,7 +236,7 @@ export default {
       return packageDetail.state === 3 || packageDetail.state === 4
     },
     isSubmitable(packageDetail) {
-      return (
+      return !this.isLearner && (
         packageDetail.state === 0 ||
         packageDetail.state === 3 ||
         packageDetail.state === 4
@@ -243,16 +263,16 @@ export default {
       let searchedSubjectId = this.searchParams.subjectId
       return searchedSubjectId
         ? _.filter(originList, {
-            subjectId: searchedSubjectId
-          })
+          subjectId: searchedSubjectId
+        })
         : originList
     },
     getStateFilteredPackageList(originList) {
       let searchedStateId = this.searchParams.stateId
       return typeof searchedStateId === 'number'
         ? _.filter(originList, packageDetail => {
-            return packageDetail.state === searchedStateId
-          })
+          return packageDetail.state === searchedStateId
+        })
         : originList
     },
     getNameFilteredPackageList(originList) {

@@ -41,13 +41,33 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail'
+      lessonPackageDetail: 'lesson/packageDetail',
+      userIdenity: 'lesson/userIdenity',
+      teacherInfo: 'lesson/teacherInfo',
+      allianceInfo: 'lesson/allianceInfo'
     }),
+    isTeacher() {
+      if (!this.teacherInfo) {
+        return this.userIdenity === 2 ? true : false
+      }
+      let { startTime, endTime } = this.teacherInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    },
+    isAlliance() {
+      if (!this.allianceInfo || this.isTeacher) {
+        return false
+      }
+      let { startTime, endTime } = this.allianceInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
     isEditable() {
       return this.editingPackageDetail.state !== 1
     },
     isSubmitable() {
-      return (
+      return !this.isLearner && (
         this.editingPackageDetail.state === 0 ||
         this.editingPackageDetail.state === 3 ||
         this.editingPackageDetail.state === 4

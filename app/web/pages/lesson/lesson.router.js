@@ -54,6 +54,7 @@ const OfflineGuidanceCourse = () =>
   import('@/components/lesson/student/OfflineGuidanceCourse')
 const TeachingVideo = () => import('@/components/lesson/student/TeachingVideo')
 const MentorService = () => import('@/components/lesson/student/MentorService')
+const MentorInvite = () => import('@/components/lesson/teacher/MentorInvite')
 
 Vue.use(Router)
 
@@ -98,6 +99,11 @@ export default new Router({
               name: 'TeacherColumnReview',
               component: Review,
               meta: { requireAuth: true }
+            },
+            {
+              path: 'mentor',
+              name: 'MentorInvite',
+              component: MentorInvite
             },
             {
               path: 'lesson/new',
