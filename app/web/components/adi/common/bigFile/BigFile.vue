@@ -16,7 +16,7 @@
           <div class="iconfont" :class="getIconClass"></div>
         </div>
         <div>
-          <div class="filename">{{this.properties.filename}}</div>
+          <div class="filename">{{getFileName()}}</div>
           <div class="filesize">{{getSize()}}</div>
         </div>
         <div class="split"></div>
@@ -76,6 +76,10 @@ export default {
         jsx: 'icon-jsx',
         js: 'icon-js',
         css: 'icon-css',
+        sketch: 'icon-sketch',
+        exe: 'icon-exe',
+        xmind: 'icon-xmind',
+        svga: 'icon-SVGA',
         md: 'icon-markdown',
         json: 'icon-json',
         doc: 'icon-word',
@@ -93,6 +97,54 @@ export default {
     }
   },
   methods: {
+    getStringLength(str) {
+      let len = 0
+      for (let i = 0; i < str.length; i ++) {
+        let charCode = str.charCodeAt(i)
+        if (charCode >= 0 && charCode <= 128) {
+          len ++
+        } else {
+          len += 2
+        }
+      }
+      return len
+    },
+    getFileName() {
+      if(!this.properties && !this.properties.filename) {
+        return
+      }
+
+      let name = this.properties.filename
+      let reg = new RegExp("(^.+)\\." + this.properties.ext)
+      let nameArray = name.match(reg)
+      let realName = nameArray[1]
+
+      if(this.getStringLength(realName) <= 20) {
+        return name
+      } else {
+        let j = 0
+        let k = 0
+        for (; j + k < 10; j ++) {
+          let charCode = realName.charCodeAt(j)
+          if (charCode < 0 || charCode > 128) {
+            k ++
+          }
+        }
+        let prefixName = realName.substring(0, 10 - k)
+
+        let m = 0
+        let index = realName.length - 1
+        for (; index + 1 > realName.length - 1 - (8 - m); index --) {
+          let characterCode = realName.charCodeAt(index)
+          if (characterCode < 0 || characterCode > 128) {
+            m ++
+          }
+        }
+        let suffixName = realName.substring(index + 2)
+
+        return prefixName + '---' + suffixName + '.' + this.properties.ext
+      }
+    },
     getSize() {
       return filesize(this.properties && this.properties.size || 0)
     },
@@ -269,14 +321,16 @@ export default {
     height: 75 - 17 * 2px;
     border: 1px solid #d9d9d9;
     background-color: #f3f3f3;
-    padding: 17px 0px;
+    padding: 17px 36px 17px 24px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    .filename,
+    .filename {
+      width: 190px;
+    }
     .filesize {
-      width: 150px;
+      width: 190px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -364,6 +418,22 @@ export default {
         color: rgb(102, 188, 92);
       }
 
+      .icon-sketch {
+        color: rgb(249, 189, 15)
+      }
+
+      .icon-exe {
+        color: rgb(119, 149, 198)
+      }
+
+      .icon-xmind {
+        color: rgb(245, 90, 35)
+      }
+      
+      .icon-SVGA {
+        color: rgb(178, 193, 142)
+      }
+
       .icon-markdown {
         color: rgb(72, 79, 89);
       }
@@ -378,6 +448,10 @@ export default {
 
       .icon-sql {
         color: #333;
+      }
+
+      .icon-ukown_file {
+        color: rgb(86, 155, 255)
       }
     }
 

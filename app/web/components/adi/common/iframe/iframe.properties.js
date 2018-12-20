@@ -1,6 +1,5 @@
 export default {
   src: '',
-  ratio: '16/9',
-  width: '',
-  height: ''
+  width: '100%',
+  height: '250px'
 }

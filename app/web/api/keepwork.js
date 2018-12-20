@@ -231,6 +231,7 @@ export const favorites = {
   unFavoriteObject: async ({ objectId, objectType }) =>
     deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
   getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
+  getUserFollows: async ({ objectType, objectId }) => get(`favorites/follows?objectId=${objectId}&objectType=${objectType}`),
   getUserSearchAllFavorites: async (args) => post('favorites/search', args)
 }
 
@@ -263,7 +264,9 @@ export const projects = {
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),
+  getPersonalProjectsByUserId: async ({ userId }) => get(`projects?userId=${userId}`),
   getContributeProjects: async () => get('projects/join'),
+  getContributeProjectsByUserId: async ({ userId, exclude }) => get(`projects/join?userId=${userId}&exclude=${exclude}`),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
   visitProject: async (projectId) => get(`projects/${projectId}/visit`)
 }

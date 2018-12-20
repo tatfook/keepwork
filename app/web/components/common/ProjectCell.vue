@@ -1,5 +1,5 @@
 <template>
-  <div class="project-cell">
+  <div class="project-cell" :class="{'project-cell-topped': isTopizable && project.isTopped}">
     <div class="project-cell-cover" @click="goProjectDetail(project)">
       <video v-if="project.extra.videoUrl" class="project-cell-cover-img" controls="controls" :src="project.extra.videoUrl"></video>
       <img v-else class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt="">
@@ -21,7 +21,12 @@
         <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
         <span class="username" :title="project.user.username">{{project.user && project.user.username}}</span>
       </a>
-      <div class="project-cell-author-time">{{relativeTime(project.updatedAt)}}</div>
+      <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}
+        <span v-if="isTopizable" class="project-cell-stick stick-hover" @click="toggleStickProject(project)">
+          <i class="iconfont icon-vertical-align-top" v-show="!project.isTopped"></i>
+          {{project.isTopped ? $t('profile.unTop') : $t('profile.top')}}
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +40,10 @@ import default_portrait from '@/assets/img/default_portrait.png'
 export default {
   name: 'ProjectCell',
   props: {
+    isTopizable: {
+      type: Boolean,
+      default: false
+    },
     project: {
       type: Object,
       default() {
@@ -65,6 +74,9 @@ export default {
       return moment(time)
         .utcOffset(offset)
         .fromNow()
+    },
+    toggleStickProject(project) {
+      this.$emit('toggleStickProject', project)
     }
   }
 }
@@ -80,9 +92,36 @@ export default {
   border-radius: 4px;
   background: #fff;
   transition: all 200ms ease-in;
+  position: relative;
+  &-topped::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-bottom: 16px solid #2397f3;
+    transform: rotate(-45deg);
+    left: -10px;
+    top: -6px;
+  }
+  &-stick {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    color: #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    display: none;
+  }
   &:hover {
     box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
     transition: all 200ms ease-in;
+    .stick-hover {
+      display: inline-block;
+    }
   }
   &-cover {
     width: 100%;
@@ -186,6 +225,7 @@ export default {
     &-time {
       width: 120px;
       text-align: right;
+      position: relative;
     }
   }
 }

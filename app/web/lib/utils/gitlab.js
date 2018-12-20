@@ -54,7 +54,9 @@ export const gitTree2NestedArray = (files, rootPath) => {
 
   let convertChildren2ArrayInTree = tree => {
     if (_.has(tree, temporaryChildrenKey)) {
-      tree.children = _.values(tree[temporaryChildrenKey])
+      // tree.children = _.values(tree[temporaryChildrenKey])
+      const children = _.values(tree[temporaryChildrenKey])
+      tree.children = [..._.filter(children, i => i.type === 'tree'), ..._.filter(children, i => i.type !== 'tree')]
       _.unset(tree, temporaryChildrenKey)
       tree.children.forEach(convertChildren2ArrayInTree)
     }

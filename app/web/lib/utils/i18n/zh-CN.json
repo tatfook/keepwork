@@ -393,7 +393,7 @@
     "categoryList": "分类列表",
     "tab": "标签",
     "pageSwitching": "页面切换",
-    "iframe": "iframe",
+    "iframe": "内联框架",
 
     "lesson": "课程",
     "quiz": "问题",
@@ -492,6 +492,11 @@
       "notice": "分享你的想法！",
       "work_review": "作品评论",
       "publish": "发布"
+    },
+    "iframe": {
+      "notice": "输入的站外链接将可能无法在iframe中加载成功, 是否继续?",
+      "pleaseInput": "请输入https或者http的链接",
+      "formatError": "请输入带https/http的链接"
     }
   },
   "card": {
@@ -531,7 +536,7 @@
     "enter": "进入",
     "innerModal": "内部模态框",
     "bigFile": "大文件",
-    "iframe": "iframe",
+    "iframe": "内联框架",
     "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表",
@@ -820,9 +825,9 @@
     "MicrosoftYaHei": "微软雅黑",
     "SimHei": "黑体",
     "STSong": "mac 华文宋体",
-    "Font": "字体:",
+    "Font": "网站字体:",
     "font": "字体",
-    "color": "颜色:",
+    "color": "网站颜色:",
     "fontSize": "字号:",
     "pleaseSelect": "请选择",
     "tips": "注意: 所选字体如浏览器不支持，会显示默认字体"
@@ -1503,6 +1508,14 @@
     "noContentForProject": "还没有创建项目~",
     "noProjectToShow": "你还没有项目，",
     "createNewProject": "立即创建新项目",
+    "noFriendsToShow": "还未关注任何人~",
+    "noFollowersToShow": "还没有粉丝~",
+    "createdProjects": "创建的项目",
+    "contributedProjects": "参与的项目",
+    "noProjectsToShow": "还没有创建项目~",
+    "noContributedProjectsToShow": "还没有参与项目~",
+    "top": "置顶",
+    "unTop": "取消置顶",
     "changePassword": "密码修改"
   }
 }

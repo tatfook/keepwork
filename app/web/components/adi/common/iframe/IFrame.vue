@@ -11,20 +11,9 @@ export default {
   mixins: [compBaseMixin],
   computed: {
     frameStyle() {
-      let ratio = this.properties.ratio
-      if (Number(ratio)) {
-        return {
-          'padding-top': Number(ratio) * 100 + '%'
-        }
-      } else if(ratio.match(/^\d+\/\d+$/gi)) {
-        return {
-          'padding-top': (100 / eval(ratio)) + '%'
-        }
-      } else {
-        return {
-          'width': this.properties.width,
-          'height': this.properties.height
-        }
+      return {
+        width: this.properties.width,
+        height: this.properties.height
       }
     }
   }
@@ -36,6 +25,8 @@ export default {
   position: relative;
   width: 100%;
   height: 0px;
+  margin: 0 auto;
+
   > * {
     position: absolute;
     left: 0;
