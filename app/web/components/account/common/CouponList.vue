@@ -1,13 +1,14 @@
 <template>
   <div class="coupon-list">
     <div class="coupon-list-sum">
-      共6张:
+      共{{ticketsCount}}张:
     </div>
     <div class="coupon-list-main">
       <coupon-ticket
         class="coupon-list-main-item"
-        v-for="(item,index) in tickets"
+        v-for="(item,index) in data"
         :key="index"
+        :data="item"
       ></coupon-ticket>
     </div>
   </div>
@@ -23,8 +24,16 @@ export default {
   },
   props: {
     data: {
-      type: Object,
-      required: true
+      type: Array,
+      required: true,
+      default() {
+        return []
+      }
+    }
+  },
+  computed: {
+    ticketsCount() {
+      return this.data.length
     }
   },
   data() {

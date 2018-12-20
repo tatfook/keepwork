@@ -1,5 +1,5 @@
 <template>
-  <div class="coupon-ticket disabled">
+  <div :class="['coupon-ticket', { 'disabled': isDisabled }]">
     <div class="coupon-ticket-left">
       <div class="coupon-ticket-left-sum">
         <span class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-rmb">¥</span>5</span>
@@ -7,32 +7,71 @@
         <!-- <div class="coupon-ticket-left-sum-bean">5 知识豆</div> -->
       </div>
       <div class="coupon-ticket-left-condition">
-        满100元可用
+        {{title}}
       </div>
-      <div class="coupon-ticket-left-label deadline-label">即将过期</div>
+      <div v-if="isCloseToExpire" class="coupon-ticket-left-label deadline-label">即将过期</div>
       <div class="coupon-ticket-left-dot right-top"></div>
       <div class="coupon-ticket-left-dot right-bottom"></div>
     </div>
     <div class="coupon-ticket-right">
       <div class="coupon-ticket-right-dot left-top"></div>
       <div class="coupon-ticket-right-dot left-bottom"></div>
-      <div class="coupon-ticket-right-type disabled">
-        通用券，Keepwork全平台通用
+      <div :class="['coupon-ticket-right-type', { 'disabled': isDisabled }]">
+        {{description}}
       </div>
       <div class="coupon-ticket-right-deadline">
-        2018/11/28 — 2018/12/30
+        {{startTime | formatTime }} — {{endTime | formatTime}}
       </div>
-      <!-- <div class="coupon-ticket-right-icon used-icon"></div> -->
-      <div class="coupon-ticket-right-icon past-icon"></div>
+      <div v-if="isUsed" class="coupon-ticket-right-icon used-icon"></div>
+      <div v-if="isExpire" class="coupon-ticket-right-icon expire-icon"></div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'CouponTicket',
   props: {
     data: Object
+  },
+  mounted() {
+    console.warn(this.data)
+  },
+  filters: {
+    formatTime(time) {
+      return moment(time).format("YYYY/M/D")
+    }
+  },
+  computed: {
+    title() {
+      return this.data.title || ''
+    },
+    description() {
+      return this.data.description || ''
+    },
+    startTime() {
+      return this.data.startTime
+    },
+    endTime() {
+      return this.data.endTime
+    },
+    isDisabled() {
+      return !this.isUseable || this.isUsed || this.isExpire
+    },
+    isExpire() {
+      return false
+    },
+    isCloseToExpire() {
+      return this.isUseable && false
+    },
+    isUseable() {
+      return true
+    },
+    isUsed() {
+      return this.data.state === 1
+    },
+
   }
 }
 </script>
@@ -176,11 +215,11 @@ export default {
       position: absolute;
       right: 4px;
       bottom: 10px;
-      &.past-icon {
-        background: url('../../../assets/account/past.png')
+      &.expire-icon {
+        background: url("../../../assets/account/expire.png");
       }
       &.used-icon {
-        background: url('../../../assets/account/used.png')
+        background: url("../../../assets/account/used.png");
       }
     }
   }

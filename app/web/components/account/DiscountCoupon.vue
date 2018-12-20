@@ -3,25 +3,26 @@
     <div class="discount-coupon-header">
       优惠卷
     </div>
-    <div class="discount-coupon-tab">
-      <el-tabs
-        v-model="activeName"
-      >
+    <div
+      class="discount-coupon-tab"
+      v-if="hasDiscounts"
+    >
+      <el-tabs v-model="activeName">
         <el-tab-pane
           label="可使用"
           name="useable"
         >
-          <!-- <coupon-list></coupon-list> -->
+          <coupon-list :data="discountsUseable"></coupon-list>
         </el-tab-pane>
         <el-tab-pane
           label="已使用"
           name="used"
         >
-          <!-- <coupon-list></coupon-list> -->
+          <coupon-list :data="discountsUsed"></coupon-list>
         </el-tab-pane>
         <el-tab-pane
           label="已过期"
-          name="past"
+          name="expire"
         >
           <!-- <coupon-list></coupon-list> -->
         </el-tab-pane>
@@ -54,11 +55,24 @@ export default {
   },
   async mounted() {
     await this.getDiscounts()
+    console.warn(this._discounts)
   },
   computed: {
     ...mapGetters({
       discounts: 'account/discounts'
-    })
+    }),
+    hasDiscounts() {
+      return this.discounts.length > 0
+    },
+    _discounts() {
+      return this.discounts.filter(i => i.title)
+    },
+    discountsUseable() {
+      return this._discounts.filter(item => item.state === 0)
+    },
+    discountsUsed() {
+      return this.discounts.filter(item => item.state === 1)
+    }
   },
   methods: {
     ...mapActions({

@@ -6,7 +6,8 @@ const state = {
   balance: {},
   trades: [],
   rechargeOrder: {},
-  tradeOrder: {}
+  tradeOrder: {},
+  discounts: []
 }
 
 export default {
