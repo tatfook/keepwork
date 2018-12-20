@@ -1,23 +1,80 @@
 <template>
-  <el-row type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
-    <el-col class="mods-treeview" unselectable="on" :style="getTreeViewWidth">
+  <el-row
+    type='flex'
+    class="full-height"
+    @mousemove.native="dragMouseMove"
+    @mouseup.native="dragMouseUp"
+  >
+    <el-col
+      class="mods-treeview"
+      unselectable="on"
+      :style="getTreeViewWidth"
+    >
       <!-- <el-tree :data='modsMenu' :props='defaultProps' highlight-current accordion :indent=0 @node-click='modeMenuClick'></el-tree> -->
-      <el-tree ref='tree' node-key='id' :data='mods' :props='defaultProps' :default-expanded-keys='defaultExpandedKeys' highlight-current accordion :indent=0 @node-click='nodeMenuClick' @node-collapse='nodeCollapseHandle'></el-tree>
+      <el-tree
+        ref='tree'
+        node-key='id'
+        :data='mods'
+        :props='defaultProps'
+        :default-expanded-keys='defaultExpandedKeys'
+        highlight-current
+        accordion
+        :indent=0
+        @node-click='nodeMenuClick'
+        @node-collapse='nodeCollapseHandle'
+      ></el-tree>
     </el-col>
-    <div class="editor-resizer" @mousedown="resizeCol($event, 'treeViewWidth', 'previewBoxViewWidth', 570)"></div>
-    <el-col class="preview-box" unselectable="on" :style="getPreviewBoxWidth">
-      <div v-for='mod in activeModsList' :key='mod.name' class="box-items">
-        <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render box-items-item" @click='newMod(mod.name, index)'>
+    <div
+      class="editor-resizer"
+      @mousedown="resizeCol($event, 'treeViewWidth', 'previewBoxViewWidth', 570)"
+    ></div>
+    <el-col
+      class="preview-box"
+      unselectable="on"
+      :style="getPreviewBoxWidth"
+    >
+      <div
+        v-for='mod in activeModsList'
+        :key='mod.name'
+        class="box-items"
+      >
+        <div
+          v-if='!style.useImage'
+          v-for='(style, index) in mod.styles'
+          :key='style.name'
+          class="style-cover render box-items-item"
+          @click='newMod(mod.name, index)'
+        >
           <div class="render-mod-container--click-prevent"></div>
-          <div class="render-mod-container" :style="getSettingStyle(style)">
-            <component class="render-mod" :is='mod.mod' :renderMode='true' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
+          <div
+            class="render-mod-container"
+            :style="getSettingStyle(style)"
+          >
+            <component
+              class="render-mod"
+              :is='mod.mod'
+              :renderMode='true'
+              :mod='modFactory(mod)'
+              :conf='modConf(mod, index)'
+              :theme='theme'
+            ></component>
             <div class="style-mask">
               <span>{{$t('tips.clickToAdd')}}</span>
             </div>
           </div>
         </div>
-        <div class="style-cover box-items-item" v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name'>
-          <img class="style-cover-image" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
+        <div
+          class="style-cover box-items-item"
+          v-if='style.useImage'
+          v-for='(style, index) in mod.styles'
+          :key='style.name'
+        >
+          <img
+            class="style-cover-image"
+            :src="style.cover"
+            alt=""
+            @click='newMod(mod.name, index)'
+          >
           <div class="style-mask">
             <span>{{$t('tips.clickToAdd')}}</span>
           </div>
@@ -34,10 +91,12 @@ import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import resize from './base/resize'
+import { setTimeout } from 'timers'
 export default {
   name: 'ModsList',
   mixins: [resize],
   mounted() {
+    this.updateModListTitle()
     let self = this
     function i18n(data) {
       _.forEach(data, (item, key) => {
@@ -56,6 +115,7 @@ export default {
       this.$refs.tree.setCurrentNode(mods[0])
       this.activeModsList = mods[0].mods
     }
+
     if (window.innerWidth <= 1920) {
       ;(this.treeViewWidth = 48.5), (this.previewBoxViewWidth = 51.5)
     } else {
@@ -104,6 +164,23 @@ export default {
     }
   },
   methods: {
+    updateModListTitle() {
+      setTimeout(() => {
+        let data = this.$refs.tree.$el.children
+        _.forEach(data, (item, key) => {
+          _.forEach(item.children, (item2, key2) => {
+            if (key2 == 0) {
+              item2.title = mods[key].label
+            }
+            _.forEach(item2.children, (item3, key3) => {
+              if (mods[key].children[key3]) {
+                item3.title = mods[key].children[key3].label
+              }
+            })
+          })
+        })
+      }, 0)
+    },
     getSettingStyle(style) {
       if (!style || !style.renderMinHeight) {
         return ''
@@ -120,6 +197,7 @@ export default {
       return string
     },
     nodeMenuClick(data) {
+      this.updateModListTitle()
       if (data.children && data.children.length > 0) {
         return
       }
