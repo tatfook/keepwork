@@ -34,10 +34,12 @@ import themeFactory from '@/lib/theme/theme.factory'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import resize from './base/resize'
+import { setTimeout } from 'timers';
 export default {
   name: 'ModsList',
   mixins: [resize],
   mounted() {
+    this.updateModListTitle()
     let self = this
     function i18n(data) {
       _.forEach(data, (item, key) => {
@@ -106,11 +108,21 @@ export default {
   },
   methods: {
     updateModListTitle() {
-      // console.log(this.$refs.tree.$el.children)
-      for (const item of this.$refs.tree.$el.children) {
-        console.log(item)
-        //TODO
-      }
+      setTimeout(() => {
+        let data = this.$refs.tree.$el.children
+        _.forEach(data, (item, key) => {
+          _.forEach(item.children, (item2, key2) => {
+            if(key2 == 0){
+              item2.title = mods[key].label
+            }
+            _.forEach(item2.children, (item3, key3) => {
+              if(mods[key].children[key3]) {
+                item3.title = mods[key].children[key3].label
+              }
+            })
+          })
+        })
+      }, 0)
     },
     getSettingStyle(style) {
       if (!style || !style.renderMinHeight) {
@@ -128,6 +140,7 @@ export default {
       return string
     },
     nodeMenuClick(data) {
+      this.updateModListTitle()
       if (data.children && data.children.length > 0) {
         return
       }
