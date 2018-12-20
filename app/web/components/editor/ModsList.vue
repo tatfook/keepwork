@@ -56,6 +56,7 @@ export default {
       this.$refs.tree.setCurrentNode(mods[0])
       this.activeModsList = mods[0].mods
     }
+
     if (window.innerWidth <= 1920) {
       ;(this.treeViewWidth = 48.5), (this.previewBoxViewWidth = 51.5)
     } else {
@@ -104,6 +105,13 @@ export default {
     }
   },
   methods: {
+    updateModListTitle() {
+      // console.log(this.$refs.tree.$el.children)
+      for (const item of this.$refs.tree.$el.children) {
+        console.log(item)
+        //TODO
+      }
+    },
     getSettingStyle(style) {
       if (!style || !style.renderMinHeight) {
         return ''
