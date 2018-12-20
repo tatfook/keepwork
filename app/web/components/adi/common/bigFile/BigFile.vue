@@ -98,10 +98,10 @@ export default {
   },
   methods: {
     getStringLength(str) {
-      var len = 0
-      for (var i = 0; i<str.length; i++) {
-        var c = str.charCodeAt(i)
-        if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+      let len = 0
+      for (let i = 0; i < str.length; i ++) {
+        let charCode = str.charCodeAt(i)
+        if (charCode >= 0 && charCode <= 128) {
           len ++
         } else {
           len += 2
@@ -115,15 +115,33 @@ export default {
       }
 
       let name = this.properties.filename
-      let lastCharacterIndex = name.lastIndexOf('.' + this.properties.ext)
-      let realName = name.substring(0, lastCharacterIndex)
-      let l = this.getStringLength(realName)
+      let reg = new RegExp("(^.+)\\." + this.properties.ext)
+      let nameArray = name.match(reg)
+      let realName = nameArray[1]
 
       if(this.getStringLength(realName) <= 20) {
         return name
       } else {
-        let prefixName = name.substring(0, 5)
-        let suffixName = name.substring(lastCharacterIndex - 4)
+        let j = 0
+        let k = 0
+        for (; j + k < 10; j ++) {
+          let charCode = realName.charCodeAt(j)
+          if (charCode < 0 || charCode > 128) {
+            k ++
+          }
+        }
+        let prefixName = realName.substring(0, 10 - k)
+
+        let m = 0
+        let index = realName.length - 1
+        for (; index + 1 > realName.length - 1 - (8 - m); index --) {
+          let characterCode = realName.charCodeAt(index)
+          if (characterCode < 0 || characterCode > 128) {
+            m ++
+          }
+        }
+        let suffixName = realName.substring(index + 2)
+
         return prefixName + '---' + suffixName
       }
     },
