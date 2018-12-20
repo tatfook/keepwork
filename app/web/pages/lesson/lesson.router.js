@@ -19,6 +19,7 @@ const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
+const ApplyTeacher = () => import('@/components/lesson/teacher/ApplyTeacher')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
 const PackageManager = () =>
   import('@/components/lesson/teacher/PackageManager')
@@ -84,6 +85,12 @@ export default new Router({
               path: '/',
               name: 'TeacherColumn',
               component: Teach,
+              meta: { requireAuth: true }
+            },
+            {
+              path: 'apply',
+              name: 'TeacherColumnApply',
+              component: ApplyTeacher,
               meta: { requireAuth: true }
             },
             {
