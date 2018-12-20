@@ -10,7 +10,6 @@
       unselectable="on"
       :style="getTreeViewWidth"
     >
-      <!-- <el-tree :data='modsMenu' :props='defaultProps' highlight-current accordion :indent=0 @node-click='modeMenuClick'></el-tree> -->
       <el-tree
         ref='tree'
         node-key='id'
@@ -154,11 +153,22 @@ export default {
     },
     getTreeViewWidth() {
       const style = {}
+
+      if (this.treeViewWidth < 11) {
+        this.treeViewWidth = 11
+      }
+
       style.width = this.treeViewWidth + '%'
+
       return style
     },
     getPreviewBoxWidth() {
       const style = {}
+
+      if (this.previewBoxViewWidth > 89) {
+        this.previewBoxViewWidth = 89
+      }
+
       style.width = this.previewBoxViewWidth + '%'
       return style
     }
@@ -248,7 +258,7 @@ export default {
 .full-height {
   height: 100%;
   .editor-resizer {
-    width: 2px;
+    width: 3px;
     background-color: #c0c4cc;
     cursor: col-resize;
   }
