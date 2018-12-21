@@ -120,6 +120,7 @@ export default {
   &-info {
     flex: 1;
     margin-right: 16px;
+    min-width: 0;
     &-name {
       font-size: 14px;
       color: #303133;
@@ -131,6 +132,9 @@ export default {
     &-desc {
       font-size: 12px;
       color: #909399;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
   &-operate {
