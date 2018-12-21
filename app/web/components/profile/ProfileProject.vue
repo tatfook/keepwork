@@ -84,7 +84,9 @@ export default {
       let copiedProjects = _.cloneDeep(this.nowProfileCreatedProjects)
       _.map(this.pinedProjects, projectId => {
         let pinedProjectIndex = _.findIndex(copiedProjects, { 'id': projectId })
-        copiedProjects[pinedProjectIndex].isTopped = true
+        if (pinedProjectIndex !== -1) {
+          copiedProjects[pinedProjectIndex].isTopped = true
+        }
       })
       return copiedProjects
     },
@@ -156,6 +158,9 @@ export default {
       this.pinedProjects = _.cloneDeep(
         _.get(this.nowUserDetail, 'extra.pinedProjects', [])
       )
+    },
+    activeName() {
+      this.initProjectsData()
     }
   },
   components: {
@@ -184,13 +189,13 @@ export default {
     &-item {
       background-color: #fff;
       margin-bottom: 24px;
-      border: 1px solid #e8e8e8;
       border-radius: 4px;
     }
   }
   &-tabs {
     .el-tabs__header {
       margin-bottom: 0;
+      border: 1px solid #e8e8e8;
     }
     .el-tabs__nav {
       width: 100%;
@@ -241,21 +246,13 @@ export default {
   &-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: -1px;
+    background-color: #f5f5f5;
     & &-item {
-      margin: 0;
-      border-radius: 0;
-      width: 33.3%;
-    }
-    & &-item:nth-child(3n + 1) {
-      border-width: 0 0 1px 0;
-    }
-    & &-item:nth-child(3n + 2) {
-      border-width: 0 1px 1px 1px;
+      margin: 8px 8px 0 0;
+      width: 294px;
     }
     & &-item:nth-child(3n) {
-      border-width: 0 0 1px 0;
+      margin: 8px 0 0 0;
     }
   }
   &-empty {

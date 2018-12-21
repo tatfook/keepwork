@@ -393,7 +393,7 @@
     "categoryList": "分类列表",
     "tab": "标签",
     "pageSwitching": "页面切换",
-    "iframe": "iframe",
+    "iframe": "内联框架",
 
     "lesson": "课程",
     "quiz": "问题",
@@ -492,6 +492,11 @@
       "notice": "分享你的想法！",
       "work_review": "作品评论",
       "publish": "发布"
+    },
+    "iframe": {
+      "notice": "输入的站外链接将可能无法在iframe中加载成功, 是否继续?",
+      "pleaseInput": "请输入https或者http的链接",
+      "formatError": "请输入带https/http的链接"
     }
   },
   "card": {
@@ -531,7 +536,7 @@
     "enter": "进入",
     "innerModal": "内部模态框",
     "bigFile": "大文件",
-    "iframe": "iframe",
+    "iframe": "内联框架",
     "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表",

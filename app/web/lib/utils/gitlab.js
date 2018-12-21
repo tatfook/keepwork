@@ -4,28 +4,28 @@ export const EMPTY_GIT_FOLDER_KEEPER = '.gitignore.md'
 export const EMPTY_GIT_FOLDER_KEEPER_REGEX = /^\.(git|keep|gitignore)/ // for .gitkeep, .keep, .gitignore, .gitignore.md
 export const CONFIG_FOLDER_NAME = '_config'
 
-// export const webTemplateProject = {
-//   rawBaseUrl: 'https://git.keepwork.com',
-//   dataSourceUsername: 'gitlab_rls_official',
-//   projectName: 'keepwork-template-v2',
-//   projectId: 36332,
-//   configFullPath: 'config.json',
-//   pageTemplateRoot: 'webpage',
-//   pageTemplateConfigFullPath: 'webpage/config.json'
-// }
-
-// https://git-stage.keepwork.com/gitlab_www_official/keepwork-template-v2
 export const webTemplateProject = {
-  rawBaseUrl: 'https://api-stage.keepwork.com/git/v0',
-  dataSourceUsername: 'official',
+  rawBaseUrl: 'https://api.keepwork.com/git/v0',
+  dataSourceUsername: 'gitlab_rls_official',
   projectName: 'official/keepwork-template-v2',
   projectId: 36332,
   configFullPath: 'config.json',
-  configName: 'config.json',
   pageTemplateRoot: 'webpage',
-  // pageTemplateConfigFullPath: 'official/keepwork-template-v2/config.json/webpage/config.json'
   pageTemplateConfigFullPath: 'webpage/config.json'
 }
+
+// https://git-stage.keepwork.com/gitlab_www_official/keepwork-template-v2
+// export const webTemplateProject = {
+//   rawBaseUrl: 'https://api-stage.keepwork.com/git/v0',
+//   dataSourceUsername: 'official',
+//   projectName: 'official/keepwork-template-v2',
+//   projectId: 36332,
+//   configFullPath: 'config.json',
+//   configName: 'config.json',
+//   pageTemplateRoot: 'webpage',
+//   // pageTemplateConfigFullPath: 'official/keepwork-template-v2/config.json/webpage/config.json'
+//   pageTemplateConfigFullPath: 'webpage/config.json'
+// }
 
 /*doc
   # gitTree2NestedArray
@@ -54,7 +54,9 @@ export const gitTree2NestedArray = (files, rootPath) => {
 
   let convertChildren2ArrayInTree = tree => {
     if (_.has(tree, temporaryChildrenKey)) {
-      tree.children = _.values(tree[temporaryChildrenKey])
+      // tree.children = _.values(tree[temporaryChildrenKey])
+      const children = _.values(tree[temporaryChildrenKey])
+      tree.children = [..._.filter(children, i => i.type === 'tree'), ..._.filter(children, i => i.type !== 'tree')]
       _.unset(tree, temporaryChildrenKey)
       tree.children.forEach(convertChildren2ArrayInTree)
     }

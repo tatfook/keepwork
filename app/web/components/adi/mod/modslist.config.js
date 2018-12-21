@@ -12,6 +12,7 @@ import ModVipRead from './web/vipRead'
 import ModComment from './web/comment'
 import ModMenu from './web/menu'
 import ModTextBoard from './web/textBoard'
+import ModIframe from './common/iframe'
 
 import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
@@ -186,6 +187,11 @@ let modsList = [
         id: '9-2',
         label: 'modList.vipRead',
         mods: [ModVipRead]
+      },
+      {
+        id: '9-3',
+        label: 'modList.iframe',
+        mods: [ModIframe]
       }
     ]
   }

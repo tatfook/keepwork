@@ -14,6 +14,7 @@ import lessonEditor from './LessonEditor'
 import projectInput from './ProjectInput'
 import projectMembersSwitch from './ProjectMembersSwitch'
 import projectTagsSwitch from './ProjectTagsSwitch'
+import iframeLink from './IframeLink'
 
 export default {
   input,
@@ -31,5 +32,6 @@ export default {
   lessonEditor,
   projectInput,
   projectMembersSwitch,
-  projectTagsSwitch
+  projectTagsSwitch,
+  iframeLink
 }

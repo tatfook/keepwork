@@ -26,7 +26,7 @@
           >
             <el-button
               class="iconfont icon-module"
-              :class="{'el-button--primary': activeManagePaneComponentName=='ModsList'}"
+              :class="{'el-button--primary': activeManagePaneComponentName == 'ModsList' || activeManagePaneComponentName == 'ModPropertyManager'}"
               @click="changeView('ModsList')"
             ></el-button>
           </el-tooltip>

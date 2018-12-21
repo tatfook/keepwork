@@ -8,7 +8,7 @@
         <el-tabs class="profile-social-tabs profile-social-main-item" v-model="activeName" v-loading='isLoading'>
           <el-tab-pane name="favorite">
             <span slot='label'>{{$t('profile.following')}}</span>
-            <user-list v-if="!isEmpty" :userList='userList'></user-list>
+            <user-list v-if="!isEmpty" :userList='userList' :isGetRankDetailAfterFavorite='isLoginUserEditable'></user-list>
             <div v-if="isEmpty" class="profile-social-empty">
               <img :src="emptyImg" alt="">
               <div class="profile-social-empty-info">{{emptyInfo}}</div>
@@ -16,7 +16,7 @@
           </el-tab-pane>
           <el-tab-pane name="follow">
             <span slot='label'>{{$t('profile.followers')}}</span>
-            <user-list v-if="!isEmpty" :userList='userList'></user-list>
+            <user-list v-if="!isEmpty" :userList='userList' :isGetRankDetailAfterFavorite='isLoginUserEditable'></user-list>
             <div v-if="isEmpty" class="profile-social-empty">
               <img :src="emptyImg" alt="">
               <div class="profile-social-empty-info">{{emptyInfo}}</div>

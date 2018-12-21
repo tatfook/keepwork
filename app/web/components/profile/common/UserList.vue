@@ -1,6 +1,6 @@
 <template>
   <div class="user-list">
-    <user-item class="user-list-item" v-for="(user, index) in userList" :key="index" :user="user"></user-item>
+    <user-item class="user-list-item" v-for="(user, index) in userList" :key="index" :user="user" :isGetRankDetailAfterFavorite='isGetRankDetailAfterFavorite'></user-item>
   </div>
 </template>
 <script>
@@ -11,6 +11,10 @@ export default {
     userList: {
       type: Array,
       default: []
+    },
+    isGetRankDetailAfterFavorite: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
