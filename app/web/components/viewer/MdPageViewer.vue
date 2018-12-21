@@ -132,7 +132,7 @@ export default {
 }
 @media (max-width: 768px) {
   .md-page-viewer {
-    .hide {
+    .hide-on-phone {
       display: none;
     }
     .toggle-sidebar-main-button {
