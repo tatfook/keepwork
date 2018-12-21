@@ -9,6 +9,7 @@ const SET_RECHARGE_ORDER_STATE = 'SET_RECHARGE_ORDER_STATE'
 const CREATE_TRADE_ORDER = 'CREATE_TRADE_ORDER'
 const SUBMIT_TRADE_ORDER = 'SUBMIT_TRADE_ORDER'
 const PAY_TRADE_ORDER = 'PAY_TRADE_ORDER'
+const GET_GOODS_SUCCESS = 'GET_GOODS_SUCCESS'
 
 export const props = {
   GET_BALANCE_SUCCESS,
@@ -19,7 +20,8 @@ export const props = {
   CLEAR_RECHARGE_ORDER_RECORD,
   CREATE_TRADE_ORDER,
   SUBMIT_TRADE_ORDER,
-  PAY_TRADE_ORDER
+  PAY_TRADE_ORDER,
+  GET_GOODS_SUCCESS
 }
 
 const mutations = {
@@ -59,6 +61,9 @@ const mutations = {
       ...state.tradeOrder,
       ...payload
     })
+  },
+  [GET_GOODS_SUCCESS](state, payload) {
+    Vue.set(state, 'goods', payload)
   }
 }
 

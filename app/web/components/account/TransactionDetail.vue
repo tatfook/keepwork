@@ -48,7 +48,7 @@ export default {
       getTrades: 'account/getTrades'
     })
   },
-  async mounted() {
+  async created() {
     await this.getTrades()
   },
 }

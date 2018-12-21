@@ -28,17 +28,57 @@
       </div>
       <div class="order-pay-main-verify">
         <div class="order-pay-main-verify-cellphone">
-          绑定的手机号: 
+          绑定的手机号:
+          <span
+            class="order-pay-main-verify-cellphone-binding"
+            v-if="isBinding"
+          >
+            {{ cellphone }}
+          </span>
+          <span
+            class="order-pay-main-verify-cellphone-unbound"
+            v-else
+          >
+            还没有绑定手机号，<span
+              class="link"
+              @click="handleToBindPage"
+            >去绑定</span>
+          </span>
         </div>
-        <div class="order-pay-main-verify-code">
-          <el-input class="order-pay-main-verify-code-input"></el-input>
-          <span class="order-pay-main-verify-code-send">发送验证码</span>
+        <div
+          v-if="isRmbPayment"
+          class="order-pay-main-verify-code"
+        >
+          <el-input
+            :class="['order-pay-main-verify-code-input', { 'error': isCodeError }]"
+            placeholder="请输入验证码"
+            v-model="captcha"
+            @focus="resetError"
+          ></el-input>
+          <span
+            v-if="isWaiting"
+            class="order-pay-main-verify-code-wait"
+          >{{waitingTime}}s后重试</span>
+          <span
+            v-else
+            @click="handleSendCode"
+            :class="['order-pay-main-verify-code-send', { 'disabled': isDisabled }]"
+          >发送验证码</span>
+        </div>
+        <div
+          v-if="isCodeError"
+          class="order-pay-main-verify-code-error"
+        >
+          <span v-if="isCodeEmpty">请输入验证码</span>
+          <span v-if="isCodeWrong">验证码错误</span>
         </div>
       </div>
       <el-button
         v-if="!isNeedRecharge"
+        :disabled="isDisabled"
         type="primary"
-        class="order-pay-main-confirm-button"
+        :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]"
+        @click="handleConfirmToPay"
       >确认支付</el-button>
       <el-button
         v-else
@@ -67,6 +107,7 @@
 <script>
 import RechargeDialog from './common/RechargeDialog'
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
 import { locale } from "@/lib/utils/i18n";
 export default {
   name: 'OrderPay',
@@ -75,7 +116,12 @@ export default {
   },
   data() {
     return {
-      isShowRechargeDialog: false
+      isShowRechargeDialog: false,
+      timer: null,
+      waitingTime: 0,
+      isCodeEmpty: false,
+      isCodeWrong: false,
+      captcha: ''
     }
   },
   mounted() {
@@ -84,8 +130,21 @@ export default {
   computed: {
     ...mapGetters({
       tradeOrder: 'account/tradeOrder',
-      balance: 'account/balance'
+      balance: 'account/balance',
+      userProfile: 'user/profile'
     }),
+    isCodeError() {
+      return this.isCodeEmpty || this.isCodeWrong
+    },
+    cellphone() {
+      return this.userProfile.cellphone
+    },
+    isBinding() {
+      return !!this.cellphone
+    },
+    isDisabled() {
+      return !this.isBinding
+    },
     isEn() {
       return locale === 'en-US'
     },
@@ -106,7 +165,7 @@ export default {
     },
     unitTable() {
       return this.isEn ? {
-        rmb: 'rmb',
+        rmb: '￥',
         coin: 'coin',
         bean: 'bean'
       } : {
@@ -119,7 +178,10 @@ export default {
       return this.unitTable[this.paymentWay]
     },
     paymentWay() {
-      return this.tradeOrder.paymentWay || 'rmb'
+      return this.tradeOrder.paymentWay
+    },
+    isRmbPayment() {
+      return this.paymentWay === 'rmb'
     },
     isRmbPayment() {
       return this.paymentWay === 'rmb'
@@ -138,13 +200,21 @@ export default {
     },
     needRechargeNumberByUnit() {
       return this.isRmbPayment ? `${this.costUnit}${this.needRechargeNumber}` : `${this.needRechargeNumber}${this.costUnit}`
+    },
+    isWaiting() {
+      return this.waitingTime > 0
     }
   },
   methods: {
     ...mapActions({
       payTradeOrder: 'account/payTradeOrder',
-      getBalance: 'account/getBalance'
+      getBalance: 'account/getBalance',
+      payTradeOrder: 'account/payTradeOrder'
     }),
+    resetError() {
+      this.isCodeWrong = false
+      this.isCodeEmpty = false
+    },
     handleBack() {
       this.$router.back(-1)
     },
@@ -154,6 +224,70 @@ export default {
     },
     handleHideRechargeDialog() {
       this.isShowRechargeDialog = false
+    },
+    waitAMiniute() {
+      clearInterval(this.timer)
+      this.waitingTime = 5
+      this.timer = setInterval(() => {
+        if (--this.waitingTime <= 0) {
+          clearInterval(this.timer)
+          this.waitingTime = 0
+        }
+      }, 1000)
+    },
+    async handleSendCode() {
+      if (this.isBinding && this.waitingTime === 0) {
+        try {
+          await keepwork.user.verifyCellphoneOne({ cellphone: this.cellphone })
+          this.waitAMiniute()
+          this.$message({
+            type: 'success',
+            message: '发送成功'
+          })
+        } catch (error) {
+          console.error(error)
+          this.$message.error('发送验证码失败')
+        }
+      }
+    },
+    handleToBindPage() {
+      this.$message({
+        type: 'success',
+        message: '去绑定页面'
+      })
+    },
+    async handleConfirmToPay() {
+      if (!this.captcha) {
+        return this.isCodeEmpty = true
+      }
+      try {
+        const {
+          goodsId,
+          finalCost,
+          paymentWay,
+          count,
+          type
+        } = this.tradeOrder
+        const payload = {
+          type,
+          goodsId: 1,
+          count,
+          rmb: finalCost,
+          captcha: this.captcha,
+          extra: {
+            packageId: 67
+          }
+        }
+        let res = await this.payTradeOrder(payload)
+        this.$meesage({
+          type: 'success',
+          message: '支付成功'
+        })
+      } catch (error) {
+        console.error(error)
+        this.isCodeWrong = true
+        this.$meesage.error('支付订单失败')
+      }
     }
   }
 }
@@ -189,9 +323,9 @@ export default {
   &-main {
     margin-top: 10px;
     background: #fff;
-    padding: 30px 50px;
+    padding:30px 50px 250px;
     color: #808080;
-
+    box-sizing: border-box;
     &-balance {
       width: 306px;
       min-height: 65px;
@@ -242,9 +376,69 @@ export default {
       }
     }
 
+    &-verify {
+      margin-top: 42px;
+      height: 130px;
+      &-cellphone {
+        &-binding {
+          color: #808080;
+        }
+        &-unbound {
+          color: #fe628f;
+          .link {
+            display: inline-block;
+            border-bottom: 1px solid #fe628f;
+            cursor: pointer;
+          }
+        }
+      }
+      &-code {
+        margin-top: 16px;
+        box-sizing: border-box;
+        &-input {
+          box-sizing: border-box;
+          width: 305px;
+          height: 31px;
+          &.error {
+            .el-input__inner {
+              border-color: #f56c6c;
+            }
+          }
+        }
+        &-send {
+          margin-left: 20px;
+          color: #409efe;
+          cursor: pointer;
+          &.disabled {
+            color: #d2d2d2;
+            cursor: not-allowed;
+          }
+        }
+        &-wait {
+          margin-left: 20px;
+          cursor: not-allowed;
+          color: #d2d2d2;
+        }
+
+        &-error {
+          margin-top: 10px;
+          color: #f56c6c;
+        }
+      }
+    }
+
     &-confirm-button {
       width: 306px;
-      margin-top: 50px;
+      &.disabled {
+        background: #eeeeee;
+        color: #bfbfbf;
+        border-color: #eeeeee;
+        &:hover {
+          background: #eeeeee;
+          color: #bfbfbf;
+          border-color: #eeeeee;
+        }
+      }
     }
 
     &-dialog {

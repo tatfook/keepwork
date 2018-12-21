@@ -14,6 +14,8 @@ const OrderConfirm = () => import('@/components/account/OrderConfirm')
 const OrderPay = () => import('@/components/account/OrderPay')
 const OrderCompletion = () => import('@/components/account/OrderCompletion')
 
+const ExchangeMall = () => import('@/components/account/ExchangeMall')
+
 export default new Router({
   mode: 'history',
   base: '/a',
@@ -70,6 +72,11 @@ export default new Router({
       path: '/orderCompletion',
       name: 'OrderCompletion',
       component: OrderCompletion
+    },
+    {
+      path: '/exchangeMall',
+      name: 'ExchangeMall',
+      component: ExchangeMall
     }
   ]
 })

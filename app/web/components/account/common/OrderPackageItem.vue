@@ -8,21 +8,21 @@
       >
     </div>
     <div class="order-package-item-info">
-      <div class="order-package-item-info-row name">
+      <div class="order-package-item-info-row-name">
         {{packageName}}
       </div>
       <div class="order-package-item-info-row">
-        <span class="includes">
+        <span class="order-package-item-info-row-includes">
           <span class="row-bold">包含:</span>{{includesLessonCount}} 个课程
         </span>
-        <span class="age">
+        <span class="order-package-item-info-row">
           年龄:
         </span>
       </div>
-      <div class="order-package-item-info-row intro">
+      <div class="order-package-item-info-row-intro">
         简介: {{ packageIntro }}
       </div>
-      <div class="order-package-item-info-row return">
+      <div class="order-package-item-info-row-return">
         购买后返还XXX知识币
       </div>
     </div>
@@ -105,15 +105,22 @@ export default {
       color: #999;
       font-size: 12px;
       line-height: 18px;
-      &.row-bold {
-        color: #5e5e5e;
+      &-includes {
+        .row-bold {
+          color: #5e5e5e;
+        }
       }
-      &.name {
+      &-name {
         font-size: 18px;
         color: #333;
         margin-bottom: 10px;
       }
-      &.return {
+      &-intro {
+        color: #999;
+        font-size: 12px;
+        line-height: 18px;
+      }
+      &-return {
         color: #55a7e8;
         margin-top: 20px;
       }

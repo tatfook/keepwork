@@ -3,7 +3,7 @@
     支付方式:
     <div class="payment-way-options">
       <span
-        :class="['payment-way-options-card', { 'selected': isWeixinPay }]"
+        :class="['payment-way-options-card', { 'options-card-selected': isWeixinPay }]"
         @click="handleSelectPayWay(CONF.WEIXIN_PAY)"
       >
         <span class="payment-way-options-card-icon weixin-icon"></span>
@@ -15,7 +15,7 @@
         </span>
       </span>
       <span
-        :class="['payment-way-options-card', { 'selected': isZhifubaoPay }]"
+        :class="['payment-way-options-card', { 'options-card-selected': isZhifubaoPay }]"
         @click="handleSelectPayWay(CONF.ZHIFUBAO_PAY)"
       >
         <span class="payment-way-options-card-icon zhifubao-icon"></span>
@@ -30,7 +30,7 @@
     <div class="payment-way-confirm">
       <el-button
         type="primary"
-        :class="['payment-way-confirm-button', {'mini': isMini}]"
+        :class="['payment-way-confirm-button', {'payment-way-min': isMini}]"
         @click="handleConfirm"
         :loading="isLoading"
       >立即充值</el-button>
@@ -114,7 +114,7 @@ export default {
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      &.selected {
+      &.options-card-selected {
         border: 2px solid #409efe;
       }
       &-icon {
@@ -166,7 +166,7 @@ export default {
       height: 43px;
       font-size: 18px;
 
-      &.mini {
+      &.payment-way-mini {
         width: 154px;
       }
     }

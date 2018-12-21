@@ -20,8 +20,8 @@
     </div>
     <div class="account-detail-item">
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col name">余额(元)</div>
-        <div class="account-detail-item-row-col count">{{rmb}}</div>
+        <div class="account-detail-item-row-col-name">余额(元)</div>
+        <div class="account-detail-item-row-col-count">{{rmb}}</div>
         <div class="account-detail-item-row-button">
           <el-button
             type="primary"
@@ -34,18 +34,19 @@
 
     <div class="account-detail-item">
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col name">知识币(个)</div>
-        <div class="account-detail-item-row-col count">{{coin}}</div>
+        <div class="account-detail-item-row-col-name">知识币(个)</div>
+        <div class="account-detail-item-row-col-count">{{coin}}</div>
         <div class="account-detail-item-row-button">
           <el-button
             type="primary"
             class="account-item-button"
+            @click="toExchangeMall"
           >去兑换</el-button>
         </div>
       </div>
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col"></div>
-        <div class="account-detail-item-row-col lock">{{lockCoin}}<span class="lock-tips">(待解锁)</span></div>
+        <div class="account-detail-item-row-col-name"></div>
+        <div class="account-detail-item-row-col-lock">{{lockCoin}}<span class="lock-tips">(待解锁)</span></div>
         <div class="account-detail-item-row-button lock">
           <el-button
             type="primary"
@@ -57,12 +58,13 @@
 
     <div class="account-detail-item">
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col name">知识豆(个)</div>
-        <div class="account-detail-item-row-col count">{{bean}}</div>
+        <div class="account-detail-item-row-col-name">知识豆(个)</div>
+        <div class="account-detail-item-row-col-count">{{bean}}</div>
         <div class="account-detail-item-row-button">
           <el-button
             type="primary"
             class="account-item-button"
+            @click="toExchangeMall"
           >去兑换</el-button>
         </div>
       </div>
@@ -102,6 +104,9 @@ export default {
   methods: {
     toRechargeConfirm() {
       this.$router.push({ name: 'RechargeConfirm' })
+    },
+    toExchangeMall() {
+      this.$router.push({ name: 'ExchangeMall' })
     }
   }
 
@@ -147,16 +152,18 @@ export default {
       display: flex;
       align-items: center;
       &-col {
-        flex: 1;
-        &.name {
+        &-name {
+          flex: 1;
           color: #808080;
           font-size: 15px;
         }
-        &.count {
+        &-count {
+          flex: 1;
           font-size: 24px;
           color: #404144;
         }
-        &.lock {
+        &-lock {
+          flex: 1;
           // text-align: center;
           font-size: 24px;
           color: #bec1c6;

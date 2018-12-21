@@ -12,7 +12,8 @@ const {
   SET_RECHARGE_ORDER_STATE,
   CREATE_TRADE_ORDER,
   SUBMIT_TRADE_ORDER,
-  PAY_TRADE_ORDER
+  PAY_TRADE_ORDER,
+  GET_GOODS_SUCCESS
 } = props
 
 const SUCCESS_CODE = 256
@@ -63,8 +64,12 @@ const actions = {
     commit(SUBMIT_TRADE_ORDER, payload)
   },
   async payTradeOrder({ commit }, payload) {
-    console.log('完成订单')
+    await account.createTradeOrder(payload)
     commit(PAY_TRADE_ORDER, payload)
+  },
+  async getGoods({ commit }) {
+    const goods = await account.getGoods()
+    commit(GET_GOODS_SUCCESS, goods)
   }
 }
 

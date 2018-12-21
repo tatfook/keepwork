@@ -26,6 +26,7 @@
         <div class="order-confirm-main-count-input">
           <el-input-number
             class="input-number-counter"
+            :disabled="isPackageType"
             v-model="count"
             :min="1"
             :max="10000"
@@ -84,14 +85,14 @@ export default {
   },
   async mounted() {
     document.title = '确认订单'
-    let { type, count = 1, id } = this.$route.query
+    let { type, count = 1, id, payment } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
     console.warn(`type: ${type}, count: ${count}, goodsId: ${id}`)
     if (_.isNumber(count) && count > 1 && COUNT_REG.test(count)) {
       this.count = count
     }
-    if (!type || !id) {
+    if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
     await Promise.all([

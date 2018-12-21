@@ -142,14 +142,6 @@ export default {
     }
   }
 
-  &-line {
-    height: 1px;
-    background: #fff;
-    .line-1px {
-      height: 1px;
-      background: #f3f3f3;
-    }
-  }
 
   &-way {
     background: #fff;
