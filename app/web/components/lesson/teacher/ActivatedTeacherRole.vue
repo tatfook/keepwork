@@ -30,6 +30,9 @@
               <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
               <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
             </el-submenu>
+            <el-menu-item v-if="!isMentor" index="4" @click="showItem('MENTOR_INVITE')">
+              <span class="item-title" slot="title">{{$t('lesson.becomeAMentor')}}</span>
+            </el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -63,28 +66,28 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       username: 'user/username',
-      teacherInfo: 'lesson/teacherInfo',
-      allianceInfo: 'lesson/allianceInfo'
+      tutorInfo: 'lesson/tutorInfo',
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
     menuMode() {
       return this.windowWidth > 678 ? 'vertical' : 'horizontal'
     },
     isTeacher() {
-      if (!this.teacherInfo) {
-        return false
-      }
-      let { startTime, endTime } = this.teacherInfo
-      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+      return this.userIsTeacher
     },
     isAlliance() {
-      if (!this.allianceInfo || this.isTeacher) {
-        return false
-      }
-      let { startTime, endTime } = this.allianceInfo
-      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+      return this.userIsAlliance
     },
     isLearner() {
       return !this.isTeacher && !this.isAlliance
+    },
+    isMentor() {
+      if (!this.tutorInfo) {
+        return false
+      }
+      let { startTime, endTime } = this.tutorInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
     }
   },
   methods: {
@@ -143,7 +146,10 @@ export default {
             path: `/teacher/packageManager`
           })
           break
-        case 'MANAGEMENT':
+        case 'MENTOR_INVITE':
+          this.$router.push({
+            path: `/teacher/mentor`
+          })
           break
         default:
           break
@@ -151,7 +157,6 @@ export default {
     },
     decideRouter() {
       let routeName = this.$route.name
-      console.log(routeName)
       if (!this.isTeacher && (routeName == 'TeacherColumn' || routeName == 'TeacherColumnReview')) {
         this.$router.push({
           path: `/teacher/apply`
@@ -242,6 +247,7 @@ export default {
             border: solid 1px #bcbcbc;
           }
           .lesson-manager-popver-menu {
+            margin-bottom: 16px;
             .el-menu {
               .el-menu-item {
                 margin: 0;
@@ -359,8 +365,6 @@ export default {
             }
           }
         }
-      }
-      &-right {
       }
     }
   }

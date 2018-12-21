@@ -1,6 +1,6 @@
 <template>
   <div class="new-package">
-    <package-editor-header :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
+    <package-editor-header :isSubmitable='isSubmitable' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
     <div class="new-package-container">
       <package-basic-info ref="basicInfoComponent" v-show="activeTab === 'basic'"></package-basic-info>
       <cover-media-setter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
@@ -13,7 +13,7 @@ import PackageEditorHeader from './PackageEditorHeader'
 import PackageBasicInfo from './PackageBasicInfo'
 import CoverMediaSetter from './CoverMediaSetter'
 import CatalogueManager from './CatalogueManager'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'NewPackage',
   mounted() {
@@ -27,6 +27,22 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
+    }),
+   isTeacher() {
+      return this.userIsTeacher
+    },
+    isAlliance() {
+      return this.userIsAlliance
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
+    isSubmitable() {
+      return !this.isLearner
+    },
     newPackageBasicInfo() {
       return this.$refs.basicInfoComponent.newPackageDetail
     },
