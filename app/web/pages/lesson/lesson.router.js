@@ -102,8 +102,9 @@ export default new Router({
             },
             {
               path: 'mentor',
-              name: 'MentorInvite',
-              component: MentorInvite
+              name: 'TeacherColumnMentorInvite',
+              component: MentorInvite,
+              meta: { requireAuth: true }
             },
             {
               path: 'lesson/new',
