@@ -17,15 +17,23 @@
           {{userBalanceByUnit}}
         </span>
       </div>
-      <div class="order-pay-main-tips" v-if="isNeedRecharge">
+      <div
+        class="order-pay-main-tips"
+        v-if="isNeedRecharge"
+      >
         <i class="order-pay-main-tips-icon el-icon-warning"></i>
         <span class="order-pay-main-tips-text">人民币余额不足，还需要
           {{needRechargeNumberByUnit}}
           ，请先去充值。</span>
       </div>
       <div class="order-pay-main-verify">
-        <!-- <div class="order-pay-main-"></div> -->
-        <el-input></el-input>
+        <div class="order-pay-main-verify-cellphone">
+          绑定的手机号: 
+        </div>
+        <div class="order-pay-main-verify-code">
+          <el-input class="order-pay-main-verify-code-input"></el-input>
+          <span class="order-pay-main-verify-code-send">发送验证码</span>
+        </div>
       </div>
       <el-button
         v-if="!isNeedRecharge"
