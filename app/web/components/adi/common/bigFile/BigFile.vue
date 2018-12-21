@@ -214,8 +214,9 @@ export default {
     },
     getIconClass() {
       if (this.properties.ext) {
-        if (this.ext[this.properties.ext]) {
-          return this.ext[this.properties.ext]
+        let ext = this.properties.ext.toLowerCase()
+        if (this.ext[ext]) {
+          return this.ext[ext]
         } else {
           return 'icon-ukown_file'
         }
@@ -224,7 +225,7 @@ export default {
       }
     },
     getType() {
-      let ext = this.properties.ext || ''
+      let ext = (this.properties.ext || '').toLowerCase()
 
       if (ext) {
         let beHandle = false
@@ -327,10 +328,10 @@ export default {
     justify-content: space-between;
 
     .filename {
-      width: 190px;
+      width: 230px;
     }
     .filesize {
-      width: 190px;
+      width: 230px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

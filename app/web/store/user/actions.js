@@ -269,7 +269,7 @@ const actions = {
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectName } = webTemplateProject
     let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectName, path: '', recursive: true })
+    fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
