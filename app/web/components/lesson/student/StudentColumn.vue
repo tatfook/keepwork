@@ -79,7 +79,7 @@ export default {
       userProfile: 'user/profile',
       username: 'user/username',
       userinfo: 'lesson/userinfo',
-      lessonTutorInfo: 'lesson/tutorInfo',
+      lessonTutorInfo: 'lesson/tutorInfo'
     }),
     isHaveTotur() {
       return Boolean(this.lessonTutorInfo && this.lessonTutorInfo.tutorId)
