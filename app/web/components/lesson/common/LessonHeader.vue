@@ -67,13 +67,12 @@
             <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
           </el-scrollbar>
         </div>
-        <div v-if="isTeacher" class="lesson-button-wrap">
+        <div v-if="userIsTeacher && isTeacher" class="lesson-button-wrap">
           <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
           <el-button v-else @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
           <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
           <span v-else class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
         </div>
-
       </el-col>
     </el-row>
     <keep-work-sticky>
@@ -276,7 +275,8 @@ export default {
       isClassIsOver: 'lesson/teacher/isClassIsOver',
       classroom: 'lesson/teacher/classroom',
       isBeInClassroom: 'lesson/student/isBeInClassroom',
-      userInfo: 'lesson/userinfo'
+      userInfo: 'lesson/userinfo',
+      userIsTeacher: 'lesson/isTeacher'
     }),
     lesson() {
       return this.data

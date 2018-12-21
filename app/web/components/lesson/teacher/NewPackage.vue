@@ -28,23 +28,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userIdenity: 'lesson/userIdenity',
-      teacherInfo: 'lesson/teacherInfo',
-      allianceInfo: 'lesson/allianceInfo'
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
-    isTeacher() {
-      if (!this.teacherInfo) {
-        return this.userIdenity === 2 ? true : false
-      }
-      let { startTime, endTime } = this.teacherInfo
-      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+   isTeacher() {
+      return this.userIsTeacher
     },
     isAlliance() {
-      if (!this.allianceInfo || this.isTeacher) {
-        return false
-      }
-      let { startTime, endTime } = this.allianceInfo
-      return moment(new Date()).isBetween(startTime, endTime, 'minute')
+      return this.userIsAlliance
     },
     isLearner() {
       return !this.isTeacher && !this.isAlliance
