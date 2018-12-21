@@ -115,6 +115,9 @@ export default {
         case 'TeacherColumnApply':
           this.itmeActive = '0'
           break
+        case 'TeacherColumnMentorInvite':
+          this.itmeActive = '4'
+          break
         default:
           this.itmeActive = this.isTeacher ? '0' : '1'
       }
@@ -280,6 +283,7 @@ export default {
     &-right {
       flex: 1;
       min-width: 0;
+      background-color: #fff;
     }
   }
   & .el-menu &-apply.el-menu-item {
