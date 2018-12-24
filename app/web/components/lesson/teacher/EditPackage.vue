@@ -41,13 +41,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail'
+      lessonPackageDetail: 'lesson/packageDetail',
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
+    isTeacher() {
+      return this.userIsTeacher
+    },
+    isAlliance() {
+      return this.userIsAlliance
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
     isEditable() {
       return this.editingPackageDetail.state !== 1
     },
     isSubmitable() {
-      return (
+      return !this.isLearner && (
         this.editingPackageDetail.state === 0 ||
         this.editingPackageDetail.state === 3 ||
         this.editingPackageDetail.state === 4

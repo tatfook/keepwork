@@ -58,8 +58,8 @@ const TeacherPageReg = /^\/teacher/
 const AboutActivePageNameReg = /^(TeacherAbout|StudentAbout)$/
 const LessonsActivePageNameReg = /^(TeacherCenter|StudentCenter)$/
 const ColumnActivePageNameReg = /^(TeacherColumn|StudentColumn)+/
-const LEARN_CNETER_TAG = ['TeacherColumn', 'TeacherColumnReview', 'TeacherColumnLessonManager', 'TeacherColumnPackageManager', 'TeacherColumnEditPackage', 'LearningCenterPackages', 'OfflineGuidanceCourse', 'TeachingVideo', 'SharedCourseLecturer']
-const ALL_LESSON_TAG = ['StudentCenter']
+const LEARN_CNETER_TAG = ['TeacherColumn', 'TeacherColumnApply', 'TeacherColumnReview', 'TeacherColumnLessonManager', 'TeacherColumnPackageManager', 'TeacherColumnEditPackage', 'TeacherColumnMentorInvite', 'LearningCenterPackages', 'OfflineGuidanceCourse', 'TeachingVideo', 'SharedCourseLecturer']
+const ALL_LESSON_TAG = ['StudentCenter', 'TeacherCenter']
 const SOLUTION_TAG = ['StudentSolution', 'TeacherSolution']
 const VIDEO_TAG = ['TeacherAllTeachingVideo', 'StudentAllTeachingVideo']
 export default {

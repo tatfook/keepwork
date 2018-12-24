@@ -11,7 +11,7 @@
             <div class="home-page-simple-show-center-left-desc-box">
               <p :class="['intro',{'intro-hover': currIndex == index}]" v-for="(item,index) in briefPic" :key="index" @mouseover="switchPic(index)" @mouseout="continueTextAnimation(index)">{{item.text}}</p>
             </div>
-            <span class="join-button" @click="goJoin">{{$t("home.joinFree")}}</span>
+            <span v-if="!isLogined" class="join-button" @click="goJoin">{{$t("home.joinFree")}}</span>
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">{{$t("home.toEducators")}}</a>
               <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">{{$t("home.toParents")}}</a>
@@ -57,7 +57,7 @@
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
-          <div class="box-word">创造</div>
+          <div class="box-word">{{$t('common.creativity')}}</div>
         </div>
         <div class="line"></div>
         <div class="box" @click="goExplorationPage" @mouseover="combinedPic('explore', -1200,1)" @mouseout="combinedPic('explore', -2000,1, 'leave')">
@@ -69,7 +69,7 @@
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
-          <div class="box-word">探索</div>
+          <div class="box-word">{{$t('common.explore')}}</div>
         </div>
         <div class="line"></div>
         <div class="box" @click="goStudyPage" @mouseover="combinedPic('study', -1200,2)" @mouseout="combinedPic('study', -2000,2, 'leave')">
@@ -81,7 +81,7 @@
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
-          <div class="box-word">学习</div>
+          <div class="box-word">{{$t('common.study')}}</div>
         </div>
       </div>
     </div>
@@ -145,6 +145,7 @@ import RegisterDialog from './RegisterDialog'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
+import {  mapGetters } from 'vuex'
 
 export default {
   name: 'HomePage',
@@ -218,6 +219,9 @@ export default {
     this.originLikesProjects = likes
   },
   computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined',
+    }),
     isEn() {
       return locale === 'en-US'
     },

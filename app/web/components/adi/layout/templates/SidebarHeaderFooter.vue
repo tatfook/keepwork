@@ -1,6 +1,6 @@
 <template>
   <el-container class="fullscreen-template">
-    <el-aside width="400px" :class="{'hide': (showSidebarOrMain !== 'sidebar')}">
+    <el-aside width="400px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
       <slot name="sidebar"></slot>
     </el-aside>
     <el-container>

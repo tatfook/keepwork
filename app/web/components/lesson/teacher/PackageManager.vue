@@ -143,8 +143,19 @@ export default {
     ...mapGetters({
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
-      lessonSubjects: 'lesson/subjects'
+      lessonSubjects: 'lesson/subjects',
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
+    isTeacher() {
+      return this.userIsTeacher
+    },
+    isAlliance() {
+      return this.userIsAlliance
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
     filteredPackageList() {
       let subjectFilteredPackageList = this.getSubjectFilteredPackageList(
         this.lessonUserPackages
@@ -216,7 +227,7 @@ export default {
       return packageDetail.state === 3 || packageDetail.state === 4
     },
     isSubmitable(packageDetail) {
-      return (
+      return !this.isLearner && (
         packageDetail.state === 0 ||
         packageDetail.state === 3 ||
         packageDetail.state === 4
@@ -243,16 +254,16 @@ export default {
       let searchedSubjectId = this.searchParams.subjectId
       return searchedSubjectId
         ? _.filter(originList, {
-            subjectId: searchedSubjectId
-          })
+          subjectId: searchedSubjectId
+        })
         : originList
     },
     getStateFilteredPackageList(originList) {
       let searchedStateId = this.searchParams.stateId
       return typeof searchedStateId === 'number'
         ? _.filter(originList, packageDetail => {
-            return packageDetail.state === searchedStateId
-          })
+          return packageDetail.state === searchedStateId
+        })
         : originList
     },
     getNameFilteredPackageList(originList) {

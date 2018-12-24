@@ -20,6 +20,10 @@ export default {
     user: {
       type: Object,
       required: true
+    },
+    isGetRankDetailAfterFavorite: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -34,6 +38,9 @@ export default {
       isLogined: 'user/isLogined',
       loginUserId: 'user/userId'
     }),
+    originFollowState() {
+      return this.user.isFollowed
+    },
     nowUserId() {
       return this.user.id
     },
@@ -54,8 +61,9 @@ export default {
       let objectId = this.nowUserId
       let objectType = 0
       this.isFavoriteButtonLoading = true
+      let isGetRankDetailAfterFavorite = this.isGetRankDetailAfterFavorite
       if (!this.followState) {
-        await this.profileFavoriteUser({ objectId, objectType })
+        await this.profileFavoriteUser({ objectId, objectType, isGetRankDetailAfterFavorite })
           .then(() => {
             this.showMessage({
               message: this.$t('project.successfullyStarred')
@@ -66,7 +74,7 @@ export default {
             this.isFavoriteButtonLoading = false
           })
       } else {
-        await this.profileUnFavoriteUser({ objectId, objectType })
+        await this.profileUnFavoriteUser({ objectId, objectType, isGetRankDetailAfterFavorite })
           .then(() => {
             this.showMessage({
               message: this.$t('project.successfullyUnstarred')
@@ -79,6 +87,11 @@ export default {
         this.isFavoriteButtonLoading = false
       }
       this.followState = !this.followState
+    }
+  },
+  watch: {
+    originFollowState(newVal) {
+      this.followState = newVal
     }
   },
   filters: {
@@ -107,6 +120,7 @@ export default {
   &-info {
     flex: 1;
     margin-right: 16px;
+    min-width: 0;
     &-name {
       font-size: 14px;
       color: #303133;
@@ -118,6 +132,9 @@ export default {
     &-desc {
       font-size: 12px;
       color: #909399;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
   &-operate {

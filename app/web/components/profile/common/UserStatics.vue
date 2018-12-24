@@ -19,7 +19,7 @@
       <div class="user-statics-intro" v-else>
         {{$t('profile.whatAndHowCreat')}}<span class="user-statics-intro-link" @click="showLearnGuide">{{$t("profile.knowMore")}}</span>
       </div>
-      <!-- <router-link class="user-statics-link" :to='{name:"ProfileProjectPage"}'><span class="hidden-sm-and-down">{{$t("profile.projectViewMore")}}</span><i class="el-icon-arrow-right"></i></router-link> -->
+      <router-link class="user-statics-link" :to='{name:"ProfileProjectPage"}'><span class="hidden-sm-and-down">{{$t("profile.projectViewMore")}}</span><i class="el-icon-arrow-right"></i></router-link>
       <create-project-guide :showGuideDialog="showGuideDialog" @close="closeLearnGuide"></create-project-guide>
     </div>
   </div>

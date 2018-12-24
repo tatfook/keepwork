@@ -61,7 +61,6 @@ export default {
       loading: false,
       registerLoading: false,
       sendCodeLoading: false,
-      authCode: '',
       sendCodeDisabled: false,
       nowOrigin: document.location.origin,
       count: 60,
@@ -70,7 +69,8 @@ export default {
       ruleForm: {
         username: '',
         password: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        authCode: ''
       },
       rules: {
         username: [
@@ -172,6 +172,11 @@ export default {
             .then(res => {
               this.registerLoading = false
               this.handleClose()
+              if(this.$route.name == 'Register'){
+                window.location.href = '/'
+              }else{
+                window.location.reload()
+              }
             })
             .catch(e => {
               if (e.response.data.code == 4) {

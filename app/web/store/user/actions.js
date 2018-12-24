@@ -119,10 +119,10 @@ const actions = {
     }
     return registerInfo
   },
-  async thirdRegister({ commit }, payload) {
-    let thirdRegisterInfo = await keepwork.user.bindThreeService(payload, null, true)
-    return thirdRegisterInfo
-  },
+  // async thirdRegister({ commit }, payload) {
+  //   let thirdRegisterInfo = await keepwork.user.register(payload, null, true)
+  //   return thirdRegisterInfo
+  // },
   async getProfile(context, { forceLogin = true, useCache = true } = {}) {
     let { commit, dispatch, getters: { token } } = context
     if (useCache) return
@@ -154,8 +154,7 @@ const actions = {
   },
   async getUserDetailWithRankByUserIdOrUsername(context, { userId, username }) {
     let { commit } = context
-    let userKey = (userId === undefined) ? username : userId
-    let userDetailWithRank = await keepwork.user.getDetailWithRankByIdOrUsername({ userKey })
+    let userDetailWithRank = (userId === undefined) ? await keepwork.user.getDetailWithRankByUsername({ username }) : await keepwork.user.getDetailWithRankById({ userId })
     userId = _.get(userDetailWithRank, 'id')
     username = _.get(userDetailWithRank, 'username')
     commit(GET_USER_DETAIL_WITH_RANK_SUCCESS, { userId, username, userDetailWithRank })
@@ -270,7 +269,7 @@ const actions = {
     if (!_.isEmpty(fileList)) return
     let { rawBaseUrl, projectName } = webTemplateProject
     let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectName, path: '', recursive: true })
+    fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
     fileList = fileList.filter(file => file.type === 'blob')
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
@@ -712,7 +711,6 @@ const actions = {
     let { commit } = context
     // let userThreeServices = await keepwork.userThreeService.getByUsername({ username })
     let userThreeServices = await keepwork.userThreeService.getOauthUsers()
-    console.log('userThree', userThreeServices)
     commit(GET_USER_THREE_SERVICES_SUCCESS, userThreeServices)
   },
   async threeServiceDeleteById(context, { id, username }) {

@@ -5,7 +5,7 @@
     </div>
     <div class="user-basic-msg-username-desc">
       <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
-      <div class="user-basic-msg-desc">{{nowUserDetail.description}}</div>
+      <div class="user-basic-msg-desc" :title="nowUserDetail.description">{{nowUserDetail.description}}</div>
     </div>
     <div class="user-basic-msg-rank-info hidden-sm-and-down">
       <div class="user-basic-msg-rank-info-item">
@@ -23,7 +23,7 @@
     </div>
     <div class="user-basic-msg-operation">
       <el-button v-if="isLoginUserEditable" @click="isPersonalCenterShow = true">{{$t("profile.addBio")}}</el-button>
-      <el-button v-else type="primary" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? $t("profile.followed"):$t("profile.follow")}}</el-button>
+      <el-button v-else type="primary" :class="{'button-outline': isLoginUserFavoritteNowUser}" :loading="isFavoriteButtonLoading" @click="toggleFavoriteState">{{isLoginUserFavoritteNowUser ? $t("profile.followed"):$t("profile.follow")}}</el-button>
     </div>
     <div class="user-basic-msg-infos hidden-sm-and-down">
       <div class="user-basic-msg-infos-item">
@@ -174,6 +174,10 @@ export default {
   &-desc {
     color: #c0c4cc;
     font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
   }
   &-rank-info {
     display: flex;
@@ -199,6 +203,10 @@ export default {
     .el-button--default {
       background: linear-gradient(#fff, #f6f7f8);
     }
+    .button-outline {
+      background-color: transparent;
+      color: #2397f3;
+    }
   }
   &-infos {
     border-top: 1px solid #e8e8e8;
@@ -206,6 +214,9 @@ export default {
     padding: 18px 24px;
     &-item {
       margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &:last-child {
         margin-bottom: 0;
       }

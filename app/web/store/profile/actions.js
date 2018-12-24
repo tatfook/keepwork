@@ -42,8 +42,14 @@ const actions = {
         return Promise.reject(error)
       })
   },
-  async favoriteUser(context, { objectId, objectType }) {
-    let { dispatch } = context
+  async favoriteUser(
+    context,
+    { objectId, objectType, isGetRankDetailAfterFavorite }
+  ) {
+    let {
+      dispatch,
+      rootGetters: { 'user/userId': loginUserId }
+    } = context
     await keepwork.favorites
       .favoriteObject({ objectId, objectType })
       .then(async () => {
@@ -53,6 +59,8 @@ const actions = {
             objectType,
             useCache: false
           }),
+          isGetRankDetailAfterFavorite &&
+            dispatch('initProfileData', { userId: loginUserId }),
           dispatch('initProfileData', { userId: objectId })
         ])
         return Promise.resolve()
@@ -61,8 +69,14 @@ const actions = {
         return Promise.reject(error)
       })
   },
-  async unFavoriteUser(context, { objectId, objectType }) {
-    let { dispatch } = context
+  async unFavoriteUser(
+    context,
+    { objectId, objectType, isGetRankDetailAfterFavorite }
+  ) {
+    let {
+      dispatch,
+      rootGetters: { 'user/userId': loginUserId }
+    } = context
     await keepwork.favorites
       .unFavoriteObject({ objectId, objectType })
       .then(async () => {
@@ -72,6 +86,8 @@ const actions = {
             objectType,
             useCache: false
           }),
+          isGetRankDetailAfterFavorite &&
+            dispatch('initProfileData', { userId: loginUserId }),
           dispatch('initProfileData', { userId: objectId })
         ])
         return Promise.resolve()
@@ -99,9 +115,9 @@ const actions = {
       .catch(err => console.error(err))
     commit(GET_USER_CREATED_PROJECT_SUCCESS, { createdProjects, userId })
   },
-  async getUserJoinedProjects({ commit }, { userId }) {
+  async getUserJoinedProjects({ commit }, { userId, exclude = true }) {
     let joinedProjects = await keepwork.projects
-      .getContributeProjectsByUserId({ objectType: 0, userId })
+      .getContributeProjectsByUserId({ objectType: 0, userId, exclude })
       .catch(err => console.error(err))
     commit(GET_USER_JOINED_PROJECT_SUCCESS, { joinedProjects, userId })
   }

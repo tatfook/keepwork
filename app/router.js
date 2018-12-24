@@ -19,6 +19,10 @@ module.exports = app => {
   router.get('/a', controller.account.index) // account
   router.get(/\/a\//, controller.account.index) // account
   router.get('/vip', controller.vip.index)
+  router.redirect('/wiki/login', '/u/r/login', 302)
+  router.redirect('/wiki/join', '/u/r/register', 302)
+  router.redirect('/wiki/user_center', '/u/p/changePassword', 302)
+  router.redirect('/wiki/find_pwd', '/u/set', 302)
   router.redirect('/wiki/*', '/', 302) // FIXME, remove this line later
   router.get(/^\/[a-zA-Z0-9]{4,}\/([\w-.]+(\/[\w-.]+)?)/, controller.viewer.index)
   router.redirect('/*', '/', 302)

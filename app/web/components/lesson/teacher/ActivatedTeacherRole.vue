@@ -8,18 +8,19 @@
           </div>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
-            <div class="lecturer">
-              <img class="lecturer-sharing-resource" src="@/assets/lessonImg/sharing_resource.png" alt="" @click="sharedCourseLecturer">
-              <span class="lecturer-text" @click="sharedCourseLecturer">{{$t('lesson.instructor')}}</span>
-            </div>
           </div>
         </div>
         <div class="activated-teacher-role-content-left-options">
           <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='' active-text-color='#fff'>
-            <el-menu-item index="1" @click="showItem('TEACH')">
+            <el-menu-item v-if="!isTeacher" index="0" @click="showItem('APPLY')" class="activated-teacher-role-apply">
+              <span class="activated-teacher-role-apply-content" slot="title">申请开通</span>
+              <span class="activated-teacher-role-apply-fake">{{$t('lesson.teach')}}</span>
+              <span class="activated-teacher-role-apply-fake">{{$t('lesson.review')}}</span>
+            </el-menu-item>
+            <el-menu-item v-if="isTeacher" index="1" @click="showItem('TEACH')">
               <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="showItem('REVIEW')">
+            <el-menu-item v-if="isTeacher" index="2" @click="showItem('REVIEW')">
               <span class="item-title" slot="title">{{$t('lesson.review')}}</span>
             </el-menu-item>
             <el-submenu index="3" class='lesson-manager-popver-menu' popper-class="manage-menu">
@@ -29,6 +30,9 @@
               <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
               <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
             </el-submenu>
+            <el-menu-item v-if="!isMentor" index="4" @click="showItem('MENTOR_INVITE')">
+              <span class="item-title" slot="title">{{$t('lesson.becomeAMentor')}}</span>
+            </el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -39,6 +43,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import avatar from '@/assets/img/default_portrait.png'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -53,20 +58,40 @@ export default {
     }
   },
   mounted() {
+    this.decideRouter()
     this.setActiveItem()
     window.addEventListener('resize', this.handleWindowResize)
   },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      username: 'user/username'
+      username: 'user/username',
+      tutorInfo: 'lesson/tutorInfo',
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
     menuMode() {
       return this.windowWidth > 678 ? 'vertical' : 'horizontal'
+    },
+    isTeacher() {
+      return this.userIsTeacher
+    },
+    isAlliance() {
+      return this.userIsAlliance
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
+    isMentor() {
+      if (!this.tutorInfo) {
+        return false
+      }
+      let { startTime, endTime } = this.tutorInfo
+      return moment(new Date()).isBetween(startTime, endTime, 'minute')
     }
   },
   methods: {
-    sharedCourseLecturer(){
+    sharedCourseLecturer() {
       this.$router.push('/teacher/sharedCourseLecturer')
     },
     setActiveItem() {
@@ -84,12 +109,26 @@ export default {
         case 'TeacherColumnPackageManager':
           this.itmeActive = '3-2'
           break
-        default:
+        case 'TeacherColumn':
           this.itmeActive = '1'
+          break
+        case 'TeacherColumnApply':
+          this.itmeActive = '0'
+          break
+        case 'TeacherColumnMentorInvite':
+          this.itmeActive = '4'
+          break
+        default:
+          this.itmeActive = this.isTeacher ? '0' : '1'
       }
     },
     showItem(itemName) {
       switch (itemName) {
+        case 'APPLY':
+          this.$router.push({
+            path: `/teacher/apply`
+          })
+          break
         case 'TEACH':
           this.$router.push({
             path: `/teacher`
@@ -110,21 +149,34 @@ export default {
             path: `/teacher/packageManager`
           })
           break
-        case 'MANAGEMENT':
+        case 'MENTOR_INVITE':
+          this.$router.push({
+            path: `/teacher/mentor`
+          })
           break
         default:
           break
+      }
+    },
+    decideRouter() {
+      let routeName = this.$route.name
+      if (!this.isTeacher && (routeName == 'TeacherColumn' || routeName == 'TeacherColumnReview')) {
+        this.$router.push({
+          path: `/teacher/apply`
+        })
+        return
       }
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     }
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     window.removeEventListener('resize', this.handleWindowResize)
   },
   watch: {
     $route() {
+      this.decideRouter()
       this.setActiveItem()
     }
   }
@@ -163,7 +215,7 @@ export default {
           font-size: 24px;
           line-height: 34px;
           color: #333333;
-          font-family: 'ArialMT';
+          font-family: "ArialMT";
           margin: 5px;
         }
         .lecturer {
@@ -183,7 +235,9 @@ export default {
         }
       }
       &-options {
-        padding: 27px 20px;
+        margin: 27px 20px;
+        border-top: 1px solid #cfd8dc;
+        padding: 20px 0;
         .el-menu {
           border: none;
           .el-submenu__title {
@@ -196,6 +250,7 @@ export default {
             border: solid 1px #bcbcbc;
           }
           .lesson-manager-popver-menu {
+            margin-bottom: 16px;
             .el-menu {
               .el-menu-item {
                 margin: 0;
@@ -227,6 +282,46 @@ export default {
     }
     &-right {
       flex: 1;
+      min-width: 0;
+      background-color: #fff;
+    }
+  }
+  & .el-menu &-apply.el-menu-item {
+    position: relative;
+    height: auto;
+    background-color: transparent;
+    border: none;
+    overflow: hidden;
+    &.is-active {
+      background-color: transparent;
+    }
+  }
+  &-apply {
+    &-fake {
+      height: 40px;
+      line-height: 38px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      border: solid 1px #bcbcbc;
+      margin-top: 16px;
+      display: block;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    &-content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.68);
+      font-size: 24px;
+      font-weight: bold;
+      padding-top: 30px;
+      color: #fff;
     }
   }
 }
@@ -274,8 +369,6 @@ export default {
             }
           }
         }
-      }
-      &-right {
       }
     }
   }
