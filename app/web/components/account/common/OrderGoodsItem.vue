@@ -1,10 +1,7 @@
 <template>
   <div class="order-goods-item">
     <div class="order-goods-item-cover">
-      <img
-        :src="coverUrl"
-        :alt="subject"
-      >
+      <img :src="coverUrl" :alt="subject">
     </div>
   </div>
 </template>

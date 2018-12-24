@@ -1,40 +1,27 @@
 <template>
-  <div class="order-confirm">
+  <div class="order-confirm" v-if="!isLoading">
     <div class="order-confirm-header">
       <div class="order-confirm-header-center">
         <div class="order-confirm-header-center-title">购买账号</div>
         <div class="order-confirm-header-center-username">Keepwork账号: {{username}}</div>
       </div>
     </div>
-    <div
-      class="order-confirm-main"
-      v-loading="isLoading"
-    >
+    <div class="order-confirm-main">
       <div class="order-confirm-main-title">
         确认订单信息
       </div>
       <div class="order-confirm-main-item">
-        <package-item
-          v-if="!isLoading && isPackageType"
-          :data="goodsDetail"
-        ></package-item>
+        <package-item v-if="!isLoading && isPackageType" :data="goodsDetail"></package-item>
       </div>
       <div class="order-confirm-main-count">
         <div class="order-confirm-main-count-title">
           数量:
         </div>
         <div class="order-confirm-main-count-input">
-          <el-input-number
-            class="input-number-counter"
-            :disabled="isPackageType"
-            v-model="count"
-            :min="1"
-            :max="10000"
-            size="small"
-          ></el-input-number>
+          <el-input-number class="input-number-counter" :disabled="isPackageType" v-model="count" :min="1" :max="10000" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-          总价: {{ totalCost }} 人民币
+          总价: {{ totalCostByUnit }}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
@@ -51,15 +38,9 @@
       <div class="order-confirm-main-submit">
         <div class="order-confirm-main-submit-total">
           <span class="order-confirm-main-submit-total-title">需支付: </span>
-          <span class="order-confirm-main-submit-total-cost">{{ finalCost }} 人民币</span>
+          <span class="order-confirm-main-submit-total-cost">{{ finalCostByUnit }}</span>
         </div>
-        <el-button
-          type="danger"
-          class="order-confirm-main-submit-button"
-          :loading="isSubmiLoading"
-          @click="handleSubmitTradeOrder"
-          round
-        >提交订单</el-button>
+        <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>提交订单</el-button>
       </div>
     </div>
   </div>
@@ -68,10 +49,12 @@
 <script>
 import PackageItem from './common/OrderPackageItem'
 import { mapActions, mapGetters } from 'vuex'
+import AccountMixin from './common/AccountMixin'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
 export default {
   name: 'OrderConfirm',
+  mixins: [AccountMixin],
   components: {
     PackageItem
   },
@@ -89,7 +72,12 @@ export default {
     type = _.toNumber(type)
     id = _.toNumber(id)
     console.warn(`type: ${type}, count: ${count}, goodsId: ${id}`)
-    if (_.isNumber(count) && count > 1 && COUNT_REG.test(count)) {
+    if (
+      !this.isPackageType &&
+      _.isNumber(count) &&
+      count > 1 &&
+      COUNT_REG.test(count)
+    ) {
       this.count = count
     }
     if (!type || !id || !payment) {
@@ -98,7 +86,7 @@ export default {
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, goodsId: id })
+      this.createTradeOrder({ type, count, goodsId: id, payment })
     ])
     this.isLoading = false
   },
@@ -111,11 +99,18 @@ export default {
     }),
     handleSubmitTradeOrder() {
       try {
-        let payload = { count: this.count, finalCost: this.finalCost, paymentWay: 'rmb' }
+        let payload = {
+          count: this.count,
+          finalCost: this.finalCost
+        }
         if (this.discountId) {
           payload['discountId '] = this.discountId
         }
-        payload = { ...payload, totalCost: this.totalCost, finalCost: this.finalCost }
+        payload = {
+          ...payload,
+          totalCost: this.totalCost,
+          finalCost: this.finalCost
+        }
         console.warn(payload)
         this.submitTradeOrder(payload)
         this.$router.push({ name: 'OrderPay' })
@@ -137,10 +132,17 @@ export default {
       return _.get(this.tradeOrder, 'type', '')
     },
     goodsDetail() {
-      return _.get(this.tradeOrder, 'goodsDetail', {})
+      return {
+        ..._.get(this.tradeOrder, 'goodsDetail', {}),
+        payment: this.payment
+      }
     },
     goodsCost() {
-      return _.get(this.goodsDetail, 'rmb', 0)
+      return (
+        _.get(this.goodsDetail, 'rmb', 0) ||
+        _.get(this.goodsDetail, 'coin', 0) ||
+        _.get(this.goodsDetail, 'bean', 0)
+      )
     },
     isPackageType() {
       return this.goodsType === 2
@@ -151,13 +153,23 @@ export default {
     isDisabledCount() {
       return false
     },
+    costByUnit() {
+      return this.isRmbPayment
+        ? `${this.costUnit}${this.finalCost}`
+        : `${this.finalCost}${this.costUnit}`
+    },
     totalCost() {
       return this.goodsCost * this.count
+    },
+    totalCostByUnit() {
+      return this.isRmbPayment
+        ? `${this.costUnit} ${this.totalCost}`
+        : `${this.totalCost} ${this.costUnit}`
     },
     finalCost() {
       return this.totalCost - 0
     }
-  },
+  }
 }
 </script>
 
@@ -166,7 +178,7 @@ export default {
 <style lang="scss">
 .order-confirm {
   &-header {
-    background: url("../../assets/account/confirm-bg.jpg") repeat-x;
+    background: url('../../assets/account/confirm-bg.jpg') repeat-x;
     height: 170px;
     &-center {
       max-width: 1145px;

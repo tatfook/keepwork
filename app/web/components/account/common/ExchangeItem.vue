@@ -27,15 +27,14 @@
 </template>
 
 <script>
-import { locale } from "@/lib/utils/i18n";
+import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'ExchangeItem',
   props: {
     data: {
       type: Object,
       default() {
-        return {
-        }
+        return {}
       }
     }
   },
@@ -47,6 +46,9 @@ export default {
   computed: {
     image() {
       return this.data.thumbnail
+    },
+    goodsId() {
+      return this.data.goodsId
     },
     subject() {
       return this.data.subject
@@ -75,28 +77,32 @@ export default {
       }
     },
     priceByUnit() {
-      return this.isRmb ? `${this.unitTable[this.priceUnit]} ${this.price}` : `${this.price} ${this.unitTable[this.priceUnit]}`
+      return this.isRmb
+        ? `${this.unitTable[this.priceUnit]} ${this.price}`
+        : `${this.price} ${this.unitTable[this.priceUnit]}`
     },
     unitTable() {
-      return this.isEn ? {
-        rmb: '￥',
-        coin: 'coin',
-        bean: 'bean'
-      } : {
-          rmb: '￥',
-          coin: '知识币',
-          bean: '知识豆'
-        }
+      return this.isEn
+        ? {
+            rmb: '￥',
+            coin: 'coin',
+            bean: 'bean'
+          }
+        : {
+            rmb: '￥',
+            coin: '知识币',
+            bean: '知识豆'
+          }
     },
     isEn() {
       return locale === 'en-US'
-    },
+    }
   },
   methods: {
     toExchangePage() {
-      this.$message({
-        type: 'success',
-        message: '跳转订单确认页面'
+      this.$router.push({
+        name: 'OrderConfirm',
+        query: { id: this.goodsId, type: 1, payment: this.priceUnit }
       })
     },
     handleShowButton() {
@@ -107,7 +113,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style lang="scss">

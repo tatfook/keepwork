@@ -48,15 +48,17 @@ const actions = {
     }
     return order
   },
-  async createTradeOrder({ commit }, payload) {
+  async createTradeOrder({ commit, dispatch, getters: { goods } }, payload) {
     const { type, goodsId } = payload
     if (type === PACKAGE_TYPE) {
       const goodsDetail = await lesson.packages.packageDetail({ packageId: goodsId })
       commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
-      return
     }
     if (type === EXCHANGE_TYPE) {
-      console.warn('exchange ------------->')
+      await dispatch('getGoods')
+      console.log(goods)
+      let goodsItem = _.find(goods, item => item.goodsId === goodsId)
+      console.log('goodsItem', goodsItem)
     }
   },
   async submitTradeOrder({ commit }, payload) {
@@ -69,6 +71,7 @@ const actions = {
   },
   async getGoods({ commit }) {
     const goods = await account.getGoods()
+    console.log('getGoods--------->', goods)
     commit(GET_GOODS_SUCCESS, goods)
   }
 }

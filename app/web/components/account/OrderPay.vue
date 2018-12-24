@@ -1,10 +1,7 @@
 <template>
   <div class="order-pay">
     <div class="order-pay-header">
-      <div
-        class="order-pay-header-back"
-        @click="handleBack"
-      > <i class="el-icon-arrow-left"></i>返回</div>
+      <div class="order-pay-header-back" @click="handleBack"> <i class="el-icon-arrow-left"></i>返回</div>
       <div class="order-pay-header-cost">
         待支付: <span class="money">{{finalCostByUnit}}</span>
       </div>
@@ -17,89 +14,38 @@
           {{userBalanceByUnit}}
         </span>
       </div>
-      <div
-        class="order-pay-main-tips"
-        v-if="isNeedRecharge"
-      >
+      <div class="order-pay-main-tips" v-if="isNeedRecharge">
         <i class="order-pay-main-tips-icon el-icon-warning"></i>
         <span class="order-pay-main-tips-text">人民币余额不足，还需要
           {{needRechargeNumberByUnit}}
           ，请先去充值。</span>
       </div>
-      <div class="order-pay-main-verify">
+      <div v-if="!isNeedRecharge" class="order-pay-main-verify">
         <div class="order-pay-main-verify-cellphone">
           绑定的手机号:
-          <span
-            class="order-pay-main-verify-cellphone-binding"
-            v-if="isBinding"
-          >
+          <span class="order-pay-main-verify-cellphone-binding" v-if="isBinding">
             {{ cellphone }}
           </span>
-          <span
-            class="order-pay-main-verify-cellphone-unbound"
-            v-else
-          >
-            还没有绑定手机号，<span
-              class="link"
-              @click="handleToBindPage"
-            >去绑定</span>
+          <span class="order-pay-main-verify-cellphone-unbound" v-else>
+            还没有绑定手机号，<span class="link" @click="handleToBindPage">去绑定</span>
           </span>
         </div>
-        <div
-          v-if="isRmbPayment"
-          class="order-pay-main-verify-code"
-        >
-          <el-input
-            :class="['order-pay-main-verify-code-input', { 'error': isCodeError }]"
-            placeholder="请输入验证码"
-            v-model="captcha"
-            @focus="resetError"
-          ></el-input>
-          <span
-            v-if="isWaiting"
-            class="order-pay-main-verify-code-wait"
-          >{{waitingTime}}s后重试</span>
-          <span
-            v-else
-            @click="handleSendCode"
-            :class="['order-pay-main-verify-code-send', { 'disabled': isDisabled }]"
-          >发送验证码</span>
+        <div v-if="isRmbPayment" class="order-pay-main-verify-code">
+          <el-input :class="['order-pay-main-verify-code-input', { 'error': isCodeError }]" placeholder="请输入验证码" v-model="captcha" @focus="resetError"></el-input>
+          <span v-if="isWaiting" class="order-pay-main-verify-code-wait">{{waitingTime}}s后重试</span>
+          <span v-else @click="handleSendCode" :class="['order-pay-main-verify-code-send', { 'disabled': isDisabled }]">发送验证码</span>
         </div>
-        <div
-          v-if="isCodeError"
-          class="order-pay-main-verify-code-error"
-        >
+        <div v-if="isCodeError" class="order-pay-main-verify-code-error">
           <span v-if="isCodeEmpty">请输入验证码</span>
           <span v-if="isCodeWrong">验证码错误</span>
         </div>
       </div>
-      <el-button
-        v-if="!isNeedRecharge"
-        :disabled="isDisabled"
-        type="primary"
-        :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]"
-        @click="handleConfirmToPay"
-      >确认支付</el-button>
-      <el-button
-        v-else
-        type="primary"
-        class="order-pay-main-confirm-button"
-        @click="handleShowRechargeDialog"
-      >去充值</el-button>
+      <el-button v-if="!isNeedRecharge" :disabled="isDisabled" type="primary" :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]" @click="handleConfirmToPay">确认支付</el-button>
+      <el-button v-else type="primary" class="order-pay-main-confirm-button" @click="handleShowRechargeDialog">去充值</el-button>
     </div>
-    <el-dialog
-      class="order-pay-main-dialog"
-      :visible.sync="isShowRechargeDialog"
-    >
-      <div
-        class="order-pay-main-dialog-title"
-        slot="title"
-      >充值</div>
-      <recharge-dialog
-        :needRechargeMoney="needRechargeNumber"
-        v-if="isShowRechargeDialog"
-        @handleCallback="handleHideRechargeDialog"
-      ></recharge-dialog>
+    <el-dialog class="order-pay-main-dialog" :visible.sync="isShowRechargeDialog">
+      <div class="order-pay-main-dialog-title" slot="title">充值</div>
+      <recharge-dialog :needRechargeMoney="needRechargeNumber" v-if="isShowRechargeDialog" @handleCallback="handleHideRechargeDialog"></recharge-dialog>
     </el-dialog>
   </div>
 </template>
@@ -107,10 +53,11 @@
 <script>
 import RechargeDialog from './common/RechargeDialog'
 import { mapActions, mapGetters } from 'vuex'
+import AccountMixin from './common/AccountMixin'
 import { keepwork } from '@/api'
-import { locale } from "@/lib/utils/i18n";
 export default {
   name: 'OrderPay',
+  mixins: [AccountMixin],
   components: {
     RechargeDialog
   },
@@ -145,14 +92,13 @@ export default {
     isDisabled() {
       return !this.isBinding
     },
-    isEn() {
-      return locale === 'en-US'
-    },
     finalCost() {
       return this.tradeOrder.finalCost
     },
     finalCostByUnit() {
-      return this.isRmbPayment ? `${this.costUnit}${this.finalCost}` : `${this.finalCost}${this.costUnit}`
+      return this.isRmbPayment
+        ? `${this.costUnit}${this.finalCost}`
+        : `${this.finalCost}${this.costUnit}`
     },
     userRmb() {
       return this.balance.rmb
@@ -163,34 +109,22 @@ export default {
     userBean() {
       return this.balance.bean
     },
-    unitTable() {
-      return this.isEn ? {
-        rmb: '￥',
-        coin: 'coin',
-        bean: 'bean'
-      } : {
-          rmb: '￥',
-          coin: '知识币',
-          bean: '知识豆'
-        }
-    },
-    costUnit() {
-      return this.unitTable[this.paymentWay]
-    },
-    paymentWay() {
-      return this.tradeOrder.paymentWay
+    payment() {
+      return this.tradeOrder.payment
     },
     isRmbPayment() {
-      return this.paymentWay === 'rmb'
+      return this.payment === 'rmb'
     },
     isRmbPayment() {
-      return this.paymentWay === 'rmb'
+      return this.payment === 'rmb'
     },
     userBalance() {
-      return this.balance[this.paymentWay]
+      return this.balance[this.payment]
     },
     userBalanceByUnit() {
-      return this.isRmbPayment ? `${this.costUnit}${this.userBalance}` : `${this.userBalance}${this.costUnit}`
+      return this.isRmbPayment
+        ? `${this.costUnit}${this.userBalance}`
+        : `${this.userBalance}${this.costUnit}`
     },
     isNeedRecharge() {
       return this.finalCost > this.userBalance
@@ -199,7 +133,9 @@ export default {
       return this.finalCost - this.userBalance
     },
     needRechargeNumberByUnit() {
-      return this.isRmbPayment ? `${this.costUnit}${this.needRechargeNumber}` : `${this.needRechargeNumber}${this.costUnit}`
+      return this.isRmbPayment
+        ? `${this.costUnit}${this.needRechargeNumber}`
+        : `${this.needRechargeNumber}${this.costUnit}`
     },
     isWaiting() {
       return this.waitingTime > 0
@@ -258,36 +194,32 @@ export default {
     },
     async handleConfirmToPay() {
       if (!this.captcha) {
-        return this.isCodeEmpty = true
+        return (this.isCodeEmpty = true)
       }
-      try {
-        const {
-          goodsId,
-          finalCost,
-          paymentWay,
-          count,
-          type
-        } = this.tradeOrder
-        const payload = {
-          type,
-          goodsId: 1,
-          count,
-          rmb: finalCost,
-          captcha: this.captcha,
-          extra: {
-            packageId: 67
-          }
+      const { goodsId, finalCost, payment, count, type } = this.tradeOrder
+      const payload = {
+        type,
+        goodsId: 1,
+        count,
+        rmb: finalCost,
+        captcha: this.captcha,
+        extra: {
+          packageId: goodsId
         }
-        let res = await this.payTradeOrder(payload)
-        this.$meesage({
-          type: 'success',
-          message: '支付成功'
-        })
-      } catch (error) {
-        console.error(error)
-        this.isCodeWrong = true
-        this.$meesage.error('支付订单失败')
       }
+      this.payTradeOrder(payload)
+        .then(res => {
+          this.$message({
+            type: 'success',
+            message: '支付成功'
+          })
+        })
+        .catch(e => {
+          this.$message({
+            type: 'success',
+            message: '支付成功'
+          })
+        })
     }
   }
 }
@@ -323,7 +255,7 @@ export default {
   &-main {
     margin-top: 10px;
     background: #fff;
-    padding:30px 50px 250px;
+    padding: 30px 50px 250px;
     color: #808080;
     box-sizing: border-box;
     &-balance {
@@ -345,6 +277,7 @@ export default {
 
     &-tips {
       margin-top: 24px;
+      margin-bottom: 24px;
       &-icon {
         color: #fe8d00;
       }

@@ -1,11 +1,7 @@
 <template>
   <div class="order-package-item">
     <div class="order-package-item-cover">
-      <img
-        class="order-package-item-cover-image"
-        :src="coverUrl"
-        :alt="packageName"
-      >
+      <img class="order-package-item-cover-image" :src="coverUrl" :alt="packageName">
     </div>
     <div class="order-package-item-info">
       <div class="order-package-item-info-row-name">
@@ -22,20 +18,22 @@
       <div class="order-package-item-info-row-intro">
         简介: {{ packageIntro }}
       </div>
-      <div class="order-package-item-info-row-return">
-        购买后返还XXX知识币
+      <div v-if="isRmbPayment" class="order-package-item-info-row-return">
+        购买后返还{{returnCoin}}知识币
       </div>
     </div>
     <div class="order-package-item-cost">
-      {{ packageCostRmb }} {{ costUnit }}
+      {{costByUnit}}
     </div>
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
+import UnitMixin from './UnitMixin'
 export default {
   name: 'OrderPackageItem',
+  mixins: [UnitMixin],
   props: {
     data: {
       type: Object,
@@ -69,11 +67,28 @@ export default {
     packageCostCoin() {
       return _.get(this.data, 'coin', 0)
     },
+    packageCostBean() {
+      return _.get(this.data, 'bean', 0)
+    },
+    packageCost() {
+      return this.packageCostRmb || this.packageCostCoin || this.packageCostBean
+    },
+    isRmbPayment() {
+      return this.payment === 'rmb'
+    },
     includesLessonCount() {
       return _.get(this.data, 'lessons', []).length
     },
-    costUnit() {
-      return '人民币'
+    payment() {
+      return _.get(this.data, 'payment', '')
+    },
+    returnCoin() {
+      return this.packageCost
+    },
+    costByUnit() {
+      return this.isRmbPayment
+        ? `${this.costUnit} ${this.packageCost}`
+        : `${this.packageCost} ${this.costUnit}`
     }
   }
 }
