@@ -9,8 +9,8 @@
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
             <router-link :to="{name: 'MentorService'}" class="learning-center-tutor">
-              <img v-if="isHaveTotur" src="@/assets/lessonImg/tutor_icon.png" alt="">
-              {{isHaveTotur ? $t('lesson.mentorService') : $t('lesson.findMentor')}}
+              <img v-if="isPurchasedTutor" src="@/assets/lessonImg/tutor_icon.png" alt="">
+              {{isPurchasedTutor ? $t('lesson.mentorService') : $t('lesson.findMentor')}}
             </router-link>
             <div class="learning-center-skill-info">
               <span>{{skillpointsCount}} {{$t('lesson.skillPoints')}}</span>
@@ -56,9 +56,18 @@ export default {
       isSkillDetailShow: false,
       currOption: undefined,
       optionArr: [
-        { name: this.$t('lesson.onlineLesson'), routerName: 'LearningCenterPackages' },
-        { name: this.$t('lesson.offlineGuidingLesson'), routerName: 'OfflineGuidanceCourse' },
-        { name: this.$t('lesson.instructionalVideos'), routerName: 'TeachingVideo' }
+        {
+          name: this.$t('lesson.onlineLesson'),
+          routerName: 'LearningCenterPackages'
+        },
+        {
+          name: this.$t('lesson.offlineGuidingLesson'),
+          routerName: 'OfflineGuidanceCourse'
+        },
+        {
+          name: this.$t('lesson.instructionalVideos'),
+          routerName: 'TeachingVideo'
+        }
       ]
     }
   },
@@ -70,8 +79,7 @@ export default {
         this.skillsList = res
         this.loadingSkillsPoint = false
       })
-      .catch(() => {
-      })
+      .catch(() => {})
   },
   computed: {
     ...mapGetters({
@@ -79,11 +87,8 @@ export default {
       userProfile: 'user/profile',
       username: 'user/username',
       userinfo: 'lesson/userinfo',
-      lessonTutorInfo: 'lesson/tutorInfo'
+      isPurchasedTutor: 'lesson/isPurchasedTutor'
     }),
-    isHaveTotur() {
-      return Boolean(this.lessonTutorInfo && this.lessonTutorInfo.tutorId)
-    },
     beansCount() {
       return _.get(this.userinfo, 'bean', 0)
     },
@@ -109,9 +114,9 @@ export default {
     },
     setActiveItem() {
       const SWITCH_TAG = {
-        'LearningCenterPackages': '0',
-        'OfflineGuidanceCourse': '1',
-        'TeachingVideo': '2'
+        LearningCenterPackages: '0',
+        OfflineGuidanceCourse: '1',
+        TeachingVideo: '2'
       }
       const { name } = this.$route
       this.currOption = SWITCH_TAG[name] || undefined
@@ -163,7 +168,7 @@ export default {
             font-size: 24px;
             line-height: 34px;
             color: #333333;
-            font-family: "ArialMT";
+            font-family: 'ArialMT';
           }
           .beans {
             margin: 5px 8px;
@@ -242,6 +247,11 @@ export default {
     color: #409efe;
     margin: 4px 0;
     text-decoration: none;
+    display: inline-block;
+    img {
+      width: 16px;
+      vertical-align: middle;
+    }
   }
   &-skill-info {
     font-size: 14px;

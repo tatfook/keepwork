@@ -4,6 +4,13 @@ const getters = {
   userinfo: state => state.userinfo,
   userIdenity: (state, { userinfo }) => _.get(userinfo, 'identify'),
   tutorInfo: (state, { userinfo }) => _.get(userinfo, 'tutor'),
+  isPurchasedTutor: (state, { tutorInfo }) => {
+    if (!tutorInfo) {
+      return false
+    }
+    let { startTime, endTime } = tutorInfo
+    return moment(new Date()).isBetween(startTime, endTime, 'minute')
+  },
   teacherInfo: (state, { userinfo }) => _.get(userinfo, 'teacher'),
   isTeacher: (state, { teacherInfo, userIdenity }) => {
     if (!teacherInfo) {
