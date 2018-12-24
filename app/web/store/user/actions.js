@@ -74,7 +74,7 @@ const actions = {
       Cookies.set('token', info.token)
       window.localStorage.setItem('satellizer_token', info.token)
       commit(LOGIN_SUCCESS, info)
-      await dispatch('lesson/getUserDetail', null, { root: true })
+      // await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
   },
@@ -82,7 +82,7 @@ const actions = {
     Cookies.set('token', payload)
     window.localStorage.setItem('satellizer_token', payload)
     commit(LOGIN_SUCCESS, payload)
-    await dispatch('lesson/getUserDetail', null, { root: true })
+    // await dispatch('lesson/getUserDetail', null, { root: true })
   },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
@@ -128,7 +128,7 @@ const actions = {
     if (useCache) return
     const profile = await keepwork.user.getProfile()
     await commit(GET_PROFILE_SUCCESS, { ...profile, token })
-    await dispatch('lesson/resumeClassData', null, { root: true })
+    // await dispatch('lesson/resumeClassData', null, { root: true })
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context

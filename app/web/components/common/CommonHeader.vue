@@ -50,7 +50,15 @@
               <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
+              <a
+                href="/a/account"
+              ><i class="iconfont icon-account1"></i>{{$t("common.myAccount")}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a
+                href="#"
+                @click.stop.prevent="goCreativityPage"
+              ><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>

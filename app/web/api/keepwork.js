@@ -55,7 +55,18 @@ export const user = {
   },
   bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
   searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
-  searchByField: async args => post('users/search', args)
+  searchByField: async args => post('users/search', args),
+
+}
+
+export const account = {
+  getBalance: async () => get('/users/account'),
+  getTrades: async () => get('/trades'),
+  getDiscounts: async () => get('/discounts'),
+  createRechargeOrder: async args => post('/orders', args),
+  getRechargeOrderState: async args => get(`/orders/${args.id}`),
+  createTradeOrder: async args => post('/trades', args),
+  getGoods: async args => get('/goods')
 }
 
 /*doc
@@ -353,7 +364,8 @@ export const keepwork = {
   comments,
   bigfile,
   issues,
-  groups
+  groups,
+  account
 }
 
 export default keepwork
