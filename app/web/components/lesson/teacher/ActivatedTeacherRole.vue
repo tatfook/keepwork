@@ -8,12 +8,17 @@
           </div>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
+            <router-link v-if="isTeacher || isAlliance" :to="{name: 'TeacherColumnApply'}" class="activated-teacher-role-identity">
+              <img v-if="isTeacher" src="@/assets/lessonImg/sharing_resource.png" alt="">
+              {{isTeacher ? $t('lesson.instructor') : $t('lesson.lessonDevelopers')}}
+            </router-link>
           </div>
         </div>
         <div class="activated-teacher-role-content-left-options">
           <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='' active-text-color='#fff'>
+            <el-menu-item v-show="false" index="-1"></el-menu-item>
             <el-menu-item v-if="!isTeacher" index="0" @click="showItem('APPLY')" class="activated-teacher-role-apply">
-              <span class="activated-teacher-role-apply-content" slot="title">申请开通</span>
+              <span class="activated-teacher-role-apply-content" slot="title">{{$t('lesson.applyAtivated')}}</span>
               <span class="activated-teacher-role-apply-fake">{{$t('lesson.teach')}}</span>
               <span class="activated-teacher-role-apply-fake">{{$t('lesson.review')}}</span>
             </el-menu-item>
@@ -113,7 +118,7 @@ export default {
           this.itmeActive = '1'
           break
         case 'TeacherColumnApply':
-          this.itmeActive = '0'
+          this.itmeActive = this.isTeacher ? '-1' : '0'
           break
         case 'TeacherColumnMentorInvite':
           this.itmeActive = '4'
@@ -160,7 +165,10 @@ export default {
     },
     decideRouter() {
       let routeName = this.$route.name
-      if (!this.isTeacher && (routeName == 'TeacherColumn' || routeName == 'TeacherColumnReview')) {
+      if (
+        !this.isTeacher &&
+        (routeName == 'TeacherColumn' || routeName == 'TeacherColumnReview')
+      ) {
         this.$router.push({
           path: `/teacher/apply`
         })
@@ -171,7 +179,7 @@ export default {
       this.windowWidth = event.currentTarget.innerWidth
     }
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     window.removeEventListener('resize', this.handleWindowResize)
   },
   watch: {
@@ -215,7 +223,7 @@ export default {
           font-size: 24px;
           line-height: 34px;
           color: #333333;
-          font-family: "ArialMT";
+          font-family: 'ArialMT';
           margin: 5px;
         }
         .lecturer {
@@ -284,6 +292,16 @@ export default {
       flex: 1;
       min-width: 0;
       background-color: #fff;
+    }
+  }
+  &-identity {
+    color: #2d9cf4;
+    font-size: 14px;
+    text-decoration: none;
+    img {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
     }
   }
   & .el-menu &-apply.el-menu-item {
