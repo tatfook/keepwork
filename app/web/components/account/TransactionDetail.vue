@@ -4,28 +4,23 @@
       交易明细
     </div>
     <div class="transaction-detail-main">
-      <!-- <div class="transaction-detail-main-row">
+      <div class="transaction-detail-main-row" v-for="(item, index) in trades" :key="index">
         <div class="transaction-detail-main-row-date">
-          2018/12/12 15:20
+          {{ item.createdAt | formatTime }}
         </div>
         <div class="transaction-detail-main-row-thing">
-
-          "购买课程包【<span class="highlight">贪吃王思聪</span>】X <span class="highlight">3</span>
+          {{ item.subject }}
+          <!-- "购买课程包【<span class="highlight">贪吃王思聪</span>】X <span class="highlight">3</span> -->
 
         </div>
         <div class="transaction-detail-main-row-sum">
-          +10 知识币，+10 知识豆
+          {{ item.rmb }}
+          <!-- +10 知识币，+10 知识豆 -->
         </div>
-      </div> -->
+      </div>
     </div>
     <div v-if="showPagination" class="transaction-detail-footer">
-      <el-pagination
-        class="transaction-detail-footer-pagination"
-        :page-size="10"
-        :pager-count="11"
-        layout="prev, pager, next"
-        :total="100000"
-      >
+      <el-pagination class="transaction-detail-footer-pagination" @current-change="handleChangePage" :current-page.sync="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -33,31 +28,61 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment'
+import _ from 'lodash'
 export default {
   name: 'TransactionDetail',
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 10
+    }
+  },
+  filters: {
+    formatTime(time) {
+      return moment(time).format('YYYY/MM/DD H: mm')
+    }
+  },
   computed: {
     ...mapGetters({
-      trades: 'account/trades'
+      origialTrades: 'account/trades'
     }),
     showPagination() {
-      return this.trades > 10
+      return this.total > 10
+    },
+    total() {
+      return _.get(this.origialTrades, 'count', 0)
+    },
+    trades() {
+      return _.get(this.origialTrades, 'rows', [])
     }
   },
   methods: {
     ...mapActions({
       getTrades: 'account/getTrades'
-    })
+    }),
+    async handleChangePage() {
+      await this.getTrades({
+        'x-order': 'createdAt-desc',
+        'x-per-page': this.pageSize,
+        'x-page': this.currentPage
+      })
+    }
   },
   async created() {
-    await this.getTrades()
-  },
+    await this.getTrades({
+      'x-order': 'createdAt-desc',
+      'x-per-page': this.pageSize,
+      'x-page': this.currentPage
+    })
+  }
 }
 </script>
 
 <style lang="scss">
 .transaction-detail {
   background: #fff;
-  padding-bottom: 77px;
+  padding-bottom: 54px;
   &-header {
     height: 61px;
     line-height: 61px;

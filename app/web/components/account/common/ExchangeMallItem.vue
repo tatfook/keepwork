@@ -29,7 +29,7 @@
 <script>
 import { locale } from '@/lib/utils/i18n'
 export default {
-  name: 'ExchangeItem',
+  name: 'ExchangeMallItem',
   props: {
     data: {
       type: Object,
