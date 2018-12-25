@@ -1,16 +1,17 @@
 <template>
   <div class="apply-teacher">
     <div class="apply-teacher-container">
-      <div class="apply-teacher-identity-info" v-if="!isLearner">
-        {{identityInfoText}}
+      <div class="apply-teacher-identity-info" :class="{'apply-teacher-identity-info-alliance': isAlliance}" v-if="!isLearner">
+        <div class="apply-teacher-identity-info-content">{{identityInfoText}}</div>
+        <div class="apply-teacher-identity-info-operate">{{$t('lesson.clickToRenew')}}</div>
       </div>
       <div class="apply-teacher-consult" v-if="isTeacher">{{$t("lesson.ifYouWantConsult")}}</div>
       <h1 class="apply-teacher-title" v-if="isLearner">{{$t('lesson.applyToBeTeacherOrAlliance')}}</h1>
       <div class="apply-teacher-hint" v-if="!isTeacher">
-        <div class="apply-teacher-hint-teacher">
+        <div class="apply-teacher-hint-teacher" :class="{'apply-teacher-hint-teacher-alliance': isAlliance}">
           <div>{{$t('lesson.pleaseInputActiveCode')}}</div>
-          <div class="apply-teacher-hint-info"></div>
-          <div class="apply-teacher-hint-contact"></div>
+          <div class="apply-teacher-hint-info">{{$t('lesson.instructorPrice')}}</div>
+          <div class="apply-teacher-hint-contact">{{$t('lesson.contactToBuyActiveCode')}}</div>
           <el-form class="apply-teacher-hint-form" :label-width="labelWidth">
             <el-form-item :label="$t('lesson.notActivatedText.activeCode')" prop=''>
               <el-input v-model.trim="activeCode" size="small" :placeholder="$t('lesson.notActivatedText.inputPlaceholder')"></el-input>
@@ -173,7 +174,25 @@ export default {
     background-color: #ff9661;
     color: #fff;
     font-size: 14px;
-    padding: 14px 20px;
+    height: 46px;
+    line-height: 46px;
+    overflow: hidden;
+    &-alliance {
+      border-radius: 46px;
+      display: flex;
+      margin-bottom: 16px;
+    }
+    &-content {
+      text-align: center;
+      flex: 1;
+    }
+    &-operate {
+      width: 185px;
+      background-color: #f5f5f5;
+      color: #333;
+      cursor: pointer;
+      text-align: center;
+    }
   }
   &-consult {
     background-color: #eef7ff;
@@ -197,6 +216,9 @@ export default {
       background-color: #ecf5ff;
       flex: 1;
       padding: 50px 24px 40px 20px;
+      &-alliance{
+        padding: 40px;
+      }
     }
     &-form {
       margin-top: 24px;
