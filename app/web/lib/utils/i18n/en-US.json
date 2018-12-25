@@ -1264,6 +1264,9 @@
     "lessonDeveloperPrice": "you need to pay ￥100 per year.",
     "toBeReleased": "To be released.",
     "applyAtivated": "Activate",
+    "paid": "paid",
+    "validPeriod": "Valid Period:",
+    "clickToRenew": "Click to Renew",
     "trackTeachingProgress": "You will be able to track your teaching progress."
   },
   "compHideText": {

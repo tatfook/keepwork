@@ -1,9 +1,16 @@
 <template>
   <div class="mentor-service">
-    <h1 class="mentor-service-title">{{$t('lesson.mentorService')}}</h1>
+    <h1 class="mentor-service-title" :class="{'mentor-service-title-bordered': !isPurchasedTutor}">{{$t('lesson.mentorService')}}</h1>
+    <div class="mentor-service-purchased" v-if="isPurchasedTutor">
+      <div class="mentor-service-purchased-info">
+        <span><i class="el-icon-check"></i>{{$t('lesson.paid')}}</span>
+        <span>{{$t('lesson.validPeriod')}} {{tutorPeriodText}}</span>
+      </div>
+      <div class="mentor-service-purchased-operate">{{$t('lesson.clickToRenew')}}</div>
+    </div>
     <p class="mentor-service-price">
       <span v-html="$t('lesson.tutorPriceInfo', {tutorPriceHtml, tutorPriceHtmlEn, tutorTargetHtml, tutorTargetHtmlEn})"></span>
-      <router-link :to="{path:'#'}" class="mentor-service-price-link">{{$t('lesson.clickToBuy')}}</router-link>
+      <router-link v-if="!isPurchasedTutor" :to="{path:'#'}" class="mentor-service-price-link">{{$t('lesson.clickToBuy')}}</router-link>
     </p>
     <div class="mentor-service-info">
       <p>{{$t('lesson.buyTutorInfo')}}</p>
@@ -33,14 +40,37 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   name: 'MentorService',
   data() {
     return {
-      tutorPriceHtml: '<span class="mentor-service-price-count">￥3000/年</span>',
-      tutorPriceHtmlEn: '<span class="mentor-service-price-count">￥3000/year</span>',
-      tutorTargetHtml: '<span class="mentor-service-price-target">1位家长+1个孩子</span>',
-      tutorTargetHtmlEn: '<span class="mentor-service-price-target">one parent and one kid</span>'
+      tutorPriceHtml:
+        '<span class="mentor-service-price-count">￥3000/年</span>',
+      tutorPriceHtmlEn:
+        '<span class="mentor-service-price-count">￥3000/year</span>',
+      tutorTargetHtml:
+        '<span class="mentor-service-price-target">1位家长+1个孩子</span>',
+      tutorTargetHtmlEn:
+        '<span class="mentor-service-price-target">one parent and one kid</span>'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      tutorInfo: 'lesson/tutorInfo',
+      isPurchasedTutor: 'lesson/isPurchasedTutor'
+    }),
+    tutorPeriodText() {
+      if (!this.isPurchasedTutor) {
+        return ''
+      }
+      let { startTime, endTime } = this.tutorInfo
+      return (
+        moment(startTime).format('YYYY.MM.DD') +
+        ' - ' +
+        moment(endTime).format('YYYY.MM.DD')
+      )
     }
   }
 }
@@ -59,10 +89,41 @@ export default {
     font-weight: bold;
     color: #333;
     margin: 0;
-    border-bottom: 1px solid #dcdcdc;
     font-size: 20px;
     text-align: center;
     padding-bottom: 8px;
+    &-bordered {
+      border-bottom: 1px solid #dcdcdc;
+    }
+  }
+  &-purchased {
+    background-color: #ff9661;
+    color: #fff;
+    font-size: 14px;
+    border: 1px solid #ff9661;
+    display: flex;
+    height: 46px;
+    line-height: 46px;
+    border-radius: 46px;
+    overflow: hidden;
+    margin: 16px 0;
+    &-info {
+      text-align: center;
+      flex: 1;
+      span + span {
+        margin-left: 30px;
+      }
+    }
+    &-operate {
+      width: 185px;
+      background-color: #f5f5f5;
+      color: #333;
+      cursor: pointer;
+      text-align: center;
+    }
+    .el-icon-check {
+      margin-right: 4px;
+    }
   }
   &-price {
     font-size: 14px;
@@ -117,7 +178,7 @@ export default {
       padding: 3px 0 8px 32px;
       &::before {
         font-family: element-icons !important;
-        content: "\E639";
+        content: '\E639';
         position: absolute;
         left: 0;
         top: 3px;
