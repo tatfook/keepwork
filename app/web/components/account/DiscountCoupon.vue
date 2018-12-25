@@ -1,40 +1,28 @@
 <template>
   <div class="discount-coupon">
     <div class="discount-coupon-header">
-      优惠卷
+      {{$t('account.coupons')}}
     </div>
-    <div
-      class="discount-coupon-tab"
-      v-if="hasDiscounts"
-    >
+    <div class="discount-coupon-tab" v-if="hasDiscounts">
       <el-tabs v-model="activeName">
-        <el-tab-pane
-          label="可使用"
-          name="useable"
-        >
+        <el-tab-pane :label="$t('account.available')" name="useable">
           <coupon-list :data="discountsUseable"></coupon-list>
         </el-tab-pane>
-        <el-tab-pane
-          label="已使用"
-          name="used"
-        >
+        <el-tab-pane :label="$t('account.used')" name="used">
           <coupon-list :data="discountsUsed"></coupon-list>
         </el-tab-pane>
-        <el-tab-pane
-          label="已过期"
-          name="expire"
-        >
+        <el-tab-pane :label="$t('account.expired')" name="expire">
           <!-- <coupon-list></coupon-list> -->
         </el-tab-pane>
       </el-tabs>
     </div>
     <div class="discount-coupon-explain">
-      <div class="discount-coupon-explain-title">优惠卷使用说明:</div>
-      <p class="discount-coupon-explain-item">请在券面所示有效期内使用，逾期失效。</p>
-      <p class="discount-coupon-explain-item">用券应满足券面所示使用范围、满减金额。通用券可全平台通用，课程券仅限指定课程使用。</p>
-      <p class="discount-coupon-explain-item">如您的订单在用券后未最终支付，则订单失效，优惠券自动返还。</p>
-      <p class="discount-coupon-explain-item">一笔订单只能使用一张优惠券。</p>
-      <p class="discount-coupon-explain-item">在个别特殊促销活动中，优惠券无法与其他优惠（如拼团、秒杀等）叠加使用。请以具体的活动规则为准。</p>
+      <div class="discount-coupon-explain-title">{{$t('account.couponDescription')}}</div>
+      <p class="discount-coupon-explain-item">{{$t('account.couponDescription1')}}</p>
+      <p class="discount-coupon-explain-item">{{$t('account.couponDescription2')}}</p>
+      <p class="discount-coupon-explain-item">{{$t('account.couponDescription3')}}</p>
+      <p class="discount-coupon-explain-item">{{$t('account.couponDescription4')}}</p>
+      <p class="discount-coupon-explain-item">{{$t('account.couponDescription5')}}</p>
     </div>
   </div>
 </template>
@@ -116,7 +104,7 @@ export default {
       line-height: 14px;
       margin-top: 10px;
       &::before {
-        content: "•";
+        content: '•';
         margin-right: 11px;
       }
     }

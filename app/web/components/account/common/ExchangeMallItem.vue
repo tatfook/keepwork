@@ -13,7 +13,7 @@
         {{subject}}
       </div>
       <div class="exchange-item-info-price">
-        单价:
+        {{$t('account.price')}}
         <span class="exchange-item-info-price-number">{{ priceByUnit }}</span>
       </div>
       <el-button
@@ -21,7 +21,7 @@
         type="primary"
         class="exchange-item-info-button"
         @click="toExchangePage"
-      >兑换</el-button>
+      >{{$t('account.conversion')}}</el-button>
     </div>
   </div>
 </template>
@@ -47,8 +47,8 @@ export default {
     image() {
       return this.data.thumbnail
     },
-    goodsId() {
-      return this.data.goodsId
+    id() {
+      return this.data.id
     },
     subject() {
       return this.data.subject
@@ -102,7 +102,7 @@ export default {
     toExchangePage() {
       this.$router.push({
         name: 'OrderConfirm',
-        query: { id: this.goodsId, type: 1, payment: this.priceUnit }
+        query: { id: this.id, type: 1, payment: this.priceUnit }
       })
     },
     handleShowButton() {

@@ -50,7 +50,6 @@ const mutations = {
     Vue.set(state, 'tradeOrder', payload)
   },
   [SUBMIT_TRADE_ORDER](state, payload) {
-    console.warn('SUBMIT_TRADE_ORDER', payload)
     Vue.set(state, 'tradeOrder', {
       ...state.tradeOrder,
       ...payload

@@ -1,22 +1,26 @@
 <template>
   <div class="order-success">
     <img class="order-success-icon" src="../../assets/account/order-success.png" alt="order-success-icon">
-    <div class="order-success-title">支付成功</div>
+    <div class="order-success-title">{{$t('account.successfullyPaid')}}</div>
     <div class="order-success-cost">{{finalCostByUnit}}</div>
     <div class="order-success-discount">
-      返{{totalCost}}知识币
-      <sapn v-if="hasDiscounts">{{discount}}</sapn>
-      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'DiscountCoupon'}">点击查看</router-link>
+      <span v-if="isPackageType">{{$t('account.returnCoin', { coin: returnCoin })}}</span>
+      <sapn v-if="hasDiscounts"> {{$t('account.returnCoupon', {returnCoin: discount })}}</sapn>
+      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'DiscountCoupon'}">{{$t('account.viewMore')}}</router-link>
     </div>
 
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'OrderSuccess',
   mounted() {
     document.title = '订单完成'
+    if (_.isEmpty(this.tradeOrder)) {
+      return this.$router.push({ name: 'MyAccount' })
+    }
   },
   computed: {
     ...mapGetters({
@@ -28,13 +32,28 @@ export default {
     totalCost() {
       return this.tradeOrder.totalCost
     },
+    goodsDetail() {
+      return this.tradeOrder.goodsDetail
+    },
+    payment() {
+      return this.tradeOrder.payment
+    },
+    isPackageType() {
+      return this.tradeOrder.type === 2
+    },
+    isRmbPayment() {
+      return this.payment
+    },
+    returnCoin() {
+      return this.isPackageType ? this.goodsDetail.rmb : ''
+    },
     discount() {
       return this.hasDiscounts ? this.tradeOrder.discounts.title : ''
     },
     hasDiscounts() {
       return this.tradeOrder.discounts
     }
-  },
+  }
 }
 </script>
 

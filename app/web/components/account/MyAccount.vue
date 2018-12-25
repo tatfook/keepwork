@@ -2,70 +2,52 @@
   <div class="account-detail">
     <div class="account-detail-header">
       <span class="account-detail-header-title">
-        我的账户
+        {{$t('account.myAccount')}}
       </span>
-      <el-popover
-        placement="bottom"
-        trigger="hover"
-        content="假装有知识币说明"
-      >
-        <span
-          slot="reference"
-          class="account-detail-header-tips"
-        >
+      <el-popover placement="bottom" trigger="hover" width="450px" popper-class="account-detail-header-popover">
+        <span slot="reference" class="account-detail-header-tips">
           <i class="account-detail-header-tips-icon el-icon-question"></i>
-          了解知识币、知识豆
+          {{$t('account.coinsTips')}}
         </span>
+        <p>{{$t('account.coinsTips-1-title')}}</p>
+        <p>{{$t('account.coinsTips-1-message')}}</p>
+        <p>{{$t('account.coinsTips-2-title')}}</p>
+        <p>{{$t('account.coinsTips-2-message')}}</p>
       </el-popover>
     </div>
     <div class="account-detail-item">
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col-name">余额(元)</div>
+        <div class="account-detail-item-row-col-name">{{$t('account.userRmb')}}</div>
         <div class="account-detail-item-row-col-count">{{rmb}}</div>
         <div class="account-detail-item-row-button">
-          <el-button
-            type="primary"
-            class="account-item-button"
-            @click="toRechargeConfirm"
-          >去充值</el-button>
+          <el-button type="primary" class="account-item-button" @click="toRechargeConfirm">{{$t('account.topUp')}}</el-button>
         </div>
       </div>
     </div>
 
     <div class="account-detail-item">
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col-name">知识币(个)</div>
+        <div class="account-detail-item-row-col-name">{{$t('account.userCoin')}}</div>
         <div class="account-detail-item-row-col-count">{{coin}}</div>
         <div class="account-detail-item-row-button">
-          <el-button
-            type="primary"
-            class="account-item-button"
-            @click="toExchangeMall"
-          >去兑换</el-button>
+          <el-button type="primary" class="account-item-button" @click="toExchangeMall">{{$t('account.exchange')}}</el-button>
         </div>
       </div>
       <div class="account-detail-item-row">
         <div class="account-detail-item-row-col-name"></div>
-        <div class="account-detail-item-row-col-lock">{{lockCoin}}<span class="lock-tips">(待解锁)</span></div>
+        <div class="account-detail-item-row-col-lock">{{lockCoin}}<span class="account-detail-item-row-col-lock-tips">({{$t('account.locked')}})</span></div>
         <div class="account-detail-item-row-button lock">
-          <el-button
-            type="primary"
-            class="account-item-button"
-          >去兑换</el-button>
+          <el-button type="primary" class="account-item-button">{{$t('account.exchange')}}</el-button>
         </div>
       </div>
     </div>
 
     <div class="account-detail-item">
       <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col-name">知识豆(个)</div>
+        <div class="account-detail-item-row-col-name">{{$t('account.userBean')}}</div>
         <div class="account-detail-item-row-col-count">{{bean}}</div>
         <div class="account-detail-item-row-button">
-          <el-button
-            type="primary"
-            class="account-item-button"
-            @click="toExchangeMall"
-          >去兑换</el-button>
+          <el-button type="primary" class="account-item-button" @click="toExchangeMall">{{$t('account.exchange')}}</el-button>
         </div>
       </div>
     </div>
@@ -75,7 +57,7 @@
 
 <script>
 import AccountTab from '@/components/account/common/AccountTab'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'MyAccount',
   components: {
@@ -83,7 +65,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      balance: 'account/balance'
+      balance: 'account/balance',
+      isLogined: 'user/isLogined'
     }),
     _rmb() {
       return this.balance.rmb || 0
@@ -109,7 +92,6 @@ export default {
       this.$router.push({ name: 'ExchangeMall' })
     }
   }
-
 }
 </script>
 
@@ -134,6 +116,15 @@ export default {
       &-icon {
         font-size: 16px;
         color: #ff9307;
+      }
+    }
+    &-popover {
+      width: 500px;
+      padding: 20px 36px;
+      font-size: 14px;
+      color: #808080;
+      &-title {
+        color: #000;
       }
     }
   }
@@ -164,15 +155,14 @@ export default {
         }
         &-lock {
           flex: 1;
-          // text-align: center;
           font-size: 24px;
           color: #bec1c6;
           margin-top: 10px;
           margin-bottom: 20px;
-        }
-        .lock-tips {
-          font-size: 14px;
-          color: #bec1c6;
+          &-tips {
+            font-size: 14px;
+            color: #bec1c6;
+          }
         }
       }
 
