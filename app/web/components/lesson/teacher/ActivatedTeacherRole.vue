@@ -10,6 +10,7 @@
             <div class="nickname">{{username}}</div>
             <router-link v-if="isTeacher || isAlliance" :to="{name: 'TeacherColumnApply'}" class="activated-teacher-role-identity">
               <img v-if="isTeacher" src="@/assets/lessonImg/sharing_resource.png" alt="">
+              <img v-if="isAlliance" src="@/assets/lessonImg/alliance.png" alt="">
               {{isTeacher ? $t('lesson.instructor') : $t('lesson.lessonDevelopers')}}
             </router-link>
           </div>
@@ -35,7 +36,7 @@
               <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
               <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
             </el-submenu>
-            <el-menu-item v-if="!isMentor" index="4" @click="showItem('MENTOR_INVITE')">
+            <el-menu-item index="4" @click="showItem('MENTOR_INVITE')">
               <span class="item-title" slot="title">{{$t('lesson.becomeAMentor')}}</span>
             </el-menu-item>
           </el-menu>
@@ -86,13 +87,6 @@ export default {
     },
     isLearner() {
       return !this.isTeacher && !this.isAlliance
-    },
-    isMentor() {
-      if (!this.tutorInfo) {
-        return false
-      }
-      let { startTime, endTime } = this.tutorInfo
-      return moment(new Date()).isBetween(startTime, endTime, 'minute')
     }
   },
   methods: {

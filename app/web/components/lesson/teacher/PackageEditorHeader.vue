@@ -73,6 +73,7 @@ export default {
 </script>
 <style lang="scss">
 .package-editor-header {
+  background-color: #f8f8f8;
   &-header {
     display: flex;
     &-breadcrumb {
