@@ -96,6 +96,7 @@
         v-show="!isDescriptionEditing"
         v-html="tempDesc || $t('project.noDescripton')"
       ></div>
+      <!--noDescripton翻译是no desc ??-->
       <div
         :id="descriptionId"
         v-show="isDescriptionEditing"
@@ -150,6 +151,7 @@
     <paracraft-info
       :isDialogVisible='isParacraftInfoDialogVisible'
       :paracraftUrl='paracraftUrl'
+      :originProjectDetail='originProjectDetail'
       @close='handleParacraftInfoDialogClose'
     ></paracraft-info>
   </div>
@@ -173,10 +175,7 @@ export default {
       type: Object,
       required: true
     },
-    projectOwnerUsername: {
-      type: String,
-      required: true
-    },
+    projectOwnerUsername: String,
     isLoginUserEditable: {
       type: Boolean,
       default: false
@@ -338,6 +337,7 @@ export default {
         })
       }
       let { archiveUrl, commitId } = this.originProjectDetail.world
+      // console.log('这里'+ archiveUrl)
       return paracraftUtil.getUrl({
         link: `${archiveUrl}?ref=${commitId}`,
         usertoken: this.userToken

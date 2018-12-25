@@ -20,7 +20,7 @@
         <el-button v-if="isDownload" @click="toParacraftWorldZip()">{{$t('project.downloadedArchive')}}</el-button>
       </div>
       <p class="paracraft-info-operate-msg"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleaseSignInToParacraft')}}</p>
-      <p class="paracraft-info-operate-info"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleasePutItUnderTheCatalogueToUse')}}</p>
+      <p v-if="isDownload" class="paracraft-info-operate-msg"><span class="paracraft-info-text-danger">*</span>{{$t('project.pleasePutItUnderTheCatalogueToUse')}}</p>
     </div>
     <img class="paracraft-info-background-img paracraft-info-background-img-left-top" src="@/assets/img/paracraft_box.png" alt="">
     <img class="paracraft-info-background-img paracraft-info-background-img-right-bottom" src="@/assets/img/littepurple_box.png" alt="">
@@ -28,10 +28,15 @@
 </template>
 <script>
 import launchUri from '@/lib/utils/launchUri'
+import { setTimeout } from 'timers';
 
 export default {
   name: 'ParacraftInfo',
   props: {
+    originProjectDetail: {
+      type: Object,
+      required: true
+    },
     isDialogVisible: {
       type: Boolean,
       required: true
@@ -41,6 +46,8 @@ export default {
   computed: {
     isDownload() {
       let url = decodeURIComponent(this.paracraftUrl)
+      console.log(url)
+      console.log(this.originProjectDetail.name)
       if(url.indexOf('cmd/loadworld') === -1) {
         return false
       } else {
@@ -54,10 +61,24 @@ export default {
         launchUri(this.paracraftUrl)
       }
     },
-    toParacraftWorldZip() {
+    async toParacraftWorldZip() {
       let url = decodeURIComponent(this.paracraftUrl)
       let downloadWorldZip = url.substring(url.indexOf('https://'), url.lastIndexOf('.zip') + 4)
-      launchUri(downloadWorldZip)
+      await new Promise((resolve, reject) => {
+        let a = document.createElement('a')
+        a.target = '_self'
+        a.style.display = 'none'
+        a.href = `${downloadWorldZip}&attname=${this.originProjectDetail.name}`
+        console.log(a)
+        a.download = this.originProjectDetail.name
+        document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+          a.remove()
+          resolve()
+        }, 100)
+      }).catch(e => console.error(e))
+      // launchUri(downloadWorldZip)
     },
     handleDialogClose() {
       this.$emit('close')
@@ -129,7 +150,7 @@ export default {
     margin-top: 160px !important;
   }
   .el-dialog__body {
-    padding: 32px 22px 8px 184px;
+    padding: 32px 22px 36px 184px;
   }
 }
 

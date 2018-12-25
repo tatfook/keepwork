@@ -36,10 +36,7 @@ export default {
       type: Object,
       required: true
     },
-    originProjectUsername: {
-      type: String,
-      required: true
-    },
+    originProjectUsername: String,
     projectOwnerPortrait: String,
     projectId: {
       type: Number,
