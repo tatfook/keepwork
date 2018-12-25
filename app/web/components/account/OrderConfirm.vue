@@ -2,10 +2,10 @@
   <div class="order-confirm" v-if="!isLoading">
     <div class="order-confirm-header">
       <div class="order-confirm-header-center">
-        <div class="order-confirm-header-center-title">购买账号</div>
+        <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
         <div class="order-confirm-header-center-main">
-          <span class="order-confirm-header-center-main-username">Keepwork账号: {{username}}</span>
-          <span class="order-confirm-header-center-main-account">数字账号： <el-select v-model="digitalAccount" placeholder="请选择">
+          <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
+          <span v-if="isExchangeType" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
               <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select></span>
@@ -14,7 +14,7 @@
     </div>
     <div class="order-confirm-main">
       <div class="order-confirm-main-title">
-        确认订单信息
+        {{$t('account.confirmInformation')}}
       </div>
       <div class="order-confirm-main-item">
         <package-item v-if="!isLoading && isPackageType" :data="goodsDetail"></package-item>
@@ -22,32 +22,32 @@
       </div>
       <div class="order-confirm-main-count">
         <div class="order-confirm-main-count-title">
-          数量:
+          {{$t('account.qty')}}
         </div>
         <div class="order-confirm-main-count-input">
           <el-input-number class="input-number-counter" :disabled="isPackageType" v-model="count" :min="1" :max="10000" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-          总价: {{ totalCostByUnit }}
+        {{$t('account.totalPrice')}} {{ totalCostByUnit }}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
         <div class="order-confirm-main-discounts-title">
-          优惠券
+          {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-          无优惠券
+           {{$t('account.noCoupons')}}
         </div>
         <div class="order-confirm-main-discounts-all">
-          查看详情 <i class="el-icon-arrow-right"></i>
+           {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
       <div class="order-confirm-main-submit">
         <div class="order-confirm-main-submit-total">
-          <span class="order-confirm-main-submit-total-title">需支付: </span>
+          <span class="order-confirm-main-submit-total-title">{{$t('account.needToPay')}} </span>
           <span class="order-confirm-main-submit-total-cost">{{ finalCostByUnit }}</span>
         </div>
-        <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>提交订单</el-button>
+        <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
       </div>
     </div>
   </div>
@@ -99,8 +99,8 @@ export default {
       // this.digitalAccountList = [{label: '7000000001360', value: 7000000001360}]
       keepwork.account.getDigitalAccounts()
         .then(res => {
-          let { data } = res
-          this.DigitalAccountList = data.map(item => ({ label: item, value: item}))
+          let { data = [] } = res
+          this.DigitalAccountList = res.data.map(item => ({ label: item, value: item}))
         })
         .catch(e => console.error(e))
     }
@@ -231,15 +231,15 @@ export default {
           display: inline-block;
           min-width: 189px;
           padding-right: 39px;
-          margin-right: 39px;
           box-sizing: border-box;
-          border-right: 1px solid #9c9c9c;
         }
 
         &-account {
           display: inline-block;
           font-size: #666;
           font-size: 14px;
+          border-left: 1px solid #9c9c9c;
+          padding-left: 39px;
           .el-input__inner {
             height: 30px;
             line-height: 30px;

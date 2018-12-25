@@ -1,29 +1,16 @@
 <template>
-  <div
-    class="account-page"
-    v-loading="loading"
-  >
+  <div class="account-page" v-loading="loading">
     <div class="account-page-header">
       <common-header class="container"></common-header>
     </div>
     <div class="account-page-main-content">
-      <router-view
-        v-if="!loading"
-        class="account-page-main-content-center"
-        id="account-page"
-      />
+      <router-view v-if="!loading" class="account-page-main-content-center" id="account-page" />
     </div>
     <div class="account-page-footer">
       <common-footer class="container"></common-footer>
     </div>
-    <div
-      @click.stop
-      v-if="isShowLoginDialog"
-    >
-      <login-dialog
-        :show="isShowLoginDialog"
-        @close="handleLoginDialogClose"
-      ></login-dialog>
+    <div @click.stop v-if="isShowLoginDialog">
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
     </div>
   </div>
 
@@ -33,6 +20,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import Cookies from 'js-cookie'
 import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
@@ -76,6 +64,13 @@ const store = new Vuex.Store({
   }
 })
 
+router.beforeEach(async (to, from, next) => {
+  if (Cookies.get('token')) {
+    return next()
+  }
+  store.dispatch('user/toggleLoginDialog', true)
+})
+
 export default {
   router,
   store,
@@ -111,13 +106,10 @@ export default {
       this.toggleLoginDialog(false)
     },
     async loadAccountPresets() {
-      // await this.getUserProfile({ force: false, useCache: false }).catch(err =>
-      //   console.error(err)
-      // )
-      await Promise.all([
-        this.getUserProfile({ force: false, useCache: false }),
-        this.getBalance()
-      ]).catch( e => console.error(e))
+      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
+        console.error(err)
+      )
+      await this.getBalance().catch(e => console.error(e))
       this.loading = false
     }
   }

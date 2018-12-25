@@ -13,7 +13,7 @@
         {{subject}}
       </div>
       <div class="exchange-item-info-price">
-        单价:
+        {{$t('account.price')}}
         <span class="exchange-item-info-price-number">{{ priceByUnit }}</span>
       </div>
       <el-button
@@ -21,7 +21,7 @@
         type="primary"
         class="exchange-item-info-button"
         @click="toExchangePage"
-      >兑换</el-button>
+      >{{$t('account.conversion')}}</el-button>
     </div>
   </div>
 </template>

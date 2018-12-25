@@ -1,12 +1,12 @@
 <template>
   <div class="order-success">
     <img class="order-success-icon" src="../../assets/account/order-success.png" alt="order-success-icon">
-    <div class="order-success-title">支付成功</div>
+    <div class="order-success-title">{{$t('account.successfullyPaid')}}</div>
     <div class="order-success-cost">{{finalCostByUnit}}</div>
     <div class="order-success-discount">
-      <span v-if="isPackageType">返{{returnCoin}}知识币</span>
-      <sapn v-if="hasDiscounts">{{discount}}</sapn>
-      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'DiscountCoupon'}">点击查看</router-link>
+      <span v-if="isPackageType">{{$t('account.returnCoin', { coin: returnCoin })}}</span>
+      <sapn v-if="hasDiscounts"> {{$t('account.returnCoupon', {returnCoin: discount })}}</sapn>
+      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'DiscountCoupon'}">{{$t('account.viewMore')}}</router-link>
     </div>
 
   </div>

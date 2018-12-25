@@ -1,7 +1,7 @@
 <template>
   <div class="coupon-list">
     <div class="coupon-list-sum">
-      共{{ticketsCount}}张:
+      {{$t('account.total', { total: ticketsCount })}}
     </div>
     <div class="coupon-list-main">
       <coupon-ticket

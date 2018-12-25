@@ -9,17 +9,18 @@
       </div>
       <div class="order-package-item-info-row">
         <span class="order-package-item-info-row-includes">
-          <span class="row-bold">包含: </span>{{includesLessonCount}} 个课程
+          <span class="row-bold">{{$t('card.includes')}}: </span>{{includesLessonCount}} {{$t('lesson.lessonsCount')}} 
         </span>
         <span class="order-package-item-info-row">
-          <span class="row-bold">年龄: </span> {{packageSuitableAge}}
+          <span class="row-bold">{{$t('lesson.ages')}}: </span> {{packageSuitableAge}}
         </span>
       </div>
       <div class="order-package-item-info-row-intro">
-        <span class="row-bold">简介: </span> {{ packageIntro }}
+        <span class="row-bold">{{$t('lesson.intro')}}: </span> {{ packageIntro }}
       </div>
       <div v-if="isRmbPayment" class="order-package-item-info-row-return">
-        购买后返还{{returnCoin}}知识币
+        <!-- 购买后返还{{returnCoin}}知识币 -->
+        {{$t('lesson.backInfo', { backCoinCount: returnCoin } )}}
       </div>
     </div>
     <div class="order-package-item-cost">
