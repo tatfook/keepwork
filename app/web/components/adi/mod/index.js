@@ -24,6 +24,8 @@ import ModPageSwitching from './web/pageSwitching'
 import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
+import ModProject from './web/project'
+import ModIframe from './common/iframe'
 
 export const modList = {
   ModMarkdown,
@@ -51,7 +53,9 @@ export const modList = {
   ModPageSwitching,
   ModLesson,
   ModQuiz,
-  ModHint
+  ModHint,
+  ModProject,
+  ModIframe
 }
 
 export const load = modName => {

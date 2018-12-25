@@ -11,6 +11,7 @@ import VueClipboard from 'vue-clipboard2'
 import editorModule from '@/store/editor'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
+import pblModule from '@/store/pbl'
 import ElementUI from 'element-ui'
 import { transfer } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -35,7 +36,8 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     gitlab: gitlabModule,
-    editor: editorModule
+    editor: editorModule,
+    pbl: pblModule
   },
   plugins: [
     transfer()

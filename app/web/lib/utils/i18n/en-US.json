@@ -2,6 +2,7 @@
   "common": {
     "login": "Login",
     "register": "Register",
+    "account": "Account",
     "existAccount": "The username already exists",
     "notValidAccount": "Account is not valid",
     "usernameCannotWithNumber": "The username cannot begin with a number",
@@ -33,6 +34,7 @@
     "userData": "Information",
     "accountSecurity": "Security",
     "realNameAuthentication": "Verified",
+    "thirdBanding": "Account binding",
     "chinese-englishSwitch": "Switch to Chinese(中文)",
     "left-rightAngles": "Toggle left and right angles",
     "accountNoChange": "Account name cannot be changed after registration",
@@ -59,7 +61,7 @@
     "settings": "Settings",
     "features": "Features",
     "applicationCenter": "Application center",
-    "myHomePage": "My home page",
+    "myHomePage": "My Profile",
     "websiteManagement": "Website Management",
     "pageEditor": "Page editor",
     "myWebDisk": "Cloud Drive",
@@ -131,7 +133,8 @@
     "weekday6": "Saturday",
     "viewMore": "More",
     "untitled": "Untitled",
-    "noSelfIntro": "No self intro."
+    "noSelfIntro": "No self intro.",
+    "identification": "Certification"
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
@@ -337,7 +340,7 @@
   "tips": {
     "mod": "Module",
     "copyUrl": "Copy URL",
-    "openInNewWindow":"Open in new window",
+    "openInNewWindow": "Open in new window",
     "clickToShow": "Show",
     "clickToHide": "Hide",
     "clickToAdd": "Add",
@@ -391,7 +394,7 @@
     "categoryList": "Category list",
     "tab": "Tab",
     "pageSwitching": "Page switching",
-    "iframe": "iframe",
+    "iframe": "Iframe",
 
     "lesson": "Lesson",
     "quiz": "Quiz",
@@ -399,7 +402,9 @@
     "lessonShare": "LessonShare",
     "package": "Package",
     "lessonPackage": "Lesson Package",
-    "hint": "Hint"
+    "hint": "Hint",
+
+    "project": "Project"
   },
   "adi": {
     "hint": {
@@ -487,6 +492,11 @@
       "notice": "Share your ideas!",
       "work_review": "Work review",
       "publish": "Publish"
+    },
+    "iframe": {
+      "notice": "Inbound links may not be able to load successfully in the iframe. Continue?",
+      "pleaseInput": "Begin with http or https",
+      "formatError": "Please enter a link beginning with http or https."
     }
   },
   "card": {
@@ -610,7 +620,17 @@
     "keepOneOption": "Please set at least one answer",
     "coinsInsufficient": "Sorry. Your coins are insufficient.",
 
-    "hint": "hint"
+    "hint": "hint",
+
+    "project": "Project",
+    "projectTags": "Project Tags",
+    "projectMembers": "Project Members",
+
+    "projectId": "Project ID",
+    "projectHome": "Project home",
+    "projectNotFound": "Project Not Found",
+    "projectInputId": "Enter the project ID to get the project data",
+    "projectForbidden": "Unable to display content"
   },
   "field": {
     "fileId": "file Id",
@@ -779,7 +799,8 @@
     "sendCodes": "Send Code",
     "inputLoginPwd": "Login Password",
     "pleaseCheckPwd": "Please check if the password is correct",
-    "pwdIncorrect": "Your password was incorrect. "
+    "pwdIncorrect": "Your password was incorrect. ",
+    "saveTheChanges": "Save the changes"
   },
   "setting": {
     "general": "Basic Info",
@@ -1005,7 +1026,7 @@
       "core7": "Key Point-7"
     },
     "notActivatedText": {
-      "hint": "You have signed up as a Learner. If you want to become an Insturctor, please input the activation code here.",
+      "hint": "You have signed up as a Learner. If you want to become an Instructor, please input the activation code here.",
       "wrongCodeHint": "Incorrect activation code. Please check it and try again.      ",
       "getActivationCode": "To get the activation code, please contact Mr Cheng: 13267059950(Tel/Wechat)、846704851(QQ)",
       "inputPlaceholder": "Please input the activation code.",
@@ -1064,6 +1085,7 @@
     "beginTheClassFail": "operation fail",
     "teach": "TEACH",
     "review": "REVIEW",
+    "becomeAMentor": "Become A Mentor",
     "lessonManagement": "Lesson Management",
     "noLessonHint": "You haven't added any packages. Please enter Lessons to view.",
     "teachingTime": "Latest teaching time",
@@ -1193,6 +1215,7 @@
     "getInstructorContact": "For further information, please contact Mr Cheng: 13267059950(Tel/Wechat)、846704851(QQ)",
     "whatYouWillGet": "What will you get",
     "learners": "Learners",
+    "lessonDevelopers": "Lesson Developers",
     "instructors": "Instructors",
     "perYearPerPerson": "/person/year",
     "selfLearning": "Self-learning",
@@ -1209,6 +1232,41 @@
     "freeForClassroomLearning": "Your students could learn all lessons on the platform free of charge in the class.",
     "trackStudentsPerformance": "You will be able to track students' real-time performance in a class.",
     "beShownReport": "You will be shown teaching reports including accuracy analysis and testing results of students after a class, which support printing and sending to mailboxes.",
+    "findMentor": "Find a Mentor?",
+    "mentorService": "Mentor Service",
+    "tutorPriceInfo": "A solution for {tutorTargetHtmlEn} to enjoy the guidance from professional programmers, charging {tutorPriceHtmlEn}.",
+    "clickToBuy": "Click to Buy",
+    "buyTutorInfo": "After payment is effected, our support staff will contact you within 1 working day. Please make sure that the phone number you reserved in Keepwork is in service.",
+    "consultTutorInfo": "For further information, please contact Mr Cheng: 13267059950 (Tel/Wechat)、846704851(QQ) .",
+    "detailServiceTitle": "What will you get:",
+    "oneToOneMentoring": "You will get weekly one-to-one online mentoring.",
+    "flipClassInfo": "Professional programmers will track your self-learning performance through asking questions, which arises from the new teaching method 'Flip Class'.",
+    "learningAndGuiding": "You will be helped to find the blind spots in learning and be guided to solve them.",
+    "askAnyQuestion": "You will be able to ask any questions about programming regardless of programming languages.",
+    "reviewedByMentor": "Your code and works will be reviewed by your mentor.",
+    "watchAndLearnDevelopment": "You will have the opportunity to watch how professional programmers work and learn the whole process of product designing and development.",
+    "participateInGroup": "You will be able to participate in the group discussion and be guided how to run a project.",
+    "solvePuzzleOnline": "Your puzzles will be solved through Q&A online.",
+    "guidedOnImportantExperience": "You will be guided on those important experiences you record. (Forthcoming)",
+    "priorityLearnOfflineLessons": "You will have the priority to learn the free offline guiding lessons.",
+    "mentorServiceToBeReleased": "Mentor System To Be Released",
+    "selfDirectedLearning": "Based on the self-directed learning ideas and methods, our education platform aims at helping excellent and knowledgeable professionals from all walks of life become mentors. Therefore, we adopt the mode of free teaching content and charging for guidance service.",
+    "mentorServiceIsInNeed": "Although many free, high-quality resourcest are available for students to learn by themselves, online and offline guidance is still necessary. For those students without self-directed learning abilities, online and offline guidance can make them gradually master self-learning capabilities and get into the habit. For those students capable of independent learning, the guidance and instructions from senior mentors are essential as well. That’s why we are trying to achieve mentorships in the Internet age, by means of which professionals can teach a wide range of mentees and make more people get benefits from their knowledge and experience.",
+    "toBeMentorContact": "For further information, please contact Mr Cheng: 13267059950(Tel/Wechat)、846704851(QQ)",
+    "youHaveBecomeAnInstructor": "You have become an Instructor. Valid Period: ",
+    "youHaveBecomeLessonDevelop": "You have become a Lesson Developer. Valid Period:",
+    "ifYouWantConsult": "For further information, please contact Mr Cheng: 13267059950 （Tel/Wechat）、846704851（QQ）",
+    "applyToBeTeacherOrAlliance": "Become An Instructor or A Lesson Developer",
+    "pleaseInputActiveCode": "To become an Instructor, please enter the activation code here.",
+    "instructorPrice": "(Instructors need to pay ￥5000/person/year. They can create an online class for 50 students to join.)",
+    "contactToBuyActiveCode": "For further information, please contact Mr Cheng: 13267059950 (Tel/Wechat)、846704851(QQ)",
+    "toBeLessonDeveloper": "To become a Lesson Developer,",
+    "lessonDeveloperPrice": "you need to pay ￥100 per year.",
+    "toBeReleased": "To be released.",
+    "applyAtivated": "Activate",
+    "paid": "paid",
+    "validPeriod": "Valid Period:",
+    "clickToRenew": "Click to Renew",
     "trackTeachingProgress": "You will be able to track your teaching progress."
   },
   "compHideText": {
@@ -1281,6 +1339,8 @@
     "projectName": "Project Name",
     "projectType": "Project Type",
     "createProject": "Create the project",
+    "projectAlreadyExists": "The project already exists.",
+    "ProjectCreationFailed": "Failed to create the project, please try again later!",
     "prev": "Prev",
     "next": "Next",
     "3DGameAndAnim": "3D games and animations",
@@ -1489,6 +1549,7 @@
     "noProjectsToShow": "No projects to show.",
     "noContributedProjectsToShow": "No contributed projects to show.",
     "top": "Top",
-    "unTop": "Un-Top"
+    "unTop": "Un-Top",
+    "changePassword": "Change Password"
   }
 }

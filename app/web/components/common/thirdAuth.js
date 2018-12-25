@@ -27,11 +27,11 @@ Vue.use(VueAuthenticate, {
       authorizationEndpoint: 'https://graph.qq.com/oauth2.0/authorize',
       scope: ['get_user_info'],
       clientId: '101403344',
-      url: baseUrl + 'oauth_users/qq',
+      url: baseUrl + '/oauth_users/qq',
       redirectUri: `${window.location.origin}/wiki/login`,
       // clientId: '101403344',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/qq',
-      // redirectUri: 'http://127.0.0.1:7001/',
+      // redirectUri: 'http://127.0.0.1:7001',
       popupOptions
     },
     weixin: {
@@ -40,11 +40,11 @@ Vue.use(VueAuthenticate, {
       authorizationEndpoint: 'https://open.weixin.qq.com/connect/qrconnect',
       appid: 'wxc97e44ce7c18725e',
       clientId: 'wxc97e44ce7c18725e',
-      url: baseUrl + 'oauth_users/weixin',
+      url: baseUrl + '/oauth_users/weixin',
       redirectUri: `${window.location.origin}/wiki/login`,
       // clientId: 'wxc97e44ce7c18725e',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/weixin',
-      // redirectUri: 'http://127.0.0.1:7001/',
+      // redirectUri: 'http://127.0.0.1:7001',
       popupOptions,
       scope: 'snsapi_login',
       requiredUrlParams: ['scope', 'appid', 'state'],
@@ -54,11 +54,11 @@ Vue.use(VueAuthenticate, {
       name: 'xinlangweibo',
       authorizationEndpoint: 'https://api.weibo.com/oauth2/authorize',
       clientId: '2411934420',
-      url: baseUrl + 'oauth_users/xinlang',
+      url: baseUrl + '/oauth_users/xinlang',
       redirectUri: `${window.location.origin}/wiki/login`,
       // clientId: '2411934420',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/xinlang',
-      // redirectUri: 'http://127.0.0.1:7001/',
+      // redirectUri: 'http://127.0.0.1:7001',
       oauthType: '2.0',
       popupOptions
     },
@@ -66,11 +66,11 @@ Vue.use(VueAuthenticate, {
       name: 'github',
       scope: ['user:email'],
       clientId: '2219fe9cb6d105dd30fb',
-      url: baseUrl + 'oauth_users/github',
+      url: baseUrl + '/oauth_users/github',
       redirectUri: `${window.location.origin}/wiki/login`
       // clientId: '2219fe9cb6d105dd30fb',
       // url: 'http://10.27.3.3:8081/api/v0/oauth_users/github',
-      // redirectUri: 'http://127.0.0.1:7001/'
+      // redirectUri: 'http://127.0.0.1:7001'
     }
   }
 })

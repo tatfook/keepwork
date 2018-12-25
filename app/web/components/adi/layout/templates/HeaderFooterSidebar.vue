@@ -4,10 +4,10 @@
       <slot name="header"></slot>
     </el-header>
     <el-container>
-      <el-aside width="400px" :class="{'hide': (showSidebarOrMain !== 'sidebar')}">
+      <el-aside width="400px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
         <slot name="sidebar"></slot>
       </el-aside>
-      <el-main :class="{'hide': showSidebarOrMain === 'sidebar'}">
+      <el-main :class="{'hide-on-phone': showSidebarOrMain === 'sidebar'}">
         <slot> </slot>
       </el-main>
     </el-container>

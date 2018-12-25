@@ -34,6 +34,7 @@ import editorModule from '@/store/editor'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
+import pblModule from '@/store/pbl'
 import createPersistedState from '@/store/createPersistedState'
 import ElementUI from 'element-ui'
 import { broadcast } from 'vuex-iframe-sync'
@@ -76,7 +77,8 @@ const store = new Vuex.Store({
     user: userModule,
     gitlab: gitlabModule,
     editor: editorModule,
-    lesson: lessonModule
+    lesson: lessonModule,
+    pbl: pblModule
   },
   plugins: [
     createPersistedState({

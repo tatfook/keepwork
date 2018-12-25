@@ -2,6 +2,7 @@
   "common": {
     "login": "登 录",
     "register": "注 册",
+    "account": "账户",
     "existAccount": "用户名已存在",
     "notValidAccount": "用户名不合法",
     "usernameCannotWithNumber": "用户名不能以数字开头",
@@ -33,6 +34,7 @@
     "userData": "用户资料",
     "accountSecurity": "账户安全",
     "realNameAuthentication": "实名认证",
+    "thirdBanding": "第三方账号绑定",
     "chinese-englishSwitch": "切换为英文（English）",
     "left-rightAngles": "切换左右视角",
     "accountNoChange": "账户名注册成功不可更改",
@@ -132,7 +134,8 @@
     "weekday6": "星期六",
     "viewMore": "查看更多",
     "untitled": "Untitled",
-    "noSelfIntro": "这家伙很懒，没有简介！"
+    "noSelfIntro": "这家伙很懒，没有简介！",
+    "identification": "立即认证"
   },
   "editor": {
     "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",
@@ -391,7 +394,7 @@
     "categoryList": "分类列表",
     "tab": "标签",
     "pageSwitching": "页面切换",
-    "iframe": "iframe",
+    "iframe": "内联框架",
 
     "lesson": "课程",
     "quiz": "问题",
@@ -400,7 +403,9 @@
     "package": "课程包",
     "lessonPackage": "课程包",
 
-    "hint": "提示"
+    "hint": "提示",
+
+    "project": "项目"
   },
   "adi": {
     "hint": {
@@ -488,6 +493,11 @@
       "notice": "分享你的想法！",
       "work_review": "作品评论",
       "publish": "发布"
+    },
+    "iframe": {
+      "notice": "输入的站外链接将可能无法在iframe中加载成功, 是否继续?",
+      "pleaseInput": "请输入https或者http的链接",
+      "formatError": "请输入带https/http的链接"
     }
   },
   "card": {
@@ -527,7 +537,7 @@
     "enter": "进入",
     "innerModal": "内部模态框",
     "bigFile": "大文件",
-    "iframe": "iframe",
+    "iframe": "内联框架",
     "pagePath": "页面路径",
     "tab": "标签",
     "categoryList": "分类列表",
@@ -611,7 +621,18 @@
     "keepTwoOptions": "至少保留两个选项",
     "keepOneOption": "至少保留一个选项",
     "coinsInsufficient": "对不起,你的知识币不够",
-    "hint": "提示"
+    "hint": "提示",
+
+    "project": "项目",
+    "projectTags": "项目标签",
+    "projectMembers": "项目成员",
+
+    "projectId": "请输入项目ID",
+    "projectHome": "项目主页",
+    "projectNotFound": "项目不存在",
+    "projectInputId": "输入项目ID,获取项目数据",
+    "projectForbidden": "无法显示内容"
+
   },
   "field": {
     "fileId": "字段",
@@ -721,15 +742,14 @@
     "fileUploading": "还有文件正在上传中，离开后文件将取消上传，是否继续？"
   },
   "user": {
-    "displayName": "昵称:",
-    "nickname": "昵:",
-    "sex": "性别:",
-    "location": "位置:",
-    "introduce": "个人简介:",
+    "displayName": "昵称",
+    "sex": "性别",
+    "location": "现居",
+    "introduce": "签名",
     "male": "男",
     "female": "女",
     "confidentiality": "保密",
-    "modifyAvatar": "修改头像",
+    "modifyAvatar": "点击修改头像",
     "inputPhoneNumber": "请输入手机号码",
     "inputPhoneOrEmail": "请输入手机号/邮箱",
     "inputVerificationCode": "请输入验证码",
@@ -760,12 +780,12 @@
     "newPwdRequired": "请输入新密码",
     "reNewPwdRequired": "请再次输入新密码",
     "pwdMinLen": "密码最少6位",
-    "emailBind": "邮箱绑定",
-    "phoneBind": "手机绑定",
-    "qqBind": "QQ绑定",
-    "weixinBind": "微信绑定",
-    "weiboBind": "微博绑定",
-    "githubBind": "Github绑定",
+    "emailBind": "邮箱",
+    "phoneBind": "手机",
+    "qqBind": "QQ",
+    "weixinBind": "微信",
+    "weiboBind": "微博",
+    "githubBind": "Github",
     "binding": "绑定",
     "unbunding": "解绑",
     "unBound": "未绑定",
@@ -783,7 +803,8 @@
     "sendCodes": "获取验证码",
     "inputLoginPwd": "输入登录密码",
     "pleaseCheckPwd": "请检查密码是否正确",
-    "pwdIncorrect": "旧密码错误。"
+    "pwdIncorrect": "旧密码错误。",
+    "saveTheChanges": "保存更改"
   },
   "setting": {
     "general": "基本信息",
@@ -1068,6 +1089,7 @@
     "beginTheClassFail": "上课失败",
     "teach": "授课",
     "review": "评估",
+    "becomeAMentor": "成为导师",
     "lessonManagement": "课程管理",
     "noLessonHint": "暂未添加课程包",
     "teachingTime": "最新授课时间",
@@ -1197,6 +1219,7 @@
     "getInstructorContact": "如需咨询，请联系：程老师 13267059950 （电话/微信）、846704851（QQ）",
     "whatYouWillGet": "具体服务如下",
     "learners": "自主学习用户",
+    "lessonDevelopers": "课程联盟会员",
     "instructors": "共享课程讲师",
     "perYearPerPerson": "/年/人",
     "selfLearning": "自主学习",
@@ -1213,6 +1236,41 @@
     "freeForClassroomLearning": "班级学生可免费在课堂中学习平台所有课程",
     "trackStudentsPerformance": "实时反馈学生的课堂表现和作答情况",
     "beShownReport": "自动生成课堂总结报告，支持打印、发送到邮箱",
+    "findMentor": "寻找导师？",
+    "mentorService": "导师服务",
+    "tutorPriceInfo": "仅需{tutorPriceHtml}购买导师服务，{tutorTargetHtml}即可享受职业程序员的指导。",
+    "clickToBuy": "点击购买",
+    "buyTutorInfo": "购买成功后，客服将在1个工作日内联系您，请确保您在keepwork预留的手机号保持畅通。",
+    "consultTutorInfo": "如需咨询，请联系：程老师  13267059950 （电话/微信）、846704851（QQ）",
+    "detailServiceTitle": "具体服务包含：",
+    "oneToOneMentoring": "每周一对一线上指导",
+    "flipClassInfo": "职业程序员通过翻转课堂的形式，通过对学员的提问了解学员自主学习的情况",
+    "learningAndGuiding": "帮助学员发现学习上的盲点并进行指导",
+    "askAnyQuestion": "学员也可以问任何关于编程的问题，不限编程语言",
+    "reviewedByMentor": "也可以审核学员的程序或者作品",
+    "watchAndLearnDevelopment": "学员有机会观摩职业程序员是如何工作的，了解产品设计开发的整个过程",
+    "participateInGroup": "集体讨论和指导包括项目的开展",
+    "solvePuzzleOnline": "在线答疑",
+    "guidedOnImportantExperience": "针对学员记录的重要体验等的指导（即将推出）",
+    "priorityLearnOfflineLessons": "优先排位我们免费的线下课程",
+    "mentorServiceToBeReleased": "导师系统即将上线",
+    "selfDirectedLearning": "我们的教育平台基于自主学习的理念和方法，同时旨在帮助各行各业的真正有知识技能的优秀职业人士可以成为老师。所以我们采取教学内容免费，指导服务收费的模式。",
+    "mentorServiceIsInNeed": "虽然我们提供了大量优质的免费内容供学员们自主学习，线上线下的指导还是需要的。一方面对于目前还缺少自主学习能力的学员，线上线下的指导可以引导学员逐步掌握自主学习的方法和习惯；另外自主学习能力很强的学员，也需要能够获得很资深的老师甚至是大师的点拨和一定的指引。所以，我们是努力在实现互联网时代的学徒制，让真正的名师大师们能够广泛的收徒，让他们的知识和经验可以触及更多的人。",
+    "toBeMentorContact": "如需咨询导师服务，请联系 ：程老师  13267059950 （电话/微信）、846704851（QQ）",
+    "youHaveBecomeAnInstructor": "您已成为共享课程讲师，有效期：",
+    "youHaveBecomeLessonDevelop": "您已成为课程联盟会员，有效期：",
+    "ifYouWantConsult": "如需咨询，请联系：程老师  13267059950 （电话/微信）、846704851（QQ）",
+    "applyToBeTeacherOrAlliance": "申请成为共享课程讲师/课程联盟会员",
+    "pleaseInputActiveCode": "成为共享课程讲师，请输入激活码",
+    "instructorPrice": "(仅需 ￥5000/年/人，即可成为共享课程讲师，创建的班级可同时容纳50个学生。)",
+    "contactToBuyActiveCode": "如需购买激活码，请联系：程老师 13267059950(电话/微信)、846704851(QQ)",
+    "toBeLessonDeveloper": "成为课程联盟会员",
+    "lessonDeveloperPrice": "仅需￥100/年/人，即可成为课程联盟会员",
+    "toBeReleased": "敬请期待",
+    "applyAtivated": "申请开通",
+    "paid": "已购买",
+    "validPeriod": "服务期限：",
+    "clickToRenew": "点击续费",
     "trackTeachingProgress": "跟踪授课进度，追溯授课轨迹"
   },
   "compHideText": {
@@ -1285,6 +1343,8 @@
     "projectName": "项目名称",
     "projectType": "项目类型",
     "createProject": "完成创建",
+    "projectAlreadyExists": "该项目已存在！",
+    "ProjectCreationFailed": "创建项目失败，请稍后再试！",
     "prev": "上一步",
     "next": "下一步",
     "3DGameAndAnim": "3D动画和游戏作品",
@@ -1296,9 +1356,9 @@
     "whiteboard": "白板",
     "share": "分享",
     "star": "收藏",
-    "unstar": "取消收藏",
+    "unstar": "已收藏",
     "like": "点赞",
-    "unlike": "取消点赞",
+    "unlike": "已点赞",
     "setting": "设定",
     "welcomeTo": "欢迎来到",
     "projectTags": "项目标签",
@@ -1493,6 +1553,7 @@
     "noProjectsToShow": "还没有创建项目~",
     "noContributedProjectsToShow": "还没有参与项目~",
     "top": "置顶",
-    "unTop": "取消置顶"
+    "unTop": "取消置顶",
+    "changePassword": "密码修改"
   }
 }

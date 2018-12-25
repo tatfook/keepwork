@@ -54,11 +54,6 @@ export default {
     }),
     async init() {
       this.isLoading = true
-      if (/^[0-9]*$/.test(this.nowUsername)) {
-        this.isUserExist = false
-        this.isLoading = false
-        return
-      }
       await this.getUserDetailWithRankByUserIdOrUsername({ username: this.nowUsername }).catch(err => {
         this.isUserExist = false
       })

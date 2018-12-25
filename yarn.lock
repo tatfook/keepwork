@@ -9936,7 +9936,7 @@ lodash.memoize@^4.1.2:
   resolved "http://registry.npm.taobao.org/lodash.memoize/download/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
-lodash.merge@^4.6.0, lodash.merge@^4.6.1:
+lodash.merge@^4.6.1:
   version "4.6.1"
   resolved "http://registry.npm.taobao.org/lodash.merge/download/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
   integrity sha1-rcJdnLmbk5HFliTzefu6YNcRHVQ=
@@ -11828,11 +11828,6 @@ pngquant-bin@^5.0.0:
     bin-wrapper "^4.0.1"
     execa "^0.10.0"
     logalot "^2.0.0"
-
-popper.js@^1.12.9:
-  version "1.14.4"
-  resolved "http://registry.npm.taobao.org/popper.js/download/popper.js-1.14.4.tgz#8eec1d8ff02a5a3a152dd43414a15c7b79fd69b6"
-  integrity sha1-juwdj/AqWjoVLdQ0FKFce3n9abY=
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
@@ -15596,11 +15591,6 @@ vue-loader@^14.1.1:
     markdown-it-toc-and-anchor leopoldchen/markdown-it-toc-and-anchor
     snabbdom "~0.7.1"
     snabbdom-virtualize leopoldchen/snabbdom-virtualize
-
-vue-resize@^0.4.3:
-  version "0.4.4"
-  resolved "http://registry.npm.taobao.org/vue-resize/download/vue-resize-0.4.4.tgz#dee9b8dd1b189e7e3f6ec47f86c60694a241bb17"
-  integrity sha1-3um43RsYnn4/bsR/hsYGlKJBuxc=
 
 vue-router@^3.0.1:
   version "3.0.1"

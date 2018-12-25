@@ -26,7 +26,8 @@ export const user = {
   getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
-  getDetailWithRankByIdOrUsername: async ({ userKey }) => get(`users/${userKey}/detail`),
+  getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
+  getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
@@ -253,6 +254,7 @@ export const projects = {
   updateProject: async ({ projectId, updatingProjectData }) =>
     put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
+  getUserProjectsByName: async ({ name }) => post('projects/search', { name }),
   createProject: async ({
     description,
     name,
@@ -276,7 +278,7 @@ export const projects = {
   getPersonalProjects: async () => get('projects'),
   getPersonalProjectsByUserId: async ({ userId }) => get(`projects?userId=${userId}`),
   getContributeProjects: async () => get('projects/join'),
-  getContributeProjectsByUserId: async ({ userId }) => get(`projects/join?userId=${userId}`),
+  getContributeProjectsByUserId: async ({ userId, exclude }) => get(`projects/join?userId=${userId}&exclude=${exclude}`),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
   visitProject: async (projectId) => get(`projects/${projectId}/visit`)
 }
