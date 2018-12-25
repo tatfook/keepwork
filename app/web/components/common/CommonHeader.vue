@@ -515,9 +515,6 @@ export default {
     }
   }
 }
-.el-menu-item {
-  padding: 0 10px;
-}
 .user-menu-dropdown {
   .greeting {
     padding: 0 20px;
@@ -550,6 +547,9 @@ export default {
     }
     &.user-menu {
       padding-right: 5px;
+    }
+    &.is-active{
+      color: #409eff;
     }
   }
 }

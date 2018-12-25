@@ -270,6 +270,9 @@ export default {
             border: none;
             &.el-menu.el-menu--horizontal{
               border: none;
+              .el-menu-item{
+                padding: 0 10px;
+              }
             }
           }
         }

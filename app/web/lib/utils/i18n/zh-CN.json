@@ -1354,7 +1354,7 @@
     "filter": "筛选",
     "all": "全部",
     "inProgress": "进行",
-    "finished": "全部",
+    "finished": "完成",
     "createNewIssue": "新建问题",
     "createNewIssueTitle": "新建问题",
     "searchMethod": "搜索标题关键字或id...",
