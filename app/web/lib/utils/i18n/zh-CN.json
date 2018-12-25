@@ -1555,5 +1555,8 @@
     "top": "置顶",
     "unTop": "取消置顶",
     "changePassword": "密码修改"
+  },
+  "account": {
+    
   }
 }

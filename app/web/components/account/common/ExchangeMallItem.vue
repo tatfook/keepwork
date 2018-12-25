@@ -47,8 +47,8 @@ export default {
     image() {
       return this.data.thumbnail
     },
-    goodsId() {
-      return this.data.goodsId
+    id() {
+      return this.data.id
     },
     subject() {
       return this.data.subject
@@ -102,7 +102,7 @@ export default {
     toExchangePage() {
       this.$router.push({
         name: 'OrderConfirm',
-        query: { id: this.goodsId, type: 1, payment: this.priceUnit }
+        query: { id: this.id, type: 1, payment: this.priceUnit }
       })
     },
     handleShowButton() {

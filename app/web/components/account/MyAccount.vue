@@ -4,18 +4,16 @@
       <span class="account-detail-header-title">
         我的账户
       </span>
-      <el-popover
-        placement="bottom"
-        trigger="hover"
-        content="假装有知识币说明"
-      >
-        <span
-          slot="reference"
-          class="account-detail-header-tips"
-        >
+      <el-popover placement="bottom" trigger="hover" width="450px" popper-class="account-detail-header-popover">
+        <span slot="reference" class="account-detail-header-tips">
           <i class="account-detail-header-tips-icon el-icon-question"></i>
           了解知识币、知识豆
         </span>
+        <p class="account-detail-header-popover-title">知识币说明</p>
+        <p>知识币</p>
+        <p>购买课程包时可获得免费赠送的待解锁知识币，待课程学习合格后，可解锁一定量的知识币。解锁后的知识币可用于购买课程包或兑换魔豆。</p>
+        <p>知识豆</p>
+        <p>每个课程学习完成均可获得10知识豆的奖励，知识豆可兑换哈奇装备</p>
       </el-popover>
     </div>
     <div class="account-detail-item">
@@ -23,11 +21,7 @@
         <div class="account-detail-item-row-col-name">余额(元)</div>
         <div class="account-detail-item-row-col-count">{{rmb}}</div>
         <div class="account-detail-item-row-button">
-          <el-button
-            type="primary"
-            class="account-item-button"
-            @click="toRechargeConfirm"
-          >去充值</el-button>
+          <el-button type="primary" class="account-item-button" @click="toRechargeConfirm">去充值</el-button>
         </div>
       </div>
     </div>
@@ -37,21 +31,14 @@
         <div class="account-detail-item-row-col-name">知识币(个)</div>
         <div class="account-detail-item-row-col-count">{{coin}}</div>
         <div class="account-detail-item-row-button">
-          <el-button
-            type="primary"
-            class="account-item-button"
-            @click="toExchangeMall"
-          >去兑换</el-button>
+          <el-button type="primary" class="account-item-button" @click="toExchangeMall">去兑换</el-button>
         </div>
       </div>
       <div class="account-detail-item-row">
         <div class="account-detail-item-row-col-name"></div>
         <div class="account-detail-item-row-col-lock">{{lockCoin}}<span class="lock-tips">(待解锁)</span></div>
         <div class="account-detail-item-row-button lock">
-          <el-button
-            type="primary"
-            class="account-item-button"
-          >去兑换</el-button>
+          <el-button type="primary" class="account-item-button">去兑换</el-button>
         </div>
       </div>
     </div>
@@ -61,11 +48,7 @@
         <div class="account-detail-item-row-col-name">知识豆(个)</div>
         <div class="account-detail-item-row-col-count">{{bean}}</div>
         <div class="account-detail-item-row-button">
-          <el-button
-            type="primary"
-            class="account-item-button"
-            @click="toExchangeMall"
-          >去兑换</el-button>
+          <el-button type="primary" class="account-item-button" @click="toExchangeMall">去兑换</el-button>
         </div>
       </div>
     </div>
@@ -109,7 +92,6 @@ export default {
       this.$router.push({ name: 'ExchangeMall' })
     }
   }
-
 }
 </script>
 
@@ -134,6 +116,15 @@ export default {
       &-icon {
         font-size: 16px;
         color: #ff9307;
+      }
+    }
+    &-popover {
+      width: 500px;
+      padding: 20px 36px;
+      font-size: 14px;
+      color: #808080;
+      &-title {
+        color: #000;
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="discount-coupon">
     <div class="discount-coupon-header">
-      优惠卷
+      优惠券
     </div>
     <div
       class="discount-coupon-tab"
@@ -29,7 +29,7 @@
       </el-tabs>
     </div>
     <div class="discount-coupon-explain">
-      <div class="discount-coupon-explain-title">优惠卷使用说明:</div>
+      <div class="discount-coupon-explain-title">优惠券使用说明:</div>
       <p class="discount-coupon-explain-item">请在券面所示有效期内使用，逾期失效。</p>
       <p class="discount-coupon-explain-item">用券应满足券面所示使用范围、满减金额。通用券可全平台通用，课程券仅限指定课程使用。</p>
       <p class="discount-coupon-explain-item">如您的订单在用券后未最终支付，则订单失效，优惠券自动返还。</p>

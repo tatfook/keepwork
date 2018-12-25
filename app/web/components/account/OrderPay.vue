@@ -55,6 +55,7 @@ import RechargeDialog from './common/RechargeDialog'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
+import _ from 'lodash'
 export default {
   name: 'OrderPay',
   mixins: [OrderMixin],
@@ -74,6 +75,9 @@ export default {
   },
   mounted() {
     document.title = '支付页面'
+    if (_.isEmpty(this.tradeOrder)) {
+      return this.$router.push({ name: 'MyAccount' })
+    }
   },
   computed: {
     ...mapGetters({
@@ -140,7 +144,6 @@ export default {
     ...mapActions({
       payTradeOrder: 'account/payTradeOrder',
       getBalance: 'account/getBalance',
-      payTradeOrder: 'account/payTradeOrder'
     }),
     resetError() {
       this.isCodeWrong = false
@@ -157,7 +160,7 @@ export default {
     },
     waitAMiniute() {
       clearInterval(this.timer)
-      this.waitingTime = 5
+      this.waitingTime = 60
       this.timer = setInterval(() => {
         if (--this.waitingTime <= 0) {
           clearInterval(this.timer)
@@ -190,20 +193,23 @@ export default {
       if (this.isNeedVerify && !this.captcha) {
         return (this.isCodeEmpty = true)
       }
-      const { goodsId, finalCost, payment, count, type = 0 } = this.tradeOrder
+      const { id, finalCost, payment, count, type = 0, goodsDetail, user_nid } = this.tradeOrder
       let payload = {
         type,
-        [this.payment]: finalCost,
+        rmb: 0,
+        bean: 0,
+        coin: 0,
         count,
+        [this.payment]: goodsDetail[this.payment],
         finalCostByUnit: this.finalCostByUnit
       }
       if (type === 2) {
         // package
         payload = {
           ...payload,
-          goodsId: 2,
+          goodsId: 1,
           extra: {
-            packageId: goodsId
+            packageId: id
           }
         }
         if (this.isNeedVerify) {
@@ -213,10 +219,10 @@ export default {
       if (type === 1) {
         // exchange
         payload = {
-          goodsId,
+          goodsId: id,
           ...payload,
           extra: {
-            user_nid: 1
+            user_nid
           }
         }
       }

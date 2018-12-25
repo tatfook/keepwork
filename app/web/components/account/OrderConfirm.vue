@@ -3,7 +3,13 @@
     <div class="order-confirm-header">
       <div class="order-confirm-header-center">
         <div class="order-confirm-header-center-title">购买账号</div>
-        <div class="order-confirm-header-center-username">Keepwork账号: {{username}}</div>
+        <div class="order-confirm-header-center-main">
+          <span class="order-confirm-header-center-main-username">Keepwork账号: {{username}}</span>
+          <span class="order-confirm-header-center-main-account">数字账号： <el-select v-model="digitalAccount" placeholder="请选择">
+              <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select></span>
+        </div>
       </div>
     </div>
     <div class="order-confirm-main">
@@ -52,6 +58,7 @@ import PackageItem from './common/OrderPackageItem'
 import GoodsItem from './common/OrderGoodsItem'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
+import { keepwork } from '@/api'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
 export default {
@@ -66,7 +73,9 @@ export default {
       isLoading: true,
       count: 1,
       isSubmiLoading: false,
-      discountId: null
+      discountId: null,
+      digitalAccount: '',
+      digitalAccountList: []
     }
   },
   async mounted() {
@@ -74,17 +83,27 @@ export default {
     let { type, count = 1, id, payment } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
-      if (type === 2 && payment === 'bean') {
-        return this.$message.error('课程包无法通过知识豆购买')
-      }
+    if (type === 2 && payment === 'bean') {
+      return this.$message.error('课程包无法通过知识豆购买')
+    }
     if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, goodsId: id, payment })
+      this.createTradeOrder({ type, count, id, payment, user_nid: this.digitalAccount })
     ])
+    if (type === 1) {
+      // exchange way
+      // this.digitalAccountList = [{label: '7000000001360', value: 7000000001360}]
+      keepwork.account.getDigitalAccounts()
+        .then(res => {
+          let { data } = res
+          this.DigitalAccountList = data.map(item => ({ label: item, value: item}))
+        })
+        .catch(e => console.error(e))
+    }
     this.isLoading = false
   },
   methods: {
@@ -95,6 +114,9 @@ export default {
       getBalance: 'account/getBalance'
     }),
     handleSubmitTradeOrder() {
+      if (this.isExchangeType && !this.digitalAccount) {
+        return this.$message.error('请选择数字账号')
+      }
       if (this.isCoinPayment && this.finalCost > this.userCoin) {
         return this.$message.error('知识币不足，无法提交订单')
       }
@@ -126,7 +148,7 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       tradeOrder: 'account/tradeOrder',
-      balance: 'account/balance',
+      balance: 'account/balance'
     }),
     username() {
       return _.get(this.userProfile, 'username', '')
@@ -175,7 +197,7 @@ export default {
     finalCost() {
       // FIXME:
       return this.totalCost - 0
-    },
+    }
   }
 }
 </script>
@@ -200,11 +222,34 @@ export default {
         font-size: 20px;
         color: #333;
       }
-      &-username {
+      &-main {
         margin-top: 14px;
         margin-bottom: 25px;
-        font-size: 14px;
-        color: #666;
+        &-username {
+          font-size: 14px;
+          color: #666;
+          display: inline-block;
+          min-width: 189px;
+          padding-right: 39px;
+          margin-right: 39px;
+          box-sizing: border-box;
+          border-right: 1px solid #9c9c9c;
+        }
+
+        &-account {
+          display: inline-block;
+          font-size: #666;
+          font-size: 14px;
+          .el-input__inner {
+            height: 30px;
+            line-height: 30px;
+          }
+          .el-input__suffix-inner {
+            .el-select__caret {
+              line-height: 30px;
+            }
+          }
+        }
       }
     }
   }

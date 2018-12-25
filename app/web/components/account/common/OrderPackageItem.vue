@@ -9,14 +9,14 @@
       </div>
       <div class="order-package-item-info-row">
         <span class="order-package-item-info-row-includes">
-          <span class="row-bold">包含:</span>{{includesLessonCount}} 个课程
+          <span class="row-bold">包含: </span>{{includesLessonCount}} 个课程
         </span>
         <span class="order-package-item-info-row">
-          年龄:
+          <span class="row-bold">年龄: </span> {{packageSuitableAge}}
         </span>
       </div>
       <div class="order-package-item-info-row-intro">
-        简介: {{ packageIntro }}
+        <span class="row-bold">简介: </span> {{ packageIntro }}
       </div>
       <div v-if="isRmbPayment" class="order-package-item-info-row-return">
         购买后返还{{returnCoin}}知识币
@@ -52,6 +52,12 @@ export default {
     packageName() {
       return _.get(this.data, 'packageName', '')
     },
+    packageSuitableAge() {
+      if (this.packageMinAge == 0 && this.pakcageMaxAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${this.packageMinAge}-${thsi.pakcageMaxAge}`
+    },
     packageIntro() {
       return _.get(this.data, 'intro', '')
     },
@@ -67,11 +73,8 @@ export default {
     packageCostCoin() {
       return _.get(this.data, 'coin', 0)
     },
-    packageCostBean() {
-      return _.get(this.data, 'bean', 0)
-    },
     packageCost() {
-      return this.packageCostRmb || this.packageCostCoin || this.packageCostBean
+      return _.get(this.data, [this.payment], '')
     },
     isRmbPayment() {
       return this.payment === 'rmb'
@@ -120,10 +123,8 @@ export default {
       color: #999;
       font-size: 12px;
       line-height: 18px;
-      &-includes {
-        .row-bold {
-          color: #5e5e5e;
-        }
+      .row-bold {
+        color: #5e5e5e;
       }
       &-name {
         font-size: 18px;
@@ -134,6 +135,9 @@ export default {
         color: #999;
         font-size: 12px;
         line-height: 18px;
+        .row-bold {
+          color: #5e5e5e;
+        }
       }
       &-return {
         color: #55a7e8;
