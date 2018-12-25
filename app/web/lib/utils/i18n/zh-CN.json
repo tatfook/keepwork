@@ -1609,6 +1609,9 @@
     "returnCoin": "返 {coin} 知识币",
     "returnCoupon": "一张 {title} 优惠券",
     "price": "单价:",
-    "conversion": "兑换"
+    "conversion": "兑换",
+    "pleaseSelectDigitalAccount": "请选择数字账号",
+    "coinInsufficient":"知识币不足，无法提交订单",
+    "beanInsufficient": "知识豆不足，无法提交订单"
   }
 }

@@ -79,7 +79,6 @@ export default {
     }
   },
   async mounted() {
-    document.title = '确认订单'
     let { type, count = 1, id, payment } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
@@ -115,13 +114,13 @@ export default {
     }),
     handleSubmitTradeOrder() {
       if (this.isExchangeType && !this.digitalAccount) {
-        return this.$message.error('请选择数字账号')
+        return this.$message.error(this.$t('account.pleaseSelectDigitalAccount'))
       }
       if (this.isCoinPayment && this.finalCost > this.userCoin) {
-        return this.$message.error('知识币不足，无法提交订单')
+        return this.$message.error(this.$t('account.coinInsufficient'))
       }
       if (this.isBeanPayment && this.finalCost > this.userBean) {
-        return this.$message.error('知识豆不足，无法提交订单')
+        return this.$message.error(this.$t('account.beanInsufficient'))
       }
       try {
         let payload = {
@@ -140,7 +139,7 @@ export default {
         this.$router.push({ name: 'OrderPay' })
       } catch (error) {
         console.error(error)
-        this.$message.error('提交订单失败')
+        this.$message.error(this.$t('card.operationFail'))
       }
     }
   },

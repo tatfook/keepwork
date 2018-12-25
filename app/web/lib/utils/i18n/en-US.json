@@ -1605,6 +1605,9 @@
     "returnCoin": "You got {coin} coins",
     "returnCoupon": "one coupon of {title}",
     "price": "unit price:",
-    "conversion": "Conversion"
+    "conversion": "Conversion",
+    "pleaseSelectDigitalAccount": "Please select a digital account.",
+    "coinInsufficient":"Sorry, your coins are insufficient.",
+    "beanInsufficient": "Sorry, your beans are insufficient."
   }
 }

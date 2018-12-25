@@ -43,9 +43,6 @@ export default {
       }
     }
   },
-  mounted() {
-    console.warn(this.data)
-  },
   computed: {
     coverUrl() {
       return _.get(this.data, 'extra.coverUrl', '')

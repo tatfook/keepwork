@@ -27,7 +27,7 @@
             {{ cellphone }}
           </span>
           <span class="order-pay-main-verify-cellphone-unbound" v-else>
-          {{$t('user.phoneNotBound')}} ，<span class="link" @click="handleToBindPage">去绑定</span>
+          {{$t('user.phoneNotBound')}} ，<span class="link" @click="handleToBindPage">{{$t('account.toBind')}}</span>
           </span>
         </div>
         <div v-if="isRmbPayment" class="order-pay-main-verify-code">
