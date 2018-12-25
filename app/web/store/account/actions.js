@@ -25,8 +25,8 @@ const actions = {
     const balance = await account.getBalance()
     commit(GET_BALANCE_SUCCESS, balance)
   },
-  async getTrades({ commit }) {
-    const trades = await account.getTrades()
+  async getTrades({ commit }, args) {
+    const trades = await account.getTrades(args)
     commit(GET_TRADES_SUCCESS, trades)
   },
   async getDiscounts({ commit }) {
@@ -48,30 +48,33 @@ const actions = {
     }
     return order
   },
-  async createTradeOrder({ commit, dispatch, getters: { goods } }, payload) {
+  async createTradeOrder({ commit, dispatch }, payload) {
     const { type, goodsId } = payload
     if (type === PACKAGE_TYPE) {
       const goodsDetail = await lesson.packages.packageDetail({ packageId: goodsId })
-      commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
     }
     if (type === EXCHANGE_TYPE) {
-      await dispatch('getGoods')
-      console.log(goods)
-      let goodsItem = _.find(goods, item => item.goodsId === goodsId)
-      console.log('goodsItem', goodsItem)
+      const goods = await account.getGoods()
+      commit(GET_GOODS_SUCCESS, goods)
+      let goodsDetail = _.find(goods, (item) => item.goodsId === goodsId)
+      console.log('goodsDetail', goodsDetail)
+      return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
     }
   },
   async submitTradeOrder({ commit }, payload) {
-    console.warn('submitTradeOrder', payload)
     commit(SUBMIT_TRADE_ORDER, payload)
   },
   async payTradeOrder({ commit }, payload) {
-    await account.createTradeOrder(payload)
+    const { finalCostByUnit, ...order } = payload
+    let res = await account.createTradeOrder(order)
+    if (res.discount) {
+      return commit(PAY_TRADE_ORDER, { ...payload, discount: res.discount })
+    }
     commit(PAY_TRADE_ORDER, payload)
   },
   async getGoods({ commit }) {
     const goods = await account.getGoods()
-    console.log('getGoods--------->', goods)
     commit(GET_GOODS_SUCCESS, goods)
   }
 }

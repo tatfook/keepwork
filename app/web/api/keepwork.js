@@ -60,7 +60,8 @@ export const user = {
 
 export const account = {
   getBalance: async () => get('/users/account'),
-  getTrades: async () => get('/trades'),
+  // getTrades: async () => get('/trades'),
+  getTrades: async args => post('/trades/search', args),
   getDiscounts: async () => get('/discounts'),
   createRechargeOrder: async args => post('/orders', args),
   getRechargeOrderState: async args => get(`/orders/${args.id}`),

@@ -6,14 +6,8 @@
     <div class="exchange-mall-main">
       <el-row>
         <template v-for="(item, index) in goodsList">
-          <el-col
-            :span="6"
-            :md="6"
-            :sm="12"
-            :xs="24"
-            :key="index"
-          >
-            <exchange-item :data="item"></exchange-item>
+          <el-col :span="6" :md="6" :sm="12" :xs="24" :key="index">
+            <exchange-mall-item :data="item"></exchange-mall-item>
           </el-col>
         </template>
       </el-row>
@@ -22,12 +16,13 @@
 </template>
 
 <script>
-import ExchangeItem from './common/ExchangeItem'
+import ExchangeMallItem from './common/ExchangeMallItem'
 import { mapActions, mapGetters } from 'vuex'
+const HIDE_GOODS = [1, 2, 3, 4]
 export default {
   name: 'ExchangeMall',
   components: {
-    ExchangeItem
+    ExchangeMallItem
   },
   data() {
     return {
@@ -39,7 +34,7 @@ export default {
       goods: 'account/goods'
     }),
     goodsList() {
-        return this.goods.filter(i => i.id !== 1)
+      return this.goods.filter(i => !HIDE_GOODS.includes(i.id))
     }
   },
   async created() {

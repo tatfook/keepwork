@@ -214,7 +214,7 @@ export default {
             border-bottom: 3px solid #fff;
             background: none;
             font-size: 30px;
-            max-width: 40%;
+            max-width: 50%;
             text-align: center;
             color: #fff;
             display: inline-block;

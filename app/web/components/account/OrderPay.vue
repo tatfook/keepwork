@@ -3,13 +3,13 @@
     <div class="order-pay-header">
       <div class="order-pay-header-back" @click="handleBack"> <i class="el-icon-arrow-left"></i>返回</div>
       <div class="order-pay-header-cost">
-        待支付: <span class="money">{{finalCostByUnit}}</span>
+        待支付:  <span class="money">{{finalCostByUnit}}</span>
       </div>
     </div>
     <div class="order-pay-main">
       使用账户余额支付：
       <div class="order-pay-main-balance">
-        <span class="order-pay-main-balance-title">我的账户余额:</span>
+        <span class="order-pay-main-balance-title">我的账户余额: </span>
         <span class="order-pay-main-balance-count">
           {{userBalanceByUnit}}
         </span>
@@ -20,7 +20,7 @@
           {{needRechargeNumberByUnit}}
           ，请先去充值。</span>
       </div>
-      <div v-if="!isNeedRecharge" class="order-pay-main-verify">
+      <div v-if="isNeedVerify" class="order-pay-main-verify">
         <div class="order-pay-main-verify-cellphone">
           绑定的手机号:
           <span class="order-pay-main-verify-cellphone-binding" v-if="isBinding">
@@ -40,8 +40,8 @@
           <span v-if="isCodeWrong">验证码错误</span>
         </div>
       </div>
-      <el-button v-if="!isNeedRecharge" :disabled="isDisabled" type="primary" :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]" @click="handleConfirmToPay">确认支付</el-button>
-      <el-button v-else type="primary" class="order-pay-main-confirm-button" @click="handleShowRechargeDialog">去充值</el-button>
+      <el-button v-if="isNeedRecharge" type="primary" class="order-pay-main-confirm-button" @click="handleShowRechargeDialog">去充值</el-button>
+      <el-button v-else :loading="isLoading" :disabled="isDisabled" type="primary" :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]" @click="handleConfirmToPay">确认支付</el-button>
     </div>
     <el-dialog class="order-pay-main-dialog" :visible.sync="isShowRechargeDialog">
       <div class="order-pay-main-dialog-title" slot="title">充值</div>
@@ -53,11 +53,11 @@
 <script>
 import RechargeDialog from './common/RechargeDialog'
 import { mapActions, mapGetters } from 'vuex'
-import AccountMixin from './common/AccountMixin'
+import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
 export default {
   name: 'OrderPay',
-  mixins: [AccountMixin],
+  mixins: [OrderMixin],
   components: {
     RechargeDialog
   },
@@ -68,7 +68,8 @@ export default {
       waitingTime: 0,
       isCodeEmpty: false,
       isCodeWrong: false,
-      captcha: ''
+      captcha: '',
+      isLoading: false
     }
   },
   mounted() {
@@ -97,8 +98,8 @@ export default {
     },
     finalCostByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit}${this.finalCost}`
-        : `${this.finalCost}${this.costUnit}`
+        ? `${this.costUnit} ${this.finalCost}`
+        : `${this.finalCost} ${this.costUnit}`
     },
     userRmb() {
       return this.balance.rmb
@@ -109,22 +110,13 @@ export default {
     userBean() {
       return this.balance.bean
     },
-    payment() {
-      return this.tradeOrder.payment
-    },
-    isRmbPayment() {
-      return this.payment === 'rmb'
-    },
-    isRmbPayment() {
-      return this.payment === 'rmb'
-    },
     userBalance() {
       return this.balance[this.payment]
     },
     userBalanceByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit}${this.userBalance}`
-        : `${this.userBalance}${this.costUnit}`
+        ? ` ${this.costUnit} ${this.userBalance}`
+        : ` ${this.userBalance} ${this.costUnit}`
     },
     isNeedRecharge() {
       return this.finalCost > this.userBalance
@@ -134,11 +126,14 @@ export default {
     },
     needRechargeNumberByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit}${this.needRechargeNumber}`
-        : `${this.needRechargeNumber}${this.costUnit}`
+        ? ` ${this.costUnit}${this.needRechargeNumber}`
+        : ` ${this.needRechargeNumber}${this.costUnit}`
     },
     isWaiting() {
       return this.waitingTime > 0
+    },
+    isNeedVerify() {
+      return this.isRmbPayment && !this.isNeedRecharge && this.finalCost > 200
     }
   },
   methods: {
@@ -155,7 +150,6 @@ export default {
       this.$router.back(-1)
     },
     handleShowRechargeDialog() {
-      console.warn('handleShowRechargeDialog--->')
       this.isShowRechargeDialog = true
     },
     handleHideRechargeDialog() {
@@ -193,32 +187,52 @@ export default {
       })
     },
     async handleConfirmToPay() {
-      if (!this.captcha) {
+      if (this.isNeedVerify && !this.captcha) {
         return (this.isCodeEmpty = true)
       }
-      const { goodsId, finalCost, payment, count, type } = this.tradeOrder
-      const payload = {
+      const { goodsId, finalCost, payment, count, type = 0 } = this.tradeOrder
+      let payload = {
         type,
-        goodsId: 1,
+        [this.payment]: finalCost,
         count,
-        rmb: finalCost,
-        captcha: this.captcha,
-        extra: {
-          packageId: goodsId
+        finalCostByUnit: this.finalCostByUnit
+      }
+      if (type === 2) {
+        // package
+        payload = {
+          ...payload,
+          goodsId: 2,
+          extra: {
+            packageId: goodsId
+          }
+        }
+        if (this.isNeedVerify) {
+          payload['captcha'] = this.captcha
         }
       }
+      if (type === 1) {
+        // exchange
+        payload = {
+          goodsId,
+          ...payload,
+          extra: {
+            user_nid: 1
+          }
+        }
+      }
+      this.isLoading = true
       this.payTradeOrder(payload)
         .then(res => {
+          this.$router.push({ name: 'OrderSuccess' })
           this.$message({
             type: 'success',
             message: '支付成功'
           })
+          this.isLoading = false
         })
         .catch(e => {
-          this.$message({
-            type: 'success',
-            message: '支付成功'
-          })
+          this.$message.error('支付失败')
+          this.isLoading = false
         })
     }
   }
@@ -362,6 +376,7 @@ export default {
 
     &-confirm-button {
       width: 306px;
+      margin-top: 30px;
       &.disabled {
         background: #eeeeee;
         color: #bfbfbf;

@@ -12,6 +12,7 @@
       </div>
       <div class="order-confirm-main-item">
         <package-item v-if="!isLoading && isPackageType" :data="goodsDetail"></package-item>
+        <goods-item v-if="!isLoading && isExchangeType" :data="goodsDetail"></goods-item>
       </div>
       <div class="order-confirm-main-count">
         <div class="order-confirm-main-count-title">
@@ -48,15 +49,17 @@
 
 <script>
 import PackageItem from './common/OrderPackageItem'
+import GoodsItem from './common/OrderGoodsItem'
 import { mapActions, mapGetters } from 'vuex'
-import AccountMixin from './common/AccountMixin'
+import OrderMixin from './common/OrderMixin'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
 export default {
   name: 'OrderConfirm',
-  mixins: [AccountMixin],
+  mixins: [OrderMixin],
   components: {
-    PackageItem
+    PackageItem,
+    GoodsItem
   },
   data() {
     return {
@@ -71,15 +74,9 @@ export default {
     let { type, count = 1, id, payment } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
-    console.warn(`type: ${type}, count: ${count}, goodsId: ${id}`)
-    if (
-      !this.isPackageType &&
-      _.isNumber(count) &&
-      count > 1 &&
-      COUNT_REG.test(count)
-    ) {
-      this.count = count
-    }
+      if (type === 2 && payment === 'bean') {
+        return this.$message.error('课程包无法通过知识豆购买')
+      }
     if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
@@ -98,6 +95,12 @@ export default {
       getBalance: 'account/getBalance'
     }),
     handleSubmitTradeOrder() {
+      if (this.isCoinPayment && this.finalCost > this.userCoin) {
+        return this.$message.error('知识币不足，无法提交订单')
+      }
+      if (this.isBeanPayment && this.finalCost > this.userBean) {
+        return this.$message.error('知识豆不足，无法提交订单')
+      }
       try {
         let payload = {
           count: this.count,
@@ -111,7 +114,6 @@ export default {
           totalCost: this.totalCost,
           finalCost: this.finalCost
         }
-        console.warn(payload)
         this.submitTradeOrder(payload)
         this.$router.push({ name: 'OrderPay' })
       } catch (error) {
@@ -123,7 +125,8 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      tradeOrder: 'account/tradeOrder'
+      tradeOrder: 'account/tradeOrder',
+      balance: 'account/balance',
     }),
     username() {
       return _.get(this.userProfile, 'username', '')
@@ -138,6 +141,9 @@ export default {
       }
     },
     goodsCost() {
+      if (this.isPackageType) {
+        return _.get(this.goodsDetail, [this.payment], '')
+      }
       return (
         _.get(this.goodsDetail, 'rmb', 0) ||
         _.get(this.goodsDetail, 'coin', 0) ||
@@ -167,8 +173,9 @@ export default {
         : `${this.totalCost} ${this.costUnit}`
     },
     finalCost() {
+      // FIXME:
       return this.totalCost - 0
-    }
+    },
   }
 }
 </script>

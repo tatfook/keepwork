@@ -11,6 +11,9 @@ export default {
         ? `${this.costUnit} ${this.finalCost}`
         : `${this.finalCost} ${this.costUnit}`
     },
+    payment() {
+      return this.tradeOrder.payment
+    },
     userRmb() {
       return this.balance.rmb
     },
@@ -19,9 +22,6 @@ export default {
     },
     userBean() {
       return this.balance.bean
-    },
-    payment() {
-      return this.tradeOrder.payment
     },
     isRmbPayment() {
       return this.payment === 'rmb'
