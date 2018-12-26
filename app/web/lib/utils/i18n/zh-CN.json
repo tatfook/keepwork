@@ -1623,6 +1623,8 @@
     "alipay": "支付宝",
     "proceedToCheckout": "立即充值",
     "rmbUnit": "{money}元",
+    "beanUnit": "{money}知识豆",
+    "coinUnit": "{money}知识币",
     "otherMoney": "其他金额",
     "payWith": "支付方式:",
     "pleaseConfirm": "请确认",
@@ -1631,6 +1633,7 @@
     "wechatScan": "请用微信扫一扫",
     "alipayScan": "请用支付宝扫一扫",
     "scan": "扫描二维码支付",
-    "success": "支付成功"
+    "success": "支付成功",
+    "pleaseRecharge": "完成上笔支付还需:"
   }
 }
