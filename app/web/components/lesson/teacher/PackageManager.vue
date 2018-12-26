@@ -84,6 +84,7 @@
       </el-table>
     </div>
     <operate-result-dialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></operate-result-dialog>
+    <submitable-info :isInfoDialogVisible='isApplyInfoDialogVisible' @close='closeInfoDialog'></submitable-info>
   </div>
 </template>
 <script>
@@ -91,6 +92,7 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
+import SubmitableInfo from './SubmitableInfo'
 import colI18n from '@/lib/utils/i18n/column'
 
 export default {
@@ -136,6 +138,7 @@ export default {
         iconType: '', // submit or delete or release or revoca
         continueFnNameAfterEnsure: ''
       },
+      isApplyInfoDialogVisible: false,
       editingPackageId: null
     }
   },
@@ -227,7 +230,7 @@ export default {
       return packageDetail.state === 3 || packageDetail.state === 4
     },
     isSubmitable(packageDetail) {
-      return !this.isLearner && (
+      return (
         packageDetail.state === 0 ||
         packageDetail.state === 3 ||
         packageDetail.state === 4
@@ -254,16 +257,16 @@ export default {
       let searchedSubjectId = this.searchParams.subjectId
       return searchedSubjectId
         ? _.filter(originList, {
-          subjectId: searchedSubjectId
-        })
+            subjectId: searchedSubjectId
+          })
         : originList
     },
     getStateFilteredPackageList(originList) {
       let searchedStateId = this.searchParams.stateId
       return typeof searchedStateId === 'number'
         ? _.filter(originList, packageDetail => {
-          return packageDetail.state === searchedStateId
-        })
+            return packageDetail.state === searchedStateId
+          })
         : originList
     },
     getNameFilteredPackageList(originList) {
@@ -303,6 +306,10 @@ export default {
       return true
     },
     async toSubmit(packageDetail) {
+      if (this.isLearner) {
+        this.isApplyInfoDialogVisible = true
+        return
+      }
       this.isTableLoading = true
       this.editingPackageId = packageDetail.id
       let isComplete = await this.isPackageInfoComplete()
@@ -438,10 +445,14 @@ export default {
     },
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
+    },
+    closeInfoDialog() {
+      this.isApplyInfoDialogVisible = false
     }
   },
   components: {
-    OperateResultDialog
+    OperateResultDialog,
+    SubmitableInfo
   }
 }
 </script>
