@@ -17,7 +17,6 @@ import _ from 'lodash'
 export default {
   name: 'OrderSuccess',
   mounted() {
-    document.title = '订单完成'
     if (_.isEmpty(this.tradeOrder)) {
       return this.$router.push({ name: 'MyAccount' })
     }

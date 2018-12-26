@@ -5,7 +5,7 @@
         <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
         <div class="order-confirm-header-center-main">
           <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
-          <span v-if="isExchangeType" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
+          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
               <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select></span>
@@ -61,6 +61,7 @@ import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
+const HAQI_PLATFORM = [2,3]
 export default {
   name: 'OrderConfirm',
   mixins: [OrderMixin],
@@ -75,13 +76,15 @@ export default {
       isSubmiLoading: false,
       discountId: null,
       digitalAccount: '',
-      digitalAccountList: []
+      digitalAccountList: [],
+      goodsId: '',
     }
   },
   async mounted() {
     let { type, count = 1, id, payment } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
+    this.goodsId = id
     if (type === 2 && payment === 'bean') {
       return this.$message.error('课程包无法通过知识豆购买')
     }
@@ -113,7 +116,7 @@ export default {
       getBalance: 'account/getBalance'
     }),
     handleSubmitTradeOrder() {
-      if (this.isExchangeType && !this.digitalAccount) {
+      if (this.isNeedDigitalAccount && !this.digitalAccount) {
         return this.$message.error(this.$t('account.pleaseSelectDigitalAccount'))
       }
       if (this.isCoinPayment && this.finalCost > this.userCoin) {
@@ -149,6 +152,9 @@ export default {
       tradeOrder: 'account/tradeOrder',
       balance: 'account/balance'
     }),
+    isDisableInput() {
+      return this.isPackageType || ''
+    },
     username() {
       return _.get(this.userProfile, 'username', '')
     },
@@ -161,6 +167,12 @@ export default {
         payment: this.payment
       }
     },
+    goodsMin() {
+      return 1
+    },
+    goodsMax() {
+      return 2
+    },
     goodsCost() {
       if (this.isPackageType) {
         return _.get(this.goodsDetail, [this.payment], '')
@@ -171,11 +183,17 @@ export default {
         _.get(this.goodsDetail, 'bean', 0)
       )
     },
+    goodsPlatform() {
+      return _.get(this.goodsDetail, 'platform', '')
+    },
     isPackageType() {
       return this.goodsType === 2
     },
     isExchangeType() {
       return this.goodsType === 1
+    },
+    isNeedDigitalAccount() {
+      return this.isExchangeType && HAQI_PLATFORM.includes(this.goodsPlatform)
     },
     isDisabledCount() {
       return false
@@ -190,8 +208,8 @@ export default {
     },
     totalCostByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit} ${this.totalCost}`
-        : `${this.totalCost} ${this.costUnit}`
+        ? `${this.costUnit}${this.totalCost}`
+        : `${this.totalCost}${this.costUnit}`
     },
     finalCost() {
       // FIXME:

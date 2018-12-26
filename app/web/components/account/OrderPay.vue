@@ -102,8 +102,8 @@ export default {
     },
     finalCostByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit} ${this.finalCost}`
-        : `${this.finalCost} ${this.costUnit}`
+        ? `${this.costUnit}${this.finalCost}`
+        : `${this.finalCost}${this.costUnit}`
     },
     userRmb() {
       return this.balance.rmb
@@ -119,8 +119,8 @@ export default {
     },
     userBalanceByUnit() {
       return this.isRmbPayment
-        ? ` ${this.costUnit} ${this.userBalance}`
-        : ` ${this.userBalance} ${this.costUnit}`
+        ? ` ${this.costUnit}${this.userBalance}`
+        : ` ${this.userBalance}${this.costUnit}`
     },
     isNeedRecharge() {
       return this.finalCost > this.userBalance
