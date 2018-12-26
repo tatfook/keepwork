@@ -32,20 +32,20 @@ export default {
   .login-page{
     box-shadow: none;
     margin: 0;
-  }
-  .login-title {
-    padding: 0 32px;
-    margin: 0 auto 30px;
-    font-size: 18px;
-    color: #303133;
-  }
-  .register-dialog-form{
-    .register-title{
+    .login-title {
+      padding: 0 32px;
+      margin: 0 auto 30px;
+      font-size: 18px;
+      color: #303133;
+    }
+    .register-dialog-form{
+      .register-title{
+        padding-top: 0;
+      }
+    } 
+    .password-reset-form-title{
       padding-top: 0;
     }
-  } 
-  .password-reset-form-title{
-    padding-top: 0;
   }
   &.force-login {
     .el-dialog__header {
