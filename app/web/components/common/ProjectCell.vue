@@ -103,7 +103,7 @@ export default {
     border-bottom: 16px solid #2397f3;
     transform: rotate(-45deg);
     left: -10px;
-    top: -6px;
+    top: -2px;
   }
   &-stick {
     position: absolute;

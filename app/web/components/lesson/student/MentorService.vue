@@ -6,11 +6,11 @@
         <span><i class="el-icon-check"></i>{{$t('lesson.paid')}}</span>
         <span>{{$t('lesson.validPeriod')}} {{tutorPeriodText}}</span>
       </div>
-      <div class="mentor-service-purchased-operate">{{$t('lesson.clickToRenew')}}</div>
+      <a class="mentor-service-purchased-operate" :href="purchaseMentorServicePath" target="_blank">{{$t('lesson.clickToRenew')}}</a>
     </div>
     <p class="mentor-service-price">
       <span v-html="$t('lesson.tutorPriceInfo', {tutorPriceHtml, tutorPriceHtmlEn, tutorTargetHtml, tutorTargetHtmlEn})"></span>
-      <router-link v-if="!isPurchasedTutor" :to="{path:'#'}" class="mentor-service-price-link">{{$t('lesson.clickToBuy')}}</router-link>
+      <a v-if="!isPurchasedTutor" :href="purchaseMentorServicePath" target="_blank" class="mentor-service-price-link">{{$t('lesson.clickToBuy')}}</a>
     </p>
     <div class="mentor-service-info">
       <p>{{$t('lesson.buyTutorInfo')}}</p>
@@ -46,6 +46,7 @@ export default {
   name: 'MentorService',
   data() {
     return {
+      purchaseMentorServicePath: '/a/orderConfirm?id=4&type=1&payment=rmb',
       tutorPriceHtml:
         '<span class="mentor-service-price-count">￥3000/年</span>',
       tutorPriceHtmlEn:
@@ -58,14 +59,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tutorInfo: 'lesson/tutorInfo',
+      tutorServiceInfo: 'lesson/tutorService',
       isPurchasedTutor: 'lesson/isPurchasedTutor'
     }),
     tutorPeriodText() {
       if (!this.isPurchasedTutor) {
         return ''
       }
-      let { startTime, endTime } = this.tutorInfo
+      let { startTime, endTime } = this.tutorServiceInfo
       return (
         moment(startTime).format('YYYY.MM.DD') +
         ' - ' +
@@ -120,6 +121,7 @@ export default {
       color: #333;
       cursor: pointer;
       text-align: center;
+      text-decoration: none;
     }
     .el-icon-check {
       margin-right: 4px;
