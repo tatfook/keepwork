@@ -2,8 +2,8 @@
   <div class="recharge-pay">
     <div class="recharge-pay-breadcrumb">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ name: 'Account' }">我的账户</el-breadcrumb-item>
-        <el-breadcrumb-item>充值</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'Account' }">{{$t('account.myAccount')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('account.recharge')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <recharge-qr></recharge-qr>

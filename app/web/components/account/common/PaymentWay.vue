@@ -1,13 +1,13 @@
 <template>
   <div class="payment-way">
-    支付方式:
+    {{$t('account.payWith')}}
     <div class="payment-way-options">
       <span
         :class="['payment-way-options-card', { 'options-card-selected': isWeixinPay }]"
         @click="handleSelectPayWay(CONF.WEIXIN_PAY)"
       >
         <span class="payment-way-options-card-icon weixin-icon"></span>
-        <span class="payment-way-options-card-name">微信支付</span>
+        <span class="payment-way-options-card-name">{{$t('account.wechat')}}</span>
         <span
           class="payment-way-options-card-selected-label"
           v-show="isWeixinPay"
@@ -19,7 +19,7 @@
         @click="handleSelectPayWay(CONF.ZHIFUBAO_PAY)"
       >
         <span class="payment-way-options-card-icon zhifubao-icon"></span>
-        <span class="payment-way-options-card-name">支付宝</span>
+        <span class="payment-way-options-card-name">{{$t('account.alipay')}}</span>
         <span
           class="payment-way-options-card-selected-label"
           v-show="isZhifubaoPay"
@@ -33,7 +33,7 @@
         :class="['payment-way-confirm-button', {'payment-way-min': isMini}]"
         @click="handleConfirm"
         :loading="isLoading"
-      >立即充值</el-button>
+      >{{$t('account.proceedToCheckout')}}</el-button>
     </div>
   </div>
 </template>
