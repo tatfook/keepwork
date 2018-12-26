@@ -570,6 +570,9 @@ export default {
     &.user-menu {
       padding-right: 5px;
     }
+    &.is-active{
+      color: #409eff;
+    }
   }
 }
 .profile-submenu,

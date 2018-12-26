@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-detail">
     <div class="transaction-detail-header">
-      交易明细
+      {{$t('account.transactions')}}
     </div>
     <div class="transaction-detail-main">
       <div class="transaction-detail-main-row" v-for="(item, index) in trades" :key="index">
@@ -14,7 +14,7 @@
 
         </div>
         <div class="transaction-detail-main-row-sum">
-          {{ item.rmb }}
+          {{ item.rmb || item.bean || item.coin }}
           <!-- +10 知识币，+10 知识豆 -->
         </div>
       </div>
