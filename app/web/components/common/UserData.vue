@@ -150,6 +150,9 @@ export default {
     width: auto;
     text-align: center;
     padding: 40px 55px 0 0;
+    .user-data-setting-profile{
+      cursor: pointer;
+    }
   }
   &-form-col {
     width: auto;
