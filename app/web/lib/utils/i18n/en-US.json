@@ -1267,6 +1267,8 @@
     "paid": "paid",
     "validPeriod": "Valid Period:",
     "clickToRenew": "Click to Renew",
+    "accessToSubmit": "Only lesson developers and instructors could get access to it.",
+    "getBenefits": "(Include submitting lessons you created to KeepWork and getting benefits from them.)",
     "trackTeachingProgress": "You will be able to track your teaching progress."
   },
   "compHideText": {
