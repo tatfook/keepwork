@@ -17,8 +17,8 @@
       <div class="order-pay-main-tips" v-if="isNeedRecharge">
         <i class="order-pay-main-tips-icon el-icon-warning"></i>
         <span class="order-pay-main-tips-text">
-          {{$t('account.back', { money: needRechargeNumberByUnit})}}
-        。</span>
+          {{$t('account.lackMoney', { money: needRechargeNumberByUnit})}}
+        </span>
       </div>
       <div v-if="isNeedVerify" class="order-pay-main-verify">
         <div class="order-pay-main-verify-cellphone">
@@ -91,10 +91,10 @@ export default {
       return this.userProfile.cellphone
     },
     isBinding() {
-      return !!this.cellphone
+      return Boolean(this.cellphone)
     },
     isDisabled() {
-      return !this.isBinding
+      return !this.isBinding && this.finalCost > 200
     },
     finalCost() {
       return this.tradeOrder.finalCost

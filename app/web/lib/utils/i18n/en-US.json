@@ -1617,6 +1617,8 @@
     "alipay": "Alipay",
     "proceedToCheckout": "Proceed to checkout",
     "rmbUnit": "￥{money}",
+    "beanUnit": "{money}Beans",
+    "coinUnit": "{money}Coins",
     "otherMoney": "Other amount",
     "payWith": "Pay with",
     "pleaseConfirm": "Please confirm",
@@ -1625,6 +1627,7 @@
     "wechatScan": "Please scan the QR code on WeChat.",
     "alipayScan": "Please scan the QR code on Alipay.",
     "scan": "Please scan the QR code to pay.",
-    "success": "Success"
+    "success": "Success",
+    "pleaseRecharge": "To pay for the order, please recharge"
   }
 }

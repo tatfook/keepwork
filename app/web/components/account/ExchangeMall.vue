@@ -18,7 +18,7 @@
 <script>
 import ExchangeMallItem from './common/ExchangeMallItem'
 import { mapActions, mapGetters } from 'vuex'
-const HIDE_GOODS = [1, 2, 3, 4]
+const PLATFORM = [2, 3]
 export default {
   name: 'ExchangeMall',
   components: {
@@ -34,14 +34,14 @@ export default {
       goods: 'account/goods'
     }),
     goodsList() {
-      return this.goods.filter(i => !HIDE_GOODS.includes(i.id))
+      return this.goods.filter(i => PLATFORM.includes(i.platform))
     }
   },
   async created() {
     await this.getGoods().catch(e => console.error(e))
   },
   mounted() {
-    document.title = '兑换商城'
+    document.title = this.$t('acccount.exchangeMall')
   },
   methods: {
     ...mapActions({
