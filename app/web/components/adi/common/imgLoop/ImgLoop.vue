@@ -5,11 +5,11 @@
         <a v-if="!item.type || item.type === 'images'" :target="item.target" :href="item.link">
           <div class="imgs" :style="loadImg(item)"></div>
         </a>
-        <a v-if="item.type === 'videos'" :target="item.target" :href="item.link">
+        <div v-if="item.type === 'videos'" @click="openVideo(item)">
           <div class="imgs">
             <video v-if="updateDom" :src="item.video" :autoplay="item.autoplay" :loop="item.playloop" :poster="item.poster" controls="controls"></video>
           </div>
-        </a>
+        </div>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -91,6 +91,9 @@ export default {
         this.properties.mobileHeight,
         this.options.img.defaultMobileHeight
       )
+    },
+    openVideo(item) {
+      console.log(item)
     }
   },
   computed: {
@@ -131,6 +134,19 @@ export default {
       this.sheet.attach()
 
       return this.sheet.classes[className]
+    },
+    playerOptions() {
+      // videojs options
+      return {
+        muted: true,
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        aspectRatio: '16:9',
+        muted: false,
+        sources: [{
+          type: "video/mp4",
+          src: this.actualUrl
+        }],
+      }
     }
   }
 }

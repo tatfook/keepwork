@@ -4,9 +4,7 @@
       <a v-if="type=='link'" :href="url">{{this.properties.extraMsg || url}}</a>
       <img v-if="type=='image'" :src="url" :alt="this.properties.extraMsg">
       <div v-if="type=='video'">
-        <video :src="url" controls>
-          {{$t('editor.videoNotSupport')}}
-        </video>
+        <video :src="url" controls>{{$t('editor.videoNotSupport')}}</video>
       </div>
       <div v-if="errMsg" class="err">{{errMsg}}</div>
     </div>
@@ -22,16 +20,17 @@
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
       </div>
-      <div class="bigfile-image" v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
-        <img :src="actualUrl" />
+      <div
+        class="bigfile-image"
+        v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']"
+      >
+        <img :src="actualUrl">
       </div>
       <div v-if="getType === handleExt['mp4']">
-        <video :src="actualUrl" controls>
-          {{$t('editor.videoNotSupport')}}
-        </video>
+        <video-player ref="videoPlayer" :options="playerOptions" :playsinline="true" class="vjs-custom-skin"></video-player>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src='getPdfSrc'></iframe>
+        <iframe :src="getPdfSrc"></iframe>
       </div>
     </div>
   </div>
@@ -43,10 +42,21 @@ import { mapGetters } from 'vuex'
 import axios from 'axios'
 import filesize from 'filesize'
 import _ from 'lodash'
+import videojs from 'video.js'
+import { videoPlayer } from 'vue-video-player'
+
+import "video.js/dist/video-js.css"
+import "vue-video-player/src/custom-theme.css"
 
 export default {
   name: 'AdiBigFile',
   mixins: [compBaseMixin],
+  components: {
+    videoPlayer
+  },
+  mounted() {
+    console.log('this is current player instance object', this.player)
+  },
   data() {
     return {
       type: '',
@@ -244,6 +254,22 @@ export default {
       } else {
         return this.otherExt
       }
+    },
+    playerOptions() {
+      // videojs options
+      return {
+        muted: true,
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        aspectRatio: '16:9',
+        muted: false,
+        sources: [{
+          type: "video/mp4",
+          src: this.actualUrl
+        }],
+      }
+    },
+    player() {
+      return this.$refs.videoPlayer.player
     }
   },
   async created() {
@@ -289,7 +315,6 @@ export default {
 .comp-bigfile {
   video {
     width: 100%;
-    // opacity: 0;
   }
 
   img {
@@ -420,19 +445,19 @@ export default {
       }
 
       .icon-sketch {
-        color: rgb(249, 189, 15)
+        color: rgb(249, 189, 15);
       }
 
       .icon-exe {
-        color: rgb(119, 149, 198)
+        color: rgb(119, 149, 198);
       }
 
       .icon-xmind {
-        color: rgb(245, 90, 35)
+        color: rgb(245, 90, 35);
       }
-      
+
       .icon-SVGA {
-        color: rgb(178, 193, 142)
+        color: rgb(178, 193, 142);
       }
 
       .icon-markdown {
@@ -452,7 +477,7 @@ export default {
       }
 
       .icon-ukown_file {
-        color: rgb(86, 155, 255)
+        color: rgb(86, 155, 255);
       }
     }
 

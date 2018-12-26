@@ -4,10 +4,14 @@
       <div class="img" :class="getImgClass" v-if='isImage'>
         <img :src="src">
       </div>
-      <div class="video" v-else-if='isVideo'>
-        <video v-if="updateDom" :class="getVideoClass" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
-      </div>
     </a>
+    <div class="video" v-if='isVideo' @click="openPlayDialog">
+      <div class="iconfont icon-video5" />
+      <video v-if="updateDom" :class="getVideoClass" :src='src' muted="true" :poster="poster"></video>
+    </div>
+    <el-dialog :visible.sync="isOpenVideo">
+      <video-player ref="videoPlayer" :options="playerOptions" class="vjs-custom-skin"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -16,16 +20,23 @@ import Media from './media.types'
 import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
-import { setTimeout } from 'timers';
+import { setTimeout } from 'timers'
+import videojs from 'video.js'
+import { videoPlayer } from 'vue-video-player'
+
+import "video.js/dist/video-js.css"
+import "vue-video-player/src/custom-theme.css"
 
 jss.setup(preset())
 
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
+  components: {videoPlayer},
   data() {
     return {
-      updateDom: true
+      updateDom: true,
+      isOpenVideo: false
     }
   },
   watch: {
@@ -33,7 +44,13 @@ export default {
       this.refresh()
     }
   },
+  mounted() {
+    console.log('this is current player instance object', this.player)
+  },
   computed: {
+    player() {
+      return this.$refs.videoPlayer.player
+    },
     isImage() {
       return Media.isImage(this.src)
     },
@@ -167,6 +184,20 @@ export default {
     },
     fullWidth() {
       return [['100%'], '!important']
+    },
+    playerOptions() {
+      // videojs options
+      return {
+        muted: true,
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        aspectRatio: '16:9',
+        muted: false,
+        inactivityTimeout: 0,
+        sources: [{
+          type: "video/mp4",
+          src: this.src
+        }],
+      }
     }
   },
   methods: {
@@ -231,10 +262,22 @@ export default {
         this.properties.mobileWidth,
         this.options.img.defaultMobileWidth
       )
+    },
+    openPlayDialog() {
+      this.isOpenVideo = true
     }
   }
 }
 </script>
+
+<style lang="scss">
+.comp-media {
+  .video-js .vjs-control-bar {
+    position: unset;
+    display: flex;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .comp-media {
@@ -256,14 +299,35 @@ export default {
         object-fit: cover;
       }
     }
-    .video {
+  }
+
+  .video {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .icon-video5 {
+      font-size: 130px;
+      color: #409EFF;
+      opacity: 0.7;
+      position: absolute;
+      z-index: 1;
+    }
+  
+    video {
       width: 100%;
       height: 100%;
-      video {
-        width: 100%;
-        height: 100%;
-      }
+      object-fit: cover;
+      opacity: 0.8;
     }
+  }
+
+  .vjs-custom-skin {
+    padding-bottom: 42px;
   }
 }
 </style>
