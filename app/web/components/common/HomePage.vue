@@ -317,7 +317,10 @@ export default {
       this.$router.push(`/exploration`)
     },
     goStudyPage() {
-      this.$router.push(`/study`)
+      if (this.isLogined) {
+        return window.location.href = `${this.locationOrigin}/l/student`
+      }
+      window.location.href = `${this.locationOrigin}/l/student/solution/teachingIdea`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
