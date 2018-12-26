@@ -523,6 +523,17 @@ export default {
     }
   }
 }
+.common-header{
+  .register-dialog {
+  max-width: 352px;
+  .el-dialog__body {
+    padding: 0;
+    .register-title{
+      padding: 0;
+    }
+  }
+}
+}
 .el-menu-item {
   padding: 0 10px;
 }
@@ -574,12 +585,6 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
-}
-.register-dialog {
-  max-width: 352px;
-  .el-dialog__body {
-    padding: 0;
-  }
 }
 @media (max-width: 768px) {
   .el-submenu__title {

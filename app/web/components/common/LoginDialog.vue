@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
-    <login />
+    <login @close='handleClose'/>
   </el-dialog>
 </template>
 <script>
@@ -39,9 +39,11 @@ export default {
     font-size: 18px;
     color: #303133;
   }
-  .register-title{
-    padding-top: 0;
-  }
+  .register-dialog-form{
+    .register-title{
+      padding-top: 0;
+    }
+  } 
   .password-reset-form-title{
     padding-top: 0;
   }
@@ -61,7 +63,7 @@ export default {
       padding: 0;
     }
     max-width: 352px;
-    padding: 20px 0;
+    padding: 40px 0 20px;
   }
 }
 @media screen and (max-width: 768px) {

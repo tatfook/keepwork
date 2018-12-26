@@ -351,6 +351,15 @@ export default {
   &-register-dialog {
     .el-dialog {
       width: 352px;
+      .el-dialog__header{
+        padding: 40px 0 0;
+      }
+      .el-dialog__body{
+        padding: 0 0 10px;
+        .register-title{
+          padding-top: 0;
+        }
+      }
     }
   }
   &-advertising-head {
