@@ -356,8 +356,12 @@ export default {
       }
       .el-dialog__body{
         padding: 0 0 10px;
-        .register-title{
-          padding-top: 0;
+        .register-dialog-form{
+          margin: 0;
+          box-shadow: none;
+          .register-title{
+            padding-top: 0;
+          }
         }
       }
     }
