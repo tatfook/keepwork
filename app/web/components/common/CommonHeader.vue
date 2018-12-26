@@ -528,8 +528,12 @@ export default {
   max-width: 352px;
   .el-dialog__body {
     padding: 0;
-    .register-title{
-      padding: 0;
+    .register-dialog-form{
+      margin: 0;
+      box-shadow: none;
+      .register-title{
+        padding: 0;
+      }
     }
   }
 }
