@@ -12,7 +12,7 @@
           <coupon-list :data="discountsUsed"></coupon-list>
         </el-tab-pane>
         <el-tab-pane :label="$t('account.expired')" name="expire">
-          <!-- <coupon-list></coupon-list> -->
+          <coupon-list :data="discountsUsed"></coupon-list>
         </el-tab-pane>
       </el-tabs>
     </div>

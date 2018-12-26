@@ -5,7 +5,8 @@
         <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
         <div class="order-confirm-header-center-main">
           <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
-          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
+          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} 
+            <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
               <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select></span>
@@ -25,7 +26,7 @@
           {{$t('account.qty')}}
         </div>
         <div class="order-confirm-main-count-input">
-          <el-input-number class="input-number-counter" :disabled="isPackageType" v-model="count" :min="1" :max="10000" size="small"></el-input-number>
+          <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
         {{$t('account.totalPrice')}} {{ totalCostByUnit }}
@@ -94,12 +95,12 @@ export default {
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, id, payment, user_nid: this.digitalAccount })
+      this.createTradeOrder({ type, count, id, payment})
     ])
     if (type === 1) {
       // exchange way
       // this.digitalAccountList = [{label: '7000000001360', value: 7000000001360}]
-      keepwork.account.getDigitalAccounts()
+      await keepwork.account.getDigitalAccounts()
         .then(res => {
           let { data = [] } = res
           this.DigitalAccountList = res.data.map(item => ({ label: item, value: item}))
@@ -132,6 +133,9 @@ export default {
         }
         if (this.discountId) {
           payload['discountId '] = this.discountId
+        }
+        if (this.isNeedDigitalAccount) {
+          payload['user_nid'] = this.digitalAccount
         }
         payload = {
           ...payload,
@@ -168,10 +172,10 @@ export default {
       }
     },
     goodsMin() {
-      return 1
+      return _.get(this.goodsDetail, 'min', 1)
     },
     goodsMax() {
-      return 2
+      return _.get(this.goodsDetail, 'max', 1)
     },
     goodsCost() {
       if (this.isPackageType) {

@@ -3,7 +3,7 @@
     <div class="order-pay-header">
       <div class="order-pay-header-back" @click="handleBack"> <i class="el-icon-arrow-left"></i>{{$t('account.back')}}</div>
       <div class="order-pay-header-cost">
-       {{$t('account.needPay')}}<span class="money">{{finalCostByUnit}}</span>
+       {{$t('account.needPay')}}<span class="order-pay-header-cost-money">{{finalCostByUnit}}</span>
       </div>
     </div>
     <div class="order-pay-main">
@@ -74,7 +74,6 @@ export default {
     }
   },
   mounted() {
-    document.title = '支付页面'
     if (_.isEmpty(this.tradeOrder)) {
       return this.$router.push({ name: 'MyAccount' })
     }
@@ -184,10 +183,7 @@ export default {
       }
     },
     handleToBindPage() {
-      this.$message({
-        type: 'success',
-        message: '去绑定页面'
-      })
+      window.location.href = `${window.location.origin}/u/p/thirdPartyAccountBinding`
     },
     async handleConfirmToPay() {
       if (this.isNeedVerify && !this.captcha) {
@@ -265,7 +261,8 @@ export default {
     }
     &-cost {
       margin-top: 14px;
-      .money {
+      &-money {
+        margin-left: 20px;
         font-size: 24px;
         color: #f20d0d;
       }

@@ -46,8 +46,8 @@ export default {
     },
     goodsCostByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit} ${this.goodsCost}`
-        : `${this.goodsCost} ${this.costUnit}`
+        ? `${this.costUnit}${this.goodsCost}`
+        : `${this.goodsCost}${this.costUnit}`
     }
   }
 }

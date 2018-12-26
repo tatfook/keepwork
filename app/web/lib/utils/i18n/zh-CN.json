@@ -1613,6 +1613,22 @@
     "pleaseSelectDigitalAccount": "请选择数字账号",
     "coinInsufficient":"知识币不足，无法提交订单",
     "beanInsufficient": "知识豆不足，无法提交订单",
-    "exchangeMall": "兑换商城"
+    "exchangeMall": "兑换商城",
+    "rechargeAccount": "充值账号:",
+    "rechargeMoney": "充值金额:",
+    "rechargeTips": "充值金额必须为正整数，单次最多不超过100万元。",
+    "wechat": "微信支付",
+    "alipay": "支付宝",
+    "proceedToCheckout": "立即充值",
+    "rmbUnit": "{money}元",
+    "otherMoney": "其他金额",
+    "payWith": "支付方式:",
+    "pleaseConfirm": "请确认",
+    "payWithWechat": "请使用微信支付:",
+    "payWithAlipay": "请使用支付宝支付",
+    "wechatScan": "请用微信扫一扫",
+    "alipayScan": "请用支付宝扫一扫",
+    "scan": "扫描二维码支付",
+    "success": "支付成功"
   }
 }

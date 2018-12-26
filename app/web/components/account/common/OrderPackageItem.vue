@@ -88,8 +88,8 @@ export default {
     },
     costByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit} ${this.packageCost}`
-        : `${this.packageCost} ${this.costUnit}`
+        ? `${this.costUnit}${this.packageCost}`
+        : `${this.packageCost}${this.costUnit}`
     }
   }
 }
