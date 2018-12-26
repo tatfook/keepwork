@@ -32,7 +32,6 @@ export default {
     return {
       loading: true,
       default_portrait,
-      isFollowLoading: [],
       userAllFollows: [],
       currentPage: 1
     }
@@ -40,10 +39,6 @@ export default {
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
-    this.isFollowLoading = Array.apply(
-      null,
-      Array(this.allUsersData.length)
-    ).map(() => false)
     this.loading = false
   },
   components: {

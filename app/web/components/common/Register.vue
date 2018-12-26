@@ -251,6 +251,7 @@ export default {
     margin: 0 auto;
     position: relative;
     .register-title {
+      padding: 20px 0 0;
       margin: 0 auto 30px;
       font-size: 18px;
       color: #303133;

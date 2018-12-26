@@ -12,8 +12,8 @@ const ChangePassword = () => import('@/components/profile/PersonalCenterComponen
 const ThirdPartyAccountBinding = () => import('@/components/profile/PersonalCenterComponents/ThirdPartyAccountBinding')
 const RealNameAuthentication = () => import('@/components/profile/PersonalCenterComponents/RealNameAuthentication')
 const LoginPage = () => import('@/components/profile/LoginPage')
-const Login = () => import('@/components/profile/Login')
-const Register = () => import('@/components/profile/Register')
+const Login = () => import('@/components/common/Login')
+const Register = () => import('@/components/common/Register')
 
 Vue.use(Router)
 
