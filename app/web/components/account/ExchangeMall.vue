@@ -3,7 +3,7 @@
     <div class="exchange-mall-header">
       {{$t('account.exchangeMall')}}
     </div>
-    <div class="exchange-mall-main">
+    <div class="exchange-mall-main" v-loading="isLoading">
       <el-row>
         <template v-for="(item, index) in goodsList">
           <el-col :span="6" :md="6" :sm="12" :xs="24" :key="index">
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+      isLoading: false
     }
   },
   computed: {
@@ -38,7 +39,9 @@ export default {
     }
   },
   async created() {
+    this.isLoading = true
     await this.getGoods().catch(e => console.error(e))
+    this.isLoading = false
   },
   mounted() {
     document.title = this.$t('acccount.exchangeMall')

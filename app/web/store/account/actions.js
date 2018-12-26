@@ -52,7 +52,8 @@ const actions = {
     const { type, id } = payload
     if (type === PACKAGE_TYPE) {
       const goodsDetail = await lesson.packages.packageDetail({ packageId: id })
-      return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      const { packageName = '' } = goodsDetail
+      return commit(CREATE_TRADE_ORDER, { ...payload, subject: packageName, goodsDetail })
     }
     if (type === EXCHANGE_TYPE) {
       const goods = await account.getGoods()
