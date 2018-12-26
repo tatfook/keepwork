@@ -229,6 +229,10 @@ export default {
     font-size: 18px;
     color: #303133;
   }
+  .register-dialog-form{
+    margin: 0;
+    box-shadow: none;
+  }
   .register-oprate {
     margin: 0 32px;
     display: flex;
@@ -248,9 +252,6 @@ export default {
         cursor: pointer;
       }
     }
-  }
-  .register-tips{
-    // padding: 30px 0;
   }
   &-form {
     padding: 0 32px 20px;

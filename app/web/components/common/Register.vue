@@ -247,9 +247,12 @@ export default {
     padding: 40px 0 10px 0;
   }
   &-form {
+    max-width: 352px;
+    margin:  80px auto 10px;
+    box-shadow: 1px 1px 5px #ccc;
     padding: 0 32px;
-    margin: 0 auto;
     position: relative;
+    box-sizing: border-box;
     .register-title {
       padding: 20px 0 0;
       margin: 0 auto 30px;
