@@ -1,7 +1,7 @@
 <template>
   <div class="exchange-mall">
     <div class="exchange-mall-header">
-      兑换商城
+      {{$t('account.exchangeMall')}}
     </div>
     <div class="exchange-mall-main">
       <el-row>
@@ -62,6 +62,7 @@ export default {
   padding: 0 53px 225px;
   &-header {
     height: 75px;
+    font-weight: bold;
     line-height: 75px;
     font-size: 18px;
     color: #ff721e;

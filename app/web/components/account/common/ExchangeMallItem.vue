@@ -118,12 +118,12 @@ export default {
 <style lang="scss">
 .exchange-item {
   display: flex;
-  align-items: center;
   max-width: 274px;
   min-width: 200px;
   height: 115px;
   border: 1px solid #e5e5e5;
-  padding-left: 20px;
+  padding-left: 24px;
+  padding-top: 20px;
   box-sizing: border-box;
   &.exchange-item-hover {
     box-shadow: 0px 4px 10px 0px rgba(84, 143, 240, 0.28);
@@ -139,6 +139,7 @@ export default {
     height: 80px;
     &-subject {
       font-size: 16px;
+      font-weight: bold;
       color: #333;
     }
     &-price {
@@ -147,6 +148,7 @@ export default {
       color: #999;
       &-number {
         color: #ff721e;
+        font-weight: bold;
       }
     }
 

@@ -28,15 +28,17 @@
         <div class="package-basic-detail-costs-item">
           <span class="package-basic-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
           <span class="package-basic-detail-costs-value">￥ {{packageDetail.rmb}}</span>
+          <el-button v-show="!isPendingReview && !isPurchaseButtonHide" class="package-basic-detail-costs-button" type="warning" @click="addPackage('rmb')">{{$t('lesson.add')}}</el-button>
         </div>
         <div class="package-basic-detail-costs-item">
           <span class="package-basic-detail-costs-label">{{$t('lesson.coinsPrice')}}:</span>
           <span class="package-basic-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
+          <el-button v-show="!isPendingReview && !isPurchaseButtonHide" class="package-basic-detail-costs-button" type="primary" @click="addPackage('coin')">{{$t('lesson.add')}}</el-button>
         </div>
       </div>
       <div v-show="!isPendingReview && isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
       <div v-if="isPendingReview" class="package-basic-detail-warning">{{$t('lesson.Unapproved')}}</div>
-      <el-button v-show="!isPendingReview && !isPurchaseButtonHide" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
+      <!-- <el-button v-show="!isPendingReview && !isPurchaseButtonHide" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button> -->
       <div @click.stop v-if="isLoginDialogShow">
         <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
       </div>
@@ -148,7 +150,7 @@ export default {
       lessonSubscribePackage: 'lesson/subscribePackage',
       userGetProfile: 'user/getProfile'
     }),
-    async addPackage() {
+    async addPackage(payment) {
       if (this.isLogin) {
         if (this.isPackageFree) {
           await this.lessonSubscribePackage({ packageId: this.packageId })
@@ -158,9 +160,10 @@ export default {
           })
           return
         }
-        this.$router.push({
-          path: this.purchasePath
-        })
+        window.location.href = `${window.location.origin}/a/orderConfirm?id=${this.packageId}&type=2&payment=${payment}`
+        // this.$router.push({
+        //   path: this.purchasePath
+        // })
       } else {
         this.isLoginDialogShow = true
       }
@@ -246,17 +249,31 @@ $dangerColor: #e4461f;
   &-costs {
     margin: 7px 0;
     &-item {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       border: 1px solid #f3f3f3;
       background-color: #fff;
       margin-right: 16px;
+      margin-top: 4px;
       font-size: 16px;
       color: #111;
-      padding: 8px 20px 8px 15px;
-      border-radius: 50px;
+      padding: 0 1px 0 10px;
+      height: 32px;
+      line-height: 32px;
+      box-sizing: border-box;
+      border-radius: 32px;
+      border: solid 2px #eeeeee;
     }
     &-value {
       color: $dangerColor;
+    }
+
+    &-button {
+      height: 26px;
+      box-sizing: border-box;
+      border-radius: 26px;
+      padding: 6px 13px;
+      margin-left: 20px;
     }
   }
   &-free {
@@ -280,11 +297,6 @@ $dangerColor: #e4461f;
   &-price-count {
     font-size: 24px;
     color: #ff4c4c;
-  }
-  .el-button--primary {
-    font-size: 14px;
-    margin-left: 0;
-    width: 266px;
   }
 }
 @media screen and (max-width: 768px) {

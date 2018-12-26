@@ -1608,6 +1608,7 @@
     "conversion": "Conversion",
     "pleaseSelectDigitalAccount": "Please select a digital account.",
     "coinInsufficient":"Sorry, your coins are insufficient.",
-    "beanInsufficient": "Sorry, your beans are insufficient."
+    "beanInsufficient": "Sorry, your beans are insufficient.",
+    "exchangeMall": "Exchange items"
   }
 }

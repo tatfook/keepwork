@@ -54,7 +54,7 @@ export default {
       if (this.packageMinAge == 0 && this.pakcageMaxAge == 0) {
         return this.$t('lesson.packageManage.SuitableForAll')
       }
-      return `${this.packageMinAge}-${thsi.pakcageMaxAge}`
+      return `${this.packageMinAge}-${this.pakcageMaxAge}`
     },
     packageIntro() {
       return _.get(this.data, 'intro', '')
