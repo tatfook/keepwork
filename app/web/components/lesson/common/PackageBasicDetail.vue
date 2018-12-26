@@ -67,7 +67,8 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      userIsLogined: 'user/isLogined'
+      userIsLogined: 'user/isLogined',
+      isLoginUserBeTeacher: 'lesson/isTeacher'
     }),
     isLogin: {
       get() {
@@ -88,10 +89,20 @@ export default {
       return this.loginUserId === this.packageOwnerId
     },
     isUserSubscribePackage() {
-      return this.isOwnPackage || this.packageDetail.isSubscribe
+      if (this.isLoginUserBeTeacher) {
+        return this.isOwnPackage || this.packageDetail.isSubscribe
+      }
+      return (
+        this.isOwnPackage ||
+        (this.packageDetail.isSubscribe && this.packageDetail.isBuy)
+      )
     },
     isPackageFree() {
-      return this.packageDetail.rmb === 0 || this.packageDetail.coin === 0
+      return (
+        this.isLoginUserBeTeacher ||
+        this.packageDetail.rmb === 0 ||
+        this.packageDetail.coin === 0
+      )
     },
     isPackageCostAndBackShow() {
       return !this.isPackageFree && !this.isUserSubscribePackage

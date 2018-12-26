@@ -30,7 +30,8 @@ import CoinPurchase from './CoinPurchase'
 import LoginDialog from '@/components/common/LoginDialog'
 import { mapGetters, mapActions } from 'vuex'
 const PACKAGE_GOOD_DETAIL_APP_NAME = process.env.PACKAGE_GOOD_DETAIL_APP_NAME
-const PACKAGE_GOOD_DETAIL_APP_GOODS_ID = process.env.PACKAGE_GOOD_DETAIL_APP_GOODS_ID
+const PACKAGE_GOOD_DETAIL_APP_GOODS_ID =
+  process.env.PACKAGE_GOOD_DETAIL_APP_GOODS_ID
 export default {
   name: 'PurchasePackage',
   async mounted() {
@@ -53,7 +54,10 @@ export default {
     this.packageDetail = this.lessonPackageDetail({
       packageId: this.packageId
     })
-    if (this.packageDetail.isSubscribe) {
+    if (
+      this.isLoginUserBeTeacher ||
+      (this.packageDetail.isSubscribe && this.packageDetail.isBuy)
+    ) {
       this.handleAlreadyPurchased()
     }
     this.isMounted = true
@@ -63,7 +67,8 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
-      lessonPackageDetail: 'lesson/packageDetail'
+      lessonPackageDetail: 'lesson/packageDetail',
+      isLoginUserBeTeacher: 'lesson/isTeacher'
     }),
     username() {
       return _.get(this.userProfile, 'username')
