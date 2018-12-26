@@ -251,7 +251,7 @@ import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
-import RegisterDialog from '@/components/common/RegisterDialog'
+import RegisterDialog from '@/components/common/Register'
 import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
@@ -523,6 +523,20 @@ export default {
     }
   }
 }
+.common-header{
+  .register-dialog {
+  max-width: 352px;
+  .el-dialog__body {
+    padding: 0;
+    .register-title{
+      padding: 0;
+    }
+  }
+}
+}
+.el-menu-item {
+  padding: 0 10px;
+}
 .user-menu-dropdown {
   .greeting {
     padding: 0 20px;
@@ -574,12 +588,6 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
-}
-.register-dialog {
-  max-width: 352px;
-  .el-dialog__body {
-    padding: 0;
-  }
 }
 @media (max-width: 768px) {
   .el-submenu__title {

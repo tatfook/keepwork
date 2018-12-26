@@ -60,7 +60,7 @@
 <script>
 import { mapActions } from 'vuex'
 import PerfectRegisterInfo from '@/components/common/PerfectRegisterInfo'
-import RegisterDialog from '@/components/common/RegisterDialog'
+import RegisterDialog from '@/components/common/Register'
 import PasswordResetForm from '@/components/common/PasswordResetForm'
 
 export default {
@@ -232,6 +232,7 @@ export default {
   .register-oprate {
     margin: 0 32px;
     display: flex;
+    padding: 0 0 20px;
     .back-home-page {
       font-size: 14px;
       width: 110px;
@@ -249,7 +250,7 @@ export default {
     }
   }
   .register-tips{
-    padding: 30px 0;
+    // padding: 30px 0;
   }
   &-form {
     padding: 0 32px 20px;
@@ -266,6 +267,7 @@ export default {
     }
     &-operate {
       display: flex;
+      font-size: 14px;
       .forget-pwd {
         width: 115px;
         cursor: pointer;
