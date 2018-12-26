@@ -72,7 +72,6 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       username: 'user/username',
-      tutorInfo: 'lesson/tutorInfo',
       userIsTeacher: 'lesson/isTeacher',
       userIsAlliance: 'lesson/isAlliance'
     }),
