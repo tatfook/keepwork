@@ -6,7 +6,7 @@
     <div class="order-success-discount">
       <span v-if="isPackageType">{{$t('account.returnCoin', { coin: returnCoin })}}</span>
       <sapn v-if="hasDiscounts"> {{$t('account.returnCoupon', {returnCoin: discount })}}</sapn>
-      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'DiscountCoupon'}">{{$t('account.viewMore')}}</router-link>
+      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'MyAccount'}">{{$t('account.viewMore')}}</router-link>
     </div>
 
   </div>
