@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <video-player ref="videoPlayer" :options="playerOptions" @ready="playerReadies" class="vjs-custom-skin"/>
+    <video-player ref="videoPlayer" :options="playerOptions" @ready="playerReadies" @playing="handlePlayButton" class="vjs-custom-skin"/>
   </div>
 </template>
 
@@ -25,23 +25,22 @@ export default {
   methods: {
     playerReadies() {
       this.player.removeChild('bigPlayButton')
-      const playerButton = this.player.addChild('button')
+      this.playerButton = this.player.addChild('button')
 
-      playerButton.addClass("iconfont")
-      playerButton.addClass("icon-video5")
-      playerButton.addClass("keepwork-play-button")
+      this.playerButton.addClass("iconfont")
+      this.playerButton.addClass("icon-video5")
+      this.playerButton.addClass("keepwork-play-button")
 
-      if (this.autoplay) {
-        playerButton.addClass("keepwork-play-button-hide")
-      }
-
-      playerButton.on(
+      this.playerButton.on(
         'click',
         () => {
-          playerButton.addClass("keepwork-play-button-hide")
           this.player.play()
         }
       )
+    },
+    handlePlayButton() {
+      this.playerButton.removeClass("keepwork-play-button-hide")
+      this.playerButton.addClass("keepwork-play-button-hide")
     }
   },
   computed: {
@@ -84,7 +83,7 @@ export default {
       left: 50%;
       font-size: 70px;
       color: #409EFF;
-      width: auto;
+      width: auto!important;
       margin-left: -35px;
       margin-top: -35px;
       opacity: 0.7;
