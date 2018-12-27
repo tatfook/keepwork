@@ -27,7 +27,7 @@
         <img :src="actualUrl">
       </div>
       <div v-if="getType === handleExt['mp4']">
-        <video-player ref="videoPlayer" :options="playerOptions" :playsinline="true" class="vjs-custom-skin"></video-player>
+        <video-player :src="actualUrl"/>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
         <iframe :src="getPdfSrc"></iframe>
@@ -42,20 +42,13 @@ import { mapGetters } from 'vuex'
 import axios from 'axios'
 import filesize from 'filesize'
 import _ from 'lodash'
-import videojs from 'video.js'
-import { videoPlayer } from 'vue-video-player'
-
-import "video.js/dist/video-js.css"
-import "vue-video-player/src/custom-theme.css"
+import videoPlayer from '@/components/common/VideoPlayer'
 
 export default {
   name: 'AdiBigFile',
   mixins: [compBaseMixin],
   components: {
     videoPlayer
-  },
-  mounted() {
-    console.log('this is current player instance object', this.player)
   },
   data() {
     return {
@@ -254,22 +247,6 @@ export default {
       } else {
         return this.otherExt
       }
-    },
-    playerOptions() {
-      // videojs options
-      return {
-        muted: true,
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
-        aspectRatio: '16:9',
-        muted: false,
-        sources: [{
-          type: "video/mp4",
-          src: this.actualUrl
-        }],
-      }
-    },
-    player() {
-      return this.$refs.videoPlayer.player
     }
   },
   async created() {
