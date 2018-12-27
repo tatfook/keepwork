@@ -7,6 +7,8 @@ category: API
 */
 import createEndpoint from './common/endpoint'
 import { event } from 'vue-analytics'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -18,6 +20,18 @@ const withoutParseEndpoint = createEndpoint(
   },
   false
 )
+
+// FIXME: bad
+const haqi = axios.create({
+  baseURL: 'https://keepwork.com/api',
+  timeout: 20000,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/json; charset=UTF-8',
+    Authorization: 'Bearer ' + Cookies.get('token')
+  },
+})
+
 
 const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
@@ -68,7 +82,7 @@ export const account = {
   getRechargeOrderState: async args => get(`/orders/${args.id}`),
   createTradeOrder: async args => post('/trades', args),
   getGoods: async args => get('/goods'),
-  getDigitalAccounts: async args => get('https://keepwork.com/api/mod/knowledgeBean/models/haqi/getUsers')
+  getDigitalAccounts: async args => haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
 }
 
 /*doc
