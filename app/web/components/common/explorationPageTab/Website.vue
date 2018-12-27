@@ -52,8 +52,7 @@ export default {
         return {
           id: i.id,
           extra: { imageUrl: i.cover, videoUrl: i.video  },
-          name: i.name,
-          name_title: this.searchKeyResult(i),
+          name: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
