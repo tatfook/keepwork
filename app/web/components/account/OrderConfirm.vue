@@ -97,7 +97,7 @@ export default {
       this.getDiscounts(),
       this.createTradeOrder({ type, count, id, payment})
     ])
-    if (type === 1) {
+    if (this.isNeedDigitalAccount) {
       // exchange way
       // this.digitalAccountList = [{label: '7000000001360', value: 7000000001360}]
       await keepwork.account.getDigitalAccounts()
