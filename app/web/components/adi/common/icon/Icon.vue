@@ -1,13 +1,18 @@
 <template>
   <div class='comp-icon'>
-    <a :target='target' :href='link'>
-      <div v-if='isImage' class="img">
+    <a  v-if='isImage' :target='target' :href='link'>
+      <div class="img">
         <img :src="src" :style="getStyle">
       </div>
-      <div v-else-if='isVideo' class="video">
-        <video v-if="updateDom" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
-      </div>
     </a>
+    <div v-if='isVideo' class="video" @click="openPlayDialog">
+      <div class="iconfont icon-video5" />
+      <video v-if="updateDom && poster" :poster="poster"></video>
+      <video v-if="updateDom && !poster" :src='src' autoplay loop muted></video>
+    </div>
+    <el-dialog :visible.sync="isOpenVideo">
+      <video-player v-if="isOpenVideo" :src='src' :autoplay='autoplay' :playloop='playloop' />
+    </el-dialog>
   </div>
 </template>
 
@@ -16,16 +21,21 @@ import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 import Media from '@/components/adi/common/media/media.types'
-import { setTimeout } from 'timers';
+import videoPlayer from '@/components/common/VideoPlayer'
+import { setTimeout } from 'timers'
 
 jss.setup(preset())
 
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
+  components: {
+    videoPlayer
+  },
   data() {
     return {
-      updateDom: true
+      updateDom: true,
+      isOpenVideo: false
     }
   },
   watch: {
@@ -95,6 +105,9 @@ export default {
     },
     getWebWidth() {
       return this.options.img ? this.getValue(this.properties.webWidth, this.options.img.defaultWebWidth) : '100%!important'
+    },
+    openPlayDialog() {
+      this.isOpenVideo = true
     }
   }
 }
@@ -117,16 +130,34 @@ export default {
         max-height: 87px;
       }
     }
-    .video {
-      min-width: 87px;
+  }
+
+  .video {
+    min-width: 87px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .icon-video5 {
+      font-size: 35px;
+      color: #409EFF;
+      opacity: 0.7;
+      position: absolute;
+      z-index: 1;
+    }
+  
+    video {
+      max-width: 185px;
+      max-height: 87px;
       width: 100%;
       height: 100%;
-      video {
-        width: 100%;
-        height: 100%;
-        max-width: 185px;
-        max-height: 87px;
-      }
+      object-fit: cover;
+      opacity: 0.8;
     }
   }
 }

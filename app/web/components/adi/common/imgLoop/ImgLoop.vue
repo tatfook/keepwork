@@ -7,7 +7,8 @@
         </a>
         <div class="video" v-if="item.type === 'videos'" @click="openVideo(item)">
           <div class="iconfont icon-video5" />
-          <video v-if="updateDom" :src="item.video" autoplay="true" playloop="true" muted="true" :poster="item.poster"></video>
+          <video v-if="updateDom && item.poster" :src="item.video" :poster="item.poster"></video>
+          <video v-if="updateDom && !item.poster" :src="item.video" autoplay loop muted></video>
         </div>
       </el-carousel-item>
     </el-carousel>
