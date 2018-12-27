@@ -2,8 +2,7 @@
   <div>
     <div class="gallery-type">
       <el-button @click='handleAdd' class="gallery-type-add-btn" icon="el-icon-plus">{{$t('common.add')}}</el-button>
-      <div v-for='(item, index) in galleryData' class="gallery-type-item" :key='index' :item="item" @change="handleChange()">
-
+      <div v-for='(item, index) in galleryData' class="gallery-type-item" :key='index' :item="item">
         <div v-if="!item.type || item.type === 'images'" class="gallery-type-item-img" :style="getImage(item)">
           <div class="gallery-type-item-img-cover">
             <span>
@@ -14,8 +13,8 @@
         </div>
 
         <div v-if="item.type === 'videos'" class="gallery-type-item-img">
-          <video :src="item.video" :play="true" :autoplay="item.autoplay" :loop="item.playloop" muted="muted"></video>
-          <div class="gallery-type-item-img-play" v-if='!item.autoplay && isPlayIconShow'>
+          <video :src="item.video" muted="muted"></video>
+          <div class="gallery-type-item-img-play" v-if='isPlayIconShow'>
             <el-button circle size="mini">
               <i class='gallery-type-item-img-play-icon el-icon-caret-right'></i>
             </el-button>
@@ -35,7 +34,7 @@
             <div class="gallery-type-item-img-cover">
               <span>
                 <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleChangeCover(index)">{{$t('common.change')}}</el-button>
-                <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" circle @click="removeCover(index)"></el-button>
+                <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" circle @click="removeCover(item)"></el-button>
               </span>
             </div>
           </div>
@@ -49,14 +48,14 @@
         <el-input v-if="!item.type || item.type === 'images'" :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
           <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
           <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
-          <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
+          <el-select v-model="item.link" slot="append" placeholder="Select">
             <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
               {{ path }}
             </el-option>
           </el-select>
         </el-input>
 
-        <el-select v-if="!item.type || item.type === 'images'" v-model="item.target" @change='handleChange' class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
+        <el-select v-if="!item.type || item.type === 'images'" v-model="item.target" class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
           <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
         </el-select>
 
@@ -106,29 +105,36 @@ export default {
     }),
     galleryData: {
       get() {
+        // console.log(this.originValue)
         if (Array.isArray(this.originValue) && this.originValue.length) {
           return this.originValue
         } else {
           if (this.optionsData && this.optionsData.emptyGallery) {
+            const initData = {
+              img: this.optionsData.emptyGallery.img || '',
+              link: this.optionsData.emptyGallery.link || '',
+              target: this.optionsData.emptyGallery.target || '',
+              autoplay: this.optionsData.emptyGallery.autoplay || true,
+              playloop: this.optionsData.emptyGallery.playloop || false,
+              poster: this.optionsData.emptyGallery.poster || ''
+            }
 
-            this.handleAdd()
+            let tempChangedDataObj = {}
+            tempChangedDataObj[this.editingKey] = [initData]
+            this.$emit('onPropertyChange', tempChangedDataObj)
 
-            return [
-              {
-                img: this.optionsData.emptyGallery.img || '',
-                link: this.optionsData.emptyGallery.link || '',
-                target: this.optionsData.emptyGallery.target || '',
-                autoplay: this.optionsData.emptyGallery.autoplay || false,
-                playloop: this.optionsData.emptyGallery.playloop || false,
-                poster: this.optionsData.emptyGallery.poster || ''
-              }
-            ]
+            return initData
           } else {
             return []
           }
         }
       },
-      set() {
+      set(data) {
+        console.log('set gallery data')
+        console.log(data)
+        let tempChangedDataObj = {}
+        tempChangedDataObj[this.editingKey] = data
+        this.$emit('onPropertyChange', tempChangedDataObj)
       }
     },
     isDisabled() {
@@ -143,22 +149,15 @@ export default {
     ...mapActions({
       getAllPersonalPageList: 'user/getAllPersonalPageList'
     }),
-    handleChange() {
-      let tempChangedDataObj = {}
-      tempChangedDataObj[this.editingKey] = this.originValue
-      this.$emit('onPropertyChange', tempChangedDataObj)
-    },
     handleAdd() {
-      this.originValue.push({
+      this.galleryData.push({
         img: '',
         link: '',
         target: '',
-        autoplay: false,
+        autoplay: true,
         playloop: false,
         poster: ''
       })
-
-      this.handleChange()
     },
     handlePlay() {
       let video = this.$el.querySelector('video')
@@ -188,7 +187,6 @@ export default {
       })
 
       this.galleryData.splice(index, 1)
-      this.handleChange()
     },
     async handleVideoRemove(index) {
       await this.$confirm(this.$t('editor.removeVideoConfirmMsg'), '', {
@@ -198,15 +196,15 @@ export default {
       })
 
       this.galleryData.splice(index, 1)
-      this.handleChange()
     },
-    async removeCover(index) {
+    async removeCover(item) {
       await this.$confirm(this.$t('editor.deleteVideoCoverConfirmMsg'), '', {
         confirmButtonText: this.$t('common.OK'),
         cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
-      this.galleryData[index].poster = ''
+      item.poster = ''
+      item.autoplay = true
     },
     handleUpdateImg(index) {
       this.selectedIndex = index
@@ -248,6 +246,7 @@ export default {
             item.video = url
             item.img = ""
             item.poster = ""
+            item.autoplay = true
           }
           break
         case "video":
@@ -259,14 +258,14 @@ export default {
           }
           if (file.type === 'videos') {
             item.video = url
+            item.autoplay = true
           }
           break
         case "cover":
           item.poster = url
+          item.autoplay = false
           break
       }
-
-      this.handleChange()
     },
     getLocationUrl(url) {
       return url ? location.origin + '/' + url : ''
