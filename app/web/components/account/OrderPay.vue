@@ -196,6 +196,7 @@ export default {
         bean: 0,
         coin: 0,
         count,
+        catch: this.captcha,
         [this.payment]: goodsDetail[this.payment],
         finalCostByUnit: this.finalCostByUnit
       }
@@ -208,9 +209,6 @@ export default {
           extra: {
             packageId: id
           }
-        }
-        if (this.isNeedVerify) {
-          payload['captcha'] = this.captcha
         }
       }
       if (type === 1) {

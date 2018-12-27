@@ -43,7 +43,6 @@ export default {
   },
   async mounted() {
     await this.getDiscounts()
-    console.warn(this._discounts)
   },
   computed: {
     ...mapGetters({
