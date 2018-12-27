@@ -7,7 +7,7 @@
       <span class="project-cell-cover-tag project-cell-cover-id">{{$t('project.projectId')}}:{{project.id}}</span>
       <span class="project-cell-cover-tag project-cell-cover-type">{{project.type == 0 ? $t('common.websiteB') : 'paracraft' }}</span>
     </div>
-    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name_title || project.name"></span><span class="recruitment" v-if="project.privilege & 1">{{$t("explore.recruiting")}}</span></h4>
+    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name"></span><span class="recruitment" v-if="project.privilege & 1">{{$t("explore.recruiting")}}</span></h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
