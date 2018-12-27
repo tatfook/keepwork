@@ -1,7 +1,7 @@
 <template>
   <div class="block">
-    <el-carousel :class="getClass" :height="'100%'">
-      <el-carousel-item v-for="(item, index) in forImgs" :key="index">
+    <el-carousel :height="'100%'" id="imgLoopHeight">
+      <el-carousel-item v-for="(item, index) in forImgs" :key="index" class="each">
         <a v-if="!item.type || item.type === 'images'" :target="item.target" :href="item.link">
           <div class="imgs" :style="loadImg(item)"></div>
         </a>
@@ -17,7 +17,8 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
-import { setTimeout } from 'timers';
+import { setTimeout } from 'timers'
+import _ from 'lodash'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 
@@ -32,7 +33,19 @@ export default {
   watch: {
     forImgs() {
       this.refresh()
-    }
+      // this.$nextTick(() => {  //页面加载完成后执行
+      //   this.getImgLoopHeight()
+      // })
+    },
+    // $route: {
+    //   handler:function(val, oldVal){
+    //     this.$nextTick(() => {  //页面加载完成后执行
+    //       this.getImgLoopHeight()
+    //     })
+    //   },
+    //   // 深度观察监听
+    //   deep: true
+    // }
   },
   methods: {
     refresh() {
@@ -65,33 +78,80 @@ export default {
 
       return [[returnValue], '!important']
     },
-    getValue(propertiesValue, optionsValue) {
-      if (propertiesValue) {
-        return this.parsePx(propertiesValue)
-      } else {
-        return this.parsePx(optionsValue)
-      }
+    // getValue(propertiesValue, optionsValue) {
+    //   if (propertiesValue) {
+    //     return this.parsePx(propertiesValue)
+    //   } else {
+    //     return this.parsePx(optionsValue)
+    //   }
+    // },
+    getValue(value) {
+      return this.parsePx(value)
     },
     getWebHeight() {
       if (typeof this.options.img != 'object') {
         return this.auto
       }
 
-      return this.getValue(
-        this.properties.webHeight,
-        this.options.img.defaultWebHeight
-      )
+      if (this.properties.webHeight) {
+        return this.getValue(this.properties.webHeight)
+      } else {
+        return this.options.img.defaultWebHeight
+      }
+
+      // return this.getValue(
+      //   this.properties.webHeight,
+      //   this.options.img.defaultWebHeight
+      // )
+    },
+    // reset() {
+    //   this.$nextTick(async () => {
+    //     setTimeout(() => {
+    //       console.log(123)
+    //       this.getImgLoopHeight()
+    //     }, 10)
+    //   })
+    // },
+    getImgLoopHeight() {
+      // let getDiv = document.getElementById('imgLoopHeight')
+      // let w = window.innerWidth
+      // let imgL = this.$el.querySelector('#imgLoopHeight')
+      let all = this.$el.querySelector('#imgLoopHeight')
+      let shrink = this.options.img.shrink
+      let numerator = this.options.img.numerator
+      let denominator = this.options.img.denominator
+      console.log(all)
+      all.style.width= this.$el.offsetWidth + 'px'
+      all.style.height = this.$el.offsetWidth * shrink * numerator / denominator + 'px'
+      console.log(all.style)
+      // _.forEach(all, (dom, key) => {
+      //   dom.style.height = dom.offsetWidth * multiple * shrink + 'px !important'
+      // })
     },
     getMobileHeight() {
       if (typeof this.options.img != 'object') {
         return this.auto
       }
 
-      return this.getValue(
-        this.properties.mobileHeight,
-        this.options.img.defaultMobileHeight
-      )
+      // return this.getValue(
+      //   this.properties.mobileHeight,
+      //   this.options.img.defaultMobileHeight
+      // )
+      if (this.properties.mobileHeight) {
+        return this.getValue(this.properties.mobileHeight)
+      } else {
+        return this.options.img.defaultMobileHeight
+      }
     }
+  },
+  // created() {
+  //   this.getImgLoopHeight()
+  // },
+  mounted() {
+    this.getImgLoopHeight()
+  },
+  updated() {
+    this.getImgLoopHeight()
   },
   computed: {
     forImgs() {
@@ -137,16 +197,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.imgs {
-  width: 100%;
-  height: 100%;
-  background-position: center;
-  background-size: cover;
-
-  video {
+.each {
+  // width: 1080px;
+  .imgs {
     width: 100%;
     height: 100%;
+    background-position: center;
+    background-size: cover;
+
+    video {
+      width: 100%;
+      height: 100%;
+    }
   }
+
 }
 
 .el-carousel__item h3 {
