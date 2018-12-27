@@ -65,8 +65,15 @@ export default {
     isOwnPackage() {
       return this.loginUserId === this.packageOwnerId
     },
+    isPackageFree() {
+      return (
+        this.isLoginUserBeTeacher ||
+        this.packageDetail.rmb === 0 ||
+        this.packageDetail.coin === 0
+      )
+    },
     isUserSubscribePackage() {
-      if (this.isLoginUserBeTeacher) {
+      if (this.isPackageFree || this.isLoginUserBeTeacher) {
         return this.isOwnPackage || this.packageDetail.isSubscribe
       }
       return (

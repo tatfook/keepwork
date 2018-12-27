@@ -38,7 +38,7 @@
       </div>
       <div v-show="!isPendingReview && isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
       <div v-if="isPendingReview" class="package-basic-detail-warning">{{$t('lesson.Unapproved')}}</div>
-      <!-- <el-button v-show="!isPendingReview && !isPurchaseButtonHide" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button> -->
+      <el-button v-show="!isPendingReview && !isPurchaseButtonHide && !isPackageCostAndBackShow" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
       </div>
@@ -91,7 +91,7 @@ export default {
       return this.loginUserId === this.packageOwnerId
     },
     isUserSubscribePackage() {
-      if (this.isLoginUserBeTeacher) {
+      if (this.isPackageFree || this.isLoginUserBeTeacher) {
         return this.isOwnPackage || this.packageDetail.isSubscribe
       }
       return (
@@ -171,7 +171,9 @@ export default {
           })
           return
         }
-        window.location.href = `${window.location.origin}/a/orderConfirm?id=${this.packageId}&type=2&payment=${payment}`
+        window.location.href = `${window.location.origin}/a/orderConfirm?id=${
+          this.packageId
+        }&type=2&payment=${payment}`
         // this.$router.push({
         //   path: this.purchasePath
         // })
