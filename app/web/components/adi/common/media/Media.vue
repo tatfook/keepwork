@@ -7,7 +7,8 @@
     </a>
     <div class="video" v-if='isVideo' @click="openPlayDialog">
       <div class="iconfont icon-video5" />
-      <video v-if="updateDom" :class="getVideoClass" :src='src' autoplay="true" playloop="true" muted="true" :poster="poster"></video>
+      <video v-if="updateDom && poster" :class="getVideoClass" :src='src' :poster="poster"></video>
+      <video v-if="updateDom && !poster" :class="getVideoClass" autoplay loop muted :src='src'></video>
     </div>
     <el-dialog :visible.sync="isOpenVideo">
       <video-player v-if="isOpenVideo" :src='src' :autoplay='autoplay' :playloop='playloop' />
