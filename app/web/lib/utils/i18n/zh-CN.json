@@ -1607,6 +1607,7 @@
     "lackMoney": "人民币余额不足,还需 {money} ,请先去充值。",
     "recharge": "充值",
     "successfullyPaid": "支付成功",
+    "failPaid": "支付失败",
     "viewMore": "查看更多",
     "returnCoin": "返 {coin} 知识币",
     "returnCoupon": "一张 {title} 优惠券",

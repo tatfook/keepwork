@@ -1603,6 +1603,7 @@
     "lackMoney": "Lack of {money}. Please recharge first.",
     "recharge": "Top up",
     "successfullyPaid": "Successfully paid.",
+    "failPaid": "Payment Failed",
     "viewMore": "View more",
     "returnCoin": "You got {coin} coins",
     "returnCoupon": "one coupon of {title}",
