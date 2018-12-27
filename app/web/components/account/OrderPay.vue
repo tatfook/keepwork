@@ -174,11 +174,10 @@ export default {
           this.waitAMiniute()
           this.$message({
             type: 'success',
-            message: '发送成功'
+            message: this.$t('user.smsCodeSentSuccess')
           })
         } catch (error) {
-          console.error(error)
-          this.$message.error('发送验证码失败')
+          this.$message.error(this.$t('user.sendingFrequent'))
         }
       }
     },
@@ -196,7 +195,7 @@ export default {
         bean: 0,
         coin: 0,
         count,
-        catch: this.captcha,
+        captcha: this.captcha,
         [this.payment]: goodsDetail[this.payment],
         finalCostByUnit: this.finalCostByUnit
       }
