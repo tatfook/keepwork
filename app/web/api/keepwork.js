@@ -19,13 +19,6 @@ const withoutParseEndpoint = createEndpoint(
   false
 )
 
-const haqiApi = createEndpoint(
-  {
-    baseURL: process.env.GATEWAY_BASE_URL
-  },
-  false
-)
-
 const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
 export const user = {
@@ -75,7 +68,7 @@ export const account = {
   getRechargeOrderState: async args => get(`/orders/${args.id}`),
   createTradeOrder: async args => post('/trades', args),
   getGoods: async args => get('/goods'),
-  getDigitalAccounts: async args => haqiApi.get('/api/mod/knowledgeBean/models/haqi/getUsers')
+  getDigitalAccounts: async args => get('https://keepwork.com/api/mod/knowledgeBean/models/haqi/getUsers')
 }
 
 /*doc
