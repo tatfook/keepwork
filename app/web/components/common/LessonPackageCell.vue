@@ -4,10 +4,10 @@
       <div class="lesson-cover" @click="goLessonPackage(lessonPackage)"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
       <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.title"></h4>
       <div class="lesson-desc">
-        <p>包含：
-          <span>{{lessonPackage.total_lessons || 0}}</span>个课程</p>
-        <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
-        <p class="lesson-desc-text" v-html="lessonPackage.description"></p>
+        <p>{{$t('lesson.include')}}：
+          <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.packagesCount')}}</p>
+        <p>{{$t('lesson.ages')}}：{{getPackageSuitableAge(lessonPackage)}}</p>
+        <p class="lesson-desc-text" v-html="`${$t('lesson.intro')}：${lessonPackage.description}`"></p>
       </div>
     </div>
   </div>
