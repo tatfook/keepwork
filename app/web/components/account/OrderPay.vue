@@ -229,12 +229,17 @@ export default {
           this.$router.push({ name: 'OrderSuccess' })
           this.$message({
             type: 'success',
-            message: '支付成功'
+            message: this.$t('account.successfullyPaid')
           })
           this.isLoading = false
         })
         .catch(e => {
-          this.$message.error('支付失败')
+          const code = _.get(e, 'response.data.code', '')
+          if (code === 5) {
+            this.isCodeWrong = true
+          }else {
+            this.$message.error(this.$t('account.failPaid'))
+          }
           this.isLoading = false
         })
     }
