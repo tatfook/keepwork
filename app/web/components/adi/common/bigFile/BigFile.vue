@@ -4,7 +4,7 @@
       <a v-if="type=='link'" :href="url">{{this.properties.extraMsg || url}}</a>
       <img v-if="type=='image'" :src="url" :alt="this.properties.extraMsg">
       <div v-if="type=='video'">
-        <video :src="url" controls>{{$t('editor.videoNotSupport')}}</video>
+        <video-player :src="url"/>
       </div>
       <div v-if="errMsg" class="err">{{errMsg}}</div>
     </div>
