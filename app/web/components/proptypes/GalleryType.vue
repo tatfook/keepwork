@@ -1,64 +1,72 @@
 <template>
   <div>
     <div class="gallery-type">
+      <el-select @change='handleChange' size='mini' :placeholder="$t('editor.newWindowOpen')">
+        <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
+      </el-select>
+      <div>
+        <span>高度：</span>
+        <el-input-number v-model="num1" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+      </div>
+
       <el-button @click='handleAdd' class="gallery-type-add-btn" icon="el-icon-plus">{{$t('common.add')}}</el-button>
       <div v-for='(item, index) in galleryData' class="gallery-type-item" :key='index' :item="item" @change="handleChange()">
 
-        <div v-if="!item.type || item.type === 'images'" class="gallery-type-item-img" :style="getImage(item)">
-          <div class="gallery-type-item-img-cover">
-            <span>
-              <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
-              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleImgRemove(index)" :disabled="isDisabled"></el-button>
-            </span>
-          </div>
-        </div>
-
-        <div v-if="item.type === 'videos'" class="gallery-type-item-img">
-          <video :src="item.video" :play="true" :autoplay="item.autoplay" :loop="item.playloop" muted="muted"></video>
-          <div class="gallery-type-item-img-play" v-if='!item.autoplay && isPlayIconShow'>
-            <el-button circle size="mini">
-              <i class='gallery-type-item-img-play-icon el-icon-caret-right'></i>
-            </el-button>
-          </div>
-          <div class="gallery-type-item-img-cover">
-            <span>
-              <el-button class="gallery-type-play-img-btn el-icon-caret-right" size="mini" round @click="handlePlay(index)"></el-button>
-              <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateVideo(index)">{{$t('common.change')}}</el-button>
-              <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)" :disabled="isDisabled"></el-button>
-            </span>
-          </div>
-        </div>
-
-        <div v-if="item.type === 'videos'" class="video-cover">
-          <el-button v-if="!item.poster" @click='handleChangeCover(index)' plain>{{$t('editor.addVideoCover')}}</el-button>
-          <div class="gallery-type-item-img" v-if="item.poster" :style="{backgroundImage: 'url(' + item.poster + ')'}">
+        <div v-if="!item.type || item.type === 'images'">
+          <div class="gallery-type-item-img" :style="getImage(item)">
             <div class="gallery-type-item-img-cover">
               <span>
-                <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleChangeCover(index)">{{$t('common.change')}}</el-button>
-                <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" circle @click="removeCover(index)"></el-button>
+                <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateImg(index)">{{$t('common.change')}}</el-button>
+                <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleImgRemove(index)" :disabled="isDisabled"></el-button>
               </span>
             </div>
           </div>
-        </div>
-
-        <div v-if="item.type === 'videos'" class="video-settings">
-          <el-checkbox v-model="item.autoplay">{{$t('field.autoplay')}}</el-checkbox>
-          <el-checkbox v-model="item.playloop">{{$t('field.playloop')}}</el-checkbox>
-        </div>
-
-        <el-input v-if="!item.type || item.type === 'images'" :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
-          <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
-          <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
-          <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
-            <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
-              {{ path }}
-            </el-option>
+          <el-input :placeholder="$t('editor.pleaseInput')" v-model="item.link" class="input-with-select">
+            <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
+            <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
+            <el-select v-model="item.link" @change='handleChange' slot="append" placeholder="Select">
+              <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
+                {{ path }}
+              </el-option>
+            </el-select>
+          </el-input>
+          <el-select v-model="item.target" @change='handleChange' class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
+            <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
           </el-select>
-        </el-input>
+        </div>
 
-        <el-select v-if="!item.type || item.type === 'images'" v-model="item.target" @change='handleChange' class="select-targetType" size='mini' :placeholder="$t('editor.newWindowOpen')">
-          <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
-        </el-select>
+        <div v-if="item.type === 'videos'">
+          <div class="gallery-type-item-img">
+            <video :src="item.video" :play="true" :autoplay="item.autoplay" :loop="item.playloop" muted="muted"></video>
+            <div class="gallery-type-item-img-play" v-if='!item.autoplay && isPlayIconShow'>
+              <el-button circle size="mini">
+                <i class='gallery-type-item-img-play-icon el-icon-caret-right'></i>
+              </el-button>
+            </div>
+            <div class="gallery-type-item-img-cover">
+              <span>
+                <el-button class="gallery-type-play-img-btn el-icon-caret-right" size="mini" round @click="handlePlay(index)"></el-button>
+                <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleUpdateVideo(index)">{{$t('common.change')}}</el-button>
+                <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" round @click="handleVideoRemove(index)" :disabled="isDisabled"></el-button>
+              </span>
+            </div>
+          </div>
+          <div class="video-cover">
+            <el-button v-if="!item.poster" @click='handleChangeCover(index)' plain>{{$t('editor.addVideoCover')}}</el-button>
+            <div class="gallery-type-item-img" v-if="item.poster" :style="{backgroundImage: 'url(' + item.poster + ')'}">
+              <div class="gallery-type-item-img-cover">
+                <span>
+                  <el-button class="gallery-type-change-img-btn" size="mini" round @click="handleChangeCover(index)">{{$t('common.change')}}</el-button>
+                  <el-button class="gallery-type-remove-img-btn iconfont icon-delete" size="mini" circle @click="removeCover(index)"></el-button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="video-settings">
+            <el-checkbox v-model="item.autoplay">{{$t('field.autoplay')}}</el-checkbox>
+            <el-checkbox v-model="item.playloop">{{$t('field.playloop')}}</el-checkbox>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -94,6 +102,7 @@ export default {
           value: '_blank'
         }
       ],
+      num1: 1,
       value: ''
     }
   },
@@ -143,6 +152,9 @@ export default {
     ...mapActions({
       getAllPersonalPageList: 'user/getAllPersonalPageList'
     }),
+    handleChange(value) {
+      console.log(value);
+    },
     handleChange() {
       let tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = this.originValue
