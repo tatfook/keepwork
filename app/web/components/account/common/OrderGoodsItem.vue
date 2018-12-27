@@ -1,7 +1,7 @@
 <template>
   <div class="order-goods-item">
     <div class="order-goods-item-cover">
-      <img :src="coverUrl" :alt="subject">
+      <img class="order-goods-item-cover-image" :src="coverUrl" :alt="subject">
     </div>
     <div class="order-goods-item-info">
       <div class="order-goods-item-info-subject">
@@ -63,6 +63,14 @@ export default {
   align-items: center;
 
   &-cover {
+    width: 180px;
+    height: 100px;
+    &-image {
+      height: 100%;
+      width: 100%;
+      object-fit: scale-down;
+    }
+    
   }
 
   &-info {

@@ -12,7 +12,7 @@
           <coupon-list :data="discountsUsed"></coupon-list>
         </el-tab-pane>
         <el-tab-pane :label="$t('account.expired')" name="expire">
-          <coupon-list :data="discountsUsed"></coupon-list>
+          <coupon-list :data="discountsExpired"></coupon-list>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -59,7 +59,10 @@ export default {
       return this._discounts.filter(item => item.state === 0)
     },
     discountsUsed() {
-      return this.discounts.filter(item => item.state === 1)
+      return this._discounts.filter(item => item.state === 1)
+    },
+    discountsExpired() {
+      return this._discounts.filter(item => item)
     }
   },
   methods: {
