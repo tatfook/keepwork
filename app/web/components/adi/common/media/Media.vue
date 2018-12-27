@@ -1,16 +1,16 @@
 <template>
   <div class='comp-media'>
-    <a :target='target' :href='link'>
-      <div class="img" :class="getImgClass" v-if='isImage'>
+    <a v-if='isImage' :target='target' :href='link'>
+      <div class="img" :class="getImgClass">
         <img :src="src">
       </div>
     </a>
     <div class="video" v-if='isVideo' @click="openPlayDialog">
       <div class="iconfont icon-video5" />
-      <video v-if="updateDom" :class="getVideoClass" :src='src' muted="true" :poster="poster"></video>
+      <video v-if="updateDom" :class="getVideoClass" :src='src' autoplay="true" playloop="true" muted="true" :poster="poster"></video>
     </div>
     <el-dialog :visible.sync="isOpenVideo">
-      <video-player ref="videoPlayer" :options="playerOptions" class="vjs-custom-skin"/>
+      <video-player v-if="isOpenVideo" :src='src' :autoplay='autoplay' :playloop='playloop' />
     </el-dialog>
   </div>
 </template>
@@ -21,11 +21,7 @@ import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 import { setTimeout } from 'timers'
-import videojs from 'video.js'
-import { videoPlayer } from 'vue-video-player'
-
-import "video.js/dist/video-js.css"
-import "vue-video-player/src/custom-theme.css"
+import videoPlayer from '@/components/common/VideoPlayer'
 
 jss.setup(preset())
 
@@ -44,13 +40,7 @@ export default {
       this.refresh()
     }
   },
-  mounted() {
-    console.log('this is current player instance object', this.player)
-  },
   computed: {
-    player() {
-      return this.$refs.videoPlayer.player
-    },
     isImage() {
       return Media.isImage(this.src)
     },
@@ -184,20 +174,6 @@ export default {
     },
     fullWidth() {
       return [['100%'], '!important']
-    },
-    playerOptions() {
-      // videojs options
-      return {
-        muted: true,
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
-        aspectRatio: '16:9',
-        muted: false,
-        inactivityTimeout: 0,
-        sources: [{
-          type: "video/mp4",
-          src: this.src
-        }],
-      }
     }
   },
   methods: {
@@ -270,15 +246,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.comp-media {
-  .video-js .vjs-control-bar {
-    position: unset;
-    display: flex;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
 .comp-media {
   width: 100%;
@@ -309,9 +276,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 
     .icon-video5 {
-      font-size: 130px;
+      font-size: 65px;
       color: #409EFF;
       opacity: 0.7;
       position: absolute;
@@ -324,10 +292,6 @@ export default {
       object-fit: cover;
       opacity: 0.8;
     }
-  }
-
-  .vjs-custom-skin {
-    padding-bottom: 42px;
   }
 }
 </style>

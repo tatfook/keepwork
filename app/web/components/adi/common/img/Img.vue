@@ -1,27 +1,36 @@
 <template>
   <div class="comp-img">
-    <a :target='target' :href='link'>
-      <div v-if='isImage'>
+    <a v-if='isImage' :target='target' :href='link'>
+      <div>
         <img :src="getSrc" />
       </div>
-      <div v-else-if='isVideo'>
-        <video v-if="updateDom" :src='getSrc' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
-      </div>
     </a>
+    <div class="video" v-if='isVideo' @click="openPlayDialog">
+      <div class="iconfont icon-video5" />
+      <video v-if="updateDom" :src='getSrc' autoplay="true" playloop="true" :poster="poster" />
+    </div>
+    <el-dialog :visible.sync="isOpenVideo">
+      <video-player v-if="isOpenVideo" :src='getSrc' :autoplay='autoplay' :playloop='playloop' />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import Media from '@/components/adi/common/media/media.types'
-import { setTimeout } from 'timers';
+import videoPlayer from '@/components/common/VideoPlayer'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'AdiImg',
   mixins: [compBaseMixin],
+  components: {
+    videoPlayer,
+  },
   data() {
     return {
-      updateDom: true
+      updateDom: true,
+      isOpenVideo: false
     }
   },
   watch: {
@@ -77,6 +86,9 @@ export default {
     refresh() {
       this.updateDom = false
       setTimeout(() => {this.updateDom = true}, 0)
+    },
+    openPlayDialog() {
+      this.isOpenVideo = true
     }
   }
 }
@@ -88,9 +100,31 @@ export default {
       width: 100%;
       height: 100%;
     }
-    video {
+    
+    .video {
       width: 100%;
       height: 100%;
+      background-color: black;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+
+      .icon-video5 {
+        font-size: 65px;
+        color: #409EFF;
+        opacity: 0.7;
+        position: absolute;
+        z-index: 1;
+      }
+    
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.8;
+      }
     }
   }
 </style>
