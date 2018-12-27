@@ -43,9 +43,6 @@ export default {
     await this.getGoods().catch(e => console.error(e))
     this.isLoading = false
   },
-  mounted() {
-    document.title = this.$t('acccount.exchangeMall')
-  },
   methods: {
     ...mapActions({
       getGoods: 'account/getGoods'

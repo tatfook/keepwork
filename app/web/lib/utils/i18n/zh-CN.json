@@ -1634,6 +1634,7 @@
     "alipayScan": "请用支付宝扫一扫",
     "scan": "扫描二维码支付",
     "success": "支付成功",
-    "pleaseRecharge": "完成上笔支付还需:"
+    "pleaseRecharge": "完成上笔支付还需:",
+    "rechargeSuccessfully": "充值成功"
   }
 }
