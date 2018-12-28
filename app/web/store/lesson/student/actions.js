@@ -80,7 +80,7 @@ const actions = {
   async enterClassRoom({ commit, dispatch }, { key }) {
     let enterClassInfo = await lesson.classrooms.join({
       key
-    }).catch(e => console.error(e))
+    })
     enterClassInfo['key'] = key
     commit(ENTER_CLASSROOM, enterClassInfo)
     return Promise.resolve(enterClassInfo)
