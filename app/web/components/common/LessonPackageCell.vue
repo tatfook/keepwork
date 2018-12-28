@@ -7,7 +7,7 @@
         <p>{{$t('lesson.include')}}：
           <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.packagesCount')}}</p>
         <p>{{$t('lesson.ages')}}：{{getPackageSuitableAge(lessonPackage)}}</p>
-        <p class="lesson-desc-text" v-html="`${$t('lesson.intro')}：${lessonPackage.description}`"></p>
+        <p class="lesson-desc-text" v-html="`${$t('lesson.intro')}：${lessonPackage.description ? lessonPackage.description : ''}`"></p>
       </div>
     </div>
   </div>
