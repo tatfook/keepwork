@@ -188,7 +188,7 @@ export default {
       if (this.isNeedVerify && !this.captcha) {
         return (this.isCodeEmpty = true)
       }
-      const { id, finalCost, payment, count, type = 0, goodsDetail, subject = '', user_nid = '', discountId } = this.tradeOrder
+      const { id, finalCost, payment, count, type = 0, goodsDetail, subject = '', user_nid = '', discountId = '' } = this.tradeOrder
       let payload = {
         type,
         rmb: 0,
@@ -196,6 +196,7 @@ export default {
         coin: 0,
         count,
         captcha: this.captcha,
+        discountId,
         [this.payment]: goodsDetail[this.payment],
         finalCostByUnit: this.finalCostByUnit
       }

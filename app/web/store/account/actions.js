@@ -13,7 +13,8 @@ const {
   CREATE_TRADE_ORDER,
   SUBMIT_TRADE_ORDER,
   PAY_TRADE_ORDER,
-  GET_GOODS_SUCCESS
+  GET_GOODS_SUCCESS,
+  SET_DISCOUNT_ID
 } = props
 
 const SUCCESS_CODE = 256
@@ -61,6 +62,9 @@ const actions = {
       const goodsDetail = _.find(goods, (item) => item.id === id)
       return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
     }
+  },
+  async setDiscount({ commit }, discountId) {
+    commit(SET_DISCOUNT_ID, discountId)
   },
   async submitTradeOrder({ commit }, payload) {
     commit(SUBMIT_TRADE_ORDER, payload)

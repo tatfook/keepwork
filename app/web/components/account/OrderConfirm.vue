@@ -29,7 +29,7 @@
           <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-          {{$t('account.totalPrice')}} {{ totalCostByUnit }}
+          {{$t('account.totalPrice')}} {{totalCostByUnit}}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
@@ -37,9 +37,14 @@
           {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-          {{$t('account.noCoupons')}}
+          <span class="is-checked-discount" v-show="this.tradeOrderDiscount">
+            - {{rewardNumberByUnit}} ({{tradeOrderDiscount && tradeOrderDiscount.title}})
+          </span>
+          <span v-show="!this.tradeOrderDiscount">
+            {{$t('account.noCoupons')}}
+          </span>
         </div>
-        <div class="order-confirm-main-discounts-all" @click="handleShowDiscounts">
+        <div class="order-confirm-main-discounts-all" @click="handleShowDiscountsDialog">
           {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
@@ -51,14 +56,14 @@
         <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
       </div>
     </div>
-    <el-dialog class="order-confirm-discounts-dialog" title="请选择优惠券" :visible.sync="isShowDiscounts">
+    <el-dialog class="order-confirm-discounts-dialog" title="请选择优惠券" :visible.sync="isShowDiscountDialog">
       <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">不使用优惠券</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
       <div class="order-confirm-discounts-dialog-list">
         <coupon-ticket-checkbox class="order-confirm-discounts-dialog-list-item" @handleClick="handleSelectDiscount" v-for="(item, index) in usableDiscounts" :data="item" :key="index"></coupon-ticket-checkbox>
       </div>
       <div class="order-confirm-discounts-dialog-footer" slot="footer">
-        <el-button class="order-confirm-discounts-dialog-footer-button" size="small">取消</el-button>
-        <el-button class="order-confirm-discounts-dialog-footer-button" size="small" type="primary">确定</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">取消</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -91,8 +96,13 @@ export default {
       digitalAccount: '',
       digitalAccountList: [],
       goodsId: '',
-      isShowDiscounts: false,
-      selectedDiscountId: ''
+      isShowDiscountDialog: false,
+      discountId: ''
+    }
+  },
+  watch: {
+    totalCost() {
+      this.autoCheckDiscount()
     }
   },
   async mounted() {
@@ -111,6 +121,8 @@ export default {
       this.getDiscounts(),
       this.createTradeOrder({ type, count, id, payment })
     ])
+    this.autoCheckDiscount()
+
     if (this.isNeedDigitalAccount) {
       // exchange way
       this.digitalAccountList = [
@@ -134,19 +146,33 @@ export default {
       createTradeOrder: 'account/createTradeOrder',
       getDiscounts: 'account/getDiscounts',
       submitTradeOrder: 'account/submitTradeOrder',
-      getBalance: 'account/getBalance'
+      getBalance: 'account/getBalance',
+      setDiscount: 'account/setDiscount'
     }),
     handleSelectDiscount(id) {
-      console.log(id)
-      this.selectedDiscountId = id
-      console.log(this.usableDiscounts)
+      this.discountId = id
     },
     handleDontChecked() {
-      this.selectedDiscountId = ''
+      this.discountId = ''
     },
-    handleShowDiscounts() {
-      this.isShowDiscounts = true
-      console.log('handleShowDiscounts------->')
+    handleShowDiscountsDialog() {
+      this.isShowDiscountDialog = true
+      this.discountId = this.tradeOrderDiscountId
+    },
+    handleCancelSelected() {
+      this.isShowDiscountDialog = false
+    },
+    handleConfirmSelected() {
+      this.setDiscount(this.discountId)
+      this.isShowDiscountDialog = false
+    },
+    autoCheckDiscount() {
+      const discount = _.maxBy(
+        this.usableDiscounts,
+        item => item[`reward${_.upperFirst(this.payment)}`]
+      )
+      const id = _.get(discount, 'id', '')
+      this.setDiscount(id)
     },
     handleSubmitTradeOrder() {
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
@@ -164,7 +190,6 @@ export default {
         const payload = {
           count: this.count,
           finalCost: this.finalCost,
-          discountId: this.discountId,
           user_nid: this.digitalAccount,
           totalCost: this.totalCost,
           finalCost: this.finalCost
@@ -185,18 +210,24 @@ export default {
       discounts: 'account/discounts'
     }),
     usableDiscounts() {
-      return this.discounts
-        .filter(i => i.state === 0 && i.endTime > +new Date())
-        .map(i => ({
-          ...i,
-          isChecked: i.id === this.selectedDiscountId
-        }))
+      const filterDiscount = item => {
+        return (
+          item.state === 0 &&
+          item.endTime > +new Date() &&
+          item[this.payment] > 0 &&
+          item[this.payment] <= this.totalCost
+        )
+      }
+      return this.discounts.filter(filterDiscount).map(i => ({
+        ...i,
+        isChecked: i.id === this.discountId
+      }))
     },
     isDisableInput() {
       return this.isPackageType || ''
     },
     isDontCheckedDiscount() {
-      return !this.selectedDiscountId
+      return !this.discountId
     },
     username() {
       return _.get(this.userProfile, 'username', '')
@@ -254,9 +285,32 @@ export default {
         ? `${this.costUnit}${this.totalCost}`
         : `${this.totalCost}${this.costUnit}`
     },
+    tradeOrderDiscountId() {
+      return this.tradeOrder.discountId
+    },
+    tradeOrderDiscount() {
+      return _.find(
+        this.discounts,
+        ({ id }) => id === this.tradeOrderDiscountId
+      )
+    },
+    payment() {
+      return _.get(this.tradeOrder, 'payment', '')
+    },
+    rewardNumber() {
+      return _.get(
+        this.tradeOrderDiscount,
+        `reward${_.upperFirst(this.payment)}`,
+        0
+      )
+    },
+    rewardNumberByUnit() {
+      return this.isRmbPayment
+        ? `${this.costUnit}${this.rewardNumber}`
+        : `${this.rewardNumber} ${this.costUnit}`
+    },
     finalCost() {
-      // FIXME:
-      return this.totalCost - 0
+      return this.totalCost - this.rewardNumber
     }
   }
 }
@@ -359,6 +413,9 @@ export default {
       &-checked {
         color: #999;
         flex: 1;
+        .is-checked-discount {
+          color: #ff9307;
+        }
       }
       &-all {
         min-width: 100px;

@@ -3,7 +3,7 @@
     <div class="discount-coupon-header">
       {{$t('account.coupons')}}
     </div>
-    <div class="discount-coupon-tab" v-if="hasDiscounts">
+    <div class="discount-coupon-tab">
       <el-tabs v-model="activeName">
         <el-tab-pane :label="$t('account.available')" name="useable">
           <coupon-list :data="discountsUseable"></coupon-list>
@@ -51,7 +51,7 @@ export default {
       return this.discounts.length > 0
     },
     _discounts() {
-      return this.discounts.filter(i => i.title)
+      return this.discounts
     },
     discountsUseable() {
       return this._discounts.filter(item => item.state === 0 && item.endTime > this.timestamp)
