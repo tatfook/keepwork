@@ -7,7 +7,8 @@ let emptyData = {
     target: '_blank',
     autoplay: false,
     playloop: false,
-    poster: ''
+    poster: '',
+    isVideoTabShow: false
   },
   desc: {
     emptyInput: 'adi.qq.desc',
