@@ -85,7 +85,7 @@ export default {
     line-height: 61px;
     padding-left: 28px;
     font-size: 16px;
-    padding-left: -28px;
+    padding-left: 28px;
     border-bottom: 1px solid #e8e8e8;
   }
 
