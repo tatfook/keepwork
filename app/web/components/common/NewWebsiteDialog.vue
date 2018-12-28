@@ -5,7 +5,7 @@
         <el-col :span="3" class="full-height">
           <el-menu class="full-height" :default-active="''+selectedCategoryIndex" @select='setSelectedCategoryIndex'>
             <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index' v-if="(category.classify !== 'course')">
-              {{ category.name }}
+              {{ $t(`templates.menu${category.name}`) }}
             </el-menu-item>
           </el-menu>
         </el-col>
@@ -14,7 +14,7 @@
             <el-card :body-style="{padding: '0px'}" shadow="never">
               <div class="template-img" @click='setSelectedTemplateIndex(index)'>
                 <img :src="template.logoUrl">
-                <span class="template-info">{{ template.name }}</span>
+                <span class="template-info">{{ $t(`templates.${template.folder}Template`) }}</span>
               </div>
             </el-card>
           </el-col>

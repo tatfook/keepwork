@@ -1554,6 +1554,17 @@
     "unTop": "Un-Top",
     "changePassword": "Change Password"
   },
+  "templates": {
+    "menuBasic": "Basic",
+    "menuHeader": "Header",
+    "basicTemplate": "Basic",
+    "basic_fullscreenTemplate": "Basic Fullscreen",
+    "headerTemplate": "Header",
+    "header_sidebarTemplate": "Header Sidebar",
+    "pageMenuBasic": "Basic",
+    "pageTemplateEmpty": "Empty",
+    "pageTemplateMenu": "Menu"
+  },
   "account": {
     "myAccount": "My Account",
     "userRmb": "RMB",

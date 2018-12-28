@@ -1558,6 +1558,17 @@
     "unTop": "取消置顶",
     "changePassword": "密码修改"
   },
+  "templates": {
+    "menuBasic": "经典布局",
+    "menuHeader": "页头布局",
+    "basicTemplate": "经典布局",
+    "basic_fullscreenTemplate": "全屏布局",
+    "headerTemplate": "页头布局",
+    "header_sidebarTemplate": "页头与侧边栏",
+    "pageMenuBasic": "经典布局",
+    "pageTemplateEmpty": "空白布局",
+    "pageTemplateMenu": "带菜单布局"
+  },
   "account": {
     "myAccount": "我的账户",
     "userRmb": "余额(元)",
