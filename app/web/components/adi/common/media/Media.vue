@@ -1,17 +1,30 @@
 <template>
   <div class='comp-media'>
-    <a v-if='isImage' :target='target' :href='link'>
-      <div class="img" :class="getImgClass">
+    <a v-if='isImage'
+       :target='target'
+       :href='link'>
+      <div class="img"
+           :class="getImgClass">
         <img :src="src">
       </div>
     </a>
-    <div class="video" v-if='isVideo' @click="openPlayDialog">
+    <div class="video"
+         v-if='isVideo'
+         @click="openPlayDialog">
       <div class="iconfont icon-video5" />
-      <video v-if="updateDom && poster" :class="getVideoClass" :src='src' :poster="poster"></video>
-      <video v-if="updateDom && !poster" :class="getVideoClass" autoplay loop muted :src='src'></video>
+      <video v-if="updateDom"
+             :class="getVideoClass"
+             :autoplay="autoplay"
+             :loop="playloop"
+             muted
+             :src="src"
+             :poster="poster" />
     </div>
     <el-dialog :visible.sync="isOpenVideo">
-      <video-player v-if="isOpenVideo" :src='src' :autoplay='autoplay' :playloop='playloop' />
+      <video-player v-if="isOpenVideo"
+                    :src='src'
+                    :autoplay='autoplay'
+                    :playloop='playloop' />
     </el-dialog>
   </div>
 </template>
@@ -29,7 +42,7 @@ jss.setup(preset())
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
-  components: {videoPlayer},
+  components: { videoPlayer },
   data() {
     return {
       updateDom: true,
@@ -38,6 +51,12 @@ export default {
   },
   watch: {
     poster() {
+      this.refresh()
+    },
+    playloop() {
+      this.refresh()
+    },
+    autoplay() {
       this.refresh()
     }
   },
@@ -57,19 +76,21 @@ export default {
         : this.options.target
     },
     link() {
-      return this.properties.link
-        ? this.properties.link
-        : this.options.link
+      return this.properties.link ? this.properties.link : this.options.link
     },
     autoplay() {
-      return this.properties.autoplay
-        ? this.properties.autoplay
-        : this.options.autoplay
+      if (typeof this.properties.autoplay === 'boolean') {
+        return this.properties.autoplay
+      } else {
+        return this.options.autoplay
+      }
     },
     playloop() {
-      return this.properties.playloop
-        ? this.properties.playloop
-        : this.options.playloop
+      if (typeof this.properties.playloop === 'boolean') {
+        return this.properties.playloop
+      } else {
+        return this.options.playloop
+      }
     },
     poster() {
       return this.properties.poster
@@ -180,7 +201,9 @@ export default {
   methods: {
     refresh() {
       this.updateDom = false
-      setTimeout(() => {this.updateDom = true}, 0)
+      setTimeout(() => {
+        this.updateDom = true
+      }, 0)
     },
     parsePx(value) {
       let returnValue = 'auto'
@@ -281,12 +304,12 @@ export default {
 
     .icon-video5 {
       font-size: 65px;
-      color: #409EFF;
+      color: #409eff;
       opacity: 0.7;
       position: absolute;
       z-index: 1;
     }
-  
+
     video {
       width: 100%;
       height: 100%;
