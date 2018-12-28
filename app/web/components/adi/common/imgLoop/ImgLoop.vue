@@ -27,7 +27,7 @@
       <video-player v-if="isOpenVideo"
                     :src='curVideo'
                     :autoplay='curAutoPlay'
-                    :playloop='curAutoPlay' />
+                    :playloop='curPlayLoop' />
     </el-dialog>
   </div>
 </template>
