@@ -62,7 +62,7 @@
     
     </div>
 
-    <SkyDriveManagerDialog :mediaLibrary='true' :isVideoTabShow='!isVideoTabHide' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+    <SkyDriveManagerDialog :mediaLibrary='true' :isVideoTabShow='isVideoTabShow' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
   </div>
 </template>
 <script>
@@ -83,7 +83,7 @@ export default {
       openType: "image",
       isSkyDriveManagerDialogShow: false,
       isPlayIconShow: true,
-      isVideoTabHide: false,
+      isVideoTabShow: true,
       linkTargets: [
         {
           label: self.$t('editor.selfWindowOpen'),
@@ -185,17 +185,22 @@ export default {
       this.autoplayValue = true
     },
     insertImg() {
-      this.isVideoTabHide = false
+      if (typeof this.optionsData.isVideoTabShow === 'boolean') {
+        this.isVideoTabShow = this.optionsData.isVideoTabShow
+      } else {
+        this.isVideoTabShow = true
+      }
+
       this.openType = "image"
       this.openSkyDriveManagerDialog()
     },
     insertVideo() {
-      this.isVideoTabHide = false
+      this.isVideoTabShow = true
       this.openType = "video"
       this.openSkyDriveManagerDialog()
     },
     changeCover() {
-      this.isVideoTabHide = true
+      this.isVideoTabShow = false
       this.openType = "cover"
       this.openSkyDriveManagerDialog()
     },
