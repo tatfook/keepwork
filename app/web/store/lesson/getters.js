@@ -9,7 +9,8 @@ const getters = {
       return false
     }
     let { startTime, endTime } = tutorService
-    return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    let nowDate = new Date()
+    return nowDate.valueOf() >= startTime && nowDate.valueOf() <= endTime
   },
   teacherInfo: (state, { userinfo }) => _.get(userinfo, 'teacher'),
   isTeacher: (state, { teacherInfo, userIdenity }) => {
@@ -17,7 +18,8 @@ const getters = {
       return userIdenity === 2
     }
     let { startTime, endTime } = teacherInfo
-    return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    let nowDate = new Date()
+    return nowDate.valueOf() >= startTime && nowDate.valueOf() <= endTime
   },
   allianceInfo: (state, { userinfo }) => _.get(userinfo, 'allianceMember'),
   isAlliance: (state, { allianceInfo, isTeacher }) => {
@@ -25,7 +27,8 @@ const getters = {
       return false
     }
     let { startTime, endTime } = allianceInfo
-    return moment(new Date()).isBetween(startTime, endTime, 'minute')
+    let nowDate = new Date()
+    return nowDate.valueOf() >= startTime && nowDate.valueOf() <= endTime
   },
   isLearner: (state, { isTeacher, isAlliance }) => {
     return !isTeacher && !isAlliance
