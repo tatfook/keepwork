@@ -99,11 +99,10 @@ export default {
     ])
     if (this.isNeedDigitalAccount) {
       // exchange way
-      // this.digitalAccountList = [{label: '7000000001360', value: 7000000001360}]
       await keepwork.account.getDigitalAccounts()
         .then(res => {
-          let { data = [] } = res
-          this.DigitalAccountList = res.data.map(item => ({ label: item, value: item}))
+          let data = _.get(res, 'data.data', [])
+          this.digitalAccountList = data.map(item => ({ label: item, value: item}))
         })
         .catch(e => console.error(e))
     }
