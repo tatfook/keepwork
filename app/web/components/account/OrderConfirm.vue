@@ -5,7 +5,7 @@
         <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
         <div class="order-confirm-header-center-main">
           <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
-          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} 
+          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}}
             <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
               <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -29,7 +29,7 @@
           <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-        {{$t('account.totalPrice')}} {{ totalCostByUnit }}
+          {{$t('account.totalPrice')}} {{ totalCostByUnit }}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
@@ -37,10 +37,10 @@
           {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-           {{$t('account.noCoupons')}}
+          {{$t('account.noCoupons')}}
         </div>
-        <div class="order-confirm-main-discounts-all">
-           {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
+        <div class="order-confirm-main-discounts-all" @click="handleShowDiscounts">
+          {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
       <div class="order-confirm-main-submit">
@@ -51,24 +51,36 @@
         <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
       </div>
     </div>
+    <el-dialog class="order-confirm-discounts-dialog" title="请选择优惠券" :visible.sync="isShowDiscounts">
+      <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">不使用优惠券</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
+      <div class="order-confirm-discounts-dialog-list">
+        <coupon-ticket-checkbox class="order-confirm-discounts-dialog-list-item" @handleClick="handleSelectDiscount" v-for="(item, index) in usableDiscounts" :data="item" :key="index"></coupon-ticket-checkbox>
+      </div>
+      <div class="order-confirm-discounts-dialog-footer" slot="footer">
+        <el-button class="order-confirm-discounts-dialog-footer-button" size="small">取消</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" size="small" type="primary">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import PackageItem from './common/OrderPackageItem'
 import GoodsItem from './common/OrderGoodsItem'
+import CouponTicketCheckbox from './common/CouponTicketCheckbox'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
-const HAQI_PLATFORM = [2,3]
+const HAQI_PLATFORM = [2, 3]
 export default {
   name: 'OrderConfirm',
   mixins: [OrderMixin],
   components: {
     PackageItem,
-    GoodsItem
+    GoodsItem,
+    CouponTicketCheckbox
   },
   data() {
     return {
@@ -79,6 +91,8 @@ export default {
       digitalAccount: '',
       digitalAccountList: [],
       goodsId: '',
+      isShowDiscounts: false,
+      selectedDiscountId: ''
     }
   },
   async mounted() {
@@ -95,15 +109,21 @@ export default {
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, id, payment})
+      this.createTradeOrder({ type, count, id, payment })
     ])
     if (this.isNeedDigitalAccount) {
       // exchange way
-      // this.digitalAccountList = [{label: '7000000001360', value: 7000000001360}]
-      await keepwork.account.getDigitalAccounts()
+      this.digitalAccountList = [
+        { label: '7000000001360', value: 7000000001360 }
+      ]
+      await keepwork.account
+        .getDigitalAccounts()
         .then(res => {
           let { data = [] } = res
-          this.DigitalAccountList = res.data.map(item => ({ label: item, value: item}))
+          this.DigitalAccountList = res.data.map(item => ({
+            label: item,
+            value: item
+          }))
         })
         .catch(e => console.error(e))
     }
@@ -116,9 +136,23 @@ export default {
       submitTradeOrder: 'account/submitTradeOrder',
       getBalance: 'account/getBalance'
     }),
+    handleSelectDiscount(id) {
+      console.log(id)
+      this.selectedDiscountId = id
+      console.log(this.usableDiscounts)
+    },
+    handleDontChecked() {
+      this.selectedDiscountId = ''
+    },
+    handleShowDiscounts() {
+      this.isShowDiscounts = true
+      console.log('handleShowDiscounts------->')
+    },
     handleSubmitTradeOrder() {
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
-        return this.$message.error(this.$t('account.pleaseSelectDigitalAccount'))
+        return this.$message.error(
+          this.$t('account.pleaseSelectDigitalAccount')
+        )
       }
       if (this.isCoinPayment && this.finalCost > this.userCoin) {
         return this.$message.error(this.$t('account.coinInsufficient'))
@@ -127,18 +161,11 @@ export default {
         return this.$message.error(this.$t('account.beanInsufficient'))
       }
       try {
-        let payload = {
+        const payload = {
           count: this.count,
-          finalCost: this.finalCost
-        }
-        if (this.discountId) {
-          payload['discountId '] = this.discountId
-        }
-        if (this.isNeedDigitalAccount) {
-          payload['user_nid'] = this.digitalAccount
-        }
-        payload = {
-          ...payload,
+          finalCost: this.finalCost,
+          discountId: this.discountId,
+          user_nid: this.digitalAccount,
           totalCost: this.totalCost,
           finalCost: this.finalCost
         }
@@ -154,10 +181,22 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       tradeOrder: 'account/tradeOrder',
-      balance: 'account/balance'
+      balance: 'account/balance',
+      discounts: 'account/discounts'
     }),
+    usableDiscounts() {
+      return this.discounts
+        .filter(i => i.state === 0 && i.endTime > +new Date())
+        .map(i => ({
+          ...i,
+          isChecked: i.id === this.selectedDiscountId
+        }))
+    },
     isDisableInput() {
       return this.isPackageType || ''
+    },
+    isDontCheckedDiscount() {
+      return !this.selectedDiscountId
     },
     username() {
       return _.get(this.userProfile, 'username', '')
@@ -349,6 +388,84 @@ export default {
         background-color: #f20d0d;
         border-color: #f20d0d;
         padding: 12px 44px;
+      }
+    }
+  }
+
+  &-discounts-dialog {
+    .el-dialog {
+      width: 599px;
+    }
+    .el-dialog__header {
+      height: 71px;
+      line-height: 71px;
+      border-bottom: 1px solid #dcdcdc;
+      text-align: center;
+      font-size: 20px;
+      color: #333;
+      padding: 0;
+    }
+    .el-dialog__body {
+      padding: 0;
+    }
+    .el-dialog__footer {
+      padding: 0;
+    }
+    &-dont {
+      width: 500px;
+      margin: 0 auto;
+      height: 57px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16px;
+      color: #666;
+      font-weight: bold;
+      &-checkbox {
+        cursor: pointer;
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        margin-right: 23px;
+        border: solid 2px #bfbfbf;
+        &.is-dont-checked {
+          background: #fff;
+          font-size: 22px;
+          line-height: 18px;
+          text-align: center;
+          &::after {
+            content: ' ';
+            display: inline-block;
+            height: 12px;
+            width: 6px;
+            border-right: 3px solid #bfbfbf;
+            border-bottom: 3px solid #bfbfbf;
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+    &-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // &-item {
+      //   width: 500px !important;
+      //   margin-bottom: 17px;
+      // }
+    }
+
+    &-footer {
+      width: 500px;
+      height: 100px;
+      box-sizing: border-box;
+      padding-top: 30px;
+      margin: 0 auto;
+      &-button {
+        &.el-button--small {
+          padding: 10px 24px;
+        }
       }
     }
   }

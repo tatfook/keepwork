@@ -37,8 +37,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'useable',
-      tickets: [1, 2, 3, 4, 5, 6]
+      activeName: 'useable'
     }
   },
   async mounted() {
@@ -55,13 +54,18 @@ export default {
       return this.discounts.filter(i => i.title)
     },
     discountsUseable() {
-      return this._discounts.filter(item => item.state === 0)
+      return this._discounts.filter(item => item.state === 0 && item.endTime > this.timestamp)
     },
     discountsUsed() {
       return this._discounts.filter(item => item.state === 1)
     },
     discountsExpired() {
-      return this._discounts.filter(item => item)
+      return this._discounts.filter(item => {
+        return item.state === 0 && item.endTime < this.timestamp
+      })
+    },
+    timestamp() {
+      return +new Date()
     }
   },
   methods: {

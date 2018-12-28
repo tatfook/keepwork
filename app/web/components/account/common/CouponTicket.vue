@@ -1,10 +1,10 @@
 <template>
-  <div :class="['coupon-ticket', { 'disabled': isDisabled }]">
+  <div :class="['coupon-ticket', { 'coupon-disabled': isDisabled }]">
     <div class="coupon-ticket-left">
       <div class="coupon-ticket-left-sum">
-        <span class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-rmb">¥</span>5</span>
-        <!-- <div class="coupon-ticket-left-sum-coin">5 知识币</div> -->
-        <!-- <div class="coupon-ticket-left-sum-bean">5 知识豆</div> -->
+        <span v-if="isRmbPayment" class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-unit">¥</span>{{rewardRmb}}</span>
+        <span v-else-if="isCoinPayment" class="coupon-ticket-left-sum-coin"><span class="coupon-ticket-left-sum-coin-unit">Ⓒ</span>{{rewardCoin}}</span>
+        <span v-else-if="isBeanPayment" class="coupon-ticket-left-sum-bean"><span class="coupon-ticket-left-sum-bean-unit">ⓑ</span>{{rewardBean}}</span>
       </div>
       <div class="coupon-ticket-left-condition">
         {{title}}
@@ -16,7 +16,7 @@
     <div class="coupon-ticket-right">
       <div class="coupon-ticket-right-dot left-top"></div>
       <div class="coupon-ticket-right-dot left-bottom"></div>
-      <div :class="['coupon-ticket-right-type', { 'disabled': isDisabled }]">
+      <div :class="['coupon-ticket-right-type', { 'coupon-disabled': isDisabled }]">
         {{description}}
       </div>
       <div class="coupon-ticket-right-deadline">
@@ -33,14 +33,15 @@ import moment from 'moment'
 export default {
   name: 'CouponTicket',
   props: {
-    data: Object
+    data: Object,
+    width: '430px'
   },
   mounted() {
     console.warn(this.data)
   },
   filters: {
     formatTime(time) {
-      return moment(time).format("YYYY/M/D")
+      return moment(time).format('YYYY/M/D')
     }
   },
   computed: {
@@ -50,28 +51,64 @@ export default {
     description() {
       return this.data.description || ''
     },
+    state() {
+      return this.data.state
+    },
     startTime() {
       return this.data.startTime
+    },
+    isRmbPayment() {
+      return Boolean(this.rmb)
+    },
+    isCoinPayment() {
+      return Boolean(this.coin)
+    },
+    isBeanPayment() {
+      return Boolean(this.bean)
+    },
+    rmb() {
+      return this.data.rmb
+    },
+    coin() {
+      return this.data.coin
+    },
+    bean() {
+      return this.data.bean
+    },
+    rewardRmb() {
+      return this.data.rewardRmb
+    },
+    rewardCoin() {
+      return this.data.rewardCoin
+    },
+    rewardBean() {
+      return this.data.rewardBean
     },
     endTime() {
       return this.data.endTime
     },
     isDisabled() {
-      return !this.isUseable || this.isUsed || this.isExpire
+      return this.isUsed || this.isExpire
     },
     isExpire() {
-      return false
+      return this.isUseable && this.endTime < this.timestamp
     },
     isCloseToExpire() {
-      return this.isUseable && false
+      return (
+        this.isUseable &&
+        !this.isExpire &&
+        moment.duration(this.endTime - this.timestamp, 'ms').asDays() <= 7
+      )
     },
     isUseable() {
-      return true
+      return this.state === 0
     },
     isUsed() {
-      return this.data.state === 1
+      return this.state === 1
     },
-
+    timestamp() {
+      return +new Date()
+    }
   }
 }
 </script>
@@ -83,7 +120,7 @@ export default {
   width: 430px;
   min-height: 110px;
   display: flex;
-  &.disabled {
+  &.coupon-disabled {
     background: #cbcbcb;
   }
   &-left {
@@ -95,11 +132,13 @@ export default {
     position: relative;
     overflow: hidden;
     &-sum {
-      &-money {
+      &-money,
+      &-coin,
+      &-bean {
         font-size: 38px;
-        &-rmb {
+        &-unit {
           font-size: 22px;
-          margin-right: 6px;
+          margin: 0 6px;
         }
         &-coin {
           font-size: 14px;
@@ -110,7 +149,7 @@ export default {
       font-size: 14px;
     }
     &::after {
-      content: " ";
+      content: ' ';
       width: 0;
       height: 100%;
       position: absolute;
@@ -158,14 +197,15 @@ export default {
     align-items: flex-start;
     box-sizing: border-box;
     padding-left: 20px;
-    width: 265px;
+    // width: 265px;
+    flex: 1;
     position: relative;
     overflow: hidden;
     &-type {
       color: #137282;
       font-size: 16px;
       font-weight: bold;
-      &.disabled {
+      &.coupon-disabled {
         color: #8a898b;
       }
     }
@@ -192,7 +232,7 @@ export default {
     }
     &::before,
     &::after {
-      content: " ";
+      content: ' ';
       width: 0;
       height: 100%;
       position: absolute;
@@ -216,10 +256,10 @@ export default {
       right: 4px;
       bottom: 10px;
       &.expire-icon {
-        background: url("../../../assets/account/expire.png");
+        background: url('../../../assets/account/expire.png');
       }
       &.used-icon {
-        background: url("../../../assets/account/used.png");
+        background: url('../../../assets/account/used.png');
       }
     }
   }
