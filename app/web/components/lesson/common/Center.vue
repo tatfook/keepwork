@@ -2,6 +2,7 @@
   <div class="lesson-packages-wrap">
     <div
       class="lesson-packages"
+      v-if="!loading"
       v-loading='loading'
     >
       <div class="packages-sum">{{$t('lesson.include')}}:
@@ -18,11 +19,13 @@
             <div
               class="img-wrap"
               @click="enterPackageDetailPage(coursePackage.id)"
-            ><img
+            >
+            <img
                 class="subject-cover"
-                :src="coursePackage.extra.coverUrl"
+                :src="coursePackage.extra && coursePackage.extra.coverUrl"
                 alt=""
-              ></div>
+              >
+              </div>
             <h4
               :title="coursePackage.packageName"
               :class="['subject-title']"
@@ -33,10 +36,10 @@
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
               <div
-                :class="['purchase-tip',{'hidden': coursePackage.rmb == 0}]"
+                :class="['purchase-tip',{'hidden': isTeacher || coursePackage.rmb == 0}]"
                 v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"
               ></div>
-              <div :class="['purchase-money',{'hidden': coursePackage.rmb == 0}]">
+              <div :class="['purchase-money',{'hidden': isTeacher || coursePackage.rmb == 0}]">
                 <span class="money">
                   {{$t('lesson.rmbPrice')}}:
                   <span class="red">￥{{coursePackage.rmb}}</span>
@@ -45,7 +48,7 @@
               <div class="purchase-money">
                 <span
                   class="money free"
-                  v-if="coursePackage.rmb == 0"
+                  v-if="isTeacher || coursePackage.rmb == 0"
                 >{{$t('lesson.free')}}</span>
                 <span
                   class="money"
@@ -97,7 +100,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      packages: "lesson/center/packagesList"
+      packages: "lesson/center/packagesList",
+      isTeacher: "lesson/isTeacher"
     }),
     packagesList() {
       return _.get(this.packages, "rows", []);
@@ -112,7 +116,7 @@ export default {
   },
   async mounted() {
     let payload = { perPage: this.perPage, page: this.page };
-    await this.getPackagesList(payload);
+    await this.getPackagesList(payload)
     this.loading = false;
   },
   methods: {

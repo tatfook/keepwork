@@ -1,6 +1,6 @@
 <template>
   <div class="edit-package" v-loading='isLoading'>
-    <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isEditable='isEditable' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
+    <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isEditable='isEditable' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isLearner='isLearner' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
     <div class="edit-package-container">
       <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
       <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
@@ -41,8 +41,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonPackageDetail: 'lesson/packageDetail'
+      lessonPackageDetail: 'lesson/packageDetail',
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
+    isTeacher() {
+      return this.userIsTeacher
+    },
+    isAlliance() {
+      return this.userIsAlliance
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
     isEditable() {
       return this.editingPackageDetail.state !== 1
     },

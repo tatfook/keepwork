@@ -1,13 +1,11 @@
 <template>
   <div class="teacher-column">
-    <activated-teacher-role class="teacher-column-activated" v-if="userinfo.identify === 2"></activated-teacher-role>
-    <not-activated-teacher-role v-else></not-activated-teacher-role>
+    <activated-teacher-role class="teacher-column-activated"></activated-teacher-role>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import NotActivatedTeacherRole from './NotActivatedTeacherRole'
 import ActivatedTeacherRole from './ActivatedTeacherRole'
 
 export default {
@@ -29,17 +27,7 @@ export default {
     })
   },
   components: {
-    NotActivatedTeacherRole,
     ActivatedTeacherRole
   }
 }
 </script>
-
-<style lang="scss">
-.teacher-column {
-  // height: 100%;
-  &-activated {
-    // height: 100%;
-  }
-}
-</style>

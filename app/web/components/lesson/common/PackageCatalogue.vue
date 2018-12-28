@@ -53,7 +53,8 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       enterClassInfo: 'lesson/student/enterClassInfo',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
+      isBeInClassroom: 'lesson/student/isBeInClassroom',
+      isLoginUserBeTeacher: 'lesson/isTeacher'
     }),
     loginUserId() {
       return _.get(this.userProfile, 'id')
@@ -64,8 +65,21 @@ export default {
     isOwnPackage() {
       return this.loginUserId === this.packageOwnerId
     },
+    isPackageFree() {
+      return (
+        this.isLoginUserBeTeacher ||
+        this.packageDetail.rmb === 0 ||
+        this.packageDetail.coin === 0
+      )
+    },
     isUserSubscribePackage() {
-      return this.isOwnPackage || this.packageDetail.isSubscribe
+      if (this.isPackageFree || this.isLoginUserBeTeacher) {
+        return this.isOwnPackage || this.packageDetail.isSubscribe
+      }
+      return (
+        this.isOwnPackage ||
+        (this.packageDetail.isSubscribe && this.packageDetail.isBuy)
+      )
     },
     isInClassroom() {
       const state = this.enterClassInfo.state
@@ -154,7 +168,7 @@ export default {
       if (this.isUserSubscribePackage) {
         let targetLessonPath = `/${this.actorType}/package/${
           this.packageDetail.id
-          }/lesson/${lesson.id}`
+        }/lesson/${lesson.id}`
         if (this.$route.name === 'StudentPackage') {
           return this.toLearnConfirm(
             this.packageDetail.id,
@@ -178,7 +192,7 @@ export default {
     toViewSummary(lesson) {
       let targetLessonPath = `/${this.actorType}/learnSummary/package/${
         this.packageDetail.id
-        }/lesson/${lesson.id}`
+      }/lesson/${lesson.id}`
       this.$router.push({
         path: targetLessonPath
       })
@@ -195,7 +209,7 @@ export default {
       }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
-        }/lesson/${this.continueLearnedLesson.id}`
+      }/lesson/${this.continueLearnedLesson.id}`
       this.toLearnConfirm(
         this.packageDetail.id,
         this.continueLearnedLesson.id,
@@ -214,7 +228,7 @@ export default {
       }
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
-        }/lesson/${lesson.id}`
+      }/lesson/${lesson.id}`
       return this.toLearnConfirm(
         this.packageDetail.id,
         lesson.id,
@@ -388,7 +402,7 @@ export default {
         line-height: 22px;
       }
       &-item::before {
-        content: "";
+        content: '';
         width: 4px;
         height: 4px;
         border-radius: 50%;

@@ -84,6 +84,7 @@
       </el-table>
     </div>
     <operate-result-dialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></operate-result-dialog>
+    <submitable-info :isInfoDialogVisible='isApplyInfoDialogVisible' @close='closeInfoDialog'></submitable-info>
   </div>
 </template>
 <script>
@@ -91,6 +92,7 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
+import SubmitableInfo from './SubmitableInfo'
 import colI18n from '@/lib/utils/i18n/column'
 
 export default {
@@ -136,6 +138,7 @@ export default {
         iconType: '', // submit or delete or release or revoca
         continueFnNameAfterEnsure: ''
       },
+      isApplyInfoDialogVisible: false,
       editingPackageId: null
     }
   },
@@ -143,8 +146,19 @@ export default {
     ...mapGetters({
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
-      lessonSubjects: 'lesson/subjects'
+      lessonSubjects: 'lesson/subjects',
+      userIsTeacher: 'lesson/isTeacher',
+      userIsAlliance: 'lesson/isAlliance'
     }),
+    isTeacher() {
+      return this.userIsTeacher
+    },
+    isAlliance() {
+      return this.userIsAlliance
+    },
+    isLearner() {
+      return !this.isTeacher && !this.isAlliance
+    },
     filteredPackageList() {
       let subjectFilteredPackageList = this.getSubjectFilteredPackageList(
         this.lessonUserPackages
@@ -292,6 +306,10 @@ export default {
       return true
     },
     async toSubmit(packageDetail) {
+      if (this.isLearner) {
+        this.isApplyInfoDialogVisible = true
+        return
+      }
       this.isTableLoading = true
       this.editingPackageId = packageDetail.id
       let isComplete = await this.isPackageInfoComplete()
@@ -427,10 +445,14 @@ export default {
     },
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
+    },
+    closeInfoDialog() {
+      this.isApplyInfoDialogVisible = false
     }
   },
   components: {
-    OperateResultDialog
+    OperateResultDialog,
+    SubmitableInfo
   }
 }
 </script>

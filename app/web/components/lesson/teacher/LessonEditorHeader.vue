@@ -54,6 +54,7 @@ export default {
   padding: 0 0 26px;
   display: flex;
   align-items: center;
+  background-color: #f8f8f8;
   &-breadcrumb {
     flex: 1;
     white-space: nowrap;

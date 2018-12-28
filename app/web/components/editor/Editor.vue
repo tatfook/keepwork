@@ -228,14 +228,15 @@
                 </el-tooltip>
               </el-button-group>
             </div>
-            <el-button-group class="fullScreenBtn">
-              <el-button
-                :title="$t('tips.ShowZenMode')"
-                :icon="fullscreenIcon"
-                circle
-                @click="openZenMode"
-              ></el-button>
-            </el-button-group>
+            <el-tooltip :content="$t('tips.ShowZenMode')">
+              <el-button-group class="fullScreenBtn">
+                <el-button
+                  :icon="fullscreenIcon"
+                  circle
+                  @click="openZenMode"
+                ></el-button>
+              </el-button-group>
+            </el-tooltip>
           </el-col>
         </el-scrollbar>
       </el-row>

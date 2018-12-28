@@ -7,6 +7,8 @@ category: API
 */
 import createEndpoint from './common/endpoint'
 import { event } from 'vue-analytics'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -18,6 +20,18 @@ const withoutParseEndpoint = createEndpoint(
   },
   false
 )
+
+// FIXME: bad
+const haqi = axios.create({
+  baseURL: 'https://keepwork.com/api',
+  timeout: 20000,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/json; charset=UTF-8',
+    Authorization: 'Bearer ' + Cookies.get('token')
+  },
+})
+
 
 const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
@@ -55,7 +69,20 @@ export const user = {
   },
   bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
   searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
-  searchByField: async args => post('users/search', args)
+  searchByField: async args => post('users/search', args),
+
+}
+
+export const account = {
+  getBalance: async () => get('/users/account'),
+  // getTrades: async () => get('/trades'),
+  getTrades: async args => post('/trades/search', args),
+  getDiscounts: async () => get('/discounts'),
+  createRechargeOrder: async args => post('/orders', args),
+  getRechargeOrderState: async args => get(`/orders/${args.id}`),
+  createTradeOrder: async args => post('/trades', args),
+  getGoods: async args => get('/goods'),
+  getDigitalAccounts: async args => haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
 }
 
 /*doc
@@ -353,7 +380,8 @@ export const keepwork = {
   comments,
   bigfile,
   issues,
-  groups
+  groups,
+  account
 }
 
 export default keepwork

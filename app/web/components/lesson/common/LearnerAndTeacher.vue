@@ -2,43 +2,43 @@
   <div class="learner-and-teacher">
     <h4 class="learner-and-teacher-title">{{$t('lesson.whatYouWillGet')}}</h4>
     <div class="learner-and-teacher-box">
-      <div class="acquire-item" v-for="n in 2" :key="n">
-        <div :class="['role',n === 2 ? 'role-teacher':'']">
-          <div class="role-text">{{n === 1 ? $t('lesson.learners') : $t('lesson.instructors')}}</div>
-          <span class="role-cost">{{n === 1 ? $t('lesson.free') : `￥5000${$t('lesson.perYearPerPerson')}`}}</span>
+      <div class="acquire-item" :class="{'learner-and-teacher-teacher': n=== 3}" v-for="n in 3" :key="n">
+        <div class="role">
+          <div class="role-text">{{getRoleTitle(n)}}</div>
+          <span class="role-cost">{{getRolePrice(n)}}</span>
         </div>
         <div class="access">
           <p class="caption">
             <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.selfLearning')}}</p>
           <div class="teaching-function">
             <p>
-              <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.learnAmazingLessons')}}<span class="learner-and-teacher-light">({{n==1 ? $t('lesson.partiallyFree') : $t('lesson.allFree')}})</span></p>
+              <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.learnAmazingLessons')}}<span class="learner-and-teacher-light">({{(n == 1 || n == 2) ? $t('lesson.partiallyFree') : $t('lesson.allFree')}})</span></p>
             <p>
               <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.realTimeFeedback')}}</p>
           </div>
-          <p :class="[{'not-student-privilege-text': n === 1},'caption']">
-            <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.lessonDevelopment')}}</p>
+          <p class="caption">
+            <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.lessonDevelopment')}}</p>
           <div class="teaching-function">
-            <p :class="{'not-student-privilege-text': n === 1}">
-              <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.createLesson')}}</p>
+            <p>
+              <span class="img-wrap"><img src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.createLesson')}}</p>
             <p :class="{'not-student-privilege-text': n === 1}">
               <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.submitLessons')}}</p>
             <p :class="{'not-student-privilege-text': n === 1}">
               <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t("lesson.getBenefit")}}</p>
           </div>
-          <p :class="[{'not-student-privilege-text': n === 1},'caption']">
-            <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.classroomTeaching')}}</p>
+          <p :class="[{'not-student-privilege-text': n <= 2},'caption']">
+            <span class="img-wrap"><img :class="{'not-student-privilege': n <= 2}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.classroomTeaching')}}</p>
           <div class="teaching-function">
-            <p :class="{'not-student-privilege-text': n === 1}">
-              <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.freeForClassroomTeaching')}}</p>
-            <p :class="{'not-student-privilege-text': n === 1}">
-              <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.freeForClassroomLearning')}}</p>
-            <p :class="{'not-student-privilege-text': n === 1}">
-              <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.trackStudentsPerformance')}}</p>
-            <p :class="{'not-student-privilege-text': n === 1}">
-              <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.beShownReport')}}</p>
-            <p :class="{'not-student-privilege-text': n === 1}">
-              <span class="img-wrap"><img :class="{'not-student-privilege': n === 1}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.trackTeachingProgress')}}</p>
+            <p :class="{'not-student-privilege-text': n <= 2}">
+              <span class="img-wrap"><img :class="{'not-student-privilege': n <= 2}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.freeForClassroomTeaching')}}</p>
+            <p :class="{'not-student-privilege-text': n <= 2}">
+              <span class="img-wrap"><img :class="{'not-student-privilege': n <= 2}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.freeForClassroomLearning')}}</p>
+            <p :class="{'not-student-privilege-text': n <= 2}">
+              <span class="img-wrap"><img :class="{'not-student-privilege': n <= 2}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.trackStudentsPerformance')}}</p>
+            <p :class="{'not-student-privilege-text': n <= 2}">
+              <span class="img-wrap"><img :class="{'not-student-privilege': n <= 2}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.beShownReport')}}</p>
+            <p :class="{'not-student-privilege-text': n <= 2}">
+              <span class="img-wrap"><img :class="{'not-student-privilege': n <= 2}" src="@/assets/lessonImg/legal_privilege.png" alt=""></span>{{$t('lesson.trackTeachingProgress')}}</p>
           </div>
         </div>
       </div>
@@ -48,13 +48,32 @@
 
 <script>
 export default {
-  name: 'LearnerAndTeacher'
+  name: 'LearnerAndTeacher',
+  methods: {
+    getRoleTitle(index) {
+      return index === 1
+        ? this.$t('lesson.learners')
+        : index === 2
+        ? this.$t('lesson.lessonDevelopers')
+        : this.$t('lesson.instructors')
+    },
+    getRolePrice(index) {
+      return index === 1
+        ? this.$t('lesson.free')
+        : index === 2
+        ? `￥100${this.$t('lesson.perYearPerPerson')}`
+        : `￥5000${this.$t('lesson.perYearPerPerson')}`
+    }
+  }
 }
 </script>
 <style lang="scss">
 .learner-and-teacher {
   padding-bottom: 40px;
   background: #fff;
+  &-teacher {
+    margin-top: 40px;
+  }
   &-light {
     color: #ff742e;
   }
@@ -92,7 +111,7 @@ export default {
       .access {
         padding: 44px 25px;
         background: #fff;
-        .caption{
+        .caption {
           margin-bottom: 2px;
         }
         p {
@@ -116,7 +135,7 @@ export default {
         }
         .teaching-function {
           margin-left: 20px;
-          p{
+          p {
             margin: 2px;
           }
         }

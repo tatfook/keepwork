@@ -9,17 +9,17 @@
         </div>
       </div>
       
-      <el-input class="media-type-link" :placeholder="$t('editor.pleaseInput')" v-model="linkValue" @change='updateLink'>
+      <el-input class="media-type-link" :placeholder="$t('editor.pleaseInput')" v-model="linkValue">
         <el-button v-if="linkValue" slot="prepend" icon="iconfont icon-link_"></el-button>
         <el-button v-if="!linkValue" slot="prepend">{{$t('common.link')}}</el-button>
-        <el-select v-model="linkValue" @change='updateLink' slot="append" placeholder="Select">
+        <el-select v-model="linkValue" slot="append" placeholder="Select">
           <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
             {{path}}
           </el-option>
         </el-select>
       </el-input>
 
-      <el-select class="media-type-target" v-model="targetValue" @change='updateTarget' size='mini' :placeholder="$t('editor.newWindowOpen')">
+      <el-select class="media-type-target" v-model="targetValue" size='mini' :placeholder="$t('editor.newWindowOpen')">
         <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'>
         </el-option>
       </el-select>
@@ -29,8 +29,8 @@
     <div v-else-if='isVideo'>
 
       <div class="media-type-img">
-        <video :src="mediaData" :autoplay="autoplayValue" :loop="playloopValue" muted="muted"></video>
-        <div class="media-type-img-play" v-if='!autoplayValue && isPlayIconShow'>
+        <video :src="mediaData" muted></video>
+        <div class="media-type-img-play" v-if='isPlayIconShow'>
           <el-button circle size="mini">
             <i class='media-type-img-play-icon el-icon-caret-right'></i>
           </el-button>
@@ -56,13 +56,13 @@
       </div>
 
       <div class="video-settings">
-        <el-checkbox v-model="autoplayValue" @change='updateAutoplay'>{{$t('field.autoplay')}}</el-checkbox>
-        <el-checkbox v-model="playloopValue" @change='updatePlayloop'>{{$t('field.playloop')}}</el-checkbox>
+        <el-checkbox v-model="autoplayValue">{{$t('field.autoplay')}}</el-checkbox>
+        <el-checkbox v-model="playloopValue">{{$t('field.playloop')}}</el-checkbox>
       </div>
     
     </div>
 
-    <SkyDriveManagerDialog :mediaLibrary='true' :isVideoTabShow='!isVideoTabHide' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
+    <SkyDriveManagerDialog :mediaLibrary='true' :isVideoTabShow='isVideoTabShow' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
   </div>
 </template>
 <script>
@@ -83,7 +83,7 @@ export default {
       openType: "image",
       isSkyDriveManagerDialogShow: false,
       isPlayIconShow: true,
-      isVideoTabHide: false,
+      isVideoTabShow: true,
       linkTargets: [
         {
           label: self.$t('editor.selfWindowOpen'),
@@ -118,7 +118,7 @@ export default {
         return this.cardValue.link
       },
       set(data) {
-        this.updateLink(data)
+        this.updateValue('link', data)
       }
     },
     targetValue: {
@@ -126,23 +126,31 @@ export default {
         return this.cardValue.target
       },
       set(data) {
-        this.updateTarget(data)
+        this.updateValue('target', data)
       }
     },
     autoplayValue: {
       get() {
-        return this.cardValue.autoplay
+        if (typeof this.cardValue.autoplay === 'boolean') {
+          return this.cardValue.autoplay
+        } else {
+          return this.optionsData.autoplay
+        }
       },
       set(data) {
-        this.updateAutoplay(data)
+        this.updateValue('autoplay', data)
       }
     },
     playloopValue: {
       get() {
-        return this.cardValue.playloop
+        if (typeof this.cardValue.playloop === 'boolean') {
+          return this.cardValue.playloop
+        } else {
+          return this.optionsData.playloop
+        }
       },
       set(data) {
-        this.updatePlayloop(data)
+        this.updateValue('playloop', data)
       }
     },
     posterValue: {
@@ -150,7 +158,7 @@ export default {
         return this.cardValue.poster
       },
       set(data) {
-        this.updatePoster(data)
+        this.updateValue('poster', data)
       }
     }
   },
@@ -159,21 +167,6 @@ export default {
       let tempChangedDataObj = {}
       tempChangedDataObj[newKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
-    },
-    updateLink(val) {
-      this.updateValue('link', val)
-    },
-    updateTarget(val) {
-      this.updateValue('target', val)
-    },
-    updateAutoplay(val) {
-      this.updateValue('autoplay',val)
-    },
-    updatePlayloop(val) {
-      this.updateValue('playloop',val)
-    },
-    updatePoster(val) {
-      this.updateValue('poster',val)
     },
     handlePlay() {
       let video = this.$el.querySelector('video')
@@ -188,20 +181,26 @@ export default {
         cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
-      this.updatePoster('')
+      this.posterValue = ''
+      this.autoplayValue = true
     },
     insertImg() {
-      this.isVideoTabHide = false
+      if (typeof this.optionsData.isVideoTabShow === 'boolean') {
+        this.isVideoTabShow = this.optionsData.isVideoTabShow
+      } else {
+        this.isVideoTabShow = true
+      }
+
       this.openType = "image"
       this.openSkyDriveManagerDialog()
     },
     insertVideo() {
-      this.isVideoTabHide = false
+      this.isVideoTabShow = true
       this.openType = "video"
       this.openSkyDriveManagerDialog()
     },
     changeCover() {
-      this.isVideoTabHide = true
+      this.isVideoTabShow = false
       this.openType = "cover"
       this.openSkyDriveManagerDialog()
     },
@@ -218,13 +217,16 @@ export default {
 
       switch(this.openType) {
         case "image":
-          this.updateValue("poster", "")
+          this.posterValue = ''
+          this.autoplayValue = true
           this.updateValue("src", url)
           break
         case "video":
+          this.autoplayValue = true
           this.updateValue("src", url)
           break
         case "cover":
+          this.autoplayValue = false
           this.updateValue("poster", url)
           break
       }

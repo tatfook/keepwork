@@ -50,7 +50,15 @@
               <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
+              <a
+                href="/a/account"
+              ><i class="iconfont icon-account1"></i>{{$t("common.myAccount")}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a
+                href="#"
+                @click.stop.prevent="goCreativityPage"
+              ><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
@@ -243,7 +251,7 @@ import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
-import RegisterDialog from '@/components/common/RegisterDialog'
+import RegisterDialog from '@/components/common/Register'
 import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
@@ -515,6 +523,21 @@ export default {
     }
   }
 }
+.common-header{
+  .register-dialog {
+  max-width: 352px;
+  .el-dialog__body {
+    padding: 0;
+    .register-dialog-form{
+      margin: 0;
+      box-shadow: none;
+      .register-title{
+        padding: 0;
+      }
+    }
+  }
+}
+}
 .el-menu-item {
   padding: 0 10px;
 }
@@ -551,6 +574,9 @@ export default {
     &.user-menu {
       padding-right: 5px;
     }
+    &.is-active{
+      color: #409eff;
+    }
   }
 }
 .profile-submenu,
@@ -566,12 +592,6 @@ export default {
   width: 30px;
   height: 30px;
   margin-right: 5px;
-}
-.register-dialog {
-  max-width: 352px;
-  .el-dialog__body {
-    padding: 0;
-  }
 }
 @media (max-width: 768px) {
   .el-submenu__title {

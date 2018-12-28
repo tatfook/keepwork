@@ -19,6 +19,7 @@ const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
 const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
+const ApplyTeacher = () => import('@/components/lesson/teacher/ApplyTeacher')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
 const PackageManager = () =>
   import('@/components/lesson/teacher/PackageManager')
@@ -52,6 +53,8 @@ const LearningCenterPackages = () =>
 const OfflineGuidanceCourse = () =>
   import('@/components/lesson/student/OfflineGuidanceCourse')
 const TeachingVideo = () => import('@/components/lesson/student/TeachingVideo')
+const MentorService = () => import('@/components/lesson/student/MentorService')
+const MentorInvite = () => import('@/components/lesson/teacher/MentorInvite')
 
 Vue.use(Router)
 
@@ -86,9 +89,21 @@ export default new Router({
               meta: { requireAuth: true }
             },
             {
+              path: 'apply',
+              name: 'TeacherColumnApply',
+              component: ApplyTeacher,
+              meta: { requireAuth: true }
+            },
+            {
               path: 'review',
               name: 'TeacherColumnReview',
               component: Review,
+              meta: { requireAuth: true }
+            },
+            {
+              path: 'mentor',
+              name: 'TeacherColumnMentorInvite',
+              component: MentorInvite,
               meta: { requireAuth: true }
             },
             {
@@ -243,6 +258,11 @@ export default new Router({
               path: 'teachingvideo',
               name: 'TeachingVideo',
               component: TeachingVideo
+            },
+            {
+              path: 'mentor',
+              name: 'MentorService',
+              component: MentorService
             }
           ]
         },
