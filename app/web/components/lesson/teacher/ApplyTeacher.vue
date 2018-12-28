@@ -113,8 +113,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProfile: 'user/getProfile',
-      getUserDetail: 'lesson/getUserDetail'
+      getProfile: 'user/getProfile'
     }),
     async activateTeacherIdentity() {
       if (this.isLogin) {
@@ -126,12 +125,12 @@ export default {
         await lesson.users
           .toBeTeacher(payload)
           .then(res => {
-            this.getUserDetail()
             this.$message({
               message: this.$t('lesson.activatedTeaching'),
               type: 'success',
               showClose: true
             })
+            window.location.reload()
           })
           .catch(err => {
             this.$alert(
