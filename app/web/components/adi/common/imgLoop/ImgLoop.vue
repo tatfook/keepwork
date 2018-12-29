@@ -161,6 +161,7 @@ export default {
         return [
           {
             img: this.options.emptyGallery.img,
+            webHeight: this.options.emptyGallery.webHeight,
             link: this.options.emptyGallery.link,
             target: this.options.emptyGallery.target,
             autoplay: this.options.emptyGallery.autoplay,

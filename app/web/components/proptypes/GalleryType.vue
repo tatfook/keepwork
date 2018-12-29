@@ -1,78 +1,31 @@
 <template>
   <div>
     <div class="gallery-type">
+
+      <div class="gallery-type-height">
+        <span class="description">{{$t('field.height')}}：</span>
+        <el-input-number v-model="num" :min="157" :max="999" :step="1"></el-input-number>
+        <span>(px)</span>
+      </div>
+      <div class="gallery-type-width">
+        <span>{{$t('field.width')}}：</span>
+        <el-select v-model="scaleValue" size='mini'>
+          <el-option v-for="scale in scaleArray" :key='scale.value' :label='scale.label' :value='scale.value'></el-option>
+        </el-select>
+      </div>
+
       <el-button
         @click="handleAdd"
         class="gallery-type-add-btn"
         icon="el-icon-plus"
       >{{$t('common.add')}}</el-button>
       <div v-for="(item, index) in originValue" class="gallery-type-item" :key="index" :item="item">
-        <div
-          v-if="!item.type || item.type === 'images'"
-          class="gallery-type-item-img"
-          :style="getImage(item)"
-        >
-          <div class="gallery-type-item-img-cover">
-            <span>
-              <el-button
-                class="gallery-type-change-img-btn"
-                size="mini"
-                round
-                @click="handleUpdateImg(index)"
-              >{{$t('common.change')}}</el-button>
-              <el-button
-                class="gallery-type-remove-img-btn iconfont icon-delete"
-                size="mini"
-                round
-                @click="handleImgRemove(index)"
-                :disabled="isDisabled"
-              ></el-button>
-            </span>
-          </div>
-        </div>
+        
+        <div v-if="!item.type || item.type === 'images'">
 
-        <div v-if="item.type === 'videos'" class="gallery-type-item-img">
-          <video :src="item.video" muted="muted"></video>
-          <div class="gallery-type-item-img-play" v-if="isPlayIconShow">
-            <el-button circle size="mini">
-              <i class="gallery-type-item-img-play-icon el-icon-caret-right"></i>
-            </el-button>
-          </div>
-          <div class="gallery-type-item-img-cover">
-            <span>
-              <el-button
-                class="gallery-type-play-img-btn el-icon-caret-right"
-                size="mini"
-                round
-                @click="handlePlay(index)"
-              ></el-button>
-              <el-button
-                class="gallery-type-change-img-btn"
-                size="mini"
-                round
-                @click="handleUpdateVideo(index)"
-              >{{$t('common.change')}}</el-button>
-              <el-button
-                class="gallery-type-remove-img-btn iconfont icon-delete"
-                size="mini"
-                round
-                @click="handleVideoRemove(index)"
-                :disabled="isDisabled"
-              ></el-button>
-            </span>
-          </div>
-        </div>
-
-        <div v-if="item.type === 'videos'" class="video-cover">
-          <el-button
-            v-if="!item.poster"
-            @click="handleChangeCover(index)"
-            plain
-          >{{$t('editor.addVideoCover')}}</el-button>
           <div
             class="gallery-type-item-img"
-            v-if="item.poster"
-            :style="{backgroundImage: 'url(' + item.poster + ')'}"
+            :style="getImage(item)"
           >
             <div class="gallery-type-item-img-cover">
               <span>
@@ -80,55 +33,121 @@
                   class="gallery-type-change-img-btn"
                   size="mini"
                   round
-                  @click="handleChangeCover(index)"
+                  @click="handleUpdateImg(index)"
                 >{{$t('common.change')}}</el-button>
                 <el-button
                   class="gallery-type-remove-img-btn iconfont icon-delete"
                   size="mini"
-                  circle
-                  @click="removeCover(item)"
+                  round
+                  @click="handleImgRemove(index)"
+                  :disabled="isDisabled"
                 ></el-button>
               </span>
             </div>
           </div>
-        </div>
 
-        <div v-if="item.type === 'videos'" class="video-settings">
-          <el-checkbox v-model="item.autoplay">{{$t('field.autoplay')}}</el-checkbox>
-          <el-checkbox v-model="item.playloop">{{$t('field.playloop')}}</el-checkbox>
-        </div>
+          <el-input
+            :placeholder="$t('editor.pleaseInput')"
+            v-model="item.link"
+            class="input-with-select"
+          >
+            <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
+            <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
+            <el-select v-model="item.link" slot="append" placeholder="Select">
+              <el-option
+                v-for="(path, pathIndex) in personalAllPagePathList"
+                :key="pathIndex"
+                :value="getLocationUrl(path)"
+              >{{ path }}</el-option>
+            </el-select>
+          </el-input>
 
-        <el-input
-          v-if="!item.type || item.type === 'images'"
-          :placeholder="$t('editor.pleaseInput')"
-          v-model="item.link"
-          class="input-with-select"
-        >
-          <el-button v-if="item.link" slot="prepend" icon="iconfont icon-link_"></el-button>
-          <el-button v-if="!item.link" slot="prepend">{{$t('common.link')}}</el-button>
-          <el-select v-model="item.link" slot="append" placeholder="Select">
+          <el-select
+            v-model="item.target"
+            class="select-targetType"
+            size="mini"
+            :placeholder="$t('editor.newWindowOpen')"
+          >
             <el-option
-              v-for="(path, pathIndex) in personalAllPagePathList"
-              :key="pathIndex"
-              :value="getLocationUrl(path)"
-            >{{ path }}</el-option>
+              v-for="targetType in linkTargets"
+              :key="targetType.value"
+              :label="targetType.label"
+              :value="targetType.value"
+            ></el-option>
           </el-select>
-        </el-input>
 
-        <el-select
-          v-if="!item.type || item.type === 'images'"
-          v-model="item.target"
-          class="select-targetType"
-          size="mini"
-          :placeholder="$t('editor.newWindowOpen')"
-        >
-          <el-option
-            v-for="targetType in linkTargets"
-            :key="targetType.value"
-            :label="targetType.label"
-            :value="targetType.value"
-          ></el-option>
-        </el-select>
+        </div>
+
+        <div v-if="item.type === 'videos'">
+
+          <div class="gallery-type-item-img">
+            <video :src="item.video" muted="muted"></video>
+            <div class="gallery-type-item-img-play" v-if="isPlayIconShow">
+              <el-button circle size="mini">
+                <i class="gallery-type-item-img-play-icon el-icon-caret-right"></i>
+              </el-button>
+            </div>
+            <div class="gallery-type-item-img-cover">
+              <span>
+                <el-button
+                  class="gallery-type-play-img-btn el-icon-caret-right"
+                  size="mini"
+                  round
+                  @click="handlePlay(index)"
+                ></el-button>
+                <el-button
+                  class="gallery-type-change-img-btn"
+                  size="mini"
+                  round
+                  @click="handleUpdateVideo(index)"
+                >{{$t('common.change')}}</el-button>
+                <el-button
+                  class="gallery-type-remove-img-btn iconfont icon-delete"
+                  size="mini"
+                  round
+                  @click="handleVideoRemove(index)"
+                  :disabled="isDisabled"
+                ></el-button>
+              </span>
+            </div>
+          </div>
+
+          <div class="video-cover">
+            <el-button
+              v-if="!item.poster"
+              @click="handleChangeCover(index)"
+              plain
+            >{{$t('editor.addVideoCover')}}</el-button>
+            <div
+              class="gallery-type-item-img"
+              v-if="item.poster"
+              :style="{backgroundImage: 'url(' + item.poster + ')'}"
+            >
+              <div class="gallery-type-item-img-cover">
+                <span>
+                  <el-button
+                    class="gallery-type-change-img-btn"
+                    size="mini"
+                    round
+                    @click="handleChangeCover(index)"
+                  >{{$t('common.change')}}</el-button>
+                  <el-button
+                    class="gallery-type-remove-img-btn iconfont icon-delete"
+                    size="mini"
+                    circle
+                    @click="removeCover(item)"
+                  ></el-button>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="video-settings">
+            <el-checkbox v-model="item.autoplay">{{$t('field.autoplay')}}</el-checkbox>
+            <el-checkbox v-model="item.playloop">{{$t('field.playloop')}}</el-checkbox>
+          </div>
+
+        </div>
       </div>
     </div>
     <sky-drive-manager-dialog
@@ -153,6 +172,22 @@ export default {
   data() {
     let self = this
     return {
+      scaleArray: [
+        {
+          label: '100%',
+          value: '100%'
+        },
+        {
+          label: '80%',
+          value: '80'
+        },
+        {
+          label: '50%',
+          value: '50'
+        }
+      ],
+      scaleValue: '100%',
+      num: '',
       selectedIndex: 0,
       openType: 'image',
       isSkyDriveManagerDialogShow: false,
@@ -210,6 +245,7 @@ export default {
     handleAdd() {
       this.originValue.push({
         img: '',
+        height: this.num + 'px',
         link: '',
         target: '',
         autoplay: true,
@@ -339,6 +375,37 @@ export default {
 </script>
 <style lang="scss">
 .gallery-type {
+  &-height {
+    .description {
+      display: inline-block;
+      width: 60px;
+    }
+    .el-input-number {
+      width: 130px;
+      line-height: 26px;
+      .el-input {
+        .el-input__inner {
+          height: 28px;
+          line-height: 26px;
+        }
+      }
+    }
+  }
+  &-width {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    >span {
+      display: inline-block;
+      width: 54px;
+    }
+    .el-select {
+      .el-input {
+        display: inline-block;
+        width: 140px;
+      }
+    }
+  }
   .el-button {
     border: none;
   }
