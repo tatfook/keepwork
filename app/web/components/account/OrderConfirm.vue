@@ -107,7 +107,7 @@ export default {
     ])
     this.count = this.goodsDefaultCount
     if (price) {
-       this.count = _.floor(_.divide(price, this.goodsCost))
+      this.count = _.floor(_.divide(price, this.goodsCost))
     }
     if (this.isNeedDigitalAccount) {
       // exchange way
@@ -239,9 +239,8 @@ export default {
         : `${this.finalCost}${this.costUnit}`
     },
     totalCost() {
-      return this.isRmbPayment
-        ? (this.goodsCost * this.count).toFixed(2)
-        : this.goodsCost * this.count
+      let total = _.multiply(this.goodsCost * this.count)
+      return this.isRmbPayment ? _.round(total, 2) : total
     },
     totalCostByUnit() {
       return this.isRmbPayment
@@ -249,8 +248,8 @@ export default {
         : `${this.totalCost}${this.costUnit}`
     },
     finalCost() {
-      // FIXME: toFixed
-      return this.isRmbPayment ? this.totalCost.toFixed(2) : this.totalCost
+      // FIXME: discounts logic
+      return this.isRmbPayment ? _.round(this.totalCost, 2) : this.totalCost
     }
   }
 }
