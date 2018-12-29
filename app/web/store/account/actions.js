@@ -60,8 +60,8 @@ const actions = {
       commit(GET_GOODS_SUCCESS, goods)
       // FIXME: goodsId
       const goodsDetail = goodsId
-        ? _.find(goods, (item) => item.goodsId === goodsId)
-        : _.find(goods, (item) => item.id === id)
+        ? _.find(goods, (item) => item.goodsId === _.toNumber(goodsId))
+        : _.find(goods, (item) => item.id === _.toNumber(id))
       return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
     }
   },
