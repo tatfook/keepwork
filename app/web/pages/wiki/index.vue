@@ -4,7 +4,6 @@ import Vuex from 'vuex'
 import router from './wiki.router'
 
 router.beforeEach(async (to, from, next) => {
-  console.log(to)
   if (to.name === 'redirectToPay') {
     const { additional, app_goods_id, username } = to.query
     let userObject = JSON.parse(additional)
