@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       isLoading: true,
-      count: 0,
+      count: 1,
       isSubmiLoading: false,
       discountId: null,
       digitalAccount: '',
@@ -99,9 +99,6 @@ export default {
     if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
-    // if (username && username !== this.username) {
-    //   return this.userLogout()
-    // }
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
