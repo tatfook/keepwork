@@ -6,7 +6,7 @@ let emptyData = {
       img: require('@/assets/adi/imgLoop/imgCarouselOne.jpg'),
       link: '',
       target: '_blank',
-      autoplay: false,
+      autoplay: true,
       playloop: false,
       poster: ''
     }

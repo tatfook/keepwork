@@ -111,7 +111,15 @@ export default {
     }
   },
   async mounted() {
-    let { type, count = 1, id, payment } = this.$route.query
+    let {
+      type,
+      count = 1,
+      id,
+      payment,
+      user_nid,
+      username = '',
+      price = ''
+    } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
     this.goodsId = id
@@ -126,18 +134,27 @@ export default {
       this.getDiscounts(),
       this.createTradeOrder({ type, count, id, payment })
     ])
-    this.autoCheckDiscount()
-
+    this.count = this.goodsDefaultCount
+    if (price) {
+      this.count = _.floor(_.divide(price, this.goodsCost))
+    }
     if (this.isNeedDigitalAccount) {
       // exchange way
-      // this.digitalAccountList = [
-      //   { label: '7000000001360', value: 7000000001360 }
-      // ]
       await keepwork.account
         .getDigitalAccounts()
         .then(res => {
-          let { data = [] } = res
-          this.DigitalAccountList = res.data.map(item => ({
+          let data = _.get(res, 'data.data', [])
+          if (user_nid && this.data.includes(user_nid)) {
+            this.digitalAccount = user_nid
+          } else {
+            this.$message({
+              type: 'error',
+              duration: '8000',
+              message: '当前登录的账号跟该数字账号不存在关联'
+            })
+          }
+          data = _.uniq(data)
+          this.digitalAccountList = data.map(item => ({
             label: item,
             value: item
           }))
@@ -152,7 +169,8 @@ export default {
       getDiscounts: 'account/getDiscounts',
       submitTradeOrder: 'account/submitTradeOrder',
       getBalance: 'account/getBalance',
-      setDiscount: 'account/setDiscount'
+      setDiscount: 'account/setDiscount',
+      userLogout: 'user/logout'
     }),
     handleSelectDiscount(id) {
       this.discountId = id
@@ -273,6 +291,9 @@ export default {
     goodsMax() {
       return _.get(this.goodsDetail, 'max', 1)
     },
+    goodsDefaultCount() {
+      return _.get(this.goodsDetail, 'defaultCount', 1)
+    },
     goodsCost() {
       if (this.isPackageType) {
         return _.get(this.goodsDetail, [this.payment], '')
@@ -304,7 +325,8 @@ export default {
         : `${this.finalCost}${this.costUnit}`
     },
     totalCost() {
-      return this.goodsCost * this.count
+      let total = _.multiply(this.goodsCost * this.count)
+      return this.isRmbPayment ? _.round(total, 2) : total
     },
     totalCostByUnit() {
       return this.isRmbPayment
@@ -336,7 +358,8 @@ export default {
         : `${this.rewardNumber} ${this.costUnit}`
     },
     finalCost() {
-      return this.totalCost - this.rewardNumber
+      // FIXME: discounts logic
+      return this.isRmbPayment ? _.round(this.totalCost, 2) : this.totalCost
     }
   }
 }

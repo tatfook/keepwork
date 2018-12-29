@@ -2,12 +2,12 @@
   <div class="lesson-package-cell">
     <div class="lesson">
       <div class="lesson-cover" @click="goLessonPackage(lessonPackage)"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
-      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.name_title"></h4>
+      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.title"></h4>
       <div class="lesson-desc">
-        <p>包含：
-          <span>{{lessonPackage.total_lessons || 0}}</span>个课程</p>
-        <p>年龄：{{getPackageSuitableAge(lessonPackage)}}</p>
-        <p class="lesson-desc-text">简介：{{lessonPackage.description}}</p>
+        <p>{{$t('lesson.include')}}：
+          <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.packagesCount')}}</p>
+        <p>{{$t('lesson.ages')}}：{{getPackageSuitableAge(lessonPackage)}}</p>
+        <p class="lesson-desc-text" v-html="`${$t('lesson.intro')}：${lessonPackage.description ? lessonPackage.description : ''}`"></p>
       </div>
     </div>
   </div>
@@ -48,6 +48,9 @@ export default {
     margin: 0 auto 10px;
     border-radius: 4px;
     transition: all 200ms ease-in;
+    .red {
+      color: red;
+    }
     &:hover {
       box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
       transition: all 200ms ease-in;
@@ -72,9 +75,6 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      .red {
-        color: red;
-      }
     }
     &-desc {
       font-size: 12px;

@@ -154,11 +154,19 @@ export default {
           })
         })
         .catch(err => {
-          this.$message({
-            showClose: true,
-            message: this.$t('lesson.wrongKey'),
-            type: 'error'
-          })
+          if (err.response.data.code === 2) {
+            this.$message({
+              showClose: true,
+              message: this.$t('lesson.classIsFull'),
+              type: 'error'
+            })
+          } else {
+            this.$message({
+              showClose: true,
+              message: this.$t('lesson.wrongKey'),
+              type: 'error'
+            })
+          }
           this.beInClassDialog = false
         })
     },

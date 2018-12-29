@@ -20,10 +20,10 @@
     </div>
     <div class='page-setting-selected-style'>
       <component :is='selectedStyleComponent'>
-        <div slot='header'>header</div>
-        <div slot='footer'>footer</div>
-        <div slot='sidebar'>aside</div>
-        main
+        <div slot='header'>{{$t('editor.header')}}</div>
+        <div slot='footer'>{{$t('editor.footer')}}</div>
+        <div slot='sidebar'>{{$t('editor.aside')}}</div>
+        {{$t('editor.main')}}
       </component>
     </div>
     <div class="layoutManagerBtnWrap" @click="openWebsiteSettingDialog">

@@ -1,13 +1,30 @@
 <template>
   <div class='comp-icon'>
-    <a :target='target' :href='link'>
-      <div v-if='isImage' class="img">
-        <img :src="src" :style="getStyle">
-      </div>
-      <div v-else-if='isVideo' class="video">
-        <video v-if="updateDom" :src='src' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
+    <a v-if='isImage'
+       :target='target'
+       :href='link'>
+      <div class="img">
+        <img :src="src"
+             :style="getStyle">
       </div>
     </a>
+    <div v-if='isVideo'
+         class="video"
+         @click="openPlayDialog">
+      <div class="iconfont icon-video5" />
+      <video v-if="updateDom"
+             :autoplay="autoplay"
+             :loop="playloop"
+             muted
+             :src="src"
+             :poster="poster" />
+    </div>
+    <el-dialog :visible.sync="isOpenVideo">
+      <video-player v-if="isOpenVideo"
+                    :src='src'
+                    :autoplay='autoplay'
+                    :playloop='playloop' />
+    </el-dialog>
   </div>
 </template>
 
@@ -16,16 +33,21 @@ import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
 import preset from 'jss-preset-default'
 import Media from '@/components/adi/common/media/media.types'
-import { setTimeout } from 'timers';
+import videoPlayer from '@/components/common/VideoPlayer'
+import { setTimeout } from 'timers'
 
 jss.setup(preset())
 
 export default {
   name: 'AdiMedia',
   mixins: [compBaseMixin],
+  components: {
+    videoPlayer
+  },
   data() {
     return {
-      updateDom: true
+      updateDom: true,
+      isOpenVideo: false
     }
   },
   watch: {
@@ -49,9 +71,7 @@ export default {
         : this.options.target
     },
     link() {
-      return this.properties.link
-        ? this.properties.link
-        : this.options.link
+      return this.properties.link ? this.properties.link : this.options.link
     },
     autoplay() {
       return this.properties.autoplay
@@ -70,31 +90,41 @@ export default {
     },
     getStyle() {
       return this.generateStyleString({
-        width: this.getWebWidth(),
+        width: this.getWebWidth()
       })
     }
   },
   methods: {
     refresh() {
       this.updateDom = false
-      setTimeout(() => {this.updateDom = true}, 0)
+      setTimeout(() => {
+        this.updateDom = true
+      }, 0)
     },
     parsePx(value) {
-      if(value) {
+      if (value) {
         return parseInt(value) + 'px!important'
       } else {
         return 'auto!important'
       }
     },
-    getValue(propertiesValue,optionsValue) {
+    getValue(propertiesValue, optionsValue) {
       if (propertiesValue) {
         return this.parsePx(propertiesValue)
       } else {
-        return  this.parsePx(optionsValue)
+        return this.parsePx(optionsValue)
       }
     },
     getWebWidth() {
-      return this.options.img ? this.getValue(this.properties.webWidth, this.options.img.defaultWebWidth) : '100%!important'
+      return this.options.img
+        ? this.getValue(
+            this.properties.webWidth,
+            this.options.img.defaultWebWidth
+          )
+        : '100%!important'
+    },
+    openPlayDialog() {
+      this.isOpenVideo = true
     }
   }
 }
@@ -117,16 +147,34 @@ export default {
         max-height: 87px;
       }
     }
-    .video {
-      min-width: 87px;
+  }
+
+  .video {
+    min-width: 87px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .icon-video5 {
+      font-size: 35px;
+      color: #409eff;
+      opacity: 0.7;
+      position: absolute;
+      z-index: 1;
+    }
+
+    video {
+      max-width: 185px;
+      max-height: 87px;
       width: 100%;
       height: 100%;
-      video {
-        width: 100%;
-        height: 100%;
-        max-width: 185px;
-        max-height: 87px;
-      }
+      object-fit: cover;
+      opacity: 0.8;
     }
   }
 }

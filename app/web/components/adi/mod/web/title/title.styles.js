@@ -14,7 +14,8 @@ let defaultData = {
   logo: {
     emptyMedia: require('@/assets/adi/title/bear.svg'),
     emptyLink: '',
-    emptyLinkTarget: '_blank'
+    emptyLinkTarget: '_blank',
+    isVideoTabShow: false
   },
   businessName: {
     emptyInput: 'adi.title.businessName',

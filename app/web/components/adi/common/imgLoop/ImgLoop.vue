@@ -1,18 +1,33 @@
 <template>
   <div class="comp-imgloop">
-    <el-carousel :class="getClass" :height="'100%'">
-      <el-carousel-item v-for="(item, index) in forImgs" :key="index">
-        <a v-if="!item.type || item.type === 'images'" :target="item.target" :href="item.link">
-          <div class="imgs" :style="loadImg(item)"></div>
+    <el-carousel :class="getClass"
+                 :height="'100%'">
+      <el-carousel-item v-for="(item, index) in forImgs"
+                        :key="index">
+        <a v-if="!item.type || item.type === 'images'"
+           :target="item.target"
+           :href="item.link">
+          <div class="imgs"
+               :style="loadImg(item)"></div>
         </a>
-        <div class="video" v-if="item.type === 'videos'" @click="openVideo(item)">
+        <div class="video"
+             v-if="item.type === 'videos'"
+             @click="openVideo(item)">
           <div class="iconfont icon-video5" />
-          <video v-if="updateDom" :src="item.video" autoplay="true" playloop="true" muted="true" :poster="item.poster"></video>
+          <video v-if="updateDom"
+                 :src="item.video"
+                 :autoplay="getAutoPlay(item)"
+                 :loop="getLoop(item)"
+                 muted
+                 :poster="item.poster"></video>
         </div>
       </el-carousel-item>
     </el-carousel>
     <el-dialog :visible.sync="isOpenVideo">
-      <video-player v-if="isOpenVideo" :src='curVideo' :autoplay='curAutoPlay' :playloop='curAutoPlay'/>
+      <video-player v-if="isOpenVideo"
+                    :src='curVideo'
+                    :autoplay='curAutoPlay'
+                    :playloop='curPlayLoop' />
     </el-dialog>
   </div>
 </template>
@@ -47,7 +62,9 @@ export default {
   methods: {
     refresh() {
       this.updateDom = false
-      setTimeout(() => {this.updateDom = true}, 0)
+      setTimeout(() => {
+        this.updateDom = true
+      }, 0)
     },
     loadImg(item) {
       if (item && item.img) {
@@ -103,16 +120,44 @@ export default {
       )
     },
     openVideo(item) {
-      this.curVideo = item.video
-      this.curAutoPlay = item.autoplay
-      this.curPlayLoop = item.playloop
+      if (typeof item !== 'object') {
+        return false
+      }
 
+      this.curVideo = item.video
+      this.curAutoPlay = this.getAutoPlay(item)
+      this.curPlayLoop = this.getLoop(item)
       this.isOpenVideo = true
+    },
+    getAutoPlay(item) {
+      if (typeof item !== 'object') {
+        return false
+      }
+
+      if (typeof item.autoplay === 'boolean') {
+        return item.autoplay
+      } else {
+        return false
+      }
+    },
+    getLoop(item) {
+      if (typeof item !== 'object') {
+        return false
+      }
+
+      if (typeof item.playloop === 'boolean') {
+        return item.playloop
+      } else {
+        return false
+      }
     }
   },
   computed: {
     forImgs() {
-      if (!this.properties.data || this.properties.data && this.properties.data.length === 0) {
+      if (
+        !this.properties.data ||
+        (this.properties.data && this.properties.data.length === 0)
+      ) {
         return [
           {
             img: this.options.emptyGallery.img,
@@ -179,12 +224,12 @@ export default {
 
     .icon-video5 {
       font-size: 65px;
-      color: #409EFF;
+      color: #409eff;
       opacity: 0.7;
       position: absolute;
       z-index: 1;
     }
-  
+
     video {
       width: 100%;
       height: 100%;

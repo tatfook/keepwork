@@ -46,9 +46,15 @@
             <span class='iconfont icon-close_' :title="$t('common.remove')" @click="removeFromUploadQue(scope.row)"></span>
           </span>
           <span v-else>
-            <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' :title="$t('common.copyURI')" @click='handleCopy(scope.row)'></span>
-            <span class='iconfont icon-insert' v-if="insertable" :class='{disabled: !scope.row.checkPassed}' :title="$t('common.insert')" @click='handleInsert(scope.row)'></span>
-            <span class='el-icon-download' :title="$t('common.download')" @click='download(scope.row)'></span>
+            <el-tooltip :content="$t('common.copyURI')">
+              <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' @click='handleCopy(scope.row)'></span>
+            </el-tooltip>
+            <el-tooltip :content="$t('common.insert')">
+              <span class='iconfont icon-insert' v-if="insertable" :class='{disabled: !scope.row.checkPassed}' @click='handleInsert(scope.row)'></span>
+            </el-tooltip>
+            <el-tooltip :content="$t('common.download')">
+              <span class='el-icon-download' @click='download(scope.row)'></span>
+            </el-tooltip>
             <el-dropdown>
               <span class="el-dropdown-link">
                 <i class="el-icon-more el-icon--right"></i>

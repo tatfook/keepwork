@@ -614,7 +614,6 @@
     "pleaseSelectOne": "请选择一个答案!",
     "chooseTwoAnswer": "至少选择两个答案!",
     "pleaseInputAnswer": "请输入你的答案!",
-    "theClassIsFull": "课堂已满员~",
     "theClassClosed": "课堂已关闭~",
     "cantBeEmpty": "内容不能为空",
     "keepThreeOptions": "至少保留三个选项",
@@ -1063,6 +1062,7 @@
     "viewStudentPage": "查看学生页",
     "enterClass": "从此处进入课堂",
     "wrongKey": "您输入的课堂ID不存在！",
+    "classIsFull": "课堂已满员~",
     "enterByClassId": "输入课堂ID",
     "enter": "进入",
     "share": "分享",
@@ -1557,6 +1557,17 @@
     "top": "置顶",
     "unTop": "取消置顶",
     "changePassword": "密码修改"
+  },
+  "templates": {
+    "menuBasic": "经典布局",
+    "menuHeader": "页头布局",
+    "basicTemplate": "经典布局",
+    "basic_fullscreenTemplate": "全屏布局",
+    "headerTemplate": "页头布局",
+    "header_sidebarTemplate": "页头与侧边栏",
+    "pageMenuBasic": "经典布局",
+    "pageTemplateEmpty": "空白布局",
+    "pageTemplateMenu": "带菜单布局"
   },
   "account": {
     "myAccount": "我的账户",
