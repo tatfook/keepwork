@@ -82,7 +82,7 @@ export default {
     }
   },
   async mounted() {
-    let { type, count = 1, id, payment } = this.$route.query
+    let { type, count = 1, id, payment, user_nid, username = '' } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
     this.goodsId = id
@@ -92,6 +92,12 @@ export default {
     if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
+    if (user_nid) {
+      this.digitalAccountLis = [{label: user_nid, value: user_nid}]
+    }
+    // if (username && username !== this.username) {
+    //   return this.userLogout()
+    // }
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
@@ -102,6 +108,11 @@ export default {
       await keepwork.account.getDigitalAccounts()
         .then(res => {
           let data = _.get(res, 'data.data', [])
+          if (user_nid) {
+            data.push(user_nid)
+            this.digitalAccount = user_nid
+          }
+          data = _.uniq(data)
           this.digitalAccountList = data.map(item => ({ label: item, value: item}))
         })
         .catch(e => console.error(e))
@@ -113,7 +124,8 @@ export default {
       createTradeOrder: 'account/createTradeOrder',
       getDiscounts: 'account/getDiscounts',
       submitTradeOrder: 'account/submitTradeOrder',
-      getBalance: 'account/getBalance'
+      getBalance: 'account/getBalance',
+      userLogout: 'user/logout'
     }),
     handleSubmitTradeOrder() {
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
