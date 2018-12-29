@@ -78,7 +78,6 @@ export default {
       discountId: null,
       digitalAccount: '',
       digitalAccountList: [],
-      goodsId: ''
     }
   },
   async mounted() {
@@ -89,11 +88,11 @@ export default {
       payment,
       user_nid,
       username = '',
-      price = ''
+      price = '',
+      goodsId = ''
     } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
-    this.goodsId = id
     if (type === 2 && payment === 'bean') {
       return this.$message.error('课程包无法通过知识豆购买')
     }
@@ -103,7 +102,7 @@ export default {
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, id, payment })
+      this.createTradeOrder({ type, count, id, payment, goodsId })
     ])
     this.count = this.goodsDefaultCount
     if (price) {
@@ -239,8 +238,8 @@ export default {
         : `${this.finalCost}${this.costUnit}`
     },
     totalCost() {
-      let total = _.multiply(this.goodsCost * this.count)
-      return this.isRmbPayment ? _.round(total, 2) : total
+      const total = _.multiply(this.goodsCost * this.count)
+      return _.round(total, 2)
     },
     totalCostByUnit() {
       return this.isRmbPayment
@@ -249,7 +248,7 @@ export default {
     },
     finalCost() {
       // FIXME: discounts logic
-      return this.isRmbPayment ? _.round(this.totalCost, 2) : this.totalCost
+      return _.round(this.totalCost, 2)
     }
   }
 }
