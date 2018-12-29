@@ -5,7 +5,7 @@
         <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
         <div class="order-confirm-header-center-main">
           <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
-          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}} 
+          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}}
             <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
               <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -29,7 +29,7 @@
           <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-        {{$t('account.totalPrice')}} {{ totalCostByUnit }}
+          {{$t('account.totalPrice')}} {{ totalCostByUnit }}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
@@ -37,10 +37,10 @@
           {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-           {{$t('account.noCoupons')}}
+          {{$t('account.noCoupons')}}
         </div>
         <div class="order-confirm-main-discounts-all">
-           {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
+          {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
       <div class="order-confirm-main-submit">
@@ -62,7 +62,7 @@ import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
-const HAQI_PLATFORM = [2,3]
+const HAQI_PLATFORM = [2, 3]
 export default {
   name: 'OrderConfirm',
   mixins: [OrderMixin],
@@ -73,16 +73,23 @@ export default {
   data() {
     return {
       isLoading: true,
-      count: 1,
+      count: 0,
       isSubmiLoading: false,
       discountId: null,
       digitalAccount: '',
       digitalAccountList: [],
-      goodsId: '',
+      goodsId: ''
     }
   },
   async mounted() {
-    let { type, count = 1, id, payment, user_nid, username = '' } = this.$route.query
+    let {
+      type,
+      count = 1,
+      id,
+      payment,
+      user_nid,
+      username = ''
+    } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
     this.goodsId = id
@@ -92,21 +99,19 @@ export default {
     if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
-    if (user_nid) {
-      this.digitalAccountLis = [{label: user_nid, value: user_nid}]
-    }
     // if (username && username !== this.username) {
     //   return this.userLogout()
     // }
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, id, payment})
+      this.createTradeOrder({ type, count, id, payment })
     ])
     this.count = this.goodsDefaultCount
     if (this.isNeedDigitalAccount) {
       // exchange way
-      await keepwork.account.getDigitalAccounts()
+      await keepwork.account
+        .getDigitalAccounts()
         .then(res => {
           let data = _.get(res, 'data.data', [])
           if (user_nid) {
@@ -114,7 +119,10 @@ export default {
             this.digitalAccount = user_nid
           }
           data = _.uniq(data)
-          this.digitalAccountList = data.map(item => ({ label: item, value: item}))
+          this.digitalAccountList = data.map(item => ({
+            label: item,
+            value: item
+          }))
         })
         .catch(e => console.error(e))
     }
@@ -130,7 +138,9 @@ export default {
     }),
     handleSubmitTradeOrder() {
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
-        return this.$message.error(this.$t('account.pleaseSelectDigitalAccount'))
+        return this.$message.error(
+          this.$t('account.pleaseSelectDigitalAccount')
+        )
       }
       if (this.isCoinPayment && this.finalCost > this.userCoin) {
         return this.$message.error(this.$t('account.coinInsufficient'))
@@ -223,7 +233,9 @@ export default {
         : `${this.finalCost}${this.costUnit}`
     },
     totalCost() {
-      return this.goodsCost * this.count
+      return this.isRmbPayment
+        ? (this.goodsCost * this.count).toFixed(2)
+        : this.goodsCost * this.count
     },
     totalCostByUnit() {
       return this.isRmbPayment
@@ -231,8 +243,8 @@ export default {
         : `${this.totalCost}${this.costUnit}`
     },
     finalCost() {
-      // FIXME:
-      return this.totalCost - 0
+      // FIXME: toFixed
+      return this.totalCost
     }
   }
 }
