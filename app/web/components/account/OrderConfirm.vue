@@ -77,7 +77,7 @@ export default {
       isSubmiLoading: false,
       discountId: null,
       digitalAccount: '',
-      digitalAccountList: [],
+      digitalAccountList: []
     }
   },
   async mounted() {
@@ -114,16 +114,17 @@ export default {
         .getDigitalAccounts()
         .then(res => {
           let data = _.get(res, 'data.data', [])
-          if (user_nid && this.data.includes(user_nid)) {
-            this.digitalAccount = user_nid
-          } else {
-            this.$message({
-              type: 'error',
-              duration: '8000',
-              message: '当前登录的账号跟该数字账号不存在关联'
-            })
+          if (user_nid) {
+            if (data.includes(user_nid)) {
+              this.digitalAccount = user_nid
+            } else {
+              this.$message({
+                type: 'error',
+                duration: '8000',
+                message: '当前登录的账号跟该数字账号不存在关联'
+              })
+            }
           }
-          data = _.uniq(data)
           this.digitalAccountList = data.map(item => ({
             label: item,
             value: item
