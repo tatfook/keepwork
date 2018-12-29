@@ -103,6 +103,7 @@ export default {
       this.getDiscounts(),
       this.createTradeOrder({ type, count, id, payment})
     ])
+    this.count = this.goodsDefaultCount
     if (this.isNeedDigitalAccount) {
       // exchange way
       await keepwork.account.getDigitalAccounts()
@@ -187,6 +188,9 @@ export default {
     },
     goodsMax() {
       return _.get(this.goodsDetail, 'max', 1)
+    },
+    goodsDefaultCount() {
+      return _.get(this.goodsDetail, 'defaultCount', 1)
     },
     goodsCost() {
       if (this.isPackageType) {
