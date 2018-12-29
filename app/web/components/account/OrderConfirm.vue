@@ -107,7 +107,7 @@ export default {
     ])
     this.count = this.goodsDefaultCount
     if (price) {
-       this.count = _.floor(price / goodsCost)
+       this.count = _.floor(_.divide(price, this.goodsCost))
     }
     if (this.isNeedDigitalAccount) {
       // exchange way
