@@ -3,7 +3,7 @@
     <div class="perfect-common-footer-detail-list hidden-sm-and-down">
       <div class="list-box-wrap">
         <div class="list-box">
-          <h4 class="title">{{$t('footer.lettersTo')}}</h4>
+          <h4 class="list-box-title">{{$t('footer.lettersTo')}}</h4>
           <ul class="list">
             <li><a href="https://keepwork.com/official/paracraft/to-educators" target="_blank">- {{$t("footer.educators")}}</a></li>
             <li><a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">- {{$t("footer.parents")}}</a></li>
@@ -12,7 +12,7 @@
           </ul>
         </div>
         <div class="list-box">
-          <h4 class="title">{{$t("footer.whatCanYouDo")}}</h4>
+          <h4 class="list-box-title">{{$t("footer.whatCanYouDo")}}</h4>
           <ul class="list">
             <li><a>- {{$t("footer.createPersonalProject")}}</a></li>
             <li><a>- {{$t("footer.createProjectWithTeachers")}}</a></li>
@@ -22,7 +22,7 @@
           </ul>
         </div>
         <div class="list-box">
-          <h4 class="title">{{$t("footer.learningMethod")}}</h4>
+          <h4 class="list-box-title">{{$t("footer.learningMethod")}}</h4>
           <ul class="list">
             <li><a>- {{$t("footer.learningBasedOnProject")}}</a></li>
             <li><a>- {{$t("footer.learningFromMentors")}}</a></li>
@@ -31,7 +31,7 @@
           </ul>
         </div>
         <div class="list-box">
-          <h4 class="title">{{$t("footer.keepworkFamily")}}</h4>
+          <h4 class="list-box-title">{{$t("footer.keepworkFamily")}}</h4>
           <ul class="list">
             <li><a href="https://keepwork.com" target="_blank">- keepwork</a></li>
             <li><a href="https://iicc.keepwork.com/#/" target="_blank">- {{$t("footer.iicc")}}</a></li>
@@ -46,7 +46,7 @@
           </ul>
         </div>
         <div class="list-box">
-          <h4 class="title">{{$t("footer.support")}}</h4>
+          <h4 class="list-box-title">{{$t("footer.support")}}</h4>
           <ul class="list">
             <li><a href="http://keepwork.com/official/company/index" target="_blank">- {{$t("footer.contactUs")}}</a></li>
             <li><a href="https://keepwork.com/official/company/joinus" target="_blank">- {{$t("footer.joinUs")}}</a></li>
@@ -118,7 +118,7 @@ export default {
       .list-box {
         flex: 1;
         padding-left: 40px;
-        .title {
+        &-title {
           color: #ffffff;
         }
         .list {
