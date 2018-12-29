@@ -212,7 +212,6 @@ export default {
       if (this.isPackageType) {
         return _.get(this.goodsDetail, [this.payment], '')
       }
-      return 0.7
       return (
         _.get(this.goodsDetail, 'rmb', 0) ||
         _.get(this.goodsDetail, 'coin', 0) ||
