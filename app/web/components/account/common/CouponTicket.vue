@@ -45,6 +45,9 @@ export default {
     }
   },
   computed: {
+    isPropsDisabled() {
+      return this.data.isDisabled || false
+    },
     title() {
       return this.data.title || ''
     },
@@ -88,7 +91,7 @@ export default {
       return this.data.endTime
     },
     isDisabled() {
-      return this.isUsed || this.isExpire
+      return this.isPropsDisabled || this.isUsed || this.isExpire
     },
     isExpire() {
       return this.isUseable && this.endTime < this.timestamp

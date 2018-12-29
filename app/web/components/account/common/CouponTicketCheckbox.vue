@@ -18,7 +18,9 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit('handleClick', this.id)
+      if (!this.isDisabled) {
+        this.$emit('handleClick', this.id)
+      }
     }
   },
   computed: {
@@ -27,6 +29,9 @@ export default {
     },
     id() {
       return this.data.id
+    },
+    isDisabled() {
+      return this.data.isDisabled
     }
   }
 }

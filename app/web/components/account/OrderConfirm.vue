@@ -57,10 +57,15 @@
       </div>
     </div>
     <el-dialog class="order-confirm-discounts-dialog" title="请选择优惠券" :visible.sync="isShowDiscountDialog">
-      <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">不使用优惠券</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
-      <div class="order-confirm-discounts-dialog-list">
-        <coupon-ticket-checkbox class="order-confirm-discounts-dialog-list-item" @handleClick="handleSelectDiscount" v-for="(item, index) in usableDiscounts" :data="item" :key="index"></coupon-ticket-checkbox>
-      </div>
+      <template v-if="hasDiscounts">
+        <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">不使用优惠券</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
+        <div class="order-confirm-discounts-dialog-list">
+          <coupon-ticket-checkbox class="order-confirm-discounts-dialog-list-item" @handleClick="handleSelectDiscount" v-for="(item, index) in currentPaymentDiscounts" :data="item" :key="index"></coupon-ticket-checkbox>
+        </div>
+      </template>
+      <template v-else>
+        <div>{{$t('account.noCoupons')}}</div>
+      </template>
       <div class="order-confirm-discounts-dialog-footer" slot="footer">
         <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">取消</el-button>
         <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">确定</el-button>
@@ -125,9 +130,9 @@ export default {
 
     if (this.isNeedDigitalAccount) {
       // exchange way
-      this.digitalAccountList = [
-        { label: '7000000001360', value: 7000000001360 }
-      ]
+      // this.digitalAccountList = [
+      //   { label: '7000000001360', value: 7000000001360 }
+      // ]
       await keepwork.account
         .getDigitalAccounts()
         .then(res => {
@@ -209,6 +214,13 @@ export default {
       balance: 'account/balance',
       discounts: 'account/discounts'
     }),
+    hasDiscounts() {
+      return false
+      return this.currentPaymentDiscounts.length > 0
+    },
+    currentPaymentDiscounts() {
+      return [...this.usableDiscounts, ...this.disabledDiscounts]
+    },
     usableDiscounts() {
       const filterDiscount = item => {
         return (
@@ -221,6 +233,20 @@ export default {
       return this.discounts.filter(filterDiscount).map(i => ({
         ...i,
         isChecked: i.id === this.discountId
+      }))
+    },
+    disabledDiscounts() {
+      const filterDiscount = item => {
+        return (
+          item.state === 0 &&
+          item.endTime > +new Date() &&
+          item[this.payment] > 0 &&
+          item[this.payment] > this.totalCost
+        )
+      }
+      return this.discounts.filter(filterDiscount).map(i => ({
+        ...i,
+        isDisabled: true
       }))
     },
     isDisableInput() {
@@ -507,10 +533,8 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
-      // &-item {
-      //   width: 500px !important;
-      //   margin-bottom: 17px;
-      // }
+      height: 500px;
+      overflow-y: auto;
     }
 
     &-footer {
