@@ -59,10 +59,13 @@ const actions = {
       const goods = await account.getGoods()
       commit(GET_GOODS_SUCCESS, goods)
       // FIXME: goodsId
-      const goodsDetail = goodsId
-        ? _.find(goods, (item) => item.goodsId === _.toNumber(goodsId))
-        : _.find(goods, (item) => item.id === _.toNumber(id))
-      return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      if (goodsId) {
+        const goodsDetail = _.find(goods, (item) => item.goodsId === _.toNumber(goodsId))
+        commit(CREATE_TRADE_ORDER, { ...payload, id: goodsDetail.id, goodsDetail })
+      } else {
+        const goodsDetail = _.find(goods, (item) => item.id === _.toNumber(id))
+        commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      }
     }
   },
   async submitTradeOrder({ commit }, payload) {
