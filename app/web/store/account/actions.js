@@ -72,7 +72,6 @@ const actions = {
     commit(SUBMIT_TRADE_ORDER, payload)
   },
   async payTradeOrder({ commit }, payload) {
-    console.log(payload)
     const { finalCostByUnit, ...order } = payload
     let res = await account.createTradeOrder(order)
     if (res.discount) {
