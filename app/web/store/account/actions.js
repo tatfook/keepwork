@@ -49,7 +49,7 @@ const actions = {
     return order
   },
   async createTradeOrder({ commit, dispatch }, payload) {
-    const { type, id } = payload
+    const { type, id, goodsId } = payload
     if (type === PACKAGE_TYPE) {
       const goodsDetail = await lesson.packages.packageDetail({ packageId: id })
       const { packageName = '' } = goodsDetail
@@ -58,7 +58,10 @@ const actions = {
     if (type === EXCHANGE_TYPE) {
       const goods = await account.getGoods()
       commit(GET_GOODS_SUCCESS, goods)
-      const goodsDetail = _.find(goods, (item) => item.id === id)
+      // FIXME: goodsId
+      const goodsDetail = goodsId
+        ? _.find(goods, (item) => item.goodsId === goodsId)
+        : _.find(goods, (item) => item.id === id)
       return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
     }
   },
