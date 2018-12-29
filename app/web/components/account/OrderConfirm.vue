@@ -88,7 +88,8 @@ export default {
       id,
       payment,
       user_nid,
-      username = ''
+      username = '',
+      price = ''
     } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
@@ -105,15 +106,23 @@ export default {
       this.createTradeOrder({ type, count, id, payment })
     ])
     this.count = this.goodsDefaultCount
+    if (price) {
+       this.count = _.floor(price / goodsCost)
+    }
     if (this.isNeedDigitalAccount) {
       // exchange way
       await keepwork.account
         .getDigitalAccounts()
         .then(res => {
           let data = _.get(res, 'data.data', [])
-          if (user_nid) {
-            data.push(user_nid)
+          if (user_nid && this.data.includes(user_nid)) {
             this.digitalAccount = user_nid
+          } else {
+            this.$message({
+              type: 'error',
+              duration: '8000',
+              message: '当前登录的账号跟该数字账号不存在关联'
+            })
           }
           data = _.uniq(data)
           this.digitalAccountList = data.map(item => ({
@@ -241,7 +250,7 @@ export default {
     },
     finalCost() {
       // FIXME: toFixed
-      return this.totalCost
+      return this.isRmbPayment ? this.totalCost.toFixed(2) : this.totalCost
     }
   }
 }
