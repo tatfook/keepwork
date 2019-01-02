@@ -1,23 +1,34 @@
 <template>
   <div class="transaction-detail">
     <div class="transaction-detail-header">
-      交易明细
+      {{$t('account.transactions')}}
     </div>
     <div class="transaction-detail-main">
-      <div class="transaction-detail-main-row" v-for="(item, index) in trades" :key="index">
-        <div class="transaction-detail-main-row-date">
+      <transaction-detail-item v-for="(item, index) in trades" :key="index" :data="item"></transaction-detail-item>
+      <!-- <div class="transaction-detail-main-row" v-for="(item, index) in trades" :key="index"> -->
+      <!-- <div class="transaction-detail-main-row-date">
           {{ item.createdAt | formatTime }}
         </div>
         <div class="transaction-detail-main-row-thing">
-          {{ item.subject }}
-          <!-- "购买课程包【<span class="highlight">贪吃王思聪</span>】X <span class="highlight">3</span> -->
-
+          <template v-if="item.type === 0">
+            {{ item.subject }}
+          </template>
+          <template v-if="item.type === 1">
+            {{ item.subject }}
+          </template>
         </div>
         <div class="transaction-detail-main-row-sum">
-          {{ item.rmb }}
-          <!-- +10 知识币，+10 知识豆 -->
-        </div>
-      </div>
+          <template v-if="item.type === 0">
+            + {{$t('account.rmbUnit', { money: item.rmb})}}
+          </template>
+          <template v-else-if="item.type === 1">
+            - {{item.bean || item.coin || item.rmb }}
+          </template>
+          <template v-else-if="item.type === 2">
+
+          </template>
+        </div> -->
+      <!-- </div> -->
     </div>
     <div v-if="showPagination" class="transaction-detail-footer">
       <el-pagination class="transaction-detail-footer-pagination" @current-change="handleChangePage" :current-page.sync="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="total">
@@ -30,8 +41,12 @@
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import _ from 'lodash'
+import TransactionDetailItem from './common/TransactionDetailItem'
 export default {
   name: 'TransactionDetail',
+  components: {
+    TransactionDetailItem
+  },
   data() {
     return {
       currentPage: 1,
@@ -40,7 +55,7 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return moment(time).format('YYYY/MM/DD H: mm')
+      return moment(time).format('YYYY/MM/DD HH: mm')
     }
   },
   computed: {
@@ -67,7 +82,7 @@ export default {
         'x-per-page': this.pageSize,
         'x-page': this.currentPage
       })
-    }
+    },
   },
   async created() {
     await this.getTrades({
@@ -94,28 +109,28 @@ export default {
   &-main {
     margin: 0 28px;
     color: #606266;
-    &-row {
-      display: flex;
-      min-height: 52px;
-      align-items: center;
-      font-size: 14px;
-      border-bottom: 1px solid #f6f6f6;
-      &-date {
-        width: 200px;
-      }
-      &-thing {
-        flex: 3;
-        font-size: 14px;
-        .highlight {
-          color: #2397f3;
-        }
-      }
+    // &-row {
+    //   display: flex;
+    //   min-height: 52px;
+    //   align-items: center;
+    //   font-size: 14px;
+    //   border-bottom: 1px solid #f6f6f6;
+    //   &-date {
+    //     width: 200px;
+    //   }
+    //   &-thing {
+    //     flex: 3;
+    //     font-size: 14px;
+    //     .highlight {
+    //       color: #2397f3;
+    //     }
+    //   }
 
-      &-sum {
-        flex: 1;
-        text-align: end;
-      }
-    }
+    //   &-sum {
+    //     flex: 1;
+    //     text-align: end;
+    //   }
+    // }
   }
 
   &-footer {

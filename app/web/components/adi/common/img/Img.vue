@@ -1,31 +1,58 @@
 <template>
   <div class="comp-img">
-    <a :target='target' :href='link'>
-      <div v-if='isImage'>
+    <a v-if='isImage'
+       :target='target'
+       :href='link'>
+      <div>
         <img :src="getSrc" />
       </div>
-      <div v-else-if='isVideo'>
-        <video v-if="updateDom" :src='getSrc' :autoplay="autoplay" :loop="playloop" :poster="poster" controls="controls"></video>
-      </div>
     </a>
+    <div class="video"
+         v-if='isVideo'
+         @click="openPlayDialog">
+      <div class="iconfont icon-video5" />
+      <video v-if="updateDom"
+             :autoplay="autoplay"
+             :loop="playloop"
+             muted
+             :src="getSrc"
+             :poster="poster" />
+    </div>
+    <el-dialog :visible.sync="isOpenVideo">
+      <video-player v-if="isOpenVideo"
+                    :src='getSrc'
+                    :autoplay='autoplay'
+                    :playloop='playloop' />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import Media from '@/components/adi/common/media/media.types'
-import { setTimeout } from 'timers';
+import videoPlayer from '@/components/common/VideoPlayer'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'AdiImg',
   mixins: [compBaseMixin],
+  components: {
+    videoPlayer
+  },
   data() {
     return {
-      updateDom: true
+      updateDom: true,
+      isOpenVideo: false
     }
   },
   watch: {
     poster() {
+      this.refresh()
+    },
+    playloop() {
+      this.refresh()
+    },
+    autoplay() {
       this.refresh()
     }
   },
@@ -36,19 +63,21 @@ export default {
         : this.options.target
     },
     link() {
-      return this.properties.link
-        ? this.properties.link
-        : this.options.link
+      return this.properties.link ? this.properties.link : this.options.link
     },
     autoplay() {
-      return this.properties.autoplay
-        ? this.properties.autoplay
-        : this.options.autoplay
+      if (typeof this.properties.autoplay === 'boolean') {
+        return this.properties.autoplay
+      } else {
+        return this.options.autoplay
+      }
     },
     playloop() {
-      return this.properties.playloop
-        ? this.properties.playloop
-        : this.options.playloop
+      if (typeof this.properties.playloop === 'boolean') {
+        return this.properties.playloop
+      } else {
+        return this.options.playloop
+      }
     },
     poster() {
       return this.properties.poster
@@ -76,21 +105,48 @@ export default {
   methods: {
     refresh() {
       this.updateDom = false
-      setTimeout(() => {this.updateDom = true}, 0)
+      setTimeout(() => {
+        this.updateDom = true
+      }, 0)
+    },
+    openPlayDialog() {
+      this.isOpenVideo = true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .comp-img {
-    img {
-      width: 100%;
-      height: 100%;
+.comp-img {
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .video {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .icon-video5 {
+      font-size: 65px;
+      color: #409eff;
+      opacity: 0.7;
+      position: absolute;
+      z-index: 1;
     }
+
     video {
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
     }
   }
+}
 </style>

@@ -1,24 +1,24 @@
 <template>
   <div :class="['recharge-qr', { 'mini': isMiniSize }]">
     <div class="recharge-qr-header">
-      请确认
+      {{$t('account.pleaseConfirm')}}
     </div>
     <div class="recharge-qr-container">
       <div class="recharge-qr-message">
-        <div class="recharge-qr-message-row">充值账号: <span class="message-bold">{{ username }}</span> </div>
-        <div class="recharge-qr-message-row">充值金额: <span class="message-bold">{{money}}元</span> </div>
+        <div class="recharge-qr-message-row">{{$t('account.rechargeAccount')}}<span class="message-bold">{{ username }}</span> </div>
+        <div class="recharge-qr-message-row">{{$t('account.rechargeMoney')}} <span class="message-bold">{{$t('account.rmbUnit', { money: money })}}</span> </div>
       </div>
       <div
         v-if="isWeixin"
         class="recharge-qr-way"
       >
-        请使用微信支付:
+        {{$t('account.payWithWechat')}}
       </div>
       <div
         v-if="isZhifubao"
         class="recharge-qr-way"
       >
-        请使用支付宝支付:
+        {{$t('account.payWithAlipay')}}
       </div>
       <div class="recharge-qr-main">
         <div class="recharge-qr-main-content">
@@ -28,7 +28,7 @@
               class="recharge-qr-main-content-qr-success"
             >
               <i class="el-icon-success"></i>
-              支付成功
+              {{$t('account.success')}}
             </div>
             <img
               class="recharge-qr-main-content-qr-image"
@@ -38,12 +38,12 @@
           </div>
           <div class="recharge-qr-main-content-tips">
             <div class="recharge-qr-main-content-tips-money">
-              充值金额: <span class="highlight">{{ money }}元</span>
+              {{$t('account.rechargeMoney')}} <span class="highlight">{{$t('account.rmbUnit', { money: money})}}</span>
             </div>
             <div class="recharge-qr-main-content-tips-app">
-              <p v-if="isWeixin">请用微信扫一扫</p>
-              <p v-if="isZhifubao">请用支付宝扫一扫</p>
-              <p>扫描二维码支付</p>
+              <p v-if="isWeixin">{{$t('account.wechatScan')}}</p>
+              <p v-if="isZhifubao">{{$t('account.alipayScan')}}</p>
+              <p>{{$t('account.scan')}}</p>
             </div>
           </div>
           <div :class="['recharge-qr-main-content-guide', {'zhifubao-guide': isZhifubao, 'weixin-guide': isWeixin}]">

@@ -141,7 +141,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
 import ProjectCell from './ProjectCell'
 import { lesson, keepwork } from '@/api'
-import RegisterDialog from './RegisterDialog'
+import RegisterDialog from './Register'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
@@ -317,7 +317,10 @@ export default {
       this.$router.push(`/exploration`)
     },
     goStudyPage() {
-      this.$router.push(`/study`)
+      if (this.isLogined) {
+        return window.location.href = `${this.locationOrigin}/l/student`
+      }
+      window.location.href = `${this.locationOrigin}/l/student/solution/teachingIdea`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
@@ -351,6 +354,19 @@ export default {
   &-register-dialog {
     .el-dialog {
       width: 352px;
+      .el-dialog__header{
+        padding: 40px 0 0;
+      }
+      .el-dialog__body{
+        padding: 0 0 10px;
+        .register-dialog-form{
+          margin: 0;
+          box-shadow: none;
+          .register-title{
+            padding-top: 0;
+          }
+        }
+      }
     }
   }
   &-advertising-head {

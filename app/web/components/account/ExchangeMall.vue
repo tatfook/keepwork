@@ -1,9 +1,9 @@
 <template>
   <div class="exchange-mall">
     <div class="exchange-mall-header">
-      兑换商城
+      {{$t('account.exchangeMall')}}
     </div>
-    <div class="exchange-mall-main">
+    <div class="exchange-mall-main" v-loading="isLoading">
       <el-row>
         <template v-for="(item, index) in goodsList">
           <el-col :span="6" :md="6" :sm="12" :xs="24" :key="index">
@@ -18,7 +18,7 @@
 <script>
 import ExchangeMallItem from './common/ExchangeMallItem'
 import { mapActions, mapGetters } from 'vuex'
-const HIDE_GOODS = [1, 2, 3, 4]
+const PLATFORM = [2, 3]
 export default {
   name: 'ExchangeMall',
   components: {
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+      isLoading: false
     }
   },
   computed: {
@@ -34,14 +35,13 @@ export default {
       goods: 'account/goods'
     }),
     goodsList() {
-      return this.goods.filter(i => !HIDE_GOODS.includes(i.id))
+      return this.goods.filter(i => PLATFORM.includes(i.platform))
     }
   },
   async created() {
+    this.isLoading = true
     await this.getGoods().catch(e => console.error(e))
-  },
-  mounted() {
-    document.title = '兑换商城'
+    this.isLoading = false
   },
   methods: {
     ...mapActions({
@@ -62,6 +62,7 @@ export default {
   padding: 0 53px 225px;
   &-header {
     height: 75px;
+    font-weight: bold;
     line-height: 75px;
     font-size: 18px;
     color: #ff721e;

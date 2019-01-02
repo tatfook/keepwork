@@ -2,8 +2,8 @@
   <div class="recharge-pay">
     <div class="recharge-pay-breadcrumb">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ name: 'Account' }">我的账户</el-breadcrumb-item>
-        <el-breadcrumb-item>充值</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'Account' }">{{$t('account.myAccount')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('account.recharge')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <recharge-qr></recharge-qr>
@@ -34,13 +34,19 @@ export default {
     this.intervalCheckOrder()
   },
   destroyed() {
-    this.clearRechargeOrderRecord()
     clearTimeout(this._interval)
+  },
+  computed: {
+    ...mapGetters({
+      order: 'account/rechargeOrder'
+    }),
+    orderId() {
+      return this.order.id || ''
+    }
   },
   methods: {
     ...mapActions({
       getRechargeOrderState: 'account/getRechargeOrderState',
-      clearRechargeOrderRecord: 'account/clearRechargeOrderRecord',
       getBalance: 'account/getBalance'
     }),
     intervalCheckOrder() {
@@ -49,19 +55,11 @@ export default {
         const order = await this.getRechargeOrderState({ id: this.orderId })
         if (order.state === 256) {
           await this.getBalance().catch(e => console.error(e))
-          // setTimeout(() => this.$router.push({ name: 'Account' }), 10000)
+          this.$router.push({ name: 'RechargeSuccess' })
           return
         }
         this.intervalCheckOrder()
       }, 2000)
-    }
-  },
-  computed: {
-    ...mapGetters({
-      order: 'account/rechargeOrder',
-    }),
-    orderId() {
-      return this.order.id || ''
     }
   }
 }

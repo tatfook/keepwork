@@ -49,17 +49,23 @@ const actions = {
     return order
   },
   async createTradeOrder({ commit, dispatch }, payload) {
-    const { type, goodsId } = payload
+    const { type, id, goodsId } = payload
     if (type === PACKAGE_TYPE) {
-      const goodsDetail = await lesson.packages.packageDetail({ packageId: goodsId })
-      return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      const goodsDetail = await lesson.packages.packageDetail({ packageId: id })
+      const { packageName = '' } = goodsDetail
+      return commit(CREATE_TRADE_ORDER, { ...payload, subject: packageName, goodsDetail })
     }
     if (type === EXCHANGE_TYPE) {
       const goods = await account.getGoods()
       commit(GET_GOODS_SUCCESS, goods)
-      let goodsDetail = _.find(goods, (item) => item.goodsId === goodsId)
-      console.log('goodsDetail', goodsDetail)
-      return commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      // FIXME: goodsId
+      if (goodsId) {
+        const goodsDetail = _.find(goods, (item) => item.goodsId === _.toNumber(goodsId))
+        commit(CREATE_TRADE_ORDER, { ...payload, id: goodsDetail.id, goodsDetail })
+      } else {
+        const goodsDetail = _.find(goods, (item) => item.id === _.toNumber(id))
+        commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
+      }
     }
   },
   async submitTradeOrder({ commit }, payload) {

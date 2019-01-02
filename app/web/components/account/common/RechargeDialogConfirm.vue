@@ -1,11 +1,11 @@
 <template>
   <div class="recharge-dialog-confirm">
     <div class="recharge-dialog-confirm-username">
-      充值账号: <span class="bold-username">{{ username }}</span>
+      {{$t('account.rechargeAccount')}} <span class="bold-username">{{ username }}</span>
     </div>
     <div class="recharge-dialog-confirm-money">
-      充值金额:
-      <div class="recharge-dialog-confirm-money-tips">完成上笔支付还需: {{needRechargeMoney | formatMoney}}</div>
+      {{$t('account.rechargeMoney')}}
+      <div class="recharge-dialog-confirm-money-tips">{{$t('account.pleaseRecharge')}}: {{needRechargeMoney | formatMoney}}</div>
       <div class="recharge-dialog-confirm-money-input">
         ¥ <input
           class="recharge-dialog-confirm-money-input-inner"
@@ -41,7 +41,7 @@ export default {
   },
   filters: {
     formatMoney(value) {
-      return `${value}.00`
+      return `¥ ${value}.00`
     }
   },
   components: {

@@ -1,50 +1,50 @@
 <template>
   <div class="order-pay">
     <div class="order-pay-header">
-      <div class="order-pay-header-back" @click="handleBack"> <i class="el-icon-arrow-left"></i>返回</div>
+      <div class="order-pay-header-back" @click="handleBack"> <i class="el-icon-arrow-left"></i>{{$t('account.back')}}</div>
       <div class="order-pay-header-cost">
-        待支付:  <span class="money">{{finalCostByUnit}}</span>
+       {{$t('account.needPay')}}<span class="order-pay-header-cost-money">{{finalCostByUnit}}</span>
       </div>
     </div>
     <div class="order-pay-main">
-      使用账户余额支付：
+     {{$t('account.useBalanceToPay')}} 
       <div class="order-pay-main-balance">
-        <span class="order-pay-main-balance-title">我的账户余额: </span>
+        <span class="order-pay-main-balance-title">{{$t('account.myBalance')}} </span>
         <span class="order-pay-main-balance-count">
           {{userBalanceByUnit}}
         </span>
       </div>
       <div class="order-pay-main-tips" v-if="isNeedRecharge">
         <i class="order-pay-main-tips-icon el-icon-warning"></i>
-        <span class="order-pay-main-tips-text">人民币余额不足，还需要
-          {{needRechargeNumberByUnit}}
-          ，请先去充值。</span>
+        <span class="order-pay-main-tips-text">
+          {{$t('account.lackMoney', { money: needRechargeNumberByUnit})}}
+        </span>
       </div>
       <div v-if="isNeedVerify" class="order-pay-main-verify">
         <div class="order-pay-main-verify-cellphone">
-          绑定的手机号:
+         {{$t('account.phoneNumber')}} 
           <span class="order-pay-main-verify-cellphone-binding" v-if="isBinding">
             {{ cellphone }}
           </span>
           <span class="order-pay-main-verify-cellphone-unbound" v-else>
-            还没有绑定手机号，<span class="link" @click="handleToBindPage">去绑定</span>
+          {{$t('user.phoneNotBound')}} ，<span class="link" @click="handleToBindPage">{{$t('account.toBind')}}</span>
           </span>
         </div>
         <div v-if="isRmbPayment" class="order-pay-main-verify-code">
-          <el-input :class="['order-pay-main-verify-code-input', { 'error': isCodeError }]" placeholder="请输入验证码" v-model="captcha" @focus="resetError"></el-input>
-          <span v-if="isWaiting" class="order-pay-main-verify-code-wait">{{waitingTime}}s后重试</span>
-          <span v-else @click="handleSendCode" :class="['order-pay-main-verify-code-send', { 'disabled': isDisabled }]">发送验证码</span>
+          <el-input :class="['order-pay-main-verify-code-input', { 'error': isCodeError }]" :placeholder="$t('account.enterCode')" v-model="captcha" @focus="resetError"></el-input>
+          <span v-if="isWaiting" class="order-pay-main-verify-code-wait">{{waitingTime}}{{$t('user.countResend')}}</span>
+          <span v-else @click="handleSendCode" :class="['order-pay-main-verify-code-send', { 'disabled': isDisabled }]"> {{$t('account.sendCode')}}</span>
         </div>
         <div v-if="isCodeError" class="order-pay-main-verify-code-error">
-          <span v-if="isCodeEmpty">请输入验证码</span>
-          <span v-if="isCodeWrong">验证码错误</span>
+          <span v-if="isCodeEmpty">{{$t('account.enterCode')}} </span>
+          <span v-if="isCodeWrong">{{$t('account.codeError')}} </span>
         </div>
       </div>
-      <el-button v-if="isNeedRecharge" type="primary" class="order-pay-main-confirm-button" @click="handleShowRechargeDialog">去充值</el-button>
-      <el-button v-else :loading="isLoading" :disabled="isDisabled" type="primary" :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]" @click="handleConfirmToPay">确认支付</el-button>
+      <el-button v-if="isNeedRecharge" type="primary" class="order-pay-main-confirm-button" @click="handleShowRechargeDialog"> {{$t('account.topUp')}}</el-button>
+      <el-button v-else :loading="isLoading" :disabled="isDisabled" type="primary" :class="['order-pay-main-confirm-button', { 'disabled': isDisabled }]" @click="handleConfirmToPay">{{$t('account.payNow')}}</el-button>
     </div>
     <el-dialog class="order-pay-main-dialog" :visible.sync="isShowRechargeDialog">
-      <div class="order-pay-main-dialog-title" slot="title">充值</div>
+      <div class="order-pay-main-dialog-title" slot="title"> {{$t('account.recharge')}}</div>
       <recharge-dialog :needRechargeMoney="needRechargeNumber" v-if="isShowRechargeDialog" @handleCallback="handleHideRechargeDialog"></recharge-dialog>
     </el-dialog>
   </div>
@@ -55,6 +55,7 @@ import RechargeDialog from './common/RechargeDialog'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
+import _ from 'lodash'
 export default {
   name: 'OrderPay',
   mixins: [OrderMixin],
@@ -73,7 +74,9 @@ export default {
     }
   },
   mounted() {
-    document.title = '支付页面'
+    if (_.isEmpty(this.tradeOrder)) {
+      return this.$router.push({ name: 'MyAccount' })
+    }
   },
   computed: {
     ...mapGetters({
@@ -88,18 +91,18 @@ export default {
       return this.userProfile.cellphone
     },
     isBinding() {
-      return !!this.cellphone
+      return Boolean(this.cellphone)
     },
     isDisabled() {
-      return !this.isBinding
+      return !this.isBinding && this.finalCost > 200
     },
     finalCost() {
       return this.tradeOrder.finalCost
     },
     finalCostByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit} ${this.finalCost}`
-        : `${this.finalCost} ${this.costUnit}`
+        ? `${this.costUnit}${this.finalCost}`
+        : `${this.finalCost}${this.costUnit}`
     },
     userRmb() {
       return this.balance.rmb
@@ -115,8 +118,8 @@ export default {
     },
     userBalanceByUnit() {
       return this.isRmbPayment
-        ? ` ${this.costUnit} ${this.userBalance}`
-        : ` ${this.userBalance} ${this.costUnit}`
+        ? ` ${this.costUnit}${this.userBalance}`
+        : ` ${this.userBalance}${this.costUnit}`
     },
     isNeedRecharge() {
       return this.finalCost > this.userBalance
@@ -140,7 +143,6 @@ export default {
     ...mapActions({
       payTradeOrder: 'account/payTradeOrder',
       getBalance: 'account/getBalance',
-      payTradeOrder: 'account/payTradeOrder'
     }),
     resetError() {
       this.isCodeWrong = false
@@ -157,7 +159,7 @@ export default {
     },
     waitAMiniute() {
       clearInterval(this.timer)
-      this.waitingTime = 5
+      this.waitingTime = 60
       this.timer = setInterval(() => {
         if (--this.waitingTime <= 0) {
           clearInterval(this.timer)
@@ -172,51 +174,49 @@ export default {
           this.waitAMiniute()
           this.$message({
             type: 'success',
-            message: '发送成功'
+            message: this.$t('user.smsCodeSentSuccess')
           })
         } catch (error) {
-          console.error(error)
-          this.$message.error('发送验证码失败')
+          this.$message.error(this.$t('user.sendingFrequent'))
         }
       }
     },
     handleToBindPage() {
-      this.$message({
-        type: 'success',
-        message: '去绑定页面'
-      })
+      window.location.href = `${window.location.origin}/u/p/thirdPartyAccountBinding`
     },
     async handleConfirmToPay() {
       if (this.isNeedVerify && !this.captcha) {
         return (this.isCodeEmpty = true)
       }
-      const { goodsId, finalCost, payment, count, type = 0 } = this.tradeOrder
+      const { id, finalCost, payment, count, type = 0, goodsDetail, subject = '', user_nid = '' } = this.tradeOrder
       let payload = {
         type,
-        [this.payment]: finalCost,
+        rmb: 0,
+        bean: 0,
+        coin: 0,
         count,
+        captcha: this.captcha,
+        [this.payment]: goodsDetail[this.payment],
         finalCostByUnit: this.finalCostByUnit
       }
       if (type === 2) {
         // package
         payload = {
           ...payload,
-          goodsId: 2,
+          goodsId: 1,
+          subject,
           extra: {
-            packageId: goodsId
+            packageId: id
           }
-        }
-        if (this.isNeedVerify) {
-          payload['captcha'] = this.captcha
         }
       }
       if (type === 1) {
         // exchange
         payload = {
-          goodsId,
+          goodsId: id,
           ...payload,
           extra: {
-            user_nid: 1
+            user_nid
           }
         }
       }
@@ -226,12 +226,17 @@ export default {
           this.$router.push({ name: 'OrderSuccess' })
           this.$message({
             type: 'success',
-            message: '支付成功'
+            message: this.$t('account.successfullyPaid')
           })
           this.isLoading = false
         })
         .catch(e => {
-          this.$message.error('支付失败')
+          const code = _.get(e, 'response.data.code', '')
+          if (code === 5) {
+            this.isCodeWrong = true
+          }else {
+            this.$message.error(this.$t('account.failPaid'))
+          }
           this.isLoading = false
         })
     }
@@ -259,7 +264,8 @@ export default {
     }
     &-cost {
       margin-top: 14px;
-      .money {
+      &-money {
+        margin-left: 20px;
         font-size: 24px;
         color: #f20d0d;
       }

@@ -19,7 +19,6 @@ import LessonPackageCell from '../LessonPackageCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
-import Vue from 'vue'
 
 export default {
   name: 'Course',
@@ -45,12 +44,17 @@ export default {
     lessonPackagesData() {
       let tempArr = _.get(this.lessonPackages, 'hits', [])
       let Arr = _.forEach(tempArr, i => {
-        if (i.highlight) {
-          let name = _.get(i.highlight, 'title', i.title)
-          name = name.join().replace(/<span>/g, `<span class="red">`)
-          Vue.set(i, 'name_title', name)
-        } else {
-          Vue.set(i, 'name_title', i.title)
+        if(i.highlight){
+          if(i.highlight.title){
+            let name = _.get(i.highlight, 'title', i.title)
+            name = name.join().replace(/<span>/g, `<span class="red">`)
+            i.title = name
+          } 
+          if(i.highlight.description){
+            let desc = _.get(i.highlight, 'description', i.description)
+            desc = desc.join().replace(/<span>/g, `<span class="red">`)
+            i.description = desc
+          }
         }
       })
       return Arr

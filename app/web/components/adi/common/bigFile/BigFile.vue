@@ -4,9 +4,7 @@
       <a v-if="type=='link'" :href="url">{{this.properties.extraMsg || url}}</a>
       <img v-if="type=='image'" :src="url" :alt="this.properties.extraMsg">
       <div v-if="type=='video'">
-        <video :src="url" controls>
-          {{$t('editor.videoNotSupport')}}
-        </video>
+        <video-player :src="url"/>
       </div>
       <div v-if="errMsg" class="err">{{errMsg}}</div>
     </div>
@@ -22,16 +20,17 @@
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
       </div>
-      <div class="bigfile-image" v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
-        <img :src="actualUrl" />
+      <div
+        class="bigfile-image"
+        v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']"
+      >
+        <img :src="actualUrl">
       </div>
       <div v-if="getType === handleExt['mp4']">
-        <video :src="actualUrl" controls>
-          {{$t('editor.videoNotSupport')}}
-        </video>
+        <video-player :src="actualUrl"/>
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src='getPdfSrc'></iframe>
+        <iframe :src="getPdfSrc"></iframe>
       </div>
     </div>
   </div>
@@ -43,10 +42,14 @@ import { mapGetters } from 'vuex'
 import axios from 'axios'
 import filesize from 'filesize'
 import _ from 'lodash'
+import videoPlayer from '@/components/common/VideoPlayer'
 
 export default {
   name: 'AdiBigFile',
   mixins: [compBaseMixin],
+  components: {
+    videoPlayer
+  },
   data() {
     return {
       type: '',
@@ -289,7 +292,6 @@ export default {
 .comp-bigfile {
   video {
     width: 100%;
-    // opacity: 0;
   }
 
   img {
@@ -420,19 +422,19 @@ export default {
       }
 
       .icon-sketch {
-        color: rgb(249, 189, 15)
+        color: rgb(249, 189, 15);
       }
 
       .icon-exe {
-        color: rgb(119, 149, 198)
+        color: rgb(119, 149, 198);
       }
 
       .icon-xmind {
-        color: rgb(245, 90, 35)
+        color: rgb(245, 90, 35);
       }
-      
+
       .icon-SVGA {
-        color: rgb(178, 193, 142)
+        color: rgb(178, 193, 142);
       }
 
       .icon-markdown {
@@ -452,7 +454,7 @@ export default {
       }
 
       .icon-ukown_file {
-        color: rgb(86, 155, 255)
+        color: rgb(86, 155, 255);
       }
     }
 

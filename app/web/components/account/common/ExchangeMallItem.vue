@@ -13,7 +13,7 @@
         {{subject}}
       </div>
       <div class="exchange-item-info-price">
-        单价:
+        {{$t('account.price')}}
         <span class="exchange-item-info-price-number">{{ priceByUnit }}</span>
       </div>
       <el-button
@@ -21,7 +21,7 @@
         type="primary"
         class="exchange-item-info-button"
         @click="toExchangePage"
-      >兑换</el-button>
+      >{{$t('account.conversion')}}</el-button>
     </div>
   </div>
 </template>
@@ -47,8 +47,8 @@ export default {
     image() {
       return this.data.thumbnail
     },
-    goodsId() {
-      return this.data.goodsId
+    id() {
+      return this.data.id
     },
     subject() {
       return this.data.subject
@@ -102,7 +102,7 @@ export default {
     toExchangePage() {
       this.$router.push({
         name: 'OrderConfirm',
-        query: { id: this.goodsId, type: 1, payment: this.priceUnit }
+        query: { id: this.id, type: 1, payment: this.priceUnit }
       })
     },
     handleShowButton() {
@@ -118,12 +118,12 @@ export default {
 <style lang="scss">
 .exchange-item {
   display: flex;
-  align-items: center;
   max-width: 274px;
   min-width: 200px;
   height: 115px;
   border: 1px solid #e5e5e5;
-  padding-left: 20px;
+  padding-left: 24px;
+  padding-top: 20px;
   box-sizing: border-box;
   &.exchange-item-hover {
     box-shadow: 0px 4px 10px 0px rgba(84, 143, 240, 0.28);
@@ -139,6 +139,7 @@ export default {
     height: 80px;
     &-subject {
       font-size: 16px;
+      font-weight: bold;
       color: #333;
     }
     &-price {
@@ -147,6 +148,7 @@ export default {
       color: #999;
       &-number {
         color: #ff721e;
+        font-weight: bold;
       }
     }
 

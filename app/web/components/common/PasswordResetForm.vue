@@ -233,7 +233,7 @@ export default {
     font-size: 18px;
     height: 25px;
     color: #303133;
-    padding-left: 2px;
+    padding: 20px 0 0;
     margin: 0 0 32px;
   }
   &-send {

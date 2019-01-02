@@ -2,7 +2,7 @@
   <el-container class="user-data-setting" v-loading='loading' @click.stop="handleDialogClick">
     <el-row class="user-data-setting-content">
       <el-col class="user-data-setting-portrait-col">
-        <img :src="portrait || defaultPortrait" alt="" class="user-data-setting-profile">
+        <img :src="portrait || defaultPortrait" alt="" class="user-data-setting-profile" @click="showMediaSkyDriveDialog">
         <div>
           <div class="user-data-setting-change-profile" @click="showMediaSkyDriveDialog">
             {{$t('user.modifyAvatar')}}
@@ -150,6 +150,9 @@ export default {
     width: auto;
     text-align: center;
     padding: 40px 55px 0 0;
+    .user-data-setting-profile{
+      cursor: pointer;
+    }
   }
   &-form-col {
     width: auto;

@@ -2,70 +2,48 @@
   <div class="recharge-confirm">
     <div class="recharge-confirm-breadcrumb">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ name: 'Account' }">我的账户</el-breadcrumb-item>
-        <el-breadcrumb-item>充值</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'Account' }">{{$t('account.myAccount')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('account.recharge')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="recharge-confirm-header">
-      充值账号: {{username}}
+      {{$t('account.recharge')}}: {{username}}
     </div>
     <div class="recharge-confirm-money">
-      充值金额:
+      {{$t('account.rechargeMoney')}}
       <div class="recharge-confirm-money-options">
-        <div
-          :class="['recharge-confirm-money-options-card', { 'selected': isCard50 } ]"
-          @click="handleSelectMoneyCard(CONF.CARD_50)"
-        >
-          50元
+        <div :class="['recharge-confirm-money-options-card', { 'selected': isCard50 } ]" @click="handleSelectMoneyCard(CONF.CARD_50)">
+          {{$t('account.rmbUnit', { money: 50 })}}
         </div>
-        <div
-          :class="['recharge-confirm-money-options-card', { 'selected': isCard100 } ]"
-          @click="handleSelectMoneyCard(CONF.CARD_100)"
-        >
-          100元
+        <div :class="['recharge-confirm-money-options-card', { 'selected': isCard100 } ]" @click="handleSelectMoneyCard(CONF.CARD_100)">
+          {{$t('account.rmbUnit', { money: 100 })}}
         </div>
-        <div
-          :class="['recharge-confirm-money-options-card', { 'selected': isCard500 } ]"
-          @click="handleSelectMoneyCard(CONF.CARD_500)"
-        >
-          500元
+        <div :class="['recharge-confirm-money-options-card', { 'selected': isCard500 } ]" @click="handleSelectMoneyCard(CONF.CARD_500)">
+          {{$t('account.rmbUnit', { money: 500 })}}
         </div>
-        <div
-          :class="['recharge-confirm-money-options-card', { 'selected': isCardOther } ]"
-          @click="handleSelectMoneyCard(CONF.CARD_OTHER)"
-        >
-          <div
-            class="recharge-confirm-money-options-card-input"
-            v-show="isCardOther"
-          >
-            <input
-              class="recharge-confirm-money-options-card-input-inner"
-              type="number"
-              min="1"
-              ref="inputMoney"
-              autofocus="autofocus"
-              v-model="inputMoney"
-            >
-            元
+        <div :class="['recharge-confirm-money-options-card', { 'selected': isCardOther } ]" @click="handleSelectMoneyCard(CONF.CARD_OTHER)">
+          <div class="recharge-confirm-money-options-card-input" v-show="isCardOther">
+            <template v-if="isEn">￥</template>
+            <input class="recharge-confirm-money-options-card-input-inner" type="number" min="1" ref="inputMoney" autofocus="autofocus" v-model="inputMoney">
+            <template v-if="!isEn">元</template>
           </div>
-          <span v-show="!isCardOther">其他金额</span>
+          <span v-show="!isCardOther">{{$t('account.otherMoney')}}</span>
         </div>
       </div>
       <div class="recharge-confirm-money-tips">
         <i class="el-icon-warning"></i>
-        充值金额必须为正整数，单次最多不超过100万元。
+        {{$t('account.rechargeTips')}}
+        <!-- 充值金额必须为正整数，单次最多不超过100万元。 -->
       </div>
     </div>
-    <payment-way
-      class="recharge-confirm-payment"
-      :handleCallback="toComfirmPayPage"
-    ></payment-way>
+    <payment-way class="recharge-confirm-payment" :handleCallback="toComfirmPayPage"></payment-way>
   </div>
 </template>
 
 <script>
 import PaymentWay from './common/PaymentWay'
 import { mapGetters, mapActions } from 'vuex'
+import { locale } from '@/lib/utils/i18n'
 const MONEY_REG = /^[0-9]*[1-9][0-9]*$/
 export default {
   name: 'RechargeConfirm',
@@ -77,13 +55,16 @@ export default {
       rechargeMoney: 0,
       inputMoney: '',
       moneyCard: '50',
-      payWay: 'weixin',
+      payWay: 'weixin'
     }
   },
   computed: {
     ...mapGetters({
       userProfile: 'user/profile'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     username() {
       return this.userProfile.username || ''
     },

@@ -2,13 +2,20 @@
   <div class="order-confirm" v-if="!isLoading">
     <div class="order-confirm-header">
       <div class="order-confirm-header-center">
-        <div class="order-confirm-header-center-title">购买账号</div>
-        <div class="order-confirm-header-center-username">Keepwork账号: {{username}}</div>
+        <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
+        <div class="order-confirm-header-center-main">
+          <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
+          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}}
+            <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
+              <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select></span>
+        </div>
       </div>
     </div>
     <div class="order-confirm-main">
       <div class="order-confirm-main-title">
-        确认订单信息
+        {{$t('account.confirmInformation')}}
       </div>
       <div class="order-confirm-main-item">
         <package-item v-if="!isLoading && isPackageType" :data="goodsDetail"></package-item>
@@ -16,32 +23,32 @@
       </div>
       <div class="order-confirm-main-count">
         <div class="order-confirm-main-count-title">
-          数量:
+          {{$t('account.qty')}}
         </div>
         <div class="order-confirm-main-count-input">
-          <el-input-number class="input-number-counter" :disabled="isPackageType" v-model="count" :min="1" :max="10000" size="small"></el-input-number>
+          <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-          总价: {{ totalCostByUnit }}
+          {{$t('account.totalPrice')}} {{ totalCostByUnit }}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
         <div class="order-confirm-main-discounts-title">
-          优惠券
+          {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-          无优惠券
+          {{$t('account.noCoupons')}}
         </div>
         <div class="order-confirm-main-discounts-all">
-          查看详情 <i class="el-icon-arrow-right"></i>
+          {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
       <div class="order-confirm-main-submit">
         <div class="order-confirm-main-submit-total">
-          <span class="order-confirm-main-submit-total-title">需支付: </span>
+          <span class="order-confirm-main-submit-total-title">{{$t('account.needToPay')}} </span>
           <span class="order-confirm-main-submit-total-cost">{{ finalCostByUnit }}</span>
         </div>
-        <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>提交订单</el-button>
+        <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
       </div>
     </div>
   </div>
@@ -52,8 +59,10 @@ import PackageItem from './common/OrderPackageItem'
 import GoodsItem from './common/OrderGoodsItem'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
+import { keepwork } from '@/api'
 import _ from 'lodash'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
+const HAQI_PLATFORM = [2, 3]
 export default {
   name: 'OrderConfirm',
   mixins: [OrderMixin],
@@ -66,25 +75,63 @@ export default {
       isLoading: true,
       count: 1,
       isSubmiLoading: false,
-      discountId: null
+      discountId: null,
+      digitalAccount: '',
+      digitalAccountList: []
     }
   },
   async mounted() {
-    document.title = '确认订单'
-    let { type, count = 1, id, payment } = this.$route.query
+    let {
+      type,
+      count = 1,
+      id,
+      payment,
+      user_nid,
+      username = '',
+      price = '',
+      goodsId = ''
+    } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
-      if (type === 2 && payment === 'bean') {
-        return this.$message.error('课程包无法通过知识豆购买')
-      }
+    if (type === 2 && payment === 'bean') {
+      return this.$message.error('课程包无法通过知识豆购买')
+    }
     if (!type || !id || !payment) {
       return this.$message.error('缺少必要参数')
     }
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, goodsId: id, payment })
+      this.createTradeOrder({ type, count, id, payment, goodsId })
     ])
+    this.count = this.goodsDefaultCount
+    if (price) {
+      this.count = _.floor(_.divide(price, this.goodsCost))
+    }
+    if (this.isNeedDigitalAccount) {
+      // exchange way
+      await keepwork.account
+        .getDigitalAccounts()
+        .then(res => {
+          let data = _.get(res, 'data.data', [])
+          if (user_nid) {
+            if (data.includes(user_nid)) {
+              this.digitalAccount = user_nid
+            } else {
+              this.$message({
+                type: 'error',
+                duration: '8000',
+                message: '当前登录的账号跟该数字账号不存在关联'
+              })
+            }
+          }
+          this.digitalAccountList = data.map(item => ({
+            label: item,
+            value: item
+          }))
+        })
+        .catch(e => console.error(e))
+    }
     this.isLoading = false
   },
   methods: {
@@ -92,14 +139,20 @@ export default {
       createTradeOrder: 'account/createTradeOrder',
       getDiscounts: 'account/getDiscounts',
       submitTradeOrder: 'account/submitTradeOrder',
-      getBalance: 'account/getBalance'
+      getBalance: 'account/getBalance',
+      userLogout: 'user/logout'
     }),
     handleSubmitTradeOrder() {
+      if (this.isNeedDigitalAccount && !this.digitalAccount) {
+        return this.$message.error(
+          this.$t('account.pleaseSelectDigitalAccount')
+        )
+      }
       if (this.isCoinPayment && this.finalCost > this.userCoin) {
-        return this.$message.error('知识币不足，无法提交订单')
+        return this.$message.error(this.$t('account.coinInsufficient'))
       }
       if (this.isBeanPayment && this.finalCost > this.userBean) {
-        return this.$message.error('知识豆不足，无法提交订单')
+        return this.$message.error(this.$t('account.beanInsufficient'))
       }
       try {
         let payload = {
@@ -108,6 +161,9 @@ export default {
         }
         if (this.discountId) {
           payload['discountId '] = this.discountId
+        }
+        if (this.isNeedDigitalAccount) {
+          payload['user_nid'] = this.digitalAccount
         }
         payload = {
           ...payload,
@@ -118,7 +174,7 @@ export default {
         this.$router.push({ name: 'OrderPay' })
       } catch (error) {
         console.error(error)
-        this.$message.error('提交订单失败')
+        this.$message.error(this.$t('card.operationFail'))
       }
     }
   },
@@ -126,8 +182,11 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       tradeOrder: 'account/tradeOrder',
-      balance: 'account/balance',
+      balance: 'account/balance'
     }),
+    isDisableInput() {
+      return this.isPackageType || ''
+    },
     username() {
       return _.get(this.userProfile, 'username', '')
     },
@@ -140,6 +199,15 @@ export default {
         payment: this.payment
       }
     },
+    goodsMin() {
+      return _.get(this.goodsDetail, 'min', 1)
+    },
+    goodsMax() {
+      return _.get(this.goodsDetail, 'max', 1)
+    },
+    goodsDefaultCount() {
+      return _.get(this.goodsDetail, 'defaultCount', 1)
+    },
     goodsCost() {
       if (this.isPackageType) {
         return _.get(this.goodsDetail, [this.payment], '')
@@ -150,11 +218,17 @@ export default {
         _.get(this.goodsDetail, 'bean', 0)
       )
     },
+    goodsPlatform() {
+      return _.get(this.goodsDetail, 'platform', '')
+    },
     isPackageType() {
       return this.goodsType === 2
     },
     isExchangeType() {
       return this.goodsType === 1
+    },
+    isNeedDigitalAccount() {
+      return this.isExchangeType && HAQI_PLATFORM.includes(this.goodsPlatform)
     },
     isDisabledCount() {
       return false
@@ -165,17 +239,18 @@ export default {
         : `${this.finalCost}${this.costUnit}`
     },
     totalCost() {
-      return this.goodsCost * this.count
+      const total = _.multiply(this.goodsCost * this.count)
+      return _.round(total, 2)
     },
     totalCostByUnit() {
       return this.isRmbPayment
-        ? `${this.costUnit} ${this.totalCost}`
-        : `${this.totalCost} ${this.costUnit}`
+        ? `${this.costUnit}${this.totalCost}`
+        : `${this.totalCost}${this.costUnit}`
     },
     finalCost() {
-      // FIXME:
-      return this.totalCost - 0
-    },
+      // FIXME: discounts logic
+      return _.round(this.totalCost, 2)
+    }
   }
 }
 </script>
@@ -200,11 +275,34 @@ export default {
         font-size: 20px;
         color: #333;
       }
-      &-username {
+      &-main {
         margin-top: 14px;
         margin-bottom: 25px;
-        font-size: 14px;
-        color: #666;
+        &-username {
+          font-size: 14px;
+          color: #666;
+          display: inline-block;
+          min-width: 189px;
+          padding-right: 39px;
+          box-sizing: border-box;
+        }
+
+        &-account {
+          display: inline-block;
+          font-size: #666;
+          font-size: 14px;
+          border-left: 1px solid #9c9c9c;
+          padding-left: 39px;
+          .el-input__inner {
+            height: 30px;
+            line-height: 30px;
+          }
+          .el-input__suffix-inner {
+            .el-select__caret {
+              line-height: 30px;
+            }
+          }
+        }
       }
     }
   }
