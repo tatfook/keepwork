@@ -56,17 +56,17 @@
           <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></all-projects>
         </div>
         <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft>
+          <paracraft-item ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft-item>
         </div>
         <div class="selected-projects" v-if='currIndex == 3'>
-          <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website>
+          <website-item ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website-item>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
         <div class="selected-lessons" v-if='currIndex == 5'>
-          <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course>
+          <course-item ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course-item>
         </div>
         <div class="selected-user" v-if='currIndex == 6'>
-          <users ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users>
+          <users-item ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users-item>
         </div>
         <div class="selected-studio" v-if='currIndex == 7'>
           <el-row>
@@ -98,7 +98,7 @@
           </el-row>
         </div>
         <div class="selected-projects" v-if='currIndex == 8'>
-          <recruiting ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting>
+          <recruiting-item ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting-item>
         </div>
       </div>
     </div>
@@ -232,12 +232,12 @@ export default {
     }
   },
   components: {
-    AllProjects,
-    Paracraft,
-    Website,
-    Course,
-    Recruiting,
-    Users
+    'all-projects': AllProjects,
+    'paracraft-item': Paracraft,
+    'website-item': Website,
+    'course-item': Course,
+    'recruiting-item': Recruiting,
+    'users-item': Users
   }
 }
 </script>
