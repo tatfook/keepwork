@@ -122,9 +122,8 @@ export default {
       activeTabIndex: '1',
       currIndex: 1,
       searchKey: '',
-      sortProjects: 'recent_view',
-      // currSortMode: this.$t("explore.overall"),
-      currSortMode: this.$t("explore.hottest"),
+      sortProjects: '',
+      currSortMode: this.$t("explore.overall"),
       searchResultAmount: 0
     }
   },
@@ -153,19 +152,18 @@ export default {
         case 5:
         case 8:
           return [
-            // { mode: this.$t("explore.overall"), command: '/综合' },
+            { mode: this.$t("explore.overall"), command: '/综合' },
             { mode: this.$t("explore.newest"), command: 'updated_time/最新' },
             { mode: this.$t("explore.hottest"), command: 'recent_view/热门' }
           ]
         case 6:
           return [
-            // { mode: this.$t("explore.overall"), command: '/综合' },
+            { mode: this.$t("explore.overall"), command: '/综合' },
             { mode: this.$t("explore.projectSort"), command: 'total_projects/项目' },
             { mode: this.$t("explore.popularity"), command: 'total_fans/名气' }
           ]
         default:
-          // return [{ mode: this.$t("explore.overall"), command: '/综合' }]
-          return [{ mode: this.$t("explore.hottest"), command: 'recent_view/热门' }]
+          return [{ mode: this.$t("explore.overall"), command: '/综合' }]
       }
     }
   },
@@ -229,14 +227,8 @@ export default {
     },
     selectTab(index) {
       this.currIndex = index
-      if(index == 6){
-        this.currSortMode = this.$t("explore.popularity")
-        this.sortProjects = 'total_fans'
-      }else{
-        // this.currSortMode = this.$t("explore.overall")
-        this.currSortMode = this.$t("explore.hottest")
-        this.sortProjects = 'recent_view'
-      }
+      this.currSortMode = this.$t("explore.overall")
+      this.sortProjects = ''
     }
   },
   components: {
