@@ -240,7 +240,12 @@ export default {
       let currentRecord = _.map(
         this.classroomLearnRecord,
         ({
-          extra: { portrait, name='visitor', username='visitor', quiz=[] },
+          extra: {
+            portrait,
+            name = 'visitor',
+            username = 'visitor',
+            quiz = []
+          },
           createdAt,
           lessonId,
           userId
@@ -294,7 +299,9 @@ export default {
         .reduce((arr, cur) => [...arr, ...cur], [])
     },
     modListFilter() {
-      return this.modList.filter(item => item.cmd !== 'Lesson' && item.cmd !== 'BigFile')
+      return this.modList.filter(
+        item => item.cmd !== 'Lesson' && item.cmd !== 'BigFile'
+      )
     }
   },
   methods: {
@@ -303,20 +310,20 @@ export default {
       getClassLearnRecords: 'lesson/teacher/getClassLearnRecords',
       modifyClassLearnRecords: 'lesson/teacher/modifyClassLearnRecords'
     }),
-    toggleSelection(rows){
+    toggleSelection(rows) {
       if (rows) {
-          rows.forEach(row => {
-            this.$refs.gradeMultipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.gradeMultipleTable.clearSelection();
-        }
+        rows.forEach(row => {
+          this.$refs.gradeMultipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.gradeMultipleTable.clearSelection()
+      }
     },
     async change(type) {
       this.changeSelected = type
-      if(type === 'changeAll'){
-        if(this.multipleSelection.length < this.newCurrentRecord.length){
-          this.$refs.gradeMultipleTable.clearSelection();
+      if (type === 'changeAll') {
+        if (this.multipleSelection.length < this.newCurrentRecord.length) {
+          this.$refs.gradeMultipleTable.clearSelection()
           this.toggleSelection(this.newCurrentRecord)
         }
         this.changeDialogVisible = true
@@ -335,7 +342,7 @@ export default {
         this.changeDialogVisible = true
       }
     },
-    cancelChangeStudentMarks(){
+    cancelChangeStudentMarks() {
       this.toggleSelection()
       this.changeDialogVisible = false
     },
@@ -650,7 +657,7 @@ export default {
     width: 70%;
   }
   .teacher-summary {
-    &-change{
+    &-change {
       .el-dialog {
         width: 90% !important;
       }
@@ -661,7 +668,7 @@ export default {
       }
     }
   }
-  .change-mark{
+  .change-mark {
     max-width: 90%;
   }
 }
