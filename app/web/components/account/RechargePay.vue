@@ -47,13 +47,17 @@ export default {
   methods: {
     ...mapActions({
       getRechargeOrderState: 'account/getRechargeOrderState',
-      getBalance: 'account/getBalance'
+      getBalance: 'account/getBalance',
+      updateRechargeOrder: 'account/updateRechargeOrder'
     }),
     intervalCheckOrder() {
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
         const order = await this.getRechargeOrderState({ id: this.orderId })
         if (order.state === 256) {
+          if (order.extra && order.extra.discount) {
+            this.updateRechargeOrder({ discount: order.extra.discount })
+          }
           await this.getBalance().catch(e => console.error(e))
           this.$router.push({ name: 'RechargeSuccess' })
           return

@@ -64,7 +64,10 @@
         </div>
       </template>
       <template v-else>
-        <div>{{$t('account.noCoupons')}}</div>
+        <div class="order-confirm-discounts-dialog-empty">
+          <img class="order-confirm-discounts-dialog-empty-image" src="../../assets/lessonImg/no_packages.png" :alt="$t('account.noCoupons')">
+          <span class="order-confirm-discounts-dialog-empty-tips">{{$t('account.noCoupons')}}</span>
+        </div>
       </template>
       <div class="order-confirm-discounts-dialog-footer" slot="footer">
         <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">取消</el-button>
@@ -161,6 +164,7 @@ export default {
         })
         .catch(e => console.error(e))
     }
+    this.autoCheckDiscount()
     this.isLoading = false
   },
   methods: {
@@ -253,13 +257,15 @@ export default {
         isChecked: i.id === this.discountId
       }))
     },
+    usableDiscountsIds() {
+      return this.usableDiscounts.map(i => i.id)
+    },
     disabledDiscounts() {
       const filterDiscount = item => {
         return (
+          !this.usableDiscountsIds.includes(item.id) &&
           item.state === 0 &&
-          item.endTime > +new Date() &&
-          item[this.payment] > 0 &&
-          item[this.payment] > this.totalCost
+          item.endTime > +new Date()
         )
       }
       return this.discounts.filter(filterDiscount).map(i => ({
@@ -325,8 +331,8 @@ export default {
         : `${this.finalCost}${this.costUnit}`
     },
     totalCost() {
-      let total = _.multiply(this.goodsCost * this.count)
-      return this.isRmbPayment ? _.round(total, 2) : total
+      const total = _.multiply(this.goodsCost * this.count)
+      return _.round(total, 2)
     },
     totalCostByUnit() {
       return this.isRmbPayment
@@ -358,8 +364,7 @@ export default {
         : `${this.rewardNumber} ${this.costUnit}`
     },
     finalCost() {
-      // FIXME: discounts logic
-      return this.isRmbPayment ? _.round(this.totalCost, 2) : this.totalCost
+      return _.round(_.subtract(this.totalCost, this.rewardNumber), 2)
     }
   }
 }
@@ -558,6 +563,19 @@ export default {
       align-items: center;
       height: 500px;
       overflow-y: auto;
+    }
+
+    &-empty {
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      &-tips {
+        color: #333;
+        font-size: 24px;
+        margin-top: 30px;
+      }
     }
 
     &-footer {

@@ -3,8 +3,8 @@
     <div class="coupon-ticket-left">
       <div class="coupon-ticket-left-sum">
         <span v-if="isRmbPayment" class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-unit">¥</span>{{rewardRmb}}</span>
-        <span v-else-if="isCoinPayment" class="coupon-ticket-left-sum-coin"><span class="coupon-ticket-left-sum-coin-unit">Ⓒ</span>{{rewardCoin}}</span>
-        <span v-else-if="isBeanPayment" class="coupon-ticket-left-sum-bean"><span class="coupon-ticket-left-sum-bean-unit">ⓑ</span>{{rewardBean}}</span>
+        <span v-else-if="isCoinPayment" class="coupon-ticket-left-sum-coin">{{rewardCoin}}<span class="coupon-ticket-left-sum-coin-unit">{{$t('account.coin')}}</span></span>
+        <span v-else-if="isBeanPayment" class="coupon-ticket-left-sum-bean">{{rewardBean}}<span class="coupon-ticket-left-sum-bean-unit">{{$t('account.bean')}}</span></span>
       </div>
       <div class="coupon-ticket-left-condition">
         {{title}}
@@ -35,9 +35,6 @@ export default {
   props: {
     data: Object,
     width: '430px'
-  },
-  mounted() {
-    console.warn(this.data)
   },
   filters: {
     formatTime(time) {
@@ -135,16 +132,22 @@ export default {
     position: relative;
     overflow: hidden;
     &-sum {
-      &-money,
+      &-money {
+        font-size: 38px;
+        &-unit {
+          font-size: 22px;
+          margin-right: 3px;
+        }
+        &-coin {
+          font-size: 14px;
+        }
+      }
       &-coin,
       &-bean {
         font-size: 38px;
         &-unit {
-          font-size: 22px;
-          margin: 0 6px;
-        }
-        &-coin {
           font-size: 14px;
+          margin-left: 3px;
         }
       }
     }

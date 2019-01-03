@@ -196,9 +196,11 @@ export default {
         coin: 0,
         count,
         captcha: this.captcha,
-        discountId,
         [this.payment]: goodsDetail[this.payment],
         finalCostByUnit: this.finalCostByUnit
+      }
+      if (discountId) {
+        payload['discountId'] = discountId
       }
       if (type === 2) {
         // package

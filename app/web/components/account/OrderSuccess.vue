@@ -5,8 +5,8 @@
     <div class="order-success-cost">{{finalCostByUnit}}</div>
     <div class="order-success-discount">
       <span v-if="isPackageType">{{$t('account.returnCoin', { coin: returnCoin })}}</span>
-      <sapn v-if="hasDiscounts"> {{$t('account.returnCoupon', {returnCoin: discount })}}</sapn>
-      <router-link v-if="hasDiscounts" class="order-success-discount-link" :to="{ name: 'MyAccount'}">{{$t('account.viewMore')}}</router-link>
+      <sapn v-if="discountTitle">,{{$t('account.returnCoupon', { title: discountTitle })}}</sapn>
+      <router-link class="order-success-discount-link" :to="{ name: 'MyAccount'}">{{$t('account.viewMore')}}</router-link>
     </div>
 
   </div>
@@ -46,11 +46,11 @@ export default {
     returnCoin() {
       return this.isPackageType ? this.goodsDetail.rmb : ''
     },
-    discount() {
-      return this.hasDiscounts ? this.tradeOrder.discounts.title : ''
+    discountTitle() {
+      return _.get(this.tradeOrder, 'discount.title', '')
     },
     hasDiscounts() {
-      return this.tradeOrder.discounts
+      return !_.isEmpty(this.tradeOrder.discounts)
     }
   }
 }
