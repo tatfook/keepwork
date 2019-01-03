@@ -382,11 +382,13 @@ export default {
     },
     modifiedGrades(record) {
       let learnRecordsArr = _.map(record, student => {
-        for (let i = 0; i < student.extra.quiz.length; i++) {
-          let standardAnswer =
-            student.extra.quiz[i].data.answer.toString() || ''
-          Vue.set(student.extra.quiz[i], `answer`, standardAnswer)
-          Vue.set(student.extra.quiz[i], `result`, true)
+        if(student.extra.quiz){
+          for (let i = 0; i < student.extra.quiz.length; i++) {
+            let standardAnswer =
+              student.extra.quiz[i].data.answer.toString() || ''
+            Vue.set(student.extra.quiz[i], `answer`, standardAnswer)
+            Vue.set(student.extra.quiz[i], `result`, true)
+          }
         }
         return student
       })
