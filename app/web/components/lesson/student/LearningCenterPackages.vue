@@ -6,7 +6,7 @@
         <span class="tip">{{$t('lesson.enterClass')}}</span>
       </div>
       <div class="search-input">
-        <el-input id="searchClass" size="medium" v-model="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
+        <el-input id="searchClass" size="medium" v-model.trim="classID" :placeholder="$t('lesson.enterByClassId')" @keyup.enter.native="enterClass"></el-input>
       </div>
       <div class="search-btn">
         <el-button @click="enterClass" :disabled="!classID" size="medium" type="primary">
