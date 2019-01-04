@@ -237,7 +237,6 @@ export default {
       discounts: 'account/discounts'
     }),
     hasDiscounts() {
-      return false
       return this.currentPaymentDiscounts.length > 0
     },
     currentPaymentDiscounts() {
