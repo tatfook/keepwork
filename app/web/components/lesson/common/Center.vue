@@ -1,44 +1,20 @@
 <template>
   <div class="lesson-packages-wrap">
-    <div
-      class="lesson-packages"
-      v-if="!loading"
-      v-loading='loading'
-    >
+    <div class="lesson-packages" v-loading='loading'>
       <div class="packages-sum">{{$t('lesson.include')}}:
-        <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}</div>
+        <span>{{packagesCount}}</span> {{$t('lesson.packagesCount')}}</div>
       <el-row class="lesson-packages-subject">
-        <el-col
-          v-for="coursePackage in sortedPackagesList"
-          :key="coursePackage.id"
-          :sm="12"
-          :md="8"
-          :xs="24"
-        >
+        <el-col v-for="coursePackage in sortedPackagesList" :key="coursePackage.id" :sm="12" :md="8" :xs="24">
           <div class="subject-desc">
-            <div
-              class="img-wrap"
-              @click="enterPackageDetailPage(coursePackage.id)"
-            >
-            <img
-                class="subject-cover"
-                :src="coursePackage.extra && coursePackage.extra.coverUrl"
-                alt=""
-              >
-              </div>
-            <h4
-              :title="coursePackage.packageName"
-              :class="['subject-title']"
-              @click="enterPackageDetailPage(coursePackage.id)"
-            >{{coursePackage.packageName}}</h4>
+            <div class="img-wrap" @click="enterPackageDetailPage(coursePackage.id)">
+              <img class="subject-cover" :src="coursePackage.extra && coursePackage.extra.coverUrl" alt="">
+            </div>
+            <h4 :title="coursePackage.packageName" :class="['subject-title']" @click="enterPackageDetailPage(coursePackage.id)">{{coursePackage.packageName}}</h4>
             <span>{{$t('lesson.include')}}: {{coursePackage.lessons.length}} {{$t('lesson.lessonsCount')}}</span>
             <span>{{$t('lesson.ages')}}: {{getCoursePackageSuitableAge(coursePackage)}}</span>
             <span :title="coursePackage.intro">{{$t('lesson.intro')}}: {{coursePackage.intro}}</span>
             <div class="purchase-lesson-package">
-              <div
-                :class="['purchase-tip',{'hidden': isTeacher || coursePackage.rmb == 0}]"
-                v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"
-              ></div>
+              <div :class="['purchase-tip',{'hidden': isTeacher || coursePackage.rmb == 0}]" v-html="$t('lesson.backInfo', { backCoinCount: `<span class='red'>${coursePackage.rmb}</span>` })"></div>
               <div :class="['purchase-money',{'hidden': isTeacher || coursePackage.rmb == 0}]">
                 <span class="money">
                   {{$t('lesson.rmbPrice')}}:
@@ -46,14 +22,8 @@
                 </span>
               </div>
               <div class="purchase-money">
-                <span
-                  class="money free"
-                  v-if="isTeacher || coursePackage.rmb == 0"
-                >{{$t('lesson.free')}}</span>
-                <span
-                  class="money"
-                  v-else
-                >
+                <span class="money free" v-if="isTeacher || coursePackage.rmb == 0">{{$t('lesson.free')}}</span>
+                <span class="money" v-else>
                   {{$t('lesson.coinsPrice')}}:
                   <span class="red">{{coursePackage.coin}}</span> {{$t('lesson.coins')}}
                 </span>
@@ -62,19 +32,10 @@
           </div>
         </el-col>
       </el-row>
-      <div
-        class="lesson-packages-pages"
-        v-if="packagesCount > perPage"
-      >
+      <div class="lesson-packages-pages" v-if="packagesCount > perPage">
         <div class="block">
           <span class="demonstration"></span>
-          <el-pagination
-            background
-            @current-change="targetPage"
-            layout="prev, pager, next"
-            :page-size="perPage"
-            :total="packagesCount"
-          >
+          <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="packagesCount">
           </el-pagination>
         </div>
       </div>
@@ -83,79 +44,77 @@
 </template>
 
 <script>
-import _ from "lodash";
-import { mapActions, mapGetters } from "vuex";
+import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: "Center",
+  name: 'Center',
   data() {
     return {
       loading: true,
       perPage: 15,
       page: 1
-    };
+    }
   },
   created() {
-    this.fromTopToShow();
+    this.fromTopToShow()
   },
   computed: {
     ...mapGetters({
-      packages: "lesson/center/packagesList",
-      isTeacher: "lesson/isTeacher"
+      packages: 'lesson/center/packagesList',
+      isTeacher: 'lesson/isTeacher'
     }),
     packagesList() {
-      return _.get(this.packages, "rows", []);
+      return _.get(this.packages, 'rows', [])
     },
     packagesCount() {
-      return _.get(this.packages, "count", 0);
+      return _.get(this.packages, 'count', 0)
     },
     sortedPackagesList() {
-      let approvedPackages = _.filter(this.packagesList, i => i.state == 2);
-      return approvedPackages.sort(this.sortByUpdateAt);
+      let approvedPackages = _.filter(this.packagesList, i => i.state == 2)
+      return approvedPackages.sort(this.sortByUpdateAt)
     }
   },
   async mounted() {
-    let payload = { perPage: this.perPage, page: this.page };
-    await this.getPackagesList(payload)
-    this.loading = false;
+    await this.targetPage(this.page)
+    this.loading = false
   },
   methods: {
     ...mapActions({
-      getPackagesList: "lesson/center/getPackagesList"
+      getPackagesList: 'lesson/center/getPackagesList'
     }),
     fromTopToShow() {
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0)
     },
     sortByUpdateAt(obj1, obj2) {
-      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1;
+      return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     enterPackageDetailPage(packageId) {
-      if (this.$route.name === "Lesson") {
+      if (this.$route.name === 'Lesson') {
         this.$router.push({
           path: `/student/package/${packageId}`
-        });
+        })
       } else {
         this.$router.push({
           path: `package/${packageId}`
-        });
+        })
       }
     },
     async targetPage(targetPage) {
-      this.loading = true;
-      this.page = targetPage;
-      let payload = { perPage: this.perPage, page: this.page };
-      await this.getPackagesList(payload);
-      this.loading = false;
+      this.loading = true
+      let payload = { perPage: this.perPage, page: targetPage }
+      await this.getPackagesList(payload)
+      this.loading = false
     },
     getCoursePackageSuitableAge(packageDetail) {
-      let { minAge, maxAge } = packageDetail;
+      let { minAge, maxAge } = packageDetail
       if (minAge == 0 && maxAge == 0) {
-        return this.$t("lesson.packageManage.SuitableForAll");
+        return this.$t('lesson.packageManage.SuitableForAll')
       }
-      return `${minAge}-${maxAge}`;
+      return `${minAge}-${maxAge}`
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
