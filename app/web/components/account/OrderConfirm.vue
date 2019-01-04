@@ -243,14 +243,19 @@ export default {
       return [...this.usableDiscounts, ...this.disabledDiscounts]
     },
     usableDiscounts() {
-      const filterDiscount = item => {
-        return (
-          item.state === 0 &&
-          item.endTime > +new Date() &&
-          item[this.payment] > 0 &&
-          item[this.payment] <= this.totalCost
-        )
-      }
+      const filterDiscount = this.isExchangeType
+        ? item =>
+            item.state === 0 &&
+            item.endTime > +new Date() &&
+            item[this.payment] > 0 &&
+            item[this.payment] <= this.totalCost &&
+            item.type === 0
+        : item =>
+            item.state === 0 &&
+            item.endTime > +new Date() &&
+            item[this.payment] > 0 &&
+            item[this.payment] <= this.totalCost
+
       return this.discounts.filter(filterDiscount).map(i => ({
         ...i,
         isChecked: i.id === this.discountId

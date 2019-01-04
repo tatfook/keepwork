@@ -5,7 +5,7 @@
         {{$t('account.total', { total: ticketsCount })}}
       </div>
       <div class="coupon-list-main">
-        <coupon-ticket class="coupon-list-main-item" v-for="(item,index) in data" :key="index" :data="item"></coupon-ticket>
+        <coupon-ticket class="coupon-list-main-item" v-for="(item,index) in soredTickets" :key="index" :data="item"></coupon-ticket>
       </div>
     </template>
     <template v-else>
@@ -40,6 +40,9 @@ export default {
     },
     hasTickets() {
       return this.ticketsCount > 0
+    },
+    soredTickets() {
+      return this.data.map(i => i).sort((prv, cur) => prv.endTime - cur.endTime)
     }
   },
   data() {
