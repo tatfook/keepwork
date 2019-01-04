@@ -194,10 +194,19 @@ export default {
       this.isShowDiscountDialog = false
     },
     autoCheckDiscount() {
-      const discount = _.maxBy(
+      let discount = _.maxBy(
         this.usableDiscounts,
         item => item[`reward${_.upperFirst(this.payment)}`]
       )
+      const discounts = _.filter(
+        this.usableDiscounts,
+        item =>
+          item[`reward${_.upperFirst(this.payment)}`] ===
+          discount[`reward${_.upperFirst(this.payment)}`]
+      )
+      if (discounts.length > 1) {
+        discount = _.minBy(discounts, item => item.endTime)
+      }
       const id = _.get(discount, 'id', '')
       this.setDiscount(id)
     },
@@ -256,10 +265,17 @@ export default {
             item[this.payment] > 0 &&
             item[this.payment] <= this.totalCost
 
-      return this.discounts.filter(filterDiscount).map(i => ({
-        ...i,
-        isChecked: i.id === this.discountId
-      }))
+      return this.discounts
+        .filter(filterDiscount)
+        .map(i => ({
+          ...i,
+          isChecked: i.id === this.discountId
+        }))
+        .sort(
+          (prv, cur) =>
+            cur[`reward${_.upperFirst(this.payment)}`] -
+            prv[`reward${_.upperFirst(this.payment)}`]
+        )
     },
     usableDiscountsIds() {
       return this.usableDiscounts.map(i => i.id)
@@ -272,10 +288,13 @@ export default {
           item.endTime > +new Date()
         )
       }
-      return this.discounts.filter(filterDiscount).map(i => ({
-        ...i,
-        isDisabled: true
-      }))
+      return this.discounts
+        .filter(filterDiscount)
+        .map(i => ({
+          ...i,
+          isDisabled: true
+        }))
+        .sort((prv, cur) => prv.endTime - cur.endTime)
     },
     isDisableInput() {
       return this.isPackageType || ''
@@ -542,7 +561,7 @@ export default {
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        margin-right: 23px;
+        margin-right: 32px;
         border: solid 2px #bfbfbf;
         &.is-dont-checked {
           background: #fff;
