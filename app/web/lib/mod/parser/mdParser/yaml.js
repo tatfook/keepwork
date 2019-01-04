@@ -1,6 +1,6 @@
-import yaml from 'js-yaml'
+const yaml = require('js-yaml')
 
-export const mdToJson = (md) => {
+const mdToJson = (md) => {
   let result
   try {
     result = yaml.safeLoad(md)
@@ -10,11 +10,11 @@ export const mdToJson = (md) => {
   return result || {}
 }
 
-export const jsonToMd = (json) => {
+const jsonToMd = (json) => {
   return yaml.safeDump(json)
 }
 
-export default {
+module.exports = {
   mdToJson,
   jsonToMd
 }

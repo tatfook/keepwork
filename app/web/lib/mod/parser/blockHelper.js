@@ -1,16 +1,17 @@
-import _ from 'lodash'
-import Vue from 'vue'
-import md5 from 'blueimp-md5'
-import {
+const _ = require('lodash')
+const Vue = require('vue')
+const md5 = require('blueimp-md5')
+const {
   mdToJson,
   jsonToMd
-} from './mdParser/yaml'
-import CmdHelper, {
+} = require('./mdParser/yaml')
+const CmdHelper = require('./cmdHelper')
+const {
   MARKDOWN_CMD,
   MOD_CMD_BEGIN,
   MOD_CMD_END
-} from './cmdHelper'
-import ModAdaptor from './modAdaptor'
+} = require('./cmdHelper')
+const ModAdaptor = require('./modAdaptor')
 
 const blockHelper = {
   buildJson(block) {
@@ -136,4 +137,4 @@ const blockHelper = {
   }
 }
 
-export default blockHelper
+module.exports = blockHelper

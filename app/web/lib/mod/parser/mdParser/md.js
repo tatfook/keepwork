@@ -31,7 +31,7 @@ const mdUnescape = text => {
 }
 
 // md 转json对象
-export const mdToJson = text => {
+const mdToJson = text => {
   if (typeof text !== 'string') return text
 
   text = mdUnescape(text)
@@ -155,7 +155,7 @@ export const mdToJson = text => {
 }
 
 // json对象转markdown文本
-export const jsonToMd = obj => {
+const jsonToMd = obj => {
   let text = ''
   let value
 
@@ -214,7 +214,7 @@ export const jsonToMd = obj => {
   return text
 }
 
-export default {
+module.exports = {
   jsonToMd,
   mdToJson
 }

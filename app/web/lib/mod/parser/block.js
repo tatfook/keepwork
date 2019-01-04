@@ -1,5 +1,5 @@
-import uuid from '@/lib/utils/uuid'
-import { MARKDOWN_CMD } from './cmdHelper'
+const uuid = require('uuid/v1')
+const { MARKDOWN_CMD } = require('./cmdHelper')
 
 class ModBlock {
   constructor(cmd, lineBegin) {
@@ -14,5 +14,4 @@ class ModBlock {
     this.uuid = uuid()
   }
 }
-
-export default ModBlock
+module.exports = ModBlock
