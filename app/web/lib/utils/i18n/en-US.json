@@ -22,6 +22,7 @@
     "inputPassword": "Please enter your password",
     "wrongPassword": "Wrong password",
     "IncorrectUsernameOrPassword": "Incorrect username or password",
+    "AccountIsUnusable": "The account is not available",
     "usernameNotExist": "The username does not exist",
     "loginSuccess": "Login successfully",
     "logonFailed": "Logon failed",
