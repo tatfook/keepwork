@@ -59,6 +59,9 @@ module.exports = {
       test: /\.md$/,
       loader: 'raw-loader'
     },
+    babel: {
+      exclude: [/node_modules/, /app\/web\/lib\/mod\/parser/]
+    }
   },
   plugins: {
     imagemini: false,

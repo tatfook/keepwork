@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const Vue = require('vue')
 const md5 = require('blueimp-md5')
 const {
   mdToJson,
@@ -18,8 +17,7 @@ const blockHelper = {
     if (CmdHelper.isValidCmd(block.cmd)) {
       if (CmdHelper.isOldCmd(block.cmd)) {
         const targetCmd = CmdHelper.targetCmd(block.cmd)
-        const data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
-        Vue.set(block, 'data', data)
+        block.data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
         this.updateCmd(block, targetCmd)
         this.buildMarkdown(block)
       } else {
@@ -30,10 +28,10 @@ const blockHelper = {
             }
           }
           : mdToJson(this.mdText(block))
-        Vue.set(block, 'data', data)
+        block.data = data
       }
     } else {
-      Vue.set(block, 'data', {})
+      block.data = {}
     }
   },
 
@@ -82,12 +80,12 @@ const blockHelper = {
   },
 
   updateJson(block, jsonData) {
-    Vue.set(block, 'data', _.cloneDeep(jsonData))
+    block.data = _.cloneDeep(jsonData)
     this.buildMarkdown(block)
   },
 
   updateJsonValue(block, key, value) {
-    Vue.set(block.data, key, value)
+    block.data[key] = value
     this.buildMarkdown(block)
   },
 
