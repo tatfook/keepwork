@@ -22,11 +22,10 @@
       </el-row>
     </div>
     <div v-if="stepIndex===1">
-      <el-form class="website-name" :model="websiteNameForm" :rules="websiteNameFormRules" ref="websiteNameForm">
+      <el-form class="website-name" :model="websiteNameForm" :rules="websiteNameFormRules" ref="websiteNameForm" @submit.native.prevent>
         <el-form-item prop="value">
-          <el-input :placeholder="forExample.forExample" v-model="websiteNameForm.value">
+          <el-input :placeholder="forExample.forExample" v-model="websiteNameForm.value" @keyup.enter.native="handleSubmit">
             <template slot="prepend">{{ locationOrigin }}/{{ username }}/</template>
-
           </el-input>
         </el-form-item>
       </el-form>
@@ -183,6 +182,7 @@ export default {
     await this.userGetWebTemplateConfig().catch()
     await this.userGetAllWebsite({ useCache: true }).catch()
     this.loading = false
+    this.keyupSubmit()
   },
   methods: {
     ...mapActions({
@@ -190,6 +190,22 @@ export default {
       userGetWebTemplateConfig: 'user/getWebTemplateConfig',
       userGetAllWebsite: 'user/getAllWebsite'
     }),
+    keyupSubmit() {
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if (_key === 13) {
+          if (this.stepIndex === 0) {
+            this.handleNextStep()
+          }
+          if (this.stepIndex === 1) {
+            this.handleSubmit()
+          }
+          if (this.stepIndex === 2) {
+            this.handleEdit()
+          }
+        }
+      }
+    },
     setSelectedCategoryIndex(index) {
       this.selectedCategoryIndex = index
       this.resetSelectedTemplateIndex()
@@ -255,6 +271,9 @@ export default {
       }
       this.loading = false
     }
+  },
+  destroyed(){
+    document.onkeydown = null
   }
 }
 </script>

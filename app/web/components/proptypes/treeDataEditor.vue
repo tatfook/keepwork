@@ -72,10 +72,21 @@ export default {
       notButton: false
     }
   },
+  mounted() {
+    this.keyupSubmit()
+  },
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo'
     }),
+    keyupSubmit() {
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if (_key === 13) {
+          this.finishEditingMenu()
+        }
+      }
+    },
     treeData() {
       return this.originalTreeData
     },
@@ -295,6 +306,9 @@ export default {
         }
       })
     }
+  },
+  destroyed(){
+    document.onkeydown = null
   }
 }
 </script>
