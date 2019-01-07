@@ -1585,6 +1585,8 @@
     "used": "Used",
     "expired": "Expired",
     "total": "Total: {total}",
+    "coin": "coin",
+    "bean": "bean",
     "couponDescription": "Description:",
     "couponDescription1": "Coupons are valid through the specified dates that are on each coupon.",
     "couponDescription2": "Coupons will have a text marked its applying conditions and available items that the counpon can apply to. Gerenal coupons apply to all products on Keepwork. Lesson coupons only apply to lesson packages.",
@@ -1618,7 +1620,7 @@
     "failPaid": "Payment Failed",
     "viewMore": "View more",
     "returnCoin": "You got {coin} coins",
-    "returnCoupon": "one coupon of {title}",
+    "returnCoupon": "one coupon of {title}.",
     "price": "unit price:",
     "conversion": "Conversion",
     "pleaseSelectDigitalAccount": "Please select a digital account.",
@@ -1644,6 +1646,9 @@
     "scan": "Please scan the QR code to pay.",
     "success": "Success",
     "pleaseRecharge": "To pay for the order, please recharge",
-     "rechargeSuccessfully": "Success"
+     "rechargeSuccessfully": "Success",
+     "noData": "no data",
+     "selectCoupons":"Please select",
+     "withoutCoupons": "Without applying the coupon"
   }
 }

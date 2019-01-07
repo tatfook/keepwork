@@ -13,7 +13,9 @@ const {
   CREATE_TRADE_ORDER,
   SUBMIT_TRADE_ORDER,
   PAY_TRADE_ORDER,
-  GET_GOODS_SUCCESS
+  GET_GOODS_SUCCESS,
+  SET_DISCOUNT_ID,
+  UPDATE_RECHARGE_ORDER
 } = props
 
 const SUCCESS_CODE = 256
@@ -37,6 +39,9 @@ const actions = {
     const order = await account.createRechargeOrder(payload)
     commit(CREATE_RECHARGE_ORDER_SUCCESS, order)
     return order
+  },
+  async updateRechargeOrder({ commit }, payload) {
+    commit(UPDATE_RECHARGE_ORDER, payload)
   },
   async clearRechargeOrderRecord({ commit }) {
     commit(CLEAR_RECHARGE_ORDER_RECORD)
@@ -67,6 +72,9 @@ const actions = {
         commit(CREATE_TRADE_ORDER, { ...payload, goodsDetail })
       }
     }
+  },
+  async setDiscount({ commit }, discountId) {
+    commit(SET_DISCOUNT_ID, discountId)
   },
   async submitTradeOrder({ commit }, payload) {
     commit(SUBMIT_TRADE_ORDER, payload)

@@ -3,6 +3,10 @@
     <img class="recharge-success-icon" src="../../assets/account/order-success.png" alt="recharge-success-icon">
     <div class="recharge-success-title">{{$t('account.rechargeSuccessfully')}}</div>
     <div class="recharge-success-cost">{{rechargeMoney}}</div>
+    <div class="recharge-success-message">
+      <sapn v-if="discountTitle"> {{$t('account.returnCoupon', { title: discountTitle })}}</sapn>
+      <router-link class="recharge-success-message-link" :to="{ name: 'MyAccount'}">{{$t('account.viewMore')}}</router-link>
+    </div>
   </div>
 </template>
 <script>
@@ -16,7 +20,7 @@ export default {
     }
   },
   destroyed() {
-      this.clearRechargeOrderRecord()
+    this.clearRechargeOrderRecord()
   },
   computed: {
     ...mapGetters({
@@ -24,6 +28,9 @@ export default {
     }),
     rechargeMoney() {
       return `¥ ${_.get(this.rechargeOrder, 'amount', 0)}`
+    },
+    discountTitle() {
+      return _.get(this.rechargeOrder, 'discount.title', '')
     }
   },
   methods: {
@@ -61,11 +68,8 @@ export default {
     color: #f20d0d;
     margin-top: 24px;
   }
-
-  &-discount {
-    font-size: 16px;
-    color: #666;
-    margin-top: 24px;
+  &-message {
+    margin-top: 10px;
     &-link {
       color: #409efe;
     }

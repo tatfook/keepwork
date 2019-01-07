@@ -1589,6 +1589,8 @@
     "used": "已使用",
     "expired": "已过期",
     "total": "共: {total} 张",
+    "coin": "知识币",
+    "bean": "知识豆",
     "couponDescription": "优惠券使用说明:",
     "couponDescription1": "请在券面所示有效期内使用，逾期失效",
     "couponDescription2": "用券应满足券面所示使用范围、满减金额。通用券可全平台通用，课程券仅限购买课程时使用",
@@ -1601,7 +1603,7 @@
     "pleaseSelect": "请选择",
     "confirmInformation": "确认订单信息",
     "qty": "数量:",
-    "noCoupons": "无优惠券",
+    "noCoupons": "暂无优惠券",
     "detail": "详情",
     "totalPrice": "总价:",
     "needToPay": "需支付:",
@@ -1620,9 +1622,9 @@
     "recharge": "充值",
     "successfullyPaid": "支付成功",
     "failPaid": "支付失败",
-    "viewMore": "查看更多",
+    "viewMore": "点击查看",
     "returnCoin": "返 {coin} 知识币",
-    "returnCoupon": "一张 {title} 优惠券",
+    "returnCoupon": "赠送{title}优惠券。",
     "price": "单价:",
     "conversion": "兑换",
     "pleaseSelectDigitalAccount": "请选择数字账号",
@@ -1648,6 +1650,9 @@
     "scan": "扫描二维码支付",
     "success": "支付成功",
     "pleaseRecharge": "完成上笔支付还需:",
-    "rechargeSuccessfully": "充值成功"
+    "rechargeSuccessfully": "充值成功",
+    "noData": "暂无数据",
+    "selectCoupons":"请选择优惠券",
+    "withoutCoupons": "不使用用优惠券"
   }
 }

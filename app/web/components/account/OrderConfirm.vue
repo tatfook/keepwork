@@ -29,7 +29,7 @@
           <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
         </div>
         <div class="order-confirm-main-count-total">
-          {{$t('account.totalPrice')}} {{ totalCostByUnit }}
+          {{$t('account.totalPrice')}} {{totalCostByUnit}}
         </div>
       </div>
       <div class="order-confirm-main-discounts">
@@ -37,9 +37,14 @@
           {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-          {{$t('account.noCoupons')}}
+          <span class="is-checked-discount" v-show="this.tradeOrderDiscount">
+            - {{rewardNumberByUnit}} ({{tradeOrderDiscount && tradeOrderDiscount.title}})
+          </span>
+          <span v-show="!this.tradeOrderDiscount">
+            {{$t('account.noCoupons')}}
+          </span>
         </div>
-        <div class="order-confirm-main-discounts-all">
+        <div class="order-confirm-main-discounts-all" @click="handleShowDiscountsDialog">
           {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
@@ -51,12 +56,31 @@
         <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
       </div>
     </div>
+    <el-dialog class="order-confirm-discounts-dialog" :title="$t('account.selectCoupons')" :visible.sync="isShowDiscountDialog">
+      <template v-if="hasDiscounts">
+        <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">{{$t('account.withoutCoupons')}}</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
+        <div class="order-confirm-discounts-dialog-list">
+          <coupon-ticket-checkbox class="order-confirm-discounts-dialog-list-item" @handleClick="handleSelectDiscount" v-for="(item, index) in currentPaymentDiscounts" :data="item" :key="index"></coupon-ticket-checkbox>
+        </div>
+      </template>
+      <template v-else>
+        <div class="order-confirm-discounts-dialog-empty">
+          <img class="order-confirm-discounts-dialog-empty-image" src="../../assets/lessonImg/no_packages.png" :alt="$t('account.noCoupons')">
+          <span class="order-confirm-discounts-dialog-empty-tips">{{$t('account.noCoupons')}}</span>
+        </div>
+      </template>
+      <div class="order-confirm-discounts-dialog-footer" slot="footer">
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">{{$t('account.Sure')}}</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">{{$t('account.Cancel')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import PackageItem from './common/OrderPackageItem'
 import GoodsItem from './common/OrderGoodsItem'
+import CouponTicketCheckbox from './common/CouponTicketCheckbox'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
@@ -68,16 +92,24 @@ export default {
   mixins: [OrderMixin],
   components: {
     PackageItem,
-    GoodsItem
+    GoodsItem,
+    CouponTicketCheckbox
   },
   data() {
     return {
       isLoading: true,
       count: 1,
       isSubmiLoading: false,
-      discountId: null,
       digitalAccount: '',
-      digitalAccountList: []
+      digitalAccountList: [],
+      goodsId: '',
+      isShowDiscountDialog: false,
+      discountId: ''
+    }
+  },
+  watch: {
+    totalCost() {
+      this.autoCheckDiscount()
     }
   },
   async mounted() {
@@ -132,6 +164,7 @@ export default {
         })
         .catch(e => console.error(e))
     }
+    this.autoCheckDiscount()
     this.isLoading = false
   },
   methods: {
@@ -140,8 +173,43 @@ export default {
       getDiscounts: 'account/getDiscounts',
       submitTradeOrder: 'account/submitTradeOrder',
       getBalance: 'account/getBalance',
+      setDiscount: 'account/setDiscount',
       userLogout: 'user/logout'
     }),
+    handleSelectDiscount(id) {
+      this.discountId = id
+    },
+    handleDontChecked() {
+      this.discountId = ''
+    },
+    handleShowDiscountsDialog() {
+      this.isShowDiscountDialog = true
+      this.discountId = this.tradeOrderDiscountId
+    },
+    handleCancelSelected() {
+      this.isShowDiscountDialog = false
+    },
+    handleConfirmSelected() {
+      this.setDiscount(this.discountId)
+      this.isShowDiscountDialog = false
+    },
+    autoCheckDiscount() {
+      let discount = _.maxBy(
+        this.usableDiscounts,
+        item => item[`reward${_.upperFirst(this.payment)}`]
+      )
+      const discounts = _.filter(
+        this.usableDiscounts,
+        item =>
+          item[`reward${_.upperFirst(this.payment)}`] ===
+          discount[`reward${_.upperFirst(this.payment)}`]
+      )
+      if (discounts.length > 1) {
+        discount = _.minBy(discounts, item => item.endTime)
+      }
+      const id = _.get(discount, 'id', '')
+      this.setDiscount(id)
+    },
     handleSubmitTradeOrder() {
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
         return this.$message.error(
@@ -155,18 +223,10 @@ export default {
         return this.$message.error(this.$t('account.beanInsufficient'))
       }
       try {
-        let payload = {
+        const payload = {
           count: this.count,
-          finalCost: this.finalCost
-        }
-        if (this.discountId) {
-          payload['discountId '] = this.discountId
-        }
-        if (this.isNeedDigitalAccount) {
-          payload['user_nid'] = this.digitalAccount
-        }
-        payload = {
-          ...payload,
+          finalCost: this.finalCost,
+          user_nid: this.digitalAccount,
           totalCost: this.totalCost,
           finalCost: this.finalCost
         }
@@ -182,10 +242,65 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       tradeOrder: 'account/tradeOrder',
-      balance: 'account/balance'
+      balance: 'account/balance',
+      discounts: 'account/discounts'
     }),
+    hasDiscounts() {
+      return this.currentPaymentDiscounts.length > 0
+    },
+    currentPaymentDiscounts() {
+      return [...this.usableDiscounts, ...this.disabledDiscounts]
+    },
+    usableDiscounts() {
+      const filterDiscount = this.isExchangeType
+        ? item =>
+            item.state === 0 &&
+            item.endTime > +new Date() &&
+            item[this.payment] > 0 &&
+            item[this.payment] <= this.totalCost &&
+            item.type === 0
+        : item =>
+            item.state === 0 &&
+            item.endTime > +new Date() &&
+            item[this.payment] > 0 &&
+            item[this.payment] <= this.totalCost
+
+      return this.discounts
+        .filter(filterDiscount)
+        .map(i => ({
+          ...i,
+          isChecked: i.id === this.discountId
+        }))
+        .sort(
+          (prv, cur) =>
+            cur[`reward${_.upperFirst(this.payment)}`] -
+            prv[`reward${_.upperFirst(this.payment)}`]
+        )
+    },
+    usableDiscountsIds() {
+      return this.usableDiscounts.map(i => i.id)
+    },
+    disabledDiscounts() {
+      const filterDiscount = item => {
+        return (
+          !this.usableDiscountsIds.includes(item.id) &&
+          item.state === 0 &&
+          item.endTime > +new Date()
+        )
+      }
+      return this.discounts
+        .filter(filterDiscount)
+        .map(i => ({
+          ...i,
+          isDisabled: true
+        }))
+        .sort((prv, cur) => prv.endTime - cur.endTime)
+    },
     isDisableInput() {
       return this.isPackageType || ''
+    },
+    isDontCheckedDiscount() {
+      return !this.discountId
     },
     username() {
       return _.get(this.userProfile, 'username', '')
@@ -247,9 +362,32 @@ export default {
         ? `${this.costUnit}${this.totalCost}`
         : `${this.totalCost}${this.costUnit}`
     },
+    tradeOrderDiscountId() {
+      return this.tradeOrder.discountId
+    },
+    tradeOrderDiscount() {
+      return _.find(
+        this.discounts,
+        ({ id }) => id === this.tradeOrderDiscountId
+      )
+    },
+    payment() {
+      return _.get(this.tradeOrder, 'payment', '')
+    },
+    rewardNumber() {
+      return _.get(
+        this.tradeOrderDiscount,
+        `reward${_.upperFirst(this.payment)}`,
+        0
+      )
+    },
+    rewardNumberByUnit() {
+      return this.isRmbPayment
+        ? `${this.costUnit}${this.rewardNumber}`
+        : `${this.rewardNumber} ${this.costUnit}`
+    },
     finalCost() {
-      // FIXME: discounts logic
-      return _.round(this.totalCost, 2)
+      return _.round(_.subtract(this.totalCost, this.rewardNumber), 2)
     }
   }
 }
@@ -352,6 +490,9 @@ export default {
       &-checked {
         color: #999;
         flex: 1;
+        .is-checked-discount {
+          color: #ff9307;
+        }
       }
       &-all {
         min-width: 100px;
@@ -381,6 +522,95 @@ export default {
         background-color: #f20d0d;
         border-color: #f20d0d;
         padding: 12px 44px;
+      }
+    }
+  }
+
+  &-discounts-dialog {
+    .el-dialog {
+      width: 599px;
+    }
+    .el-dialog__header {
+      height: 71px;
+      line-height: 71px;
+      border-bottom: 1px solid #dcdcdc;
+      text-align: center;
+      font-size: 20px;
+      color: #333;
+      padding: 0;
+    }
+    .el-dialog__body {
+      padding: 0;
+    }
+    .el-dialog__footer {
+      padding: 0;
+    }
+    &-dont {
+      width: 500px;
+      margin: 0 auto;
+      height: 57px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16px;
+      color: #666;
+      font-weight: bold;
+      &-checkbox {
+        cursor: pointer;
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        margin-right: 32px;
+        border: solid 2px #bfbfbf;
+        &.is-dont-checked {
+          background: #fff;
+          font-size: 22px;
+          line-height: 18px;
+          text-align: center;
+          &::after {
+            content: ' ';
+            display: inline-block;
+            height: 12px;
+            width: 6px;
+            border-right: 3px solid #bfbfbf;
+            border-bottom: 3px solid #bfbfbf;
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+    &-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 500px;
+      overflow-y: auto;
+    }
+
+    &-empty {
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      &-tips {
+        color: #333;
+        font-size: 24px;
+        margin-top: 30px;
+      }
+    }
+
+    &-footer {
+      width: 500px;
+      height: 100px;
+      box-sizing: border-box;
+      padding-top: 30px;
+      margin: 0 auto;
+      &-button {
+        &.el-button--small {
+          padding: 10px 24px;
+        }
       }
     }
   }
