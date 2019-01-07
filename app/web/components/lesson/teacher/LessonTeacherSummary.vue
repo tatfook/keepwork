@@ -54,7 +54,7 @@
         </span>
       </div>
       <div class="teacher-summary-detailed-table">
-        <el-table :data="newCurrentRecord" border style="width: 100%" class="email-text-center" @selection-change="handleSelectionChange">
+        <el-table ref='gradeMultipleTable' :data="newCurrentRecord" border style="width: 100%" class="email-text-center" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="portrait" label="NO." width="80px">
@@ -91,7 +91,7 @@
         <div class="tip-text">{{changeSelected == 'changeAll' ? $t('lesson.confirmFullAll') : $t('lesson.confirmFullSelected')}}</div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="changeDialogVisible = false">{{$t('common.Cancel')}}</el-button>
+        <el-button @click="cancelChangeStudentMarks">{{$t('common.Cancel')}}</el-button>
         <el-button type="primary" @click="toChangeStudentMarks">{{$t('common.Sure')}}</el-button>
       </span>
     </el-dialog>
@@ -240,7 +240,12 @@ export default {
       let currentRecord = _.map(
         this.classroomLearnRecord,
         ({
-          extra: { portrait, name='visitor', username='visitor', quiz=[] },
+          extra: {
+            portrait,
+            name = 'visitor',
+            username = 'visitor',
+            quiz = []
+          },
           createdAt,
           lessonId,
           userId
@@ -294,7 +299,9 @@ export default {
         .reduce((arr, cur) => [...arr, ...cur], [])
     },
     modListFilter() {
-      return this.modList.filter(item => item.cmd !== 'Lesson' && item.cmd !== 'BigFile')
+      return this.modList.filter(
+        item => item.cmd !== 'Lesson' && item.cmd !== 'BigFile'
+      )
     }
   },
   methods: {
@@ -303,8 +310,25 @@ export default {
       getClassLearnRecords: 'lesson/teacher/getClassLearnRecords',
       modifyClassLearnRecords: 'lesson/teacher/modifyClassLearnRecords'
     }),
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.gradeMultipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.gradeMultipleTable.clearSelection()
+      }
+    },
     async change(type) {
       this.changeSelected = type
+      if (type === 'changeAll') {
+        if (this.multipleSelection.length < this.newCurrentRecord.length) {
+          this.$refs.gradeMultipleTable.clearSelection()
+          this.toggleSelection(this.newCurrentRecord)
+        }
+        this.changeDialogVisible = true
+        return
+      }
       if (this.multipleSelection.length == 0) {
         this.changeDialogVisible = false
         this.$alert(this.$t('lesson.reviseGrades'), '', {
@@ -317,6 +341,10 @@ export default {
       } else {
         this.changeDialogVisible = true
       }
+    },
+    cancelChangeStudentMarks() {
+      this.toggleSelection()
+      this.changeDialogVisible = false
     },
     async toChangeStudentMarks() {
       if (this.changeSelected === 'changeAll') {
@@ -354,11 +382,13 @@ export default {
     },
     modifiedGrades(record) {
       let learnRecordsArr = _.map(record, student => {
-        for (let i = 0; i < student.extra.quiz.length; i++) {
-          let standardAnswer =
-            student.extra.quiz[i].data.answer.toString() || ''
-          Vue.set(student.extra.quiz[i], `answer`, standardAnswer)
-          Vue.set(student.extra.quiz[i], `result`, true)
+        if(student.extra.quiz){
+          for (let i = 0; i < student.extra.quiz.length; i++) {
+            let standardAnswer =
+              student.extra.quiz[i].data.answer.toString() || ''
+            Vue.set(student.extra.quiz[i], `answer`, standardAnswer)
+            Vue.set(student.extra.quiz[i], `result`, true)
+          }
         }
         return student
       })
@@ -629,7 +659,7 @@ export default {
     width: 70%;
   }
   .teacher-summary {
-    &-change{
+    &-change {
       .el-dialog {
         width: 90% !important;
       }
@@ -640,7 +670,7 @@ export default {
       }
     }
   }
-  .change-mark{
+  .change-mark {
     max-width: 90%;
   }
 }

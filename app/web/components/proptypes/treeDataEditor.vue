@@ -12,9 +12,9 @@
       </span>
     </div>
     <el-tree v-if="treeData.length > 0" :style="fixMaxHeight()" ref='menuTree' :data="formatLevelList(treeData)" :props='defaultProps' :expand-on-click-node="false" :draggable='false'>
-      <span class="custom-tree-node" slot-scope="{ node, data }">
+      <span :style="fixPadding(node, data)" class="custom-tree-node" slot-scope="{ node, data }">
         <span class="node-label">
-          <el-input :style="fixPadding(node, data)" :placeholder='$t("editor.menuName")' :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
+          <el-input :placeholder='$t("editor.menuName")' :ref='"name"+node.id' :class="{'is-focus': data.nameInputShow}" size='mini' v-model='data.name' clearable @blur='hideInput(data, "name")' @keyup.enter.native.prevent='finishInput(node.id, "name")'></el-input>
         </span>
         <span class="node-link">
           <el-tooltip class="item" :disabled='warningInput(data)' effect="dark" :content="$t('editor.warningInput')" placement="top">
@@ -53,7 +53,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { setTimeout } from 'timers'
-import { types } from 'util';
+import { types } from 'util'
 
 let newMenuId = 1
 
@@ -88,54 +88,54 @@ export default {
       this.$emit('cancel', null)
     },
     formatLevelList(data) {
-      function addLevel(data, subIndex){
+      function addLevel(data, subIndex) {
         let index = subIndex || 1
 
-         _.forEach(data, (item, key) => {
-           item.level = index
-           if(item.child) {
-             let nextIndex = index + 1
-             addLevel(item.child,nextIndex)
-           }
+        _.forEach(data, (item, key) => {
+          item.level = index
+          if (item.child) {
+            let nextIndex = index + 1
+            addLevel(item.child, nextIndex)
+          }
         })
       }
       addLevel(data)
       return data
     },
-    fixPadding(node,data){
-      let name = "name" + node.id
+    fixPadding(node, data) {
+      let name = 'name' + node.id
       setTimeout(() => {
-        if(this.$refs[name]){
-          let inputStyle = this.$refs[name].$refs["input"]
-          if(inputStyle){
-            if(data.level){
-              inputStyle.style.paddingLeft = data.level * 20 + "px"
+        if (this.$refs[name]) {
+          let inputStyle = this.$refs[name].$parent.$parent.$el
+          if (inputStyle) {
+            if (data.level && data.level < 10) {
+              inputStyle.style.paddingLeft = data.level * 5 + 'px'
             }
           }
         }
-        }, 0)
+      }, 0)
     },
-    warningInput(item, node){
-      if(item && item.link){
+    warningInput(item, node) {
+      if (item && item.link) {
         let currentUrl = item.link
         let url = /(^(http|https):\/\/.+|^\/(\w)+)/
         let self = this
         function inputStyle(data) {
-          if(!node){
+          if (!node) {
             return
           }
-          let name = "link" + node.id
+          let name = 'link' + node.id
           setTimeout(() => {
-            if(self.$refs[name]){
-              let inputStyle = self.$refs[name].$refs["input"]
-              if(!inputStyle){
+            if (self.$refs[name]) {
+              let inputStyle = self.$refs[name].$refs['input']
+              if (!inputStyle) {
                 return
               }
-              if(data){
+              if (data) {
                 inputStyle.style.borderWidth = null
                 inputStyle.style.borderStyle = null
                 inputStyle.style.borderColor = null
-              }else{
+              } else {
                 inputStyle.style.borderWidth = '1px'
                 inputStyle.style.borderStyle = 'solid'
                 inputStyle.style.borderColor = 'red'
@@ -143,7 +143,7 @@ export default {
             }
           }, 0)
         }
-        if(currentUrl.match(url)) {
+        if (currentUrl.match(url)) {
           inputStyle(true)
           this.notButton = false
           return true
@@ -156,17 +156,17 @@ export default {
       return true
     },
     finishEditingMenu() {
-      function deleteLevel(data){
-         _.forEach(data, (item, key) => {
-           if(item.level) {
-             delete(item["level"])
-             deleteLevel(item.child)
-           }
+      function deleteLevel(data) {
+        _.forEach(data, (item, key) => {
+          if (item.level) {
+            delete item['level']
+            deleteLevel(item.child)
+          }
         })
       }
       deleteLevel(this.treeData)
       let fixLink = link => {
-        if ( !/http(s?):\/\//.test(link) && !/^\//.test(link) ) {
+        if (!/http(s?):\/\//.test(link) && !/^\//.test(link)) {
           return ''
         }
         return link
@@ -195,12 +195,12 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.focus()
     },
-    changeInputColor(data, node){
-      let name = "link" + node.id
-      if(data && data.link == '') {
-        if(this.$refs[name]){
-          let inputStyle = this.$refs[name].$refs["input"]
-          if(!inputStyle){
+    changeInputColor(data, node) {
+      let name = 'link' + node.id
+      if (data && data.link == '') {
+        if (this.$refs[name]) {
+          let inputStyle = this.$refs[name].$refs['input']
+          if (!inputStyle) {
             return
           }
           inputStyle.style.borderWidth = null
@@ -210,7 +210,7 @@ export default {
       }
     },
     hideInput(data, type, node) {
-      if(data && data.link == '') {
+      if (data && data.link == '') {
         this.notButton = false
       }
       this.warningInput(data)
@@ -222,8 +222,8 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.blur()
     },
-    fixMaxHeight(){
-      if(this.treeData.length > 10){
+    fixMaxHeight() {
+      if (this.treeData.length > 10) {
         return 'max-height: 350px;overflow-y: auto;'
       }
     },
@@ -282,7 +282,6 @@ export default {
           })
       }
       newMenuId++
-
     },
     remove(node, data) {
       let self = this
@@ -339,7 +338,7 @@ export default {
     box-sizing: border-box;
     min-width: 0;
     .el-button:hover {
-      color: #1989fa
+      color: #1989fa;
     }
   }
   .node-prompt {
@@ -352,7 +351,7 @@ export default {
   .el-tree-node__content {
     height: 34px;
     line-height: 32px;
-    padding: 0!important;
+    padding: 0 !important;
   }
   .el-button.is-circle {
     border: none;

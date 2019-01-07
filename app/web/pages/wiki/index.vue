@@ -11,7 +11,7 @@ router.beforeEach(async (to, from, next) => {
       window.location.origin
     }/a/orderConfirm?type=1&payment=rmb&id=${app_goods_id}&user_nid=${
       userObject.user_nid
-    }&username=${username}&price=${price}&app_name=${app_name}`
+    }&username=${username}&price=${price}&app_name=${app_name}&goodsId=${app_goods_id}`
   }
 })
 

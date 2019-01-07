@@ -47,6 +47,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
     } else if (m.options.type === 'menu' && menuData.child) {
       return (
         <el-submenu
+          popper-class="comp-submenu"
           index={getIndexString(index)}
           style={parentIndex == 1 && m.itemStyle}
         >
@@ -250,9 +251,13 @@ a {
     .el-submenu__title {
       i {
         margin-left: -20px;
+        color: #fff;
       }
     }
   }
+}
+.comp-submenu .el-submenu .el-submenu__title .el-icon-arrow-right{
+  color: #fff;
 }
 .comp-menu .el-menu--horizontal > .el-submenu .el-submenu__title {
   width: auto;
