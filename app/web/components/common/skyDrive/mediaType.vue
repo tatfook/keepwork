@@ -188,6 +188,9 @@ export default {
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')
+  },
+  destroyed(){
+    document.onkeydown = null
   }
 }
 </script>

@@ -271,6 +271,9 @@ export default {
       }
       this.loading = false
     }
+  },
+  destroyed(){
+    document.onkeydown = null
   }
 }
 </script>

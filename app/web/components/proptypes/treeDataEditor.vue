@@ -305,6 +305,9 @@ export default {
         this.$refs.menuTree.remove(node)
       })
     }
+  },
+  destroyed(){
+    document.onkeydown = null
   }
 }
 </script>

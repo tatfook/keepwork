@@ -32,6 +32,9 @@ export default {
     handleClose() {
       this.$emit('close')
     }
+  },
+  destroyed(){
+    document.onkeydown = null
   }
 }
 </script>
