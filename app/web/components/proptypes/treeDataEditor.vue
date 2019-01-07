@@ -55,7 +55,7 @@ import { mapGetters } from 'vuex'
 import { setTimeout } from 'timers'
 import { types } from 'util'
 
-let newMenuId = 1
+let newMenuId = 0
 
 export default {
   name: 'treeDataEditor',
@@ -229,9 +229,8 @@ export default {
     },
     insert(node, data, position) {
       let self = this
-
       const newChild = {
-        name: self.$t('editor.menuItem') + newMenuId,
+        name: `${self.$t('editor.menuItem')}${++newMenuId}`,
         link: ''
       }
       if (!node) {
@@ -281,7 +280,6 @@ export default {
             inputFocus()
           })
       }
-      newMenuId++
     },
     remove(node, data) {
       let self = this
@@ -292,6 +290,9 @@ export default {
         type: 'error'
       }).then(() => {
         this.$refs.menuTree.remove(node)
+        if (this.$refs.menuTree.$children.length === 1) {
+          newMenuId = 0
+        }
       })
     }
   }
