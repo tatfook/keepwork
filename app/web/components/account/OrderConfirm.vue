@@ -56,9 +56,9 @@
         <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
       </div>
     </div>
-    <el-dialog class="order-confirm-discounts-dialog" title="请选择优惠券" :visible.sync="isShowDiscountDialog">
+    <el-dialog class="order-confirm-discounts-dialog" :title="$t('account.selectCoupons')" :visible.sync="isShowDiscountDialog">
       <template v-if="hasDiscounts">
-        <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">不使用优惠券</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
+        <div class="order-confirm-discounts-dialog-dont"> <span class="order-confirm-discounts-dialog-dont-title">{{$t('account.withoutCoupons')}}</span> <span @click="handleDontChecked" :class="['order-confirm-discounts-dialog-dont-checkbox', { 'is-dont-checked': isDontCheckedDiscount}]"></span></div>
         <div class="order-confirm-discounts-dialog-list">
           <coupon-ticket-checkbox class="order-confirm-discounts-dialog-list-item" @handleClick="handleSelectDiscount" v-for="(item, index) in currentPaymentDiscounts" :data="item" :key="index"></coupon-ticket-checkbox>
         </div>
@@ -70,8 +70,8 @@
         </div>
       </template>
       <div class="order-confirm-discounts-dialog-footer" slot="footer">
-        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">取消</el-button>
-        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">确定</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">{{$t('account.Sure')}}</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">{{$t('account.Cancel')}}</el-button>
       </div>
     </el-dialog>
   </div>

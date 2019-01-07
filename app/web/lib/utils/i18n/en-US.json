@@ -1646,6 +1646,8 @@
     "success": "Success",
     "pleaseRecharge": "To pay for the order, please recharge",
      "rechargeSuccessfully": "Success",
-     "noData": "no data"
+     "noData": "no data",
+     "selectCoupons":"Please select",
+     "withoutCoupons": "Without applying the coupon"
   }
 }
