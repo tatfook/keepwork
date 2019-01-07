@@ -117,6 +117,7 @@ export default {
         'background-position': 'center',
         'background-size': 'cover',
         'background-color': '#eee',
+        'background-repeat': 'no-repeat',
         opacity: '0.8',
         'border-radius': '8px'
       })
