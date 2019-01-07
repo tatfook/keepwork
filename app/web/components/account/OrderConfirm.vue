@@ -100,7 +100,6 @@ export default {
       isLoading: true,
       count: 1,
       isSubmiLoading: false,
-      discountId: null,
       digitalAccount: '',
       digitalAccountList: [],
       goodsId: '',
@@ -121,11 +120,11 @@ export default {
       payment,
       user_nid,
       username = '',
-      price = ''
+      price = '',
+      goodsId = ''
     } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
-    this.goodsId = id
     if (type === 2 && payment === 'bean') {
       return this.$message.error('课程包无法通过知识豆购买')
     }
@@ -135,7 +134,7 @@ export default {
     await Promise.all([
       this.getBalance(),
       this.getDiscounts(),
-      this.createTradeOrder({ type, count, id, payment })
+      this.createTradeOrder({ type, count, id, payment, goodsId })
     ])
     this.count = this.goodsDefaultCount
     if (price) {
@@ -147,16 +146,17 @@ export default {
         .getDigitalAccounts()
         .then(res => {
           let data = _.get(res, 'data.data', [])
-          if (user_nid && this.data.includes(user_nid)) {
-            this.digitalAccount = user_nid
-          } else {
-            this.$message({
-              type: 'error',
-              duration: '8000',
-              message: '当前登录的账号跟该数字账号不存在关联'
-            })
+          if (user_nid) {
+            if (data.includes(user_nid)) {
+              this.digitalAccount = user_nid
+            } else {
+              this.$message({
+                type: 'error',
+                duration: '8000',
+                message: '当前登录的账号跟该数字账号不存在关联'
+              })
+            }
           }
-          data = _.uniq(data)
           this.digitalAccountList = data.map(item => ({
             label: item,
             value: item
