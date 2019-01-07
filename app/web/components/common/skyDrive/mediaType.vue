@@ -86,6 +86,9 @@ export default {
       default: false
     }
   },
+  mounted(){
+    this.keyupSubmit()
+  },
   data() {
     return {
       mediaFilterType: 'image',
@@ -117,6 +120,14 @@ export default {
     }
   },
   methods: {
+    keyupSubmit(){
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if(_key === 13){
+          this.handleInsert(this.availableSelectedMediaItem)
+        }
+      }
+    },
     handleUploadFile(e) {
       this.$emit('uploadFile', e)
       this.$refs.fileInput && (this.$refs.fileInput.value = '')

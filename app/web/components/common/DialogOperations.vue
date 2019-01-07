@@ -14,7 +14,18 @@ export default {
     },
     isSaveBtnDisabled: Boolean
   },
+  mounted() {
+    this.keyupSubmit()
+  },
   methods: {
+    keyupSubmit() {
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if (_key === 13) {
+          this.handleSave()
+        }
+      }
+    },
     handleSave() {
       this.$emit('save')
     },
