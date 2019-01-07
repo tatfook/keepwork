@@ -112,5 +112,12 @@ module.exports = {
   targetCmd,
   isCmdLine,
   isCmdEnd,
-  parseCmd
+  parseCmd,
+  MOD_CMD_BEGIN_REG,
+  MOD_CMD_END_REG,
+  MARKDOWN_CMD,
+  MOD_CMD_BEGIN,
+  MOD_CMD_END,
+  MARKDOWN_CMD_END,
+  MOD_PARACRAFT,
 }
