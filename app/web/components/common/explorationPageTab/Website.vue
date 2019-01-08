@@ -12,6 +12,10 @@
         </el-pagination>
       </div>
     </div>
+    <div v-if="nothing" class="all-projects-nothing">
+      <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+      <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
+    </div>
   </div>
 </template>
 <script>
@@ -40,6 +44,9 @@ export default {
     ...mapGetters({
       pblWebsite: 'pbl/diffTypeProject'
     }),
+    nothing() {
+      return this.websiteData.length === 0 && !this.loading
+    },
     website() {
       return this.pblWebsite({ type: 'site' })
     },
@@ -51,7 +58,7 @@ export default {
       return _.map(hits, i => {
         return {
           id: i.id,
-          extra: { imageUrl: i.cover, videoUrl: i.video  },
+          extra: { imageUrl: i.cover, videoUrl: i.video },
           name: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,

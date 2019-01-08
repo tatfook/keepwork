@@ -12,6 +12,10 @@
         </el-pagination>
       </div>
     </div>
+    <div v-if="nothing" class="all-projects-nothing">
+      <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+      <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
+    </div>
   </div>
 </template>
 <script>
@@ -38,6 +42,9 @@ export default {
     this.loading = false
   },
   computed: {
+    nothing(){
+      return this.recruitmentData.length === 0 && !this.loading
+    },
     recruitingCount() {
       return _.get(this.recruitongProjects, 'total', 0)
     },

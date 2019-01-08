@@ -79,14 +79,6 @@ export default {
     ...mapGetters({
       activePageInfo: 'activePageInfo'
     }),
-    keyupSubmit() {
-      document.onkeydown = e => {
-        let _key = window.event.keyCode
-        if (_key === 13) {
-          this.finishEditingMenu()
-        }
-      }
-    },
     treeData() {
       return this.originalTreeData
     },
@@ -95,6 +87,14 @@ export default {
     }
   },
   methods: {
+    keyupSubmit() {
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if (_key === 13 && !this.notButton) {
+          this.finishEditingMenu()
+        }
+      }
+    },
     handleClose() {
       this.$emit('cancel', null)
     },
@@ -307,7 +307,7 @@ export default {
       })
     }
   },
-  destroyed(){
+  destroyed() {
     document.onkeydown = null
   }
 }
