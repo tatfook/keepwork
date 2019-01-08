@@ -12,10 +12,12 @@
         </el-pagination>
       </div>
     </div>
-    <div v-if="nothing" class="all-projects-nothing">
-      <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-      <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
-    </div>
+    <transition name="fade">
+      <div v-if="nothing" class="all-projects-nothing">
+        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
