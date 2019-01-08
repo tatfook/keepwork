@@ -201,10 +201,10 @@ export default {
       text-align: center;
       line-height: 24px;
       position: absolute;
-      left: -28px;
-      top: 9px;
-      transform: rotate(-45deg);
-      width: 100px;
+      left: 0;
+      top: 0;
+      border-bottom-right-radius: 4px;
+      padding: 0 5px;
       &.deadline-label {
         color: #666666;
         background: #ffea01;
