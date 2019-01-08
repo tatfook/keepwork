@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const removeMd = require('remove-markdown')
 const modSearchableConfig = require('./_searchableConfig')
 const { buildBlockList } = require('../index')
 
@@ -10,11 +11,15 @@ const getBlockAttrContent = ({ blockItem, config }) => {
   let content = ''
   for (let i = 0; i < config.length; i++) {
     let configItem = config[i]
-    content += _.get(
+    let tempContent = _.get(
       blockItem,
       `data.${configItem.attr}.${configItem.value}`,
       ''
     )
+    if (configItem.isMarkdown) {
+      tempContent = removeMd(tempContent)
+    }
+    content += tempContent
     content = trimContent(content)
     if (content !== '') {
       content += '\n'

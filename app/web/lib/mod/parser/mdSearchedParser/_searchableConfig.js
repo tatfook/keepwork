@@ -2,7 +2,8 @@ const modSearchableConfig = {
   Markdown: [
     {
       attr: 'md',
-      value: 'data'
+      value: 'data',
+      isMarkdown: true
     }
   ],
   Text: [
@@ -12,7 +13,8 @@ const modSearchableConfig = {
     },
     {
       attr: 'paragraph',
-      value: 'name'
+      value: 'name',
+      isMarkdown: true
     }
   ],
   MixLayer: [
@@ -26,7 +28,8 @@ const modSearchableConfig = {
     },
     {
       attr: 'paragraph',
-      value: 'data'
+      value: 'data',
+      isMarkdown: true
     }
   ],
   MixPosition: [
@@ -40,7 +43,8 @@ const modSearchableConfig = {
     },
     {
       attr: 'paragraph',
-      value: 'data'
+      value: 'data',
+      isMarkdown: true
     }
   ],
   TextBoard: [
@@ -54,7 +58,8 @@ const modSearchableConfig = {
     },
     {
       attr: 'paragraph',
-      value: 'data'
+      value: 'data',
+      isMarkdown: true
     }
   ]
 }
