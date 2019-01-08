@@ -13,6 +13,10 @@
     "transform-runtime",
     "dynamic-import-node"
   ],
+  "ignore": [
+    "app/web/lib/mod/parser/*",
+    "app/web/lib/global.js"
+  ],
   "comments": false,
   "env": {
     "test": {

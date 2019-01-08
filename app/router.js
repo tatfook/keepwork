@@ -20,6 +20,7 @@ module.exports = app => {
   router.get(/\/a\//, controller.account.index) // account
   router.get('/vip', controller.vip.index)
   router.get('/wiki/pay', controller.wiki.index)
+  router.post('/es/parser', controller.parser.parser)
   router.redirect('/wiki/login', '/u/r/login', 302)
   router.redirect('/wiki/join', '/u/r/register', 302)
   router.redirect('/wiki/user_center', '/u/p/changePassword', 302)

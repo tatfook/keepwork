@@ -1,19 +1,19 @@
 // add global variables here
 
-export const gClasses = {
+const gClasses = {
   compActive: 'comp-active',
   compHover: 'comp-hover',
   modActive: 'mod-active',
   modHover: 'mod-hover'
 }
 
-export const gThemeData = {
+const gThemeData = {
   'mod-full-width': '1080px',
   'mod-space-computer': '60px',
   'mod-space-mobile': '45px'
 }
 
-export const gTheme = {
+const gTheme = {
   '@media only screen and (min-width: 1080px)': {
     'mod-full-width': {
       width: gThemeData['mod-full-width'],
@@ -35,7 +35,7 @@ export const gTheme = {
   }
 }
 
-export const gConst = {
+const gConst = {
   GIT_FILE_UPLOAD_MAX_SIZE: 1024 * 1024 * 10, // 10M
   POSITION_BEFORE: 'before',
   POSITION_AFTER: 'after',
@@ -43,7 +43,7 @@ export const gConst = {
   ADDING_AREA_MARKDOWN: 'Markdown'
 }
 
-export default {
+module.exports = {
   gClasses,
   gThemeData,
   gTheme,
