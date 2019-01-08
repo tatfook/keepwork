@@ -107,7 +107,7 @@ export default {
     &-item {
       color: #808080;
       font-size: 14px;
-      line-height: 14px;
+      line-height: 24px;
       margin-top: 10px;
       &::before {
         content: '•';
