@@ -33,7 +33,9 @@ export default {
       return _.get(this.data, 'thumbnail', '')
     },
     subject() {
-      return _.get(this.data, 'subject', '')
+      return this.isEn
+        ? _.get(this.data, 'enSubject', '')
+        : _.get(this.data, 'subject', '')
     },
     payment() {
       return _.get(this.data, 'payment', '')
@@ -70,7 +72,6 @@ export default {
       width: 100%;
       object-fit: scale-down;
     }
-    
   }
 
   &-info {
