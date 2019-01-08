@@ -1,5 +1,5 @@
 'use strict'
-const { buildBlockList } = require('../web/lib/mod/parser/index.js')
+const { getSearchableContent } = require('../web/lib/mod/parser/mdSearchedParser/index')
 module.exports = app => {
   return class ParserController extends app.Controller {
     async parser() {
@@ -7,7 +7,7 @@ module.exports = app => {
       const { name } = ctx.request.body
       ctx.body = {
         code: 0,
-        masg: buildBlockList(name)
+        masg: getSearchableContent(name)
       }
     }
   }
