@@ -14,6 +14,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
+import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'OrderSuccess',
   mounted() {
@@ -25,6 +26,9 @@ export default {
     ...mapGetters({
       tradeOrder: 'account/tradeOrder'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     finalCostByUnit() {
       return this.tradeOrder.finalCostByUnit
     },
@@ -47,7 +51,9 @@ export default {
       return this.isPackageType ? this.goodsDetail.rmb : ''
     },
     discountTitle() {
-      return _.get(this.tradeOrder, 'discount.title', '')
+      return this.isEn
+        ? _.get(this.tradeOrder, 'discount.extra.enTitle', '')
+        : _.get(this.tradeOrder, 'discount.title', '')
     },
     hasDiscounts() {
       return !_.isEmpty(this.tradeOrder.discounts)

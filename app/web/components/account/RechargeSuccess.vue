@@ -12,6 +12,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'RechargeSuccess',
   mounted() {
@@ -26,11 +27,16 @@ export default {
     ...mapGetters({
       rechargeOrder: 'account/rechargeOrder'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     rechargeMoney() {
       return `¥ ${_.get(this.rechargeOrder, 'amount', 0)}`
     },
     discountTitle() {
-      return _.get(this.rechargeOrder, 'discount.title', '')
+      return this.isEn
+        ? _.get(this.rechargeOrder, 'discount.extra.enTitle', '')
+        : _.get(this.rechargeOrder, 'discount.title', '')
     }
   },
   methods: {
