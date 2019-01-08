@@ -6,7 +6,8 @@
     </el-dialog>
     <div class="lesson-container">
       <el-row type="flex" class="mod-full-width-0-0-65">
-        <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()">
+        <el-col class="lesson-cover" @click.native="openAnimations()">
+          <img class="lesson-cover-image" :src="lessonCoverUrl">
         </el-col>
         <el-col>
           <div class="lessonDesc">
@@ -91,7 +92,9 @@ export default {
       return this.lessonExtra.coverUrl
     },
     updated() {
-      return this.properties.updated ? this.properties.updated : this.options.updated
+      return this.properties.updated
+        ? this.properties.updated
+        : this.options.updated
     }
   },
   async mounted() {
@@ -115,7 +118,7 @@ export default {
       return this.generateStyleString({
         background: 'url(' + this.lessonCoverUrl + ')',
         'background-position': 'center',
-        'background-size': 'cover',
+        'background-size': 'contain',
         'background-color': '#eee',
         'background-repeat': 'no-repeat',
         opacity: '0.8',
@@ -186,6 +189,11 @@ export default {
   min-width: 400px;
   position: relative;
   cursor: pointer;
+  &-image {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
 }
 .lesson-cover::after {
   content: '';
