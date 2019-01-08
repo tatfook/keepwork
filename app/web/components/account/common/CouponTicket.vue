@@ -58,12 +58,12 @@ export default {
     },
     title() {
       return this.isEn
-        ? _.get(this.data, 'extra.en.title', '')
+        ? _.get(this.data, 'extra.enTitle', '')
         : _.get(this.data, 'title', '')
     },
     description() {
       return this.isEn
-        ? _.get(this.data, 'extra.en.description', '')
+        ? _.get(this.data, 'extra.enDescription', '')
         : _.get(this.data, 'description', '')
     },
     state() {
