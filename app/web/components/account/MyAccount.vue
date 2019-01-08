@@ -165,6 +165,7 @@ export default {
       &-button {
         .account-item-button {
           padding: 10px 20px;
+          width: 100px;
         }
 
         &.lock {

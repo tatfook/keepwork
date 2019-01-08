@@ -38,7 +38,7 @@
         </div>
         <div class="order-confirm-main-discounts-checked">
           <span class="is-checked-discount" v-show="this.tradeOrderDiscount">
-            - {{rewardNumberByUnit}} ({{tradeOrderDiscount && tradeOrderDiscount.title}})
+            - {{rewardNumberByUnit}} ({{tradeOrderDiscountTitle}})
           </span>
           <span v-show="!this.tradeOrderDiscount">
             {{$t('account.noCoupons')}}
@@ -70,8 +70,8 @@
         </div>
       </template>
       <div class="order-confirm-discounts-dialog-footer" slot="footer">
-        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">{{$t('account.Sure')}}</el-button>
-        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">{{$t('account.Cancel')}}</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleCancelSelected" size="small">{{$t('common.Cancel')}}</el-button>
+        <el-button class="order-confirm-discounts-dialog-footer-button" @click="handleConfirmSelected" size="small" type="primary">{{$t('common.Sure')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -85,6 +85,7 @@ import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
 import { keepwork } from '@/api'
 import _ from 'lodash'
+import { locale } from '@/lib/utils/i18n'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
 const HAQI_PLATFORM = [2, 3]
 export default {
@@ -245,6 +246,14 @@ export default {
       balance: 'account/balance',
       discounts: 'account/discounts'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
+    tradeOrderDiscountTitle() {
+      return this.isEn
+        ? _.get(this.tradeOrderDiscount, 'extra.en.title', '')
+        : _.get(this.tradeOrderDiscount, 'title', '')
+    },
     hasDiscounts() {
       return this.currentPaymentDiscounts.length > 0
     },

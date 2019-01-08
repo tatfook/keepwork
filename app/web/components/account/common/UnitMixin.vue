@@ -9,8 +9,8 @@ export default {
       return this.isEn
         ? {
             rmb: '￥',
-            coin: 'coin',
-            bean: 'bean'
+            coin: ' coins',
+            bean: ' beans'
           }
         : {
             rmb: '￥',

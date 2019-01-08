@@ -28,8 +28,10 @@
 
 <script>
 import { locale } from '@/lib/utils/i18n'
+import UnitMixin from './UnitMixin'
 export default {
   name: 'ExchangeMallItem',
+  mixins: [UnitMixin],
   props: {
     data: {
       type: Object,
@@ -81,22 +83,6 @@ export default {
         ? `${this.unitTable[this.priceUnit]} ${this.price}`
         : `${this.price} ${this.unitTable[this.priceUnit]}`
     },
-    unitTable() {
-      return this.isEn
-        ? {
-            rmb: '￥',
-            coin: 'coin',
-            bean: 'bean'
-          }
-        : {
-            rmb: '￥',
-            coin: '知识币',
-            bean: '知识豆'
-          }
-    },
-    isEn() {
-      return locale === 'en-US'
-    }
   },
   methods: {
     toExchangePage() {
