@@ -54,9 +54,9 @@ export default {
       let hits = _.get(this.recruitongProjects, 'hits', [])
       return _.map(hits, i => {
         return {
-          id: i.id,
+          id: this.searchKeyResult(i, 'id'),
           extra: { imageUrl: i.cover, videoUrl: i.video },
-          name: this.searchKeyResult(i),
+          name: this.searchKeyResult(i, 'name'),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
@@ -89,12 +89,14 @@ export default {
         this.$emit('getAmount', this.recruitingCount)
       })
     },
-    searchKeyResult(i) {
+    searchKeyResult(i, key) {
       if (i.highlight) {
-        let name = _.get(i.highlight, 'name', i.name)
-        return name.join().replace(/<span>/g, `<span class="red">`)
+        if (i.highlight[key]) {
+          let name = _.get(i.highlight, key, i[key])
+          return name.join().replace(/<span>/g, `<span class="red">`)
+        }
       }
-      return i.name
+      return i[key]
     }
   },
   components: {
