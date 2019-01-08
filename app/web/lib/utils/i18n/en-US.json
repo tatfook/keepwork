@@ -1314,6 +1314,7 @@
     "howToCreateProject": "How to create projects?"
   },
   "explore": {
+    "noResults": "No search results",
     "searchFor": "Search for ...",
     "search": "search",
     "project": "Projects",

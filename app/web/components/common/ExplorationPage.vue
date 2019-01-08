@@ -123,7 +123,7 @@ export default {
       currIndex: 1,
       searchKey: '',
       sortProjects: '',
-      currSortMode: this.$t("explore.overall"),
+      currSortMode: this.$t('explore.overall'),
       searchResultAmount: 0
     }
   },
@@ -152,18 +152,21 @@ export default {
         case 5:
         case 8:
           return [
-            { mode: this.$t("explore.overall"), command: '/综合' },
-            { mode: this.$t("explore.newest"), command: 'updated_time/最新' },
-            { mode: this.$t("explore.hottest"), command: 'recent_view/热门' }
+            { mode: this.$t('explore.overall'), command: '/综合' },
+            { mode: this.$t('explore.newest'), command: 'updated_time/最新' },
+            { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
           ]
         case 6:
           return [
-            { mode: this.$t("explore.overall"), command: '/综合' },
-            { mode: this.$t("explore.projectSort"), command: 'total_projects/项目' },
-            { mode: this.$t("explore.popularity"), command: 'total_fans/名气' }
+            { mode: this.$t('explore.overall'), command: '/综合' },
+            {
+              mode: this.$t('explore.projectSort'),
+              command: 'total_projects/项目'
+            },
+            { mode: this.$t('explore.popularity'), command: 'total_fans/名气' }
           ]
         default:
-          return [{ mode: this.$t("explore.overall"), command: '/综合' }]
+          return [{ mode: this.$t('explore.overall'), command: '/综合' }]
       }
     }
   },
@@ -227,7 +230,7 @@ export default {
     },
     selectTab(index) {
       this.currIndex = index
-      this.currSortMode = this.$t("explore.overall")
+      this.currSortMode = this.$t('explore.overall')
       this.sortProjects = ''
     }
   },
@@ -260,9 +263,9 @@ export default {
         &-tab {
           &-menu {
             border: none;
-            &.el-menu.el-menu--horizontal{
+            &.el-menu.el-menu--horizontal {
               border: none;
-              .el-menu-item{
+              .el-menu-item {
                 padding: 0 10px;
               }
             }
@@ -406,25 +409,31 @@ export default {
   .search-result-total {
     padding: 15px 0;
     font-size: 18px;
+    margin: 20px 30px;
   }
-}
-.search-result-total {
-  margin: 20px 30px;
-}
-.all-projects {
-  &-pages {
-    margin-top: 40px;
-    text-align: center;
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 3s;
   }
-  &-nothing{
-    min-height: 500px;
-    text-align: center;
-    &-img{
-      margin: 128px 0 32px;
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  .all-projects {
+    &-pages {
+      margin-top: 40px;
+      text-align: center;
     }
-    &-tip{
-      color: #606266;
-      font-size: 14px;
+    &-nothing {
+      min-height: 500px;
+      text-align: center;
+      &-img {
+        margin: 128px 0 32px;
+      }
+      &-tip {
+        color: #606266;
+        font-size: 14px;
+      }
     }
   }
 }
@@ -453,7 +462,7 @@ export default {
               height: 60px;
               line-height: 60px;
             }
-            .sort-dropdown-menu{
+            .sort-dropdown-menu {
               float: right;
             }
           }

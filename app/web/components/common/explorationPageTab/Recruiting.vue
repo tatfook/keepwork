@@ -12,10 +12,12 @@
         </el-pagination>
       </div>
     </div>
-    <div v-if="nothing" class="all-projects-nothing">
-      <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-      <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
-    </div>
+    <transition name="fade">
+      <div v-if="nothing" class="all-projects-nothing">
+        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -42,7 +44,7 @@ export default {
     this.loading = false
   },
   computed: {
-    nothing(){
+    nothing() {
       return this.recruitmentData.length === 0 && !this.loading
     },
     recruitingCount() {
@@ -53,7 +55,7 @@ export default {
       return _.map(hits, i => {
         return {
           id: i.id,
-          extra: { imageUrl: i.cover, videoUrl: i.video  },
+          extra: { imageUrl: i.cover, videoUrl: i.video },
           name: this.searchKeyResult(i),
           visit: i.total_view,
           star: i.total_like,
