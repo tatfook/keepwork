@@ -416,6 +416,17 @@ export default {
     margin-top: 40px;
     text-align: center;
   }
+  &-nothing{
+    min-height: 500px;
+    text-align: center;
+    &-img{
+      margin: 128px 0 32px;
+    }
+    &-tip{
+      color: #606266;
+      font-size: 14px;
+    }
+  }
 }
 @media screen and (max-width: 768px) {
   .exploration-page {

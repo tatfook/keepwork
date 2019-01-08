@@ -12,6 +12,10 @@
         </el-pagination>
       </div>
     </div>
+    <div v-if="nothing" class="all-projects-nothing">
+      <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+      <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
+    </div>
   </div>
 </template>
 <script>
@@ -40,6 +44,9 @@ export default {
     ...mapGetters({
       allProjects: 'pbl/allProjects'
     }),
+    nothing() {
+      return this.allProjectsDataOptimize.length === 0 && !this.loading
+    },
     projectsCount() {
       return _.get(this.allProjects, 'total', 0)
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="user-tab">
+  <div class="user-tab" v-loading="loading">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(user) in allUsersData" :key="user.id">
         <user-cell :user="user"></user-cell>
@@ -11,6 +11,10 @@
         <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="usersCount">
         </el-pagination>
       </div>
+    </div>
+    <div v-if="nothing" class="all-projects-nothing">
+      <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+      <p class="all-projects-nothing-tip">没有找到符合条件的结果</p>
     </div>
   </div>
 </template>
@@ -49,6 +53,9 @@ export default {
       allUsers: 'pbl/allUsers',
       userProfile: 'user/profile'
     }),
+    nothing() {
+      return this.allUsersData.length === 0 && !this.loading
+    },
     usersCount() {
       return _.get(this.allUsers, 'total', 0)
     },
