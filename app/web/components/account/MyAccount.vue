@@ -167,10 +167,6 @@ export default {
           padding: 10px 20px;
           width: 100px;
         }
-
-        &.lock {
-          visibility: hidden;
-        }
       }
     }
 
