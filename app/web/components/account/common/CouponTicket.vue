@@ -9,7 +9,7 @@
       <div class="coupon-ticket-left-condition">
         {{title}}
       </div>
-      <div v-if="isCloseToExpire" class="coupon-ticket-left-label deadline-label">即将过期</div>
+      <div v-if="isCloseToExpire" class="coupon-ticket-left-label deadline-label">{{$t('account.willExpire')}}</div>
       <div class="coupon-ticket-left-dot right-top"></div>
       <div class="coupon-ticket-left-dot right-bottom"></div>
     </div>
@@ -22,14 +22,22 @@
       <div class="coupon-ticket-right-deadline">
         {{startTime | formatTime }} — {{endTime | formatTime}}
       </div>
-      <div v-if="isUsed" class="coupon-ticket-right-icon used-icon"></div>
-      <div v-if="isExpire" class="coupon-ticket-right-icon expire-icon"></div>
+      <template v-if="isUsed">
+        <div v-if="isEn" class="coupon-ticket-right-icon en-used-icon"></div>
+        <div v-else class="coupon-ticket-right-icon used-icon"></div>
+      </template>
+      <template v-if="isExpire">
+        <div v-if="isEn" class="coupon-ticket-right-icon en-expire-icon"></div>
+        <div v-else class="coupon-ticket-right-icon expire-icon"></div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import { locale } from '@/lib/utils/i18n'
+import _ from 'lodash'
 export default {
   name: 'CouponTicket',
   props: {
@@ -42,14 +50,21 @@ export default {
     }
   },
   computed: {
+    isEn() {
+      return locale === 'en-US'
+    },
     isPropsDisabled() {
       return this.data.isDisabled || false
     },
     title() {
-      return this.data.title || ''
+      return this.isEn
+        ? _.get(this.data, 'extra.en.title', '')
+        : _.get(this.data, 'title', '')
     },
     description() {
-      return this.data.description || ''
+      return this.isEn
+        ? _.get(this.data, 'extra.en.description', '')
+        : _.get(this.data, 'description', '')
     },
     state() {
       return this.data.state
@@ -264,8 +279,14 @@ export default {
       &.expire-icon {
         background: url('../../../assets/account/expire.png');
       }
+      &.en-expire-icon {
+        background: url('../../../assets/account/en-expire.png');
+      }
       &.used-icon {
         background: url('../../../assets/account/used.png');
+      }
+      &.en-used-icon {
+        background: url('../../../assets/account/en-used.png');
       }
     }
   }
