@@ -45,7 +45,7 @@ const oldCmdMapper = {
 
 const isNewCmd = (cmd) => {
   for (let key in cmdList) {
-    if ((cmdList[key] && cmdList[key].toLowerCase()) === (cmd && cmd.toLowerCase())) return true
+    if (cmdList[key].toLowerCase() === cmd.toLowerCase()) return true
   }
   return false
 }
