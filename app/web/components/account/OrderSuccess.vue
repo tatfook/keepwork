@@ -5,8 +5,8 @@
     <div class="order-success-cost">{{finalCostByUnit}}</div>
     <div class="order-success-discount">
       <span v-if="isPackageType">{{$t('account.returnCoin', { coin: returnCoin })}}</span>
-      <sapn v-if="discountTitle">,{{$t('account.returnCoupon', { title: discountTitle })}}</sapn>
-      <router-link class="order-success-discount-link" :to="{ name: 'MyAccount'}">{{$t('account.viewMore')}}</router-link>
+      <sapn v-if="discountMessage">,{{discountMessage}}</sapn>
+      <router-link class="order-success-discount-link" :to="{ name: 'MyAccount'}">{{$t('account.backMyAccount')}}</router-link>
     </div>
 
   </div>
@@ -15,8 +15,10 @@
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
+import DiscountMixin from './common/DiscountMixin'
 export default {
   name: 'OrderSuccess',
+  mixins: [DiscountMixin],
   mounted() {
     if (_.isEmpty(this.tradeOrder)) {
       return this.$router.push({ name: 'MyAccount' })
@@ -50,13 +52,11 @@ export default {
     returnCoin() {
       return this.isPackageType ? this.goodsDetail.rmb : ''
     },
-    discountTitle() {
-      return this.isEn
-        ? _.get(this.tradeOrder, 'discount.extra.enTitle', '')
-        : _.get(this.tradeOrder, 'discount.title', '')
+    discount() {
+      return _.get(this.tradeOrder, 'discount', '')
     },
-    hasDiscounts() {
-      return !_.isEmpty(this.tradeOrder.discounts)
+    discountMessage() {
+      return this.discount ? this.getDiscountMessage(this.discount) : ''
     }
   }
 }

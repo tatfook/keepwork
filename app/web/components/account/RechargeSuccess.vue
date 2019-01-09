@@ -4,17 +4,19 @@
     <div class="recharge-success-title">{{$t('account.rechargeSuccessfully')}}</div>
     <div class="recharge-success-cost">{{rechargeMoney}}</div>
     <div class="recharge-success-message">
-      <sapn v-if="discountTitle"> {{$t('account.returnCoupon', { title: discountTitle })}}</sapn>
-      <router-link class="recharge-success-message-link" :to="{ name: 'MyAccount'}">{{$t('account.viewMore')}}</router-link>
+      <sapn v-if="discountMessage">{{discountMessage}}</sapn>
+      <router-link class="recharge-success-message-link" :to="{ name: 'MyAccount'}">{{$t('account.backMyAccount')}}</router-link>
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
-import { locale } from '@/lib/utils/i18n'
+import UnitMixin from './common/UnitMixin'
+import DiscountMixin from './common/DiscountMixin'
 export default {
   name: 'RechargeSuccess',
+  mixins: [UnitMixin, DiscountMixin],
   mounted() {
     if (_.isEmpty(this.rechargeOrder)) {
       return this.$router.push({ name: 'MyAccount' })
@@ -27,16 +29,16 @@ export default {
     ...mapGetters({
       rechargeOrder: 'account/rechargeOrder'
     }),
-    isEn() {
-      return locale === 'en-US'
-    },
     rechargeMoney() {
       return `¥ ${_.get(this.rechargeOrder, 'amount', 0)}`
     },
-    discountTitle() {
-      return this.isEn
-        ? _.get(this.rechargeOrder, 'discount.extra.enTitle', '')
-        : _.get(this.rechargeOrder, 'discount.title', '')
+    discount() {
+      return _.get(this.rechargeOrder, 'discount', '')
+    },
+    discountMessage() {
+      return this.discount
+        ? this.getDiscountMessage(this.discount)
+        : ''
     }
   },
   methods: {

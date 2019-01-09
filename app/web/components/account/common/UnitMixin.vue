@@ -1,5 +1,6 @@
 <script>
 import { locale } from '@/lib/utils/i18n'
+import { upperFirst } from 'lodash'
 export default {
   computed: {
     isEn() {
