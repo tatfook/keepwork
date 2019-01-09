@@ -6,7 +6,7 @@
         <span v-else-if="isCoinPayment" class="coupon-ticket-left-sum-coin">{{rewardCoin}}<span class="coupon-ticket-left-sum-coin-unit">{{$t('account.coin')}}</span></span>
         <span v-else-if="isBeanPayment" class="coupon-ticket-left-sum-bean">{{rewardBean}}<span class="coupon-ticket-left-sum-bean-unit">{{$t('account.bean')}}</span></span>
       </div>
-      <div class="coupon-ticket-left-condition">
+      <div :class="['coupon-ticket-left-condition', {'is-en-ticket': isEn }]">
         {{title}}
       </div>
       <div v-if="isCloseToExpire" class="coupon-ticket-left-label deadline-label">{{$t('account.willExpire')}}</div>
@@ -16,7 +16,7 @@
     <div class="coupon-ticket-right">
       <div class="coupon-ticket-right-dot left-top"></div>
       <div class="coupon-ticket-right-dot left-bottom"></div>
-      <div :class="['coupon-ticket-right-type', { 'coupon-disabled': isDisabled }]">
+      <div :class="['coupon-ticket-right-type', { 'coupon-disabled': isDisabled, 'is-en-ticket': isEn }]">
         {{description}}
       </div>
       <div class="coupon-ticket-right-deadline">
@@ -168,6 +168,10 @@ export default {
     }
     &-condition {
       font-size: 14px;
+
+      &.is-en-ticket {
+        font-size: 12px;
+      }
     }
     &::after {
       content: ' ';
@@ -226,8 +230,13 @@ export default {
       color: #137282;
       font-size: 16px;
       font-weight: bold;
+      padding-right: 5px;
       &.coupon-disabled {
         color: #8a898b;
+      }
+
+      &.is-en-ticket {
+        font-size: 15px;
       }
     }
     &-deadline {

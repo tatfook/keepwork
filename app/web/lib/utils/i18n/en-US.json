@@ -1617,7 +1617,7 @@
     "payNow": "Pay Now",
     "lackMoney": "Lack of {money}. Please recharge first.",
     "recharge": "Top up",
-    "successfullyPaid": "Successfully paid.",
+    "successfullyPaid": "Successfully paid",
     "failPaid": "Payment Failed",
     "viewMore": "View more",
     "returnCoin": "You got {coin} coins",
@@ -1651,6 +1651,8 @@
      "noData": "no data",
      "selectCoupons":"Please select",
      "withoutCoupons": "Without applying the coupon",
-     "willExpire": "Will expire soon"
+     "willExpire": "Will expire soon",
+     "backMyAccount": "Back to My Account",
+     "returnOneCoupon": "You got one coupon of "
   }
 }

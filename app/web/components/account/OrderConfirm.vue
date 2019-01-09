@@ -41,7 +41,7 @@
             - {{rewardNumberByUnit}} ({{tradeOrderDiscountTitle}})
           </span>
           <span v-show="!this.tradeOrderDiscount">
-            {{$t('account.noCoupons')}}
+            {{$t('account.pleaseSelect')}}
           </span>
         </div>
         <div class="order-confirm-main-discounts-all" @click="handleShowDiscountsDialog">
@@ -251,7 +251,7 @@ export default {
     },
     tradeOrderDiscountTitle() {
       return this.isEn
-        ? _.get(this.tradeOrderDiscount, 'extra.en.title', '')
+        ? _.get(this.tradeOrderDiscount, 'extra.enTitle', '')
         : _.get(this.tradeOrderDiscount, 'title', '')
     },
     hasDiscounts() {
