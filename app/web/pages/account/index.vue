@@ -99,8 +99,7 @@ export default {
   methods: {
     ...mapActions({
       toggleLoginDialog: 'user/toggleLoginDialog',
-      getUserProfile: 'user/getProfile',
-      getBalance: 'account/getBalance'
+      getUserProfile: 'user/getProfile'
     }),
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
@@ -109,7 +108,6 @@ export default {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)
       )
-      await this.getBalance().catch(e => console.error(e))
       this.loading = false
     }
   }
