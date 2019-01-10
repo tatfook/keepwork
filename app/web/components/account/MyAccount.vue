@@ -55,9 +55,6 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'MyAccount',
-  components: {
-    AccountTab
-  },
   mounted() {
     this.getBalance()
   },
