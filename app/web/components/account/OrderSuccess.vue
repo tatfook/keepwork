@@ -5,10 +5,10 @@
     <div class="order-success-cost">{{finalCostByUnit}}</div>
     <div class="order-success-discount">
       <span v-if="isPackageType">{{$t('account.returnCoin', { coin: returnCoin })}}</span>
+      <span v-if="isPackageType && discountMessage">,</span>
       <sapn v-if="discountMessage"> {{discountMessage}}</sapn>
       <router-link class="order-success-discount-link" :to="{ name: 'MyAccount'}">{{$t('account.backMyAccount')}}</router-link>
     </div>
-
   </div>
 </template>
 <script>
