@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       items: [],
-      isLoading: false
+      isLoading: true
     }
   },
   computed: {
@@ -39,7 +39,6 @@ export default {
     }
   },
   async created() {
-    this.isLoading = true
     await this.getGoods().catch(e => console.error(e))
     this.isLoading = false
   },

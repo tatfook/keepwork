@@ -44,16 +44,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      origialTrades: 'account/trades'
+      originalTrades: 'account/trades'
     }),
     showPagination() {
       return this.total > 10
     },
     total() {
-      return _.get(this.origialTrades, 'count', 0)
+      return _.get(this.originalTrades, 'count', 0)
     },
     trades() {
-      return _.get(this.origialTrades, 'rows', [])
+      return _.get(this.originalTrades, 'rows', [])
     },
     hasTrades() {
       return this.trades.length > 0
