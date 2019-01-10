@@ -88,6 +88,7 @@ export default {
     padding: 0;
     color: #909399;
     font-size: 14px;
+    text-align: center;
     li {
       display: inline-block;
       height: 60px;
