@@ -37,11 +37,14 @@
           {{$t('account.coupons')}}
         </div>
         <div class="order-confirm-main-discounts-checked">
-          <span class="is-checked-discount" v-show="this.tradeOrderDiscount">
+          <span class="is-checked-discount" v-if="tradeOrderDiscount">
             - {{rewardNumberByUnit}} ({{tradeOrderDiscountTitle}})
           </span>
-          <span v-show="!this.tradeOrderDiscount">
-            {{$t('account.pleaseSelect')}}
+          <span v-else-if="noAvailableDiscount">
+            {{$t('account.noAvailableCoupons')}}
+          </span>
+          <span v-else-if="withoutDiscounts">
+            {{$t('account.withoutCoupons')}}
           </span>
         </div>
         <div class="order-confirm-main-discounts-all" @click="handleShowDiscountsDialog">
@@ -397,6 +400,12 @@ export default {
     },
     finalCost() {
       return _.round(_.subtract(this.totalCost, this.rewardNumber), 2)
+    },
+    noAvailableDiscount() {
+      return this.usableDiscounts.length === 0
+    },
+    withoutDiscounts() {
+      return this.usableDiscounts.length > 0 && !this.tradeOrderDiscountId
     }
   }
 }
