@@ -1,6 +1,6 @@
 <template>
   <div class="user-data" v-loading="loading">
-    <div class="user-data-title">{{$t('common.accountSecurity')}}</div>
+    <div class="user-data-title">{{$t('common.userData')}}</div>
     <div class="user-data-content">
       <el-form ref="form" :model="userInfo" label-width="80px">
           <el-form-item :label='$t("card.pic")'>

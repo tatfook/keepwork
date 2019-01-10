@@ -7,6 +7,9 @@
       <div class="order-goods-item-info-subject">
         {{ subject }}
       </div>
+      <div class="order-goods-item-info-body">
+        {{ body }}
+      </div>
     </div>
     <div class="order-goods-item-cost">
       {{ goodsCostByUnit }}
@@ -33,7 +36,14 @@ export default {
       return _.get(this.data, 'thumbnail', '')
     },
     subject() {
-      return _.get(this.data, 'subject', '')
+      return this.isEn
+        ? _.get(this.data, 'extra.enSubject', '')
+        : _.get(this.data, 'subject', '')
+    },
+    body() {
+      return this.isEn
+        ? _.get(this.data, 'extra.enBody', '')
+        : _.get(this.data, 'body', '')
     },
     payment() {
       return _.get(this.data, 'payment', '')
@@ -70,12 +80,17 @@ export default {
       width: 100%;
       object-fit: scale-down;
     }
-    
   }
 
   &-info {
     flex: 1;
     padding-left: 22px;
+
+    &-body {
+      font-size: 12px;
+      color: #999;
+      margin-top: 10px;
+    }
   }
 
   &-cost {

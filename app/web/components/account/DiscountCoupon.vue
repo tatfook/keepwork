@@ -3,7 +3,7 @@
     <div class="discount-coupon-header">
       {{$t('account.coupons')}}
     </div>
-    <div class="discount-coupon-tab" v-if="hasDiscounts">
+    <div class="discount-coupon-tab">
       <el-tabs v-model="activeName">
         <el-tab-pane :label="$t('account.available')" name="useable">
           <coupon-list :data="discountsUseable"></coupon-list>
@@ -37,8 +37,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'useable',
-      tickets: [1, 2, 3, 4, 5, 6]
+      activeName: 'useable'
     }
   },
   async mounted() {
@@ -52,16 +51,21 @@ export default {
       return this.discounts.length > 0
     },
     _discounts() {
-      return this.discounts.filter(i => i.title)
+      return this.discounts
     },
     discountsUseable() {
-      return this._discounts.filter(item => item.state === 0)
+      return this._discounts.filter(item => item.state === 0 && item.endTime > this.timestamp)
     },
     discountsUsed() {
       return this._discounts.filter(item => item.state === 1)
     },
     discountsExpired() {
-      return this._discounts.filter(item => item)
+      return this._discounts.filter(item => {
+        return item.state === 0 && item.endTime < this.timestamp
+      })
+    },
+    timestamp() {
+      return +new Date()
     }
   },
   methods: {
@@ -81,7 +85,7 @@ export default {
     line-height: 61px;
     padding-left: 28px;
     font-size: 16px;
-    padding-left: -28px;
+    padding-left: 28px;
     border-bottom: 1px solid #e8e8e8;
   }
 
@@ -103,7 +107,7 @@ export default {
     &-item {
       color: #808080;
       font-size: 14px;
-      line-height: 14px;
+      line-height: 24px;
       margin-top: 10px;
       &::before {
         content: '•';

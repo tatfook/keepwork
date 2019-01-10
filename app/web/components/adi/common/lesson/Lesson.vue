@@ -1,11 +1,13 @@
 <template>
   <el-row class="index-page-lesson" wdith="1080px">
     <el-dialog :visible.sync="dialogVisible" width="50%">
-      <video controls="" width="100%" autoplay="" name="media"><source :src="lessonVideoUrl" type="video/mp4"></video>
+      <video controls="" width="100%" autoplay="" name="media">
+        <source :src="lessonVideoUrl" type="video/mp4"></video>
     </el-dialog>
     <div class="lesson-container">
       <el-row type="flex" class="mod-full-width-0-0-65">
-        <el-col class="lesson-cover" @click.native="openAnimations()" :style="loadCover()">
+        <el-col class="lesson-cover" @click.native="openAnimations()">
+          <img class="lesson-cover-image" :src="lessonCoverUrl">
         </el-col>
         <el-col>
           <div class="lessonDesc">
@@ -55,6 +57,11 @@ export default {
       lessonData: {}
     }
   },
+  watch: {
+    async updated(value) {
+      await this.getLessonData()
+    }
+  },
   computed: {
     ...mapGetters({
       username: 'user/username',
@@ -83,29 +90,37 @@ export default {
     },
     lessonCoverUrl() {
       return this.lessonExtra.coverUrl
+    },
+    updated() {
+      return this.properties.updated
+        ? this.properties.updated
+        : this.options.updated
     }
   },
   async mounted() {
-    let origin = window.location.origin
-    if (origin === 'http://localhost:8080') {
-      origin = 'https://stage.keepwork.com'
-    }
-    await lesson.lessons
-      .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
-      .then(res => {
-        console.log(res)
-        this.lessonData = res
-        this.isLinked = true
-      })
-      .catch(e => console.error(e))
+    this.getLessonData()
   },
   methods: {
+    async getLessonData() {
+      let origin = window.location.origin
+      // if (origin === 'http://localhost:8080') {
+      //   origin = 'https://release.keepwork.com'
+      // }
+      await lesson.lessons
+        .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
+        .then(res => {
+          this.lessonData = res
+          this.isLinked = true
+        })
+        .catch(e => console.error(e))
+    },
     loadCover() {
       return this.generateStyleString({
         background: 'url(' + this.lessonCoverUrl + ')',
         'background-position': 'center',
-        'background-size': 'cover',
+        'background-size': 'contain',
         'background-color': '#eee',
+        'background-repeat': 'no-repeat',
         opacity: '0.8',
         'border-radius': '8px'
       })
@@ -174,6 +189,11 @@ export default {
   min-width: 400px;
   position: relative;
   cursor: pointer;
+  &-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
 }
 .lesson-cover::after {
   content: '';

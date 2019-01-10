@@ -45,10 +45,10 @@
         <div @click="hasAccountToLogin" class="has-account">{{$t('common.alreadyOwnAccount')}}<span class="login-now">{{$t('common.fastLogin')}}</span></div>
       </div>
     </div>
-    <div v-show="isPerfectRegisterInfo"  class="register-tips">
+    <div v-show="isPerfectRegisterInfo" class="register-tips">
       <perfect-register-info @close="handleClose" :userThreeService="userThreeService"></perfect-register-info>
     </div>
-    <div v-show="isShowPasswordResetForm"  class="register-tips">
+    <div v-show="isShowPasswordResetForm" class="register-tips">
       <password-reset-form></password-reset-form>
       <div class="register-oprate">
         <div @click="backHome" class="back-home-page">{{$t('editor.backHomePage')}}</div>
@@ -146,24 +146,28 @@ export default {
             password: this.ruleForm.password
           }
           this.loading = true
-          let info = await this.userLogin(payload).catch(e => {
-            this.loading = false
-          })
-          this.loading = false
-          if (!info) {
-            this.showMessage(
-              'error',
-              this.$t('common.IncorrectUsernameOrPassword')
-            )
-          } else {
-            this.$emit('close')
-            if(this.$route.name == 'Login'){
-              window.location.href = '/'
-            }else{
-              window.location.reload()
-            }
-            return false
-          }
+          await this.userLogin(payload)
+            .then(res => {
+              this.$emit('close')
+              if (this.$route.name == 'Login') {
+                window.location.href = '/'
+              } else {
+                window.location.reload()
+              }
+              this.loading = false
+            })
+            .catch(e => {
+              if (e.response.data.code === 1) {
+                this.showMessage(
+                  'error',
+                  this.$t('common.IncorrectUsernameOrPassword')
+                )
+              }
+              if (e.response.data.code === 14) {
+                this.showMessage('error', this.$t('common.AccountIsUnusable'))
+              }
+              this.loading = false
+            })
         }
       })
     },
@@ -174,7 +178,7 @@ export default {
     },
     authorizedToLogin(provider) {
       this.$auth
-        .authenticate(provider, {state: "login"})
+        .authenticate(provider, { state: 'login' })
         .then(async result => {
           this.handleLoginResult(result)
         })
@@ -191,12 +195,12 @@ export default {
           this.handleClose()
           this.showMessage('success', this.$t('common.loginSuccess'))
           setTimeout(() => {
-            if(this.$route.name == 'Login'){
+            if (this.$route.name == 'Login') {
               window.location.href = '/'
-            }else{
+            } else {
               window.location.reload()
             }
-          },800)
+          }, 800)
         } else {
           this.isLoginForm = false
           this.isRegisterForm = false
@@ -219,17 +223,17 @@ export default {
 }
 </script>
 <style lang="scss">
-.login-page{
+.login-page {
   max-width: 352px;
-  margin:  80px auto 10px;
+  margin: 80px auto 10px;
   box-shadow: 1px 1px 5px #ccc;
-   .login-title {
+  .login-title {
     padding: 20px 32px 0;
     margin: 0 auto 30px;
     font-size: 18px;
     color: #303133;
   }
-  .register-dialog-form{
+  .register-dialog-form {
     margin: 0;
     box-shadow: none;
   }
@@ -273,7 +277,7 @@ export default {
         width: 115px;
         cursor: pointer;
         text-align: left;
-        color:#1272cc;
+        color: #1272cc;
       }
       a {
         text-decoration: none;

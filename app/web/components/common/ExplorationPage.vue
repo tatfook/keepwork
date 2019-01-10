@@ -56,17 +56,17 @@
           <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></all-projects>
         </div>
         <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft>
+          <paracraft-item ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft-item>
         </div>
         <div class="selected-projects" v-if='currIndex == 3'>
-          <website ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website>
+          <website-item ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website-item>
         </div>
         <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
         <div class="selected-lessons" v-if='currIndex == 5'>
-          <course ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course>
+          <course-item ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course-item>
         </div>
         <div class="selected-user" v-if='currIndex == 6'>
-          <users ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users>
+          <users-item ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users-item>
         </div>
         <div class="selected-studio" v-if='currIndex == 7'>
           <el-row>
@@ -98,7 +98,7 @@
           </el-row>
         </div>
         <div class="selected-projects" v-if='currIndex == 8'>
-          <recruiting ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting>
+          <recruiting-item ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting-item>
         </div>
       </div>
     </div>
@@ -122,9 +122,8 @@ export default {
       activeTabIndex: '1',
       currIndex: 1,
       searchKey: '',
-      sortProjects: 'recent_view',
-      // currSortMode: this.$t("explore.overall"),
-      currSortMode: this.$t("explore.hottest"),
+      sortProjects: '',
+      currSortMode: this.$t('explore.overall'),
       searchResultAmount: 0
     }
   },
@@ -153,19 +152,21 @@ export default {
         case 5:
         case 8:
           return [
-            // { mode: this.$t("explore.overall"), command: '/综合' },
-            { mode: this.$t("explore.newest"), command: 'updated_time/最新' },
-            { mode: this.$t("explore.hottest"), command: 'recent_view/热门' }
+            { mode: this.$t('explore.overall'), command: '/综合' },
+            { mode: this.$t('explore.newest'), command: 'updated_time/最新' },
+            { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
           ]
         case 6:
           return [
-            // { mode: this.$t("explore.overall"), command: '/综合' },
-            { mode: this.$t("explore.projectSort"), command: 'total_projects/项目' },
-            { mode: this.$t("explore.popularity"), command: 'total_fans/名气' }
+            { mode: this.$t('explore.overall'), command: '/综合' },
+            {
+              mode: this.$t('explore.projectSort'),
+              command: 'total_projects/项目'
+            },
+            { mode: this.$t('explore.popularity'), command: 'total_fans/名气' }
           ]
         default:
-          // return [{ mode: this.$t("explore.overall"), command: '/综合' }]
-          return [{ mode: this.$t("explore.hottest"), command: 'recent_view/热门' }]
+          return [{ mode: this.$t('explore.overall'), command: '/综合' }]
       }
     }
   },
@@ -229,23 +230,17 @@ export default {
     },
     selectTab(index) {
       this.currIndex = index
-      if(index == 6){
-        this.currSortMode = this.$t("explore.popularity")
-        this.sortProjects = 'total_fans'
-      }else{
-        // this.currSortMode = this.$t("explore.overall")
-        this.currSortMode = this.$t("explore.hottest")
-        this.sortProjects = 'recent_view'
-      }
+      this.currSortMode = this.$t('explore.overall')
+      this.sortProjects = ''
     }
   },
   components: {
-    AllProjects,
-    Paracraft,
-    Website,
-    Course,
-    Recruiting,
-    Users
+    'all-projects': AllProjects,
+    'paracraft-item': Paracraft,
+    'website-item': Website,
+    'course-item': Course,
+    'recruiting-item': Recruiting,
+    'users-item': Users
   }
 }
 </script>
@@ -268,9 +263,9 @@ export default {
         &-tab {
           &-menu {
             border: none;
-            &.el-menu.el-menu--horizontal{
+            &.el-menu.el-menu--horizontal {
               border: none;
-              .el-menu-item{
+              .el-menu-item {
                 padding: 0 10px;
               }
             }
@@ -414,15 +409,32 @@ export default {
   .search-result-total {
     padding: 15px 0;
     font-size: 18px;
+    margin: 20px 30px;
   }
-}
-.search-result-total {
-  margin: 20px 30px;
-}
-.all-projects {
-  &-pages {
-    margin-top: 40px;
-    text-align: center;
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 3s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  .all-projects {
+    &-pages {
+      margin-top: 40px;
+      text-align: center;
+    }
+    &-nothing {
+      min-height: 500px;
+      text-align: center;
+      &-img {
+        margin: 128px 0 32px;
+      }
+      &-tip {
+        color: #606266;
+        font-size: 14px;
+      }
+    }
   }
 }
 @media screen and (max-width: 768px) {
@@ -450,7 +462,7 @@ export default {
               height: 60px;
               line-height: 60px;
             }
-            .sort-dropdown-menu{
+            .sort-dropdown-menu {
               float: right;
             }
           }

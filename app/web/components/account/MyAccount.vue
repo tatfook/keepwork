@@ -26,18 +26,14 @@
     </div>
 
     <div class="account-detail-item">
-      <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col-name">{{$t('account.userCoin')}}</div>
-        <div class="account-detail-item-row-col-count">{{coin}}</div>
+      <div class="account-detail-item-row-top">
+        <div class="account-detail-item-row-top-col-name">{{$t('account.userCoin')}}</div>
+        <div class="account-detail-item-row-top-col-count">
+          <span class="account-detail-item-row-top-col-count-number">{{coin}}</span>
+          <span class="account-detail-item-row-top-col-count-lock">{{lockCoin}}<span class="account-detail-item-row-top-col-count-lock-tips">({{$t('account.locked')}})</span></span>
+        </div>
         <div class="account-detail-item-row-button">
           <el-button type="primary" class="account-item-button" @click="toExchangeMall">{{$t('account.exchange')}}</el-button>
-        </div>
-      </div>
-      <div class="account-detail-item-row">
-        <div class="account-detail-item-row-col-name"></div>
-        <div class="account-detail-item-row-col-lock">{{lockCoin}}<span class="account-detail-item-row-col-lock-tips">({{$t('account.locked')}})</span></div>
-        <div class="account-detail-item-row-button lock">
-          <el-button type="primary" class="account-item-button">{{$t('account.exchange')}}</el-button>
         </div>
       </div>
     </div>
@@ -169,10 +165,37 @@ export default {
       &-button {
         .account-item-button {
           padding: 10px 20px;
+          width: 100px;
         }
+      }
+    }
 
-        &.lock {
-          visibility: hidden;
+    &-row-top {
+      width: 100%;
+      display: flex;
+      &-col {
+        &-name {
+          flex: 1;
+          color: #808080;
+          font-size: 15px;
+        }
+        &-count {
+          flex: 1;
+          font-size: 24px;
+          color: #404144;
+          display: flex;
+          flex-direction: column;
+          &-lock {
+            flex: 1;
+            font-size: 24px;
+            color: #bec1c6;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            &-tips {
+              font-size: 14px;
+              color: #bec1c6;
+            }
+          }
         }
       }
     }

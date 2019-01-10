@@ -7,22 +7,29 @@
       <template v-if="isRecharge">
         {{ subject }}
       </template>
-      <template v-if="isExchange">
+      <template v-else-if="isExchange">
         兑换【<span class="transaction-detail-item-highlight">{{ subject }}</span>】X <span class="transaction-detail-item-highlight">{{count}}</span>
       </template>
-      <template v-if="isLesson">
+      <template v-else-if="isPackage">
         购买课程包【<span class="transaction-detail-item-highlight">{{ subject }}</span>】, 奖励 {{cost}}知识币(待解锁)
+      </template>
+      <template v-else-if="isLesson">
+        课程 【<span class="transaction-detail-item-highlight">{{ subject }}</span>】学习完成
       </template>
     </div>
     <div class="transaction-detail-item-sum">
       <template v-if="isRecharge">
-        + {{$t('account.rmbUnit', { money: rmb })}}
+        +{{$t('account.rmbUnit', { money: rmb })}}
       </template>
       <template v-else-if="isExchange">
-        - {{ finalCostByUnit }}
+        -{{ finalCostByUnit }}
+      </template>
+      <template v-else-if="isPackage">
+        -{{ finalCostByUnit }}
       </template>
       <template v-else-if="isLesson">
-        - {{ finalCostByUnit }}
+        <span v-if="coin">+{{ coin && $t('account.coinUnit', { money: coin }) }}</span>
+        <span v-if="bean">, +{{ bean && $t('account.beanUnit', { money: bean })}}</span>
       </template>
     </div>
   </div>
@@ -95,8 +102,11 @@ export default {
     isExchange() {
       return this.type === 1
     },
-    isLesson() {
+    isPackage() {
       return this.type === 2
+    },
+    isLesson() {
+      return this.type === 3
     },
     createdAt() {
       return _.get(this.data, 'createdAt', '')
