@@ -5,7 +5,7 @@
     </div>
     <div class="recharge-dialog-confirm-money">
       {{$t('account.rechargeMoney')}}
-      <div class="recharge-dialog-confirm-money-tips">{{$t('account.pleaseRecharge')}}: {{needRechargeMoney | formatMoney}}</div>
+      <div class="recharge-dialog-confirm-money-tips">{{$t('account.pleaseRecharge')}} {{needRechargeMoney | formatMoney}}</div>
       <div class="recharge-dialog-confirm-money-input">
         ¥ <input
           class="recharge-dialog-confirm-money-input-inner"

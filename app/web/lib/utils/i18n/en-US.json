@@ -1646,7 +1646,7 @@
     "alipayScan": "Please scan the QR code on Alipay.",
     "scan": "Please scan the QR code to pay.",
     "success": "Success",
-    "pleaseRecharge": "To pay for the order, please recharge",
+    "pleaseRecharge": "To pay for the order, please recharge:",
      "rechargeSuccessfully": "Success",
      "noData": "no data",
      "selectCoupons":"Please select",
