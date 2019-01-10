@@ -89,7 +89,7 @@ export default {
     &-body {
       font-size: 12px;
       color: #999;
-      margin-top: 1em;
+      margin-top: 10px;
     }
   }
 
