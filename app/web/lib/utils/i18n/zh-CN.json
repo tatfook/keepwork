@@ -1657,6 +1657,7 @@
     "withoutCoupons": "不使用优惠券",
     "willExpire": "即将过期",
     "backMyAccount": "进入我的账户查看",
-    "returnOneCoupon": "赠送1张优惠券共"
+    "returnOneCoupon": "赠送1张优惠券共",
+    "noAvailableCoupons": "无可用优惠券"
   }
 }

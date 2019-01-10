@@ -10,7 +10,7 @@ export default {
         payment = 'coin'
       }
       if (discount.bean) {
-        return 'bean'
+        payment = 'bean'
       }
       let count = discount.rewardRmb || discount.rewardCoin || this.rewardBean
       return `${this.$t('account.returnOneCoupon')}${this.$t(`account.${payment}Unit`, {

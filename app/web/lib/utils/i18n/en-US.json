@@ -1653,6 +1653,7 @@
      "withoutCoupons": "Without applying the coupon",
      "willExpire": "Will expire soon",
      "backMyAccount": "Back to My Account",
-     "returnOneCoupon": "You got one coupon of "
+     "returnOneCoupon": "You got one coupon of ",
+     "noAvailableCoupons": "No available coupons"
   }
 }
