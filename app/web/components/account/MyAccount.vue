@@ -52,20 +52,15 @@
 
 
 <script>
-import AccountTab from '@/components/account/common/AccountTab'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'MyAccount',
-  components: {
-    AccountTab
-  },
   mounted() {
     this.getBalance()
   },
   computed: {
     ...mapGetters({
-      balance: 'account/balance',
-      isLogined: 'user/isLogined'
+      balance: 'account/balance'
     }),
     _rmb() {
       return this.balance.rmb || 0
@@ -137,7 +132,6 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // min-height: 80px;
     margin: 0 28px;
     padding: 20px 0;
     &-row {

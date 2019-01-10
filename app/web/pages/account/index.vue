@@ -21,10 +21,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
-import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
-import VueClipboard from 'vue-clipboard2'
 import router from './account.router'
 import userModule from '@/store/user'
 import accountModule from '@/store/account'
@@ -37,16 +35,6 @@ import CommonFooter from '@/components/common/CommonFooter'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
-Vue.use(VueClipboard)
-Vue.use(VueAnalytics, {
-  id: process.env.GOOGLE_ANALYTICS_UA,
-  router,
-  batch: {
-    enabled: true, // enable/disable
-    amount: 2, // amount of events fired
-    delay: 500 // delay in milliseconds
-  }
-})
 
 const i18n = new VueI18n({
   locale,

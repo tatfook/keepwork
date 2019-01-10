@@ -41,7 +41,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { locale } from '@/lib/utils/i18n'

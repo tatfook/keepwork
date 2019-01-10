@@ -28,8 +28,8 @@
         -{{ finalCostByUnit }}
       </template>
       <template v-else-if="isLesson">
-        <span v-if="coin">+{{ coin && $t('account.coinUnit', { money: coin }) }}</span>
-        <span v-if="bean">, +{{ bean && $t('account.beanUnit', { money: bean })}}</span>
+        <span v-if="coin">+{{ coin && $t('account.coinUnit', { money: coin }) }} </span>
+        <span v-if="bean">+{{ bean && $t('account.beanUnit', { money: bean })}}</span>
       </template>
     </div>
   </div>
