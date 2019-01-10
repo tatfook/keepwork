@@ -55,6 +55,9 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'MyAccount',
+  mounted() {
+    this.getBalance()
+  },
   computed: {
     ...mapGetters({
       balance: 'account/balance'
@@ -76,6 +79,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getBalance: 'account/getBalance'
+    }),
     toRechargeConfirm() {
       this.$router.push({ name: 'RechargeConfirm' })
     },
