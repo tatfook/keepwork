@@ -1,5 +1,5 @@
 <template>
-  <div :class="['exchange-item', { 'exchange-item-hover': isHover }]" @mouseover="handleShowButton" @mouseout="handleHideButton">
+  <div class="exchange-item">
     <img class="exchange-item-image" :src="image">
     <div class="exchange-item-info">
       <div class="exchange-item-info-subject">
@@ -9,7 +9,7 @@
         {{$t('account.price')}}
         <span class="exchange-item-info-price-number">{{ priceByUnit }}</span>
       </div>
-      <el-button v-show="isHover" type="primary" class="exchange-item-info-button" @click="toExchangePage">{{$t('account.conversion')}}</el-button>
+      <el-button type="primary" class="exchange-item-info-button" @click="toExchangePage">{{$t('account.conversion')}}</el-button>
     </div>
   </div>
 </template>
@@ -30,7 +30,6 @@ export default {
   },
   data() {
     return {
-      isHover: false
     }
   },
   computed: {
@@ -81,12 +80,6 @@ export default {
         query: { id: this.id, type: 1, payment: this.priceUnit }
       })
     },
-    handleShowButton() {
-      this.isHover = true
-    },
-    handleHideButton() {
-      this.isHover = false
-    }
   }
 }
 </script>
@@ -101,16 +94,18 @@ export default {
   padding-left: 24px;
   padding-top: 20px;
   box-sizing: border-box;
-  &.exchange-item-hover {
+  &:hover {
     box-shadow: 0px 4px 10px 0px rgba(84, 143, 240, 0.28);
     border: solid 1px #409efe;
+    .exchange-item-info-button{
+      display: inline;
+    }
   }
   &-image {
     width: 60px;
     height: 60px;
     margin-right: 15px;
   }
-
   &-info {
     height: 80px;
     &-subject {
@@ -133,9 +128,8 @@ export default {
       font-size: 12px;
       padding: 6px 16px;
       border-radius: 2px;
+      display: none;
     }
   }
 }
 </style>
-
-
