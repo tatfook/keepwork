@@ -1,12 +1,8 @@
 <template>
   <div class="account-tab">
-    <img
-      class="account-tab-avatar"
-      :src="avatar"
-      alt="avatar"
-    >
+    <img class="account-tab-avatar" :src="avatar" alt="avatar">
     <div class="account-tab-username">{{ username }}</div>
-    <el-button :class="['account-tab-button', {'selected': isMyAccountTab }]" @click="switchTab('MyAccount')" >{{$t('account.myAccount')}}</el-button>
+    <el-button :class="['account-tab-button', {'selected': isMyAccountTab }]" @click="switchTab('MyAccount')">{{$t('account.myAccount')}}</el-button>
     <el-button :class="['account-tab-button', {'selected': isTransactionDetail }]" @click="switchTab('TransactionDetail')">{{$t('account.transactions')}}</el-button>
     <el-button :class="['account-tab-button', {'selected': isDiscountCoupon }]" @click="switchTab('DiscountCoupon')">{{$t('account.coupons')}}</el-button>
   </div>
@@ -43,7 +39,10 @@ export default {
       return this.currentTab === 'DiscountCoupon'
     },
     avatar() {
-      return this.userProfile.portrait || require('@/assets/img/default_portrait.png')
+      return (
+        this.userProfile.portrait ||
+        require('@/assets/img/default_portrait.png')
+      )
     },
     username() {
       return this.userProfile.username

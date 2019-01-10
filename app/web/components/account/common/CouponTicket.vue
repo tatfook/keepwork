@@ -222,7 +222,6 @@ export default {
     align-items: flex-start;
     box-sizing: border-box;
     padding-left: 20px;
-    // width: 265px;
     flex: 1;
     position: relative;
     overflow: hidden;
