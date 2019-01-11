@@ -25,7 +25,8 @@
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div>
             <div class="video">
-              <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video>
+              <!-- <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video> -->
+              <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4' />
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
@@ -146,6 +147,7 @@ import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
 import {  mapGetters } from 'vuex'
+import videoPlayer from '@/components/common/VideoPlayer'
 
 export default {
   name: 'HomePage',
@@ -194,7 +196,8 @@ export default {
   components: {
     ProjectCell,
     RegisterDialog,
-    LessonPackageCell
+    LessonPackageCell,
+    videoPlayer
   },
   async mounted() {
     this.textAnimation()
@@ -495,7 +498,7 @@ export default {
           border: 1px solid #eeeeee;
           .video {
             width: 352px;
-            height: 193px;
+            height: 240px;
             margin: 17px;
             text-align: center;
           }
