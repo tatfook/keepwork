@@ -249,12 +249,13 @@ export default {
 .exploration-page {
   &-theme {
     background: #fff;
+    padding-top: 24px;
     &-center {
       margin: 10px auto 0;
       max-width: 1200px;
       .theme {
         text-align: center;
-        margin: 24px auto 32px;
+        margin: 0 auto 32px;
         .explore {
           color: #409eff;
         }
