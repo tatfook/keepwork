@@ -252,6 +252,7 @@ body {
   font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'PingFang SC',
     'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 0;
+  background: #f6f7f8;
 }
 [mod-container] {
   overflow: hidden;
