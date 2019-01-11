@@ -43,7 +43,6 @@ const LessonSummary = () =>
 const LessonPlan = () => import('@/components/lesson/teacher/LessonTeacherPlan')
 const LessonPerformance = () =>
   import('@/components/lesson/teacher/LessonStudentPerformance')
-const Print = () => import('@/components/lesson/teacher/Print')
 const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 const Bean = () => import('@/components/lesson/student/Bean')
 const Visitor = () => import('@/components/lesson/Visitor')
@@ -224,12 +223,6 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId/class/:classId/summary',
           name: 'LessonSummary',
           component: LessonSummary
-        },
-        {
-          path:
-            'package/:packageId/lesson/:lessonId/class/:classId/summary/print',
-          name: 'Print',
-          component: Print
         }
       ]
     },
