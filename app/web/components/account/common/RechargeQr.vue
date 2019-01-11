@@ -196,17 +196,10 @@ export default {
         height: 391px;
         width: 267px;
         background-size: cover;
-        &.weixin-guide {
-          background: url('../../../assets/account/weixin-guide.png');
-        }
-        &.zhifubao-guide {
-          background: url('../../../assets/account/zhifubao-guide.png');
-        }
-        &.en-weixin-guide {
-          background: url('../../../assets/account/en-weixin-guide.png');
-        }
-        &.en-zhifubao-guide {
-          background: url('../../../assets/account/en-zhifubao-guide.png');
+        @each $pic in weixin, zhifubao, en-weixin, en-zhifubao {
+          &.#{$pic}-guide {
+            background: url('../../../assets/account/#{$pic}-guide.png');
+          }
         }
       }
     }
