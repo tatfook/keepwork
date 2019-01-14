@@ -62,52 +62,52 @@ export default {
     renderMode: Boolean
   },
   render(h) {
+    const styleID = this.modData.styleID || 0
+    const style = this.conf.styles[styleID]
+
+    const templateID = (style && typeof style.templateID === 'number') && style.templateID || 0
+    const template = this.conf.templates[templateID]
+
     let isShowMod = false
 
-    _.forEach(this.mod.data, (item, key) => {
-      let modsID = this.mod.data.styleID || 0
-      let modstemplatesID = this.conf.styles[modsID]
-      let modstemplates = this.conf.templates[modstemplatesID ? modstemplatesID.templateID || 0 : 0]
-
-      let modsForEach = (item) => {
-        if (typeof item === 'object') {
-          _.forEach(item, (itemB, keyB) => {
-            if (this.mod.data[itemB]) {
-              if (!this.mod.data[itemB].hidden) {
-                isShowMod = true
-              }
-            } else {
-              modsForEach(itemB)
-            }
-          })
+    if (this.mod.data && Object.keys(this.mod.data).length !== 0) {
+      _.forEach(this.mod.data, (val, key) => {
+        if (typeof val === 'object') {
+          if (typeof val.hidden === 'undefined' || val.hidden === false) {
+            isShowMod = true
+          }
         }
-      }
-
-      _.forEach(modstemplates, (item, key) => {
-        modsForEach(item)
       })
+    } else {
+      isShowMod = true
+    }
 
-    })
-
-    if (this.sheet) this.sheet.detach()
-    let styleID =
-      Number(this.modData.styleID) >= this.conf.styles.length
-        ? this.conf.styles.length - 1
-        : Number(this.modData.styleID)
-    this.style = this.conf.styles[styleID || 0]
-    this.template = this.conf.templates[this.style.templateID || 0]
+    this.style = style
+    this.template = template
     this.sheet = jss.createStyleSheet(this.style.data)
-    this.sheet.attach()
+    if (this.sheet) this.sheet.detach()
+
     _.merge(this.theme.data, gThemeData)
-    if (this.renderMode || isShowMod || !this.editMode) {
+
+    if (isShowMod) {
       return (
-        <div data-mod={this.mod ? this.mod.modType : 'ModMarkdown'} style={this.getFontFamily()} class={this.getClasses('root')}>
+        <div
+          data-mod={this.mod ? this.mod.modType : 'ModMarkdown'}
+          style={this.getFontFamily()}
+          class={this.getClasses('root')}
+        >
           {renderTemplate(h, this)}
         </div>
       )
     } else {
-      return (<CompHide compHideName={this.mod.modType} compHideData={this.mod.data} />)
-
+      if (!this.renderMode && this.editMode) {
+        return (
+          <CompHide
+            compHideName={this.mod.modType}
+            compHideData={this.mod.data}
+          />
+        )
+      }
     }
   },
   methods: {
@@ -119,12 +119,17 @@ export default {
         return ''
       }
 
-      if (!this.conf || !this.conf.components || !this.conf.components[property]) {
+      if (
+        !this.conf ||
+        !this.conf.components ||
+        !this.conf.components[property]
+      ) {
         return ''
       }
 
       if (Array.isArray(this.conf.components[property])) {
-        let componentID = this.style && this.style.componentID && this.style.componentID || 0
+        let componentID =
+          (this.style && this.style.componentID && this.style.componentID) || 0
 
         return this.conf.components[property][componentID]
       } else {
@@ -146,9 +151,14 @@ export default {
       let gThemeName = this.themeConf.name
       let gThemeColorId = this.themeConf.colorID
       let cName = ''
-      if (themeData && gThemeName &&
-        themeData[gThemeName] && themeData[gThemeName].colors &&
-        (gThemeColorId === 0 || gThemeColorId) && name) {
+      if (
+        themeData &&
+        gThemeName &&
+        themeData[gThemeName] &&
+        themeData[gThemeName].colors &&
+        (gThemeColorId === 0 || gThemeColorId) &&
+        name
+      ) {
         cName = themeData[gThemeName].colors[gThemeColorId][name]
         return cName
       }
@@ -158,23 +168,32 @@ export default {
       let gThemeName = this.themeConf.name
       let gThemeFontId = this.themeConf.fontID
       let fSize = ''
-      if (themeData && gThemeName &&
-        themeData[gThemeName] && themeData[gThemeName].colors &&
-        (gThemeFontId === 0 || gThemeFontId) && name) {
+      if (
+        themeData &&
+        gThemeName &&
+        themeData[gThemeName] &&
+        themeData[gThemeName].colors &&
+        (gThemeFontId === 0 || gThemeFontId) &&
+        name
+      ) {
         fSize = themeData[gThemeName].fontSize[gThemeFontId][name]
         return fSize
       }
     },
     themeClass(name) {
       if (this.convertColorStyle(name) || this.convertFontStyle(name)) {
-        return this.theme.sheet.classes[this.convertColorStyle(name) || this.convertFontStyle(name)]
+        return this.theme.sheet.classes[
+          this.convertColorStyle(name) || this.convertFontStyle(name)
+        ]
       } else {
         return this.theme.sheet.classes[name]
       }
     },
     themeData(name) {
       if (this.convertColorStyle(name)) {
-        return this.theme.data[this.convertColorStyle(name) || this.convertFontStyle(name)]
+        return this.theme.data[
+          this.convertColorStyle(name) || this.convertFontStyle(name)
+        ]
       } else {
         return this.theme.data[name]
       }
@@ -185,7 +204,10 @@ export default {
       classes.push('comp')
 
       if (this.activeMod) {
-        if (this.mod.uuid === this.activeMod.uuid && name === this.activeProperty) {
+        if (
+          this.mod.uuid === this.activeMod.uuid &&
+          name === this.activeProperty
+        ) {
           classes.push('comp-proptype-hover')
         }
       }
@@ -200,8 +222,7 @@ export default {
       if (this.style.theme && this.style.theme[name]) {
         this.style.theme[name].forEach(el => {
           classes.push(this.themeClass(el))
-        }
-        )
+        })
       }
       return _.flatten(classes)
     },
@@ -224,7 +245,7 @@ export default {
             _.forEach(item, (op, key) => {
               // 如果定义了相同的theme key，则之前的配置会被覆盖
 
-              if (typeof (op) === 'object') {
+              if (typeof op === 'object') {
                 getClassStyle(op)
               } else {
                 themeOptions[key] = self.themeData(op)
@@ -233,7 +254,7 @@ export default {
           }
 
           _.forEach(themeClassOptions, (item, key) => {
-            if (typeof (item) === 'object') {
+            if (typeof item === 'object') {
               let themeOptions = {}
               getClassStyle(item, themeOptions)
 
@@ -249,7 +270,9 @@ export default {
     compWrapperOptions(name) {
       let options = {}
 
-      options = _.merge(options, this.generateOptionsStyle(name), { enableScript: this.mod.enableScript })
+      options = _.merge(options, this.generateOptionsStyle(name), {
+        enableScript: this.mod.enableScript
+      })
 
       return options
     }
