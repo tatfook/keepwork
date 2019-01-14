@@ -1,77 +1,129 @@
 <template>
-  <div :class="['coupon-ticket', { 'disabled': isDisabled }]">
+  <div :class="['coupon-ticket', { 'coupon-disabled': isDisabled }]">
     <div class="coupon-ticket-left">
       <div class="coupon-ticket-left-sum">
-        <span class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-rmb">¥</span>5</span>
-        <!-- <div class="coupon-ticket-left-sum-coin">5 知识币</div> -->
-        <!-- <div class="coupon-ticket-left-sum-bean">5 知识豆</div> -->
+        <span v-if="isRmbPayment" class="coupon-ticket-left-sum-money"><span class="coupon-ticket-left-sum-money-unit">¥</span>{{rewardRmb}}</span>
+        <span v-else-if="isCoinPayment" class="coupon-ticket-left-sum-coin">{{rewardCoin}}<span class="coupon-ticket-left-sum-coin-unit">{{$t('account.coin')}}</span></span>
+        <span v-else-if="isBeanPayment" class="coupon-ticket-left-sum-bean">{{rewardBean}}<span class="coupon-ticket-left-sum-bean-unit">{{$t('account.bean')}}</span></span>
       </div>
-      <div class="coupon-ticket-left-condition">
+      <div :class="['coupon-ticket-left-condition', {'is-en-ticket': isEn }]">
         {{title}}
       </div>
-      <div v-if="isCloseToExpire" class="coupon-ticket-left-label deadline-label">即将过期</div>
+      <div v-if="isCloseToExpire" class="coupon-ticket-left-label deadline-label">{{$t('account.willExpire')}}</div>
       <div class="coupon-ticket-left-dot right-top"></div>
       <div class="coupon-ticket-left-dot right-bottom"></div>
     </div>
     <div class="coupon-ticket-right">
       <div class="coupon-ticket-right-dot left-top"></div>
       <div class="coupon-ticket-right-dot left-bottom"></div>
-      <div :class="['coupon-ticket-right-type', { 'disabled': isDisabled }]">
+      <div :class="['coupon-ticket-right-type', { 'coupon-disabled': isDisabled, 'is-en-ticket': isEn }]">
         {{description}}
       </div>
       <div class="coupon-ticket-right-deadline">
         {{startTime | formatTime }} — {{endTime | formatTime}}
       </div>
-      <div v-if="isUsed" class="coupon-ticket-right-icon used-icon"></div>
-      <div v-if="isExpire" class="coupon-ticket-right-icon expire-icon"></div>
+      <template v-if="isUsed">
+        <div v-if="isEn" class="coupon-ticket-right-icon en-used-icon"></div>
+        <div v-else class="coupon-ticket-right-icon used-icon"></div>
+      </template>
+      <template v-if="isExpire">
+        <div v-if="isEn" class="coupon-ticket-right-icon en-expire-icon"></div>
+        <div v-else class="coupon-ticket-right-icon expire-icon"></div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import { locale } from '@/lib/utils/i18n'
+import _ from 'lodash'
 export default {
   name: 'CouponTicket',
   props: {
-    data: Object
-  },
-  mounted() {
-    console.warn(this.data)
+    data: Object,
+    width: '430px'
   },
   filters: {
     formatTime(time) {
-      return moment(time).format("YYYY/M/D")
+      return moment(time).format('YYYY/M/D')
     }
   },
   computed: {
+    isEn() {
+      return locale === 'en-US'
+    },
+    isPropsDisabled() {
+      return this.data.isDisabled || false
+    },
     title() {
-      return this.data.title || ''
+      return this.isEn
+        ? _.get(this.data, 'extra.enTitle', '')
+        : _.get(this.data, 'title', '')
     },
     description() {
-      return this.data.description || ''
+      return this.isEn
+        ? _.get(this.data, 'extra.enDescription', '')
+        : _.get(this.data, 'description', '')
+    },
+    state() {
+      return this.data.state
     },
     startTime() {
       return this.data.startTime
+    },
+    isRmbPayment() {
+      return Boolean(this.rmb)
+    },
+    isCoinPayment() {
+      return Boolean(this.coin)
+    },
+    isBeanPayment() {
+      return Boolean(this.bean)
+    },
+    rmb() {
+      return this.data.rmb
+    },
+    coin() {
+      return this.data.coin
+    },
+    bean() {
+      return this.data.bean
+    },
+    rewardRmb() {
+      return this.data.rewardRmb
+    },
+    rewardCoin() {
+      return this.data.rewardCoin
+    },
+    rewardBean() {
+      return this.data.rewardBean
     },
     endTime() {
       return this.data.endTime
     },
     isDisabled() {
-      return !this.isUseable || this.isUsed || this.isExpire
+      return this.isPropsDisabled || this.isUsed || this.isExpire
     },
     isExpire() {
-      return false
+      return this.isUseable && this.endTime < this.timestamp
     },
     isCloseToExpire() {
-      return this.isUseable && false
+      return (
+        this.isUseable &&
+        !this.isExpire &&
+        moment.duration(this.endTime - this.timestamp, 'ms').asDays() <= 7
+      )
     },
     isUseable() {
-      return true
+      return this.state === 0
     },
     isUsed() {
-      return this.data.state === 1
+      return this.state === 1
     },
-
+    timestamp() {
+      return +new Date()
+    }
   }
 }
 </script>
@@ -83,7 +135,7 @@ export default {
   width: 430px;
   min-height: 110px;
   display: flex;
-  &.disabled {
+  &.coupon-disabled {
     background: #cbcbcb;
   }
   &-left {
@@ -97,20 +149,32 @@ export default {
     &-sum {
       &-money {
         font-size: 38px;
-        &-rmb {
+        &-unit {
           font-size: 22px;
-          margin-right: 6px;
+          margin-right: 3px;
         }
         &-coin {
           font-size: 14px;
         }
       }
+      &-coin,
+      &-bean {
+        font-size: 38px;
+        &-unit {
+          font-size: 14px;
+          margin-left: 3px;
+        }
+      }
     }
     &-condition {
       font-size: 14px;
+
+      &.is-en-ticket {
+        font-size: 12px;
+      }
     }
     &::after {
-      content: " ";
+      content: ' ';
       width: 0;
       height: 100%;
       position: absolute;
@@ -141,10 +205,10 @@ export default {
       text-align: center;
       line-height: 24px;
       position: absolute;
-      left: -28px;
-      top: 9px;
-      transform: rotate(-45deg);
-      width: 100px;
+      left: 0;
+      top: 0;
+      border-bottom-right-radius: 4px;
+      padding: 0 5px;
       &.deadline-label {
         color: #666666;
         background: #ffea01;
@@ -158,15 +222,20 @@ export default {
     align-items: flex-start;
     box-sizing: border-box;
     padding-left: 20px;
-    width: 265px;
+    flex: 1;
     position: relative;
     overflow: hidden;
     &-type {
       color: #137282;
       font-size: 16px;
       font-weight: bold;
-      &.disabled {
+      padding-right: 5px;
+      &.coupon-disabled {
         color: #8a898b;
+      }
+
+      &.is-en-ticket {
+        font-size: 15px;
       }
     }
     &-deadline {
@@ -192,7 +261,7 @@ export default {
     }
     &::before,
     &::after {
-      content: " ";
+      content: ' ';
       width: 0;
       height: 100%;
       position: absolute;
@@ -216,10 +285,16 @@ export default {
       right: 4px;
       bottom: 10px;
       &.expire-icon {
-        background: url("../../../assets/account/expire.png");
+        background: url('../../../assets/account/expire.png');
+      }
+      &.en-expire-icon {
+        background: url('../../../assets/account/en-expire.png');
       }
       &.used-icon {
-        background: url("../../../assets/account/used.png");
+        background: url('../../../assets/account/used.png');
+      }
+      &.en-used-icon {
+        background: url('../../../assets/account/en-used.png');
       }
     }
   }

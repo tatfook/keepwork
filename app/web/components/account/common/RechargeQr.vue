@@ -8,33 +8,20 @@
         <div class="recharge-qr-message-row">{{$t('account.rechargeAccount')}}<span class="message-bold">{{ username }}</span> </div>
         <div class="recharge-qr-message-row">{{$t('account.rechargeMoney')}} <span class="message-bold">{{$t('account.rmbUnit', { money: money })}}</span> </div>
       </div>
-      <div
-        v-if="isWeixin"
-        class="recharge-qr-way"
-      >
+      <div v-if="isWeixin" class="recharge-qr-way">
         {{$t('account.payWithWechat')}}
       </div>
-      <div
-        v-if="isZhifubao"
-        class="recharge-qr-way"
-      >
+      <div v-if="isZhifubao" class="recharge-qr-way">
         {{$t('account.payWithAlipay')}}
       </div>
       <div class="recharge-qr-main">
         <div class="recharge-qr-main-content">
           <div class="recharge-qr-main-content-qr">
-            <div
-              v-if="isOrderSuccess"
-              class="recharge-qr-main-content-qr-success"
-            >
+            <div v-if="isOrderSuccess" class="recharge-qr-main-content-qr-success">
               <i class="el-icon-success"></i>
               {{$t('account.success')}}
             </div>
-            <img
-              class="recharge-qr-main-content-qr-image"
-              v-if="qrData && !isOrderSuccess"
-              :src="qrData"
-            >
+            <img class="recharge-qr-main-content-qr-image" v-if="qrData && !isOrderSuccess" :src="qrData">
           </div>
           <div class="recharge-qr-main-content-tips">
             <div class="recharge-qr-main-content-tips-money">
@@ -46,7 +33,7 @@
               <p>{{$t('account.scan')}}</p>
             </div>
           </div>
-          <div :class="['recharge-qr-main-content-guide', {'zhifubao-guide': isZhifubao, 'weixin-guide': isWeixin}]">
+          <div :class="['recharge-qr-main-content-guide', { 'zhifubao-guide': isZhifubao, 'weixin-guide': isWeixin, 'en-zhifubao-guide': isEnZhifubao, 'en-weixin-guide': isEnWeixin}]">
           </div>
         </div>
       </div>
@@ -54,9 +41,9 @@
   </div>
 </template>
 
-
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { locale } from '@/lib/utils/i18n'
 export default {
   name: 'RechargeQr',
   props: {
@@ -68,8 +55,11 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/profile',
-      order: 'account/rechargeOrder',
+      order: 'account/rechargeOrder'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     isMiniSize() {
       return this.size === 'mini'
     },
@@ -88,6 +78,12 @@ export default {
     isZhifubao() {
       return this.channel === 'alipay_qr'
     },
+    isEnZhifubao() {
+      return this.isEn && this.isZhifubao
+    },
+    isEnWeixin() {
+      return this.isEn && this.isWeixin
+    },
     channel() {
       return this.order.channel
     },
@@ -101,7 +97,6 @@ export default {
       return this.userProfile.username || ''
     }
   }
-
 }
 </script>
 
@@ -142,7 +137,6 @@ export default {
     }
   }
 
-
   &-way {
     background: #fff;
     height: 78px;
@@ -168,7 +162,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: url("../../../assets/account/qr-bg.png");
+        background: url('../../../assets/account/qr-bg.png');
         &-success {
           color: #67c23a;
           font-size: 28px;
@@ -202,11 +196,10 @@ export default {
         height: 391px;
         width: 267px;
         background-size: cover;
-        &.weixin-guide {
-          background: url("../../../assets/account/weixin-guide.png");
-        }
-        &.zhifubao-guide {
-          background: url("../../../assets/account/zhifubao-guide.png");
+        @each $pic in weixin, zhifubao, en-weixin, en-zhifubao {
+          &.#{$pic}-guide {
+            background: url('../../../assets/account/#{$pic}-guide.png');
+          }
         }
       }
     }
@@ -227,7 +220,7 @@ export default {
       &-qr {
         height: 183px;
         width: 183px;
-        margin-left: 35px;
+        margin-left: 20px;
         background-size: contain;
         background-repeat: no-repeat;
         &-image {
@@ -240,6 +233,7 @@ export default {
       }
 
       &-tips {
+        margin-left: 20px;
         &-money {
           font-size: 18px;
           .highlight {
@@ -262,7 +256,7 @@ export default {
         width: 151px;
         background-size: contain;
         background-repeat: no-repeat;
-        margin-left: 50px;
+        margin-left: 30px;
       }
     }
   }

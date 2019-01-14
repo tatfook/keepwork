@@ -12,6 +12,12 @@
         </el-pagination>
       </div>
     </div>
+    <transition name="fade">
+      <div v-if="nothing" class="all-projects-nothing">
+        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -38,6 +44,9 @@ export default {
     this.loading = false
   },
   computed: {
+    nothing() {
+      return this.recruitmentData.length === 0 && !this.loading
+    },
     recruitingCount() {
       return _.get(this.recruitongProjects, 'total', 0)
     },
@@ -45,9 +54,9 @@ export default {
       let hits = _.get(this.recruitongProjects, 'hits', [])
       return _.map(hits, i => {
         return {
-          id: i.id,
-          extra: { imageUrl: i.cover, videoUrl: i.video  },
-          name: this.searchKeyResult(i),
+          id: this.searchKeyResult(i, 'id'),
+          extra: { imageUrl: i.cover, videoUrl: i.video },
+          name: this.searchKeyResult(i, 'name'),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
@@ -80,12 +89,14 @@ export default {
         this.$emit('getAmount', this.recruitingCount)
       })
     },
-    searchKeyResult(i) {
+    searchKeyResult(i, key) {
       if (i.highlight) {
-        let name = _.get(i.highlight, 'name', i.name)
-        return name.join().replace(/<span>/g, `<span class="red">`)
+        if (i.highlight[key]) {
+          let name = _.get(i.highlight, key, i[key])
+          return name.join().replace(/<span>/g, `<span class="red">`)
+        }
       }
-      return i.name
+      return i[key]
     }
   },
   components: {

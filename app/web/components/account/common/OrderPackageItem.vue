@@ -9,7 +9,7 @@
       </div>
       <div class="order-package-item-info-row">
         <span class="order-package-item-info-row-includes">
-          <span class="row-bold">{{$t('card.includes')}}: </span>{{includesLessonCount}} {{$t('lesson.lessonsCount')}} 
+          <span class="row-bold">{{$t('card.includes')}} </span>{{includesLessonCount}} {{$t('lesson.lessonsCount')}} 
         </span>
         <span class="order-package-item-info-row">
           <span class="row-bold">{{$t('lesson.ages')}}: </span> {{packageSuitableAge}}

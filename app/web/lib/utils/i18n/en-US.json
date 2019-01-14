@@ -22,6 +22,7 @@
     "inputPassword": "Please enter your password",
     "wrongPassword": "Wrong password",
     "IncorrectUsernameOrPassword": "Incorrect username or password",
+    "AccountIsUnusable": "The account is not available",
     "usernameNotExist": "The username does not exist",
     "loginSuccess": "Login successfully",
     "logonFailed": "Logon failed",
@@ -1313,6 +1314,7 @@
     "howToCreateProject": "How to create projects?"
   },
   "explore": {
+    "noResults": "No search results",
     "searchFor": "Search for ...",
     "search": "search",
     "project": "Projects",
@@ -1584,6 +1586,8 @@
     "used": "Used",
     "expired": "Expired",
     "total": "Total: {total}",
+    "coin": "coins",
+    "bean": "beans",
     "couponDescription": "Description:",
     "couponDescription1": "Coupons are valid through the specified dates that are on each coupon.",
     "couponDescription2": "Coupons will have a text marked its applying conditions and available items that the counpon can apply to. Gerenal coupons apply to all products on Keepwork. Lesson coupons only apply to lesson packages.",
@@ -1613,11 +1617,11 @@
     "payNow": "Pay Now",
     "lackMoney": "Lack of {money}. Please recharge first.",
     "recharge": "Top up",
-    "successfullyPaid": "Successfully paid.",
+    "successfullyPaid": "Successfully paid",
     "failPaid": "Payment Failed",
     "viewMore": "View more",
     "returnCoin": "You got {coin} coins",
-    "returnCoupon": "one coupon of {title}",
+    "returnCoupon": "one coupon of {title}.",
     "price": "unit price:",
     "conversion": "Conversion",
     "pleaseSelectDigitalAccount": "Please select a digital account.",
@@ -1642,7 +1646,14 @@
     "alipayScan": "Please scan the QR code on Alipay.",
     "scan": "Please scan the QR code to pay.",
     "success": "Success",
-    "pleaseRecharge": "To pay for the order, please recharge",
-     "rechargeSuccessfully": "Success"
+    "pleaseRecharge": "To pay for the order, please recharge:",
+     "rechargeSuccessfully": "Success",
+     "noData": "no data",
+     "selectCoupons":"Please select",
+     "withoutCoupons": "Without applying the coupon",
+     "willExpire": "Will expire soon",
+     "backMyAccount": "Back to My Account",
+     "returnOneCoupon": "You got one coupon of ",
+     "noAvailableCoupons": "No available coupons"
   }
 }

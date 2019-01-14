@@ -287,14 +287,12 @@ export default {
     hostname() {
       return window.location.hostname
     },
-    pathname() {
-      return window.location.pathname
-    },
     lessonCenterUrl() {
       return '/l/student'
     }
   },
   mounted() {
+    this.checkCurrentTab()
     if (!this.userIsLogined) {
       this.userGetProfile({ forceLogin: false })
         .then(() => {
@@ -318,13 +316,14 @@ export default {
       changeStatus: 'lesson/student/changeStatus'
     }),
     checkCurrentTab() {
-      if (CREATE_REG.test(this.pathname)) {
+      let pathname = window.location.pathname
+      if (CREATE_REG.test(pathname)) {
         return this.activeIndex = '1'
       }
-      if (EXPLORATION_REG.test(this.pathname)) {
+      if (EXPLORATION_REG.test(pathname)) {
         return this.activeIndex = '2'
       }
-      if (STUDY_REG.test(this.pathname)) {
+      if (STUDY_REG.test(pathname)) {
         return this.activeIndex = '4'
       }
       this.activeIndex = '0'

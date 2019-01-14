@@ -1,5 +1,6 @@
 <script>
 import { locale } from '@/lib/utils/i18n'
+import { upperFirst } from 'lodash'
 export default {
   computed: {
     isEn() {
@@ -9,8 +10,8 @@ export default {
       return this.isEn
         ? {
             rmb: '￥',
-            coin: 'coin',
-            bean: 'bean'
+            coin: ' coins',
+            bean: ' beans'
           }
         : {
             rmb: '￥',

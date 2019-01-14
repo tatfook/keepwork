@@ -4,7 +4,7 @@
       <video v-if="project.extra.videoUrl" class="project-cell-cover-img" controls="controls" :src="project.extra.videoUrl"></video>
       <img v-else class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt="">
       <div class="video-mask"></div>
-      <span class="project-cell-cover-tag project-cell-cover-id">{{$t('project.projectId')}}:{{project.id}}</span>
+      <span class="project-cell-cover-tag project-cell-cover-id" v-html="`${$t('project.projectId')}:${project.id}`"></span>
       <span class="project-cell-cover-tag project-cell-cover-type">{{project.type == 0 ? $t('common.websiteB') : 'paracraft' }}</span>
     </div>
     <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name"></span><span class="recruitment" v-if="project.privilege & 1">{{$t("explore.recruiting")}}</span></h4>
@@ -93,8 +93,11 @@ export default {
   background: #fff;
   transition: all 200ms ease-in;
   position: relative;
+  .red {
+    color: red;
+  }
   &-topped::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     top: 0;
@@ -142,18 +145,18 @@ export default {
       top: 0;
       left: 0;
     }
-    &-tag{
+    &-tag {
       position: absolute;
       top: 5px;
       font-size: 12px;
-      background: rgba(255,255,255,.7);
+      background: rgba(255, 255, 255, 0.7);
       padding: 0 3px;
       border-radius: 2px;
     }
-    &-id{
+    &-id {
       left: 5px;
     }
-    &-type{
+    &-type {
       right: 5px;
     }
   }
@@ -164,9 +167,6 @@ export default {
     height: 20px;
     cursor: pointer;
     display: flex;
-    .red {
-      color: red;
-    }
     .text {
       display: inline-block;
       max-width: 190px;

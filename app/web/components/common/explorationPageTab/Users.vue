@@ -1,5 +1,5 @@
 <template>
-  <div class="user-tab">
+  <div class="user-tab" v-loading="loading">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(user) in allUsersData" :key="user.id">
         <user-cell :user="user"></user-cell>
@@ -12,6 +12,12 @@
         </el-pagination>
       </div>
     </div>
+    <transition name="fade">
+      <div v-if="nothing" class="all-projects-nothing">
+        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -49,6 +55,9 @@ export default {
       allUsers: 'pbl/allUsers',
       userProfile: 'user/profile'
     }),
+    nothing() {
+      return this.allUsersData.length === 0 && !this.loading
+    },
     usersCount() {
       return _.get(this.allUsers, 'total', 0)
     },
