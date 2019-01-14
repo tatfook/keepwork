@@ -130,7 +130,6 @@ export default {
   }
   &-item {
     width: 360px;
-    height: 461px;
     padding: 34px 36px 6px;
     margin: 20px 60px 20px 0;
     border: solid 2px #d2d2d2;
@@ -218,13 +217,16 @@ export default {
 }
 @media (max-width: 768px) {
   .lesson-center {
-    &-desc {
+    &-item {
       max-width: 287px;
       box-sizing: border-box;
       padding: 4px 4px 6px;
       border: none;
       margin: 20px auto;
       border-bottom: solid 2px #d2d2d2;
+      &:nth-child(3n) {
+        margin-right: auto;
+      }
     }
     &-cover {
       width: 100%;
