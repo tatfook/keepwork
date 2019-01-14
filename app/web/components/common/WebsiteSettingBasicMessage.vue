@@ -46,7 +46,7 @@ export default {
       this.getSiteDetailInfoByPath(this.sitePath).siteinfo
     )
 
-    if(!this.basicMessage.displayName) {
+    if (!this.basicMessage.displayName) {
       this.basicMessage.displayName = this.basicMessage.sitename
     }
 
@@ -184,7 +184,7 @@ export default {
       this.$emit('close')
     }
   },
-  components:{
+  components: {
     SkyDriveManagerDialog,
     DialogOperations
   }
@@ -263,7 +263,7 @@ export default {
       height: 220px;
     }
   }
-  &-operations{
+  &-operations {
     width: 120px;
   }
 }

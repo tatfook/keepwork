@@ -12,6 +12,12 @@
         </el-pagination>
       </div>
     </div>
+    <transition name="fade">
+      <div v-if="nothing" class="all-projects-nothing">
+        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -38,19 +44,22 @@ export default {
     this.loading = false
   },
   computed: {
+    nothing() {
+      return this.lessonPackagesData.length === 0 && !this.loading
+    },
     lessonPackagesCount() {
       return _.get(this.lessonPackages, 'total', 0)
     },
     lessonPackagesData() {
       let tempArr = _.get(this.lessonPackages, 'hits', [])
       let Arr = _.forEach(tempArr, i => {
-        if(i.highlight){
-          if(i.highlight.title){
+        if (i.highlight) {
+          if (i.highlight.title) {
             let name = _.get(i.highlight, 'title', i.title)
             name = name.join().replace(/<span>/g, `<span class="red">`)
             i.title = name
-          } 
-          if(i.highlight.description){
+          }
+          if (i.highlight.description) {
             let desc = _.get(i.highlight, 'description', i.description)
             desc = desc.join().replace(/<span>/g, `<span class="red">`)
             i.description = desc

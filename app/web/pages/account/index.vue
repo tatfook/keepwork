@@ -21,10 +21,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
-import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
-import VueClipboard from 'vue-clipboard2'
 import router from './account.router'
 import userModule from '@/store/user'
 import accountModule from '@/store/account'
@@ -37,16 +35,6 @@ import CommonFooter from '@/components/common/CommonFooter'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
-Vue.use(VueClipboard)
-Vue.use(VueAnalytics, {
-  id: process.env.GOOGLE_ANALYTICS_UA,
-  router,
-  batch: {
-    enabled: true, // enable/disable
-    amount: 2, // amount of events fired
-    delay: 500 // delay in milliseconds
-  }
-})
 
 const i18n = new VueI18n({
   locale,
@@ -67,6 +55,9 @@ const store = new Vuex.Store({
 router.beforeEach(async (to, from, next) => {
   if (Cookies.get('token')) {
     return next()
+  }
+  if (to.name === 'OrderConfirm') {
+    return window.location.href = window.location.origin
   }
   store.dispatch('user/toggleLoginDialog', true)
 })
@@ -99,8 +90,7 @@ export default {
   methods: {
     ...mapActions({
       toggleLoginDialog: 'user/toggleLoginDialog',
-      getUserProfile: 'user/getProfile',
-      getBalance: 'account/getBalance'
+      getUserProfile: 'user/getProfile'
     }),
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
@@ -109,7 +99,6 @@ export default {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)
       )
-      await this.getBalance().catch(e => console.error(e))
       this.loading = false
     }
   }
@@ -120,6 +109,7 @@ export default {
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 .account-page {

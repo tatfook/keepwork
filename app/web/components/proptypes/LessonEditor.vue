@@ -27,6 +27,8 @@
 
 <script>
 import EditLesson from '@/components/lesson/teacher/EditLesson'
+import moment from 'moment'
+import protypesBaseMixin from './protypes.base.mixin'
 import Parser from '@/lib/mod/parser'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
 import uuid from 'uuid/v1'
@@ -34,6 +36,10 @@ import { lesson } from '@/api'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
+  mixins: [protypesBaseMixin],
+  props: {
+    originValue: String
+  },
   components: {
     EditLesson
   },
@@ -119,12 +125,17 @@ export default {
     },
     hideDialog() {
       this.dialogVisible = false
+      this.updateMarkdown({ updated: moment().format('YYYY/MM/DD HH:mm:ss')})
     },
     async showEditorDialog() {
       if (!this.selectValue) {
         return this.$message.error(this.$t('lesson.pleaseSelect'))
       }
       this.dialogVisible = true
+    },
+    updateMarkdown(payload) {
+      this.$emit('onPropertyChange', payload)
+      this.$emit('onChangeValue')
     }
   }
 }

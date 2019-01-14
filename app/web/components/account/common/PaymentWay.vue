@@ -2,38 +2,21 @@
   <div class="payment-way">
     {{$t('account.payWith')}}
     <div class="payment-way-options">
-      <span
-        :class="['payment-way-options-card', { 'options-card-selected': isWeixinPay }]"
-        @click="handleSelectPayWay(CONF.WEIXIN_PAY)"
-      >
+      <span :class="['payment-way-options-card', { 'options-card-selected': isWeixinPay }]" @click="handleSelectPayWay(CONF.WEIXIN_PAY)">
         <span class="payment-way-options-card-icon weixin-icon"></span>
         <span class="payment-way-options-card-name">{{$t('account.wechat')}}</span>
-        <span
-          class="payment-way-options-card-selected-label"
-          v-show="isWeixinPay"
-        >
+        <span class="payment-way-options-card-selected-label" v-show="isWeixinPay">
         </span>
       </span>
-      <span
-        :class="['payment-way-options-card', { 'options-card-selected': isZhifubaoPay }]"
-        @click="handleSelectPayWay(CONF.ZHIFUBAO_PAY)"
-      >
+      <span :class="['payment-way-options-card', { 'options-card-selected': isZhifubaoPay }]" @click="handleSelectPayWay(CONF.ZHIFUBAO_PAY)">
         <span class="payment-way-options-card-icon zhifubao-icon"></span>
         <span class="payment-way-options-card-name">{{$t('account.alipay')}}</span>
-        <span
-          class="payment-way-options-card-selected-label"
-          v-show="isZhifubaoPay"
-        ></span>
+        <span class="payment-way-options-card-selected-label" v-show="isZhifubaoPay"></span>
       </span>
     </div>
 
     <div class="payment-way-confirm">
-      <el-button
-        type="primary"
-        :class="['payment-way-confirm-button', {'payment-way-min': isMini}]"
-        @click="handleConfirm"
-        :loading="isLoading"
-      >{{$t('account.proceedToCheckout')}}</el-button>
+      <el-button type="primary" :class="['payment-way-confirm-button', {'payment-way-min': isMini}]" @click="handleConfirm" :loading="isLoading">{{$t('account.proceedToCheckout')}}</el-button>
     </div>
   </div>
 </template>
@@ -44,7 +27,7 @@ export default {
   props: {
     handleCallback: {
       type: Function,
-      default: () => { }
+      default: () => {}
     },
     size: {
       type: String,
@@ -83,8 +66,7 @@ export default {
     },
     handleSelectPayWay(way) {
       this.payWay = way
-    },
-
+    }
   }
 }
 </script>
@@ -123,10 +105,10 @@ export default {
         width: 30px;
         margin: 8px;
         &.zhifubao-icon {
-          background: url("../../../assets/account/zhifubao.png") no-repeat;
+          background: url('../../../assets/account/zhifubao.png') no-repeat;
         }
         &.weixin-icon {
-          background: url("../../../assets/account/weixin.png") no-repeat;
+          background: url('../../../assets/account/weixin.png') no-repeat;
         }
       }
       &-name {
@@ -147,7 +129,7 @@ export default {
         justify-content: center;
         align-items: center;
         &::after {
-          content: " ";
+          content: ' ';
           display: inline-block;
           border-right: 3px solid #fff;
           border-bottom: 3px solid #fff;

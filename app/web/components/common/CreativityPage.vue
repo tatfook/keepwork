@@ -123,7 +123,7 @@ export default {
       let tempArr = _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
       let others = _.filter(
         tempArr,
-        project => project.user.userId !== this.userId
+        project => (project.user.userId || project.userId) !== this.userId
       )
       let tempArr2 = _.cloneDeep(others.slice(0, 4))
       return _.forEach(tempArr2, i => {

@@ -4,31 +4,15 @@
       {{$t('account.transactions')}}
     </div>
     <div class="transaction-detail-main">
-      <transaction-detail-item v-for="(item, index) in trades" :key="index" :data="item"></transaction-detail-item>
-      <!-- <div class="transaction-detail-main-row" v-for="(item, index) in trades" :key="index"> -->
-      <!-- <div class="transaction-detail-main-row-date">
-          {{ item.createdAt | formatTime }}
+      <template v-if="hasTrades">
+        <transaction-detail-item v-for="(item, index) in trades" :key="index" :data="item"></transaction-detail-item>
+      </template>
+      <template v-else>
+        <div class="transaction-detail-main-empty">
+          <img class="transaction-detail-main-empty-image" src="../../assets/lessonImg/no_packages.png" alt="无数据">
+          <span class="transaction-detail-main-empty-tips">{{$t('account.noData')}}</span>
         </div>
-        <div class="transaction-detail-main-row-thing">
-          <template v-if="item.type === 0">
-            {{ item.subject }}
-          </template>
-          <template v-if="item.type === 1">
-            {{ item.subject }}
-          </template>
-        </div>
-        <div class="transaction-detail-main-row-sum">
-          <template v-if="item.type === 0">
-            + {{$t('account.rmbUnit', { money: item.rmb})}}
-          </template>
-          <template v-else-if="item.type === 1">
-            - {{item.bean || item.coin || item.rmb }}
-          </template>
-          <template v-else-if="item.type === 2">
-
-          </template>
-        </div> -->
-      <!-- </div> -->
+      </template>
     </div>
     <div v-if="showPagination" class="transaction-detail-footer">
       <el-pagination class="transaction-detail-footer-pagination" @current-change="handleChangePage" :current-page.sync="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="total">
@@ -60,16 +44,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      origialTrades: 'account/trades'
+      originalTrades: 'account/trades'
     }),
     showPagination() {
       return this.total > 10
     },
     total() {
-      return _.get(this.origialTrades, 'count', 0)
+      return _.get(this.originalTrades, 'count', 0)
     },
     trades() {
-      return _.get(this.origialTrades, 'rows', [])
+      return _.get(this.originalTrades, 'rows', [])
+    },
+    hasTrades() {
+      return this.trades.length > 0
     }
   },
   methods: {
@@ -82,7 +69,7 @@ export default {
         'x-per-page': this.pageSize,
         'x-page': this.currentPage
       })
-    },
+    }
   },
   async created() {
     await this.getTrades({
@@ -109,28 +96,18 @@ export default {
   &-main {
     margin: 0 28px;
     color: #606266;
-    // &-row {
-    //   display: flex;
-    //   min-height: 52px;
-    //   align-items: center;
-    //   font-size: 14px;
-    //   border-bottom: 1px solid #f6f6f6;
-    //   &-date {
-    //     width: 200px;
-    //   }
-    //   &-thing {
-    //     flex: 3;
-    //     font-size: 14px;
-    //     .highlight {
-    //       color: #2397f3;
-    //     }
-    //   }
-
-    //   &-sum {
-    //     flex: 1;
-    //     text-align: end;
-    //   }
-    // }
+    &-empty {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 428px;
+      &-tips {
+        font-size: 20px;
+        color: #111;
+        margin-top: 30px;
+      }
+    }
   }
 
   &-footer {

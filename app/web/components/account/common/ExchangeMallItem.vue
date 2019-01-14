@@ -1,13 +1,6 @@
 <template>
-  <div
-    :class="['exchange-item', { 'exchange-item-hover': isHover }]"
-    @mouseover="handleShowButton"
-    @mouseout="handleHideButton"
-  >
-    <img
-      class="exchange-item-image"
-      :src="image"
-    >
+  <div class="exchange-item">
+    <img class="exchange-item-image" :src="image">
     <div class="exchange-item-info">
       <div class="exchange-item-info-subject">
         {{subject}}
@@ -16,20 +9,17 @@
         {{$t('account.price')}}
         <span class="exchange-item-info-price-number">{{ priceByUnit }}</span>
       </div>
-      <el-button
-        v-show="isHover"
-        type="primary"
-        class="exchange-item-info-button"
-        @click="toExchangePage"
-      >{{$t('account.conversion')}}</el-button>
+      <el-button type="primary" class="exchange-item-info-button" @click="toExchangePage">{{$t('account.conversion')}}</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { locale } from '@/lib/utils/i18n'
+import UnitMixin from './UnitMixin'
+import _ from 'lodash'
 export default {
   name: 'ExchangeMallItem',
+  mixins: [UnitMixin],
   props: {
     data: {
       type: Object,
@@ -40,7 +30,6 @@ export default {
   },
   data() {
     return {
-      isHover: false
     }
   },
   computed: {
@@ -51,7 +40,9 @@ export default {
       return this.data.id
     },
     subject() {
-      return this.data.subject
+      return this.isEn
+        ? _.get(this.data, 'extra.enSubject', '')
+        : _.get(this.data, 'subject', '')
     },
     price() {
       return this.data.rmb || this.data.coin || this.data.bean
@@ -80,22 +71,6 @@ export default {
       return this.isRmb
         ? `${this.unitTable[this.priceUnit]} ${this.price}`
         : `${this.price} ${this.unitTable[this.priceUnit]}`
-    },
-    unitTable() {
-      return this.isEn
-        ? {
-            rmb: '￥',
-            coin: 'coin',
-            bean: 'bean'
-          }
-        : {
-            rmb: '￥',
-            coin: '知识币',
-            bean: '知识豆'
-          }
-    },
-    isEn() {
-      return locale === 'en-US'
     }
   },
   methods: {
@@ -105,12 +80,6 @@ export default {
         query: { id: this.id, type: 1, payment: this.priceUnit }
       })
     },
-    handleShowButton() {
-      this.isHover = true
-    },
-    handleHideButton() {
-      this.isHover = false
-    }
   }
 }
 </script>
@@ -125,16 +94,18 @@ export default {
   padding-left: 24px;
   padding-top: 20px;
   box-sizing: border-box;
-  &.exchange-item-hover {
+  &:hover {
     box-shadow: 0px 4px 10px 0px rgba(84, 143, 240, 0.28);
     border: solid 1px #409efe;
+    .exchange-item-info-button{
+      display: inline;
+    }
   }
   &-image {
     width: 60px;
     height: 60px;
     margin-right: 15px;
   }
-
   &-info {
     height: 80px;
     &-subject {
@@ -157,9 +128,8 @@ export default {
       font-size: 12px;
       padding: 6px 16px;
       border-radius: 2px;
+      display: none;
     }
   }
 }
 </style>
-
-

@@ -3,20 +3,27 @@
     <img class="recharge-success-icon" src="../../assets/account/order-success.png" alt="recharge-success-icon">
     <div class="recharge-success-title">{{$t('account.rechargeSuccessfully')}}</div>
     <div class="recharge-success-cost">{{rechargeMoney}}</div>
+    <div class="recharge-success-message">
+      <sapn v-if="discountMessage">{{discountMessage}}</sapn>
+      <router-link class="recharge-success-message-link" :to="{ name: 'MyAccount'}">{{$t('account.backMyAccount')}}</router-link>
+    </div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import UnitMixin from './common/UnitMixin'
+import DiscountMixin from './common/DiscountMixin'
 export default {
   name: 'RechargeSuccess',
+  mixins: [UnitMixin, DiscountMixin],
   mounted() {
     if (_.isEmpty(this.rechargeOrder)) {
       return this.$router.push({ name: 'MyAccount' })
     }
   },
   destroyed() {
-      this.clearRechargeOrderRecord()
+    this.clearRechargeOrderRecord()
   },
   computed: {
     ...mapGetters({
@@ -24,6 +31,14 @@ export default {
     }),
     rechargeMoney() {
       return `¥ ${_.get(this.rechargeOrder, 'amount', 0)}`
+    },
+    discount() {
+      return _.get(this.rechargeOrder, 'discount', '')
+    },
+    discountMessage() {
+      return this.discount
+        ? this.getDiscountMessage(this.discount)
+        : ''
     }
   },
   methods: {
@@ -61,11 +76,8 @@ export default {
     color: #f20d0d;
     margin-top: 24px;
   }
-
-  &-discount {
-    font-size: 16px;
-    color: #666;
-    margin-top: 24px;
+  &-message {
+    margin-top: 10px;
     &-link {
       color: #409efe;
     }

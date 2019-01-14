@@ -52,7 +52,6 @@ export default {
   },
   data() {
     return {
-      rechargeMoney: 0,
       inputMoney: '',
       moneyCard: '50',
       payWay: 'weixin'
@@ -112,9 +111,6 @@ export default {
           this.$refs.inputMoney.focus()
         })
       }
-    },
-    handleSelectPayWay(way) {
-      this.payWay = way
     },
     getRechargeMoney() {
       if (this.isCardOther) {
