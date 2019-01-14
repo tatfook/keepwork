@@ -133,64 +133,68 @@ export default {
 </script>
 
 <style lang="scss">
-.el-main.index-page-main {
-  background-color: #fbfbfb;
-  padding: 0;
-}
-
-.lesson-button .el-button {
-  margin-right: 10px;
-  margin-top: 10px;
-  margin-left: 0;
-}
-
-.lessonDesc {
-  .el-scrollbar__wrap {
-    overflow-x: hidden;
-    word-break: break-all;
+.index-page-lesson {
+  .el-main {
+    background-color: #fbfbfb;
+    padding: 0;
   }
-}
 
-.el-button:disabled {
-  background: #d2d2d2;
-  border: 1px solid #d2d2d2;
-  cursor: not-allowed;
-  color: white;
-  pointer-events: none;
-}
-.el-tabs__header {
-  margin: 0;
-}
-.el-tabs__item {
-  padding: 0;
-  font-size: 20px;
-  height: 53px;
-  line-height: 53px;
-}
-.el-tabs__active-bar {
-  display: none;
-}
-.el-tabs__nav {
-  float: none;
-  display: flex;
-  justify-content: center;
-}
-.el-tabs__item.is-active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: #409eff;
-  z-index: 1;
-}
-.el-tabs__content {
-  overflow: inherit;
-}
+  .lesson-button {
+    .el-button {
+      margin-right: 10px;
+      margin-top: 10px;
+      margin-left: 0;
+    }
+  }
 
-.el-main [mod-container] > div:not([data-mod='ModLesson']) > div {
-  background-color: #fff;
+  .lessonDesc {
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      word-break: break-all;
+    }
+  }
+
+  .el-button:disabled {
+    background: #d2d2d2;
+    border: 1px solid #d2d2d2;
+    cursor: not-allowed;
+    color: white;
+    pointer-events: none;
+  }
+  .el-tabs__header {
+    margin: 0;
+  }
+  .el-tabs__item {
+    padding: 0;
+    font-size: 20px;
+    height: 53px;
+    line-height: 53px;
+  }
+  .el-tabs__active-bar {
+    display: none;
+  }
+  .el-tabs__nav {
+    float: none;
+    display: flex;
+    justify-content: center;
+  }
+  .el-tabs__item.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #409eff;
+    z-index: 1;
+  }
+  .el-tabs__content {
+    overflow: inherit;
+  }
+
+  .el-main [mod-container] > div:not([data-mod='ModLesson']) > div {
+    background-color: #fff;
+  }
 }
 </style>
 
