@@ -363,17 +363,14 @@
     "markdown": "文本(Markdown)",
     "bigFile": "大文件",
     "pagePath": "页面路径",
-
     "text": "文本",
     "navigation": "导航",
     "menu": "导航菜单",
     "title": "页首导航",
-
     "graphic": "图形",
     "imgLoop": "图片轮播",
     "img": "宽屏图像",
     "board": "绘图板",
-
     "mixLayer": "图文叠加",
     "mixPosition": "图文拼接",
     "interative": "交互",
@@ -382,31 +379,26 @@
     "paracraft": "Paracraft作品",
     "works": "作品",
     "specialPerformance": "特殊表现",
-
     "vipRead": "VIP阅读权限",
     "comment": "评论留言",
     "setting": "设置",
     "pageList": "页面列表",
     "textBoard": "文本与绘图板",
-    "toc": "Markdown 目录",
-
+    "toc": "目录",
     "other": "其他",
-
     "categoryList": "分类列表",
     "tab": "标签",
     "pageSwitching": "页面切换",
     "iframe": "内联框架",
-
     "lesson": "课程",
     "quiz": "问题",
     "teachers": "教师可见",
     "lessonShare": "分享课程",
     "package": "课程包",
     "lessonPackage": "课程包",
-
     "hint": "提示",
-
-    "project": "项目"
+    "project": "项目",
+    "ppt": "PPT"
   },
   "adi": {
     "hint": {
@@ -546,7 +538,6 @@
     "titleA": "标题",
     "subtitleA": "副标题",
     "backgroundImage": "背景图片",
-
     "lesson": "课程",
     "lessonGoals": "课程目标:",
     "quiz": "问题",
@@ -560,7 +551,6 @@
     "playParacraft": "玩 Paracraft",
     "lessonPreview": "预览",
     "catalogue": "目录：",
-
     "includes": "包含:",
     "lessons": "门课程",
     "ages": "年龄:",
@@ -607,7 +597,6 @@
     "true": "对",
     "false": "错",
     "teachersColon": "教师:",
-
     "rightAnswerColon": "正确答案:",
     "yourAnswerColon": "你的答案:",
     "explanationColon": "解释:",
@@ -622,17 +611,15 @@
     "keepOneOption": "至少保留一个选项",
     "coinsInsufficient": "对不起,你的知识币不够",
     "hint": "提示",
-
     "project": "项目",
     "projectTags": "项目标签",
     "projectMembers": "项目成员",
-
     "projectId": "请输入项目ID",
     "projectHome": "项目主页",
     "projectNotFound": "项目不存在",
     "projectInputId": "输入项目ID,获取项目数据",
-    "projectForbidden": "无法显示内容"
-
+    "projectForbidden": "无法显示内容",
+    "ppt": "PPT"
   },
   "field": {
     "fileId": "字段",

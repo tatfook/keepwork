@@ -72,7 +72,7 @@ export default {
 
     if (this.mod.data && Object.keys(this.mod.data).length !== 0) {
       _.forEach(this.mod.data, (val, key) => {
-        if (typeof val === 'object') {
+        if (val && typeof val === 'object') {
           if (typeof val.hidden === 'undefined' || val.hidden === false) {
             isShowMod = true
           }

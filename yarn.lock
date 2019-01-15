@@ -13465,10 +13465,9 @@ ret@~0.1.10:
   resolved "http://registry.npm.taobao.org/ret/download/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha1-uKSCXVvbH8P29Twrwz+BOIaBx7w=
 
-reveal.js@^3.7.0:
+"reveal.js@github:NPLFoshan/reveal.js":
   version "3.7.0"
-  resolved "https://registry.yarnpkg.com/reveal.js/-/reveal.js-3.7.0.tgz#7afaf72fd963000381289d58f3aa54c0c46b150c"
-  integrity sha512-HTOTNhF5mQAw6fcsptk4oql/DEEUwTG0YHk/LzTNNx0/3IgvOQZqKzvlK/zNpqqKMLlhn1gH9Nvp+FFoc/e5/w==
+  resolved "https://codeload.github.com/NPLFoshan/reveal.js/tar.gz/7860709f1e7003a38de94d149499e627e6d13e65"
 
 rgb-regex@^1.0.1:
   version "1.0.1"
