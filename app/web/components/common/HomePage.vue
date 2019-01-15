@@ -1,8 +1,10 @@
 <template>
   <div class="home-page">
-    <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
-      <i class="iconfont icon-sound-fill"></i>{{$t('home.paracraftIsFree')}}
-      <span class="close" @click="closeAd">&times;</span>
+    <div class="home-page-advertising">
+      <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
+        <i class="iconfont icon-sound-fill"></i>{{$t('home.paracraftIsFree')}}
+        <span class="close" @click="closeAd">&times;</span>
+      </div>
     </div>
     <div class="home-page-simple-show">
       <div class="home-page-simple-show-center">
@@ -145,7 +147,7 @@ import RegisterDialog from './Register'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
-import {  mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'HomePage',
@@ -220,7 +222,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLogined: 'user/isLogined',
+      isLogined: 'user/isLogined'
     }),
     isEn() {
       return locale === 'en-US'
@@ -318,9 +320,11 @@ export default {
     },
     goStudyPage() {
       if (this.isLogined) {
-        return window.location.href = `${this.locationOrigin}/l/student`
+        return (window.location.href = `${this.locationOrigin}/l/student`)
       }
-      window.location.href = `${this.locationOrigin}/l/student/solution/teachingIdea`
+      window.location.href = `${
+        this.locationOrigin
+      }/l/student/solution/teachingIdea`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
@@ -334,7 +338,9 @@ export default {
       const HomePageInfo = {
         apiPrefix: 'https://api.keepwork.com/git/v0',
         projectName: 'official/keepwork',
-        newsPath: this.isEn ? 'official/keepwork/news_en.md' : 'official/keepwork/news.md'
+        newsPath: this.isEn
+          ? 'official/keepwork/news_en.md'
+          : 'official/keepwork/news.md'
       }
       return gitlabShowRawForGuest(
         HomePageInfo.apiPrefix,
@@ -354,59 +360,63 @@ export default {
   &-register-dialog {
     .el-dialog {
       width: 352px;
-      .el-dialog__header{
+      .el-dialog__header {
         padding: 40px 0 0;
       }
-      .el-dialog__body{
+      .el-dialog__body {
         padding: 0 0 10px;
-        .register-dialog-form{
+        .register-dialog-form {
           margin: 0;
           box-shadow: none;
-          .register-title{
+          .register-title {
             padding-top: 0;
           }
         }
       }
     }
   }
-  &-advertising-head {
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-top: 16px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background: rgba(35, 151, 243, 0.2);
-    border-radius: 4px;
-    border: solid 1px #2397f3;
-    color: #2397f3;
-    position: relative;
-    .iconfont {
-      font-size: 20px;
-      margin-right: 6px;
-    }
-    .close {
-      display: inline-block;
-      width: 40px;
+  &-advertising {
+    background: #fff;
+    padding-top: 16px;
+    &-head {
+      max-width: 1200px;
+      margin: 0 auto;
       height: 40px;
       line-height: 40px;
-      font-size: 28px;
-      position: absolute;
-      right: 20px;
-      top: 0;
-      cursor: pointer;
+      text-align: center;
+      background: rgba(35, 151, 243, 0.2);
+      border-radius: 4px;
+      border: solid 1px #2397f3;
+      color: #2397f3;
+      position: relative;
+      .iconfont {
+        font-size: 20px;
+        margin-right: 6px;
+      }
+      .close {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 28px;
+        position: absolute;
+        right: 20px;
+        top: 0;
+        cursor: pointer;
+      }
+    }
+    .hidden-ad {
+      height: 0;
+      overflow: hidden;
+      border: none;
+      transition: all 0.2s ease-out;
     }
   }
-  .hidden-ad {
-    height: 0;
-    overflow: hidden;
-    border: none;
-    transition: all 0.2s ease-out;
-  }
   &-simple-show {
-    margin-top: 16px;
+    padding-top: 16px;
     padding-bottom: 40px;
     border-bottom: 1px solid #eeeeee;
+    background: #fff;
     &-center {
       max-width: 1200px;
       margin: 0 auto;
@@ -549,6 +559,7 @@ export default {
     }
   }
   &-brief {
+    background: #fff;
     &-center {
       margin: 0 auto;
       max-width: 1200px;

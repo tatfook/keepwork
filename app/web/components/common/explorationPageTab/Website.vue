@@ -6,11 +6,8 @@
       </el-col>
     </el-row>
     <div class="all-projects-pages" v-if="websiteCount > perPage">
-      <div class="block">
-        <span class="demonstration"></span>
-        <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="websiteCount">
-        </el-pagination>
-      </div>
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="websiteCount">
+      </el-pagination>
     </div>
     <transition name="fade">
       <div v-if="nothing" class="all-projects-nothing">

@@ -119,43 +119,9 @@ export default {
       }
     }
   }
-  //   padding: 25px 15px;
-  //   ul {
-  //     margin: 0;
-  //     padding: 0;
-  //   }
-  //   ul > li {
-  //     list-style: none;
-  //     display: inline-block;
-  //     padding-bottom: 6px;
-  //   }
-  //   a {
-  //     color: #3977ad;
-  //     padding: 0 5px 5px;
-  //     margin: 0 25px;
-  //     text-decoration: none;
-  //     font-size: 14px;
-  //   }
-  //   a:hover {
-  //     border-bottom: 2px solid #3977ad;
-  //   }
-  //   p {
-  //     margin: 6px 0 0;
-  //     text-align: center;
-  //     font-size: 14px;
-  //   }
-  //   span {
-  //     font-size: 14px;
-  //   }
-  //   .icon-language {
-  //     color: #ec1e1e;
-  //     vertical-align: middle;
-  //     margin-right: 5px;
-  //   }
-  //   .el-dropdown-link {
-  //     cursor: pointer;
-  //   }
-  // }
+  .el-dropdown-link {
+    cursor: pointer;
+  }
   @media (max-width: 768px) {
     .footer-container {
       &-list {
