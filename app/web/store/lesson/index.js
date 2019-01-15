@@ -1,4 +1,3 @@
-import center from './center'
 import student from './student'
 import teacher from './teacher'
 import getters from './getters'
@@ -10,6 +9,7 @@ const state = {
   subjects: [],
   userinfo: {},
   lessonsDetail: {},
+  packagesList: {},
   packagesDetail: {},
   isShowLoginDialog: {}
 }
@@ -21,7 +21,6 @@ export default {
   mutations,
 
   modules: {
-    center,
     student,
     teacher
   }

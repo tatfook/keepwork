@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // const Lesson = () => import('@/components/lesson/Lesson')
 const About = () => import('@/components/lesson/common/About')
-const Center = () => import('@/components/lesson/common/Center')
+const LessonCenter = () => import('@/components/lesson/common/LessonCenter')
 const AllTeachingVideo = () => import('@/components/lesson/common/AllTeachingVideo')
 const Autobiography = () => import('@/components/lesson/common/Autobiography')
 const Solution = () => import('@/components/lesson/common/Solution')
@@ -64,7 +64,7 @@ export default new Router({
     {
       path: '*',
       name: 'Lesson',
-      component: Center
+      component: LessonCenter
     },
     {
       path: '/teacher',
@@ -166,7 +166,7 @@ export default new Router({
         {
           path: 'center',
           name: 'TeacherCenter',
-          component: Center
+          component: LessonCenter
         },
         {
           path: 'autobiography',
@@ -282,7 +282,7 @@ export default new Router({
         {
           path: 'center',
           name: 'StudentCenter',
-          component: Center
+          component: LessonCenter
         },
         {
           path: 'autobiography',
