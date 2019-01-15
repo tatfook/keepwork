@@ -68,10 +68,8 @@ export default {
     }
   },
   async mounted() {
-    let payload = { perPage: this.perPage, page: this.page }
-    await this.getPackagesList(payload)
+    await this.toGetPackagesList()
     this.isPreseting = false
-    this.loading = false
   },
   methods: {
     ...mapActions({
@@ -91,13 +89,17 @@ export default {
         })
       }
     },
-    async targetPage(targetPage) {
+    async toGetPackagesList() {
       this.loading = true
-      this.page = targetPage
-      let payload = { perPage: this.perPage, page: this.page }
-      await this.getPackagesList(payload)
-      window.scrollTo(0, 0)
+      let params = { perPage: this.perPage, page: this.page }
+      await this.getPackagesList(params).catch()
       this.loading = false
+      return Promise.resolve()
+    },
+    async targetPage(targetPage) {
+      this.page = targetPage
+      await this.toGetPackagesList()
+      window.scrollTo(0, 0)
     },
     getCoursePackageSuitableAge(packageDetail) {
       let { minAge, maxAge } = packageDetail
