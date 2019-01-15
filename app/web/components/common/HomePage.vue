@@ -94,7 +94,7 @@
             <span class="star">
               <img src="@/assets/img/hp_select_project.png" alt="">
             </span>{{$t("home.selectedProjects")}}</div>
-          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('pickedProjects')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in handpickProjects" :key="index">
@@ -108,7 +108,7 @@
             <span class="star">
               <img src="@/assets/img/hp_hot_lesson.png" alt="">
             </span>{{$t("home.hotLessons")}}</div>
-          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('course')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
@@ -122,7 +122,7 @@
             <span class="star">
               <img src="@/assets/img/hp_people_like.png" alt="">
             </span>{{$t("home.likedByOthers")}}</div>
-          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('allProjects')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in likesProjects" :key="index">
@@ -303,8 +303,13 @@ export default {
     closeAd() {
       this.hiddenAd = true
     },
-    viewMore() {
-      this.$router.push('/exploration')
+    viewMore(tabName) {
+      this.$router.push({
+        name: 'ExplorationPage',
+        query: {
+          tab: tabName
+        }
+      })
     },
     goJoin() {
       this.isRegisterDialogShow = true

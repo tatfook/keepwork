@@ -1,5 +1,5 @@
 <template>
-  <div class="recruiting" v-loading="loading">
+  <div class="picked-projects">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in recruitmentData" :key="index">
         <project-cell :project="project"></project-cell>
@@ -24,7 +24,7 @@ import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
 
 export default {
-  name: 'Recruiting',
+  name: 'PickedProjects',
   props: {
     searchKey: String,
     sortProjects: String
