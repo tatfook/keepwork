@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      packages: 'lesson/center/packagesList',
+      packages: 'lesson/packagesList',
       isTeacher: 'lesson/isTeacher'
     }),
     packagesList() {
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getPackagesList: 'lesson/center/getPackagesList'
+      getPackagesList: 'lesson/getPackagesList'
     }),
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1

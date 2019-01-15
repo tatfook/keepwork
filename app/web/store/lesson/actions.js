@@ -3,6 +3,7 @@ import { props } from './mutations'
 
 let {
   GET_USER_INFO_SUCCESS,
+  GET_PACKAGES_LIST,
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_DETAIL_SUCCESS,
   GET_ALL_SKILLS_SUCCESS,
@@ -17,6 +18,10 @@ const actions = {
     let { commit } = context
     let userLessonInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userLessonInfo)
+  },
+  async getPackagesList({ commit }, payload) {
+    let packagesList = await lesson.packages.packagesList(payload)
+    commit(GET_PACKAGES_LIST, packagesList)
   },
   async getPackageDetail(context, { packageId }) {
     let { commit } = context
