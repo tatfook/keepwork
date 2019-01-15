@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-center">
-    <div class="lesson-center-container" v-if="!loading" v-loading='loading'>
+    <div class="lesson-center-container" v-if="!isPreseting" v-loading='loading'>
       <div class="lesson-center-info">{{$t('lesson.include')}}:
         <span>{{sortedPackagesList.length}}</span> {{$t('lesson.packagesCount')}}
       </div>
@@ -45,13 +45,11 @@ export default {
   name: 'LessonCenter',
   data() {
     return {
+      isPreseting: true,
       loading: true,
       perPage: 15,
       page: 1
     }
-  },
-  created() {
-    this.fromTopToShow()
   },
   computed: {
     ...mapGetters({
@@ -72,15 +70,13 @@ export default {
   async mounted() {
     let payload = { perPage: this.perPage, page: this.page }
     await this.getPackagesList(payload)
+    this.isPreseting = false
     this.loading = false
   },
   methods: {
     ...mapActions({
       getPackagesList: 'lesson/center/getPackagesList'
     }),
-    fromTopToShow() {
-      window.scrollTo(0, 0)
-    },
     sortByUpdateAt(obj1, obj2) {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
@@ -100,6 +96,7 @@ export default {
       this.page = targetPage
       let payload = { perPage: this.perPage, page: this.page }
       await this.getPackagesList(payload)
+      window.scrollTo(0, 0)
       this.loading = false
     },
     getCoursePackageSuitableAge(packageDetail) {
