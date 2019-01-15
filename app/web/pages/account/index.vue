@@ -56,9 +56,6 @@ router.beforeEach(async (to, from, next) => {
   if (Cookies.get('token')) {
     return next()
   }
-  if (to.name === 'OrderConfirm') {
-    return window.location.href = window.location.origin
-  }
   store.dispatch('user/toggleLoginDialog', true)
 })
 
