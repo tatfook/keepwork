@@ -53,6 +53,11 @@ const store = new Vuex.Store({
 })
 
 router.beforeEach(async (to, from, next) => {
+  if (to.name === 'OrderConfirm' && to.query.token) {
+    let { token, ..._query } = to.query
+    Cookies.set('token', token)
+    return next({ name: 'OrderConfirm', query: _query })
+  }
   if (Cookies.get('token')) {
     return next()
   }
