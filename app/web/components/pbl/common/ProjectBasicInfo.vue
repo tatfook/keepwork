@@ -31,6 +31,7 @@
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectId")}}:</label>{{originProjectDetail.id}}</p>
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate(formatType)}}</p>
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
+        <project-grade v-if="!isWebType" :projectDetail='originProjectDetail'></project-grade>
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
           <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{$t("project.edit")}}</el-button>
@@ -77,6 +78,7 @@ import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
+import ProjectGrade from './ProjectGrade'
 import launchUri from '@/lib/utils/launchUri'
 
 export default {
@@ -516,6 +518,7 @@ export default {
   components: {
     SkyDriveManagerDialog,
     ParacraftInfo,
+    ProjectGrade,
     WebsiteBinder
   }
 }
@@ -644,7 +647,10 @@ export default {
       &-item {
         font-size: 14px;
         color: #404144;
-        margin: 8px 0 0;
+        margin: 6px 0 0;
+        &:first-child {
+          margin-top: 0;
+        }
         label {
           color: #909399;
           width: 72px;
