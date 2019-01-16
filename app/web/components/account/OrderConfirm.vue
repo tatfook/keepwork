@@ -86,6 +86,8 @@
 <script>
 import PackageItem from './common/OrderPackageItem'
 import GoodsItem from './common/OrderGoodsItem'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import CouponTicketCheckbox from './common/CouponTicketCheckbox'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
@@ -156,10 +158,20 @@ export default {
     if (price) {
       this.count = _.floor(_.divide(price, this.goodsCost))
     }
+    // exchange way
     if (this.isNeedDigitalAccount) {
-      // exchange way
-      await keepwork.account
-        .getDigitalAccounts()
+      // :FIXME: bad way
+      const haqi = axios.create({
+        baseURL: 'https://keepwork.com/api',
+        timeout: 20000,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/json; charset=UTF-8',
+          Authorization: 'Bearer ' + Cookies.get('token')
+        }
+      })
+      await haqi
+        .get('/mod/knowledgeBean/models/haqi/getUsers')
         .then(res => {
           let data = _.get(res, 'data.data', [])
           if (this.digitalAccount) {
