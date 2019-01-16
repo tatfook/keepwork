@@ -33,7 +33,8 @@ const cmdList = [
   'Lesson',
   'Quiz',
   'Hint',
-  'Project'
+  'Project',
+  'Ppt'
 ]
 
 const oldCmdMapper = {

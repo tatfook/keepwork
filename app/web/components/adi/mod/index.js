@@ -26,6 +26,7 @@ import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
 import ModProject from './web/project'
 import ModIframe from './common/iframe'
+import ModPpt from './web/ppt'
 
 export const modList = {
   ModMarkdown,
@@ -55,7 +56,8 @@ export const modList = {
   ModQuiz,
   ModHint,
   ModProject,
-  ModIframe
+  ModIframe,
+  ModPpt
 }
 
 export const load = modName => {

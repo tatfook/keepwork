@@ -39,13 +39,11 @@ export default {
   },
   methods: {},
   created() {
-    let self = this
-
     setTimeout(() => {
-      self.toc = true
-      self.show = true
+      this.toc = true
+      this.show = true
 
-      let dom = document.querySelector('.toc-source')
+      const dom = document.querySelector('.toc-source')
 
       if (dom) {
         document.querySelector('.toc-source').remove()
