@@ -6,10 +6,13 @@
         <div class="order-confirm-header-center-main">
           <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
           <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}}
-            <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
-              <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select></span>
+            <el-input v-model="digitalAccount">
+              <el-select slot="append" v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
+                <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-input>
+          </span>
         </div>
       </div>
     </div>
@@ -128,12 +131,21 @@ export default {
       goodsId = ''
     } = this.$route.query
     type = _.toNumber(type)
-    id = _.toNumber(id)
+    goodsId = _.toNumber(goodsId)
     if (type === 2 && payment === 'bean') {
       return this.$message.error('课程包无法通过知识豆购买')
     }
-    if (!type || !id || !payment) {
+    if (!type || !goodsId || !payment) {
       return this.$message.error('缺少必要参数')
+    }
+    if (user_nid) {
+      this.digitalAccountList = [
+        {
+          label: user_nid,
+          value: user_nid
+        }
+      ]
+      this.digitalAccount = user_nid
     }
     await Promise.all([
       this.getBalance(),
@@ -150,18 +162,10 @@ export default {
         .getDigitalAccounts()
         .then(res => {
           let data = _.get(res, 'data.data', [])
-          if (user_nid) {
-            if (data.includes(user_nid)) {
-              this.digitalAccount = user_nid
-            } else {
-              this.$message({
-                type: 'error',
-                duration: '8000',
-                message: '当前登录的账号跟该数字账号不存在关联'
-              })
-            }
+          if (this.digitalAccount) {
+            data = _.uniq([...data, this.digitalAccount])
           }
-          this.digitalAccountList = data.map(item => ({
+          this.digitalAccountList = _.map(data, item => ({
             label: item,
             value: item
           }))
@@ -452,6 +456,9 @@ export default {
           .el-input__inner {
             height: 30px;
             line-height: 30px;
+          }
+          .el-input-group {
+            width: 60%;
           }
           .el-input__suffix-inner {
             .el-select__caret {
