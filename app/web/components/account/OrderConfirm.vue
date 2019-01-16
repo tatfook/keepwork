@@ -133,12 +133,10 @@ export default {
       goodsId = ''
     } = this.$route.query
     type = _.toNumber(type)
+    id = _.toNumber(id)
     goodsId = _.toNumber(goodsId)
     if (type === 2 && payment === 'bean') {
       return this.$message.error('课程包无法通过知识豆购买')
-    }
-    if (!type || !goodsId || !payment) {
-      return this.$message.error('缺少必要参数')
     }
     if (user_nid) {
       this.digitalAccountList = [
