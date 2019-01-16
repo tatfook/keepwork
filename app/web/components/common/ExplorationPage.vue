@@ -112,6 +112,7 @@ export default {
     window.scrollTo(0, 0)
   },
   mounted() {
+    this.resetUrl()
     const { query } = this.$route
     this.currentTab = query.tab
     this.activeTabIndex = query.tab
@@ -119,7 +120,6 @@ export default {
     if (query && query.keyword) {
       this.searchKey = query.keyword
     }
-    this.resetUrl()
     this.goSearch()
   },
   computed: {
@@ -160,7 +160,8 @@ export default {
   methods: {
     resetUrl() {
       if (this.$route.query.searchType && this.$route.query.keyword) {
-        history.replaceState('', '', this.$route.path)
+        let origin = window.location.origin
+        history.replaceState('', '', `${origin}/exploration?tab=allProjects`)
       }
     },
     getAmount(amount) {

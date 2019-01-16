@@ -1,10 +1,10 @@
 <template>
   <div class="webpage" v-loading="loading">
-    <div class="webpage-content" v-for="(webpage,index) in webpagesData" :key="index">
+    <a :href="webpage.url" target="_blank" class="webpage-content" v-for="(webpage,index) in webpagesData" :key="index">
       <h4 v-html="webpage.title"></h4>
-      <p v-html="webpage.url"></p>
+      <p v-html="webpage.url_html"></p>
       <p v-html="webpage.content"></p>
-    </div>
+    </a>
     <transition name="fade">
       <div v-if="nothing" class="all-projects-nothing">
         <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
@@ -35,21 +35,18 @@ export default {
   },
   computed: {
     webpagesData() {
-      if (!this.searchKey) {
-        return []
-      }
       let hits = _.get(this.webpages, 'hits', [])
       return _.map(hits, i => {
         return {
           ...i,
           title: this.searchKeyResult(i, 'title'),
-          url: this.searchKeyResult(i, 'url'),
+          url_html: this.searchKeyResult(i, 'url'),
           content: this.searchKeyResult(i, 'content')
         }
       })
     },
     webpagesCount() {
-      return this.searchKey ? _.get(this.webpages, 'total', 0) : 0
+      return _.get(this.webpages, 'total', 0)
     },
     nothing() {
       return this.webpagesCount === 0
@@ -90,6 +87,13 @@ export default {
     background: #fff;
     padding: 8px;
     margin-bottom: 5px;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    color: #212224;
+    .red {
+      color: red;
+    }
   }
 }
 </style>
