@@ -1,15 +1,15 @@
 <template>
   <div class="project-cell" :class="{'project-cell-topped': isTopizable && project.isTopped}">
-    <span v-if="ranking" class="project-cell-medal"><img src="@/assets/pblImg/gold.png" alt=""></span>
-    <!-- <span v-if="ranking" class="project-cell-medal-4">55</span> -->
+    <span v-if="ranking && level < 3" class="project-cell-medal"><img :src="rankingIcon" alt="medal"></span>
+    <span v-if="ranking && level>=3" class="project-cell-medal-4">{{level+1}}</span>
     <div class="project-cell-cover" @click="goProjectDetail(project)">
-      <video v-if="project.extra.videoUrl" class="project-cell-cover-img" controls="controls" :src="project.extra.videoUrl"></video>
-      <img v-else class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt="">
+      <video v-if="(project.extra && project.extra.videoUrl)" class="project-cell-cover-img" controls="controls" :src="(project.extra && project.extra.videoUrl) || ''"></video>
+      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" alt="">
       <div class="video-mask"></div>
-      <span v-if="ranking" class="project-cell-cover-tag">99.8</span>
+      <span v-if="ranking" class="project-cell-cover-tag">{{projectRate}}</span>
     </div>
     <h4 class="project-cell-title" @click="goProjectDetail(project)">
-      <span class="picked" title="精选" v-if="true"><img src="@/assets/pblImg/picked.png" alt=""></span>
+      <span class="picked" title="精选" v-if="project.choicenessNo"><img src="@/assets/pblImg/picked.png" alt=""></span>
       <span class="recruitment" :title='$t("explore.recruiting")' v-if="project.privilege & 1">{{isEn ? 'R':'招'}}</span>
       <span class="text" :title="project.name" v-html="project.name"></span>
       <span class="id">#{{project.id}}</span>
@@ -28,9 +28,9 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <a :href="`/u/${project.user.username}`" target="_blank" class="project-cell-author-name">
+      <a :href="`/u/${(project.user && project.user.username) || '未命名'}`" target="_blank" class="project-cell-author-name">
         <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
-        <span class="username" :title="project.user.username">{{project.user && project.user.username}}</span>
+        <span class="username" :title="(project.user && project.user.username) || '未命名'">{{(project.user && project.user.username) || '未命名'}}</span>
       </a>
       <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}
         <span v-if="isTopizable" class="project-cell-stick stick-hover" @click="toggleStickProject(project)">
@@ -59,6 +59,10 @@ export default {
       type: Boolean,
       default: false
     },
+    level: {
+      type: Number,
+      default: 0
+    },
     project: {
       type: Object,
       default() {
@@ -85,6 +89,16 @@ export default {
       return this.project.type == 0
         ? require('@/assets/pblImg/website.png')
         : require('@/assets/pblImg/paracraft.png')
+    },
+    rankingIcon() {
+      return this.level === 0
+        ? require('@/assets/pblImg/gold.png')
+        : this.level === 1
+        ? require('@/assets/pblImg/silver.png')
+        : require('@/assets/pblImg/copper.png')
+    },
+    projectRate() {
+      return this.project.rate.toFixed(2)
     }
   },
   methods: {

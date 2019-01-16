@@ -340,7 +340,7 @@ export default {
     },
     goExplorationPage() {
       if (this.$route.name !== 'ExplorationPage') {
-        window.location.href = `${this.locationOrigin}/exploration`
+        window.location.href = `${this.locationOrigin}/exploration?tab=allProjects`
       }
     },
     goRanking() {

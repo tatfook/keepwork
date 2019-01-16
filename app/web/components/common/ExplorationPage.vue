@@ -118,9 +118,9 @@ export default {
     this.currentTabComp = query.tab
     if (query && query.keyword) {
       this.searchKey = query.keyword
-      this.goSearch()
     }
     this.resetUrl()
+    this.goSearch()
   },
   computed: {
     ...mapGetters({
@@ -140,7 +140,7 @@ export default {
       ) {
         return [
           { mode: this.$t('explore.overall'), command: '/综合' },
-          { mode: this.$t('explore.newest'), command: 'updated_time/最新' },
+          { mode: this.$t('explore.newest'), command: 'updated_at/最新' },
           { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
         ]
       }

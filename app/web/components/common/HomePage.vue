@@ -228,16 +228,10 @@ export default {
       return locale === 'en-US'
     },
     handpickProjects() {
-      return _.map(_.get(this.originHandpickProjects, 'rows', []), i => ({
-        ...i,
-        name_title: i.name || '未命名'
-      }))
+      return _.get(this.originHandpickProjects, 'rows', [])
     },
     likesProjects() {
-      return _.map(_.get(this.originLikesProjects, 'rows', []), i => ({
-        ...i,
-        name_title: i.name || '未命名'
-      }))
+      return _.get(this.originLikesProjects, 'rows', [])
     }
   },
   methods: {
