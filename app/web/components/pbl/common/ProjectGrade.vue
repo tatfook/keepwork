@@ -37,7 +37,7 @@ export default {
   computed: {
     projectRate: {
       get() {
-        return _.get(this.projectDetail, 'rate', 0)
+        return _.get(this.projectDetail, 'rate', 1)
       },
       set(rate) {
         this.startRate = rate / 20
