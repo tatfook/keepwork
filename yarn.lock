@@ -13465,7 +13465,7 @@ ret@~0.1.10:
   resolved "http://registry.npm.taobao.org/ret/download/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha1-uKSCXVvbH8P29Twrwz+BOIaBx7w=
 
-"reveal.js@github:NPLFoshan/reveal.js":
+"reveal.js@github:NPLFoshan/reveal.js#master":
   version "3.7.0"
   resolved "https://codeload.github.com/NPLFoshan/reveal.js/tar.gz/25afc4a61ab61f40ded01621e44ab5afe1407d9b"
 
