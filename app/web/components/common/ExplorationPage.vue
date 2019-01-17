@@ -97,7 +97,7 @@ export default {
       searchResultAmount: 0,
       currentTabComp: '',
       tabBar: [
-        // { command: 'pickedProjects', tag: '精选项目' },
+        { command: 'pickedProjects', tag: '精选项目' },
         { command: 'allProjects', tag: this.$t('explore.project') },
         { command: 'paracraft', tag: this.$t('explore.3DWorlds') },
         { command: 'website', tag: this.$t('explore.websites') },

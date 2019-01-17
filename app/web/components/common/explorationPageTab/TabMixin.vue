@@ -1,7 +1,10 @@
 <script>
+import ProjectCell from '../ProjectCell'
+
 export default {
   data() {
     return {
+      loading: true,
       perPage: 20,
       page: 1
     }
@@ -16,13 +19,15 @@ export default {
           }
           return name.join().replace(/<span>/g, `<span class="red">`)
         }
-      }else{
-        if(key === 'id'){
-          return '#' + i[key]
-        }
-        return i[key]
       }
+      if (key === 'id') {
+        return '#' + i[key]
+      }
+      return i[key]
     }
+  },
+  components: {
+    ProjectCell
   }
 }
 </script>

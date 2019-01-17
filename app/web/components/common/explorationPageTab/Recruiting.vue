@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import ProjectCell from '../ProjectCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
@@ -32,7 +31,6 @@ export default {
   data() {
     return {
       recruitongProjects: [],
-      loading: true
     }
   },
   mixins: [TabMixin],
@@ -61,7 +59,8 @@ export default {
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
-          privilege: i.recruiting ? 1 : 2
+          privilege: i.recruiting ? 1 : 2,
+          choicenessNo: i.recommended ? 1 : 0
         }
       })
     }
@@ -86,9 +85,6 @@ export default {
         this.$emit('getAmount', this.recruitingCount)
       })
     }
-  },
-  components: {
-    ProjectCell
   }
 }
 </script>
