@@ -16,6 +16,7 @@
 <script>
 import _ from 'lodash'
 import { EsAPI } from '@/api'
+import TabMixin from './TabMixin'
 
 export default {
   name: 'Webpage',
@@ -29,6 +30,7 @@ export default {
       loading: true
     }
   },
+  mixins: [TabMixin],
   async mounted() {
     await this.targetPage()
     this.loading = false
@@ -68,15 +70,6 @@ export default {
         this.loading = false
         this.$emit('getAmount', this.webpagesCount)
       })
-    },
-    searchKeyResult(i, key) {
-      if (i.highlight) {
-        if (i.highlight[key]) {
-          let name = _.get(i.highlight, key, i[key])
-          return name.join().replace(/<span>/g, `<span class="red">`)
-        }
-      }
-      return i[key]
     }
   }
 }

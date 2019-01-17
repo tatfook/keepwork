@@ -179,7 +179,9 @@ export default {
       this.goSearch()
     },
     goSearch() {
-      this.$refs[this.currentTab].targetPage(1)
+      this.$nextTick(async () => {
+        this.$refs[this.currentTab].targetPage(1)
+      })
     },
     handleSelectTab(key, keyPath) {
       this.$router.push({
@@ -378,7 +380,7 @@ export default {
     transition: opacity 2s;
   }
   .fade-leave-active {
-    transition: opacity .5s;
+    transition: opacity 0.5s;
   }
   .fade-enter,
   .fade-leave-to {
