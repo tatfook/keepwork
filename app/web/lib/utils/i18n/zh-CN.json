@@ -1559,7 +1559,7 @@
     "pageTemplateMenu": "带菜单布局"
   },
   "account": {
-    "myAccount": "我的账户",
+    "myAccount": "我的钱包",
     "userRmb": "余额(元)",
     "userCoin": "知识币(个)",
     "locked": "待解锁",
@@ -1585,7 +1585,7 @@
     "couponDescription3": "如您的订单在用券后未最终支付，则订单失效，优惠券自动返还",
     "couponDescription4": "一笔订单只能使用一张优惠券",
     "couponDescription5": "在个别特殊促销活动中，优惠券无法与其他优惠（如拼团、秒杀等）叠加使用。请以具体的活动规则为准",
-    "confirmAccount": "购买账号:",
+    "confirmAccount": "购买账号 ",
     "keepworkAccount": "Keepwork账号:",
     "digitalAccount": "数字账号:",
     "pleaseSelect": "请选择",
@@ -1645,6 +1645,11 @@
     "willExpire": "即将过期",
     "backMyAccount": "进入我的账户查看",
     "returnOneCoupon": "赠送1张优惠券共",
-    "noAvailableCoupons": "无可用优惠券"
+    "noAvailableCoupons": "无可用优惠券",
+    "consumptionAmount": "消费的RMB金额：",
+    "haqiBeans": "魔豆数量：",
+    "rmbToHaqiBeans": "1RMB等于10魔豆",
+    "haqiBeansCount": "{count} 魔豆",
+    "forMoreInformation": "如有疑问，请联系客服QQ: {qq}"
   }
 }
