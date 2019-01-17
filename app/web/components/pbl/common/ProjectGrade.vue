@@ -37,7 +37,7 @@ export default {
   computed: {
     projectRate: {
       get() {
-        return _.get(this.projectDetail, 'rate', 1)
+        return _.get(this.projectDetail, 'rate', 0)
       },
       set(rate) {
         this.startRate = rate / 20
@@ -60,7 +60,7 @@ export default {
       return total == 0 ? 0 : _.round((count / total) * 100)
     },
     rateShowFilter(rate, markCount) {
-      return markCount < 8 ? 'N/A' : _.ceil(rate, 1)
+      return markCount < 8 ? 'N/A' : _.round(rate, 1)
     },
     rateInfoFilter(rate, markCount) {
       return markCount < 8 ? '尚未收集到足够的评价' : ''
