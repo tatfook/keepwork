@@ -1,4 +1,4 @@
-export const transfer = (md, cmd) => {
+const transfer = (md, cmd) => {
   let mdString = md.join('\n')
   let data
 
@@ -15,4 +15,4 @@ export const transfer = (md, cmd) => {
   }
 }
 
-export default { transfer }
+module.exports = { transfer }

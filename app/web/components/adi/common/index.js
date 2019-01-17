@@ -22,12 +22,11 @@ import AdiCategoryList from './categoryList/CategoryList'
 import AdiPageSwitching from './pageSwitching/PageSwitching'
 import AdiIcon from './icon/Icon'
 import AdiImg from './img/Img'
-
 import AdiLesson from './lesson/Lesson'
 import AdiQuiz from './quiz/Quiz'
 import AdiHint from './hint/Hint'
-
 import AdiProject from './project/Project'
+import AdiPpt from './ppt/Ppt'
 
 export default {
   AdiMarkdown,
@@ -57,5 +56,6 @@ export default {
   AdiLesson,
   AdiQuiz,
   AdiHint,
-  AdiProject
+  AdiProject,
+  AdiPpt
 }

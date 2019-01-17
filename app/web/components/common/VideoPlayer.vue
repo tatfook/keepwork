@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <video-player ref="videoPlayer" :options="playerOptions" @ready="playerReadies" @playing="handlePlayButton" class="vjs-custom-skin"/>
+    <video-player ref="videoPlayer" :options="playerOptions" @ready="playerReadies()" @pause="handleStopButton()" @playing="handlePlayButton()" class="vjs-custom-skin"/>
   </div>
 </template>
 
@@ -37,6 +37,9 @@ export default {
           this.player.play()
         }
       )
+    },
+    handleStopButton() {
+      this.playerButton.removeClass("keepwork-play-button-hide")
     },
     handlePlayButton() {
       this.playerButton.removeClass("keepwork-play-button-hide")

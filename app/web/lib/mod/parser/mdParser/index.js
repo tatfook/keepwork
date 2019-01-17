@@ -1,7 +1,7 @@
-import yaml from './yaml'
-import md from './md'
+const yaml = require('./yaml')
+const md = require('./md')
 
-export default {
+module.exports = {
   yaml,
   md
 }

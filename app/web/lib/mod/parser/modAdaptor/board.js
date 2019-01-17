@@ -1,4 +1,4 @@
-export const transfer = (md, cmd) => {
+const transfer = (md, cmd) => {
   let newData = {
     board: {
       data: ''
@@ -13,4 +13,4 @@ export const transfer = (md, cmd) => {
   }
 }
 
-export default { transfer }
+module.exports = { transfer }

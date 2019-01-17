@@ -1,5 +1,5 @@
 <template>
-  <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isModShow}">
+  <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isCardShow}">
     <el-row class="prop-header" type='flex' justify='space-between'>
       <el-col>
         {{$t("card." + cardKey)}}
@@ -16,11 +16,11 @@
           <i v-show="isMultiLineProp" class="iconfont icon-full-screen_" @click='showMultiTextDailog'></i>
         </el-tooltip>
         <el-tooltip :content="isToolTip" placement="top">
-          <el-switch :width='32' v-model="isModShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'></el-switch>
+          <el-switch :width='32' v-model="isCardShow" active-color="#3ba4ff" inactive-color='#bfbfbf' @change='toggleModVisible'></el-switch>
         </el-tooltip>
       </el-col>
     </el-row>
-    <el-row class="prop-item" v-if="isModShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
+    <el-row class="prop-item" v-show="isCardShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
       <component 
         :is='proptypes[propItem]'
         :prop='prop'
@@ -61,14 +61,14 @@ export default {
     ...mapGetters({
       activeMod: 'activeMod'
     }),
-    isModShow: {
+    isCardShow: {
       get() {
         return this.cardValue && !this.cardValue.hidden
       },
       set() {}
     },
     isToolTip () {
-      if (this.isModShow){
+      if (this.isCardShow){
         return this.$t("tips.clickToHide")
       } else {
         return this.$t("tips.clickToShow")
@@ -112,18 +112,16 @@ export default {
       })
     },
     changeProptyData(changedData) {
-      let self = this
-
-      if (!self.changeProtyDataThrottle) {
-        self.changeProtyDataThrottle = _.throttle(changedData => {
-          self.changeActivePropty()
-          self.setActivePropertyData({
+      if (!this.changeProtyDataThrottle) {
+        this.changeProtyDataThrottle = _.throttle(changedData => {
+          this.changeActivePropty()
+          this.setActivePropertyData({
             data: changedData
           })
         }, 100)
       }
 
-      self.changeProtyDataThrottle(changedData)
+      this.changeProtyDataThrottle(changedData)
     },
     toggleModVisible(value) {
       this.changeProptyData({

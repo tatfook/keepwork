@@ -61,7 +61,7 @@ import ProjectJoinedMembersList from './ProjectJoinedMembersList'
 import _ from 'lodash'
 
 export default {
-  name: 'ProjectMod',
+  name: 'AdiProject',
   mixins: [compBaseMixin],
   components: {
     ProjectTags,
