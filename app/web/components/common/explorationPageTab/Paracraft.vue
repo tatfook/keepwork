@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import ProjectCell from '../ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import TabMixin from './TabMixin'
@@ -31,7 +30,6 @@ export default {
   },
   data() {
     return {
-      loading: true
     }
   },
   mixins: [TabMixin],
@@ -66,7 +64,8 @@ export default {
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
-          privilege: i.recruiting ? 1 : 0
+          privilege: i.recruiting ? 1 : 0,
+          choicenessNo: i.recommended ? 1 : 0
         }
       })
     }
@@ -89,9 +88,6 @@ export default {
         this.$emit('getAmount', this.paracraftCount)
       })
     }
-  },
-  components: {
-    ProjectCell
   }
 }
 </script>

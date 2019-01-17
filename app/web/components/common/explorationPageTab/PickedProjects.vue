@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import ProjectCell from '../ProjectCell'
 import _ from 'lodash'
 import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
@@ -31,8 +30,7 @@ export default {
   },
   data() {
     return {
-      recruitongProjects: [],
-      loading: true
+      pickedProjects: []
     }
   },
   mixins: [TabMixin],
@@ -45,10 +43,10 @@ export default {
       return this.recruitmentData.length === 0 && !this.loading
     },
     recruitingCount() {
-      return _.get(this.recruitongProjects, 'total', 0)
+      return _.get(this.pickedProjects, 'total', 0)
     },
     recruitmentData() {
-      let hits = _.get(this.recruitongProjects, 'hits', [])
+      let hits = _.get(this.pickedProjects, 'hits', [])
       return _.map(hits, i => {
         return {
           id: this.searchKeyResult(i, 'id'),
@@ -61,7 +59,8 @@ export default {
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
-          privilege: i.recruiting ? 1 : 2
+          privilege: i.recruiting ? 1 : 2,
+          choicenessNo: i.recommended ? 1 : 0
         }
       })
     }
@@ -74,21 +73,18 @@ export default {
           .getProjects({
             page: targetPage,
             per_page: this.perPage,
-            recruiting: true,
+            recommended: true,
             q: this.searchKey,
             sort: this.sortProjects
           })
           .then(res => {
-            this.recruitongProjects = res
+            this.pickedProjects = res
           })
           .catch(err => console.error(err))
         this.loading = false
         this.$emit('getAmount', this.recruitingCount)
       })
     }
-  },
-  components: {
-    ProjectCell
   }
 }
 </script>

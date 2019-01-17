@@ -32,7 +32,6 @@ export default {
   data() {
     return {
       lessonPackages: [],
-      loading: true
     }
   },
   mixins: [TabMixin],

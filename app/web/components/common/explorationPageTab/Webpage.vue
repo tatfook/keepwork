@@ -27,7 +27,6 @@ export default {
   data() {
     return {
       webpages: [],
-      loading: true
     }
   },
   mixins: [TabMixin],
