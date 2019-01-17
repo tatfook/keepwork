@@ -52,7 +52,7 @@
             <el-dropdown-item>
               <a
                 href="/a/account"
-              ><i class="iconfont icon-account1"></i>{{$t("common.myAccount")}}</a>
+              ><i class="iconfont icon-account1"></i>{{$t("account.myAccount")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a

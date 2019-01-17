@@ -29,8 +29,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     image() {
@@ -38,6 +37,9 @@ export default {
     },
     id() {
       return this.data.id
+    },
+    goodsId() {
+      return this.data.goodsId
     },
     subject() {
       return this.isEn
@@ -75,11 +77,15 @@ export default {
   },
   methods: {
     toExchangePage() {
+      let query = { goodsId: this.goodsId, type: 1, payment: this.priceUnit }
+      if (this.goodsId === 984) {
+        query['price'] = 30
+      }
       this.$router.push({
         name: 'OrderConfirm',
-        query: { id: this.id, type: 1, payment: this.priceUnit }
+        query
       })
-    },
+    }
   }
 }
 </script>
@@ -97,7 +103,7 @@ export default {
   &:hover {
     box-shadow: 0px 4px 10px 0px rgba(84, 143, 240, 0.28);
     border: solid 1px #409efe;
-    .exchange-item-info-button{
+    .exchange-item-info-button {
       display: inline;
     }
   }
