@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS'
+const GET_PACKAGES_LIST = 'GET_PACKAGES_LIST'
 const GET_PACKAGE_DETAIL_SUCCESS = 'GET_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_DETAIL_SUCCESS = 'GET_LESSON_DETAIL_SUCCESS'
 const GET_ALL_SKILLS_SUCCESS = 'GET_ALL_SKILLS_SUCCESS'
@@ -11,6 +12,7 @@ const TOGGLE_LOGIN_DIALOG = 'TOGGLE_LOGIN_DIALOG'
 
 export const props = {
   GET_USER_INFO_SUCCESS,
+  GET_PACKAGES_LIST,
   GET_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_DETAIL_SUCCESS,
   GET_ALL_SKILLS_SUCCESS,
@@ -29,6 +31,9 @@ const mutations = {
   },
   [TOGGLE_LOGIN_DIALOG](state, payload) {
     Vue.set(state, 'isShowLoginDialog', payload)
+  },
+  [GET_PACKAGES_LIST](state, packagesList) {
+    Vue.set(state, 'packagesList', packagesList)
   },
   [GET_PACKAGE_DETAIL_SUCCESS](state, { detail }) {
     Vue.set(state, 'packagesDetail', {

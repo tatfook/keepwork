@@ -1,24 +1,23 @@
-import _ from 'lodash'
-import Vue from 'vue'
-import md5 from 'blueimp-md5'
-import {
+const _ = require('lodash')
+const md5 = require('blueimp-md5')
+const {
   mdToJson,
   jsonToMd
-} from './mdParser/yaml'
-import CmdHelper, {
+} = require('./mdParser/yaml')
+const CmdHelper = require('./cmdHelper')
+const {
   MARKDOWN_CMD,
   MOD_CMD_BEGIN,
   MOD_CMD_END
-} from './cmdHelper'
-import ModAdaptor from './modAdaptor'
+} = require('./cmdHelper')
+const ModAdaptor = require('./modAdaptor')
 
 const blockHelper = {
   buildJson(block) {
     if (CmdHelper.isValidCmd(block.cmd)) {
       if (CmdHelper.isOldCmd(block.cmd)) {
         const targetCmd = CmdHelper.targetCmd(block.cmd)
-        const data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
-        Vue.set(block, 'data', data)
+        block.data = ModAdaptor.transfer(block.md, block.cmd, targetCmd)
         this.updateCmd(block, targetCmd)
         this.buildMarkdown(block)
       } else {
@@ -29,10 +28,10 @@ const blockHelper = {
             }
           }
           : mdToJson(this.mdText(block))
-        Vue.set(block, 'data', data)
+        block.data = data
       }
     } else {
-      Vue.set(block, 'data', {})
+      block.data = {}
     }
   },
 
@@ -81,12 +80,12 @@ const blockHelper = {
   },
 
   updateJson(block, jsonData) {
-    Vue.set(block, 'data', _.cloneDeep(jsonData))
+    block.data = _.cloneDeep(jsonData)
     this.buildMarkdown(block)
   },
 
   updateJsonValue(block, key, value) {
-    Vue.set(block.data, key, value)
+    block.data[key] = value
     this.buildMarkdown(block)
   },
 
@@ -136,4 +135,4 @@ const blockHelper = {
   }
 }
 
-export default blockHelper
+module.exports = blockHelper

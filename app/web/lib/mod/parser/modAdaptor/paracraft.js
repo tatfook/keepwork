@@ -1,6 +1,6 @@
-import mdParse from '../mdParser/md'
+const mdParse = require('../mdParser/md')
 
-export const transfer = (md, cmd) => {
+const transfer = (md, cmd) => {
   let newData = {
     styleID: 0,
     author: {
@@ -146,4 +146,4 @@ export const transfer = (md, cmd) => {
   }
 }
 
-export default { transfer }
+module.exports = { transfer }

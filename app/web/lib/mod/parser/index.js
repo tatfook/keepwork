@@ -1,10 +1,10 @@
-import _ from 'lodash'
-import ModBlock from './block'
-import BlockHelper from './blockHelper'
-import CmdHelper from './cmdHelper'
-import {
+const _ = require('lodash')
+const ModBlock = require('./block')
+const BlockHelper = require('./blockHelper')
+const CmdHelper = require('./cmdHelper')
+const {
   gConst
-} from '@/lib/global'
+} = require('../../global')
 
 const buildBlock = (cmd, jsonData, beginLine) => {
   let block = new ModBlock(cmd, beginLine || 1)
@@ -316,7 +316,7 @@ const addBlockToMarkdownWithoutHeadAndTail = (code, position = 0, modName, conte
   return mdLines.join('\n')
 }
 
-export default {
+module.exports = {
   buildBlock,
   buildBlockList,
   buildMarkdown,

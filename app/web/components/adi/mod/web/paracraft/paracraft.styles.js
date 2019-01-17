@@ -5,7 +5,7 @@ let emptyData = {
     emptyMedia: require('@/assets/adi/paracraft/preview.jpg'),
     link: '',
     target: '_blank',
-    autoplay: false,
+    autoplay: true,
     playloop: false,
     poster: ''
   },
@@ -18,7 +18,7 @@ let emptyData = {
     emptyMedia: require('@/assets/adi/paracraft/backgroundImage.png'),
     link: '',
     target: '_blank',
-    autoplay: false,
+    autoplay: true,
     playloop: false,
     poster: ''
   },
@@ -53,7 +53,7 @@ let emptyData = {
     emptyMedia: require('@/assets/adi/paracraft/eye.png'),
     link: '',
     target: '_blank',
-    autoplay: false,
+    autoplay: true,
     playloop: false,
     poster: ''
   },
