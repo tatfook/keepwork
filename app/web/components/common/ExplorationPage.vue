@@ -374,9 +374,11 @@ export default {
     font-size: 18px;
     margin: 20px 30px;
   }
-  .fade-enter-active,
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
   .fade-leave-active {
-    transition: opacity 3s;
+    transition: opacity .5s;
   }
   .fade-enter,
   .fade-leave-to {
