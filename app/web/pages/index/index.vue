@@ -7,10 +7,6 @@
       <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
       <router-view :pageLoading="pageLoading" v-if="presetLoaded" />
     </el-main>
-    <el-aside></el-aside>
-    <!-- <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHome">
-      <common-footer class="container"></common-footer>
-    </el-footer> -->
     <el-footer class="home-page-footer">
       <perfect-common-footer></perfect-common-footer>
     </el-footer>
@@ -90,9 +86,9 @@ export default {
     }
   },
   async created() {
-    await this.loadEditorPresets()
+    // await this.loadEditorPresets()
     this.presetLoaded = true
-    await this.updateActivePage()
+    // await this.updateActivePage()
   },
   watch: {
     $route: 'updateActivePage',
@@ -115,10 +111,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      setActivePage: 'setActivePage',
+      // setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
-      userInitPageDetail: 'user/initPageDetail',
       getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite',
       pblToggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
@@ -164,11 +159,7 @@ export default {
           path = await this.getPathWithPagename(path)
           this.$router.replace({ path })
         }
-        await this.setActivePage({ path, editorMode: false })
-        await this.userInitPageDetail({
-          url: path,
-          visitor: this.username || ''
-        })
+        // await this.setActivePage({ path, editorMode: false })
       } catch (error) {
         console.log(error)
       }

@@ -57,6 +57,10 @@ export const users = {
   getUsers: async args => get('users', { params: args })
 }
 
+export const webpages = {
+  getWebpages: async args => get('pages', { params: args })
+}
+
 export const suggestions = {
   getPrefixSuggestions: async args => get('suggestions', { params: args })
 }
@@ -67,5 +71,6 @@ export default {
   projects,
   packages,
   users,
+  webpages,
   suggestions
 }

@@ -12,13 +12,7 @@
             <el-col :sm="16" :xs="24">
               <div class="search-tab">
                 <el-menu :default-active="activeTabIndex" class="search-tab-menu" mode="horizontal" @select="handleSelectTab">
-                  <el-menu-item index="allProjects">{{$t("explore.project")}}</el-menu-item>
-                  <el-menu-item index="paracraft">{{$t("explore.3DWorlds")}}</el-menu-item>
-                  <el-menu-item index="website">{{$t("explore.websites")}}</el-menu-item>
-                  <el-menu-item index="course">{{$t("explore.lessons")}}</el-menu-item>
-                  <el-menu-item index="users">{{$t("explore.uses")}}</el-menu-item>
-                  <el-menu-item index="recruiting">{{$t("explore.recruiting")}}</el-menu-item>
-                  <!-- <el-menu-item index="webpage">网页</el-menu-item> -->
+                  <el-menu-item v-for="item in tabBar" :key='item.command' :index="item.command">{{item.tag}}</el-menu-item>
                 </el-menu>
               </div>
             </el-col>
@@ -42,23 +36,10 @@
     </div>
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
-        <div class="selected-projects" v-if='currentTab == "allProjects"'>
-          <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></all-projects>
+        <div class="selected-projects">
+          <component :is="currentTabComp" :ref="currentTab" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></component>
         </div>
-        <div class="selected-projects" v-if='currentTab == "paracraft"'>
-          <paracraft-item ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft-item>
-        </div>
-        <div class="selected-projects" v-if='currentTab == "website"'>
-          <website-item ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website-item>
-        </div>
-        <div class="selected-knowledge" v-if='currentTab == ""'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
-        <div class="selected-lessons" v-if='currentTab == "course"'>
-          <course-item ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course-item>
-        </div>
-        <div class="selected-user" v-if='currentTab == "users"'>
-          <users-item ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users-item>
-        </div>
-        <div class="selected-studio" v-if='currentTab == ""'>
+        <!-- <div class="selected-studio" v-if='currentTab == ""'>
           <el-row>
             <el-col :span="6">
               <div class="studio">
@@ -86,18 +67,13 @@
               </div>
             </el-col>
           </el-row>
-        </div>
-        <div class="selected-projects" v-if='currentTab == "recruiting"'>
-          <recruiting-item ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting-item>
-        </div>
-        <div class="selected-projects" v-if='currentTab == "webpage"'>
-          <webpage-item ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></webpage-item>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
+import PickedProjects from './explorationPageTab/PickedProjects'
 import AllProjects from './explorationPageTab/AllProjects'
 import Paracraft from './explorationPageTab/Paracraft'
 import Website from './explorationPageTab/Website'
@@ -113,24 +89,38 @@ export default {
   name: 'ExplorationPage',
   data() {
     return {
-      activeTabIndex: '1',
+      activeTabIndex: 'allProjects',
       currentTab: 'allProjects',
       searchKey: '',
       sortProjects: '',
       currSortMode: this.$t('explore.overall'),
-      searchResultAmount: 0
+      searchResultAmount: 0,
+      currentTabComp: '',
+      tabBar: [
+        // { command: 'pickedProjects', tag: '精选项目' },
+        { command: 'allProjects', tag: this.$t('explore.project') },
+        { command: 'paracraft', tag: this.$t('explore.3DWorlds') },
+        { command: 'website', tag: this.$t('explore.websites') },
+        { command: 'course', tag: this.$t('explore.lessons') },
+        { command: 'users', tag: this.$t('explore.uses') },
+        { command: 'webpage', tag: this.$t('editor.website') },
+        { command: 'recruiting', tag: this.$t('explore.recruiting') }
+      ]
     }
   },
   created() {
     window.scrollTo(0, 0)
   },
   mounted() {
+    this.resetUrl()
     const { query } = this.$route
+    this.currentTab = query.tab
+    this.activeTabIndex = query.tab
+    this.currentTabComp = query.tab
     if (query && query.keyword) {
       this.searchKey = query.keyword
-      this.goSearch()
     }
-    history.replaceState('', '', this.$route.path)
+    this.goSearch()
   },
   computed: {
     ...mapGetters({
@@ -140,7 +130,8 @@ export default {
     }),
     currSortColumn() {
       if (
-        this.currentTab === 'allProjects' ||
+        this.currentTab === 'pickedProjects' ||
+        'allProjects' ||
         'paracraft' ||
         'website' ||
         'course' ||
@@ -149,7 +140,7 @@ export default {
       ) {
         return [
           { mode: this.$t('explore.overall'), command: '/综合' },
-          { mode: this.$t('explore.newest'), command: 'updated_time/最新' },
+          { mode: this.$t('explore.newest'), command: 'updated_at/最新' },
           { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
         ]
       }
@@ -167,6 +158,12 @@ export default {
     }
   },
   methods: {
+    resetUrl() {
+      if (this.$route.query.searchType && this.$route.query.keyword) {
+        let origin = window.location.origin
+        history.replaceState('', '', `${origin}/exploration?tab=allProjects`)
+      }
+    },
     getAmount(amount) {
       this.searchResultAmount = amount
     },
@@ -185,19 +182,27 @@ export default {
       this.$refs[this.currentTab].targetPage(1)
     },
     handleSelectTab(key, keyPath) {
+      this.$router.push({
+        name: 'ExplorationPage',
+        query: {
+          tab: key
+        }
+      })
+      this.currentTabComp = key
       this.currentTab = key
       this.currSortMode = this.$t('explore.overall')
       this.sortProjects = ''
     }
   },
   components: {
-    'all-projects': AllProjects,
-    'paracraft-item': Paracraft,
-    'website-item': Website,
-    'course-item': Course,
-    'recruiting-item': Recruiting,
-    'users-item': Users,
-    'webpage-item': Webpage
+    PickedProjects,
+    AllProjects,
+    Paracraft,
+    Website,
+    Course,
+    Recruiting,
+    Users,
+    Webpage
   }
 }
 </script>
