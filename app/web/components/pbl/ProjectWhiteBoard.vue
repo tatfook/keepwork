@@ -229,7 +229,7 @@ export default {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     issueTagArr(issue) {
-      if(_.get(issue, 'tags', '')){
+      if (_.get(issue, 'tags', '')) {
         return _.get(issue, 'tags', '').split('|')
       }
     }

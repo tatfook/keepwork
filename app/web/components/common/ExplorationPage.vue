@@ -97,13 +97,13 @@ export default {
       searchResultAmount: 0,
       currentTabComp: '',
       tabBar: [
-        { command: 'pickedProjects', tag: '精选项目' },
+        // { command: 'pickedProjects', tag: '精选项目' },
         { command: 'allProjects', tag: this.$t('explore.project') },
         { command: 'paracraft', tag: this.$t('explore.3DWorlds') },
         { command: 'website', tag: this.$t('explore.websites') },
         { command: 'course', tag: this.$t('explore.lessons') },
         { command: 'users', tag: this.$t('explore.uses') },
-        { command: 'webpage', tag: '网页' },
+        { command: 'webpage', tag: this.$t('editor.website') },
         { command: 'recruiting', tag: this.$t('explore.recruiting') }
       ]
     }
