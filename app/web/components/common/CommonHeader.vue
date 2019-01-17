@@ -132,7 +132,7 @@
       </el-menu-item>
 
       <el-menu-item index='12' class="pull-right common-header-menu-ranking" @click="goRanking">
-        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">排行榜</span>
+        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
       </el-menu-item>
 
       <el-menu-item index='10'>
@@ -256,6 +256,7 @@ import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
 const EXPLORATION_REG = /^\/exploration/
+const RANKING_REG = /^\/ranking/
 const STUDY_REG = /^\/l/
 
 export default {
@@ -325,6 +326,9 @@ export default {
       }
       if (STUDY_REG.test(pathname)) {
         return (this.activeIndex = '4')
+      }
+      if(RANKING_REG.test(pathname)){
+        return (this.activeIndex = '12')
       }
       this.activeIndex = '0'
     },

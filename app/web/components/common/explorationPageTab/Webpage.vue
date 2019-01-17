@@ -49,7 +49,7 @@ export default {
       return _.get(this.webpages, 'total', 0)
     },
     nothing() {
-      return this.webpagesCount === 0
+      return this.webpagesCount === 0  && !this.loading
     }
   },
   methods: {
