@@ -30,7 +30,7 @@
           <!-- 魔豆特殊处理 -->
           <div class="order-confirm-main-count-input order-confirm-main-count-haqi">
             <div>
-              {{$t('account.consumptionAmount')}}<el-input @input="handleInputMoney" :value="price" class="haqi-bean-input"></el-input> RMB
+              {{$t('account.consumptionAmount')}}<el-input @input="handleInputMoney" @blur="handleInputMoneyBlur" :value="price" class="haqi-bean-input"></el-input> RMB
             </div>
             <div class="haqi-bean-tips">
               {{$t('account.haqiBeans')}} <span class="haqi-bean-highlight">{{$t('account.haqiBeansCount', { count: count })}}</span><span class="haqi-bean-lowlight">({{$t('account.rmbToHaqiBeans')}})</span>
@@ -222,12 +222,20 @@ export default {
       userLogout: 'user/logout'
     }),
     handleInputMoney(price) {
-      console.log()
+      this.price = price
       if (price && !NUMBER_REG.test(price)) {
         return this.$message.error(this.$t('card.integerThan0'))
       }
       if (price) {
         this.count = _.floor(_.divide(price, this.goodsCost))
+      } else {
+        this.count = 0
+      }
+    },
+    handleInputMoneyBlur(evt) {
+      if (_.isEmpty(this.price)) {
+        this.price = 30
+        this.count = _.floor(_.divide(30, this.goodsCost))
       }
     },
     handleSelectDiscount(id) {
@@ -265,6 +273,11 @@ export default {
       this.setDiscount(id)
     },
     handleSubmitTradeOrder() {
+      if (this.isHaqiBean) {
+        if (this.count === 0 || !NUMBER_REG.test(this.price)) {
+          return this.$message.error(this.$t('card.integerThan0'))
+        }
+      }
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
         return this.$message.error(
           this.$t('account.pleaseSelectDigitalAccount')
