@@ -132,7 +132,7 @@
       </el-menu-item>
 
       <el-menu-item index='12' class="pull-right common-header-menu-ranking" @click="goRanking">
-        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">排行榜</span>
+        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
       </el-menu-item>
 
       <el-menu-item index='10'>
