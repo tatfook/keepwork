@@ -85,15 +85,6 @@ export default {
         this.loading = false
         this.$emit('getAmount', this.recruitingCount)
       })
-    },
-    searchKeyResult(i, key) {
-      if (i.highlight) {
-        if (i.highlight[key]) {
-          let name = _.get(i.highlight, key, i[key])
-          return name.join().replace(/<span>/g, `<span class="red">`)
-        }
-      }
-      return i[key]
     }
   },
   components: {

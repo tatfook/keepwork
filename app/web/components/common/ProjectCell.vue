@@ -12,7 +12,7 @@
       <span class="picked" title="精选" v-if="project.choicenessNo"><img src="@/assets/pblImg/picked.png" alt=""></span>
       <span class="recruitment" :title='$t("explore.recruiting")' v-if="project.privilege & 1">{{isEn ? 'R':'招'}}</span>
       <span class="text" :title="project.name" v-html="project.name"></span>
-      <span class="id">#{{project.id}}</span>
+      <span class="id" v-html="`${project.id}`"></span>
       <span class="project-type">
         <el-popover popper-class="project-cell-type-popover" placement="top" :title="projectType" width="20" trigger="hover" content="">
           <img slot="reference" :src="projectTypeIcon" alt="">
