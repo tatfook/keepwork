@@ -60,7 +60,7 @@
 <script>
 import { mapActions } from 'vuex'
 import PerfectRegisterInfo from '@/components/common/PerfectRegisterInfo'
-import RegisterDialog from '@/components/common/Register'
+import RegisterDialog from '@/components/common/RegisterComp'
 import PasswordResetForm from '@/components/common/PasswordResetForm'
 
 export default {

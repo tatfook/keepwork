@@ -5,7 +5,7 @@ const CreativityPage = () => import('@/components/common/CreativityPage')
 const ExplorationPage = () => import('@/components/common/ExplorationPage')
 const StudyPage = () => import('@/components/common/StudyPage')
 const KeepworkAgreement = () => import('@/components/common/KeepworkAgreement')
-const Ranking = () => import('@/components/common/Ranking')
+const RankingList = () => import('@/components/common/RankingList')
 
 
 Vue.use(Router)
@@ -40,8 +40,8 @@ export default new Router({
     },
     {
       path: '/ranking',
-      name: 'Ranking',
-      component: Ranking
+      name: 'RankingList',
+      component: RankingList
     }
   ]
 })

@@ -1,12 +1,12 @@
 <template>
-  <div class="paracraft" v-loading="loading">
+  <div class="website" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pracraftData" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in websiteData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="paracraftCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="paracraftCount">
+    <div class="all-projects-pages" v-if="websiteCount > perPage">
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="websiteCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -23,7 +23,7 @@ import _ from 'lodash'
 import TabMixin from './TabMixin'
 
 export default {
-  name: 'Paracraft',
+  name: 'WebsiteField',
   props: {
     searchKey: String,
     sortProjects: String
@@ -39,19 +39,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      pblParacraft: 'pbl/diffTypeProject'
+      pblWebsite: 'pbl/diffTypeProject'
     }),
     nothing() {
-      return this.pracraftData.length === 0 && !this.loading
+      return this.websiteData.length === 0 && !this.loading
     },
-    paracraft() {
-      return this.pblParacraft({ type: 'paracraft' })
+    website() {
+      return this.pblWebsite({ type: 'site' })
     },
-    paracraftCount() {
-      return _.get(this.paracraft, 'total', 0)
+    websiteCount() {
+      return _.get(this.website, 'total', 0)
     },
-    pracraftData() {
-      let hits = _.get(this.paracraft, 'hits', [])
+    websiteData() {
+      let hits = _.get(this.website, 'hits', [])
       return _.map(hits, i => {
         return {
           id: i.id,
@@ -82,12 +82,12 @@ export default {
         await this.getTypeProjects({
           page: targetPage,
           per_page: this.perPage,
-          type: 'paracraft',
+          type: 'site',
           q: this.searchKey,
           sort: this.sortProjects
         })
         this.loading = false
-        this.$emit('getAmount', this.paracraftCount)
+        this.$emit('getAmount', this.websiteCount)
       })
     }
   }

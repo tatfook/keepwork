@@ -1,12 +1,12 @@
 <template>
-  <div class="recruiting" v-loading="loading">
+  <div class="paracraft" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in recruitmentData" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="recruitingCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="recruitingCount">
+    <div class="all-projects-pages" v-if="paracraftCount > perPage">
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="paracraftCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -18,19 +18,18 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
-import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
 
 export default {
-  name: 'Recruiting',
+  name: 'ParacraftField',
   props: {
     searchKey: String,
     sortProjects: String
   },
   data() {
     return {
-      recruitongProjects: [],
     }
   },
   mixins: [TabMixin],
@@ -39,14 +38,20 @@ export default {
     this.loading = false
   },
   computed: {
+    ...mapGetters({
+      pblParacraft: 'pbl/diffTypeProject'
+    }),
     nothing() {
-      return this.recruitmentData.length === 0 && !this.loading
+      return this.pracraftData.length === 0 && !this.loading
     },
-    recruitingCount() {
-      return _.get(this.recruitongProjects, 'total', 0)
+    paracraft() {
+      return this.pblParacraft({ type: 'paracraft' })
     },
-    recruitmentData() {
-      let hits = _.get(this.recruitongProjects, 'hits', [])
+    paracraftCount() {
+      return _.get(this.paracraft, 'total', 0)
+    },
+    pracraftData() {
+      let hits = _.get(this.paracraft, 'hits', [])
       return _.map(hits, i => {
         return {
           id: i.id,
@@ -60,7 +65,7 @@ export default {
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
-          privilege: i.recruiting ? 1 : 2,
+          privilege: i.recruiting ? 1 : 0,
           choicenessNo: i.recommended ? 1 : 0,
           rate: i.point || 0
         }
@@ -68,23 +73,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getTypeProjects: 'pbl/getTypeProjects'
+    }),
     async targetPage(targetPage) {
       this.loading = true
       this.$nextTick(async () => {
-        await EsAPI.projects
-          .getProjects({
-            page: targetPage,
-            per_page: this.perPage,
-            recruiting: true,
-            q: this.searchKey,
-            sort: this.sortProjects
-          })
-          .then(res => {
-            this.recruitongProjects = res
-          })
-          .catch(err => console.error(err))
+        await this.getTypeProjects({
+          page: targetPage,
+          per_page: this.perPage,
+          type: 'paracraft',
+          q: this.searchKey,
+          sort: this.sortProjects
+        })
         this.loading = false
-        this.$emit('getAmount', this.recruitingCount)
+        this.$emit('getAmount', this.paracraftCount)
       })
     }
   }
