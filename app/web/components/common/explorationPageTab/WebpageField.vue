@@ -1,10 +1,16 @@
 <template>
   <div class="webpage" v-loading="loading">
-    <a :href="webpage.url" target="_blank" class="webpage-content" v-for="(webpage,index) in webpagesData" :key="index">
-      <h4 v-html="webpage.title"></h4>
-      <p v-html="webpage.url_html"></p>
-      <p v-html="webpage.content"></p>
-    </a>
+    <div class="webpage-content" v-for="(webpage,index) in webpagesData" :key="index">
+      <div class="webpage-content-top">
+        <a :href="webpage.url" target="_blank" class="webpage-content-top-title" v-html="webpage.title"></a>
+        <a :href="webpage.url" target="_blank" class="webpage-content-top-url" v-html="origin + webpage.url_html"></a>
+      </div>
+      <p class="webpage-content-text" v-html="webpage.content + '...'"></p>
+    </div>
+    <div class="all-projects-pages" v-if="webpagesCount > perPage">
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="webpagesCount">
+      </el-pagination>
+    </div>
     <transition name="fade">
       <div v-if="nothing" class="all-projects-nothing">
         <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
@@ -27,14 +33,18 @@ export default {
   data() {
     return {
       webpages: [],
+      perPage: 12
     }
   },
   mixins: [TabMixin],
   async mounted() {
-    await this.targetPage()
+    await this.targetPage(1)
     this.loading = false
   },
   computed: {
+    origin() {
+      return window.location.origin + '/'
+    },
     webpagesData() {
       let hits = _.get(this.webpages, 'hits', [])
       return _.map(hits, i => {
@@ -50,15 +60,17 @@ export default {
       return _.get(this.webpages, 'total', 0)
     },
     nothing() {
-      return this.webpagesCount === 0  && !this.loading
+      return this.webpagesCount === 0 && !this.loading
     }
   },
   methods: {
-    async targetPage() {
+    async targetPage(targetPage) {
       this.loading = true
       this.$nextTick(async () => {
         await EsAPI.webpages
           .getWebpages({
+            page: targetPage,
+            per_page: this.perPage,
             q: this.searchKey,
             sort: this.sortProjects
           })
@@ -78,13 +90,34 @@ export default {
   &-content {
     background: #fff;
     padding: 8px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    display: block;
-    text-decoration: none;
+    margin-bottom: 16px;
     color: #212224;
     .red {
       color: red;
+    }
+    &-top {
+      cursor: pointer;
+      &:hover {
+        .webpage-content-top-title {
+          text-decoration: underline;
+        }
+      }
+      &-title {
+        color: #409efe;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        display: block;
+        margin: 10px 0;
+      }
+      &-url {
+        text-decoration: none;
+        color: rgb(100, 218, 150);
+      }
+    }
+    &-text{
+      color: #909399;
+      font-size: 14px;
     }
   }
 }

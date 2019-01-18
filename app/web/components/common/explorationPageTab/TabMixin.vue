@@ -17,6 +17,9 @@ export default {
           if (key === 'id') {
             return name.join().replace(/<span>/g, `<span class="red">#`)
           }
+          if (key === 'content') {
+            return name.join('...').replace(/<span>/g, `<span class="red">`)
+          }
           return name.join().replace(/<span>/g, `<span class="red">`)
         }
       }
