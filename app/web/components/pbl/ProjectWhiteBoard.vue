@@ -1,39 +1,46 @@
 <template>
   <div class="project-white-board">
     <div class="project-white-board-content">
-      <div class="project-white-board-content-header">
-        <div class="search">
+      <div class="project-white-board-header">
+        <div class="project-white-board-header-search">
           <el-input size="medium" :placeholder="$t('project.searchMethod')" v-model="searchKeyWord" class="input-with-select" @keyup.enter.native="searchIssue">
             <el-button slot="append" icon="el-icon-search" @click="searchIssue"></el-button>
           </el-input>
         </div>
-        <div class="filter hidden-sm-and-down">
+        <div class="project-white-board-header-filter hidden-sm-and-down">
           {{$t("project.filter")}}：
-          <span class="rank" @click="showAllIssues"><span class="rank-tip">{{$t("project.all")}}({{issuesOpenCount + issuesCloseCount}})</span></span>
-          <span class="rank" @click="showUnfinishedIssues"><i class="iconfont icon-warning-circle-fill"></i><span class="rank-tip">{{$t("project.inProgress")}} ({{issuesOpenCount}})</span></span>
-          <span class="rank" @click="showFinishedIssues"><i class="iconfont icon-check-circle-fill"></i><span class="rank-tip">{{$t("project.finished")}} ({{issuesCloseCount}})</span></span>
+          <span class="project-white-board-header-rank" @click="showAllIssues">{{$t("project.all")}}({{issuesOpenCount + issuesCloseCount}})</span>
+          <span class="project-white-board-header-rank" @click="showUnfinishedIssues">
+            <i class="iconfont icon-warning-circle-fill"></i>{{$t("project.inProgress")}} ({{issuesOpenCount}})
+          </span>
+          <span class="project-white-board-header-rank" @click="showFinishedIssues">
+            <i class="iconfont icon-check-circle-fill"></i>{{$t("project.finished")}} ({{issuesCloseCount}})
+          </span>
         </div>
-        <div class="new-issue-btn">
-          <el-button type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ {{$t("project.createNewIssue")}}</el-button>
-        </div>
+        <el-button class="project-white-board-header-new" type="primary" :disabled="isProhibitEdit" size="medium" @click="goNewIssue">+ {{$t("project.createNewIssue")}}</el-button>
       </div>
-      <div class="project-white-board-content-list">
-        <div class="single-issue" v-for="(issue,index) in projectIssues" :key="index">
-          <div class="single-issue-brief">
-            <div class="single-issue-brief-title" @click="goIssueDetail(issue)">
-              <i :class="['title-icon','iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
-              <span class="title-text" :title="issue.title">{{issue.title}}</span><span class="title-number">#{{issue.no}}</span>
+      <div class="project-white-board-list">
+        <div class="project-white-board-list-item" v-for="(issue,index) in projectIssues" :key="index">
+          <div class="project-white-board-list-brief">
+            <div class="project-white-board-list-title" @click="goIssueDetail(issue)">
+              <i :class="['iconfont', issue.state == 0 ? 'icon-warning-circle-fill':'icon-check-circle-fill']"></i>
+              <span class="project-white-board-list-text" :title="issue.title">{{issue.title}}</span>
+              <span class="project-white-board-list-number">#{{issue.no}}</span>
             </div>
-            <div class="single-issue-brief-intro">
-              <span class="created-time">{{isEn ? $t('common.update') : ''}} {{relativeTime(issue.updatedAt)}}{{isEn ? '' : $t('common.update')}}</span>
-              <span class="created-by">{{$t("project.createBy")}}<span class="name">{{issue.user.username}}</span>{{$t("project.created")}}</span>
-              <div class="created-tag">
-                <span class="tag" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
+            <div class="project-white-board-list-intro">
+              <span class="project-white-board-list-time">{{isEn ? $t('common.update') : ''}} {{relativeTime(issue.updatedAt)}}{{isEn ? '' : $t('common.update')}}</span>
+              <span class="project-white-board-list-creator">
+                {{$t("project.createBy")}}
+                <span class="project-white-board-list-creator-name">{{issue.user.username}}</span>
+                {{$t("project.created")}}
+              </span>
+              <div class="project-white-board-list-tags">
+                <span class="project-white-board-list-tags-item" v-for="(tag,i) in issueTagArr(issue)" :key="i">{{tag}}</span>
               </div>
             </div>
           </div>
-          <div class="single-issue-join  hidden-sm-and-down" v-if="issue.assigns.length > 0">
-            <img class="player-portrait" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
+          <div class="project-white-board-list-asignees  hidden-sm-and-down" v-if="issue.assigns.length > 0">
+            <img class="project-white-board-list-asignees-item" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
           </div>
         </div>
       </div>
@@ -41,11 +48,8 @@
     <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
     <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
     <div class="all-issue-pages" v-if="issuesCount > perPage">
-      <div class="block">
-        <span class="demonstration"></span>
-        <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="issuesCount">
-        </el-pagination>
-      </div>
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="issuesCount">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -229,7 +233,7 @@ export default {
       return obj1.updatedAt >= obj2.updatedAt ? -1 : 1
     },
     issueTagArr(issue) {
-      if(_.get(issue, 'tags', '')){
+      if (_.get(issue, 'tags', '')) {
         return _.get(issue, 'tags', '').split('|')
       }
     }
@@ -239,12 +243,6 @@ export default {
 
 <style lang="scss">
 .project-white-board {
-  .el-select .el-input {
-    min-width: 90px;
-  }
-  .el-input-group__append {
-    background: #fff;
-  }
   background: #f5f5f5;
   padding: 24px 0 120px;
   &-content {
@@ -253,131 +251,131 @@ export default {
     border: 1px solid #e8e8e8;
     box-sizing: border-box;
     margin: 0 auto;
-    &-header {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      border-bottom: 1px solid #e8e8e8;
-      .search {
-        width: 340px;
-      }
-      .filter {
-        flex: 1;
-        font-size: 12px;
-        padding-left: 40px;
-        display: flex;
-        align-items: center;
-        .rank {
-          margin-left: 14px;
-          display: inline-flex;
-          align-items: center;
-          .icon-check-circle-fill {
-            color: #62e08f;
-            font-size: 20px;
-            margin-right: 4px;
-          }
-          .icon-warning-circle-fill {
-            color: #f3b623;
-            font-size: 20px;
-            margin-right: 4px;
-          }
-          &-tip {
-            cursor: pointer;
-            &:hover {
-              color: #409eff;
-            }
-          }
-        }
-      }
-      .new-issue-btn {
-        width: 116px;
-        text-align: right;
+  }
+  &-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid #e8e8e8;
+    &-search {
+      width: 340px;
+      .el-input-group__append {
+        background: #fff;
       }
     }
-    &-list {
-      width: 100%;
-      .single-issue {
-        padding: 6px 16px;
-        display: flex;
-        border-bottom: 1px solid #f5f5f5;
-        &-brief {
-          flex: 1;
-          &-title {
-            display: flex;
-            align-items: center;
-            line-height: 35px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            .title-icon {
-              font-size: 22px;
-              &.icon-warning-circle-fill {
-                color: #f3b623;
-                margin-right: 13px;
-              }
-              &.icon-check-circle-fill {
-                color: #62e08f;
-                margin-right: 13px;
-              }
-            }
-            .title-text {
-              cursor: pointer;
-              display: inline-block;
-              max-width: 80%;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-            .title-number {
-              color: #909399;
-              margin-left: 10px;
-            }
-          }
-          &-intro {
-            padding-left: 35px;
-            font-size: 12px;
-            .created-time {
-              color: #909399;
-              margin-right: 8px;
-            }
-            .created-by {
-              color: #909399;
-              margin-right: 20px;
-              .name {
-                color: #409eff;
-              }
-            }
-            .created-tag {
-              display: inline-block;
-              .tag {
-                background: #eee;
-                color: #909399;
-                display: inline-block;
-                padding: 2px 4px;
-                border-radius: 2px;
-                margin-right: 5px;
-              }
-            }
-          }
-        }
-        &-join {
-          width: 300px;
-          display: flex;
-          align-items: center;
-          flex-direction: row-reverse;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          .player-portrait {
-            width: 24px;
-            height: 24px;
-            object-fit: cover;
-            border: 1px solid #eee;
-            border-radius: 50%;
-            margin-right: 5px;
-          }
-        }
+    &-filter {
+      flex: 1;
+      font-size: 12px;
+      padding-left: 40px;
+      display: flex;
+      align-items: center;
+    }
+    &-rank {
+      margin-left: 14px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      .icon-check-circle-fill {
+        color: #62e08f;
+        font-size: 20px;
+        margin-right: 4px;
+      }
+      .icon-warning-circle-fill {
+        color: #f3b623;
+        font-size: 20px;
+        margin-right: 4px;
+      }
+      &:hover {
+        color: #409eff;
+      }
+    }
+    &-new {
+      width: 116px;
+    }
+  }
+  &-list {
+    width: 100%;
+    &-item {
+      padding: 6px 16px;
+      display: flex;
+      color: #909399;
+      border-bottom: 1px solid #f5f5f5;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    &-brief {
+      flex: 1;
+    }
+    &-title {
+      display: flex;
+      align-items: center;
+      line-height: 35px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      .iconfont {
+        font-size: 22px;
+        margin-right: 13px;
+      }
+      .icon-warning-circle-fill {
+        color: #f3b623;
+      }
+      .icon-check-circle-fill {
+        color: #62e08f;
+      }
+    }
+    &-text {
+      cursor: pointer;
+      display: inline-block;
+      max-width: 80%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #303133;
+    }
+    &-number {
+      margin-left: 10px;
+    }
+    &-intro {
+      padding-left: 35px;
+      font-size: 12px;
+    }
+    &-time {
+      margin-right: 8px;
+    }
+    &-creator {
+      margin-right: 20px;
+      &-name {
+        color: #409eff;
+      }
+    }
+    &-tags {
+      display: inline-block;
+      &-item {
+        background: #eee;
+        display: inline-block;
+        padding: 2px 4px;
+        border-radius: 2px;
+        margin-right: 5px;
+      }
+    }
+    &-asignees {
+      width: 300px;
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      &-item {
+        width: 24px;
+        height: 24px;
+        object-fit: cover;
+        border: 1px solid #eee;
+        border-radius: 50%;
+        margin-right: 5px;
       }
     }
   }
@@ -387,4 +385,3 @@ export default {
   }
 }
 </style>
-
