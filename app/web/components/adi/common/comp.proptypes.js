@@ -22,12 +22,11 @@ import AdiCategoryList from './categoryList/categoryList.proptypes'
 import AdiPageSwitching from './pageSwitching/pageSwitching.proptypes'
 import AdiIcon from './icon/icon.proptypes'
 import AdiImg from './img/img.proptypes'
-
 import AdiLesson from './lesson/lesson.proptypes'
 import AdiQuiz from './quiz/quiz.proptypes'
 import AdiHint from './hint/hint.proptypes'
-
 import AdiProject from './project/project.proptypes'
+import AdiPpt from './ppt/ppt.proptypes'
 
 export default {
   AdiMarkdown,
@@ -57,5 +56,6 @@ export default {
   AdiLesson,
   AdiQuiz,
   AdiHint,
-  AdiProject
+  AdiProject,
+  AdiPpt
 }

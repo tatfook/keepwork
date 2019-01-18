@@ -13267,6 +13267,11 @@ release-zalgo@^1.0.0:
   dependencies:
     es6-error "^4.0.1"
 
+remove-markdown@^0.3.0:
+  version "0.3.0"
+  resolved "http://registry.npm.taobao.org/remove-markdown/download/remove-markdown-0.3.0.tgz#5e4b667493a93579728f3d52ecc1db9ca505dc98"
+  integrity sha1-XktmdJOpNXlyjz1S7MHbnKUF3Jg=
+
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/remove-trailing-separator/download/remove-trailing-separator-1.1.0.tgz#c24bce2a283adad5bc3f58e0d48249b92379d8ef"
@@ -13459,6 +13464,10 @@ ret@~0.1.10:
   version "0.1.15"
   resolved "http://registry.npm.taobao.org/ret/download/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha1-uKSCXVvbH8P29Twrwz+BOIaBx7w=
+
+"reveal.js@github:NPLFoshan/reveal.js#master":
+  version "3.7.0"
+  resolved "https://codeload.github.com/NPLFoshan/reveal.js/tar.gz/206cf28e64c780665cc0b816b1025e6d501915bc"
 
 rgb-regex@^1.0.1:
   version "1.0.1"

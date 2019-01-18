@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import ProjectCell from '../ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import TabMixin from './TabMixin'
@@ -30,9 +29,7 @@ export default {
     sortProjects: String
   },
   data() {
-    return {
-      loading: true
-    }
+    return {}
   },
   mixins: [TabMixin],
   async mounted() {
@@ -53,17 +50,21 @@ export default {
       let hits = _.get(this.allProjects, 'hits', [])
       return _.map(hits, i => {
         return {
-          id: this.searchKeyResult(i, 'id'),
+          id: i.id,
+          _id: this.searchKeyResult(i, 'id'),
           extra: { imageUrl: i.cover, videoUrl: i.video },
           name: this.searchKeyResult(i, 'name'),
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
           user: { username: i.username, portrait: i.user_portrait || '' },
-          updatedAt: i.updated_time,
-          createdAt: i.created_time,
+          updatedAt: i.updated_at,
+          createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
-          privilege: i.recruiting ? 1 : 0
+          privilege: i.recruiting ? 1 : 0,
+          choicenessNo: i.recommended ? 1 : 0,
+          rate: i.point || 0,
+          extra: { rate: { count: i.point ? 8 : 0 } }
         }
       })
     }
@@ -84,19 +85,7 @@ export default {
         this.loading = false
         this.$emit('getAmount', this.projectsCount)
       })
-    },
-    searchKeyResult(i, key) {
-      if (i.highlight) {
-        if (i.highlight[key]) {
-          let name = _.get(i.highlight, key, i[key])
-          return name.join().replace(/<span>/g, `<span class="red">`)
-        }
-      }
-      return i[key]
     }
-  },
-  components: {
-    ProjectCell
   }
 }
 </script>

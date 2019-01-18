@@ -1,12 +1,12 @@
-export const MOD_CMD_BEGIN_REG = /^```@[\w/]*$/
-export const MOD_CMD_END_REG = /^```$/
-export const MARKDOWN_CMD = 'Markdown'
-export const MOD_CMD_BEGIN = '```@'
-export const MOD_CMD_END = '```'
-export const MARKDOWN_CMD_END = '----'
-export const MOD_PARACRAFT = 'Paracraft'
+const MOD_CMD_BEGIN_REG = /^```@[\w/]*$/
+const MOD_CMD_END_REG = /^```$/
+const MARKDOWN_CMD = 'Markdown'
+const MOD_CMD_BEGIN = '```@'
+const MOD_CMD_END = '```'
+const MARKDOWN_CMD_END = '----'
+const MOD_PARACRAFT = 'Paracraft'
 
-export const cmdList = [
+const cmdList = [
   'Markdown',
   'IFrame',
   'Title',
@@ -33,24 +33,25 @@ export const cmdList = [
   'Lesson',
   'Quiz',
   'Hint',
-  'Project'
+  'Project',
+  'Ppt'
 ]
 
-export const oldCmdMapper = {
+const oldCmdMapper = {
   'paracraft': 'Paracraft',
   'wiki/js/world3D': 'Paracraft',
   'board/main': 'Board',
   'wiki/js/bigfile': 'BigFile'
 }
 
-export const isNewCmd = (cmd) => {
+const isNewCmd = (cmd) => {
   for (let key in cmdList) {
     if (cmdList[key].toLowerCase() === cmd.toLowerCase()) return true
   }
   return false
 }
 
-export const isOldCmd = (cmd) => {
+const isOldCmd = (cmd) => {
   if (cmd === MOD_PARACRAFT) {
     return false
   }
@@ -61,15 +62,15 @@ export const isOldCmd = (cmd) => {
   return false
 }
 
-export const isValidCmd = (cmd) => {
+const isValidCmd = (cmd) => {
   return isOldCmd(cmd) || isNewCmd(cmd)
 }
 
-export const isMarkdownCmd = (cmd) => {
+const isMarkdownCmd = (cmd) => {
   return cmd === MARKDOWN_CMD
 }
 
-export const standardCmd = (cmd) => {
+const standardCmd = (cmd) => {
   for (let key in oldCmdMapper) {
     if (key === cmd) return key
   }
@@ -79,14 +80,14 @@ export const standardCmd = (cmd) => {
   return ''
 }
 
-export const targetCmd = (cmd) => {
+const targetCmd = (cmd) => {
   for (let key in oldCmdMapper) {
     if (key === cmd) return oldCmdMapper[key]
   }
   return ''
 }
 
-export const isCmdLine = (line) => {
+const isCmdLine = (line) => {
   if (line && line.match(MOD_CMD_BEGIN_REG)) {
     const cmd = line.split('@')[1]
     if (isValidCmd(cmd)) return true
@@ -94,23 +95,30 @@ export const isCmdLine = (line) => {
   return false
 }
 
-export const parseCmd = (line) => {
+const parseCmd = (line) => {
   if (line && line.match(MOD_CMD_BEGIN_REG)) {
     const cmd = line.split('@')[1]
     if (isValidCmd(cmd)) return standardCmd(cmd)
   }
 }
 
-export const isCmdEnd = (line) => {
+const isCmdEnd = (line) => {
   return line && line.match(MOD_CMD_END_REG)
 }
 
-export default {
+module.exports = {
   isValidCmd,
   isOldCmd,
   isMarkdownCmd,
   targetCmd,
   isCmdLine,
   isCmdEnd,
-  parseCmd
+  parseCmd,
+  MOD_CMD_BEGIN_REG,
+  MOD_CMD_END_REG,
+  MARKDOWN_CMD,
+  MOD_CMD_BEGIN,
+  MOD_CMD_END,
+  MARKDOWN_CMD_END,
+  MOD_PARACRAFT,
 }

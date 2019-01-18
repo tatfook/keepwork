@@ -1,6 +1,6 @@
-import Board from './board'
-import Paracraft from './paracraft'
-import BigFile from './bigFile'
+const Board = require('./board')
+const Paracraft = require('./paracraft')
+const BigFile = require('./bigFile')
 
 const parsers = {
   Board,
@@ -13,4 +13,4 @@ const transfer = (md, cmd, targetCmd) => {
   if (parser) return parser.transfer(md, cmd)
 }
 
-export default { transfer }
+module.exports = { transfer }

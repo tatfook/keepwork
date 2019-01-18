@@ -12,8 +12,8 @@ const ChangePassword = () => import('@/components/profile/PersonalCenterComponen
 const ThirdPartyAccountBinding = () => import('@/components/profile/PersonalCenterComponents/ThirdPartyAccountBinding')
 const RealNameAuthentication = () => import('@/components/profile/PersonalCenterComponents/RealNameAuthentication')
 const LoginPage = () => import('@/components/profile/LoginPage')
-const Login = () => import('@/components/common/Login')
-const Register = () => import('@/components/common/Register')
+const LoginComp = () => import('@/components/common/LoginComp')
+const RegisterComp = () => import('@/components/common/RegisterComp')
 
 Vue.use(Router)
 
@@ -39,12 +39,12 @@ export default new Router({
         {
           path: 'login',
           name: 'Login',
-          component: Login
+          component: LoginComp
         },
         {
           path: 'register',
           name: 'Register',
-          component: Register
+          component: RegisterComp
         },
       ]
     },

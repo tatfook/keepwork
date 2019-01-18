@@ -35,5 +35,11 @@ module.exports = app => {
     'access'
   ]
 
+  exports.security = {
+    csrf: {
+      enable: false,
+    }
+  }
+
   return exports
 }

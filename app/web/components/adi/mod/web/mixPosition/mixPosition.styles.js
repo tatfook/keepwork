@@ -5,7 +5,7 @@ let emptyData = {
     emptyMedia: require('@/assets/adi/mixPosition/picture-mod.png'),
     link: '',
     target: '_blank',
-    autoplay: false,
+    autoplay: true,
     playloop: false,
     poster: ''
   },

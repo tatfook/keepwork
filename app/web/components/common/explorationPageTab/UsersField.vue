@@ -33,7 +33,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       default_portrait,
       userAllFollows: [],
       currentPage: 1
