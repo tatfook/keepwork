@@ -199,7 +199,6 @@ export default {
       })
       this.currentTabComp = key
       this.currentTab = key
-      console.log('this.currenttab', this.currentTab)
       this.currSortMode = this.$t('explore.overall')
       this.sortProjects = ''
     }
