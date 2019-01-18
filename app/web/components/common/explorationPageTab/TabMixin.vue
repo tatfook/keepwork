@@ -26,6 +26,9 @@ export default {
       if (key === 'id') {
         return '#' + i[key]
       }
+      if (key === 'content') {
+        return i[key].substring(0, 80) + '...'
+      }
       return i[key]
     }
   },
