@@ -49,7 +49,8 @@ export default {
       let hits = _.get(this.recruitongProjects, 'hits', [])
       return _.map(hits, i => {
         return {
-          id: this.searchKeyResult(i, 'id'),
+          id: i.id,
+          _id: this.searchKeyResult(i, 'id'),
           extra: { imageUrl: i.cover, videoUrl: i.video },
           name: this.searchKeyResult(i, 'name'),
           visit: i.total_view,
