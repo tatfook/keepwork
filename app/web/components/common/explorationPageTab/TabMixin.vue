@@ -26,7 +26,7 @@ export default {
       if (key === 'id') {
         return '#' + i[key]
       }
-      if (key === 'content') {
+      if (key === 'content' && i[key].length > 80) {
         return i[key].substring(0, 80) + '...'
       }
       return i[key]
