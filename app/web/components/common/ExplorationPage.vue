@@ -89,8 +89,8 @@ export default {
   name: 'ExplorationPage',
   data() {
     return {
-      activeTabIndex: 'AllProjects',
-      currentTab: 'AllProjects',
+      activeTabIndex: 'allProjects',
+      currentTab: 'allProjects',
       searchKey: '',
       sortProjects: '',
       currSortMode: this.$t('explore.overall'),
