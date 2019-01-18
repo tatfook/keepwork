@@ -5,7 +5,7 @@
         <a :href="webpage.url" target="_blank" class="webpage-content-top-title" v-html="webpage.title"></a>
         <a :href="webpage.url" target="_blank" class="webpage-content-top-url" v-html="origin + webpage.url_html"></a>
       </div>
-      <p v-html="webpage.content + '...'"></p>
+      <p class="webpage-content-text" v-html="webpage.content + '...'"></p>
     </div>
     <div class="all-projects-pages" v-if="webpagesCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="webpagesCount">
@@ -114,6 +114,10 @@ export default {
         text-decoration: none;
         color: rgb(100, 218, 150);
       }
+    }
+    &-text{
+      color: #909399;
+      font-size: 14px;
     }
   }
 }
