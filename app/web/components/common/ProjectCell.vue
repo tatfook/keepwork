@@ -98,10 +98,10 @@ export default {
         : require('@/assets/pblImg/copper.png')
     },
     projectRate() {
-      return this.project.rate.toFixed(2)
+      return this.project.rate.toFixed(1)
     },
     showRate() {
-      return this.project.type == 1 && this.projectRate > 0
+      return this.project.type == 1 && this.projectRate > 0 && _.get(this.project.extra.rate, 'count', 0) >= 8
     }
   },
   methods: {
