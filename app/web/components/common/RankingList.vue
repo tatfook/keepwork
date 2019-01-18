@@ -40,7 +40,7 @@ export default {
         .getProjects({
           'x-order': 'rate-desc',
           'x-per-page': 100,
-          'type':0,
+          type: 1
         })
         .then(res => {
           this.ranking = res
