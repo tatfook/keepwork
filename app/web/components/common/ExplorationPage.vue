@@ -75,12 +75,12 @@
 <script>
 import PickedProjects from './explorationPageTab/PickedProjects'
 import AllProjects from './explorationPageTab/AllProjects'
-import Paracraft from './explorationPageTab/Paracraft'
-import Website from './explorationPageTab/Website'
-import Course from './explorationPageTab/Course'
-import Recruiting from './explorationPageTab/Recruiting'
-import Users from './explorationPageTab/Users'
-import Webpage from './explorationPageTab/Webpage'
+import ParacraftField from './explorationPageTab/ParacraftField'
+import WebsiteField from './explorationPageTab/WebsiteField'
+import CourseField from './explorationPageTab/CourseField'
+import RecruitingField from './explorationPageTab/RecruitingField'
+import UsersField from './explorationPageTab/UsersField'
+import WebpageField from './explorationPageTab/WebpageField'
 import { EsAPI } from '@/api'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
@@ -99,12 +99,12 @@ export default {
       tabBar: [
         { command: 'pickedProjects', tag: this.$t('home.selectedProjects') },
         { command: 'allProjects', tag: this.$t('explore.project') },
-        { command: 'paracraft', tag: this.$t('explore.3DWorlds') },
-        { command: 'website', tag: this.$t('explore.websites') },
-        { command: 'course', tag: this.$t('explore.lessons') },
-        { command: 'users', tag: this.$t('explore.uses') },
-        { command: 'webpage', tag: this.$t('editor.website') },
-        { command: 'recruiting', tag: this.$t('explore.recruiting') }
+        { command: 'paracraftField', tag: this.$t('explore.3DWorlds') },
+        { command: 'websiteField', tag: this.$t('explore.websites') },
+        { command: 'courseField', tag: this.$t('explore.lessons') },
+        { command: 'usersField', tag: this.$t('explore.uses') },
+        { command: 'webpageField', tag: this.$t('editor.website') },
+        { command: 'recruitingField', tag: this.$t('explore.recruiting') }
       ]
     }
   },
@@ -132,11 +132,11 @@ export default {
       if (
         this.currentTab === 'pickedProjects' ||
         'allProjects' ||
-        'paracraft' ||
-        'website' ||
-        'course' ||
-        'recruiting' ||
-        'webpage'
+        'paracraftField' ||
+        'websiteField' ||
+        'courseField' ||
+        'recruitingField' ||
+        'webpageField'
       ) {
         return [
           { mode: this.$t('explore.overall'), command: '/综合' },
@@ -144,7 +144,7 @@ export default {
           { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
         ]
       }
-      if (this.currentTab === 'users') {
+      if (this.currentTab === 'usersField') {
         return [
           { mode: this.$t('explore.overall'), command: '/综合' },
           {
@@ -199,12 +199,12 @@ export default {
   components: {
     PickedProjects,
     AllProjects,
-    Paracraft,
-    Website,
-    Course,
-    Recruiting,
-    Users,
-    Webpage
+    ParacraftField,
+    WebsiteField,
+    CourseField,
+    RecruitingField,
+    UsersField,
+    WebpageField
   }
 }
 </script>

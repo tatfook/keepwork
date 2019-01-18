@@ -18,7 +18,7 @@ import _ from 'lodash'
 import { keepwork } from '@/api'
 
 export default {
-  name: 'Ranking',
+  name: 'RankingList',
   data() {
     return {
       loading: true,

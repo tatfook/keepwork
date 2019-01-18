@@ -19,7 +19,7 @@ import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
 
 export default {
-  name: 'Webpage',
+  name: 'WebpageField',
   props: {
     searchKey: String,
     sortProjects: String
