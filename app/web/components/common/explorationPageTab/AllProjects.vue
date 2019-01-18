@@ -29,8 +29,7 @@ export default {
     sortProjects: String
   },
   data() {
-    return {
-    }
+    return {}
   },
   mixins: [TabMixin],
   async mounted() {
@@ -64,7 +63,8 @@ export default {
           type: i.type === 'site' ? 0 : 1,
           privilege: i.recruiting ? 1 : 0,
           choicenessNo: i.recommended ? 1 : 0,
-          rate: i.point || 0
+          rate: i.point || 0,
+          extra: { rate: { count: i.point ? 8 : 0 } }
         }
       })
     }
