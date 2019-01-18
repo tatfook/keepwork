@@ -51,7 +51,6 @@ export default {
         return {
           id: i.id,
           _id: this.searchKeyResult(i, 'id'),
-          extra: { imageUrl: i.cover, videoUrl: i.video },
           name: this.searchKeyResult(i, 'name'),
           visit: i.total_view,
           star: i.total_like,
@@ -63,7 +62,11 @@ export default {
           privilege: i.recruiting ? 1 : 2,
           choicenessNo: i.recommended ? 1 : 0,
           rate: i.point || 0,
-          extra: { rate: { count: i.point ? 8 : 0 } }
+          extra: {
+            imageUrl: i.cover,
+            videoUrl: i.video,
+            rate: { count: i.point ? 8 : 0 }
+          }
         }
       })
     }
