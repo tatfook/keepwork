@@ -39,7 +39,8 @@ export default {
       keepwork.projects
         .getProjects({
           'x-order': 'rate-desc',
-          'x-per-page': 100
+          'x-per-page': 100,
+          'type':0,
         })
         .then(res => {
           this.ranking = res
