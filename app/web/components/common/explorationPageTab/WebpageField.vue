@@ -115,9 +115,10 @@ export default {
         color: rgb(100, 218, 150);
       }
     }
-    &-text{
+    &-text {
       color: #909399;
       font-size: 14px;
+      word-break: break-all;
     }
   }
 }
