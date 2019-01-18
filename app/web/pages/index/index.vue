@@ -86,7 +86,7 @@ export default {
     }
   },
   async created() {
-    // await this.loadEditorPresets()
+    await this.loadEditorPresets()
     this.presetLoaded = true
     // await this.updateActivePage()
   },
