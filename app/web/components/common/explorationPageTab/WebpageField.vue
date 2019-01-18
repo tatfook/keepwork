@@ -118,7 +118,7 @@ export default {
     &-text {
       color: #909399;
       font-size: 14px;
-      word-break: break-all;
+      word-break: break-word;
     }
   }
 }
