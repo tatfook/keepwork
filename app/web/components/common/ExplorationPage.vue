@@ -129,19 +129,26 @@ export default {
       website: 'pbl/website'
     }),
     currSortColumn() {
-      if (
-        this.currentTab === 'pickedProjects' ||
-        'allProjects' ||
-        'paracraftField' ||
-        'websiteField' ||
-        'courseField' ||
-        'recruitingField' ||
-        'webpageField'
-      ) {
+      let tabs = [
+        'pickedProjects',
+        'allProjects',
+        'paracraftField',
+        'websiteField',
+        'courseField',
+        'recruitingField'
+      ]
+      if (tabs.includes(this.currentTab)) {
         return [
           { mode: this.$t('explore.overall'), command: '/综合' },
           { mode: this.$t('explore.newest'), command: 'updated_at/最新' },
           { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
+        ]
+      }
+      if (this.currentTab === 'webpageField') {
+        return [
+          { mode: this.$t('explore.overall'), command: '/综合' },
+          { mode: this.$t('explore.newest'), command: 'updated_at/最新' }
+          // { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
         ]
       }
       if (this.currentTab === 'usersField') {
@@ -192,6 +199,7 @@ export default {
       })
       this.currentTabComp = key
       this.currentTab = key
+      console.log('this.currenttab', this.currentTab)
       this.currSortMode = this.$t('explore.overall')
       this.sortProjects = ''
     }
