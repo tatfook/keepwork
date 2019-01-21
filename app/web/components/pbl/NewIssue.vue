@@ -1,53 +1,46 @@
 <template>
-  <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="new-issue-dialog">
-    <div class="new-issue">
-      <div class="title">{{$t('project.createNewIssueTitle')}}</div>
-      <div class="sketch">
-        <div class="sketch-box">
-          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t("project.title")}}</div>
-          <div class="sketch-box-content">
-            <el-input size="medium" v-model="issueTitle" :placeholder='$t("project.pleaseInputTitle")'></el-input>
-          </div>
-        </div>
-        <div class="sketch-box">
-          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.labels')}}</div>
-          <div class="sketch-box-content" v-loading='isTagLoading'>
-            <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">
-              {{tag}}
-            </el-tag>
-            <el-input class="input-new-tag" v-if="inputVisible" maxlength="40" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
-            </el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ {{$t('project.newLabel')}}</el-button>
-          </div>
-        </div>
-        <div class="sketch-box">
-          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.asignees')}}</div>
-          <div class="sketch-box-content">
-            <div class="player">
-              <img v-for="(member,index) in assignedMembers" :key="index" class="player-portrait" :src="member.portrait || default_portrait" alt="">
-              <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
-                <span class="el-dropdown-link">
-                  <span class="assigns-btn"></span>
-                </span>
-                <el-dropdown-menu slot="dropdown" class="new-issue-assign">
-                  <el-dropdown-item v-if="memberList.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
-                  <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-          </div>
-        </div>
-        <div class="sketch-box">
-          <div class="sketch-box-tag" :class="{'sketch-box-tag-en': isEn}">{{$t('project.write')}}</div>
-          <div class="sketch-box-content">
-            <el-input type="textarea" :rows="4" v-model="descriptionText" :placeholder="$t('project.writeAComment')"></el-input>
-          </div>
+  <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="new-issue">
+    <div class="new-issue-title">{{$t('project.createNewIssueTitle')}}</div>
+    <div class="new-issue-sketch">
+      <div class="new-issue-sketch-item">
+        <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t("project.title")}}</div>
+        <div class="new-issue-sketch-content">
+          <el-input size="medium" v-model="issueTitle" :placeholder='$t("project.pleaseInputTitle")'></el-input>
         </div>
       </div>
-      <div class="finish">
-        <el-button size="medium" :loading="cretateIssueLoading" type="primary" @click="finishedCreateIssue" :disabled="!issueTitle || !descriptionText">{{$t('project.submitIssue')}}</el-button>
+      <div class="new-issue-sketch-item">
+        <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t('project.labels')}}</div>
+        <div class="new-issue-sketch-content" v-loading='isTagLoading'>
+          <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">{{tag}}</el-tag>
+          <el-input class="new-issue-sketch-new-input" v-if="inputVisible" :maxlength="tagMaxLength" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
+          <el-button v-else size="small" @click="showInput">+ {{$t('project.newLabel')}}</el-button>
+        </div>
+      </div>
+      <div class="new-issue-sketch-item">
+        <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t('project.asignees')}}</div>
+        <div class="new-issue-sketch-content new-issue-sketch-asignee">
+          <img v-for="(member,index) in assignedMembers" :key="index" class="new-issue-sketch-asignee-portrait" :src="member.portrait || default_portrait" alt="">
+          <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
+            <span class="el-icon-plus"></span>
+            <el-dropdown-menu slot="dropdown" class="new-issue-sketch-asignee-dropdown">
+              <el-dropdown-item v-if="memberList.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
+              <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId">
+                <i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i>
+                <img class="new-issue-sketch-asignee-dropdown-portrait" :src="member.portrait || default_portrait" alt="">
+                {{member.nickname || member.username}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+      <div class="new-issue-sketch-item">
+        <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t('project.write')}}</div>
+        <div class="new-issue-sketch-content">
+          <el-input type="textarea" :rows="4" v-model="descriptionText" :placeholder="$t('project.writeAComment')" resize="none"></el-input>
+        </div>
       </div>
     </div>
+    <el-button class="new-issue-finish" size="medium" :loading="cretateIssueLoading" type="primary" @click="finishedCreateIssue" :disabled="!issueTitle || !descriptionText">{{$t('project.submitIssue')}}</el-button>
   </el-dialog>
 </template>
 <script>
@@ -69,6 +62,7 @@ export default {
   },
   data() {
     return {
+      tagMaxLength: 40,
       issueTitle: '',
       dynamicTags: [],
       inputVisible: false,
@@ -209,120 +203,113 @@ export default {
 }
 </script>
 <style lang="scss">
-.new-issue-dialog {
+.new-issue {
   .el-dialog {
     max-width: 600px;
-    .el-dialog__header {
-      padding: 0;
-    }
-    .el-dialog__body {
-      padding: 6px 20px;
-    }
-  }
-
-  .new-issue {
     margin: 0 auto;
     background: #fff;
-    .title {
+  }
+  .el-dialog__header {
+    padding: 0;
+  }
+  .el-dialog__body {
+    padding: 6px 20px;
+  }
+  &-title {
+    line-height: 60px;
+    font-size: 16px;
+    color: #303133;
+    padding-left: 4px;
+    font-weight: bold;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 12px;
+  }
+  &-sketch {
+    padding-left: 6px;
+    &-item {
+      display: flex;
       line-height: 60px;
-      font-size: 16px;
-      color: #303133;
-      padding-left: 4px;
-      font-weight: bold;
-      border-bottom: 1px solid #e8e8e8;
       max-width: 600px;
-      margin-bottom: 12px;
     }
-    .sketch {
-      padding-left: 6px;
-      &-box {
-        display: flex;
-        line-height: 60px;
-        max-width: 600px;
-        &-tag {
-          width: 52px;
-          font-size: 14px;
-          color: #909399;
-          &-en {
-            width: 80px;
-          }
-        }
-        &-content {
-          flex: 1;
-          .el-tag + .el-tag {
-            margin-left: 10px;
-          }
-          .input-new-tag {
-            margin-bottom: 4px;
-            display: inline-block;
-            width: 60px;
-            height: 20px;
-            padding: 0;
-            .el-input__inner {
-              padding: 0 8px;
-            }
-          }
-          .player {
-            line-height: 38px;
-            margin-bottom: 8px;
-            &-portrait {
-              width: 36px;
-              height: 36px;
-              margin: 8px 6px 0 0;
-              border-radius: 50%;
-              border: 1px solid #e8e8e8;
-            }
-            .assigns-btn {
-              width: 36px;
-              height: 36px;
-              border-radius: 50%;
-              border: 1px solid #e8e8e8;
-              display: inline-block;
-              position: relative;
-              margin-top: 8px;
-              &::after {
-                content: "";
-                height: 16px;
-                width: 1px;
-                background: #6e6d6d;
-                position: absolute;
-                left: 17px;
-                top: 10px;
-              }
-              &::before {
-                content: "";
-                height: 1px;
-                width: 16px;
-                background: #6e6d6d;
-                position: absolute;
-                left: 10px;
-                top: 17px;
-              }
-            }
-          }
-        }
+    &-label {
+      width: 52px;
+      font-size: 14px;
+      color: #909399;
+      &-en {
+        width: 80px;
       }
     }
-    .finish {
-      padding: 24px 68px;
+    &-content {
+      flex: 1;
+      .el-tag + .el-tag {
+        margin-left: 10px;
+      }
+      .player {
+        line-height: 38px;
+        margin-bottom: 8px;
+      }
+    }
+    &-asignee {
+      line-height: 38px;
+      margin-bottom: 8px;
+      &-portrait {
+        vertical-align: middle;
+        width: 36px;
+        height: 36px;
+        margin: 8px 6px 0 0;
+        border-radius: 50%;
+        border: 1px solid #e8e8e8;
+      }
+      &-dropdown {
+        &-portrait {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          margin-right: 10px;
+          object-fit: cover;
+        }
+        .el-dropdown-menu__item {
+          display: flex;
+          align-items: center;
+          position: relative;
+        }
+        .el-icon-check {
+          position: absolute;
+          left: 4px;
+        }
+      }
+      .el-icon-plus {
+        top: 8px;
+        position: relative;
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        color: #6e6d6d;
+        border: 1px solid #e8e8e8;
+        text-align: center;
+        border-radius: 50%;
+        line-height: 36px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+    }
+    &-new-input {
+      margin-bottom: 4px;
+      display: inline-block;
+      width: 60px;
+      height: 20px;
+      padding: 0;
+      .el-input__inner {
+        padding: 0 8px;
+      }
     }
   }
-}
-.new-issue-assign {
-  .member-portrait {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-  }
-  .el-dropdown-menu__item {
-    display: flex;
-    align-items: center;
+  &-finish {
+    margin: 24px 58px;
   }
 }
 @media screen and (max-width: 768px) {
-  .new-issue-dialog {
+  .new-issue {
     .el-dialog {
       width: 90%;
     }
