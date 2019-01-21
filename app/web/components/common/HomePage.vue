@@ -109,7 +109,7 @@
             <span class="star">
               <img src="@/assets/img/hp_hot_lesson.png" alt="">
             </span>{{$t("home.hotLessons")}}</div>
-          <div class="more" @click="viewMore('course')">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('courseField')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
