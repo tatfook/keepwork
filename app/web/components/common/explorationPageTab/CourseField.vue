@@ -5,14 +5,14 @@
         <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="lessonPackagesCount > perPage">
+    <div class="course-tab-pages" v-if="lessonPackagesCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="lessonPackagesCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="all-projects-nothing">
-        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-if="nothing" class="course-tab-nothing">
+        <img class="course-tab-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="course-tab-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
@@ -31,13 +31,13 @@ export default {
   },
   data() {
     return {
-      lessonPackages: [],
+      loading: true,
+      lessonPackages: []
     }
   },
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
-    this.loading = false
   },
   computed: {
     nothing() {
@@ -49,18 +49,8 @@ export default {
     lessonPackagesData() {
       let tempArr = _.get(this.lessonPackages, 'hits', [])
       let Arr = _.forEach(tempArr, i => {
-        if (i.highlight) {
-          if (i.highlight.title) {
-            let name = _.get(i.highlight, 'title', i.title)
-            name = name.join().replace(/<span>/g, `<span class="red">`)
-            i.title = name
-          }
-          if (i.highlight.description) {
-            let desc = _.get(i.highlight, 'description', i.description)
-            desc = desc.join().replace(/<span>/g, `<span class="red">`)
-            i.description = desc
-          }
-        }
+        i.title = this.searchKeyResult(i, 'title')
+        i.description = this.searchKeyResult(i, 'description')
       })
       return Arr
     }
@@ -90,4 +80,34 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.course-tab {
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+  &-nothing {
+    min-height: 500px;
+    text-align: center;
+    &-img {
+      margin: 128px 0 32px;
+    }
+    &-tip {
+      color: #606266;
+      font-size: 14px;
+    }
+  }
+}
+</style>
+
 

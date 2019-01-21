@@ -1,18 +1,18 @@
 <template>
-  <div class="website" v-loading="loading">
+  <div class="website-field" v-loading="loading">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in websiteData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="websiteCount > perPage">
+    <div class="website-field-pages" v-if="websiteCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="websiteCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="all-projects-nothing">
-        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-if="nothing" class="website-field-nothing">
+        <img class="website-field-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="website-field-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
@@ -30,12 +30,12 @@ export default {
   },
   data() {
     return {
+      loading: true
     }
   },
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
-    this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -97,4 +97,33 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.website-field {
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+  &-nothing {
+    min-height: 500px;
+    text-align: center;
+    &-img {
+      margin: 128px 0 32px;
+    }
+    &-tip {
+      color: #606266;
+      font-size: 14px;
+    }
+  }
+}
+</style>
 

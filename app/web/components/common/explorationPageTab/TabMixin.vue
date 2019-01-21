@@ -4,7 +4,6 @@ import ProjectCell from '../ProjectCell'
 export default {
   data() {
     return {
-      loading: true,
       perPage: 20,
       page: 1
     }
