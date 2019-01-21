@@ -8,17 +8,10 @@
         <main>
           <el-button class="add-layout-btn" icon="el-icon-plus" type="text" @click.stop="addLayout">{{$t('editor.addLayout')}}</el-button>
           <div class="website-setting-layout-list">
-            <div
-              v-for='(layout) in siteLayoutsMap'
-              :key='layout.id'
-              class="website-setting-layout-item"
-              :class="{
-                active: selectedLayoutId==layout.id,
-                is_default: unsavedDefaultLayoutId==layout.id
-              }"
-              @click.stop="selectLayout(layout)"
-              :ref="'layout' + layout.id"
-            >
+            <div v-for='(layout) in siteLayoutsMap' :key='layout.id' class="website-setting-layout-item" :class="{
+                'active': selectedLayoutId==layout.id,
+                'is_default': unsavedDefaultLayoutId==layout.id
+              }" @click.stop="selectLayout(layout)" :ref="'layout' + layout.id">
               <div v-if="selectedLayoutNameEdittable && selectedLayoutId==layout.id" class="input-state">
                 <el-form class="website-setting-name" :model="layoutForm" :rules="layoutFormRules" ref="layoutNameForm">
                   <el-form-item prop="name">
@@ -31,26 +24,11 @@
                   {{ layout.name }}
                 </label>
                 <span class="display-state-btns">
-                  <el-button
-                    class="default-btn"
-                    :class="{is_default: unsavedDefaultLayoutId==layout.id}"
-                    size="mini" type="text"
-                    @click.stop="setDefault(layout)"
-                    icon="iconfont icon-default"
-                    :title="$t('editor.default')">
+                  <el-button class="default-btn" :class="{'is_default': unsavedDefaultLayoutId==layout.id}" size="mini" type="text" @click.stop="setDefault(layout)" icon="iconfont icon-default" :title="$t('editor.default')">
                   </el-button>
-                  <el-button
-                    size="mini" type="text"
-                    @click.stop="editLayout(layout)"
-                    icon="iconfont icon-edit-"
-                    :title="$t('editor.rename')">
+                  <el-button size="mini" type="text" @click.stop="editLayout(layout)" icon="iconfont icon-edit-" :title="$t('editor.rename')">
                   </el-button>
-                  <el-button
-                    size="mini"
-                    type="text"
-                    @click.stop="removeLayout(layout)"
-                    icon="iconfont icon-delete"
-                    :title="$t('editor.delete')">
+                  <el-button size="mini" type="text" @click.stop="removeLayout(layout)" icon="iconfont icon-delete" :title="$t('editor.delete')">
                   </el-button>
                 </span>
               </div>
@@ -72,13 +50,7 @@
         </header>
         <main>
           <div class="website-setting-styles-main">
-            <div
-              v-for='(styleComponent, name) in stylesList'
-              :key='name'
-              class="website-setting-style-item"
-              :class="{active: selectedLayoutStyleName==name}"
-              @click.stop="selectStyle(name, styleComponent)"
-              >
+            <div v-for='(styleComponent, name) in stylesList' :key='name' class="website-setting-style-item" :class="{'active': selectedLayoutStyleName==name}" @click.stop="selectStyle(name, styleComponent)">
               <component :is='styleComponent.component'>
                 <div slot='header'>{{$t('editor.header')}}</div>
                 <div slot='footer'>{{$t('editor.footer')}}</div>
@@ -97,12 +69,8 @@
           <el-form class="website-setting-config" :model="layoutForm" :rules="layoutFormRules" ref="layoutConfigForm">
             <el-form-item v-show="headerSelect" prop="header">
               <label>{{$t('editor.header')}}</label>
-              <el-select  size="small" v-model="layoutForm.header" filterable clearable>
-                <el-option
-                  v-for="fileName in getAvailableContentFileNames('header')"
-                  :key="fileName"
-                  :label="fileName"
-                  :value="fileName">
+              <el-select size="small" v-model="layoutForm.header" filterable clearable>
+                <el-option v-for="fileName in getAvailableContentFileNames('header')" :key="fileName" :label="fileName" :value="fileName">
                 </el-option>
               </el-select>
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('header')"></el-button>
@@ -110,11 +78,7 @@
             <el-form-item v-show="sidebarSelect" prop="sidebar">
               <label>{{$t('editor.aside')}}</label>
               <el-select size="small" v-model="layoutForm.sidebar" filterable clearable>
-                <el-option
-                  v-for="fileName in getAvailableContentFileNames('sidebar')"
-                  :key="fileName"
-                  :label="fileName"
-                  :value="fileName">
+                <el-option v-for="fileName in getAvailableContentFileNames('sidebar')" :key="fileName" :label="fileName" :value="fileName">
                 </el-option>
               </el-select>
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('sidebar')"></el-button>
@@ -122,11 +86,7 @@
             <el-form-item v-show="footerSelect" prop="footer">
               <label>{{$t('editor.footer')}}</label>
               <el-select size="small" v-model="layoutForm.footer" filterable clearable>
-                <el-option
-                  v-for="fileName in getAvailableContentFileNames('footer')"
-                  :key="fileName"
-                  :label="fileName"
-                  :value="fileName">
+                <el-option v-for="fileName in getAvailableContentFileNames('footer')" :key="fileName" :label="fileName" :value="fileName">
                 </el-option>
               </el-select>
               <el-button icon="el-icon-plus" @click.stop="addLayoutContentFile('footer')"></el-button>
@@ -141,7 +101,7 @@
         </main>
       </el-col>
     </el-row>
-    <DialogOperations class="website-setting-layout-operations" @save="handleSave" @close="handleClose"></DialogOperations>
+    <dialog-operations class="website-setting-layout-operations" @save="handleSave" @close="handleClose"></dialog-operations>
   </div>
 </template>
 
@@ -158,7 +118,7 @@ const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 export default {
   name: 'WebsiteSettingLayout',
   props: {
-    sitePath: String,
+    sitePath: String
   },
   data() {
     let nameValidator = (rule, value, callback) => {
@@ -214,29 +174,48 @@ export default {
       }
     },
     userSiteLayoutConfigClone() {
-      let userSiteLayoutConfig = this.userSiteLayoutConfigBySitePath(this.sitePath)
+      let userSiteLayoutConfig = this.userSiteLayoutConfigBySitePath(
+        this.sitePath
+      )
       return _.cloneDeep(userSiteLayoutConfig)
     },
     userSiteLayoutsMapClone() {
-      return _.keyBy(_.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'layouts'], []), 'id')
+      return _.keyBy(
+        _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'layouts'], []),
+        'id'
+      )
     },
     userSiteDefaultLayoutId() {
-      return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'defaultLayoutId'], NaN)
+      return _.get(
+        this.userSiteLayoutConfigClone,
+        ['layoutConfig', 'defaultLayoutId'],
+        NaN
+      )
     },
     userSiteDefaultIsSystemHeaderHide() {
-      return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'isSystemHeaderHide'], false)
+      return _.get(
+        this.userSiteLayoutConfigClone,
+        ['layoutConfig', 'isSystemHeaderHide'],
+        false
+      )
     },
     userSiteDefaultIsSystemFooterHide() {
-      return _.get(this.userSiteLayoutConfigClone, ['layoutConfig', 'isSystemFooterHide'], false)
+      return _.get(
+        this.userSiteLayoutConfigClone,
+        ['layoutConfig', 'isSystemFooterHide'],
+        false
+      )
     },
     allSiteLayoutsMap() {
       return _.merge({}, this.userSiteLayoutsMapClone, this.updatedLayoutsMap)
     },
     allUnsavedLayouts() {
-      return _.values(_.pickBy(
-        this.allSiteLayoutsMap,
-        ({ id, deleted }) => this.userSiteLayoutsMapClone[id] || !deleted
-      ))
+      return _.values(
+        _.pickBy(
+          this.allSiteLayoutsMap,
+          ({ id, deleted }) => this.userSiteLayoutsMapClone[id] || !deleted
+        )
+      )
     },
     siteLayoutsMap() {
       return _.pickBy(this.allSiteLayoutsMap, ({ deleted }) => !deleted)
@@ -245,12 +224,14 @@ export default {
       return _.values(this.siteLayoutsMap)[0]
     },
     defaultLayout() {
-      return _.values(this.siteLayoutsMap).filter(i => i.id === this.userSiteDefaultLayoutId)[0]
+      return _.values(this.siteLayoutsMap).filter(
+        i => i.id === this.userSiteDefaultLayoutId
+      )[0]
     },
     unsavedDefaultLayoutId() {
       const defaultLayoutIdIsLegal = id => {
         // lodash keys return a string array
-        return _.keys(this.siteLayoutsMap).indexOf(id+'') > -1
+        return _.keys(this.siteLayoutsMap).indexOf(id + '') > -1
       }
       let firstLayoutId = _.get(this.firstLayout, 'id', NaN)
       let idCandidates = [
@@ -281,17 +262,26 @@ export default {
       let selectedLayout = this.selectedLayout
       return {
         name: _.get(selectedLayout, 'name', ''),
-        header: _.get(selectedLayout, ['content', 'header'], '').replace(/\.md$/,''),
-        sidebar: _.get(selectedLayout, ['content', 'sidebar'], '').replace(/\.md$/,''),
-        footer: _.get(selectedLayout, ['content', 'footer'], '').replace(/\.md$/,''),
+        header: _.get(selectedLayout, ['content', 'header'], '').replace(
+          /\.md$/,
+          ''
+        ),
+        sidebar: _.get(selectedLayout, ['content', 'sidebar'], '').replace(
+          /\.md$/,
+          ''
+        ),
+        footer: _.get(selectedLayout, ['content', 'footer'], '').replace(
+          /\.md$/,
+          ''
+        ),
         match: _.get(selectedLayout, 'match', '')
       }
     }
   },
   async mounted() {
     await Promise.all([
-      this.gitlabGetRepositoryTree({path: this.sitePath}),
-      this.userGetSiteLayoutConfig({path: this.sitePath})
+      this.gitlabGetRepositoryTree({ path: this.sitePath }),
+      this.userGetSiteLayoutConfig({ path: this.sitePath })
     ]).catch(e => {
       console.error(e)
       this.loading = false
@@ -325,7 +315,7 @@ export default {
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       gitlabCreateFile: 'gitlab/createFile'
     }),
-    changeHeaderHide(val){
+    changeHeaderHide(val) {
       this.unsavedDefaultIsSystemFooterHide = val
     },
     addLayout() {
@@ -342,7 +332,7 @@ export default {
         return this.$message({
           message: this.$t('editor.theLayoutIsInUse'),
           type: 'error',
-          center:true
+          center: true
         })
       }
 
@@ -350,7 +340,7 @@ export default {
         return this.$message({
           message: this.$t('editor.keepOneLayout'),
           type: 'warning',
-          center:true
+          center: true
         })
       }
       Vue.set(this.updatedLayoutsMap, layout.id, {
@@ -369,19 +359,21 @@ export default {
       this.firstLayout && this.selectLayout(this.firstLayout)
     },
     selectDefaultLayout() {
-      this.defaultLayout ? this.selectLayout(this.defaultLayout) : this.selectFirstLayout()
+      this.defaultLayout
+        ? this.selectLayout(this.defaultLayout)
+        : this.selectFirstLayout()
     },
     resetLayoutForm() {
       _.merge(this.layoutForm, this.selectedLayoutForm)
     },
-    hideSelect({header , sidebar , footer }){
+    hideSelect({ header, sidebar, footer }) {
       this.headerSelect = header
       this.sidebarSelect = sidebar
       this.footerSelect = footer
     },
     selectStyle(styleName, component) {
       this.hideSelect(component)
-      this.updateSelectedLayout({styleName})
+      this.updateSelectedLayout({ styleName })
     },
     updateSelectedLayout(updatedInfo) {
       Vue.set(
@@ -407,30 +399,46 @@ export default {
       await this.$nextTick()
       try {
         let layoutItemDOM = this.$refs[`layout${this.selectedLayoutId}`]
-        layoutItemDOM = _.isArray(layoutItemDOM) ? layoutItemDOM[0] : layoutItemDOM
+        layoutItemDOM = _.isArray(layoutItemDOM)
+          ? layoutItemDOM[0]
+          : layoutItemDOM
         layoutItemDOM.querySelector('input').focus()
       } catch (e) {}
     },
     getAvailableContentFileNames(contentKey) {
-      let contentFolderPath = LayoutHelper.layoutContentFolderPath(this.sitePath, contentKey)
+      let contentFolderPath = LayoutHelper.layoutContentFolderPath(
+        this.sitePath,
+        contentKey
+      )
       let childNames = this.gitlabChildNamesByPath(contentFolderPath)
       return childNames
     },
     async addLayoutContentFile(contentKey) {
-      let newFileName = await this.newLayoutContentFileNamePrompt({contentKey})
+      let newFileName = await this.newLayoutContentFileNamePrompt({
+        contentKey
+      })
       newFileName = suffixFileExtension(newFileName, 'md')
-      let contentFolderPath = LayoutHelper.layoutContentFolderPath(this.sitePath, contentKey)
+      let contentFolderPath = LayoutHelper.layoutContentFolderPath(
+        this.sitePath,
+        contentKey
+      )
       let newFilePath = `${contentFolderPath}/${newFileName}`
       this.loading = true
-      await this.gitlabCreateFile({ path: newFilePath, content: `# this is ${contentKey}` }).then(
-        async () => await this.gitlabGetRepositoryTree({ path: this.sitePath })
-      ).catch(e => {
-        console.error(e)
-        this.loading = false
+      await this.gitlabCreateFile({
+        path: newFilePath,
+        content: `# this is ${contentKey}`
       })
+        .then(
+          async () =>
+            await this.gitlabGetRepositoryTree({ path: this.sitePath })
+        )
+        .catch(e => {
+          console.error(e)
+          this.loading = false
+        })
       this.loading = false
     },
-    async newLayoutContentFileNamePrompt({contentKey}) {
+    async newLayoutContentFileNamePrompt({ contentKey }) {
       let self = this
       let childNames = this.getAvailableContentFileNames(contentKey)
 
@@ -444,8 +452,10 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return `${what} ${self.$t('editor.emptyName')}`
-            if (!gitFilenameValidator(value)) return `${what} ${self.$t('editor.nameRule')}`
-            if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
+            if (!gitFilenameValidator(value))
+              return `${what} ${self.$t('editor.nameRule')}`
+            if (childNames.indexOf(value) > -1)
+              return self.$t('editor.nameExist')
             return true
           }
         }
@@ -476,7 +486,7 @@ export default {
       this.disalbeSelectedLayoutNameEdittable()
     }
   },
-  components:{
+  components: {
     DialogOperations
   }
 }
@@ -487,7 +497,7 @@ export default {
   display: flex;
   $column-height: auto;
   height: 100%;
-  &-layout-list{
+  &-layout-list {
     overflow: auto;
   }
   &-layout {
@@ -503,7 +513,7 @@ export default {
   &-layout-system {
     border-top: 1px solid #bcbcbc;
     padding-top: 16px;
-    p{
+    p {
       margin: 0 0 10px 0;
     }
   }
@@ -511,16 +521,17 @@ export default {
     height: 32px;
     margin-bottom: 10px;
     cursor: pointer;
-    border: 1px solid #BCBCBC;
+    border: 1px solid #bcbcbc;
     border-radius: 4px;
     &.active {
-      border: 1px solid #1890FF;
+      border: 1px solid #1890ff;
     }
-    .input-state, .display-state {
+    .input-state,
+    .display-state {
       height: 100%;
     }
     .input-state {
-      [class*="el-form"] {
+      [class*='el-form'] {
         height: 100%;
         line-height: initial;
       }
@@ -542,7 +553,7 @@ export default {
         text-overflow: ellipsis;
         width: 0;
       }
-      &-btns{
+      &-btns {
         white-space: nowrap;
       }
     }
@@ -559,7 +570,7 @@ export default {
         justify-content: center;
         border-radius: 50%;
         &:hover {
-          background: #ECEDF0;
+          background: #ecedf0;
         }
       }
       .default-btn {
@@ -571,7 +582,10 @@ export default {
       }
     }
   }
-  &-layouts, &-styles, &-layoutconfig, &-btns {
+  &-layouts,
+  &-styles,
+  &-layoutconfig,
+  &-btns {
     padding: 20px;
     height: $column-height;
     h1 {
@@ -601,7 +615,8 @@ export default {
   &-layoutconfig {
     border-right: 15px solid #cdd4db;
   }
-  &-styles, &-layoutconfig {
+  &-styles,
+  &-layoutconfig {
     padding-bottom: 0;
     padding-left: 0;
     padding-right: 0;
@@ -628,7 +643,8 @@ export default {
     }
   }
   &-layoutconfig {
-    .el-textarea, textarea {
+    .el-textarea,
+    textarea {
       min-height: 70px !important;
     }
   }
@@ -638,20 +654,24 @@ export default {
       overflow-y: auto;
       overflow-x: hidden;
     }
-    .el-header, .el-footer, .el-aside, .el-main {
+    .el-header,
+    .el-footer,
+    .el-aside,
+    .el-main {
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    .el-header, .el-footer {
-      background: #B3C0D1 !important;
+    .el-header,
+    .el-footer {
+      background: #b3c0d1 !important;
     }
     .el-aside {
       max-width: 50px !important;
-      background: #D3DCE6 !important;
+      background: #d3dce6 !important;
     }
     .el-main {
-      background: #E4EEF3;
+      background: #e4eef3;
     }
     .maxwidth-template {
       .el-main {
@@ -664,10 +684,10 @@ export default {
   &-style-item {
     height: 120px;
     margin-bottom: 10px;
-    border: 5px solid #E4EEF3;
-    background: #E4EEF3;
+    border: 5px solid #e4eef3;
+    background: #e4eef3;
     &.active {
-      border: 5px solid #1989FA;
+      border: 5px solid #1989fa;
     }
   }
   &-layoutconfig {
@@ -677,7 +697,7 @@ export default {
       label {
         flex: 0 0 60px;
         text-align: right;
-        padding-right:6px;
+        padding-right: 6px;
       }
       button {
         margin-left: 6px;
@@ -690,8 +710,9 @@ export default {
       height: 26px;
       padding: 0;
       border: 0;
-      &:hover, &:focus {
-        background: #C0C4CC;
+      &:hover,
+      &:focus {
+        background: #c0c4cc;
         color: black;
       }
     }
@@ -706,7 +727,7 @@ export default {
       margin: 15px 0 0 !important;
     }
   }
-  &-layout-operations{
+  &-layout-operations {
     width: 120px;
   }
 }
