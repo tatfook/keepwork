@@ -1,18 +1,18 @@
 <template>
-  <div class="course-tab" v-loading="loading">
+  <div class="course-field" v-loading="loading">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in lessonPackagesData" :key="index">
         <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
       </el-col>
     </el-row>
-    <div class="course-tab-pages" v-if="lessonPackagesCount > perPage">
+    <div class="course-field-pages" v-if="lessonPackagesCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="lessonPackagesCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-show="nothing" class="course-tab-nothing">
-        <img class="course-tab-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="course-tab-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-show="nothing" class="course-field-nothing">
+        <img class="course-field-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="course-field-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
@@ -81,7 +81,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.course-tab {
+.course-field {
   .fade-enter-active {
     transition: opacity 2s;
   }
