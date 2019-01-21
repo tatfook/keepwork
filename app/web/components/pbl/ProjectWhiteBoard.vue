@@ -72,7 +72,6 @@ export default {
       showNewIssue: false,
       showIssueDetail: false,
       searchKeyWord: '',
-      select: '',
       default_portrait,
       selectedIssue: {},
       perPage: 25,
@@ -81,8 +80,6 @@ export default {
     }
   },
   props: {
-    isBoardViewForMember: Boolean,
-    isBoardEditForMember: Boolean,
     isProhibitView: {
       type: Boolean,
       default: false
@@ -179,12 +176,8 @@ export default {
         'x-per-page': this.perPage,
         'x-page': page,
         'x-order': 'createdAt-desc',
-        state: this.state
-      }
-      if (this.searchKeyWord) payload['text-like'] = `%${this.searchKeyWord}%`
-      if (this.state === null) {
-        let { state, ..._payload } = payload
-        return await this.getProjectIssues(_payload)
+        'text-like': this.searchKeyWord ? `%${this.searchKeyWord}%` : undefined,
+        state: _.isNull(this.state) ? undefined : this.state
       }
       await this.getProjectIssues(payload)
     },
