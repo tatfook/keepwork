@@ -10,7 +10,7 @@
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="paracraft-field-nothing">
+      <div v-show="nothing" class="paracraft-field-nothing">
         <img class="paracraft-field-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
         <p class="paracraft-field-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
