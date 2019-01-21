@@ -1,18 +1,18 @@
 <template>
-  <div class="picked-projects">
+  <div class="picked-projects" v-loading="loading">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pickedProjectsData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="pickedProjectsCount > perPage">
+    <div class="picked-projects-pages" v-if="pickedProjectsCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="pickedProjectsCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="all-projects-nothing">
-        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-show="nothing" class="picked-projects-nothing">
+        <img class="picked-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="picked-projects-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
@@ -30,13 +30,13 @@ export default {
   },
   data() {
     return {
+      loading: true,
       pickedProjects: []
     }
   },
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
-    this.loading = false
   },
   computed: {
     nothing() {
@@ -94,4 +94,34 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.picked-projects {
+  min-height: 500px;
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+  &-nothing {
+    text-align: center;
+    &-img {
+      margin: 128px 0 32px;
+    }
+    &-tip {
+      color: #606266;
+      font-size: 14px;
+    }
+  }
+}
+</style>
+
 

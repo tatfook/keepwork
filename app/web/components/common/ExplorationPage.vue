@@ -383,33 +383,6 @@ export default {
     font-size: 18px;
     margin: 20px 30px;
   }
-  .fade-enter-active {
-    transition: opacity 2s;
-  }
-  .fade-leave-active {
-    transition: opacity 0.5s;
-  }
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  }
-  .all-projects {
-    &-pages {
-      margin-top: 40px;
-      text-align: center;
-    }
-    &-nothing {
-      min-height: 500px;
-      text-align: center;
-      &-img {
-        margin: 128px 0 32px;
-      }
-      &-tip {
-        color: #606266;
-        font-size: 14px;
-      }
-    }
-  }
 }
 @media screen and (max-width: 768px) {
   .exploration-page {

@@ -1,18 +1,18 @@
 <template>
-  <div class="paracraft" v-loading="loading">
+  <div class="paracraft-field" v-loading="loading">
     <el-row>
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="paracraftCount > perPage">
+    <div class="paracraft-field-pages" v-if="paracraftCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="paracraftCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="all-projects-nothing">
-        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-show="nothing" class="paracraft-field-nothing">
+        <img class="paracraft-field-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="paracraft-field-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
@@ -30,12 +30,12 @@ export default {
   },
   data() {
     return {
+      loading: true
     }
   },
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
-    this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -97,4 +97,34 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.paracraft-field {
+  min-height: 500px;
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+  &-nothing {
+    text-align: center;
+    &-img {
+      margin: 128px 0 32px;
+    }
+    &-tip {
+      color: #606266;
+      font-size: 14px;
+    }
+  }
+}
+</style>
+
 

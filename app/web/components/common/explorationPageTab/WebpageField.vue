@@ -1,20 +1,20 @@
 <template>
-  <div class="webpage" v-loading="loading">
-    <div class="webpage-content" v-for="(webpage,index) in webpagesData" :key="index">
-      <div class="webpage-content-top">
-        <a :href="webpage.url" target="_blank" class="webpage-content-top-title" v-html="webpage.title"></a>
-        <a :href="webpage.url" target="_blank" class="webpage-content-top-url" v-html="origin + webpage.url_html"></a>
+  <div class="webpage-field" v-loading="loading">
+    <div class="webpage-field-content" v-for="(webpage,index) in webpagesData" :key="index">
+      <div class="webpage-field-content-top">
+        <a :href="webpage.url" target="_blank" class="webpage-field-content-top-title" v-html="webpage.title"></a>
+        <a :href="webpage.url" target="_blank" class="webpage-field-content-top-url" v-html="origin + webpage.url_html"></a>
       </div>
-      <p class="webpage-content-text" v-html="webpage.content"></p>
+      <p class="webpage-field-content-text" v-html="webpage.content"></p>
     </div>
-    <div class="all-projects-pages" v-if="webpagesCount > perPage">
+    <div class="webpage-field-pages" v-if="webpagesCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="webpagesCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="all-projects-nothing">
-        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-show="nothing" class="webpage-field-nothing">
+        <img class="webpage-field-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="webpage-field-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
@@ -32,6 +32,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       webpages: [],
       perPage: 12
     }
@@ -39,7 +40,6 @@ export default {
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(1)
-    this.loading = false
   },
   computed: {
     origin() {
@@ -86,7 +86,8 @@ export default {
 }
 </script>
 <style lang="scss">
-.webpage {
+.webpage-field {
+  min-height: 500px;
   &-content {
     background: #fff;
     padding: 8px;
@@ -98,7 +99,7 @@ export default {
     &-top {
       cursor: pointer;
       &:hover {
-        .webpage-content-top-title {
+        .webpage-field-content-top-title {
           text-decoration: underline;
         }
       }
@@ -119,6 +120,30 @@ export default {
       color: #909399;
       font-size: 14px;
       word-break: break-word;
+    }
+  }
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+  &-nothing {
+    text-align: center;
+    &-img {
+      margin: 128px 0 32px;
+    }
+    &-tip {
+      color: #606266;
+      font-size: 14px;
     }
   }
 }

@@ -10,7 +10,7 @@
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-if="nothing" class="all-projects-nothing">
+      <div v-show="nothing" class="all-projects-nothing">
         <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
         <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
@@ -29,12 +29,13 @@ export default {
     sortProjects: String
   },
   data() {
-    return {}
+    return {
+      loading: true
+    }
   },
   mixins: [TabMixin],
   async mounted() {
     await this.targetPage(this.page)
-    this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -48,7 +49,7 @@ export default {
     },
     allProjectsDataOptimize() {
       let hits = _.get(this.allProjects, 'hits', [])
-      const data = _.map(hits, i => {
+      return _.map(hits, i => {
         return {
           id: i.id,
           _id: this.searchKeyResult(i, 'id'),
@@ -70,7 +71,6 @@ export default {
           }
         }
       })
-      return data
     }
   },
   methods: {
@@ -93,7 +93,34 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.all-projects {
+  min-height: 500px;
+  .fade-enter-active {
+    transition: opacity 2s;
+  }
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  &-pages {
+    margin-top: 40px;
+    text-align: center;
+  }
+  &-nothing {
+    text-align: center;
+    &-img {
+      margin: 128px 0 32px;
+    }
+    &-tip {
+      color: #606266;
+      font-size: 14px;
+    }
+  }
+}
 </style>
 
 
