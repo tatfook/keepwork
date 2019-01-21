@@ -95,6 +95,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .all-projects {
+  min-height: 500px;
   .fade-enter-active {
     transition: opacity 2s;
   }
@@ -110,7 +111,6 @@ export default {
     text-align: center;
   }
   &-nothing {
-    min-height: 500px;
     text-align: center;
     &-img {
       margin: 128px 0 32px;

@@ -87,6 +87,7 @@ export default {
 </script>
 <style lang="scss">
 .webpage-field {
+  min-height: 500px;
   &-content {
     background: #fff;
     padding: 8px;
@@ -136,7 +137,6 @@ export default {
     text-align: center;
   }
   &-nothing {
-    min-height: 500px;
     text-align: center;
     &-img {
       margin: 128px 0 32px;
