@@ -26,6 +26,9 @@ const ModQuiz = () => import('./web/quiz')
 const ModProject = () => import('./web/project')
 const ModPpt = () => import('./web/ppt')
 
+const ModMixLayerList = () => import('./list/mixLayerList')
+const ModTextMixLayerList = () => import('./group/textMixLayerList')
+
 export const modList = {
   ModMarkdown,
   ModIFrame,
@@ -53,7 +56,10 @@ export const modList = {
   ModLesson,
   ModQuiz,
   ModProject,
-  ModPpt
+  ModPpt,
+
+  ModMixLayerList,
+  ModTextMixLayerList
 }
 
 export const load = async modName => {

@@ -28,6 +28,9 @@ import ModProject from './web/project'
 import ModIframe from './common/iframe'
 import ModPpt from './web/ppt'
 
+import ModMixLayerList from './list/mixLayerList'
+import ModTextMixLayerList from './group/textMixLayerList'
+
 export const modList = {
   ModMarkdown,
   ModIFrame,
@@ -57,7 +60,10 @@ export const modList = {
   ModHint,
   ModProject,
   ModIframe,
-  ModPpt
+  ModPpt,
+
+  ModMixLayerList,
+  ModTextMixLayerList
 }
 
 export const load = modName => {

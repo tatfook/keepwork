@@ -1,9 +1,9 @@
 <template>
   <div v-if='editMode' @click.stop.prevent='onEditProperty' @dblclick='onDblclickProperty' :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :editMode='editMode' :options='compOptions' />
+    <component v-if='isDisplay' :is='basicComp' :rootMod='rootMod' :property='property' :source='source' :theme='theme' :editMode='editMode' :options='compOptions'/>
   </div>
   <div v-else :class='classes'>
-    <component v-if='isDisplay' :is='basicComp' :source='source' :theme='theme' :options='compOptions' />
+    <component v-if='isDisplay' :is='basicComp' :rootMod='rootMod' :property='property' :source='source' :theme='theme' :options='compOptions' />
   </div>
 </template>
 
@@ -13,6 +13,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: {
+    rootMod: Object,
     mod: Object,
     modData: Object,
     theme: Object,
@@ -22,15 +23,39 @@ export default {
     editMode: Boolean,
     options: Object
   },
+  data() {
+    return {
+    }
+  },
   methods: {
     ...mapActions({
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
     }),
-    onEditProperty() {
-      this.$store.dispatch('setActiveProperty', {
-        key: this.mod.key,
-        property: this.property
-      })
+    async onEditProperty() {
+      if (this.mod.isSub) {
+        await this.$store.dispatch('setActiveMod', this.rootMod.key)
+        if(this.mod.index !== undefined) { // list mod
+          await this.$store.dispatch('updateActiveModAttributeList', {
+            key: this.mod.property,
+            action: 'EDIT',
+            index: this.mod.index
+          })
+        } else {
+          await this.$store.dispatch('setActiveSubMod', {
+            modType: this.mod.modType,
+            parentProperty: this.mod.property,
+            data: this.activeMod.data[this.mod.property]
+          })
+        }
+        this.$store.dispatch('setActiveProperty', {
+          property: this.property
+        })
+      } else {
+        this.$store.dispatch('setActiveProperty', {
+          key: this.rootMod.key,
+          property: this.property
+        })
+      }
     },
     onDblclickProperty() {
       if (this.compType === 'AdiMarkdown') {
@@ -47,7 +72,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activePageUrl: 'activePageUrl'
+      activePageUrl: 'activePageUrl',
+      activeMod: 'activeMod'
     }),
     basicComp() {
       return BasicComponents[this.compType]

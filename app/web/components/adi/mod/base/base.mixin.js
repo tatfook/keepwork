@@ -11,6 +11,7 @@ jss.setup(preset())
 const buildCompWrapper = (h, m, property, compType) => {
   return (
     <CompWrapper
+      rootMod={m.rootMod}
       mod={m.mod}
       modData={m.modData}
       property={property}
@@ -54,6 +55,7 @@ const renderTemplate = (h, m, template, root) => {
 
 export default {
   props: {
+    rootMod: Object,
     mod: Object,
     conf: Object,
     theme: Object,
@@ -265,6 +267,7 @@ export default {
           })
         }
       }
+
       return options
     },
     compWrapperOptions(name) {

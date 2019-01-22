@@ -21,16 +21,17 @@
       </el-col>
     </el-row>
     <el-row class="prop-item" v-show="isCardShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-      <component 
-        :is='proptypes[propItem]'
+      <component
+        :is='getPropType(propItem)'
         :prop='prop'
         :optionsData='optionsData'
         :editingKey='index'
         :originValue='cardValue[index]'
         :cardValue='cardValue'
+        :cardKey='cardKey'
         :activePropertyOptions='activePropertyOptions'
-        @onPropertyChange='changeProptyData'
-        @onChangeValue='changeActivePropty'></component>
+        @onPropertyChange='changePropertyData'
+        @onChangeValue='changeActiveProperty'></component>
     </el-row>
   </div>
 </template>
@@ -59,7 +60,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeMod: 'activeMod'
+      activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod'
     }),
     isCardShow: {
       get() {
@@ -100,12 +102,15 @@ export default {
     }
   },
   methods: {
+    getPropType(prop) {
+      return this.proptypes[prop]
+    },
     ...mapActions({
       setActiveProperty: 'setActiveProperty',
       setActivePropertyData: 'setActivePropertyData',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
     }),
-    changeActivePropty() {
+    changeActiveProperty() {
       this.setActiveProperty({
         key: this.activeMod.key,
         property: this.cardKey
@@ -124,12 +129,12 @@ export default {
       this.changeProtyDataThrottle(changedData)
     },
     toggleModVisible(value) {
-      this.changeProptyData({
+      this.changePropertyData({
         hidden: !value
       })
     },
     showMultiTextDailog() {
-      this.changeProptyData(this.cardValue)
+      this.changePropertyData(this.cardValue)
       this.setIsMultipleTextDialogShow({
         isShow: true
       })
