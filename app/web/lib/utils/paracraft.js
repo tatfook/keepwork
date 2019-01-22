@@ -15,12 +15,13 @@ const getUrl = ({
   paramA = '',
   paramB = '',
   usertoken = '',
+  kpProjectId,
   link = ''
 }) => {
   let env = getCurrentEnv()
   let actualUrl = env
-    ? `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}" env="${env}" cmd/loadworld ${link}`
-    : `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}" cmd/loadworld ${link}`
+    ? `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" kpProjectId="${kpProjectId}" usertoken="${usertoken}" env="${env}" cmd/loadworld ${link}`
+    : `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" kpProjectId="${kpProjectId}" usertoken="${usertoken}" cmd/loadworld ${link}`
   let encodeUrl = encodeURIComponent(actualUrl)
   return `${protocol}://${encodeUrl}`
 }
@@ -29,12 +30,13 @@ const getOpenUrl = ({
   protocol = 'paracraft',
   paramA = '',
   paramB = '',
+  kpProjectId,
   usertoken = ''
 }) => {
   let env = getCurrentEnv()
   let actualUrl = env
-    ? `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}" env="${env}" `
-    : `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" usertoken="${usertoken}"`
+    ? `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" kpProjectId="${kpProjectId}" usertoken="${usertoken}" env="${env}" `
+    : `protocol="${protocol}" paramA="${paramA}" paramB="${paramB}" kpProjectId="${kpProjectId}" usertoken="${usertoken}"`
   let encodeUrl = encodeURIComponent(actualUrl)
   return `${protocol}://${encodeUrl}`
 }

@@ -259,6 +259,7 @@ export default {
       let { archiveUrl, commitId } = this.originProjectDetail.world
       return paracraftUtil.getUrl({
         link: `${archiveUrl}?ref=${commitId}`,
+        kpProjectId: this.projectId,
         usertoken: this.userToken
       })
     },
