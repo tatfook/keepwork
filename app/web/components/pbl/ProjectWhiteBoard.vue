@@ -45,8 +45,8 @@
         </div>
       </div>
     </div>
-    <new-issue v-if="showNewIssue" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
+    <new-issue v-if="isNewIssueRendered" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
+    <issue-detail v-if="isIssueDetailRendered" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
     <div class="all-issue-pages" v-if="issuesCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="issuesCount">
       </el-pagination>
@@ -71,6 +71,8 @@ export default {
       projectIssues: [],
       showNewIssue: false,
       showIssueDetail: false,
+      isNewIssueRendered: false,
+      isIssueDetailRendered: false,
       searchKeyWord: '',
       default_portrait,
       selectedIssue: {},
@@ -190,6 +192,7 @@ export default {
         return this.toggleLoginDialog(true)
       }
       if (!this.isProhibitEdit) {
+        this.isNewIssueRendered = true
         this.showNewIssue = true
       }
     },
@@ -198,6 +201,7 @@ export default {
     },
     goIssueDetail(issue) {
       this.selectedIssue = issue
+      this.isIssueDetailRendered = true
       this.showIssueDetail = true
     },
     closeIssueDetail() {

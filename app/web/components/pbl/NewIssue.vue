@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="new-issue">
+  <el-dialog :visible.sync="show" :before-close="handleClose" class="new-issue">
     <div class="new-issue-title">{{$t('project.createNewIssueTitle')}}</div>
     <div class="new-issue-sketch">
       <div class="new-issue-sketch-item">
@@ -12,8 +12,8 @@
         <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t('project.labels')}}</div>
         <div class="new-issue-sketch-content" v-loading='isTagLoading'>
           <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleCloseTag(tag)">{{tag}}</el-tag>
-          <el-input class="new-issue-sketch-new-input" v-if="inputVisible" :maxlength="tagMaxLength" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
-          <el-button v-else size="small" @click="showInput">+ {{$t('project.newLabel')}}</el-button>
+          <el-input class="new-issue-sketch-new-input" v-show="inputVisible" :maxlength="tagMaxLength" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
+          <el-button v-show="!inputVisible" size="small" @click="showInput">+ {{$t('project.newLabel')}}</el-button>
         </div>
       </div>
       <div class="new-issue-sketch-item">
@@ -88,7 +88,7 @@ export default {
       return locale === 'en-US'
     },
     memberList() {
-      return this.pblProjectMemberList({ projectId: this.projectId })
+      return this.pblProjectMemberList({ projectId: this.projectId }) || []
     },
     assignMembersId() {
       let arrId = []
@@ -112,11 +112,26 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    async handleInputConfirm() {
-      let inputValue = this.inputValue
+    async checkSensitive(checkedWords) {
+      let sensitiveResult = await checkSensitiveWords({ checkedWords }).catch()
+      if (sensitiveResult && sensitiveResult.length > 0) return true
+      return false
+    },
+    checkTagValid(tagValue) {
+      if (tagValue.indexOf('|') !== -1) {
+        this.$message({
+          showClose: true,
+          message: '标签里不能包含|',
+          type: 'error'
+        })
+        return false
+      }
+      return true
+    },
+    checkTagWhetherExist(tagValue) {
       let isExistTagIndex = _.findIndex(
         this.dynamicTags,
-        tag => tag === inputValue
+        tag => tag === tagValue
       )
       if (isExistTagIndex !== -1) {
         this.$message({
@@ -124,80 +139,77 @@ export default {
           message: '该标签已存在',
           type: 'error'
         })
-        return
+        return true
       }
+      return false
+    },
+    async handleInputConfirm() {
+      this.inputValue = _.trim(this.inputValue, ' ')
+      let inputValue = this.inputValue
+      let isTagValid = this.checkTagValid(inputValue)
+      if (!isTagValid) return
+      let isTagExist = this.checkTagWhetherExist(inputValue)
+      if (isTagExist) return
       this.isTagLoading = true
-      let sensitiveResult = await checkSensitiveWords({
-        checkedWords: inputValue
-      }).catch()
+      let isSensitive = await this.checkSensitive(inputValue)
       this.isTagLoading = false
-      if (sensitiveResult && sensitiveResult.length > 0) {
-        return
-      }
-      if (inputValue) {
-        this.dynamicTags.push(inputValue)
-      }
+      if (isSensitive) return
+      if (inputValue) this.dynamicTags.push(inputValue)
       this.inputVisible = false
       this.inputValue = ''
     },
     handleClose() {
       this.$emit('close')
+      this.resetFormData()
     },
     handleCommand(userId) {
-      _.forEach(this.memberList, member => {
-        if (member.userId === userId) {
-          if (this.assignedMembers.length == 0) {
-            return this.assignedMembers.push(member)
-          }
-          let i
-          for (i = 0; i < this.assignedMembers.length; ++i) {
-            if (this.assignedMembers[i].userId === userId) {
-              break
-            }
-          }
-          if (i === this.assignedMembers.length) {
-            return this.assignedMembers.push(member)
-          }
-          this.assignedMembers.splice(i, 1)
-        }
-      })
+      let findedIndex = _.findIndex(this.assignedMembers, { userId })
+      if (findedIndex !== -1) {
+        return this.assignedMembers.splice(findedIndex, 1)
+      } else {
+        let targetMember = _.find(this.memberList, { userId })
+        return this.assignedMembers.push(targetMember)
+      }
     },
     async finishedCreateIssue() {
       this.cretateIssueLoading = true
-      this.$nextTick(async () => {
-        let sensitiveResult = await checkSensitiveWords({
-          checkedWords: [this.issueTitle, this.descriptionText]
-        }).catch()
-        if (sensitiveResult && sensitiveResult.length > 0) {
-          this.cretateIssueLoading = false
-          return
-        }
-        let payload = {
-          objectType: 5,
-          objectId: this.projectId,
-          title: this.issueTitle,
-          content: this.descriptionText,
-          tags: this.dynamicTags.join('|'),
-          assigns: this.assignMembersId
-        }
-        await keepwork.issues
-          .createIssue(payload)
-          .then(res => {
-            this.getProjectIssues({
-              objectId: this.projectId,
-              objectType: 5,
-              'x-per-page': 25,
-              'x-page': 1,
-              'x-order': 'createdAt-desc'
-            })
-            this.handleClose()
-            this.cretateIssueLoading = false
+      let isSensitive = await this.checkSensitive([
+        this.issueTitle,
+        this.descriptionText
+      ])
+      this.cretateIssueLoading = false
+      if (isSensitive) return
+      let payload = {
+        objectType: 5,
+        objectId: this.projectId,
+        title: this.issueTitle,
+        content: this.descriptionText,
+        tags: this.dynamicTags.join('|'),
+        assigns: this.assignMembersId
+      }
+      await keepwork.issues
+        .createIssue(payload)
+        .then(res => {
+          this.getProjectIssues({
+            objectId: this.projectId,
+            objectType: 5,
+            'x-per-page': 25,
+            'x-page': 1,
+            'x-order': 'createdAt-desc'
           })
-          .catch(err => console.error(err))
-      })
+          this.handleClose()
+          this.cretateIssueLoading = false
+        })
+        .catch(err => console.error(err))
     },
     isAssigned(member) {
       return this.assignedMembers.indexOf(member) !== -1 ? true : false
+    },
+    resetFormData() {
+      this.issueTitle = ''
+      this.dynamicTags = []
+      this.assignedMembers = []
+      this.descriptionText = ''
     }
   }
 }
