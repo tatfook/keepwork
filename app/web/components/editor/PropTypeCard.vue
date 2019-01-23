@@ -116,7 +116,7 @@ export default {
         property: this.cardKey
       })
     },
-    changeProptyData(changedData) {
+    changePropertyData(changedData) {
       if (!this.changeProtyDataThrottle) {
         this.changeProtyDataThrottle = _.throttle(changedData => {
           this.changeActivePropty()

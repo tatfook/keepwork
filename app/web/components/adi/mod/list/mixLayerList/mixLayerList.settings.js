@@ -4,7 +4,10 @@ export default {
   list: {
     modType: 'ModMixLayer',
     modSettings: {
-      style: 1
+      style: 1,
+      title: {
+        name: 'title'
+      }
     }
   }
 }
