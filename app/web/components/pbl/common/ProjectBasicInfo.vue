@@ -686,8 +686,6 @@ export default {
       }
     }
     &-content {
-      max-height: 280px;
-      overflow: auto;
       p {
         word-break: break-all;
       }
