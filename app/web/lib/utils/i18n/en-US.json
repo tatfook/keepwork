@@ -47,7 +47,7 @@
     "userAgreement": "Keepwork User Agreement",
 
     "another": "another",
-
+    "ranking": "Ranking List",
     "creativity": "Create",
     "explore": "Explore",
     "study": "Learn",
@@ -1568,7 +1568,7 @@
     "pageTemplateMenu": "Menu"
   },
   "account": {
-    "myAccount": "My Account",
+    "myAccount": "My Wallet",
     "userRmb": "RMB",
     "userCoin": "Coins",
     "locked": "Locked",
@@ -1635,8 +1635,8 @@
     "alipay": "Alipay",
     "proceedToCheckout": "Proceed to checkout",
     "rmbUnit": "￥{money}",
-    "beanUnit": "{money}Beans",
-    "coinUnit": "{money}Coins",
+    "beanUnit": "{money} beans",
+    "coinUnit": "{money} coins",
     "otherMoney": "Other amount",
     "payWith": "Pay with",
     "pleaseConfirm": "Please confirm",
@@ -1654,6 +1654,11 @@
      "willExpire": "Will expire soon",
      "backMyAccount": "Back to My Account",
      "returnOneCoupon": "You got one coupon of ",
-     "noAvailableCoupons": "No available coupons"
+     "noAvailableCoupons": "No available coupons",
+     "consumptionAmount": "Consumption Amount:",
+     "haqiBeans": "Haqi Beans:",
+     "rmbToHaqiBeans": "1RMB = 10 Haqi Beans",
+     "haqiBeansCount": "{count} Haqi Beans",
+     "forMoreInformation": "For more information, please contact QQ: {qq}"
   }
 }

@@ -3,6 +3,9 @@
 </template>
 <script>
 export default {
-  name: 'PblIndex'
+  name: 'PblIndex',
+  mounted() {
+    window.location.href = window.location.origin
+  }
 }
 </script>

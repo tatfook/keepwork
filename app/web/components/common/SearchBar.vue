@@ -45,7 +45,7 @@ export default {
       _.forIn(searchParams, (value, key) => {
         searchParamsArr.push(`${key}=${value}`)
       })
-      let searchUrl = encodeURI(`/exploration?${searchParamsArr.join('&')}`)
+      let searchUrl = encodeURI(`/exploration?tab=allProjects&${searchParamsArr.join('&')}`)
       window.location.href = searchUrl
     }
   }

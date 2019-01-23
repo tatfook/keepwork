@@ -102,7 +102,6 @@ export default {
     },
     async closeSkyDriveManagerDialog({ file, url }) {
       this.isMediaSkyDriveDialogShow = false
-
       if (url && this.basicMessage && this.basicMessage.extra) {
         this.basicMessage.extra.logoUrl = url
       }
@@ -246,6 +245,7 @@ export default {
       text-align: center;
       border-radius: 50px;
       position: relative;
+      cursor: pointer;
     }
     .input-file {
       position: absolute;

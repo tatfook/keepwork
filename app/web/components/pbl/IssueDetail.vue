@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-if="show" :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
+  <el-dialog :visible.sync="show" :before-close="handleClose" class="issue-detail-dialog">
     <h4 slot="title" class="issue-detail-title">{{projectDetail.name}}/{{$t('project.board')}}/{{$t('project.issueDetail')}}</h4>
     <div v-loading="updateLoading">
       <div class="issue-detail-header">

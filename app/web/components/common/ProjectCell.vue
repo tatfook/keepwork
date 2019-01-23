@@ -1,13 +1,24 @@
 <template>
   <div class="project-cell" :class="{'project-cell-topped': isTopizable && project.isTopped}">
+    <span v-if="ranking && level < 3" class="project-cell-medal"><img :src="rankingIcon" alt="medal"></span>
+    <span v-if="ranking && level>=3" class="project-cell-medal-4">{{level+1}}</span>
     <div class="project-cell-cover" @click="goProjectDetail(project)">
-      <video v-if="project.extra.videoUrl" class="project-cell-cover-img" controls="controls" :src="project.extra.videoUrl"></video>
-      <img v-else class="project-cell-cover-img" :src="project.extra.imageUrl || project_default_cover" alt="">
+      <video v-if="(project.extra && project.extra.videoUrl)" class="project-cell-cover-img" controls="controls" :src="(project.extra && project.extra.videoUrl) || ''"></video>
+      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" alt="">
       <div class="video-mask"></div>
-      <span class="project-cell-cover-tag project-cell-cover-id" v-html="`${$t('project.projectId')}:${project.id}`"></span>
-      <span class="project-cell-cover-tag project-cell-cover-type">{{project.type == 0 ? $t('common.websiteB') : 'paracraft' }}</span>
+      <span class="project-cell-cover-tag" v-if='showRate'>{{projectRate}}</span>
     </div>
-    <h4 class="project-cell-title" @click="goProjectDetail(project)" :title="project.name"><span class="text" v-html="project.name"></span><span class="recruitment" v-if="project.privilege & 1">{{$t("explore.recruiting")}}</span></h4>
+    <h4 class="project-cell-title" @click="goProjectDetail(project)">
+      <span class="picked" title="精选" v-if="project.choicenessNo"><img src="@/assets/pblImg/picked.png" alt=""></span>
+      <span class="recruitment" :title='$t("explore.recruiting")' v-if="project.privilege & 1">{{isEn ? 'R':'招'}}</span>
+      <span class="text" :title="project.name" v-html="project.name"></span>
+      <span class="id" v-html="`${project._id || '#' + project.id}`"></span>
+      <span class="project-type">
+        <el-popover popper-class="project-cell-type-popover" placement="top" :title="projectType" width="20" trigger="hover" content="">
+          <img slot="reference" :src="projectTypeIcon" alt="">
+        </el-popover>
+      </span>
+    </h4>
     <div class="project-cell-like">
       <i class="iconfont icon-browse_fill"></i>
       <span>{{project.visit}}</span>
@@ -17,9 +28,9 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <a :href="`/u/${project.user.username}`" target="_blank" class="project-cell-author-name">
+      <a :href="`/u/${(project.user && project.user.username) || '未命名'}`" target="_blank" class="project-cell-author-name">
         <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
-        <span class="username" :title="project.user.username">{{project.user && project.user.username}}</span>
+        <span class="username" :title="(project.user && project.user.username) || '未命名'">{{(project.user && project.user.username) || '未命名'}}</span>
       </a>
       <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}
         <span v-if="isTopizable" class="project-cell-stick stick-hover" @click="toggleStickProject(project)">
@@ -44,6 +55,14 @@ export default {
       type: Boolean,
       default: false
     },
+    ranking: {
+      type: Boolean,
+      default: false
+    },
+    level: {
+      type: Number,
+      default: 0
+    },
     project: {
       type: Object,
       default() {
@@ -62,6 +81,27 @@ export default {
   computed: {
     isEn() {
       return locale === 'en-US'
+    },
+    projectType() {
+      return this.project.type == 0 ? this.$t('common.websiteB') : 'paracraft'
+    },
+    projectTypeIcon() {
+      return this.project.type == 0
+        ? require('@/assets/pblImg/website.png')
+        : require('@/assets/pblImg/paracraft.png')
+    },
+    rankingIcon() {
+      return this.level === 0
+        ? require('@/assets/pblImg/gold.png')
+        : this.level === 1
+        ? require('@/assets/pblImg/silver.png')
+        : require('@/assets/pblImg/copper.png')
+    },
+    projectRate() {
+      return this.project.rate.toFixed(1)
+    },
+    showRate() {
+      return this.project.type == 1 && this.projectRate > 0 && _.get(this.project.extra.rate, 'count', 0) >= 8
     }
   },
   methods: {
@@ -93,6 +133,26 @@ export default {
   background: #fff;
   transition: all 200ms ease-in;
   position: relative;
+  &-medal {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+  }
+  &-medal-4 {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    z-index: 10;
+    background: url(../../assets/pblImg/top4_100.png);
+    display: inline-block;
+    width: 60px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 1px 2px 2px #303133;
+    text-align: center;
+  }
   .red {
     color: red;
   }
@@ -148,16 +208,16 @@ export default {
     &-tag {
       position: absolute;
       top: 5px;
-      font-size: 12px;
+      font-size: 24px;
+      line-height: 26px;
       background: rgba(255, 255, 255, 0.7);
       padding: 0 3px;
-      border-radius: 2px;
-    }
-    &-id {
-      left: 5px;
-    }
-    &-type {
+      border-radius: 3px;
       right: 5px;
+      font-style: italic;
+      color: #ffa405;
+      font-family: 'SourceHanSansCN-Medium';
+      background: rgba(0, 0, 0, 0.1);
     }
   }
   &-title {
@@ -167,23 +227,41 @@ export default {
     height: 20px;
     cursor: pointer;
     display: flex;
+    position: relative;
     .text {
       display: inline-block;
-      max-width: 190px;
+      max-width: 140px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
       height: 20px;
+    }
+    .id {
+      color: #909399;
+      padding-left: 4px;
+    }
+    .picked {
+      margin-right: 4px;
+      img {
+        height: 20px;
+        width: 20px;
+        object-fit: contain;
+      }
     }
     .recruitment {
       display: inline-block;
       background: #ef5936;
       border-radius: 10px;
       color: #fff;
-      margin-left: 4px;
-      padding: 0 8px;
+      margin-right: 4px;
+      padding: 0 6px;
       font-size: 11px;
       height: 20px;
+    }
+    .project-type {
+      position: absolute;
+      right: 2px;
+      top: 0;
     }
   }
   &-like {
@@ -227,6 +305,17 @@ export default {
       text-align: right;
       position: relative;
     }
+  }
+}
+.project-cell-type-popover.el-popper.el-popover {
+  width: 50px !important;
+  min-width: 50px !important;
+  padding: 6px;
+  .el-popover__title {
+    width: 50px;
+    font-size: 12px;
+    text-align: center;
+    margin: 0;
   }
 }
 @media screen and (max-width: 768px) {

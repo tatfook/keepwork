@@ -95,7 +95,7 @@
             <span class="star">
               <img src="@/assets/img/hp_select_project.png" alt="">
             </span>{{$t("home.selectedProjects")}}</div>
-          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('pickedProjects')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in handpickProjects" :key="index">
@@ -109,7 +109,7 @@
             <span class="star">
               <img src="@/assets/img/hp_hot_lesson.png" alt="">
             </span>{{$t("home.hotLessons")}}</div>
-          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('courseField')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
@@ -123,7 +123,7 @@
             <span class="star">
               <img src="@/assets/img/hp_people_like.png" alt="">
             </span>{{$t("home.likedByOthers")}}</div>
-          <div class="more" @click="viewMore">{{$t("common.viewMore")}}&gt;</div>
+          <div class="more" @click="viewMore('allProjects')">{{$t("common.viewMore")}}&gt;</div>
         </div>
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in likesProjects" :key="index">
@@ -144,7 +144,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { locale } from '@/lib/utils/i18n'
 import ProjectCell from './ProjectCell'
 import { lesson, keepwork } from '@/api'
-import RegisterDialog from './Register'
+import RegisterDialog from './RegisterComp'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
@@ -231,16 +231,10 @@ export default {
       return locale === 'en-US'
     },
     handpickProjects() {
-      return _.map(_.get(this.originHandpickProjects, 'rows', []), i => ({
-        ...i,
-        name_title: i.name || '未命名'
-      }))
+      return _.get(this.originHandpickProjects, 'rows', [])
     },
     likesProjects() {
-      return _.map(_.get(this.originLikesProjects, 'rows', []), i => ({
-        ...i,
-        name_title: i.name || '未命名'
-      }))
+      return _.get(this.originLikesProjects, 'rows', [])
     }
   },
   methods: {
@@ -306,8 +300,13 @@ export default {
     closeAd() {
       this.hiddenAd = true
     },
-    viewMore() {
-      this.$router.push('/exploration')
+    viewMore(tabName) {
+      this.$router.push({
+        name: 'ExplorationPage',
+        query: {
+          tab: tabName
+        }
+      })
     },
     goJoin() {
       this.isRegisterDialogShow = true

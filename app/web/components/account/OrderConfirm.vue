@@ -5,11 +5,15 @@
         <div class="order-confirm-header-center-title">{{$t('account.confirmAccount')}}</div>
         <div class="order-confirm-header-center-main">
           <span class="order-confirm-header-center-main-username">{{$t('account.keepworkAccount')}} {{username}}</span>
-          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">{{$t('account.digitalAccount')}}
-            <el-select v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
-              <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select></span>
+          <span v-if="isNeedDigitalAccount" class="order-confirm-header-center-main-account">
+            <span class="order-confirm-header-center-main-title">{{$t('account.digitalAccount')}}</span>
+            <el-input v-model="digitalAccount">
+              <el-select slot="append" v-model="digitalAccount" :placeholder="$t('account.pleaseSelect')">
+                <el-option v-for="item in digitalAccountList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-input>
+          </span>
         </div>
       </div>
     </div>
@@ -22,12 +26,26 @@
         <goods-item v-if="!isLoading && isExchangeType" :data="goodsDetail"></goods-item>
       </div>
       <div class="order-confirm-main-count">
-        <div class="order-confirm-main-count-title">
-          {{$t('account.qty')}}
-        </div>
-        <div class="order-confirm-main-count-input">
-          <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
-        </div>
+        <template v-if="isHaqiBean">
+          <!-- 魔豆特殊处理 -->
+          <div class="order-confirm-main-count-input order-confirm-main-count-haqi">
+            <div>
+              {{$t('account.consumptionAmount')}}<el-input @input="handleInputMoney" @blur="handleInputMoneyBlur" :value="price" class="haqi-bean-input"></el-input> RMB
+            </div>
+            <div class="haqi-bean-tips">
+              {{$t('account.haqiBeans')}} <span class="haqi-bean-highlight">{{$t('account.haqiBeansCount', { count: count })}}</span><span class="haqi-bean-lowlight">({{$t('account.rmbToHaqiBeans')}})</span>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="order-confirm-main-count-title">
+            {{$t('account.qty')}}
+          </div>
+          <div class="order-confirm-main-count-input">
+            <el-input-number class="input-number-counter" v-model="count" :min="goodsMin" :max="goodsMax" size="small"></el-input-number>
+          </div>
+        </template>
+
         <div class="order-confirm-main-count-total">
           {{$t('account.totalPrice')}} {{totalCostByUnit}}
         </div>
@@ -51,12 +69,16 @@
           {{$t('account.detail')}} <i class="el-icon-arrow-right"></i>
         </div>
       </div>
+      <!-- <div class="order-confirm-main-tips-left-bottom">lafjlafljalfjl</div> -->
       <div class="order-confirm-main-submit">
         <div class="order-confirm-main-submit-total">
           <span class="order-confirm-main-submit-total-title">{{$t('account.needToPay')}} </span>
           <span class="order-confirm-main-submit-total-cost">{{ finalCostByUnit }}</span>
         </div>
-        <el-button type="danger" class="order-confirm-main-submit-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
+        <div class="order-confirm-main-submit-bottom">
+          <div class="order-confirm-main-submit-bottom-tips">{{$t('account.forMoreInformation', { qq: '2953765808' })}}</div>
+          <el-button type="danger" class="order-confirm-main-submit-bottom-button" :loading="isSubmiLoading" @click="handleSubmitTradeOrder" round>{{$t('account.submitOrder')}}</el-button>
+        </div>
       </div>
     </div>
     <el-dialog class="order-confirm-discounts-dialog" :title="$t('account.selectCoupons')" :visible.sync="isShowDiscountDialog">
@@ -83,6 +105,8 @@
 <script>
 import PackageItem from './common/OrderPackageItem'
 import GoodsItem from './common/OrderGoodsItem'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import CouponTicketCheckbox from './common/CouponTicketCheckbox'
 import { mapActions, mapGetters } from 'vuex'
 import OrderMixin from './common/OrderMixin'
@@ -91,6 +115,8 @@ import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
 const COUNT_REG = /^[0-9]*[1-9][0-9]*$/
 const HAQI_PLATFORM = [2, 3]
+const HAQI_BEAN_ID = 984
+const NUMBER_REG = /(^[1-9]\d*$)/
 export default {
   name: 'OrderConfirm',
   mixins: [OrderMixin],
@@ -103,6 +129,7 @@ export default {
     return {
       isLoading: true,
       count: 1,
+      price: 1,
       isSubmiLoading: false,
       digitalAccount: '',
       digitalAccountList: [],
@@ -129,11 +156,22 @@ export default {
     } = this.$route.query
     type = _.toNumber(type)
     id = _.toNumber(id)
+    goodsId = _.toNumber(goodsId)
+    if (goodsId) {
+      // 哈奇魔豆做特殊处理
+      this.goodsId = goodsId
+    }
     if (type === 2 && payment === 'bean') {
       return this.$message.error('课程包无法通过知识豆购买')
     }
-    if (!type || !id || !payment) {
-      return this.$message.error('缺少必要参数')
+    if (user_nid) {
+      this.digitalAccountList = [
+        {
+          label: user_nid,
+          value: user_nid
+        }
+      ]
+      this.digitalAccount = user_nid
     }
     await Promise.all([
       this.getBalance(),
@@ -143,25 +181,28 @@ export default {
     this.count = this.goodsDefaultCount
     if (price) {
       this.count = _.floor(_.divide(price, this.goodsCost))
+      this.price = price
     }
+    // exchange way
     if (this.isNeedDigitalAccount) {
-      // exchange way
-      await keepwork.account
-        .getDigitalAccounts()
+      // :FIXME: bad way
+      const haqi = axios.create({
+        baseURL: 'https://keepwork.com/api',
+        timeout: 20000,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/json; charset=UTF-8',
+          Authorization: 'Bearer ' + Cookies.get('token')
+        }
+      })
+      await haqi
+        .get('/mod/knowledgeBean/models/haqi/getUsers')
         .then(res => {
           let data = _.get(res, 'data.data', [])
-          if (user_nid) {
-            if (data.includes(user_nid)) {
-              this.digitalAccount = user_nid
-            } else {
-              this.$message({
-                type: 'error',
-                duration: '8000',
-                message: '当前登录的账号跟该数字账号不存在关联'
-              })
-            }
+          if (this.digitalAccount) {
+            data = _.uniq([...data, this.digitalAccount])
           }
-          this.digitalAccountList = data.map(item => ({
+          this.digitalAccountList = _.map(data, item => ({
             label: item,
             value: item
           }))
@@ -180,6 +221,23 @@ export default {
       setDiscount: 'account/setDiscount',
       userLogout: 'user/logout'
     }),
+    handleInputMoney(price) {
+      this.price = price
+      if (price && !NUMBER_REG.test(price)) {
+        return this.$message.error(this.$t('card.integerThan0'))
+      }
+      if (price) {
+        this.count = _.floor(_.divide(price, this.goodsCost))
+      } else {
+        this.count = 0
+      }
+    },
+    handleInputMoneyBlur(evt) {
+      if (_.isEmpty(this.price)) {
+        this.price = 30
+        this.count = _.floor(_.divide(30, this.goodsCost))
+      }
+    },
     handleSelectDiscount(id) {
       this.discountId = id
     },
@@ -215,6 +273,11 @@ export default {
       this.setDiscount(id)
     },
     handleSubmitTradeOrder() {
+      if (this.isHaqiBean) {
+        if (this.count === 0 || !NUMBER_REG.test(this.price)) {
+          return this.$message.error(this.$t('card.integerThan0'))
+        }
+      }
       if (this.isNeedDigitalAccount && !this.digitalAccount) {
         return this.$message.error(
           this.$t('account.pleaseSelectDigitalAccount')
@@ -249,6 +312,9 @@ export default {
       balance: 'account/balance',
       discounts: 'account/discounts'
     }),
+    isHaqiBean() {
+      return this.goodsId === HAQI_BEAN_ID
+    },
     isEn() {
       return locale === 'en-US'
     },
@@ -434,24 +500,35 @@ export default {
       &-main {
         margin-top: 14px;
         margin-bottom: 25px;
+        display: flex;
+        align-items: center;
         &-username {
           font-size: 14px;
           color: #666;
           display: inline-block;
           min-width: 189px;
-          padding-right: 39px;
+          padding-right: 20px;
           box-sizing: border-box;
+        }
+
+        &-title {
+          margin-right: 10px;
         }
 
         &-account {
           display: inline-block;
-          font-size: #666;
+          color: #666;
           font-size: 14px;
           border-left: 1px solid #9c9c9c;
-          padding-left: 39px;
+          padding-left: 20px;
+          display: flex;
+          align-items: center;
           .el-input__inner {
             height: 30px;
             line-height: 30px;
+          }
+          .el-input-group {
+            width: 60%;
           }
           .el-input__suffix-inner {
             .el-select__caret {
@@ -485,6 +562,34 @@ export default {
       display: flex;
       align-items: center;
       border-bottom: 1px solid #e8e8e8;
+
+      &-haqi {
+        color: #666;
+        font-size: 16px;
+        margin: 30px 0 26px;
+        .haqi-bean {
+          &-input {
+            width: 172px;
+            height: 31px;
+            margin: 0 8px;
+            .el-input__inner {
+              height: 31px;
+              line-height: 31px;
+            }
+          }
+          &-tips {
+            margin-top: 25px;
+          }
+          &-highlight {
+            color: #fd7727;
+            margin-right: 1em;
+          }
+
+          &-lowlight {
+            color: #999;
+          }
+        }
+      }
       &-title {
         min-width: 60px;
         color: #666;
@@ -513,7 +618,7 @@ export default {
         }
       }
       &-all {
-        min-width: 100px;
+        min-width: 72px;
         color: #999;
         cursor: pointer;
       }
@@ -535,11 +640,21 @@ export default {
           color: #f20d0d;
         }
       }
-      &-button {
-        margin-top: 30px;
-        background-color: #f20d0d;
-        border-color: #f20d0d;
-        padding: 12px 44px;
+      &-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+        &-tips {
+          color: #999;
+          font-size: 14px;
+        }
+        &-button {
+          margin-top: 30px;
+          padding: 12px 44px;
+          background-color: #f20d0d;
+          border-color: #f20d0d;
+        }
       }
     }
   }
@@ -579,7 +694,7 @@ export default {
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        margin-right: 32px;
+        margin-right: 22px;
         border: solid 2px #bfbfbf;
         &.is-dont-checked {
           background: #fff;

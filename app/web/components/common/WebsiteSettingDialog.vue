@@ -5,8 +5,8 @@
     </div>
     <div class="website-setting-sidebar">
       <ul>
-        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in filteredWebsiteSettingNavs" :key="index" v-show="navItem.isShow">
-          <span :class="{'active': index === activeSettingIndex}" class="sidebar-nav-item">{{navItem.text}}</span>
+        <li @click='doActiveNavItem(index)' v-for="(navItem, index) in filteredWebsiteSettingNavs" :key="index">
+          <span :class="['sidebar-nav-item', {'active': index === activeSettingIndex}]">{{navItem.text}}</span>
         </li>
       </ul>
     </div>
@@ -18,7 +18,6 @@
 
 <script>
 import _ from 'lodash'
-import Vue from 'vue'
 import WebsiteSettingLayout from './WebsiteSettingLayout'
 import WebsiteSettingPermission from './WebsiteSettingPermission'
 import WebsiteSettingBasicMessage from './WebsiteSettingBasicMessage'

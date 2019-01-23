@@ -2,7 +2,7 @@
   <div class="project-header">
     <div class="container">
       <el-breadcrumb separator="/" class="project-header-breadcrumb hidden-xs-only">
-        <el-breadcrumb-item :to="{ path: '/' }">
+        <el-breadcrumb-item>
           <img class="project-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
         <el-breadcrumb-item>
@@ -150,7 +150,7 @@ export default {
       scrollIntoView(input)
     },
     goHomePage() {
-      window.location.href = `/`
+      window.location.href = window.location.origin
     },
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })

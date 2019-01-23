@@ -1,36 +1,37 @@
 <template>
-  <div class="all-projects" v-loading="loading">
+  <div class="picked-projects" v-loading="loading">
     <el-row>
-      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pickedProjectsData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
     </el-row>
-    <div class="all-projects-pages" v-if="projectsCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
+    <div class="picked-projects-pages" v-if="pickedProjectsCount > perPage">
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="pickedProjectsCount">
       </el-pagination>
     </div>
     <transition name="fade">
-      <div v-show="nothing" class="all-projects-nothing">
-        <img class="all-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
-        <p class="all-projects-nothing-tip">{{$t('explore.noResults')}}</p>
+      <div v-show="nothing" class="picked-projects-nothing">
+        <img class="picked-projects-nothing-img" src="@/assets/pblImg/no_result.png" alt="">
+        <p class="picked-projects-nothing-tip">{{$t('explore.noResults')}}</p>
       </div>
     </transition>
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import { EsAPI } from '@/api'
 import TabMixin from './TabMixin'
 
 export default {
-  name: 'AllProjects',
+  name: 'PickedProjects',
   props: {
     searchKey: String,
     sortProjects: String
   },
   data() {
     return {
-      loading: true
+      loading: true,
+      pickedProjects: []
     }
   },
   mixins: [TabMixin],
@@ -38,17 +39,14 @@ export default {
     await this.targetPage(this.page)
   },
   computed: {
-    ...mapGetters({
-      allProjects: 'pbl/allProjects'
-    }),
     nothing() {
-      return this.allProjectsDataOptimize.length === 0 && !this.loading
+      return this.pickedProjectsData.length === 0 && !this.loading
     },
-    projectsCount() {
-      return _.get(this.allProjects, 'total', 0)
+    pickedProjectsCount() {
+      return _.get(this.pickedProjects, 'total', 0)
     },
-    allProjectsDataOptimize() {
-      let hits = _.get(this.allProjects, 'hits', [])
+    pickedProjectsData() {
+      let hits = _.get(this.pickedProjects, 'hits', [])
       return _.map(hits, i => {
         return {
           id: i.id,
@@ -61,7 +59,7 @@ export default {
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
-          privilege: i.recruiting ? 1 : 0,
+          privilege: i.recruiting ? 1 : 2,
           choicenessNo: i.recommended ? 1 : 0,
           rate: i.point || 0,
           extra: {
@@ -74,27 +72,30 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      getAllProjects: 'pbl/getAllProjects'
-    }),
     async targetPage(targetPage) {
       this.loading = true
       this.$nextTick(async () => {
-        await this.getAllProjects({
-          page: targetPage,
-          per_page: this.perPage,
-          q: this.searchKey,
-          sort: this.sortProjects
-        })
+        await EsAPI.projects
+          .getProjects({
+            page: targetPage,
+            per_page: this.perPage,
+            recommended: true,
+            q: this.searchKey,
+            sort: this.sortProjects
+          })
+          .then(res => {
+            this.pickedProjects = res
+          })
+          .catch(err => console.error(err))
         this.loading = false
-        this.$emit('getAmount', this.projectsCount)
+        this.$emit('getAmount', this.pickedProjectsCount)
       })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.all-projects {
+.picked-projects {
   min-height: 500px;
   .fade-enter-active {
     transition: opacity 2s;

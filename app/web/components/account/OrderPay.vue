@@ -125,7 +125,7 @@ export default {
       return this.finalCost > this.userBalance
     },
     needRechargeNumber() {
-      return this.finalCost - this.userBalance
+      return _.ceil(this.finalCost - this.userBalance)
     },
     needRechargeNumberByUnit() {
       return this.isRmbPayment

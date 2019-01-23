@@ -3,32 +3,16 @@
     <div class="exploration-page-theme">
       <div class="exploration-page-theme-center">
         <div class="theme">
-          <!-- <span class="explore">探索</span>·未知之境 -->
           <el-input :placeholder="$t('explore.searchFor')" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
             <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"> {{$t("explore.search")}}</i>
-            <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
           </el-input>
         </div>
         <div class="search">
           <el-row>
             <el-col :sm="16" :xs="24">
-              <!-- <el-autocomplete class="search-input" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect" v-model="searchKey" placeholder="请输入内容">
-                <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
-              </el-autocomplete> -->
-              <!-- <el-input placeholder="请输入你要搜索的内容" class="search-input" v-model="searchKey" @keyup.enter.native="goSearch">
-                <i slot="suffix" class="el-icon-search search-input-button" @click="goSearch"></i> -->
-              <!-- <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button> -->
-              <!-- </el-input> -->
               <div class="search-tab">
                 <el-menu :default-active="activeTabIndex" class="search-tab-menu" mode="horizontal" @select="handleSelectTab">
-                  <el-menu-item index="1">{{$t("explore.project")}}</el-menu-item>
-                  <el-menu-item index="2">{{$t("explore.3DWorlds")}}</el-menu-item>
-                  <el-menu-item index="3">{{$t("explore.websites")}}</el-menu-item>
-                  <!-- <el-menu-item index="4">知识</el-menu-item> -->
-                  <el-menu-item index="5">{{$t("explore.lessons")}}</el-menu-item>
-                  <el-menu-item index="6">{{$t("explore.uses")}}</el-menu-item>
-                  <!-- <el-menu-item index="7">工作室</el-menu-item> -->
-                  <el-menu-item index="8">{{$t("explore.recruiting")}}</el-menu-item>
+                  <el-menu-item v-for="item in tabBar" :key='item.command' :index="item.command">{{item.tag}}</el-menu-item>
                 </el-menu>
               </div>
             </el-col>
@@ -52,23 +36,10 @@
     </div>
     <div class="exploration-page-cabinet">
       <div class="exploration-page-cabinet-center">
-        <div class="selected-projects" v-if='currIndex == 1'>
-          <all-projects ref="allProjects" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></all-projects>
+        <div class="selected-projects">
+          <component :is="currentTabComp" :ref="currentTab" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></component>
         </div>
-        <div class="selected-projects" v-if='currIndex == 2'>
-          <paracraft-item ref="paracraft" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></paracraft-item>
-        </div>
-        <div class="selected-projects" v-if='currIndex == 3'>
-          <website-item ref="website" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></website-item>
-        </div>
-        <div class="selected-knowledge" v-if='currIndex == 4'>程序员小哥哥小姐姐们拼命开发中。。。。</div>
-        <div class="selected-lessons" v-if='currIndex == 5'>
-          <course-item ref="course" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></course-item>
-        </div>
-        <div class="selected-user" v-if='currIndex == 6'>
-          <users-item ref="users" :searchKey="searchKey" :sortUsers="sortProjects" @getAmount="getAmount"></users-item>
-        </div>
-        <div class="selected-studio" v-if='currIndex == 7'>
+        <!-- <div class="selected-studio" v-if='currentTab == ""'>
           <el-row>
             <el-col :span="6">
               <div class="studio">
@@ -96,21 +67,20 @@
               </div>
             </el-col>
           </el-row>
-        </div>
-        <div class="selected-projects" v-if='currIndex == 8'>
-          <recruiting-item ref="recruiting" :searchKey="searchKey" :sortProjects="sortProjects" @getAmount="getAmount"></recruiting-item>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
+import PickedProjects from './explorationPageTab/PickedProjects'
 import AllProjects from './explorationPageTab/AllProjects'
-import Paracraft from './explorationPageTab/Paracraft'
-import Website from './explorationPageTab/Website'
-import Course from './explorationPageTab/Course'
-import Recruiting from './explorationPageTab/Recruiting'
-import Users from './explorationPageTab/Users'
+import ParacraftField from './explorationPageTab/ParacraftField'
+import WebsiteField from './explorationPageTab/WebsiteField'
+import CourseField from './explorationPageTab/CourseField'
+import RecruitingField from './explorationPageTab/RecruitingField'
+import UsersField from './explorationPageTab/UsersField'
+import WebpageField from './explorationPageTab/WebpageField'
 import { EsAPI } from '@/api'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
@@ -119,24 +89,38 @@ export default {
   name: 'ExplorationPage',
   data() {
     return {
-      activeTabIndex: '1',
-      currIndex: 1,
+      activeTabIndex: 'allProjects',
+      currentTab: 'allProjects',
       searchKey: '',
       sortProjects: '',
       currSortMode: this.$t('explore.overall'),
-      searchResultAmount: 0
+      searchResultAmount: 0,
+      currentTabComp: '',
+      tabBar: [
+        { command: 'pickedProjects', tag: this.$t('home.selectedProjects') },
+        { command: 'allProjects', tag: this.$t('explore.project') },
+        { command: 'paracraftField', tag: this.$t('explore.3DWorlds') },
+        { command: 'websiteField', tag: this.$t('explore.websites') },
+        { command: 'courseField', tag: this.$t('explore.lessons') },
+        { command: 'usersField', tag: this.$t('explore.uses') },
+        { command: 'webpageField', tag: this.$t('editor.website') },
+        { command: 'recruitingField', tag: this.$t('explore.recruiting') }
+      ]
     }
   },
   created() {
     window.scrollTo(0, 0)
   },
   mounted() {
+    this.resetUrl()
     const { query } = this.$route
+    this.currentTab = query.tab
+    this.activeTabIndex = query.tab
+    this.currentTabComp = query.tab
     if (query && query.keyword) {
       this.searchKey = query.keyword
-      this.goSearch()
     }
-    history.replaceState('', '', this.$route.path)
+    this.goSearch()
   },
   computed: {
     ...mapGetters({
@@ -145,34 +129,47 @@ export default {
       website: 'pbl/website'
     }),
     currSortColumn() {
-      switch (this.currIndex) {
-        case 1:
-        case 2:
-        case 3:
-        case 5:
-        case 8:
-          return [
-            { mode: this.$t('explore.overall'), command: '/综合' },
-            { mode: this.$t('explore.newest'), command: 'updated_time/最新' },
-            { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
-          ]
-        case 6:
-          return [
-            { mode: this.$t('explore.overall'), command: '/综合' },
-            {
-              mode: this.$t('explore.projectSort'),
-              command: 'total_projects/项目'
-            },
-            { mode: this.$t('explore.popularity'), command: 'total_fans/名气' }
-          ]
-        default:
-          return [{ mode: this.$t('explore.overall'), command: '/综合' }]
+      let tabs = [
+        'pickedProjects',
+        'allProjects',
+        'paracraftField',
+        'websiteField',
+        'courseField',
+        'recruitingField'
+      ]
+      if (tabs.includes(this.currentTab)) {
+        return [
+          { mode: this.$t('explore.overall'), command: '/综合' },
+          { mode: this.$t('explore.newest'), command: 'updated_at/最新' },
+          { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
+        ]
       }
+      if (this.currentTab === 'webpageField') {
+        return [
+          { mode: this.$t('explore.overall'), command: '/综合' },
+          { mode: this.$t('explore.newest'), command: 'updated_at/最新' }
+          // { mode: this.$t('explore.hottest'), command: 'recent_view/热门' }
+        ]
+      }
+      if (this.currentTab === 'usersField') {
+        return [
+          { mode: this.$t('explore.overall'), command: '/综合' },
+          {
+            mode: this.$t('explore.projectSort'),
+            command: 'total_projects/项目'
+          },
+          { mode: this.$t('explore.popularity'), command: 'total_fans/名气' }
+        ]
+      }
+      return [{ mode: this.$t('explore.overall'), command: '/综合' }]
     }
   },
   methods: {
-    handleSelectTab(key, keyPath) {
-      this.selectTab(Number(key))
+    resetUrl() {
+      if (this.$route.query.searchType && this.$route.query.keyword) {
+        let origin = window.location.origin
+        history.replaceState('', '', `${origin}/exploration?tab=allProjects`)
+      }
     },
     getAmount(amount) {
       this.searchResultAmount = amount
@@ -182,17 +179,6 @@ export default {
         cb(_.map(res, i => ({ value: i.keyword })))
       }
     },
-    async querySearch(queryString, cb) {
-      // FIXME: 还缺个热门和最近
-      let suggestions = await EsAPI.suggestions.getPrefixSuggestions({
-        prefix: queryString
-      })
-      return this.filterSuggetions(suggestions, cb)
-    },
-    handleSelect(item) {
-      this.searchKey = item.value
-      this.goSearch()
-    },
     handleSort(selectSort) {
       let sortType = selectSort.command
       this.currSortMode = selectSort.mode
@@ -200,47 +186,32 @@ export default {
       this.goSearch()
     },
     goSearch() {
-      switch (this.currIndex) {
-        case 1:
-          this.$refs.allProjects.targetPage(1)
-          break
-        case 2:
-          this.$refs.paracraft.targetPage(1)
-          break
-        case 3:
-          this.$refs.website.targetPage(1)
-          break
-        case 4:
-          break
-        case 5:
-          this.$refs.course.targetPage(1)
-          break
-        case 6:
-          this.$refs.users.targetPage(1)
-          break
-        case 7:
-          break
-        case 8:
-          this.$refs.recruiting.targetPage(1)
-          break
-        default:
-          this.currIndex = 1
-          break
-      }
+      this.$nextTick(async () => {
+        this.$refs[this.currentTab].targetPage(1)
+      })
     },
-    selectTab(index) {
-      this.currIndex = index
+    handleSelectTab(key, keyPath) {
+      this.$router.push({
+        name: 'ExplorationPage',
+        query: {
+          tab: key
+        }
+      })
+      this.currentTabComp = key
+      this.currentTab = key
       this.currSortMode = this.$t('explore.overall')
       this.sortProjects = ''
     }
   },
   components: {
-    'all-projects': AllProjects,
-    'paracraft-item': Paracraft,
-    'website-item': Website,
-    'course-item': Course,
-    'recruiting-item': Recruiting,
-    'users-item': Users
+    PickedProjects,
+    AllProjects,
+    ParacraftField,
+    WebsiteField,
+    CourseField,
+    RecruitingField,
+    UsersField,
+    WebpageField
   }
 }
 </script>
@@ -412,31 +383,6 @@ export default {
     font-size: 18px;
     margin: 20px 30px;
   }
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 3s;
-  }
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  }
-  .all-projects {
-    &-pages {
-      margin-top: 40px;
-      text-align: center;
-    }
-    &-nothing {
-      min-height: 500px;
-      text-align: center;
-      &-img {
-        margin: 128px 0 32px;
-      }
-      &-tip {
-        color: #606266;
-        font-size: 14px;
-      }
-    }
-  }
 }
 @media screen and (max-width: 768px) {
   .exploration-page {
@@ -473,4 +419,3 @@ export default {
   }
 }
 </style>
-

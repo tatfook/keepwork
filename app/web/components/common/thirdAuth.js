@@ -48,7 +48,7 @@ Vue.use(VueAuthenticate, {
       popupOptions,
       scope: 'snsapi_login',
       requiredUrlParams: ['scope', 'appid', 'state'],
-      state: 'weixin'
+      state: 'login'
     },
     xinlangweibo: {
       name: 'xinlangweibo',
