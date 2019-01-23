@@ -119,7 +119,7 @@ export default {
     changePropertyData(changedData) {
       if (!this.changeProtyDataThrottle) {
         this.changeProtyDataThrottle = _.throttle(changedData => {
-          this.changeActivePropty()
+          this.changeActiveProperty()
           this.setActivePropertyData({
             data: changedData
           })
