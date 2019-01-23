@@ -4,7 +4,7 @@
   </el-dialog>
 </template>
 <script>
-import Login from '@/components/common/Login'
+import Login from '@/components/common/LoginComp'
 
 export default {
   name: 'LoginDialog',

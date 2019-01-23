@@ -50,15 +50,11 @@
               <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a
-                href="/a/account"
-              ><i class="iconfont icon-account1"></i>{{$t("common.myAccount")}}</a>
+              <a href="/a/account"
+              ><i class="iconfont icon-account1"></i>{{$t("account.myAccount")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a
-                href="#"
-                @click.stop.prevent="goCreativityPage"
-              ><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
+              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
@@ -135,6 +131,11 @@
       <el-menu-item index='9' class="pull-right login-button" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
+
+      <el-menu-item index='12' class="pull-right common-header-menu-ranking" @click="goRanking">
+        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
+      </el-menu-item>
+
       <el-menu-item index='10'>
         <search-bar></search-bar>
       </el-menu-item>
@@ -251,11 +252,12 @@ import { mapGetters, mapActions } from 'vuex'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
-import RegisterDialog from '@/components/common/Register'
+import RegisterDialog from '@/components/common/RegisterComp'
 import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
 const EXPLORATION_REG = /^\/exploration/
+const RANKING_REG = /^\/ranking/
 const STUDY_REG = /^\/l/
 
 export default {
@@ -282,7 +284,7 @@ export default {
       get() {
         return this.userIsLogined
       },
-      set() { }
+      set() {}
     },
     hostname() {
       return window.location.hostname
@@ -318,13 +320,16 @@ export default {
     checkCurrentTab() {
       let pathname = window.location.pathname
       if (CREATE_REG.test(pathname)) {
-        return this.activeIndex = '1'
+        return (this.activeIndex = '1')
       }
       if (EXPLORATION_REG.test(pathname)) {
-        return this.activeIndex = '2'
+        return (this.activeIndex = '2')
       }
       if (STUDY_REG.test(pathname)) {
-        return this.activeIndex = '4'
+        return (this.activeIndex = '4')
+      }
+      if(RANKING_REG.test(pathname)){
+        return (this.activeIndex = '12')
       }
       this.activeIndex = '0'
     },
@@ -340,14 +345,21 @@ export default {
     },
     goExplorationPage() {
       if (this.$route.name !== 'ExplorationPage') {
-        window.location.href = `${this.locationOrigin}/exploration`
+        window.location.href = `${this.locationOrigin}/exploration?tab=allProjects`
+      }
+    },
+    goRanking() {
+      if (this.$route.name !== 'Ranking') {
+        window.location.href = `${this.locationOrigin}/ranking`
       }
     },
     goStudyPage() {
       if (this.userIsLogined) {
-        return window.location.href = `${this.locationOrigin}/l/student`
+        return (window.location.href = `${this.locationOrigin}/l/student`)
       }
-      window.location.href = `${this.locationOrigin}/l/student/solution/teachingIdea`
+      window.location.href = `${
+        this.locationOrigin
+      }/l/student/solution/teachingIdea`
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {
@@ -355,7 +367,9 @@ export default {
       }
     },
     goUserProfilePage() {
-      return window.location.href = `${this.locationOrigin}/u/${this.username}`
+      return (window.location.href = `${this.locationOrigin}/u/${
+        this.username
+      }`)
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
@@ -522,20 +536,31 @@ export default {
     }
   }
 }
-.common-header{
+.common-header {
+  &-menu-ranking {
+    &-img {
+      margin-right: 10px;
+    }
+    &-text {
+      text-shadow: 1px 1px 1px #303133;
+      color: #ffa405;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding-right: 18px;
+    }
+  }
   .register-dialog {
-  max-width: 352px;
-  .el-dialog__body {
-    padding: 0;
-    .register-dialog-form{
-      margin: 0;
-      box-shadow: none;
-      .register-title{
-        padding: 0;
+    max-width: 352px;
+    .el-dialog__body {
+      padding: 0;
+      .register-dialog-form {
+        margin: 0;
+        box-shadow: none;
+        .register-title {
+          padding: 0;
+        }
       }
     }
   }
-}
 }
 .el-menu-item {
   padding: 0 10px;
@@ -573,7 +598,7 @@ export default {
     &.user-menu {
       padding-right: 5px;
     }
-    &.is-active{
+    &.is-active {
       color: #409eff;
     }
   }

@@ -13467,7 +13467,7 @@ ret@~0.1.10:
 
 "reveal.js@github:NPLFoshan/reveal.js#master":
   version "3.7.0"
-  resolved "https://codeload.github.com/NPLFoshan/reveal.js/tar.gz/25afc4a61ab61f40ded01621e44ab5afe1407d9b"
+  resolved "https://codeload.github.com/NPLFoshan/reveal.js/tar.gz/206cf28e64c780665cc0b816b1025e6d501915bc"
 
 rgb-regex@^1.0.1:
   version "1.0.1"
