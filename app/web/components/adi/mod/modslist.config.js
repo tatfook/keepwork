@@ -20,6 +20,7 @@ import ModHint from './web/hint'
 
 import ModProject from './web/project'
 import ModMixLayerList from './list/mixLayerList'
+import ModMixPositionList from './list/mixPositionList'
 import ModTextMixLayerList from './group/textMixLayerList'
 
 let modsList = [
@@ -46,6 +47,11 @@ let modsList = [
         id: '1-4',
         label: 'modList.textmixlayerlist',
         mods: [ModTextMixLayerList]
+      },
+      {
+        id: '1-5',
+        label: 'ModMixPositionList',
+        mods: [ModMixPositionList]
       }
     ]
   },

@@ -29,6 +29,7 @@ import ModIframe from './common/iframe'
 import ModPpt from './web/ppt'
 
 import ModMixLayerList from './list/mixLayerList'
+import ModMixPositionList from './list/mixPositionList'
 import ModTextMixLayerList from './group/textMixLayerList'
 
 export const modList = {
@@ -63,6 +64,7 @@ export const modList = {
   ModPpt,
 
   ModMixLayerList,
+  ModMixPositionList,
   ModTextMixLayerList
 }
 

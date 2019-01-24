@@ -27,6 +27,7 @@ const ModProject = () => import('./web/project')
 const ModPpt = () => import('./web/ppt')
 
 const ModMixLayerList = () => import('./list/mixLayerList')
+const ModMixPositionList = () => import('./list/mixPositionList')
 const ModTextMixLayerList = () => import('./group/textMixLayerList')
 
 export const modList = {
@@ -59,6 +60,7 @@ export const modList = {
   ModPpt,
 
   ModMixLayerList,
+  ModMixPositionList,
   ModTextMixLayerList
 }
 

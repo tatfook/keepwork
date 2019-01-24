@@ -37,6 +37,7 @@ const cmdList = [
   'Ppt',
 
   'MixLayerList',
+  'MixPositionList',
   'TextMixLayerList'
 ]
 
