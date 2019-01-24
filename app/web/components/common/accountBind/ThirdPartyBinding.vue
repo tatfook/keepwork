@@ -9,6 +9,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import PasswordVerifyDialog from './PasswordVerifyDialog'
+import { keepwork } from '@/api'
+
 export default {
   name: 'ThirdPartyBinding',
   async mounted() {
@@ -32,11 +34,11 @@ export default {
       username: 'user/username',
       getThreeService: 'user/getThreeService'
     }),
-    iconType(){
+    iconType() {
       let _icon = ''
       switch (this.type.split('/')[0]) {
         case 'github':
-          _icon = 'icon-github-fill';
+          _icon = 'icon-github-fill'
           break
         case 'qq':
           _icon = 'icon-QQ-circle-fill'
@@ -52,7 +54,7 @@ export default {
       }
       return _icon
     },
-    typeNumber(){
+    typeNumber() {
       return _.toNumber(this.type.split('/')[1])
     },
     bindServiceData() {
@@ -114,6 +116,15 @@ export default {
       this.isLoading = false
     },
     async authenticate() {
+      let newestUserInfo = await keepwork.user.getProfile().catch(e => {
+        window.location.reload()
+      })
+      if (
+        newestUserInfo.username !== this.username ||
+        !newestUserInfo
+      ) {
+        window.location.reload()
+      }
       if (this.isUserBindService) {
         this.pwdDialogData = {
           type: 'threeService',
@@ -127,14 +138,12 @@ export default {
       this.isLoading = true
       let provider = this.type.split('/')[0]
       this.$auth
-        .authenticate(provider, {state: "bind"})
+        .authenticate(provider, { state: 'bind' })
         .then(async result => {
-          console.log('1',result)
           this.handleBingdingResult(result)
           this.isLoading = false
         })
         .catch(async result => {
-          console.log('2',result)
           this.handleBingdingResult(result)
           this.isLoading = false
         })
@@ -161,20 +170,20 @@ export default {
     padding-right: 26px;
     box-sizing: border-box;
   }
-  .iconfont{
+  .iconfont {
     font-size: 36px;
     margin-right: 26px;
   }
-  .icon-logo-wechat{
-    color: rgba(129, 206, 76,.99)
+  .icon-logo-wechat {
+    color: rgba(129, 206, 76, 0.99);
   }
-  .icon-weibo-circle-fill{
-    color: rgba(233, 60, 72,.99)
+  .icon-weibo-circle-fill {
+    color: rgba(233, 60, 72, 0.99);
   }
-  .icon-QQ-circle-fill{
-    color: rgba(59, 156, 230,.99)
+  .icon-QQ-circle-fill {
+    color: rgba(59, 156, 230, 0.99);
   }
-  .icon-github-fill{
+  .icon-github-fill {
     color: #000;
   }
   &-info {
