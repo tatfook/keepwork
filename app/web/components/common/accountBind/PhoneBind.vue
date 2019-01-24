@@ -19,7 +19,9 @@
 <script>
 import CodeVerifyDialog from './CodeVerifyDialog'
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
 const PhoneReg = /[0-9]{11}/
+
 export default {
   name: 'PhoneBind',
   data() {
@@ -71,6 +73,15 @@ export default {
       userGetByCellphone: 'user/getByCellphone'
     }),
     async toggleBindPhone() {
+      let newestUserInfo = await keepwork.user.getProfile().catch(e => {
+        window.location.reload()
+      })
+      if (
+        newestUserInfo.username !== this.userProfile.username ||
+        !newestUserInfo
+      ) {
+        window.location.reload()
+      }
       let phoneForm = this.$refs.phoneForm
       if (this.isUserBindPhone) {
         this.phoneCodeDialogDatas = {
@@ -91,7 +102,9 @@ export default {
           let isCellphoneBinded = await this.isCellphoneBInded()
           if (isCellphoneBinded) {
             phoneForm.clearValidate()
-            this.phoneError = this.$t('user.cellphoneHasBeenBoundToOtherAccounts')
+            this.phoneError = this.$t(
+              'user.cellphoneHasBeenBoundToOtherAccounts'
+            )
             return
           }
           this.phoneCodeDialogDatas = {
@@ -140,16 +153,16 @@ export default {
       padding-right: 26px;
       color: #333;
     }
-    .el-form-item__content{
+    .el-form-item__content {
       display: inline-flex;
       align-items: center;
     }
-    .el-form-item{
+    .el-form-item {
       display: inline-flex;
       align-items: center;
       vertical-align: center !important;
     }
-    .iconfont{
+    .iconfont {
       font-size: 36px;
       margin-right: 26px;
     }

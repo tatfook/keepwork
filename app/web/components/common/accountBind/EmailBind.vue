@@ -21,7 +21,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import CodeVerifyDialog from './CodeVerifyDialog'
+import { keepwork } from '@/api'
 const EmailReg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+
 export default {
   name: 'EmailBind',
   data() {
@@ -74,6 +76,15 @@ export default {
       userGetByEmail: 'user/getByEmail'
     }),
     async toggleBindEmail() {
+      let newestUserInfo = await keepwork.user.getProfile().catch(e => {
+        window.location.reload()
+      })
+      if (
+        newestUserInfo.username !== this.userProfile.username ||
+        !newestUserInfo
+      ) {
+        window.location.reload()
+      }
       let emailForm = this.$refs.emailForm
       if (this.isUserBindEmail) {
         this.emailCodeDialogDatas = {
@@ -82,7 +93,7 @@ export default {
           bind: false
         }
         emailForm.clearValidate()
-        this.isCodeDialogVisible  = true
+        this.isCodeDialogVisible = true
         return
       }
       if (this.emailFormData.email == '') {
@@ -144,16 +155,16 @@ export default {
       padding-right: 26px;
       color: #333;
     }
-    .el-form-item__content{
+    .el-form-item__content {
       display: inline-flex;
       align-items: center;
     }
-    .el-form-item{
+    .el-form-item {
       display: inline-flex;
       align-items: center;
       vertical-align: center !important;
     }
-    .iconfont{
+    .iconfont {
       font-size: 36px;
       margin-right: 26px;
     }
