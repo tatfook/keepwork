@@ -87,8 +87,8 @@ export default {
     this.sheet = jss.createStyleSheet(this.style.data)
     if (this.sheet) {
       this.sheet.detach()
+      this.sheet.attach()
     }
-    this.sheet.attach()
 
     _.merge(this.theme.data, gThemeData)
 
