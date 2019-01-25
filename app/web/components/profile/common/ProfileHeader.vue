@@ -2,7 +2,7 @@
   <div class="profile-header">
     <div class="container">
       <el-breadcrumb separator="/" class="profile-header-breadcrumb hidden-sm-and-down">
-        <el-breadcrumb-item :to="{ path: '/' }">
+        <el-breadcrumb-item>
           <img class="profile-header-breadcrumb-home-icon" src="@/assets/pblImg/home.png" alt="" @click="goHomePage">
         </el-breadcrumb-item>
         <el-breadcrumb-item>
