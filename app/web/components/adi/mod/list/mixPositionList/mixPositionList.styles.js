@@ -5,8 +5,8 @@ const defaultData = {
   list: {
     gutter: 5,
     colSize: 2,
-    modType: modSettings['default'].modType,
-    modSettings: modSettings['default'].modSettings
+    modType: modSettings['list'].modType,
+    modSettings: modSettings['list'].modSettings
   }
 }
 
