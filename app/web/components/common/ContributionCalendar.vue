@@ -2,12 +2,12 @@
   <el-card class="contribution-calendar" shadow="never">
     <div slot="header">
       <span>{{$t("profile.contributions")}}</span>
-      <el-dropdown>
+      <el-dropdown @command="changeActiveYear">
         <span class="el-dropdown-link">
-          2018<i class="el-icon-arrow-down el-icon--right"></i>
+          {{activeYear}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>2018</el-dropdown-item>
+          <el-dropdown-item v-for="year in yearList" :key="year" :command="year">{{year}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -27,7 +27,9 @@
 <script>
 import { locale } from '@/lib/utils/i18n'
 import '@/lib/contribution-calendar/css/contribution-calendar.css'
-import contributionCalendarCreator from '@/lib/contribution-calendar/js/contribution-calendar'
+import { contributionCalendarGenerator } from '@/lib/contribution-calendar/js/contribution-calendar'
+const START_YEAR = 2018
+const CURRENT_YEAR = new Date().getFullYear()
 export default {
   name: 'ContributionCalendar',
   props: {
@@ -37,10 +39,13 @@ export default {
     }
   },
   mounted() {
+    this.setYearList()
     this.setContributionCalendar()
   },
   data() {
     return {
+      activeYear: CURRENT_YEAR,
+      yearList: [],
       defaultColor: '#ebecee',
       stepColor: ['#cceaf9', '#82c6f1', '#3794de', '#175496', '#0d3a73']
     }
@@ -51,9 +56,21 @@ export default {
     }
   },
   methods: {
+    setYearList() {
+      let yearList = []
+      for (let year = START_YEAR; year <= CURRENT_YEAR; year++) {
+        yearList.push(year)
+      }
+      this.yearList = yearList
+    },
+    changeActiveYear(year) {
+      this.activeYear = year
+      // destoryCalendar('contributeCalendar')
+      this.setContributionCalendar()
+    },
     setContributionCalendar() {
-      contributionCalendarCreator('contributeCalendar', {
-        year: '2018',
+      contributionCalendarGenerator('contributeCalendar', {
+        year: this.activeYear,
         active: true,
         stepColor: this.stepColor,
         defaultColor: this.defaultColor,
@@ -67,7 +84,7 @@ export default {
     contributionData() {
       this.setContributionCalendar()
     }
-  },
+  }
 }
 </script>
 <style lang="scss">
@@ -87,7 +104,7 @@ export default {
   &-container {
     position: relative;
     &::before {
-      content: "";
+      content: '';
       display: inline-block;
       width: 1px;
       height: 50px;
@@ -98,7 +115,7 @@ export default {
       z-index: 2;
     }
     &::after {
-      content: "";
+      content: '';
       display: inline-block;
       width: 45px;
       height: 50px;

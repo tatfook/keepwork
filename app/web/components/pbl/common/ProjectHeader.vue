@@ -94,7 +94,7 @@ export default {
       activePageName: this.$route.name
     }
   },
-  mounted(){
+  mounted() {
     window.document.title = `${this.editingProjectName}`
   },
   computed: {
@@ -150,7 +150,7 @@ export default {
       scrollIntoView(input)
     },
     goHomePage() {
-      window.location.href = window.location.origin
+      window.location.href = `/`
     },
     showMessage({ type = 'success', message = '操作成功' }) {
       this.$message({ type, message })

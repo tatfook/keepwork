@@ -338,9 +338,10 @@ export default {
           usertoken: this.userToken
         })
       }
-      let { archiveUrl, commitId } = this.originProjectDetail.world
+      let { archiveUrl } = this.originProjectDetail.world
       return paracraftUtil.getUrl({
-        link: `${archiveUrl}?ref=${commitId}`,
+        link: `${archiveUrl}`,
+        kpProjectId: this.projectId,
         usertoken: this.userToken
       })
     },

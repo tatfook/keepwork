@@ -1,26 +1,25 @@
-/**
- * contribution-calendar.js v0.0.1
- *
- * @author  ZhangGuolu <986673640@qq.com>
+// contribution-calendar.js v0.0.1
 
- * @example
- * <pre>
- * contributionCalendar("containerId",{});
- *
- * // or
- *
- * contributionCalendar("containerId",{
- *   year: "2016",
- *   dateCount: {
- *     "2016-01-01": 1,
- *     "2016-02-01": 2,
- *     "2016-03-01"：3,
- *     "2016-04-01"：4,
- *     "2016-05-01"：5,
- *     "2016-06-01":6,
- *   }
- *});
- */
+// @author  ZhangGuolu <986673640@qq.com>
+
+// @example
+// <pre>
+// contributionCalendarGenerator("containerId",{});
+
+// // or
+
+// contributionCalendarGenerator("containerId",{
+//   year: "2016",
+//   dateCount: {
+//     "2016-01-01": 1,
+//     "2016-02-01": 2,
+//     "2016-03-01"：3,
+//     "2016-04-01"：4,
+//     "2016-05-01"：5,
+//     "2016-06-01":6,
+//   }
+// });
+
 let defaults = {
   year: new Date().getFullYear(),
   week: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
@@ -33,15 +32,11 @@ let defaults = {
   defaultTextFillColor: '#303133',
   languageLocaleIsForGlobalUser: false
 }
+let svg, gEle, yearLen
 let languageLocaleIsForGlobalUser = defaults.languageLocaleIsForGlobalUser
-let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-let gEle = document.createElementNS('http://www.w3.org/2000/svg', 'g')
 let startX = 36
 let startY = 45
-gEle.setAttribute('transform', 'translate(' + startX + ', ' + startY + ')')
-svg.appendChild(gEle)
 let year = defaults.year
-let yearLen = 0
 let month = []
 let monthChars = defaults.monthChars
 let week = defaults.week
@@ -160,13 +155,30 @@ function showTables(svg, yearLen) {
   return svg
 }
 
-const contributionCalendar = (id, options) => {
+function destoryCalendar(id) {
+  let elem = document.getElementById(id)
+  let childNode = elem.childNodes[0]
+  console.log(typeof elem, typeof elem.childNodes[0], elem.childNodes)
+  childNode && elem.removeChild(childNode)
+}
+
+function init() {
+  svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  gEle = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+  gEle.setAttribute('transform', 'translate(' + startX + ', ' + startY + ')')
+  svg.appendChild(gEle)
+  yearLen = 0
+}
+
+export const contributionCalendarGenerator = (id, options) => {
   options = options || {}
   let elem = document.getElementById(id)
   if (!elem) {
-    console.log('传入的ID不存在')
+    console.error('传入的ID不存在')
     return
   }
+  destoryCalendar(id)
+  init()
   if (options.languageLocaleIsForGlobalUser) {
     languageLocaleIsForGlobalUser = options.languageLocaleIsForGlobalUser
   }
@@ -201,4 +213,6 @@ const contributionCalendar = (id, options) => {
   }
 }
 
-export default contributionCalendar
+export default {
+  contributionCalendarGenerator
+}

@@ -177,7 +177,7 @@ export default new Router({
           path: 'package/:id',
           name: 'TeacherPackage',
           component: TeacherPackageDetailPage,
-          meta: { requireAuth: true }
+          meta: { requireAuth: true, admin: true }
         },
         {
           path: 'package/:id/purchase',
