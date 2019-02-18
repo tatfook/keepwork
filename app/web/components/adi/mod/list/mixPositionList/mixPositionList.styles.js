@@ -24,14 +24,15 @@ export default [
       config: {
         ...defaultData,
         list: _.merge({}, defaultData.list, {
+          colSize: 1,
           modSettings: _.merge({}, defaultData.list.modSettings, {
-            styleID: 4
+            styleID: 0
           })
         })
       }
     },
-    useImage: false,
-    cover: '',
+    useImage: true,
+    cover: require('@/assets/adi/mixPositionList/styleCover1.png'),
     preview: {
       outter: {},
       inner: {}
@@ -48,11 +49,17 @@ export default [
     },
     options: {
       config: {
-        ...defaultData
+        ...defaultData,
+        list: _.merge({}, defaultData.list, {
+          colSize: 2,
+          modSettings: _.merge({}, defaultData.list.modSettings, {
+            styleID: 3
+          })
+        })
       }
     },
-    useImage: false,
-    cover: '',
+    useImage: true,
+    cover: require('@/assets/adi/mixPositionList/styleCover2.png'),
     preview: {
       outter: {},
       inner: {}
