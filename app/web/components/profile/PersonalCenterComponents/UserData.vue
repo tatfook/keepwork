@@ -18,12 +18,27 @@
           <el-form-item :label='$t("user.displayName")'>
             <el-input v-model="userInfo.nickname" size="small"></el-input>
           </el-form-item>
+          <el-form-item label='姓名'>
+            <el-input ></el-input>
+          </el-form-item>
           <el-form-item :label='$t("user.sex")'>
             <el-radio-group v-model="userInfo.sex">
               <el-radio label="M">{{$t('user.male')}}</el-radio>
               <el-radio label="F">{{$t('user.female')}}</el-radio>
               <el-radio label="N">{{$t('user.confidentiality')}}</el-radio>
             </el-radio-group>
+          </el-form-item>
+          <el-form-item label="出生年月">
+            <el-date-picker v-model="birthday" type="date" placeholder="选择日期"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="QQ">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="学校">
+            <el-input></el-input>
           </el-form-item>
           <el-form-item :label='$t("user.location")' size="small">
             <el-select v-model="tempLocation" :placeholder="$t('editor.select')">
@@ -67,6 +82,7 @@ export default {
   data() {
     return {
       loading: false,
+      birthday: '',
       cities: cityName,
       tempLocation: null,
       userInfo:{},
@@ -105,6 +121,7 @@ export default {
     }),
     getUserInfo(){
       this.userInfo = _.cloneDeep(this.loginUserProfile)
+      console.log('userinfo', this.userInfo)
       this.copiedLoginUserProfile = _.cloneDeep(this.userInfo)
       this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
     },

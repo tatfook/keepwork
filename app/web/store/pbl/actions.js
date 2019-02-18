@@ -18,7 +18,9 @@ let {
   GET_TYPE_PROJECTS,
   GET_PROJECT_ISSUES_SUCCESS,
   GET_ALL_USERS_SUCCESS,
-  GET_USER_FOLLOWS
+  GET_USER_FOLLOWS,
+  GET_GAMES_LIST,
+  GET_WORKS_BY_GAMEID
 } = props
 
 const actions = {
@@ -252,9 +254,18 @@ const actions = {
   },
   async getUserFavorite({ commit }, { objectType, userId }) {
     await keepwork.favorites.getUserFavorites({ objectType, userId }).then(res => {
-      console.log('favorite', res)
       commit(GET_USER_FOLLOWS, res)
     }).catch(err => console.error(err))
+  },
+  async getGamesList({ commit }) {
+    await keepwork.games.getGamesList().then(res => {
+      commit(GET_GAMES_LIST, res)
+    }).catch(err => console.warn(err))
+  },
+  async getWorksByGameId({ commit }, { gameId }) {
+    await keepwork.games.getWorksByGameId({ gameId }).then(res => {
+      commit(GET_WORKS_BY_GAMEID, res)
+    })
   }
 }
 
