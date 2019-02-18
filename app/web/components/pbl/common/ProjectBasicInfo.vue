@@ -2,6 +2,7 @@
   <div class="project-basic-info">
     <div class="project-basic-info-header">
       <p class="project-basic-info-name">{{originProjectDetail.name}}
+        <img class="project-basic-info-picked" :title="$t('home.selectedProjects')" v-if="originProjectDetail.choicenessNo" src="@/assets/pblImg/picked.png" alt="">
         <span class="project-basic-info-state" v-if="!isProjectStopRecruit">{{$t("explore.recruiting")}}</span>
       </p>
       <p class="project-basic-info-more">
@@ -256,9 +257,9 @@ export default {
           usertoken: this.userToken
         })
       }
-      let { archiveUrl, commitId } = this.originProjectDetail.world
+      let { archiveUrl } = this.originProjectDetail.world
       return paracraftUtil.getUrl({
-        link: `${archiveUrl}?ref=${commitId}`,
+        link: `${archiveUrl}`,
         kpProjectId: this.projectId,
         usertoken: this.userToken
       })
@@ -537,6 +538,10 @@ export default {
     font-weight: bold;
     margin: 0;
   }
+  &-picked {
+    vertical-align: middle;
+    margin: 0 4px;
+  }
   &-state {
     background-color: #ef5936;
     font-size: 12px;
@@ -681,8 +686,6 @@ export default {
       }
     }
     &-content {
-      max-height: 280px;
-      overflow: auto;
       p {
         word-break: break-all;
       }

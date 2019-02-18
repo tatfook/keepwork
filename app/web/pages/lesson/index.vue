@@ -144,6 +144,14 @@ router.beforeEach(async (to, from, next) => {
     }
     return next({ name: 'Anonymous', params })
   }
+  if (to.matched.some(record => record.meta.admin)) {
+    const { query: { token = '' }} = to
+    if (token) {
+      Cookies.set('token', token)
+      const { query, ...reset} = to
+      return next(reset)
+    }
+  }
 
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!Cookies.get('token')) {
