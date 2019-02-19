@@ -122,7 +122,8 @@ const actions = {
       let filterQuiz = _.filter(quiz, ({ answer }) => answer)
       _.forEach(_lessonDetail.modList, q => {
         if (q.cmd === 'Quiz') {
-          let quiz = _.find(filterQuiz, o => o.key === q.data.quiz.data[0].id)
+          // let quiz = _.find(filterQuiz, o => o.key === q.data.quiz.data[0].id)
+          let quiz = _.find(filterQuiz, o => o.data.title === q.data.quiz.data[0].title)
           if (quiz) {
             q.state = { result: quiz.result, answer: quiz.answer }
           }
@@ -143,10 +144,11 @@ const actions = {
       commit,
       getters: { lessonDetail }
     },
-    { key, result, answer }
+    { key, question, result, answer }
   ) {
     let _lessonDetail = _.clone(lessonDetail)
-    let index = _.findIndex(_lessonDetail.quiz, o => o.key === key)
+    // let index = _.findIndex(_lessonDetail.quiz, o => o.key === key)
+    let index = _.findIndex(_lessonDetail.quiz, o => o.data.title === question)
     _lessonDetail.quiz[index].result = result
     _lessonDetail.quiz[index].answer = answer
     commit(DO_QUIZ, _lessonDetail)
