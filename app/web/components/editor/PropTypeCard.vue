@@ -1,6 +1,6 @@
 <template>
   <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isCardShow}">
-    <el-row class="prop-header" type='flex' justify='space-between'>
+    <el-row v-show="isCardHeaderShow" class="prop-header" type='flex' justify='space-between'>
       <el-col>
         {{$t("card." + cardKey)}}
       </el-col>
@@ -68,6 +68,9 @@ export default {
         return this.cardValue && !this.cardValue.hidden
       },
       set() {}
+    },
+    isCardHeaderShow(){
+      return this.cardKey !== 'list'
     },
     isToolTip () {
       if (this.isCardShow){

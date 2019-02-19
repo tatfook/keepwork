@@ -1,8 +1,8 @@
 <template>
   <div class='comp-list'>
     <el-row :gutter='options.gutter'>
-      <el-col :span="colWidth" v-for='(item, index) in properties.collection' :key='index'>
-        <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(item, index)' :theme='theme' :modType='options.modType' :editMode='editMode'/>
+      <el-col :span="colWidth" v-for='(item, index) in filteredCollection' :key='index'>
+        <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(item, index)' :theme='theme' :modType='options.modType' :editMode='editMode' />
       </el-col>
     </el-row>
   </div>
@@ -21,7 +21,7 @@ export default {
   methods: {
     modWithExtraConf(source, index) {
       return {
-        data:  _.merge({}, this.options.modSettings, source),
+        data: _.merge({}, this.options.modSettings, source),
         isSub: true,
         property: this.property,
         index
@@ -29,6 +29,12 @@ export default {
     }
   },
   computed: {
+    filteredCollection() {
+      return _.filter(
+        this.properties.collection,
+        collectionItem => collectionItem.isSubmodShow !== false
+      )
+    },
     colWidth() {
       if (this.options.colSize) {
         return 24 / this.options.colSize
@@ -40,5 +46,4 @@ export default {
 </script>
 
 <style>
-
 </style>
