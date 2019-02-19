@@ -2,8 +2,10 @@
   <div class="npl">
     <div class="npl-banner">
       <img src="@/assets/nplImg/banner.jpg" alt="">
-      <img class="npl-banner-button-1" src="@/assets/nplImg/Button-contestant.png" alt="">
-      <img class="npl-banner-button-2" src="@/assets/nplImg/Button-download.png" alt="">
+      <div class="npl-banner-button">
+        <img class="npl-banner-button-contest" src="@/assets/nplImg/Button-contestant.png" alt="contest" @click="joinContest">
+        <a href="http://www.paracraft.cn/download?lang=zh" target="_blank"><img class="npl-banner-button-download" src="@/assets/nplImg/Button-download.png" alt="download"></a>
+      </div>
     </div>
     <div class="npl-center">
       <div class="npl-center-title">
@@ -123,17 +125,29 @@
         </el-row>
       </div>
     </div>
+    <el-dialog class="npl-hint-dialog" :visible.sync="hintVisible" width="375px" center :before-close="handleCloseHint">
+      <p class="npl-hint-dialog-text">请完善个人信息</p>
+      <p class="npl-hint-dialog-text">包括姓名、手机号、出生年月、邮箱、QQ</p>
+      <a href="/u/p/userData" class="npl-hint-dialog-btn">现在就去</a>
+    </el-dialog>
+    <el-dialog class="npl-submit-work" :visible.sync="submitWorkVisible" width="614px" :before-close="handleCloseSubmitWork">
+      <submit-work></submit-work>
+    </el-dialog>
   </div>
 </template>
 <script>
 import ProjectCell from './ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import SubmitWork from './SubmitWork'
 
 export default {
   name: 'NPL',
   data() {
-    return {}
+    return {
+      hintVisible: false,
+      submitWorkVisible: false
+    }
   },
   async mounted() {
     await this.getGamesList()
@@ -149,42 +163,75 @@ export default {
   computed: {
     ...mapGetters({
       gamesList: 'pbl/gamesList',
-      gameWorks: 'pbl/gameWorks'
+      gameWorks: 'pbl/gameWorks',
+      loginUserProfile: 'user/profile',
+      isLogined: 'user/isLogined'
     }),
     rankingList() {
       let list = _.get(this.gameWorks, 'rows', [])
       let works = []
-      _.forEach(list, i => { works.push(i.projects) } )
+      _.forEach(list, i => {
+        works.push(i.projects)
+      })
       return works
     }
   },
   methods: {
     ...mapActions({
       getGamesList: 'pbl/getGamesList',
-      getWorksByGameId: 'pbl/getWorksByGameId'
-    })
+      getWorksByGameId: 'pbl/getWorksByGameId',
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
+    joinContest() {
+      console.log('userinfo', this.loginUserProfile)
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
+      if (
+        this.loginUserProfile.info.name &&
+        this.loginUserProfile.realname &&
+        this.loginUserProfile.info.birthdate &&
+        this.loginUserProfile.email &&
+        this.loginUserProfile.info.qq
+      ) {
+        this.submitWorkVisible = true
+        return
+      }
+      this.hintVisible = true
+    },
+    handleCloseHint() {
+      this.hintVisible = false
+    },
+    handleCloseSubmitWork() {
+      this.submitWorkVisible = false
+    }
   },
   components: {
-    ProjectCell
+    ProjectCell,
+    SubmitWork
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .npl {
   background: #fff;
   &-banner {
     text-align: center;
     position: relative;
-    &-button-1 {
+    &-button {
+      min-height: 90px;
       position: absolute;
-      bottom: 20px;
-      left: 35%;
-    }
-    &-button-2 {
-      position: absolute;
-      bottom: 20px;
-      right: 35%;
+      bottom: 50px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      &-contest {
+        margin-right: 42px;
+        cursor: pointer;
+      }
+      &-download {
+        cursor: pointer;
+      }
     }
   }
   &-center {
@@ -259,9 +306,13 @@ export default {
       &-text {
         display: flex;
         &-box {
+          max-width: 260px;
           flex: 1;
-          margin: 0 60px;
+          margin: 0 auto;
           padding-bottom: 110px;
+          color: #333;
+          line-height: 26px;
+          font-size: 16px;
         }
       }
     }
@@ -352,6 +403,32 @@ export default {
     &-showcase {
       max-width: 1200px;
       margin: 0 auto;
+    }
+  }
+  &-hint-dialog {
+    &-text {
+      text-align: center;
+      color: #333;
+      font-size: 16px;
+    }
+    &-btn {
+      width: 90%;
+      margin: 40px auto;
+      display: block;
+      width: 285px;
+      height: 44px;
+      line-height: 44px;
+      color: #fff;
+      text-align: center;
+      background: #409eff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+  }
+  &-submit-work{
+    .el-dialog .el-dialog__body{
+      padding:  10px 80px;
     }
   }
 }
