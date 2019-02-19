@@ -1541,8 +1541,10 @@
     "noFollowersToShow": "还没有粉丝~",
     "createdProjects": "创建的项目",
     "contributedProjects": "参与的项目",
+    "starredProjects": "收藏的项目",
     "noProjectsToShow": "还没有创建项目~",
     "noContributedProjectsToShow": "还没有参与项目~",
+    "noStarredProjectsToShow": "还没有收藏项目~",
     "top": "置顶",
     "unTop": "取消置顶",
     "changePassword": "密码修改"

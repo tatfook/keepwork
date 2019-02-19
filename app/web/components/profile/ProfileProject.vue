@@ -28,6 +28,15 @@
               <div class="profile-project-empty-info">{{$t("profile.noContributedProjectsToShow")}}</div>
             </div>
           </el-tab-pane>
+          <el-tab-pane name="starred">
+            <span slot='label'>{{$t('profile.starredProjects')}}</span>
+            <div v-if="!isStarredEmpty" class="profile-project-list">
+              <project-cell class="profile-project-list-item" v-for="(starredItem, index) in nowProfileStarredProjects" :key="index" :project='starredItem.projects'></project-cell>
+            </div>
+            <div v-if="isStarredEmpty" class="profile-project-empty">
+              <div class="profile-project-empty-info">{{$t("profile.noStarredProjectsToShow")}}</div>
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -37,7 +46,7 @@
 import moment from 'moment'
 import ProjectCell from '@/components/common/ProjectCell'
 import UserBasicMsg from './common/UserBasicMsg'
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ProfileProject',
   props: {
@@ -63,13 +72,17 @@ export default {
     ...mapGetters({
       loginUserId: 'user/userId',
       createdProjects: 'profile/createdProjects',
-      joinedProjects: 'profile/joinedProjects'
+      joinedProjects: 'profile/joinedProjects',
+      starredProjects: 'profile/starredProjects'
     }),
     isLoginUserEditable() {
       return this.loginUserId === this.nowProfileUserId
     },
     isCreatedType() {
       return this.activeName === 'created'
+    },
+    isStarredType() {
+      return this.activeName === 'starred'
     },
     isJoinedType() {
       return this.activeName === 'joined'
@@ -83,7 +96,7 @@ export default {
     nowProfileCreatedProjectsWithStick() {
       let copiedProjects = _.cloneDeep(this.nowProfileCreatedProjects)
       _.map(this.pinedProjects, projectId => {
-        let pinedProjectIndex = _.findIndex(copiedProjects, { 'id': projectId })
+        let pinedProjectIndex = _.findIndex(copiedProjects, { id: projectId })
         if (pinedProjectIndex !== -1) {
           copiedProjects[pinedProjectIndex].isTopped = true
         }
@@ -91,33 +104,53 @@ export default {
       return copiedProjects
     },
     sortedNowProfileCreatedProjectsWithStick() {
-      return _.sortBy(this.nowProfileCreatedProjectsWithStick, project => project.isTopped && -moment(project.createdAt).valueOf())
+      return _.sortBy(
+        this.nowProfileCreatedProjectsWithStick,
+        project => project.isTopped && -moment(project.createdAt).valueOf()
+      )
     },
     nowProfileJoinedProjects() {
       return this.joinedProjects({ userId: this.nowProfileUserId })
     },
+    nowProfileStarredProjects() {
+      return this.starredProjects({ userId: this.nowProfileUserId })
+    },
     isCreatedEmpty() {
-      return !Boolean(this.nowProfileCreatedProjects && this.nowProfileCreatedProjects.length)
+      return !Boolean(
+        this.nowProfileCreatedProjects && this.nowProfileCreatedProjects.length
+      )
     },
     isJoinedEmpty() {
-      return !Boolean(this.nowProfileJoinedProjects && this.nowProfileJoinedProjects.length)
+      return !Boolean(
+        this.nowProfileJoinedProjects && this.nowProfileJoinedProjects.length
+      )
+    },
+    isStarredEmpty() {
+      return !Boolean(
+        this.nowProfileStarredProjects && this.nowProfileStarredProjects.length
+      )
     },
     originExtra() {
       return _.cloneDeep(_.get(this.nowUserDetail, 'extra'))
     },
     updatingExtra() {
-      return _.mergeWith(this.originExtra, {
-        pinedProjects: this.pinedProjects
-      }, (objValue, srcValue) => {
-        return srcValue
-      })
+      return _.mergeWith(
+        this.originExtra,
+        {
+          pinedProjects: this.pinedProjects
+        },
+        (objValue, srcValue) => {
+          return srcValue
+        }
+      )
     },
     updatingUserInfo() {
       return _.mergeWith(
         this.nowUserDetail,
         {
           extra: this.updatingExtra
-        }, (objValue, srcValue) => {
+        },
+        (objValue, srcValue) => {
           return srcValue
         }
       )
@@ -127,12 +160,15 @@ export default {
     ...mapActions({
       profileGetUserCreatedProjects: 'profile/getUserCreatedProjects',
       profileGetUserJoinedProjects: 'profile/getUserJoinedProjects',
+      profileGetUserStarredProjects: 'profile/getUserStarredProjects',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     async initProjectsData() {
       let userId = this.nowProfileUserId
       this.isLoading = true
-      this.isCreatedType ? await this.profileGetUserCreatedProjects({ userId }) : await this.profileGetUserJoinedProjects({ userId })
+      this.isCreatedType && await this.profileGetUserCreatedProjects({ userId })
+      this.isJoinedType && await this.profileGetUserJoinedProjects({ userId })
+      this.isStarredType && await this.profileGetUserStarredProjects({ userId })
       this.isLoading = false
     },
     async updateData() {
