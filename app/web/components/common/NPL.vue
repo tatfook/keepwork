@@ -188,11 +188,12 @@ export default {
         return this.toggleLoginDialog(true)
       }
       if (
-        this.loginUserProfile.info.name &&
-        this.loginUserProfile.realname &&
-        this.loginUserProfile.info.birthdate &&
-        this.loginUserProfile.email &&
-        this.loginUserProfile.info.qq
+        this.loginUserProfile.info &&
+        (this.loginUserProfile.info.name &&
+          this.loginUserProfile.realname &&
+          this.loginUserProfile.info.birthdate &&
+          this.loginUserProfile.email &&
+          this.loginUserProfile.info.qq)
       ) {
         this.submitWorkVisible = true
         return
@@ -426,9 +427,9 @@ export default {
       font-size: 16px;
     }
   }
-  &-submit-work{
-    .el-dialog .el-dialog__body{
-      padding:  10px 80px;
+  &-submit-work {
+    .el-dialog .el-dialog__body {
+      padding: 10px 80px;
     }
   }
 }

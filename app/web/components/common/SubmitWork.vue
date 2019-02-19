@@ -19,11 +19,10 @@
         <div class="submit-work-cover">
           <div class="submit-work-cover-img">
             <img v-if="submitWorkInfo.cover" class="submit-work-cover-img-image" :src="submitWorkInfo.cover" alt="cover">
-            <div class="submit-work-cover-img-no">
+            <div class="submit-work-cover-img-no" @click="showMediaSkyDriveDialog">
               <div class="submit-work-cover-img-no-text">
                 <p class="submit-work-cover-img-no-text-icon">+</p>
                 <p class="submit-work-cover-img-no-text-hint">上传封面</p>
-                <input type="file" class="submit-work-cover-img-no-text-file" @change="uploadWorkCover()">
               </div>
             </div>
           </div>
@@ -42,9 +41,13 @@
         <el-button type="primary" @click="goSubmitWork">提交作品</el-button>
       </el-form-item>
     </el-form>
+    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'SubmitWork',
   data() {
@@ -55,8 +58,27 @@ export default {
         desc: '',
         cover: '',
         myWorks: ''
-      }
+      },
+      isMediaSkyDriveDialogShow: false
     }
+  },
+  async mounted() {},
+  methods: {
+    showMediaSkyDriveDialog() {
+      this.isMediaSkyDriveDialogShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isMediaSkyDriveDialogShow = false
+      if (url) {
+        this.submitWorkInfo.cover = url
+      }
+    },
+    goSubmitWork() {
+      console.log('要提交作品')
+    }
+  },
+  components: {
+    SkyDriveManagerDialog
   }
 }
 </script>
@@ -90,6 +112,7 @@ export default {
       }
       &-no {
         z-index: 0;
+        cursor: pointer;
         position: absolute;
         top: 0;
         left: 0;
@@ -108,15 +131,6 @@ export default {
           }
           &-hint {
             margin: 0;
-          }
-          &-file {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0px;
-            opacity: 0;
-            cursor: pointer;
           }
         }
       }

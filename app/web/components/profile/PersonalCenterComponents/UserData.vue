@@ -117,6 +117,7 @@ export default {
     }),
     getUserInfo() {
       this.userInfo = _.cloneDeep(this.loginUserProfile)
+      this.userInfo.info = this.userInfo.info || {}
       this.copiedLoginUserProfile = _.cloneDeep(this.userInfo)
       this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
     },
