@@ -92,9 +92,6 @@ export default {
       isDone: false
     }
   },
-  mounted() {
-    console.log(_.get(this.data, 'data.quiz.data[0]'))
-  },
   methods: {
     ...mapActions({
       doQuiz: 'lesson/student/doQuiz',
