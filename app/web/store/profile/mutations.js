@@ -5,13 +5,15 @@ const GET_USER_FAVORITE_USERS_SUCCESS = 'GET_USER_FAVORITE_USERS_SUCCESS'
 const GET_USER_FOLLOW_USERS_SUCCESS = 'GET_USER_FOLLOW_USERS_SUCCESS'
 const GET_USER_CREATED_PROJECT_SUCCESS = 'GET_USER_CREATED_PROJECT_SUCCESS'
 const GET_USER_JOINED_PROJECT_SUCCESS = 'GET_USER_JOINED_PROJECT_SUCCESS'
+const GET_USER_STARRED_PROJECT_SUCCESS = 'GET_USER_STARRED_PROJECT_SUCCESS'
 
 export const props = {
   GET_USER_FAVORITE_STATE_SUCCESS,
   GET_USER_FAVORITE_USERS_SUCCESS,
   GET_USER_FOLLOW_USERS_SUCCESS,
   GET_USER_CREATED_PROJECT_SUCCESS,
-  GET_USER_JOINED_PROJECT_SUCCESS
+  GET_USER_JOINED_PROJECT_SUCCESS,
+  GET_USER_STARRED_PROJECT_SUCCESS
 }
 
 const mutations = {
@@ -43,6 +45,12 @@ const mutations = {
     Vue.set(state, 'joinedProjects', {
       ...state.joinedProjects,
       [userId]: joinedProjects
+    })
+  },
+  [GET_USER_STARRED_PROJECT_SUCCESS](state, { starredProjects, userId }) {
+    Vue.set(state, 'starredProjects', {
+      ...state.starredProjects,
+      [userId]: starredProjects
     })
   }
 }

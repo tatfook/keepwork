@@ -1550,8 +1550,10 @@
     "noFollowersToShow": "No followers to show.",
     "createdProjects": "Created projects",
     "contributedProjects": "Contributed projects",
+    "starredProjects": "Starred projects",
     "noProjectsToShow": "No projects to show.",
     "noContributedProjectsToShow": "No contributed projects to show.",
+    "noStarredProjectsToShow": "No starred projects to show.",
     "top": "Top",
     "unTop": "Un-Top",
     "changePassword": "Change Password"
