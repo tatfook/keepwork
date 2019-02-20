@@ -18,6 +18,7 @@ const GET_ALL_USERS_SUCCESS = 'GET_ALL_USERS_SUCCESS'
 const GET_USER_FOLLOWS = 'GET_USER_FOLLOWS'
 const GET_GAMES_LIST = 'GET_GAMES_LIST'
 const GET_WORKS_BY_GAMEID = 'GET_WORKS_BY_GAMEID'
+const GET_LEGAL_GAMES_PROJECTS = 'GET_LEGAL_GAMES_PROJECTS'
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
@@ -37,7 +38,8 @@ export const props = {
   GET_ALL_USERS_SUCCESS,
   GET_USER_FOLLOWS,
   GET_GAMES_LIST,
-  GET_WORKS_BY_GAMEID
+  GET_WORKS_BY_GAMEID,
+  GET_LEGAL_GAMES_PROJECTS
 }
 
 const mutations = {
@@ -156,6 +158,9 @@ const mutations = {
   },
   [GET_WORKS_BY_GAMEID](state, obj) {
     Vue.set(state, 'gameWorks', obj)
+  },
+  [GET_LEGAL_GAMES_PROJECTS](state, list) {
+    Vue.set(state, 'legalGamesProjects', list)
   }
 }
 

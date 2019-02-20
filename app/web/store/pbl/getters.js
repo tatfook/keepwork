@@ -18,7 +18,8 @@ const getters = {
   allUsers: state => state.allUsers,
   userFollows: state => state.userFollows,
   gamesList: state => state.gamesList,
-  gameWorks: state => state.gameWorks
+  gameWorks: state => state.gameWorks,
+  legalGamesProjects: state => state.legalGamesProjects
 }
 
 export default getters

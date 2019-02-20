@@ -21,7 +21,8 @@ const state = {
   allUsers: [],
   userFollows: [],
   gamesList: [],
-  gameWorks: {}
+  gameWorks: {},
+  legalGamesProjects: []
 }
 export default {
   namespaced: true,

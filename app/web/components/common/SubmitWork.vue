@@ -33,8 +33,8 @@
         </div>
       </el-form-item>
       <el-form-item label="项目ID">
-        <el-select v-model="submitWorkInfo.myWorks">
-          <el-option label="项目1 id111" value="111"></el-option>
+        <el-select v-model="submitWorkInfo.workId">
+          <el-option v-for="i in gamesProjectsId" :key="i.id" :label="i.name+ '  #' + i.id" :value="i.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -47,23 +47,53 @@
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: 'SubmitWork',
   data() {
     return {
       submitWorkInfo: {
+        gameId: -1,
         theme: '',
         name: '',
         desc: '',
         cover: '',
-        myWorks: ''
+        workId: ''
       },
       isMediaSkyDriveDialogShow: false
     }
   },
-  async mounted() {},
+  async mounted() {
+    await Promise.all([
+      this.getLegalGamesProjects(),
+      this.getGamesList()
+    ]).catch(e => console.warn(e))
+    for (let i = 0; i < this.gamesList.rows.length; i++) {
+      if (this.gamesList.rows[i].state === 1) {
+        this.submitWorkInfo.gameId = _.get(this.gamesList.rows[i], 'id', 0)
+        break
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({
+      legalGamesProjects: 'pbl/legalGamesProjects',
+      gamesList: 'pbl/gamesList'
+    }),
+    gamesProjectsId() {
+      return _.map(this.legalGamesProjects, ({ id, name }) => ({
+        id,
+        name
+      }))
+    }
+  },
   methods: {
+    ...mapActions({
+      getLegalGamesProjects: 'pbl/getLegalGamesProjects',
+      getGamesList: 'pbl/getGamesList',
+      submitGameWorks: 'pbl/submitGameWorks'
+    }),
     showMediaSkyDriveDialog() {
       this.isMediaSkyDriveDialogShow = true
     },
@@ -73,8 +103,23 @@ export default {
         this.submitWorkInfo.cover = url
       }
     },
-    goSubmitWork() {
-      console.log('要提交作品')
+    async goSubmitWork() {
+      if (this.submitWorkInfo.gameId === -1) {
+        this.$message.info('当前没有正在进行的比赛')
+        return
+      }
+      let payload = {
+        gameId: this.submitWorkInfo.gameId,
+        worksSubject: this.submitWorkInfo.theme,
+        worksName: this.submitWorkInfo.name,
+        worksDescription: this.submitWorkInfo.desc,
+        worksLogo: this.submitWorkInfo.cover,
+        projectId: this.submitWorkInfo.workId
+      }
+      await this.submitGameWorks(payload).catch(e => {
+        console.dir(e)
+      })
+      this.$emit('close')
     }
   },
   components: {

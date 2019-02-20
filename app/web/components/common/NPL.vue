@@ -130,8 +130,8 @@
       <p class="npl-hint-dialog-text">包括姓名、手机号、出生年月、邮箱、QQ</p>
       <a href="/u/p/userData" class="npl-hint-dialog-btn">现在就去</a>
     </el-dialog>
-    <el-dialog class="npl-submit-work" :visible.sync="submitWorkVisible" width="614px" :before-close="handleCloseSubmitWork">
-      <submit-work></submit-work>
+    <el-dialog class="npl-submit-work" :visible.sync="submitWorkVisible" v-if="submitWorkVisible" width="614px" :before-close="handleCloseSubmitWork">
+      <submit-work @close='handleCloseSubmitWork'></submit-work>
     </el-dialog>
   </div>
 </template>
@@ -146,19 +146,22 @@ export default {
   data() {
     return {
       hintVisible: false,
-      submitWorkVisible: false
+      submitWorkVisible: false,
+      gameId: -1
     }
   },
   async mounted() {
     await this.getGamesList()
-    let gameId
     for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (this.gamesList.rows[i].state === 0) {
-        gameId = _.get(this.gamesList.rows[i], 'id', 0)
+      if (this.gamesList.rows[i].state === 1) {
+        this.gameId = _.get(this.gamesList.rows[i], 'id', 0)
         break
       }
     }
-    await this.getWorksByGameId({ gameId })
+    if (this.gameId === -1) {
+      return
+    }
+    await this.getWorksByGameId({ gameId: this.gameId })
   },
   computed: {
     ...mapGetters({
@@ -183,9 +186,12 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     joinContest() {
-      console.log('userinfo', this.loginUserProfile)
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
+      }
+      if (this.gameId === -1) {
+        this.$message.info('当前没有正在进行的比赛')
+        return
       }
       if (
         this.loginUserProfile.info &&
