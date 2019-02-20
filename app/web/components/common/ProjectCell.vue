@@ -32,7 +32,8 @@
         <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
         <span class="username" :title="(project.user && project.user.username) || '未命名'">{{(project.user && project.user.username) || '未命名'}}</span>
       </a>
-      <div class="project-cell-author-time">{{relativeTime(project.createdAt)}}
+      <div class="project-cell-author-time">
+        <p class="project-cell-author-time-text" :title="updatedAtTime">{{isEn ? $t('common.update')+'d' : ''}} {{relativeTime(project.updatedAt)}}{{isEn ? '' : $t('common.update')}}</p>
         <span v-if="isTopizable" class="project-cell-stick stick-hover" @click="toggleStickProject(project)">
           <i class="iconfont icon-vertical-align-top" v-show="!project.isTopped"></i>
           {{project.isTopped ? $t('profile.unTop') : $t('profile.top')}}
@@ -82,6 +83,13 @@ export default {
     isEn() {
       return locale === 'en-US'
     },
+    updatedAtTime() {
+      return (
+        (this.isEn ? this.$t('common.update') + 'd' : '') +
+        this.relativeTime(this.project.updatedAt) +
+        (this.isEn ? '' : this.$t('common.update'))
+      )
+    },
     projectType() {
       return this.project.type == 0 ? this.$t('common.websiteB') : 'paracraft'
     },
@@ -101,7 +109,11 @@ export default {
       return this.project.rate.toFixed(1)
     },
     showRate() {
-      return this.project.type == 1 && this.projectRate > 0 && _.get(this.project.extra.rate, 'count', 0) >= 8
+      return (
+        this.project.type == 1 &&
+        this.projectRate > 0 &&
+        _.get(this.project.extra.rate, 'count', 0) >= 8
+      )
     }
   },
   methods: {
@@ -304,6 +316,15 @@ export default {
       width: 120px;
       text-align: right;
       position: relative;
+      &-text {
+        line-height: 15px;
+        height: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
     }
   }
 }
