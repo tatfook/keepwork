@@ -363,6 +363,13 @@ export const groups = {
   addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
 }
 
+export const games = {
+  getGamesList: async () => post('games/search'),
+  getWorksByGameId: async ({ gameId }) => post('gameWorks/search', { gameId }),
+  getLegalGamesProjects: async () => get('games/projects'),
+  submitGameWorks: async (...args) => post('gameWorks', ...args)
+}
+
 export const keepwork = {
   user,
   website,
@@ -381,7 +388,8 @@ export const keepwork = {
   bigfile,
   issues,
   groups,
-  account
+  account,
+  games
 }
 
 export default keepwork
