@@ -1,7 +1,7 @@
 <template>
   <div class="npl">
     <div class="npl-banner">
-      <img src="@/assets/nplImg/banner.jpg" alt="">
+      <img class="npl-banner-img" src="@/assets/nplImg/banner.jpg" alt="">
       <div class="npl-banner-button">
         <img class="npl-banner-button-contest" src="@/assets/nplImg/Button-contestant.png" alt="contest" @click="joinContest">
         <a href="http://www.paracraft.cn/download?lang=zh" target="_blank"><img class="npl-banner-button-download" src="@/assets/nplImg/Button-download.png" alt="download"></a>
@@ -131,7 +131,12 @@
       <a href="/u/p/userData" class="npl-hint-dialog-btn">现在就去</a>
     </el-dialog>
     <el-dialog class="npl-submit-work" :visible.sync="submitWorkVisible" v-if="submitWorkVisible" width="614px" :before-close="handleCloseSubmitWork">
-      <submit-work @close='handleCloseSubmitWork'></submit-work>
+      <submit-work @close='handleCloseSubmitWork' @submitSuccess="submitSuccess"></submit-work>
+    </el-dialog>
+    <el-dialog class="npl-success-dialog" :visible.sync="submitSuccessVisible" width="375px" center :before-close="handleCloseSubmitSuccess">
+      <p class="npl-success-dialog-text"><img src="@/assets/nplImg/submit-success.png" alt=""></p>
+      <p class="npl-success-dialog-text">作品提交成功!</p>
+      <a class="npl-success-dialog-btn" @click="continueSubmit">继续提交</a>
     </el-dialog>
   </div>
 </template>
@@ -147,13 +152,14 @@ export default {
     return {
       hintVisible: false,
       submitWorkVisible: false,
+      submitSuccessVisible: false,
       gameId: -1
     }
   },
   async mounted() {
     await this.getGamesList()
     for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (this.gamesList.rows[i].state === 1) {
+      if (this.gamesList.rows[i].state === 0) {
         this.gameId = _.get(this.gamesList.rows[i], 'id', 0)
         break
       }
@@ -206,11 +212,22 @@ export default {
       }
       this.hintVisible = true
     },
+    submitSuccess() {
+      this.submitSuccessVisible = true
+      this.handleCloseSubmitWork()
+    },
+    continueSubmit() {
+      this.submitWorkVisible = true
+      this.handleCloseSubmitSuccess()
+    },
     handleCloseHint() {
       this.hintVisible = false
     },
     handleCloseSubmitWork() {
       this.submitWorkVisible = false
+    },
+    handleCloseSubmitSuccess() {
+      this.submitSuccessVisible = false
     }
   },
   components: {
@@ -226,6 +243,12 @@ export default {
   &-banner {
     text-align: center;
     position: relative;
+    &-img {
+      object-fit: cover;
+      max-width: 1920px;
+      width: 100%;
+      height: 580px;
+    }
     &-button {
       min-height: 90px;
       position: absolute;
@@ -431,6 +454,29 @@ export default {
       border-radius: 5px;
       text-decoration: none;
       font-size: 16px;
+    }
+  }
+  &-success-dialog {
+    &-text {
+      text-align: center;
+      color: #333;
+      font-size: 18px;
+      margin: 0;
+    }
+    &-btn {
+      width: 90%;
+      margin: 40px auto;
+      display: block;
+      width: 116px;
+      height: 36px;
+      line-height: 36px;
+      color: #fff;
+      text-align: center;
+      background: #409eff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
     }
   }
   &-submit-work {

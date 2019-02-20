@@ -70,7 +70,7 @@ export default {
       this.getGamesList()
     ]).catch(e => console.warn(e))
     for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (this.gamesList.rows[i].state === 1) {
+      if (this.gamesList.rows[i].state === 0) {
         this.submitWorkInfo.gameId = _.get(this.gamesList.rows[i], 'id', 0)
         break
       }
@@ -119,7 +119,7 @@ export default {
       await this.submitGameWorks(payload).catch(e => {
         console.dir(e)
       })
-      this.$emit('close')
+      this.$emit('submitSuccess')
     }
   },
   components: {
