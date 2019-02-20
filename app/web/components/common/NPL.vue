@@ -113,7 +113,7 @@
       </div>
       <div class="npl-center-end">
         <p class="npl-center-end-date">2019年1月NPL大赛截至日期1月15日（已截止）</p>
-        <p class="npl-center-end-hint">点击查看<a href="#"> &lt;获奖作品&gt; </a></p>
+        <p class="npl-center-end-hint">点击查看<a href="/ranking"> &lt;获奖作品&gt; </a></p>
       </div>
     </div>
     <div class="npl-competition">
