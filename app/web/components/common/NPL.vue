@@ -1,13 +1,13 @@
 <template>
   <div class="npl">
     <div class="npl-banner">
-      <img class="npl-banner-img hidden-sm-and-down" src="@/assets/nplImg/banner.jpg" alt="">
+      <img class="npl-banner-img" src="@/assets/nplImg/banner.jpg" alt="">
       <img class="npl-banner-img-phone" src="@/assets/nplImg/banner-phone.jpg" alt="">
       <div class="npl-banner-button">
-        <img class="npl-banner-button-contest hidden-sm-and-down" :src="contestImg" alt="contest" @click="joinContest" @mouseover="contestImgOver" @mouseout="contestImgOut">
+        <img class="npl-banner-button-contest" :src="contestImg" alt="contest" @click="joinContest" @mouseover="contestImgOver" @mouseout="contestImgOut">
         <img class="npl-banner-button-contest npl-banner-button-contest-phone" src="@/assets/nplImg/Button-contest-phone.png" alt="contest" @click="joinContest">
         <a href="http://www.paracraft.cn/download?lang=zh" target="_blank">
-          <img class="npl-banner-button-download hidden-sm-and-down" :src="downloadImg" alt="download" @mouseover="downloadImgOver" @mouseout="downloadImgOut">
+          <img class="npl-banner-button-download" :src="downloadImg" alt="download" @mouseover="downloadImgOver" @mouseout="downloadImgOut">
           <img class="npl-banner-button-download npl-banner-button-download-phone" src="@/assets/nplImg/Button-download-phone.png" alt="download">
         </a>
       </div>
@@ -146,7 +146,6 @@
   </div>
 </template>
 <script>
-import 'element-ui/lib/theme-chalk/display.css'
 import ProjectCell from './ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
@@ -523,10 +522,13 @@ export default {
     }
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 769px) {
   .npl {
     &-banner {
       width: 100%;
+      &-img{
+        display: none;
+      }
       &-img-phone {
         object-fit: cover;
         width: 100%;
@@ -537,11 +539,13 @@ export default {
         min-height: 30px;
         bottom: 10px;
         &-contest {
+          display: none;
           &-phone {
             display: inline-block;
           }
         }
         &-download {
+          display: none;
           &-phone {
             display: inline-block;
           }
