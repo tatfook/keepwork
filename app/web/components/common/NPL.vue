@@ -1,10 +1,15 @@
 <template>
   <div class="npl">
     <div class="npl-banner">
-      <img class="npl-banner-img" src="@/assets/nplImg/banner.jpg" alt="">
+      <img class="npl-banner-img hidden-sm-and-down" src="@/assets/nplImg/banner.jpg" alt="">
+      <img class="npl-banner-img-phone" src="@/assets/nplImg/banner-phone.jpg" alt="">
       <div class="npl-banner-button">
-        <img class="npl-banner-button-contest" src="@/assets/nplImg/Button-contestant.png" alt="contest" @click="joinContest">
-        <a href="http://www.paracraft.cn/download?lang=zh" target="_blank"><img class="npl-banner-button-download" src="@/assets/nplImg/Button-download.png" alt="download"></a>
+        <img class="npl-banner-button-contest hidden-sm-and-down" src="@/assets/nplImg/Button-contestant.png" alt="contest" @click="joinContest">
+        <img class="npl-banner-button-contest npl-banner-button-contest-phone" src="@/assets/nplImg/Button-contestant-phone.png" alt="contest" @click="joinContest">
+        <a href="http://www.paracraft.cn/download?lang=zh" target="_blank">
+          <img class="npl-banner-button-download hidden-sm-and-down" src="@/assets/nplImg/Button-download.png" alt="download">
+          <img class="npl-banner-button-download npl-banner-button-download-phone" src="@/assets/nplImg/Button-download-phone.png" alt="download">
+        </a>
       </div>
     </div>
     <div class="npl-center">
@@ -13,7 +18,7 @@
         <span class="npl-center-title-text">简介</span>
         <span class="npl-center-title-right"></span>
       </div>
-      <p class="npl-center-text">NPL大赛由<a href="#">KeepWork</a>举办推广，以NPL语言和Paracraft工具为基础，以游戏、动画、解谜为主题，每月举办一次。 参赛者使用Paracraft软件单人或组队完成一个游戏项目，项目评比在KeepWork网络评分系统中进行。
+      <p class="npl-center-text">NPL大赛由<a href="https://keepwork.com/" target="_blank">KeepWork</a>举办推广，以NPL语言和Paracraft工具为基础，以游戏、动画、解谜为主题，每月举办一次。 参赛者使用Paracraft软件单人或组队完成一个游戏项目，项目评比在KeepWork网络评分系统中进行。
       </p>
       <div class="npl-center-title">
         <span class="npl-center-title-left"></span>
@@ -25,7 +30,7 @@
         <div class="npl-center-theme-text">
           <div class="npl-center-theme-text-box">
             <h2>游戏</h2>
-            <p>游戏：必须是引导清晰（包含玩法介绍），体验完整和流畅的产品。参考4399.com</p>
+            <p>游戏：必须是引导清晰（包含玩法介绍），体验完整和流畅的产品。参考<a href="http://www.4399.com/" target="_blank">4399.com</a></p>
           </div>
           <div class="npl-center-theme-text-box">
             <h2>动画</h2>
@@ -141,6 +146,7 @@
   </div>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css'
 import ProjectCell from './ProjectCell'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
@@ -159,7 +165,7 @@ export default {
   async mounted() {
     await this.getGamesList()
     for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (this.gamesList.rows[i].state === 0) {
+      if (this.gamesList.rows[i].state === 1) {
         this.gameId = _.get(this.gamesList.rows[i], 'id', 0)
         break
       }
@@ -248,6 +254,9 @@ export default {
       max-width: 1920px;
       width: 100%;
       height: 580px;
+      &-phone {
+        display: none;
+      }
     }
     &-button {
       min-height: 90px;
@@ -258,9 +267,15 @@ export default {
       &-contest {
         margin-right: 42px;
         cursor: pointer;
+        &-phone {
+          display: none;
+        }
       }
       &-download {
         cursor: pointer;
+        &-phone {
+          display: none;
+        }
       }
     }
   }
@@ -349,7 +364,10 @@ export default {
     &-bonus {
       display: flex;
       margin-bottom: 110px;
+      flex-wrap: wrap;
       &-box {
+        font-family: 'MicrosoftYaHei-Bold';
+        min-width: 130px;
         flex: 1;
         text-align: center;
         color: #ff7800;
@@ -378,7 +396,13 @@ export default {
         }
       }
       &-text {
+        color: #333;
+        padding-left: 20px;
+        position: relative;
         .text-icon {
+          position: absolute;
+          left: 0;
+          top: 6px;
           display: inline-block;
           height: 10px;
           width: 10px;
@@ -396,7 +420,7 @@ export default {
       min-height: 198px;
       margin: 0 auto;
       text-align: center;
-      background: url(../../assets/nplImg/going-bg.png);
+      background: url(../../assets/nplImg/going-bg.png) no-repeat;
       color: #fff;
       &-date {
         padding-top: 78px;
@@ -482,6 +506,134 @@ export default {
   &-submit-work {
     .el-dialog .el-dialog__body {
       padding: 10px 80px;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .npl {
+    &-banner {
+      width: 100%;
+      &-img-phone {
+        object-fit: cover;
+        width: 100%;
+        display: block;
+      }
+      &-button {
+        width: 100%;
+        min-height: 30px;
+        bottom: 10px;
+        &-contest {
+          &-phone {
+            display: inline-block;
+          }
+        }
+        &-download {
+          &-phone {
+            display: inline-block;
+          }
+        }
+      }
+    }
+    &-center {
+      &-title {
+        font-size: 18px;
+        font-weight: 700;
+        &-left,
+        &-right {
+          display: none;
+        }
+        &-text {
+          margin: 45px 20px 20px;
+        }
+      }
+      &-text {
+        margin: 0 16px;
+        font-size: 16px;
+        line-height: 26px;
+        text-align: left;
+      }
+      &-theme {
+        background: none;
+        &-title {
+          font-size: 14px;
+          padding: 0;
+        }
+        &-text {
+          display: block;
+          margin: 0 16px;
+          &-box {
+            padding: 0 3px;
+            border-bottom: 1px solid #999;
+            max-width: 330px;
+            h2 {
+              font-size: 16px;
+              color: #333;
+              font-weight: normal;
+            }
+            p {
+              color: #666;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+      &-bonus {
+        margin: 0;
+        &-box {
+          font-size: 16px;
+          line-height: 20px;
+        }
+      }
+      &-points {
+        margin: 0 16px;
+        &-title {
+          margin: 26px 0 0;
+          font-size: 16px;
+        }
+        &-subtitle {
+          margin: 18px 0 0;
+          font-size: 14px;
+          .subtitle-icon {
+            margin-right: 9px;
+          }
+        }
+        &-text {
+          color: #666;
+          font-size: 14px;
+          line-height: 22px;
+        }
+        &-prize {
+          font-size: 14px;
+          line-height: 24px;
+          padding-left: 20px;
+        }
+      }
+      &-going {
+        background: url(../../assets/nplImg/going-bg-phone.png) no-repeat top
+          center;
+        background-size: 100%;
+        min-height: 100px;
+        margin: 0 16px;
+        &-date {
+          font-size: 14px;
+          padding-top: 30px;
+        }
+        &-hint {
+          font-size: 14px;
+          margin: 0;
+        }
+      }
+      &-end {
+        margin: 30px 16px;
+        font-size: 14px;
+        min-height: 100px;
+        &-hint{
+          font-size: 14px;
+        }
+      }
+    }
+    &-competition {
+      padding: 10px;
     }
   }
 }

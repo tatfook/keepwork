@@ -70,7 +70,7 @@ export default {
       this.getGamesList()
     ]).catch(e => console.warn(e))
     for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (this.gamesList.rows[i].state === 0) {
+      if (this.gamesList.rows[i].state === 1) {
         this.submitWorkInfo.gameId = _.get(this.gamesList.rows[i], 'id', 0)
         break
       }
