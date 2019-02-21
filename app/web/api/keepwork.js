@@ -295,6 +295,7 @@ export const projects = {
   getContributeProjects: async () => get('projects/join'),
   getContributeProjectsByUserId: async ({ userId, exclude }) => get(`projects/join?userId=${userId}&exclude=${exclude}`),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
+  getProjectGames: async ({ projectId }) => get(`projects/${projectId}/game`),
   visitProject: async (projectId) => get(`projects/${projectId}/visit`)
 }
 

@@ -18,6 +18,7 @@ const GET_ALL_USERS_SUCCESS = 'GET_ALL_USERS_SUCCESS'
 const GET_USER_FOLLOWS = 'GET_USER_FOLLOWS'
 const GET_GAMES_LIST = 'GET_GAMES_LIST'
 const GET_WORKS_BY_GAMEID = 'GET_WORKS_BY_GAMEID'
+const GET_PROJECT_GAMES_SUCCESS = 'GET_PROJECT_GAMES_SUCCESS'
 const GET_LEGAL_GAMES_PROJECTS = 'GET_LEGAL_GAMES_PROJECTS'
 
 export const props = {
@@ -39,6 +40,7 @@ export const props = {
   GET_USER_FOLLOWS,
   GET_GAMES_LIST,
   GET_WORKS_BY_GAMEID,
+  GET_PROJECT_GAMES_SUCCESS,
   GET_LEGAL_GAMES_PROJECTS
 }
 
@@ -158,6 +160,12 @@ const mutations = {
   },
   [GET_WORKS_BY_GAMEID](state, obj) {
     Vue.set(state, 'gameWorks', obj)
+  },
+  [GET_PROJECT_GAMES_SUCCESS](state, { projectId, nowJoinedGame }) {
+    Vue.set(state, 'joinedGames', {
+      ...state.joinedGames,
+      [projectId]: nowJoinedGame
+    })
   },
   [GET_LEGAL_GAMES_PROJECTS](state, list) {
     Vue.set(state, 'legalGamesProjects', list)

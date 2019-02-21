@@ -22,6 +22,7 @@ const state = {
   userFollows: [],
   gamesList: [],
   gameWorks: {},
+  joinedGames: [],
   legalGamesProjects: []
 }
 export default {

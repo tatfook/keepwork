@@ -21,6 +21,7 @@ let {
   GET_USER_FOLLOWS,
   GET_GAMES_LIST,
   GET_WORKS_BY_GAMEID,
+  GET_PROJECT_GAMES_SUCCESS,
   GET_LEGAL_GAMES_PROJECTS
 } = props
 
@@ -267,6 +268,10 @@ const actions = {
     await keepwork.games.getWorksByGameId({ gameId }).then(res => {
       commit(GET_WORKS_BY_GAMEID, res)
     })
+  },
+  async getProjectGames({ commit }, { projectId }) {
+    let nowJoinedGame = await keepwork.projects.getProjectGames({ projectId }).catch(() => [])
+    commit(GET_PROJECT_GAMES_SUCCESS, { projectId, nowJoinedGame })
   },
   async getLegalGamesProjects({ commit }) {
     await keepwork.games.getLegalGamesProjects().then(res => {
