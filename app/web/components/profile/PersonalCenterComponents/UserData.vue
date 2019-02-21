@@ -18,7 +18,7 @@
         <el-form-item :label='$t("user.displayName")'>
           <el-input v-model="userInfo.nickname" size="small"></el-input>
         </el-form-item>
-        <el-form-item label='姓名'>
+        <el-form-item :label='$t("lesson.name")'>
           <el-input v-model="userInfo.info.name" size="small"></el-input>
         </el-form-item>
         <el-form-item :label='$t("user.sex")'>
@@ -28,17 +28,17 @@
             <el-radio label="N">{{$t('user.confidentiality')}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="生日">
-          <el-date-picker v-model="userInfo.info.birthdate" type="date" placeholder="选择日期"></el-date-picker>
+        <el-form-item :label="$t('user.birthday')">
+          <el-date-picker size="small" v-model="userInfo.info.birthdate" type="date" :placeholder="$t('user.inputBirth')"></el-date-picker>
         </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input v-model="userInfo.email" size="small"></el-input>
+        <el-form-item :label="$t('user.email')">
+          <el-input v-model="userInfo.email" size="small" :placeholder="$t('user.inputEmail')"></el-input>
         </el-form-item>
         <el-form-item label="QQ">
-          <el-input v-model="userInfo.info.qq" size="small"></el-input>
+          <el-input v-model="userInfo.info.qq" size="small" :placeholder="$t('user.inputQQ')"></el-input>
         </el-form-item>
-        <el-form-item label="学校">
-          <el-input v-model="userInfo.info.school" size="small"></el-input>
+        <el-form-item :label="$t('user.school')">
+          <el-input v-model="userInfo.info.school" size="small" :placeholder="$t('user.inputSchool')"></el-input>
         </el-form-item>
         <el-form-item :label='$t("user.location")' size="small">
           <el-select v-model="tempLocation" :placeholder="$t('editor.select')">
