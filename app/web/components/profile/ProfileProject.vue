@@ -31,7 +31,7 @@
           <el-tab-pane name="starred">
             <span slot='label'>{{$t('profile.starredProjects')}}</span>
             <div v-if="!isStarredEmpty" class="profile-project-list">
-              <project-cell class="profile-project-list-item" v-for="(starredItem, index) in nowProfileStarredProjects" :key="index" :project='starredItem.projects'></project-cell>
+              <project-cell class="profile-project-list-item" v-for="(starredItem, index) in formatedNowProfileStarredProjects" :key="index" :project='starredItem.projects'></project-cell>
             </div>
             <div v-if="isStarredEmpty" class="profile-project-empty">
               <div class="profile-project-empty-info">{{$t("profile.noStarredProjectsToShow")}}</div>
@@ -115,6 +115,12 @@ export default {
     nowProfileStarredProjects() {
       return this.starredProjects({ userId: this.nowProfileUserId })
     },
+    formatedNowProfileStarredProjects() {
+      return _.map(this.nowProfileStarredProjects, project => {
+        project.projects.user = project.projects.users
+        return project
+      })
+    },
     isCreatedEmpty() {
       return !Boolean(
         this.nowProfileCreatedProjects && this.nowProfileCreatedProjects.length
@@ -166,9 +172,11 @@ export default {
     async initProjectsData() {
       let userId = this.nowProfileUserId
       this.isLoading = true
-      this.isCreatedType && await this.profileGetUserCreatedProjects({ userId })
-      this.isJoinedType && await this.profileGetUserJoinedProjects({ userId })
-      this.isStarredType && await this.profileGetUserStarredProjects({ userId })
+      this.isCreatedType &&
+        (await this.profileGetUserCreatedProjects({ userId }))
+      this.isJoinedType && (await this.profileGetUserJoinedProjects({ userId }))
+      this.isStarredType &&
+        (await this.profileGetUserStarredProjects({ userId }))
       this.isLoading = false
     },
     async updateData() {
