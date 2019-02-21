@@ -19,7 +19,7 @@
           <el-input v-model="userInfo.nickname" size="small"></el-input>
         </el-form-item>
         <el-form-item :label='$t("lesson.name")'>
-          <el-input v-model="userInfo.info.name" size="small"></el-input>
+          <el-input v-model="userInfo.info.name" size="small" :placeholder="$t('user.inputName')"></el-input>
         </el-form-item>
         <el-form-item :label='$t("user.sex")'>
           <el-radio-group v-model="userInfo.sex">
