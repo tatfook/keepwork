@@ -19,6 +19,7 @@ const getters = {
   userFollows: state => state.userFollows,
   gamesList: state => state.gamesList,
   gameWorks: state => state.gameWorks,
+  projectJoinedGames: state => ({ projectId }) => _.get(state.joinedGames, projectId),
   legalGamesProjects: state => state.legalGamesProjects
 }
 

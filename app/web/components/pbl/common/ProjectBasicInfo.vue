@@ -37,6 +37,7 @@
           <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
           <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{$t("project.edit")}}</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
+          <game-entry v-if="isLoginUserBeCreator" :projectId='projectId' class="project-basic-info-detail-operations-item"></game-entry>
         </div>
       </div>
     </div>
@@ -80,6 +81,7 @@ import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
 import ProjectGrade from './ProjectGrade'
+import GameEntry from './GameEntry'
 import launchUri from '@/lib/utils/launchUri'
 
 export default {
@@ -161,11 +163,15 @@ export default {
     ...mapGetters({
       loginUserId: 'user/userId',
       loginUserDetail: 'user/profile',
+      loginUsername: 'user/username',
       userToken: 'user/token',
       getSiteDetailInfoById: 'user/getSiteDetailInfoById',
       isLogined: 'user/isLogined',
       getUserSitePrivilege: 'user/getUserSitePrivilege'
     }),
+    isLoginUserBeCreator() {
+      return this.isLogined && this.loginUsername === this.projectOwnerUsername
+    },
     isEn() {
       return locale === 'en-US' ? true : false
     },
@@ -521,6 +527,7 @@ export default {
     SkyDriveManagerDialog,
     ParacraftInfo,
     ProjectGrade,
+    GameEntry,
     WebsiteBinder
   }
 }
@@ -669,6 +676,10 @@ export default {
       left: 0;
       bottom: 0;
       right: 0;
+      &-item {
+        display: inline-block;
+        margin-left: 10px;
+      }
     }
   }
 
