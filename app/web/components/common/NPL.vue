@@ -133,7 +133,7 @@
     <el-dialog class="npl-hint-dialog" :visible.sync="hintVisible" width="375px" center :before-close="handleCloseHint">
       <p class="npl-hint-dialog-text">请完善个人信息</p>
       <p class="npl-hint-dialog-text">包括姓名、手机号、出生年月、邮箱、QQ</p>
-      <a href="/u/p/userData" class="npl-hint-dialog-btn">现在就去</a>
+      <a href="/u/p/userData" target="_blank" class="npl-hint-dialog-btn">现在就去</a>
     </el-dialog>
     <el-dialog class="npl-submit-work" :visible.sync="submitWorkVisible" v-if="submitWorkVisible" width="614px" :before-close="handleCloseSubmitWork">
       <submit-work @close='handleCloseSubmitWork' @submitSuccess="submitSuccess"></submit-work>
