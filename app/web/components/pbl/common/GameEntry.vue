@@ -12,7 +12,7 @@
       </el-dropdown-menu>
     </el-dropdown>
     <el-dialog class="game-entry-submit" :visible.sync="isSubmitWorkVisible" v-if="isSubmitWorkVisible" width="614px" :before-close="closeSubmitDialog">
-      <submit-work @close='closeSubmitDialog' @submitSuccess="handleSubmitSuccess"></submit-work>
+      <submit-work :selectedGameAndProject='selectedGameAndProject' @close='closeSubmitDialog' @submitSuccess="handleSubmitSuccess"></submit-work>
     </el-dialog>
   </div>
 </template>
@@ -29,7 +29,8 @@ export default {
   data() {
     return {
       isSubmitWorkVisible: false,
-      isLoading: false
+      isLoading: false,
+      selectedGameAndProject: undefined
     }
   },
   computed: {
@@ -67,6 +68,13 @@ export default {
         this.isLoading = false
       }
     },
+    setSelectedGame(gameName) {
+      this.selectedGameAndProject = {
+        game: _.find(this.inProgressGames, { name: gameName }),
+        projectId: this.projectId
+      }
+      return true
+    },
     checkUserInfoMeetDemmand() {
       return (
         this.loginUserDetail.info &&
@@ -81,7 +89,10 @@ export default {
       this.isSubmitWorkVisible = true
     },
     toJoin(gameName) {
-      gameName && this.checkUserInfoMeetDemmand() && this.showJoinComp()
+      gameName &&
+        this.checkUserInfoMeetDemmand() &&
+        this.setSelectedGame(gameName) &&
+        this.showJoinComp()
     },
     handleSubmitSuccess() {
       this.$message({
@@ -121,6 +132,11 @@ export default {
   }
   &-empty {
     color: #c0c4cc;
+  }
+  &-submit {
+    .el-dialog__body {
+      padding: 10px 80px;
+    }
   }
 }
 </style>

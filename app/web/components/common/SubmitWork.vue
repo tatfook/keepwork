@@ -33,9 +33,11 @@
         </div>
       </el-form-item>
       <el-form-item label="项目ID">
-        <el-select v-model="submitWorkInfo.workId">
+        <el-select v-if="isGameSelectable" v-model="submitWorkInfo.workId">
           <el-option v-for="i in gamesProjectsId" :key="i.id" :label="i.name+ '  #' + i.id" :value="i.id"></el-option>
         </el-select>
+        <el-input v-else :placeholder="selectedGameText" :disabled="true">
+        </el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="goSubmitWork">提交作品</el-button>
@@ -51,6 +53,9 @@ import _ from 'lodash'
 
 export default {
   name: 'SubmitWork',
+  props: {
+    selectedGameAndProject: Object
+  },
   data() {
     return {
       submitWorkInfo: {
@@ -65,6 +70,11 @@ export default {
     }
   },
   async mounted() {
+    if (!this.isGameSelectable) {
+      this.submitWorkInfo.workId = this.selectedGameAndProject.projectId
+      this.submitWorkInfo.gameId = this.selectedGameAndProject.game.id
+      return
+    }
     await Promise.all([
       this.getLegalGamesProjects(),
       this.getGamesList()
@@ -81,6 +91,20 @@ export default {
       legalGamesProjects: 'pbl/legalGamesProjects',
       gamesList: 'pbl/gamesList'
     }),
+    isGameSelectable() {
+      return !(
+        this.selectedGameAndProject &&
+        this.selectedGameAndProject.game &&
+        this.selectedGameAndProject.projectId
+      )
+    },
+    selectedGameText() {
+      if (!this.isGameSelectable) {
+        let gameInfo = this.selectedGameAndProject.game
+        return gameInfo.name + ' #' + gameInfo.id
+      }
+      return ''
+    },
     gamesProjectsId() {
       return _.map(this.legalGamesProjects, ({ id, name }) => ({
         id,
