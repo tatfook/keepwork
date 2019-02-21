@@ -295,6 +295,7 @@ export const projects = {
   getContributeProjects: async () => get('projects/join'),
   getContributeProjectsByUserId: async ({ userId, exclude }) => get(`projects/join?userId=${userId}&exclude=${exclude}`),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
+  getProjectGames: async ({ projectId }) => get(`projects/${projectId}/game`),
   visitProject: async (projectId) => get(`projects/${projectId}/visit`)
 }
 
@@ -363,6 +364,13 @@ export const groups = {
   addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
 }
 
+export const games = {
+  getGamesList: async () => post('games/search'),
+  getWorksByGameId: async ({ gameId }) => post('gameWorks/search', { gameId }),
+  getLegalGamesProjects: async () => get('games/projects'),
+  submitGameWorks: async (...args) => post('gameWorks', ...args)
+}
+
 export const keepwork = {
   user,
   website,
@@ -381,7 +389,8 @@ export const keepwork = {
   bigfile,
   issues,
   groups,
-  account
+  account,
+  games
 }
 
 export default keepwork
