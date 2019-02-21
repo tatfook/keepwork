@@ -40,7 +40,7 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="goSubmitWork">提交作品</el-button>
+        <el-button type="primary" @click="goSubmitWork" :disabled="submitDisabled">提交作品</el-button>
       </el-form-item>
     </el-form>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
@@ -91,6 +91,16 @@ export default {
       legalGamesProjects: 'pbl/legalGamesProjects',
       gamesList: 'pbl/gamesList'
     }),
+    submitDisabled() {
+      return !(
+        this.submitWorkInfo.gameId &&
+        this.submitWorkInfo.theme &&
+        this.submitWorkInfo.name &&
+        this.submitWorkInfo.desc &&
+        this.submitWorkInfo.cover &&
+        this.submitWorkInfo.workId
+      )
+    },
     isGameSelectable() {
       return !(
         this.selectedGameAndProject &&
