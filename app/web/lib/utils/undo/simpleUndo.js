@@ -1,6 +1,6 @@
 'use strict'
 
-const DEFAULT_STACK_SIZE = 100
+const DEFAULT_STACK_SIZE = 30
 
 class SimpleUndo {
   /**
