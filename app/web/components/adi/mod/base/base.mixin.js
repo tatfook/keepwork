@@ -67,7 +67,8 @@ export default {
     const styleID = this.modData.styleID || 0
     const style = this.conf.styles[styleID]
 
-    const templateID = (style && typeof style.templateID === 'number') && style.templateID || 0
+    const templateID =
+      (style && typeof style.templateID === 'number' && style.templateID) || 0
     const template = this.conf.templates[templateID]
 
     let isShowMod = false
@@ -209,10 +210,12 @@ export default {
       classes.push('comp')
 
       if (this.activeMod) {
-        if (
-          this.mod.uuid === this.activeMod.uuid &&
-          name === this.activeProperty
-        ) {
+        let isModSame = this.mod.uuid === this.activeMod.uuid
+        let isSubModSame =
+          this.activeSubMod &&
+          this.rootMod.uuid === this.activeMod.uuid &&
+          this.mod.index === this.activeSubMod.childProperty
+        if ((isModSame || isSubModSame) && name === this.activeProperty) {
           classes.push('comp-proptype-hover')
         }
       }
@@ -286,6 +289,7 @@ export default {
     ...mapGetters({
       activeProperty: 'activeProperty',
       activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod',
       themeConf: 'themeConf',
       userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
     }),

@@ -197,7 +197,6 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 3;
   background-color: rgba(127, 195, 255, 0.4);
   cursor: pointer;
 }
