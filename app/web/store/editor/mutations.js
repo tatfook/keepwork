@@ -184,12 +184,12 @@ const mutations = {
     }
   },
   [SET_ACTIVE_SUB_MOD](state, payload) {
-    let subMod = state.activePage.activeSubMod
+    // let subMod = state.activePage.activeSubMod
     if (!payload || !payload.modType) {
       Vue.set(state.activePage, 'activeSubMod', null)
-      if (subMod) {
-        Vue.set(state.activePage, 'activeProperty', subMod.parentProperty)
-      }
+      // if (subMod) {
+      //   Vue.set(state.activePage, 'activeProperty', subMod.parentProperty)
+      // }
     } else {
       Vue.set(state.activePage, 'activeSubMod', payload)
     }

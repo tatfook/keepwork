@@ -5,7 +5,7 @@
         <i class="iconfont icon-delete icon-del"></i>
       </div>
       <div class='mod'>
-      <component :is='modComponent' :rootMod='mod' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
+        <component :is='modComponent' :rootMod='mod' :mod='mod' :conf='modConf' :theme='theme' :editMode='true' :active='isActive'></component>
         <span v-if='invalid'>{{$t('editor.wrongModDirective')}}</span>
       </div>
       <div class='operator' v-if='isActive'>
@@ -17,7 +17,7 @@
         </el-tooltip>
       </div>
     </div>
-    <QuickToTop/>
+    <quick-to-top></quick-to-top>
   </div>
 </template>
 
@@ -103,9 +103,9 @@ export default {
         payload: this.mod.key
       }
       this.toggleIframeDialog(data)
-    },
+    }
   },
-  components:{
+  components: {
     QuickToTop
   }
 }
@@ -140,20 +140,20 @@ export default {
 </style>
 
 <style lang="scss">
-.mod-wrap{
+.mod-wrap {
   border: 2px solid transparent;
-  &:hover{
-    border:2px dashed #3ab4ff;
+  &:hover {
+    border: 2px dashed #3ab4ff;
   }
 }
 .mod-active {
-  border:2px dashed #f7a935;
+  border: 2px dashed #f7a935;
   position: relative;
-  .add-mod-btn{
+  .add-mod-btn {
     background-color: #f7a935;
   }
-  &:hover{
-    border:2px dashed #f7a935;
+  &:hover {
+    border: 2px dashed #f7a935;
   }
 }
 .kp-mod-selector .comp {
