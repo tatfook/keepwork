@@ -633,6 +633,7 @@
     "projectInputId": "Enter the project ID to get the project data",
     "edit": "Edit",
     "delete": "Delete",
+    "back": "Back",
     "projectForbidden": "Unable to display content"
   },
   "field": {
