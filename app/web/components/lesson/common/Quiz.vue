@@ -52,6 +52,7 @@
         <span :class="['explan',isError ? 'error-highlight': 'highlight']">{{desc}}</span>
       </div>
     </div>
+    <div v-if="isFormatError" class="is-format-error">{{$t('lesson.formatError')}}</div>
     <el-button v-if="!isDone && !isPreview" class="quiz-submit" size="small" type="primary" @click="checkAnswer">{{$t('card.submit')}}</el-button>
   </div>
 </template>
@@ -264,6 +265,9 @@ export default {
       return Array.from({ length: 26 }, (i, index) =>
         String.fromCharCode(65 + index)
       )
+    },
+    isFormatError() {
+      return _.isEmpty(this.data.data)
     }
   }
 }
@@ -280,6 +284,10 @@ export default {
   background: white;
   max-width: 1229px;
   margin: 0 auto;
+  .is-format-error {
+    color: #F56C6C;
+    margin-left: 60px;
+  }
   &.is-preview {
     .el-radio__input,
     .el-checkbox__inner,
