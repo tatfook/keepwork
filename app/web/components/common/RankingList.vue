@@ -7,7 +7,7 @@
           <el-menu-item index="总榜">总榜</el-menu-item>
           <el-submenu index="NPL">
             <template slot="title">NPL大赛</template>
-            <el-menu-item v-for="i in tabGamesList" :key="i.id" :index="i.id+''">{{i.name + '  (' + gameState(i) + ')'}}</el-menu-item>
+            <el-menu-item v-for="i in tabGamesList" :key="i.id" :index="i.id+''">{{i.name + ' (' + gameState(i) + ')'}}</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
@@ -62,7 +62,9 @@ export default {
       return '总榜'
     },
     tabGamesList() {
-      return _.get(this.gamesList, 'rows', [])
+      return _.filter(_.get(this.gamesList, 'rows', []), i => {
+        return i.state != 0
+      })
     },
     showProjectsByTab() {
       return this.activeIndex[0] === '总榜'
@@ -91,7 +93,7 @@ export default {
       getGamesList: 'pbl/getGamesList',
       getWorksByGameId: 'pbl/getWorksByGameId'
     }),
-    gameState(i){
+    gameState(i) {
       return i.state === 0 ? '未开始' : i.state === 1 ? '进行中' : '已结束'
     },
     getRankingProjects() {
@@ -99,7 +101,8 @@ export default {
         .getProjects({
           'x-order': 'rate-desc',
           'x-per-page': 100,
-          type: 1
+          type: 1,
+          visibility: 0
         })
         .then(res => {
           this.ranking = res
