@@ -37,22 +37,17 @@ let modsList = [
         id: '1-2',
         label: 'modList.board',
         mods: [ModBoard]
-      },
-      {
-        id: '1-3',
-        label: 'modList.mixlayerlist',
-        mods: [ModMixLayerList]
-      },
-      {
-        id: '1-4',
-        label: 'modList.textmixlayerlist',
-        mods: [ModTextMixLayerList]
-      },
-      {
-        id: '1-5',
-        label: 'ModMixPositionList',
-        mods: [ModMixPositionList]
       }
+      // {
+      //   id: '1-3',
+      //   label: 'modList.mixlayerlist',
+      //   mods: [ModMixLayerList]
+      // },
+      // {
+      //   id: '1-4',
+      //   label: 'modList.textmixlayerlist',
+      //   mods: [ModTextMixLayerList]
+      // },
     ]
   },
   {
@@ -157,6 +152,11 @@ let modsList = [
         id: '6-6',
         label: 'modList.textBoard',
         mods: [ModTextBoard]
+      },
+      {
+        id: '6-7',
+        label: 'modList.mixPositionList',
+        mods: [ModMixPositionList]
       }
     ]
   },
