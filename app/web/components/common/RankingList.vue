@@ -62,8 +62,12 @@ export default {
       return '总榜'
     },
     tabGamesList() {
+      const nowTime = new Date()
       return _.filter(_.get(this.gamesList, 'rows', []), i => {
-        return i.state != 0
+        return (
+          (nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)) ||
+          nowTime > new Date(i.endDate)
+        )
       })
     },
     showProjectsByTab() {
@@ -94,7 +98,12 @@ export default {
       getWorksByGameId: 'pbl/getWorksByGameId'
     }),
     gameState(i) {
-      return i.state === 0 ? '未开始' : i.state === 1 ? '进行中' : '已结束'
+      const nowTime = new Date()
+      return nowTime < new Date(i.startDate)
+        ? '未开始'
+        : nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)
+        ? '进行中'
+        : '已结束'
     },
     getRankingProjects() {
       keepwork.projects
