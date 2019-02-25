@@ -55,7 +55,7 @@ export default {
       if (this.activeIndex[0] === 'NPL') {
         for (let i = 0; i < this.tabGamesList.length; i++) {
           if (Number(this.activeIndex[1]) === this.tabGamesList[i].id) {
-            return this.tabGamesList[i].name
+            return this.tabGamesList[i].name + '  第' + this.tabGamesList[i].no +'期'
           }
         }
       }
