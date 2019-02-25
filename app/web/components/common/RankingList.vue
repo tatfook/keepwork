@@ -62,7 +62,9 @@ export default {
       return '总榜'
     },
     tabGamesList() {
-      return _.get(this.gamesList, 'rows', [])
+      return _.filter(_.get(this.gamesList, 'rows', []), i => {
+        return i.state != 0
+      })
     },
     showProjectsByTab() {
       return this.activeIndex[0] === '总榜'
