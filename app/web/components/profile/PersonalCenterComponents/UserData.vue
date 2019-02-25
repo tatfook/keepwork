@@ -2,7 +2,7 @@
   <div class="user-data" v-loading="loading">
     <div class="user-data-title">{{$t('common.userData')}}</div>
     <div class="user-data-content">
-      <el-form ref="form" :model="userInfo" label-width="80px">
+      <el-form ref="form" :model="userInfo" label-width="80px" :rules="userInfoRules">
         <el-form-item :label='$t("card.pic")'>
           <div class="user-data-content-profile" @click="showMediaSkyDriveDialog">
             <img :src="portrait || defaultPortrait" alt="" class="profile">
@@ -31,7 +31,7 @@
         <el-form-item :label="$t('user.birthday')">
           <el-date-picker size="small" v-model="userInfo.info.birthdate" type="date" :placeholder="$t('user.inputBirth')"></el-date-picker>
         </el-form-item>
-        <el-form-item :label="$t('user.email')">
+        <el-form-item :label="$t('user.email')" prop="email">
           <el-input v-model="userInfo.email" size="small" :placeholder="$t('user.inputEmail')"></el-input>
         </el-form-item>
         <el-form-item label="QQ">
@@ -81,10 +81,19 @@ export default {
       loading: true,
       cities: cityName,
       tempLocation: null,
-      userInfo: {info:{}},
+      userInfo: { info: {} },
       copiedLoginUserProfile: {},
       defaultPortrait: require('@/assets/img/default_portrait.png'),
-      isMediaSkyDriveDialogShow: false
+      isMediaSkyDriveDialogShow: false,
+      userInfoRules: {
+        email: [
+          {
+            type: 'email',
+            message: '请输入正确的邮箱地址',
+            trigger: ['blur', 'change']
+          }
+        ]
+      }
     }
   },
   computed: {
