@@ -81,13 +81,13 @@
 
         <h4 class="npl-center-points-title">一二三等奖评比规则</h4>
         <h5 class="npl-center-points-subtitle"><span class="subtitle-icon"></span>最低标准要求：</h5>
-        <p class="npl-center-points-prize">一等奖：游戏类参考作品：《BlockBot》；动画类参考作品：《呵护》；解谜类参考作品：《解救游戏》</p>
-        <p class="npl-center-points-prize">二等奖：游戏类参考作品：《坦克大战》；动画类参考作品：《肇庆一中·记忆永存》；解谜类参考作品：《百货商店》</p>
-        <p class="npl-center-points-prize">三等奖：游戏类参考作品：《道路通畅》；动画类参考作品：《悲伤的巴塞罗那》；解谜类参考作品: 《飞机奇遇记》</p>
+        <p class="npl-center-points-prize">一等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/709/" target="_blank">《BlockBot》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/805/" target="_blank">《呵护》</a>；解谜类参考作品：<a href="https://keepwork.com/pbl/project/177/" target="_blank">《解救游戏》</a></p>
+        <p class="npl-center-points-prize">二等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/821/" target="_blank">《坦克大战》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/456/" target="_blank">《肇庆一中·记忆永存》</a>；解谜类参考作品：<a href="https://keepwork.com/pbl/project/105/" target="_blank">《百货商店》</a></p>
+        <p class="npl-center-points-prize">三等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/840/" target="_blank">《道路通畅》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/166/" target="_blank">《悲伤的巴塞罗那》</a>；解谜类参考作品: <a href="https://keepwork.com/pbl/project/167/" target="_blank">《飞机奇遇记》</a></p>
 
         <h5 class="npl-center-points-subtitle"><span class="subtitle-icon"></span>评比方法：</h5>
         <p class="npl-center-points-prize">获奖作品须满足对应奖项最低标准要求。</p>
-        <p class="npl-center-points-prize">根据评分系统得分进行排序评选。</p>
+        <p class="npl-center-points-prize">根据评分系统得分进行排序评选。可参考<a href="/ranking" target="_blank">KeepWork排行榜</a></p>
         <p class="npl-center-points-prize">评分评委为所有拥有自己作品的KeepWork注册用户，评委分为主动评分类型及被动系统邀请类型。</p>
         <p class="npl-center-points-prize">每个评委可对提交的每一个作品进行一次评分。</p>
         <p class="npl-center-points-prize">每个作品在每届NPL大赛截至日期之前都可进行评委评分。</p>
@@ -113,7 +113,7 @@
       </div>
       <div class="npl-center-end">
         <p class="npl-center-end-date">2019年1月NPL大赛截至日期1月15日（已截止）</p>
-        <p class="npl-center-end-hint">点击查看<a href="/ranking"> &lt;获奖作品&gt; </a></p>
+        <p class="npl-center-end-hint">点击查看<a href="https://keepwork.com/paraworld/NPLone/index"> &lt;获奖作品&gt; </a></p>
       </div>
     </div>
     <div class="npl-competition">
