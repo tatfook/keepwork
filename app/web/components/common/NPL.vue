@@ -108,7 +108,7 @@
         <span class="npl-center-title-right"></span>
       </div>
       <div class="npl-center-going">
-        <p class="npl-center-going-date">2019年2月NPL大赛截止日期2月25日</p>
+        <p class="npl-center-going-date">2019年2月NPL大赛截止日期2月28日</p>
         <p class="npl-center-going-hint"><img class="npl-center-going-hint-flame" src="@/assets/nplImg/flame.png">进行中</p>
       </div>
       <div class="npl-center-end">
