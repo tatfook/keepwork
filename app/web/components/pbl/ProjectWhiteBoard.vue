@@ -28,7 +28,7 @@
               <span class="project-white-board-list-number">#{{issue.no}}</span>
             </div>
             <div class="project-white-board-list-intro">
-              <span class="project-white-board-list-time">{{isEn ? $t('common.update') : ''}} {{relativeTime(issue.updatedAt)}}{{isEn ? '' : $t('common.update')}}</span>
+              <span class="project-white-board-list-time">{{isEn ? $t('common.update')+'d' : ''}} {{relativeTime(issue.updatedAt)}}{{isEn ? '' : $t('common.update')}}</span>
               <span class="project-white-board-list-creator">
                 {{$t("project.createBy")}}
                 <span class="project-white-board-list-creator-name">{{issue.user.username}}</span>

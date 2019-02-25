@@ -16,7 +16,11 @@ const getters = {
   diffTypeProject: state => ({ type }) => _.get(state.projectsType, type),
   issuesList: state => ({ projectId }) => _.get(state.issuesList, projectId),
   allUsers: state => state.allUsers,
-  userFollows: state => state.userFollows
+  userFollows: state => state.userFollows,
+  gamesList: state => state.gamesList,
+  gameWorks: state => state.gameWorks,
+  projectJoinedGames: state => ({ projectId }) => _.get(state.joinedGames, projectId),
+  legalGamesProjects: state => state.legalGamesProjects
 }
 
 export default getters
