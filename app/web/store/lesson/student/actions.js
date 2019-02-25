@@ -50,26 +50,31 @@ const actions = {
       lesson.lessons.lessonDetail({ lessonId })
     ])
     if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
-    let modList = Parser.buildBlockList(res.content)
-    let quiz = modList
-      .filter(({ cmd }) => cmd === 'Quiz')
-      .map(({ data: { quiz: { data } } }) => ({
-        key: data[0].id,
-        data: data[0],
-        result: null,
-        answer: null
-      }))
-    commit(GET_LESSON_CONTENT_SUCCESS, {
-      lessonId,
-      content: res.content
-    })
-    commit(SAVE_LESSON_DETAIL, {
-      lessonId,
-      lesson: detail,
-      quiz,
-      modList
-    })
-    commit(CLEAR_LEARN_RECORDS_ID)
+    try {
+      let modList = Parser.buildBlockList(res.content)
+      let quiz = modList.filter(item => {
+        return item.cmd === 'Quiz' && !_.isEmpty(item.data)
+      })
+        .map(({ data: { quiz: { data } } }) => ({
+          key: data[0].id,
+          data: data[0],
+          result: null,
+          answer: null
+        }))
+      commit(GET_LESSON_CONTENT_SUCCESS, {
+        lessonId,
+        content: res.content
+      })
+      commit(SAVE_LESSON_DETAIL, {
+        lessonId,
+        lesson: detail,
+        quiz,
+        modList
+      })
+      commit(CLEAR_LEARN_RECORDS_ID)
+    } catch (error) {
+      console.error(error)
+    }
   },
   async subscribePackage({ context }, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({

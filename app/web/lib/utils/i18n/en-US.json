@@ -842,6 +842,7 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "formatError": "format error",
     "viewMore": "View More",
     "teachingContent": "Teach with diversified contents",
     "onlineLessons": "Online Lessons",
