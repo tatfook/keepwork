@@ -738,12 +738,20 @@
     "fileUploading": "There are files being uploaded. After leaving, the files will be canceled. Continue?"
   },
   "user": {
-    "displayName": "NickName:",
-    "sex": "Gender:",
-    "location": "Location:",
-    "introduce": "Intro:",
+    "displayName": "NickName",
+    "sex": "Gender",
+    "location": "Location",
+    "introduce": "Intro",
     "male": "Male",
     "female": "Female",
+    "birthday": "Birthday",
+    "email": "Email",
+    "school": "School",
+    "inputName": "Please enter your name",
+    "inputBirth": "Please select date",
+    "inputEmail": "Please enter email address",
+    "inputQQ": "Please enter your QQ number",
+    "inputSchool": "Please enter your school",
     "confidentiality": "Private",
     "modifyAvatar": "Modify Avatar",
     "inputPhoneNumber": "Phone number",
@@ -834,6 +842,7 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "formatError": "format error",
     "viewMore": "View More",
     "teachingContent": "Teach with diversified contents",
     "onlineLessons": "Online Lessons",
@@ -1550,8 +1559,10 @@
     "noFollowersToShow": "No followers to show.",
     "createdProjects": "Created projects",
     "contributedProjects": "Contributed projects",
+    "starredProjects": "Starred projects",
     "noProjectsToShow": "No projects to show.",
     "noContributedProjectsToShow": "No contributed projects to show.",
+    "noStarredProjectsToShow": "No starred projects to show.",
     "top": "Top",
     "unTop": "Un-Top",
     "changePassword": "Change Password"

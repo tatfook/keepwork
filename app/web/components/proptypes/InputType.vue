@@ -1,5 +1,5 @@
 <template>
-  <el-input class="input-type" :placeholder="$t('field.' + inputPlaceholder())" v-model='inputTypeValue' clearable @input='updateValue' @focus='getFocus'></el-input>
+  <el-input class="input-type" :placeholder="$t('field.' + inputPlaceholder())" v-model="inputValue" clearable @input='updateValue' @focus='getFocus'></el-input>
 </template>
 <script>
 import protypesBaseMixin from './protypes.base.mixin'
@@ -9,6 +9,14 @@ export default {
   mixins: [protypesBaseMixin],
   props: {
     originValue: String
+  },
+  data() {
+    return {
+      inputValue: ''
+    }
+  },
+  mounted() {
+    this.inputValue = this.inputTypeValue
   },
   computed: {
     inputTypeValue: {

@@ -735,6 +735,14 @@
     "introduce": "签名",
     "male": "男",
     "female": "女",
+    "birthday": "生日",
+    "email": "邮箱",
+    "school": "学校",
+    "inputName": "请输入您的姓名",
+    "inputBirth": "请选择日期",
+    "inputEmail": "请输入邮箱",
+    "inputQQ": "请输入您的QQ号",
+    "inputSchool": "请输入您的学校",
     "confidentiality": "保密",
     "modifyAvatar": "点击修改头像",
     "inputPhoneNumber": "请输入手机号码",
@@ -825,6 +833,7 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "formatError": "格式错误",
     "viewMore": "了解更多",
     "teachingContent": "教学内容",
     "onlineLessons": "线上课程",
@@ -1541,8 +1550,10 @@
     "noFollowersToShow": "还没有粉丝~",
     "createdProjects": "创建的项目",
     "contributedProjects": "参与的项目",
+    "starredProjects": "收藏的项目",
     "noProjectsToShow": "还没有创建项目~",
     "noContributedProjectsToShow": "还没有参与项目~",
+    "noStarredProjectsToShow": "还没有收藏项目~",
     "top": "置顶",
     "unTop": "取消置顶",
     "changePassword": "密码修改"

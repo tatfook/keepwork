@@ -6,6 +6,7 @@ const ExplorationPage = () => import('@/components/common/ExplorationPage')
 const StudyPage = () => import('@/components/common/StudyPage')
 const KeepworkAgreement = () => import('@/components/common/KeepworkAgreement')
 const RankingList = () => import('@/components/common/RankingList')
+const NPL = () => import('@/components/common/NPL')
 
 
 Vue.use(Router)
@@ -42,6 +43,11 @@ export default new Router({
       path: '/ranking',
       name: 'RankingList',
       component: RankingList
+    },
+    {
+      path: '/NPL',
+      name: 'NPL',
+      component: NPL
     }
   ]
 })
