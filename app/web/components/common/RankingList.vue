@@ -7,7 +7,7 @@
           <el-menu-item index="总榜">总榜</el-menu-item>
           <el-submenu index="NPL">
             <template slot="title">NPL大赛</template>
-            <el-menu-item v-for="i in tabGamesList" :key="i.id" :index="i.id+''">{{i.name + ' (' + gameState(i) + ')'}}</el-menu-item>
+            <el-menu-item v-for="i in tabGamesList" :key="i.id" :index="i.id+''">{{i.name + '第' + i.no + '期' + ' (' + gameState(i) + ')'}}</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
