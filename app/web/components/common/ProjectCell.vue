@@ -6,7 +6,7 @@
       <video v-if="(project.extra && project.extra.videoUrl)" class="project-cell-cover-img" controls="controls" :src="(project.extra && project.extra.videoUrl) || ''"></video>
       <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" alt="">
       <div class="video-mask"></div>
-      <span class="project-cell-cover-tag" v-if='showRate'>{{projectRate}}</span>
+      <span class="project-cell-cover-tag" v-if='showRate && showProjectRate'>{{projectRate}}</span>
     </div>
     <h4 class="project-cell-title" @click="goProjectDetail(project)">
       <span class="picked" title="精选" v-if="project.choicenessNo"><img src="@/assets/pblImg/picked.png" alt=""></span>
@@ -59,6 +59,10 @@ export default {
     ranking: {
       type: Boolean,
       default: false
+    },
+    showProjectRate: {
+      type: Boolean,
+      default: true
     },
     level: {
       type: Number,
