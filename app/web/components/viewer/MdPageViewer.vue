@@ -164,6 +164,13 @@ export default {
     }
   }
 }
+@media print {
+  .md-page-viewer {
+    .toggle-sidebar-main-button {
+      display: none;
+    }
+  }
+}
 .img404 {
   width: 40%;
   text-align: center;
