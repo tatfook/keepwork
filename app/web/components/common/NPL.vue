@@ -112,13 +112,13 @@
         <span class="npl-center-title-text">日程</span>
         <span class="npl-center-title-right"></span>
       </div>
-      <div class="npl-center-going">
-        <p class="npl-center-going-date">2019年2月NPL大赛截止日期2月28日</p>
+      <div class="npl-center-going" v-if="currentGameBoard">
+        <p class="npl-center-going-date">{{currentGameInfo}}</p>
         <p class="npl-center-going-hint"><img class="npl-center-going-hint-flame" src="@/assets/nplImg/flame.png">进行中</p>
       </div>
-      <div class="npl-center-end">
-        <p class="npl-center-end-date">2019年1月NPL大赛截至日期1月15日（已截止）</p>
-        <p class="npl-center-end-hint">点击查看<a href="https://keepwork.com/paraworld/NPLone/index"> &lt;获奖作品&gt; </a></p>
+      <div class="npl-center-end" v-if="lastGameBoard">
+        <p class="npl-center-end-date">{{lastGameInfo}}</p>
+        <p class="npl-center-end-hint">点击查看<a :href='lastGameAward' target="_blank"> &lt;获奖作品&gt; </a></p>
       </div>
     </div>
     <div class="npl-competition">
@@ -165,18 +165,26 @@ export default {
       submitSuccessVisible: false,
       gameId: -1,
       contestImg: require('@/assets/nplImg/Button-contest.png'),
-      downloadImg: require('@/assets/nplImg/Button-download.png')
+      downloadImg: require('@/assets/nplImg/Button-download.png'),
+      currentGame: {
+        currentGameStartTime: 0,
+        currentGameEndTime: '',
+        currentGameNo: '',
+        currentGameName: ''
+      },
+      lastGame: {
+        lastGameStartTime: 0,
+        lastGameEndTime: '',
+        lastGameNo: '',
+        lastGameName: ''
+      }
     }
   },
   async mounted() {
     await this.getGamesList()
-    const nowTime = new Date()
-    for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (nowTime > new Date(this.gamesList.rows[i].startDate) && nowTime < new Date(this.gamesList.rows[i].endDate)) {
-        this.gameId = _.get(this.gamesList.rows[i], 'id', -1)
-        break
-      }
-    }
+    await this.getCurrentGameAndLastGameInfo()
+    console.log('this.currentgame', this.currentGame)
+    console.log('this.lastgame', this.lastGame)
     if (this.gameId === -1) {
       return
     }
@@ -189,6 +197,37 @@ export default {
       loginUserProfile: 'user/profile',
       isLogined: 'user/isLogined'
     }),
+    currentGameBoard(){
+      return this.currentGame.currentGameStartTime === 0 ? false : true
+    },
+    lastGameBoard(){
+      return this.lastGame.lastGameStartTime === 0 ? false : true
+    },
+    currentGameInfo(){
+      let current_game_start_time = new Date(this.currentGame.currentGameStartTime)
+      let startYear = current_game_start_time.getFullYear()
+      let startMonth = current_game_start_time.getMonth() + 1
+
+      let current_game_end_time = new Date(this.currentGame.currentGameEndTime)
+      let endYear = current_game_end_time.getFullYear()
+      let endMonth = current_game_end_time.getMonth() + 1
+      let endDate = current_game_end_time.getDate()
+      return `${startYear}年${startMonth}月${this.currentGame.currentGameName}截止日期${endMonth}月${endDate}日`
+    },
+    lastGameInfo(){
+      let last_game_start_time = new Date(this.lastGame.lastGameStartTime)
+      let startYear = last_game_start_time.getFullYear()
+      let startMonth = last_game_start_time.getMonth() + 1
+
+      let last_game_end_time = new Date(this.lastGame.lastGameEndTime)
+      let endYear = last_game_end_time.getFullYear()
+      let endMonth = last_game_end_time.getMonth() + 1
+      let endDate = last_game_end_time.getDate()
+      return `${startYear}年${startMonth}月${this.lastGame.lastGameName}截止日期${endMonth}月${endDate}日 (已截止)`
+    },
+    lastGameAward(){
+      return `https://keepwork.com/paraworld/NPL_${this.lastGame.lastGameNo}/index`
+    },
     rankingList() {
       let list = _.get(this.gameWorks, 'rows', [])
       let works = []
@@ -204,6 +243,28 @@ export default {
       getWorksByGameId: 'pbl/getWorksByGameId',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
+    getCurrentGameAndLastGameInfo(){
+      const nowTime = new Date()
+      for (let i = 0; i < this.gamesList.rows.length; i++) {
+        if (nowTime > new Date(this.gamesList.rows[i].startDate) && nowTime < new Date(this.gamesList.rows[i].endDate)) {
+          this.gameId = _.get(this.gamesList.rows[i], 'id', -1)
+          this.currentGame.currentGameStartTime = _.get(this.gamesList.rows[i], 'startDate', 0)
+          this.currentGame.currentGameEndTime = _.get(this.gamesList.rows[i], 'endDate', 0)
+          this.currentGame.currentGameNo = _.get(this.gamesList.rows[i], 'no', 0)
+          this.currentGame.currentGameName = _.get(this.gamesList.rows[i], 'name', 0)
+          this.lastGame.lastGameNo = this.currentGame.currentGameNo - 1
+          for (let j = 0; j < this.gamesList.rows.length; j++) {
+            if((this.gamesList.rows[j].no === this.lastGame.lastGameNo)){
+              this.lastGame.lastGameStartTime = _.get(this.gamesList.rows[j], 'startDate', 0)
+              this.lastGame.lastGameEndTime = _.get(this.gamesList.rows[j], 'endDate', 0)
+              this.lastGame.lastGameName = _.get(this.gamesList.rows[j], 'name', 0)
+              break
+            }
+          }
+          break
+        }
+      }
+    },
     contestImgOver() {
       this.contestImg = require('@/assets/nplImg/Button-contest-2.png')
     },
