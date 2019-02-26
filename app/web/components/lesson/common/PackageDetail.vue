@@ -15,6 +15,10 @@ export default {
     await this.getPackageDetail({
       packageId: this.packageId
     })
+    let { packageName } = this.packageDetail
+    if (packageName) {
+      window.document.title =packageName
+    }
     this.isLoading = false
     this.isFirstGetData = false
   },
