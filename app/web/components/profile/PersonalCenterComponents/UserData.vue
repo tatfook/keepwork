@@ -180,7 +180,7 @@ export default {
               this.loading = false
               return
             }
-            const { qq, ...reset } = this.updatingUserInfo
+            const { qq } = this.updatingUserInfo
             this.updatingUserInfo.info.qq = qq
             await this.userUpdateUserInfo(this.updatingUserInfo)
             this.loading = false
