@@ -7,7 +7,7 @@
           <el-menu-item index="总榜">总榜</el-menu-item>
           <el-submenu index="NPL">
             <template slot="title">NPL大赛</template>
-            <el-menu-item v-for="i in tabGamesList" :key="i.id" :index="i.id+''">{{i.name + '  (' + gameState(i) + ')'}}</el-menu-item>
+            <el-menu-item v-for="i in tabGamesList" :key="i.id" :index="i.id+''">{{i.name + '第' + i.no + '期' + ' (' + gameState(i) + ')'}}</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
@@ -55,14 +55,20 @@ export default {
       if (this.activeIndex[0] === 'NPL') {
         for (let i = 0; i < this.tabGamesList.length; i++) {
           if (Number(this.activeIndex[1]) === this.tabGamesList[i].id) {
-            return this.tabGamesList[i].name
+            return this.tabGamesList[i].name + '  第' + this.tabGamesList[i].no +'期'
           }
         }
       }
       return '总榜'
     },
     tabGamesList() {
-      return _.get(this.gamesList, 'rows', [])
+      const nowTime = new Date()
+      return _.filter(_.get(this.gamesList, 'rows', []), i => {
+        return (
+          (nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)) ||
+          nowTime > new Date(i.endDate)
+        )
+      })
     },
     showProjectsByTab() {
       return this.activeIndex[0] === '总榜'
@@ -91,15 +97,21 @@ export default {
       getGamesList: 'pbl/getGamesList',
       getWorksByGameId: 'pbl/getWorksByGameId'
     }),
-    gameState(i){
-      return i.state === 0 ? '未开始' : i.state === 1 ? '进行中' : '已结束'
+    gameState(i) {
+      const nowTime = new Date()
+      return nowTime < new Date(i.startDate)
+        ? '未开始'
+        : nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)
+        ? '进行中'
+        : '已结束'
     },
     getRankingProjects() {
       keepwork.projects
         .getProjects({
           'x-order': 'rate-desc',
           'x-per-page': 100,
-          type: 1
+          type: 1,
+          visibility: 0
         })
         .then(res => {
           this.ranking = res

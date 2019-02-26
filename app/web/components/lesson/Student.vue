@@ -33,9 +33,16 @@ export default {
       if (!this.enterClassInfo.packageId || !this.enterClassInfo.lessonId) {
         await this.resumeTheClass()
       }
-      const { packageId, lessonId } = this.enterClassInfo
+      const { packageId = '', lessonId = '' } = this.enterClassInfo
       this._notify && this._notify.close()
-      this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
+      if (packageId && lessonId) {
+        this.$router.push(`/student/package/${packageId}/lesson/${lessonId}`)
+      } else {
+        this.$message({
+          type: 'warning',
+          message: this.$t('lesson.classIsOver')
+        })
+      }
     },
     async intervalCheckClass(delay = 10 * 1000) {
       await this.checkClassroom()

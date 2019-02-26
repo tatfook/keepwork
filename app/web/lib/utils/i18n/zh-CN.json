@@ -833,6 +833,7 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "formatError": "格式错误",
     "viewMore": "了解更多",
     "teachingContent": "教学内容",
     "onlineLessons": "线上课程",

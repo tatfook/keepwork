@@ -51,8 +51,9 @@ const actions = {
     ])
     if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
-    let quiz = modList
-      .filter(({ cmd }) => cmd === 'Quiz')
+    let quiz = modList.filter(item => {
+      return item.cmd === 'Quiz' && !_.isEmpty(item.data)
+    })
       .map(({ data: { quiz: { data } } }) => ({
         key: data[0].id,
         data: data[0],
@@ -70,6 +71,7 @@ const actions = {
       modList
     })
     commit(CLEAR_LEARN_RECORDS_ID)
+
   },
   async subscribePackage({ context }, { packageId }) {
     let subscribeResult = await lesson.packages.subscribe({

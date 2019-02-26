@@ -53,15 +53,15 @@
           <p>现金奖励3500元</p>
         </div>
         <div class="npl-center-bonus-box">
-          <p>一等奖（2名）</p>
+          <p>二等奖（2名）</p>
           <p>现金奖励2500元</p>
         </div>
         <div class="npl-center-bonus-box">
-          <p>一等奖（4名）</p>
+          <p>三等奖（4名）</p>
           <p>现金奖励1500元</p>
         </div>
         <div class="npl-center-bonus-box">
-          <p>一等奖（1名）</p>
+          <p>人气奖（1名）</p>
           <p>现金奖励500元</p>
         </div>
       </div>
