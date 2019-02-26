@@ -212,7 +212,7 @@ export default {
       let endYear = current_game_end_time.getFullYear()
       let endMonth = current_game_end_time.getMonth() + 1
       let endDate = current_game_end_time.getDate()
-      return `${startYear}年${startMonth}月${this.currentGame.currentGameName}截止日期${endMonth}月${endDate}日`
+      return `${endYear}年${endMonth}月${this.currentGame.currentGameName}截止日期${endMonth}月${endDate}日`
     },
     lastGameInfo(){
       let last_game_start_time = new Date(this.lastGame.lastGameStartTime)
@@ -223,7 +223,7 @@ export default {
       let endYear = last_game_end_time.getFullYear()
       let endMonth = last_game_end_time.getMonth() + 1
       let endDate = last_game_end_time.getDate()
-      return `${startYear}年${startMonth}月${this.lastGame.lastGameName}截止日期${endMonth}月${endDate}日 (已截止)`
+      return `${endYear}年${endMonth}月${this.lastGame.lastGameName}截止日期${endMonth}月${endDate}日 (已截止)`
     },
     lastGameAward(){
       return `https://keepwork.com/paraworld/NPL_${this.lastGame.lastGameNo}/index`
