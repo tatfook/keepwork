@@ -144,7 +144,7 @@ export default {
       window.location.href = '/pbl/project/new'
     },
     goExplorationPage() {
-      this.$router.push('exploration')
+      this.$router.push('exploration?tab=allProjects')
     },
     closeLearn() {
       this.hiddenLearn = true

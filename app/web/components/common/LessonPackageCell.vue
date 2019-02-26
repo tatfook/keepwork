@@ -2,7 +2,7 @@
   <div class="lesson-package-cell">
     <div class="lesson">
       <div class="lesson-cover" @click="goLessonPackage(lessonPackage)"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
-      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.title"></h4>
+      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.title || lessonPackage.packageName"></h4>
       <div class="lesson-desc">
         <p>{{$t('lesson.include')}}：
           <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.packagesCount')}}</p>

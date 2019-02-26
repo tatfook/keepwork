@@ -151,24 +151,30 @@ export default {
       })
     },
     async saveUserData() {
-      let userInfo = this.userInfo
-      if (this.isModified) {
-        this.loading = true
-        let { id, nickname, sex, portrait, description } = userInfo
-        let location = this.tempLocation
-        let isSensitive = await this.checkSensitive([
-          nickname,
-          location,
-          description
-        ])
-        if (isSensitive) {
-          this.loading = false
-          return
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          let userInfo = this.userInfo
+          if (this.isModified) {
+            this.loading = true
+            let { id, nickname, sex, portrait, description } = userInfo
+            let location = this.tempLocation
+            let isSensitive = await this.checkSensitive([
+              nickname,
+              location,
+              description
+            ])
+            if (isSensitive) {
+              this.loading = false
+              return
+            }
+            await this.userUpdateUserInfo(this.updatingUserInfo)
+            this.loading = false
+          }
+          this.showMessage('success', this.$t('common.saveSuccess'))
+        } else {
+          this.$message.error(this.$t('common.saveFail'))
         }
-        await this.userUpdateUserInfo(this.updatingUserInfo)
-        this.loading = false
-      }
-      this.showMessage('success', this.$t('common.saveSuccess'))
+      })
     },
     handleClose() {
       this.$emit('close')
