@@ -35,7 +35,7 @@
       </ul>
     </div>
     <div class="mentor-service-operate">
-      <router-link class="mentor-service-operate-button" :to="{path: 'moreResources/memtor'}" target="_blank">{{$t('lesson.viewMore')}}</router-link>
+      <router-link class="mentor-service-operate-button" :to="{path: 'moreResources/mentor'}" target="_blank">{{$t('lesson.viewMore')}}</router-link>
     </div>
   </div>
 </template>
