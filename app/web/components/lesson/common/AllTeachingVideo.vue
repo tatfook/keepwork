@@ -3,6 +3,7 @@
     <div class="all-teaching-video-content">
       <div class="all-teaching-video-content-sidebar">
         <el-tree
+          ref="tree"
           :data="data"
           node-key="id"
           :current-node-key="defaultKey"
@@ -74,6 +75,23 @@ export default {
         children: 'children',
         label: 'label'
       }
+    }
+  },
+  mounted(){
+    let currentParam = this.$route.params.command
+    switch(currentParam){
+      case 'animate': 
+        this.$refs.tree.setCurrentKey(2)
+        break
+      case 'program':
+        this.$refs.tree.setCurrentKey(3)
+        break
+      case 'cad':
+        this.$refs.tree.setCurrentKey(4)
+        break
+      default: 
+        this.$refs.tree.setCurrentKey(2)
+        break
     }
   },
   computed: {
