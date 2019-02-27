@@ -60,11 +60,10 @@ export default {
 .keep-work-sticky {
   max-width: 100%;
   padding: 30px 0;
-  background: white;
+  background: #f8f8f8;
   &.fixed {
     padding: 0;
     box-sizing: border-box;
-    background: white;
     position: fixed;
     z-index: 200;
     top: 0;
