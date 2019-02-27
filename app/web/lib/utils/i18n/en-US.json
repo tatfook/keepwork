@@ -895,6 +895,7 @@
     "duration": "Duration",
     "addPackageFirst": "Please add the package first",
     "addLessonFirst": "Please add lessons to this package.",
+    "pleaseAddLessonFirst": "Please add lessons first.",
     "backInfo": "Returns {backCoinCount} coins after purchase",
     "rmbPrice": "RMB",
     "coinsPrice": "Coins",

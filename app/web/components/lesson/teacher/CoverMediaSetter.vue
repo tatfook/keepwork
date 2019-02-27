@@ -14,7 +14,7 @@
         <i class="el-icon-plus"></i>
       </div>
     </div>
-    <div class="cover-media-setter-from-url" v-show="imageSourceType === 'url'">
+    <div class="cover-media-setter-from-url" :class="{'cover-media-setter-from-url-success': isSubmitPressed && !isCoverUrlEmpty, 'cover-media-setter-from-url-error': isSubmitPressed && isCoverUrlEmpty}" v-show="imageSourceType === 'url'">
       <el-input :disabled="!isEditable" placeholder="https://" v-model="urlTypeUrl">
         <template slot="append">
           <el-popover placement="top" width="264" trigger="click" popper-class='cover-media-setter-image-preview'>
@@ -43,6 +43,10 @@ export default {
     isEditable: {
       type: Boolean,
       default: true
+    },
+    isSubmitPressed: {
+      type: Boolean,
+      default: false
     },
     isEditing: Boolean
   },
@@ -83,6 +87,10 @@ export default {
         this.imageSourceType === 'url' ? this.urlTypeUrl : this.bigfileTypeUrl
       this.$emit('urlChange', newCoverUrl)
       return newCoverUrl
+    },
+    isCoverUrlEmpty() {
+      let coverUrl = this.newPackageCoverUrl
+      return !coverUrl || coverUrl == ''
     }
   },
   methods: {
@@ -130,6 +138,16 @@ export default {
     margin-top: 10px;
   }
   &-from-url {
+    &-success {
+      .el-input__inner {
+        border-color: #67c23a;
+      }
+    }
+    &-error {
+      .el-input__inner {
+        border-color: #f56c6c;
+      }
+    }
     .el-input-group {
       width: 565px;
       max-width: 100%;
