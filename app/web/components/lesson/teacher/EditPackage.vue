@@ -2,8 +2,8 @@
   <div class="edit-package" v-loading='isLoading'>
     <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isEditable='isEditable' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isLearner='isLearner' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
     <div class="edit-package-container">
-      <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
-      <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
+      <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'"  :isSubmitPressed="isSubmitPressed" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
+      <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'"  :isSubmitPressed="isSubmitPressed" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
       <catalogue-manager ref="lessonListComponent" v-if="!isGettingData" :isEditable='isEditable' v-show="activeTab === 'catalogue'" :editingPackageDetail='editingPackageDetail' :isEditing='true'></catalogue-manager>
     </div>
   </div>
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       editingPackageId: _.get(this.$route.params, 'id'),
+      isSubmitPressed: false,
       isGettingData: true,
       isLoading: false,
       isMounted: false,
@@ -97,32 +98,35 @@ export default {
         this.updatingPackageData && this.updatingPackageData.packageName
       return !packageName || packageName == ''
     },
-    isPackageInfoComplete() {
+    isPackageBasicInfoComplete() {
       if (!this.isMounted || this.isPackageNameEmpty) {
         return false
       }
-      let {
-        subjectId,
-        minAge,
-        maxAge,
-        intro,
-        rmb,
-        extra,
-        lessons
-      } = this.updatingPackageData
+      let { subjectId, minAge, maxAge, intro, rmb, extra } = this.updatingPackageData
       if (
         typeof subjectId !== 'number' ||
         typeof minAge !== 'number' ||
         typeof maxAge !== 'number' ||
         typeof rmb !== 'number' ||
         !intro ||
-        !extra.coverUrl ||
-        !lessons ||
-        lessons.length <= 0
+        !extra.coverUrl
       ) {
         return false
       }
       return true
+    },
+    isPackageHaveLesson() {
+      if (!this.isMounted || this.isPackageNameEmpty) {
+        return false
+      }
+      let { lessons } = this.updatingPackageData
+      if (!lessons || lessons.length <= 0) {
+        return false
+      }
+      return true
+    },
+    isPackageInfoComplete() {
+      return this.isPackageBasicInfoComplete && this.isPackageHaveLesson
     }
   },
   methods: {
@@ -211,9 +215,17 @@ export default {
         })
     },
     async beforeSubmitOrRelease() {
-      if (!this.isPackageInfoComplete) {
+      this.isSubmitPressed = true
+      if (!this.isPackageBasicInfoComplete) {
         this.$message({
           message: this.$t('lesson.pleaseCompleteInfo'),
+          type: 'warning'
+        })
+        return Promise.reject(new Error('Package info not complete'))
+      }
+      if (!this.isPackageHaveLesson) {
+        this.$message({
+          message: this.$t('lesson.pleaseAddLessonFirst'),
           type: 'warning'
         })
         return Promise.reject(new Error('Package info not complete'))

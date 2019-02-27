@@ -886,6 +886,7 @@
     "duration": "时长",
     "addPackageFirst": "请先添加课程包",
     "addLessonFirst": "请先添加课程",
+    "pleaseAddLessonFirst": "请先添加课程",
     "backInfo": "购买后返还{backCoinCount}知识币",
     "rmbPrice": "人民币价格",
     "coinsPrice": "知识币价格",
