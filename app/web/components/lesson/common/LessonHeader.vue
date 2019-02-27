@@ -302,14 +302,12 @@ export default {
       return _.get(this.lesson, 'packageIndex', '')
     },
     lessonSkills() {
-      return ['及鞥嫩点1','及鞥嫩点1','及鞥嫩点1','及鞥嫩点1','及鞥嫩点1','及鞥嫩点1','及鞥嫩点1','及鞥嫩点1',]
       return _.map(
         _.get(this.lesson, 'skills', []),
         skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
       )
     },
     lessonGoals() {
-      return 'jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介jain简介'
       return _.get(this.lesson, 'goals', '')
     },
     title() {
