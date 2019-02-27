@@ -176,7 +176,7 @@ export default {
       margin-left: -17px;
       color: #686868;
       &.light {
-        color: $green;
+        color: #409efe;
       }
     }
     &-number {

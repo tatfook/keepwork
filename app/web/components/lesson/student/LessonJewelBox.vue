@@ -225,11 +225,9 @@ export default {
   width: 66px;
   cursor: pointer;
   position: relative;
-  background: url('../../../assets/lessonImg/jewelbox.png') no-repeat center
-    #fff;
+  background: url('../../../assets/lessonImg/jewelbox.png') no-repeat center;
   &.opened {
-    background: url('../../../assets/lessonImg/jewelbox2.png') no-repeat center
-      #fff;
+    background: url('../../../assets/lessonImg/jewelbox2.png') no-repeat center;
   }
   &-coin-wrap {
     position: absolute;
