@@ -912,6 +912,7 @@
     "havePurchased": "You have added this package!",
     "loginBeforePurchase": "You should login before add this package!",
     "packageManage": {
+      "clickToPreview": "Click to preview",
       "detailLabel": "Details",
       "package": "Packages",
       "Submit": "Submit",
