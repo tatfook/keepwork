@@ -36,11 +36,11 @@ export default {
       routes: {
         animate: {
           projectName: 'official/paracraft',
-          filePath: 'animation-tutorials'
+          filePath: 'animation-tutorials-2'
         },
         program: {
           projectName: 'official/paracraft',
-          filePath: 'codeblock'
+          filePath: 'CodeblockList'
         },
         cad: {
           projectName: 'intro/keepwork',
