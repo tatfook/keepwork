@@ -15,6 +15,8 @@ import projectInput from './ProjectInput'
 import projectMembersSwitch from './ProjectMembersSwitch'
 import projectTagsSwitch from './ProjectTagsSwitch'
 import iframeLink from './IframeLink'
+import bigFileWidthInput from './BigFileWidthInput'
+import bigFileHeightInput from './BigFileHeightInput'
 
 export default {
   input,
@@ -33,5 +35,7 @@ export default {
   projectInput,
   projectMembersSwitch,
   projectTagsSwitch,
-  iframeLink
+  iframeLink,
+  bigFileWidthInput,
+  bigFileHeightInput
 }

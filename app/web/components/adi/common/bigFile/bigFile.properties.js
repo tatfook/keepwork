@@ -1,1 +1,4 @@
-export default {}
+export default {
+  width: 100,
+  height: 0,
+}

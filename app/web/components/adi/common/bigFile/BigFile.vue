@@ -24,7 +24,7 @@
         class="bigfile-image"
         v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']"
       >
-        <img :src="actualUrl">
+        <img ref="bigImg" :style="style" :src="actualUrl">
       </div>
       <div v-if="getType === handleExt['mp4']">
         <video-player :src="actualUrl"/>
@@ -98,6 +98,13 @@ export default {
       },
       otherExt: 'other'
     }
+  },
+  mounted() {
+    console.dir(this.$refs.bigImg)
+    console.dir(this)
+    // this.properties.name = 'kevin'
+    this.srouce.name = 'kevin'
+    // console.dir(document.getElementById('bigImage'))
   },
   methods: {
     getStringLength(str) {
@@ -247,6 +254,18 @@ export default {
       } else {
         return this.otherExt
       }
+    },
+    isImage() {
+       return ['jpg', 'png', 'gif'].includes(this.properties.ext)
+    },
+    width() {
+      return this.properties.width
+    },
+    isPx() {
+      return this.properties.unit === 'px'
+    },
+    style() {
+      return this.isPx ? `width: ${this.width}px;` : `width:${this.width}%`
     }
   },
   async created() {
@@ -315,6 +334,8 @@ export default {
 
   .bigfile-image {
     img {
+      margin: auto;
+      display: block;
       width: 100%;
     }
   }
