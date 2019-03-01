@@ -115,30 +115,43 @@ export default {
       this.beInClassDialog = false
     },
     async enterClass() {
-      if (JSON.stringify(this.enterClassInfo) == '{}') {
-        this.enterNewClass()
-      } else if (this.classID == this.enterClassInfo.key) {
-        this.$message.success(this.$t('lesson.haveEnteredClass'))
-        this.backCurrentClass()
-      } else if (this.classID !== this.enterClassInfo.key) {
-        let key = this.classID
-        await lesson.classrooms
-          .isValidKey(key)
-          .then(res => {
-            if (res) {
-              this.beInClassDialog = true
-            } else {
-              this.$message({
-                showClose: true,
-                message: this.$t('lesson.wrongKey'),
-                type: 'error'
-              })
-              this.beInClassDialog = false
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
+      if(!/^[C]/.test(this.classID)){
+        if (/^[0-9]/.test(this.classID)) {
+          let include_x = this.classID.includes('x')
+          let include_X = this.classID.includes('X')
+          let data = include_x ? this.classID.split('x') : include_X ? this.classID.split('X') : 0
+          if(data === 0) {
+            this.$message.error(this.$t('lesson.wrongKey'))
+            return
+          }
+          window.open(`/l/student/package/${data[0]}/lesson/${data[1]}`)
+        }
+      }else{
+        if (JSON.stringify(this.enterClassInfo) == '{}') {
+          this.enterNewClass()
+        } else if (this.classID == this.enterClassInfo.key) {
+          this.$message.success(this.$t('lesson.haveEnteredClass'))
+          this.backCurrentClass()
+        } else if (this.classID !== this.enterClassInfo.key) {
+          let key = this.classID
+          await lesson.classrooms
+            .isValidKey(key)
+            .then(res => {
+              if (res) {
+                this.beInClassDialog = true
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: this.$t('lesson.wrongKey'),
+                  type: 'error'
+                })
+                this.beInClassDialog = false
+              }
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        }
       }
     },
     async enterNewClass() {
