@@ -700,7 +700,12 @@
     "titleText": "Please input the title",
     "subTitleText": "Please input subtitle",
     "descText": "Please input description",
-    "buttonText": "Please enter button text"
+    "buttonText": "Please enter button text",
+
+    "alignment": "alignment",
+    "left": "left",
+    "center": "center",
+    "right": "right"
   },
   "skydrive": {
     "image": "Image",
