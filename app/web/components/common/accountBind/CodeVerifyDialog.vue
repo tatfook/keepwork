@@ -126,13 +126,13 @@ export default {
       if (message == true) {
         this.showMessage(
           'success',
-          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
+          `${this.codeDialogDatas.bind ? this.$t('user.bindingSuccess') : this.$t('user.unbundingSuccess')}`
         )
       } else {
         this.codeError = message
         this.showMessage(
           'error',
-          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.failure')}`
+          `${this.codeDialogDatas.bind ? this.$t('user.bindingFailed') : this.$t('user.unBundingFailure')}`
         )
       }
       return message
@@ -146,14 +146,14 @@ export default {
       if (result == 'OK') {
         this.showMessage(
           'success',
-          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.success')}`
+          `${this.codeDialogDatas.bind ? this.$t('user.bindingSuccess') : this.$t('user.unbundingSuccess')}`
         )
         result = true
       } else {
         this.codeError = result.error.message
         this.showMessage(
           'error',
-          `${this.codeDialogDatas.bind ? this.$t('user.binding') : this.$t('user.unbunding')}${this.$t('common.failure')}`
+          `${this.codeDialogDatas.bind ? this.$t('user.bindingFailed') : this.$t('user.unBundingFailure')}`
         )
       }
       return result
