@@ -44,6 +44,7 @@
 <script>
 import StudentSubscribePackages from '@/components/lesson/student/StudentSubscribePackages'
 import { mapGetters, mapActions } from 'vuex'
+import { lesson } from '@/api'
 
 export default {
   name: 'LearningCenterPackages',
@@ -124,18 +125,33 @@ export default {
             this.$message.error(this.$t('lesson.wrongKey'))
             return
           }
-          window.open(`/l/student/package/${data[0]}/lesson/${data[1]}`)
+          let params = {
+            packageId: Number(data[0]),
+            lessonId: Number(data[1])
+          }
+          await lesson.classrooms.isValidLessonId(params).then(res => {
+            if(res.count > 0){
+              window.open(`/l/student/package/${params.packageId}/lesson/${params.lessonId}`)
+              return
+            }
+            this.$message.error(this.$t('lesson.wrongKey'))
+          }).catch(e => {
+            this.$message.error(this.$t('lesson.wrongKey'))
+          })
+        }else {
+          this.$message.error(this.$t('lesson.wrongKey'))
         }
       }else{
+        let key = this.classID
+        let _key = key.toString().substring(1)
         if (JSON.stringify(this.enterClassInfo) == '{}') {
           this.enterNewClass()
-        } else if (this.classID == this.enterClassInfo.key) {
+        } else if (_key == this.enterClassInfo.key) {
           this.$message.success(this.$t('lesson.haveEnteredClass'))
           this.backCurrentClass()
-        } else if (this.classID !== this.enterClassInfo.key) {
-          let key = this.classID
+        } else if (_key !== this.enterClassInfo.key) {
           await lesson.classrooms
-            .isValidKey(key)
+            .isValidKey(_key)
             .then(res => {
               if (res) {
                 this.beInClassDialog = true
