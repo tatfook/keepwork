@@ -260,14 +260,24 @@ export default {
     isCustom() {
       return _.get(this.properties, 'custom', false)
     },
+    alignment() {
+      return _.get(this.properties, 'alignment', 'center')
+    },
     style() {
+      let alignmentStyle = ``
+      if (this.alignment === 'left') {
+        alignmentStyle = `margin: 0 auto 0 0`
+      }
+      if (this.alignment === 'right') {
+        alignmentStyle = `margin: 0 0 0 auto`
+      }
       if (this.isPx) {
         if (this.isCustom) {
-          return `width: ${this.width}px; height: ${this.height}px;`
+          return `width: ${this.width}px; height: ${this.height}px;${alignmentStyle}`
         }
-        return `width: ${this.width}px`
+        return `width: ${this.width}px; ${alignmentStyle}`
       }
-      return `width:${this.percent}%`
+      return `width:${this.percent}%; ${alignmentStyle}`
     }
   },
   async created() {

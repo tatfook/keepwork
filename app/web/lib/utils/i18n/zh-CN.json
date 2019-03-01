@@ -691,7 +691,12 @@
     "titleText": "请输入标题",
     "subTitleText": "请输入副标题",
     "descText": "请输入描述内容",
-    "buttonText": "请输入按钮文字"
+    "buttonText": "请输入按钮文字",
+
+    "alignment": "对齐方式",
+    "left": "左对齐",
+    "center": "居中",
+    "right": "右对齐"
   },
   "skydrive": {
     "image": "图片",

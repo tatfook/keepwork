@@ -1,8 +1,21 @@
 <template>
   <div class="big-file-size" v-if="isImage">
+    <div class="big-file-alignment">
+      <div class="big-file-alignment-title">
+        {{$t('field.alignment')}}
+      </div>
+      <el-dropdown class="big-file-alignment-dropdown" size="small" split-button @command="handleAlignmentSelect">
+        {{$t(`field.${alignment}`)}}
+        <el-dropdown-menu slot="dropdown" >
+          <el-dropdown-item command="center">{{$t('field.center')}}</el-dropdown-item>
+          <el-dropdown-item command="left">{{$t('field.left')}}</el-dropdown-item>
+          <el-dropdown-item command="right">{{$t('field.right')}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
     <div class="big-file-px" v-if="isPx">
       <div class="big-file-px-left">
-        <span :class="['big-file-custom', { 'custom-off': !isCustom }]" @click="handleCustomSwitch">自定义</span>
+        <span :class="['big-file-custom', { 'custom-off': !isCustom }]" @click="handleCustomSwitch"></span>
       </div>
       <div class="big-file-px-right">
         <div class="big-file-px-row">
@@ -64,7 +77,8 @@ export default {
     return {
       percent: 100,
       width: '',
-      height: ''
+      height: '',
+      alignment: 'center'
     }
   },
   mounted() {
@@ -75,6 +89,7 @@ export default {
       this.percent = this.originPercent
       this.width = this.originWidth
       this.height = this.originHeight
+      this.alignment = this.originAligment
       if (!this.cardValue.unit) {
         this.handleDropdown('%')
       }
@@ -102,6 +117,10 @@ export default {
     },
     handleCustomSwitch() {
       this.$emit('onPropertyChange', { custom: !this.isCustom })
+    },
+    handleAlignmentSelect(alignment) {
+      console.log(alignment)
+      this.$emit('onPropertyChange', { alignment })
     }
   },
   watch: {
@@ -113,6 +132,9 @@ export default {
     },
     originPercent(value) {
       this.percent = value
+    },
+    originAligment(value) {
+      this.alignment = value
     }
   },
   computed: {
@@ -141,7 +163,10 @@ export default {
       return _.get(this.cardValue, 'percent', 100)
     },
     isCustom() {
-      return this.cardValue.custom
+      return _.get(this.cardValue, 'custom', false)
+    },
+    originAligment() {
+      return _.get(this.cardValue, 'alignment', 'center')
     }
   }
 }
@@ -149,6 +174,14 @@ export default {
 
 <style lang="scss">
 .big-file-size {
+  .big-file-alignment {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    &-title {
+      margin-right: 20px;
+    }
+  }
   .big-file-unit-dropdown {
     line-height: 40px;
     cursor: pointer;
@@ -175,26 +208,18 @@ export default {
       display: flex;
     }
     &-left {
-      width: 50px;
+      width: 20px;
       display: flex;
-      justify-content: center;
+      // justify-content: center;
       align-items: center;
       .big-file-custom {
-        width: 16px;
-        padding: 4px 2px;
-        font-size: 12px;
-        line-height: 16px;
-        text-align: center;
-        border-radius: 4px;
-        color: #fff;
-        background: #3ba4ff;
-        box-shadow: 3px 3px 5px #ccc;
+        display: block;
+        height: 21px;
+        width: 9px;
+        background: url('../../assets/img/big-file-unlock.png');
         cursor: pointer;
         &.custom-off {
-          color: #fff;
-          background-color: #aaadb3;
-          border-color: #909399;
-          box-shadow: 2px 2px 3px #ccc;
+          background: url('../../assets/img/big-file-lock.png');
         }
       }
     }
