@@ -143,7 +143,8 @@ export const classrooms = {
   getClassroomLearnRecords: id => get(`classrooms/${id}/learnRecords`),
   modifyClassroomLearnRecords: ({ id, learnRecordsArr }) =>
     put(`classrooms/${id}/learnRecords`, learnRecordsArr),
-  isValidKey: key => get(`classrooms/valid?key=${key}`)
+  isValidKey: key => get(`classrooms/valid?key=${key}`),
+  isValidLessonId: async (...args) => post('packageLessons/search', ...args)
 }
 
 export const visitor = {
