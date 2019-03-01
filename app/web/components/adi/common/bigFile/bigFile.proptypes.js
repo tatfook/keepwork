@@ -1,4 +1,3 @@
 export default {
-  width: 'bigFileWidthInput',
-  height: 'bigFileHeightInput'
+  unit: 'bigFileSizeInput'
 }
