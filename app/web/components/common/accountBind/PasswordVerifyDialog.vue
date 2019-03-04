@@ -94,7 +94,7 @@ export default {
         this.handleClose()
         this.showMessage(
           'success',
-          `${this.$t('user.unbunding')}${this.$t('common.success')}`
+          `${this.$t('user.unbundingSuccess')}`
         )
       } else {
         this.pwdError =  this.$t('user.unBundingFailure') + ',' + this.$t('user.pleaseCheckPwd')

@@ -126,6 +126,7 @@ export default {
 .lesson-student-progress {
   $green: #66cd2e;
   $grey: #d2d2d2;
+  background: #f8f8f8;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -175,7 +176,7 @@ export default {
       margin-left: -17px;
       color: #686868;
       &.light {
-        color: $green;
+        color: #409efe;
       }
     }
     &-number {

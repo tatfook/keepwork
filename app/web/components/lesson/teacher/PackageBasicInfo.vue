@@ -26,11 +26,11 @@
         <div class="package-basic-info-name-intro">
           <div class="package-basic-info-name">
             <label class="package-basic-info-label" for="nameInput">{{$t('lesson.nameLabel')}}</label>
-            <el-input :disabled="!isEditable" id="nameInput" :maxlength='255' v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
+            <el-input :class="{'package-basic-info-name-intro-success': isSubmitPressed && !isPackageNameEmpty, 'package-basic-info-name-intro-error': isSubmitPressed && isPackageNameEmpty}" :disabled="!isEditable" id="nameInput" :maxlength='255' v-model="newPackageDetail.packageName" @blur='trimPackageName'></el-input>
           </div>
           <div class="package-basic-info-intro">
             <label class="package-basic-info-label" for="introInput">{{$t('lesson.intro')}}</label>
-            <el-input :disabled="!isEditable" type="textarea" id="introInput" :maxlength='512' resize='none' v-model="newPackageDetail.intro"></el-input>
+            <el-input :class="{'package-basic-info-name-intro-success': isSubmitPressed && !isIntroEmpty, 'package-basic-info-name-intro-error': isSubmitPressed && isIntroEmpty}" :disabled="!isEditable" type="textarea" id="introInput" :maxlength='512' resize='none' v-model="newPackageDetail.intro"></el-input>
           </div>
         </div>
         <div class="package-basic-info-price">
@@ -55,6 +55,10 @@ export default {
     isEditable: {
       type: Boolean,
       default: true
+    },
+    isSubmitPressed: {
+      type: Boolean,
+      default: false
     },
     isEditing: Boolean
   },
@@ -91,7 +95,15 @@ export default {
   computed: {
     ...mapGetters({
       lessonSubjects: 'lesson/subjects'
-    })
+    }),
+    isPackageNameEmpty() {
+      let packageName = _.get(this.newPackageDetail, 'packageName')
+      return !packageName || packageName == ''
+    },
+    isIntroEmpty() {
+      let intro = _.get(this.newPackageDetail, 'intro')
+      return !intro || intro == ''
+    }
   },
   methods: {
     ...mapActions({
@@ -223,6 +235,18 @@ export default {
   }
   .el-input-number.is-without-controls .el-input__inner {
     padding: 0 10px;
+  }
+  &-name-intro {
+    &-success {
+      .el-input__inner, .el-textarea__inner {
+        border-color: #67c23a;
+      }
+    }
+    &-error {
+      .el-input__inner, .el-textarea__inner {
+        border-color: #f56c6c;
+      }
+    }
   }
 }
 </style>

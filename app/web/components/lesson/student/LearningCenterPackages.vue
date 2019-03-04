@@ -44,6 +44,7 @@
 <script>
 import StudentSubscribePackages from '@/components/lesson/student/StudentSubscribePackages'
 import { mapGetters, mapActions } from 'vuex'
+import { lesson } from '@/api'
 
 export default {
   name: 'LearningCenterPackages',
@@ -115,30 +116,58 @@ export default {
       this.beInClassDialog = false
     },
     async enterClass() {
-      if (JSON.stringify(this.enterClassInfo) == '{}') {
-        this.enterNewClass()
-      } else if (this.classID == this.enterClassInfo.key) {
-        this.$message.success(this.$t('lesson.haveEnteredClass'))
-        this.backCurrentClass()
-      } else if (this.classID !== this.enterClassInfo.key) {
-        let key = this.classID
-        await lesson.classrooms
-          .isValidKey(key)
-          .then(res => {
-            if (res) {
-              this.beInClassDialog = true
-            } else {
-              this.$message({
-                showClose: true,
-                message: this.$t('lesson.wrongKey'),
-                type: 'error'
-              })
-              this.beInClassDialog = false
+      if(!/^[C]/.test(this.classID)){
+        if (/^[0-9]/.test(this.classID)) {
+          let include_x = this.classID.includes('x')
+          let include_X = this.classID.includes('X')
+          let data = include_x ? this.classID.split('x') : include_X ? this.classID.split('X') : 0
+          if(data === 0) {
+            this.$message.error(this.$t('lesson.wrongKey'))
+            return
+          }
+          let params = {
+            packageId: Number(data[0]),
+            lessonId: Number(data[1])
+          }
+          await lesson.classrooms.isValidLessonId(params).then(res => {
+            if(res.count > 0){
+              window.open(`/l/student/package/${params.packageId}/lesson/${params.lessonId}`)
+              return
             }
+            this.$message.error(this.$t('lesson.wrongKey'))
+          }).catch(e => {
+            this.$message.error(this.$t('lesson.wrongKey'))
           })
-          .catch(err => {
-            console.log(err)
-          })
+        }else {
+          this.$message.error(this.$t('lesson.wrongKey'))
+        }
+      }else{
+        let key = this.classID
+        let _key = key.toString().substring(1)
+        if (JSON.stringify(this.enterClassInfo) == '{}') {
+          this.enterNewClass()
+        } else if (_key == this.enterClassInfo.key) {
+          this.$message.success(this.$t('lesson.haveEnteredClass'))
+          this.backCurrentClass()
+        } else if (_key !== this.enterClassInfo.key) {
+          await lesson.classrooms
+            .isValidKey(_key)
+            .then(res => {
+              if (res) {
+                this.beInClassDialog = true
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: this.$t('lesson.wrongKey'),
+                  type: 'error'
+                })
+                this.beInClassDialog = false
+              }
+            })
+            .catch(err => {
+              console.error(err)
+            })
+        }
       }
     },
     async enterNewClass() {

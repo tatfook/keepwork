@@ -2,8 +2,8 @@
   <div class="new-package">
     <package-editor-header :activeTab='activeTab' :isLearner='isLearner' :isPackageNameEmpty='isPackageNameEmpty' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='savePackage'></package-editor-header>
     <div class="new-package-container">
-      <package-basic-info ref="basicInfoComponent" v-show="activeTab === 'basic'"></package-basic-info>
-      <cover-media-setter ref="coverUrlComponent" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
+      <package-basic-info ref="basicInfoComponent" :isSubmitPressed="isSubmitPressed" v-show="activeTab === 'basic'"></package-basic-info>
+      <cover-media-setter ref="coverUrlComponent" :isSubmitPressed="isSubmitPressed" v-show="activeTab === 'basic'" class="new-package-media-setter"></cover-media-setter>
       <catalogue-manager ref="lessonListComponent" v-show="activeTab === 'catalogue'"></catalogue-manager>
     </div>
   </div>
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       isMounted: false,
+      isSubmitPressed: false,
       newSavingPackageId: null,
       activeTab: 'basic' //basic or catalogue
     }
@@ -65,32 +66,35 @@ export default {
       let packageName = this.newPackageData && this.newPackageData.packageName
       return !packageName || packageName == ''
     },
-    isPackageInfoComplete() {
+    isPackageBasicInfoComplete() {
       if (!this.isMounted || this.isPackageNameEmpty) {
         return false
       }
-      let {
-        subjectId,
-        minAge,
-        maxAge,
-        intro,
-        rmb,
-        extra,
-        lessons
-      } = this.newPackageData
+      let { subjectId, minAge, maxAge, intro, rmb, extra } = this.newPackageData
       if (
         typeof subjectId !== 'number' ||
         typeof minAge !== 'number' ||
         typeof maxAge !== 'number' ||
         typeof rmb !== 'number' ||
         !intro ||
-        !extra.coverUrl ||
-        !lessons ||
-        lessons.length <= 0
+        !extra.coverUrl
       ) {
         return false
       }
       return true
+    },
+    isPackageHaveLesson() {
+      if (!this.isMounted || this.isPackageNameEmpty) {
+        return false
+      }
+      let { lessons } = this.newPackageData
+      if (!lessons || lessons.length <= 0) {
+        return false
+      }
+      return true
+    },
+    isPackageInfoComplete() {
+      return this.isPackageBasicInfoComplete && this.isPackageHaveLesson
     }
   },
   methods: {
@@ -180,9 +184,17 @@ export default {
       if (this.isLearner) {
         return
       }
-      if (!this.isPackageInfoComplete) {
+      this.isSubmitPressed = true
+      if (!this.isPackageBasicInfoComplete) {
         this.$message({
           message: this.$t('lesson.pleaseCompleteInfo'),
+          type: 'warning'
+        })
+        return
+      }
+      if (!this.isPackageHaveLesson) {
+        this.$message({
+          message: this.$t('lesson.pleaseAddLessonFirst'),
           type: 'warning'
         })
         return

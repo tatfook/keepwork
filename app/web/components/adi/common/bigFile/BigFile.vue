@@ -4,7 +4,7 @@
       <a v-if="type=='link'" :href="url">{{this.properties.extraMsg || url}}</a>
       <img v-if="type=='image'" :src="url" :alt="this.properties.extraMsg">
       <div v-if="type=='video'">
-        <video-player :src="url"/>
+        <video-player :src="url" />
       </div>
       <div v-if="errMsg" class="err">{{errMsg}}</div>
     </div>
@@ -20,14 +20,11 @@
         <div class="split"></div>
         <div class="download iconfont icon-download" @click="download"></div>
       </div>
-      <div
-        class="bigfile-image"
-        v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']"
-      >
-        <img :src="actualUrl">
+      <div class="bigfile-image" v-if="getType === handleExt['png'] || getType === handleExt['jpg'] || getType === handleExt['gif']">
+        <img :style="style" :src="actualUrl">
       </div>
       <div v-if="getType === handleExt['mp4']">
-        <video-player :src="actualUrl"/>
+        <video-player :src="actualUrl" />
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
         <iframe :src="getPdfSrc"></iframe>
@@ -102,10 +99,10 @@ export default {
   methods: {
     getStringLength(str) {
       let len = 0
-      for (let i = 0; i < str.length; i ++) {
+      for (let i = 0; i < str.length; i++) {
         let charCode = str.charCodeAt(i)
         if (charCode >= 0 && charCode <= 128) {
-          len ++
+          len++
         } else {
           len += 2
         }
@@ -113,34 +110,34 @@ export default {
       return len
     },
     getFileName() {
-      if(!this.properties && !this.properties.filename) {
+      if (!this.properties && !this.properties.filename) {
         return
       }
 
       let name = this.properties.filename
-      let reg = new RegExp("(^.+)\\." + this.properties.ext)
+      let reg = new RegExp('(^.+)\\.' + this.properties.ext)
       let nameArray = name.match(reg)
       let realName = nameArray[1]
 
-      if(this.getStringLength(realName) <= 20) {
+      if (this.getStringLength(realName) <= 20) {
         return name
       } else {
         let j = 0
         let k = 0
-        for (; j + k < 10; j ++) {
+        for (; j + k < 10; j++) {
           let charCode = realName.charCodeAt(j)
           if (charCode < 0 || charCode > 128) {
-            k ++
+            k++
           }
         }
         let prefixName = realName.substring(0, 10 - k)
 
         let m = 0
         let index = realName.length - 1
-        for (; index + 1 > realName.length - 1 - (8 - m); index --) {
+        for (; index + 1 > realName.length - 1 - (8 - m); index--) {
           let characterCode = realName.charCodeAt(index)
           if (characterCode < 0 || characterCode > 128) {
-            m ++
+            m++
           }
         }
         let suffixName = realName.substring(index + 2)
@@ -149,7 +146,7 @@ export default {
       }
     },
     getSize() {
-      return filesize(this.properties && this.properties.size || 0)
+      return filesize((this.properties && this.properties.size) || 0)
     },
     async download() {
       let downloadUrl = this.actualUrl
@@ -247,6 +244,40 @@ export default {
       } else {
         return this.otherExt
       }
+    },
+    width() {
+      return _.get(this.properties, 'width', 100)
+    },
+    height() {
+      return _.get(this.properties, 'height', 100)
+    },
+    percent() {
+      return _.get(this.properties, 'percent', 100)
+    },
+    isPx() {
+      return this.properties.unit === 'px'
+    },
+    isCustom() {
+      return _.get(this.properties, 'custom', false)
+    },
+    alignment() {
+      return _.get(this.properties, 'alignment', 'center')
+    },
+    style() {
+      let alignmentStyle = ``
+      if (this.alignment === 'left') {
+        alignmentStyle = `margin: 0 auto 0 0`
+      }
+      if (this.alignment === 'right') {
+        alignmentStyle = `margin: 0 0 0 auto`
+      }
+      if (this.isPx) {
+        if (this.isCustom) {
+          return `width: ${this.width}px; height: ${this.height}px;${alignmentStyle}`
+        }
+        return `width: ${this.width}px; ${alignmentStyle}`
+      }
+      return `width:${this.percent}%; ${alignmentStyle}`
     }
   },
   async created() {
@@ -315,6 +346,8 @@ export default {
 
   .bigfile-image {
     img {
+      margin: auto;
+      display: block;
       width: 100%;
     }
   }
