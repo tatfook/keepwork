@@ -182,6 +182,7 @@ export default {
     .el-textarea__inner {
       height: 150px;
       max-width: 655px;
+      font-family: 'Avenir', Helvetica, Arial, sans-serif;
     }
   }
   &-skills,

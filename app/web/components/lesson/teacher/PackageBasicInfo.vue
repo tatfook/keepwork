@@ -199,6 +199,7 @@ export default {
       color: #414141;
       font-size: 12px;
       border-color: #ccc;
+      font-family: 'Avenir', Helvetica, Arial, sans-serif;
     }
   }
   &-price {
@@ -232,6 +233,7 @@ export default {
   }
   .el-input__inner {
     border-color: #ccc;
+    font-size: 12px;
   }
   .el-input-number.is-without-controls .el-input__inner {
     padding: 0 10px;
