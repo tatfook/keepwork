@@ -81,7 +81,6 @@ const actions = {
     let {
       'user/username': username
     } = context.rootGetters
-    commit(SET_ACTIVE_PAGE_URL, { path })
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
     const fullPath = getFileFullPathByPath(path)
     const sitePath = getFileSitePathByPath(path)
