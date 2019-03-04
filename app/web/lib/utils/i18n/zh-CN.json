@@ -841,6 +841,7 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "lessonIndexLabel": "课程",
     "formatError": "格式错误",
     "viewMore": "了解更多",
     "teachingContent": "教学内容",

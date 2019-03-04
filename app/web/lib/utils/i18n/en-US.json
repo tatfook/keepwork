@@ -850,6 +850,7 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "lessonIndexLabel": "Lesson ",
     "formatError": "format error",
     "viewMore": "View More",
     "teachingContent": "Teach with diversified contents",
