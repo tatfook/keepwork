@@ -18,7 +18,7 @@
       </div>
       <div class="project-joined-members-list-card-created">
         <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
-        <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
+        <span class="project-joined-members-list-card-username" :title="originProjectUsername">{{originProjectUsername}}</span>
         <span class="project-joined-members-list-card-label">{{$t("project.creator")}}</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
@@ -175,6 +175,9 @@ export default {
     &-username {
       margin: 0 16px;
       flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     &-profiles {
       padding: 16px 8px;
