@@ -38,7 +38,7 @@
       </div>
       <div v-show="!isPendingReview && isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
       <div v-if="isPendingReview" class="package-basic-detail-warning">{{$t('lesson.Unapproved')}}</div>
-      <el-button v-show="!isPendingReview && !isPurchaseButtonHide && !isPackageCostAndBackShow" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
+      <el-button v-if="!isPreview" v-show="!isPendingReview && !isPurchaseButtonHide && !isPackageCostAndBackShow" type="primary" class="package-basic-detail-operate-button" @click="addPackage">{{$t('lesson.add')}}</el-button>
       <div @click.stop v-if="isLoginDialogShow">
         <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
       </div>
@@ -53,7 +53,11 @@ export default {
   name: 'PackageBasicDetail',
   props: {
     packageDetail: Object,
-    actorType: String
+    actorType: String,
+    isPreview: {
+      type: Boolean,
+      default: false
+    }
   },
   mounted() {
     if (!this.userIsLogined) {

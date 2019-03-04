@@ -1,11 +1,11 @@
 <template>
   <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
-    <div class="lesson-page-header">
+    <div v-if="!isPreview" class="lesson-page-header">
       <common-header class="container" @callback="resetPage"></common-header>
     </div>
-    <lesson-header></lesson-header>
+    <lesson-header v-if="!isPreview"></lesson-header>
     <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
-    <perfect-common-footer></perfect-common-footer>
+    <perfect-common-footer v-if="!isPreview"></perfect-common-footer>
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -207,6 +207,9 @@ export default {
     },
     isHeaderFooterFixed() {
       return TeacherColumnActivePageNameReg.test(this.nowPagename)
+    },
+    isPreview() {
+      return this.$route.name === 'PackagePreview' || this.$route.name === 'LessonPreview'
     }
   },
   methods: {

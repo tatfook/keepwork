@@ -9,7 +9,7 @@
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
-      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !isPendingReview && !isUserSubscribePackage}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
+      <div class="package-catalogue-item" :class="{'package-catalogue-item-disabled': !isPreview && !isPendingReview && !isUserSubscribePackage}" v-for="(lesson, index) in lessonsList" :key='index' @click='handleUnSubscribe'>
         <div class="package-catalogue-item-cover-box">
           <div class="package-catalogue-item-mark" v-show="lesson.isFinished">
             <i class="el-icon-check"></i>
@@ -47,7 +47,11 @@ export default {
   name: 'PackageCatalogue',
   props: {
     packageDetail: Object,
-    actorType: String
+    actorType: String,
+    isPreview: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -147,6 +151,11 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
+      if (this.isPreview) {
+         return this.$router.push({
+          path: `/preview/package/${this.packageDetail.id}/lesson/${lesson.id}`
+        })
+      }
       if (!this.isTeacher && this.isPendingReview) {
         return this.$message({
           type: 'warning',
@@ -182,7 +191,7 @@ export default {
       }
     },
     handleUnSubscribe() {
-      if (!this.isPendingReview && !this.isUserSubscribePackage) {
+      if (!this.isPreview && !this.isPendingReview && !this.isUserSubscribePackage) {
         this.$alert(
           this.$t('lesson.addPackageFirst'),
           this.$t('lesson.infoTitle')
