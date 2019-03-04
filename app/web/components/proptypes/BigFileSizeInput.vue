@@ -183,16 +183,11 @@ export default {
     }
   }
   .big-file-unit-dropdown {
-    line-height: inherit;
     cursor: pointer;
   }
   &-title {
     display: block;
     width: 70px;
-    line-height: 32px;
-  }
-  &-unit {
-    line-height: inherit;
   }
   &-input {
     margin-right: 5px;
