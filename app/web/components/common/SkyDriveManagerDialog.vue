@@ -9,7 +9,7 @@
     :before-close="handleClose"
     :append-to-body='true'
   >
-    <sky-drive ref='skyDriveManager' :isSiteMode='isSiteMode' :mediaLibrary='mediaLibrary' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
+    <sky-drive ref='skyDriveManager' :isSiteMode='isSiteMode' :mediaLibrary='mediaLibrary' :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
   </el-dialog>
 </template>
 
@@ -26,6 +26,7 @@ export default {
     },
     show: Boolean,
     mediaLibrary: Boolean,
+    isImageTabShow: Boolean,
     isVideoTabShow: Boolean,
     insertable: {
       type: Boolean,
