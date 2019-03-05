@@ -89,7 +89,7 @@ export default {
     },
     updatedAtTime() {
       return (
-        (this.isEn ? this.$t('common.update') + 'd' : '') +
+        (this.isEn ? this.$t('common.update') + 'd' : '') + ' ' +
         this.relativeTime(this.project.updatedAt) +
         (this.isEn ? '' : this.$t('common.update'))
       )

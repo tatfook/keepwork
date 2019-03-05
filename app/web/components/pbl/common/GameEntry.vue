@@ -2,7 +2,7 @@
   <div class="game-entry">
     <el-dropdown class="game-entry-dropdown" placement="bottom-start" @visible-change='handleVisibleChange' @command='toJoin'>
       <div class="el-dropdown-link">
-        我要参赛<i class="el-icon-caret-bottom"></i>
+        {{$t('common.contestEntry')}}<i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu v-loading='isLoading' slot="dropdown">
         <el-dropdown-item v-show="filteredDuplicateGames.length > 0" v-for='(game, index) in filteredDuplicateGames' :key='index' :command='projectJoinedGames && projectJoinedGames.name === game ? undefined : game'>
