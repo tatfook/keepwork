@@ -11,7 +11,8 @@ const state = {
   lessonsDetail: {},
   packagesList: {},
   packagesDetail: {},
-  isShowLoginDialog: {}
+  isShowLoginDialog: {},
+  previewFlag: {}
 }
 export default {
   namespaced: true,

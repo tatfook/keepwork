@@ -10,10 +10,9 @@ const MoreResources = () => import('@/components/lesson/common/MoreResources')
 
 const Teacher = () => import('@/components/lesson/Teacher')
 const Student = () => import('@/components/lesson/Student')
-const StudentPackageDetailPage = () =>
-  import('@/components/lesson/student/PackageDetailPage')
-const TeacherPackageDetailPage = () =>
-  import('@/components/lesson/teacher/PackageDetailPage')
+const Preview = () => import('@/components/lesson/Preview')
+const StudentPackageDetailPage = () => import('@/components/lesson/student/PackageDetailPage')
+const TeacherPackageDetailPage = () => import('@/components/lesson/teacher/PackageDetailPage')
 const LessonStudent = () => import('@/components/lesson/student/Lesson')
 const LessonTeacher = () => import('@/components/lesson/teacher/Lesson')
 const StudentColumn = () => import('@/components/lesson/student/StudentColumn')
@@ -21,36 +20,29 @@ const TeacherColumn = () => import('@/components/lesson/teacher/TeacherColumn')
 const Teach = () => import('@/components/lesson/teacher/TeacherColumnTeach')
 const ApplyTeacher = () => import('@/components/lesson/teacher/ApplyTeacher')
 const Review = () => import('@/components/lesson/teacher/TeacherColumnReview')
-const PackageManager = () =>
-  import('@/components/lesson/teacher/PackageManager')
+const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
 const LessonManager = () => import('@/components/lesson/teacher/LessonManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
 const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
-const SharedCourseLecturer = () =>
-  import('@/components/lesson/teacher/SharedCourseLecturer')
+const SharedCourseLecturer = () => import('@/components/lesson/teacher/SharedCourseLecturer')
 
-const LessonSummaryShare = () =>
-  import('@/components/lesson/student/LessonSummaryShare')
-const PurchasePackage = () =>
-  import('@/components/lesson/common/PurchasePackage')
+const LessonSummaryShare = () => import('@/components/lesson/student/LessonSummaryShare')
+const PurchasePackage = () => import('@/components/lesson/common/PurchasePackage')
 const Share = () => import('@/components/lesson/Share')
-const LessonStudentRecord = () =>
-  import('@/components/lesson/teacher/LessonStudentRecord')
-const LessonSummary = () =>
-  import('@/components/lesson/teacher/LessonTeacherSummary')
+const LessonStudentRecord = () => import('@/components/lesson/teacher/LessonStudentRecord')
+const LessonSummary = () => import('@/components/lesson/teacher/LessonTeacherSummary')
 const LessonPlan = () => import('@/components/lesson/teacher/LessonTeacherPlan')
-const LessonPerformance = () =>
-  import('@/components/lesson/teacher/LessonStudentPerformance')
+const LessonPerformance = () => import('@/components/lesson/teacher/LessonStudentPerformance')
 const LearnSummary = () => import('@/components/lesson/student/LearnSummary')
 const Bean = () => import('@/components/lesson/student/Bean')
 const Visitor = () => import('@/components/lesson/Visitor')
 const VisitorLesson = () => import('@/components/lesson/visitor/Lesson')
-const LearningCenterPackages = () =>
-  import('@/components/lesson/student/LearningCenterPackages')
-const OfflineGuidanceCourse = () =>
-  import('@/components/lesson/student/OfflineGuidanceCourse')
+const PackagePreview = () => import('@/components/lesson/preview/PackagePreview')
+const LessonPreview = () => import('@/components/lesson/preview/LessonPreview')
+const LearningCenterPackages = () => import('@/components/lesson/student/LearningCenterPackages')
+const OfflineGuidanceCourse = () => import('@/components/lesson/student/OfflineGuidanceCourse')
 const TeachingVideo = () => import('@/components/lesson/student/TeachingVideo')
 const MentorService = () => import('@/components/lesson/student/MentorService')
 const MentorInvite = () => import('@/components/lesson/teacher/MentorInvite')
@@ -214,8 +206,7 @@ export default new Router({
           ]
         },
         {
-          path:
-            'student/:userId/classId/:classId/lessonNo/:lessonNo/lessonName/:lessonName/record',
+          path: 'student/:userId/classId/:classId/lessonNo/:lessonNo/lessonName/:lessonName/record',
           name: 'LessonStudentRecord',
           component: LessonStudentRecord
         },
@@ -341,6 +332,28 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'Anonymous',
           component: VisitorLesson
+        }
+      ]
+    },
+    {
+      path: '/preview',
+      name: 'Preview',
+      component: Preview,
+      children: [
+        {
+          path: 'package/:packageId',
+          name: 'PackagePreview',
+          component: PackagePreview
+        },
+        {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'LessonPreview',
+          component: LessonPreview
+        },
+        {
+          path: 'lesson/:lessonId',
+          name: 'SingleLessonPreview',
+          component: LessonPreview
         }
       ]
     },

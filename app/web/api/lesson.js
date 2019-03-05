@@ -13,8 +13,14 @@ export const endpoint = createEndpoint({
   baseURL: process.env.LESSON_API_PREFIX
 })
 
-export const endpointWithoutToken = createEndpoint({
-  baseURL: process.env.LESSON_API_PREFIX
+
+export const requestWithoutToken = axios.create({
+  baseURL: process.env.LESSON_API_PREFIX,
+  timeout: 20000,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/json; charset=UTF-8'
+  }
 })
 
 export const { get, post, put, delete: deleteMethod } = endpoint
