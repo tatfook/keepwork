@@ -1481,7 +1481,8 @@
     "operations": "操作",
     "joinAt": "加入时间",
     "removeMember": "移出",
-    "hasRate": "已有{number}人评分"
+    "hasRate": "已有{number}人评分",
+    "noGames": "当前没有可供参加的比赛"
   },
   "footer": {
     "lettersTo": "致社区",

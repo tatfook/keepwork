@@ -8,7 +8,7 @@
         <el-dropdown-item v-show="filteredDuplicateGames.length > 0" v-for='(game, index) in filteredDuplicateGames' :key='index' :command='projectJoinedGames && projectJoinedGames.name === game ? undefined : game'>
           {{game}}<span v-if="projectJoinedGames && projectJoinedGames.name === game" class="game-entry-joined">已参赛</span>
         </el-dropdown-item>
-        <el-dropdown-item class="game-entry-empty" v-show="filteredDuplicateGames.length == 0">当前没有可供参加的比赛</el-dropdown-item>
+        <el-dropdown-item class="game-entry-empty" v-show="filteredDuplicateGames.length == 0">{{$t('project.noGames')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <el-dialog class="game-entry-submit" :visible.sync="isSubmitWorkVisible" v-if="isSubmitWorkVisible" width="614px" :before-close="closeSubmitDialog">
