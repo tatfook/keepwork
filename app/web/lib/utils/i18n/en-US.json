@@ -1490,7 +1490,8 @@
     "operations": "",
     "joinAt": "Join at",
     "removeMember": "Remove",
-    "hasRate": "{number} ratings"
+    "hasRate": "{number} ratings",
+    "noGames": "No contests"
   },
   "footer": {
     "lettersTo": "Letters To",
