@@ -5,12 +5,13 @@
       <div class="project-grade-stars">
         <el-rate v-model="startRate" disabled text-color="#ff9900">
         </el-rate>
-        <p class="project-grade-stars-info">已有<span class="project-grade-stars-warning">{{rateDetail.count}}</span>人评分</p>
+        <!-- <p class="project-grade-stars-info">已有<span class="project-grade-stars-warning">{{rateDetail.count}}</span>人评分</p> -->
+        <p class="project-grade-stars-info">{{$t('project.hasRate', {number: rateDetail.count})}}</p>
       </div>
     </div>
     <div class="project-grade-detail">
       <div class="project-grade-item" v-for="index in [5,4,3,2,1]" :key="index">
-        <span>{{index}}星</span>
+        <span>{{index}}{{$t('common.star')}}</span>
         <el-progress :percentage="rateDetail[index] | percentFilter(rateDetail.count)"></el-progress>
       </div>
     </div>

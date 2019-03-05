@@ -666,7 +666,7 @@ export default {
         }
         label {
           color: #909399;
-          width: 72px;
+          width: 87px;
           display: inline-block;
         }
       }

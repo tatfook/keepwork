@@ -135,7 +135,9 @@
     "viewMore": "More",
     "untitled": "Untitled",
     "noSelfIntro": "No self intro.",
-    "identification": "Certification"
+    "identification": "Certification",
+    "contestEntry": "Contest Entry",
+    "star": "star"
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
@@ -1487,7 +1489,8 @@
     "rejected": "Rejected",
     "operations": "",
     "joinAt": "Join at",
-    "removeMember": "Remove"
+    "removeMember": "Remove",
+    "hasRate": "{number} ratings"
   },
   "footer": {
     "lettersTo": "Letters To",
