@@ -51,7 +51,8 @@ const getters = {
   lessonDetail: state => ({ lessonId }) => _.get(state.lessonsDetail, lessonId),
   skills: state => state.skills,
   subjects: state => state.subjects,
-  isShowLoginDialog: state => state.isShowLoginDialog
+  isShowLoginDialog: state => state.isShowLoginDialog,
+  previewFlag: state => state.previewFlag
 }
 
 export default getters

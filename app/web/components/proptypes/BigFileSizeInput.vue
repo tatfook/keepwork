@@ -6,7 +6,7 @@
       </div>
       <el-dropdown class="big-file-alignment-dropdown" size="small" split-button @command="handleAlignmentSelect">
         {{$t(`field.${alignment}`)}}
-        <el-dropdown-menu slot="dropdown" >
+        <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="center">{{$t('field.center')}}</el-dropdown-item>
           <el-dropdown-item command="left">{{$t('field.left')}}</el-dropdown-item>
           <el-dropdown-item command="right">{{$t('field.right')}}</el-dropdown-item>
@@ -20,7 +20,7 @@
       <div class="big-file-px-right">
         <div class="big-file-px-row">
           <span class="big-file-size-title">{{$t('field.width')}}</span>
-          <el-input type="number" v-model="width" @change="handleWidthInput" @focus="handleWidthInput" min="1" max="10000" class="big-file-size-input"></el-input>
+          <el-input-number size="small" v-model="width" controls-position="right" @change="handleWidthInput"  :min="1" :max="10000" class="big-file-size-input"></el-input-number>
           <span class="big-file-size-unit">px</span>
           <el-dropdown class="big-file-unit-dropdown" @command="handleDropdown">
             <span class="el-dropdown-link">
@@ -34,7 +34,7 @@
         </div>
         <div class="big-file-px-row">
           <span class="big-file-size-title">{{$t('field.height')}}</span>
-          <el-input type="number" :disabled="!isCustom" v-model="height" @change="handleHeightInput" @focus="handleHeightInput" min="1" max="10000" class="big-file-size-input"></el-input>
+          <el-input-number size="small" controls-position="right" :disabled="!isCustom" v-model="height" @change="handleHeightInput"  :min="1" :max="10000" class="big-file-size-input"></el-input-number>
           <span class="big-file-size-unit">px</span>
           <el-dropdown class="big-file-unit-dropdown" @command="handleDropdown">
             <span class="el-dropdown-link">
@@ -49,8 +49,8 @@
       </div>
     </div>
     <div class="big-file-percent" v-else>
-      <span class="big-file-size-title">{{$t('field.width')}}</span>
-      <el-input type="number" v-model="percent" @change="handlePercentInput" @focus="handlePercentInput" min="1" max="100" class="big-file-size-input"></el-input>
+      <span class="big-file-percent-title">{{$t('field.width')}}</span>
+      <el-input-number size="small" controls-position="right" v-model="percent" @change="handlePercentInput"  :min="1" :max="100" class="big-file-percent-input"></el-input-number>
       <span class="big-file-size-unit">%</span>
       <el-dropdown class="big-file-unit-dropdown" @command="handleDropdown">
         <span class="el-dropdown-link">
@@ -183,59 +183,53 @@ export default {
     }
   }
   .big-file-unit-dropdown {
-    line-height: 40px;
     cursor: pointer;
   }
   &-title {
     display: block;
-    width: 80px;
-    line-height: 40px;
-  }
-  &-unit {
-    line-height: 40px;
+    width: 70px;
   }
   &-input {
-    .el-input__inner {
-      border-right: none;
-      border-top: none;
-      border-left: none;
-      border-radius: 0;
-    }
+    margin-right: 5px;
   }
   .big-file-px {
     display: flex;
     &-row {
       display: flex;
+      line-height: 32px;
+      padding: 5px 0;
     }
     &-left {
       width: 20px;
-      display: flex;
-      // justify-content: center;
+      display: inline-flex;
+      justify-content: center;
       align-items: center;
       .big-file-custom {
         display: block;
         height: 21px;
         width: 9px;
-        background: url('../../assets/img/big-file-unlock.png');
+        background: url('../../assets/img/big-file-unlock.png') no-repeat;
         cursor: pointer;
         &.custom-off {
-          background: url('../../assets/img/big-file-lock.png');
+          background: url('../../assets/img/big-file-lock.png') no-repeat;
         }
       }
     }
     &-right {
-      flex: 1;
+      width: 220px;
     }
   }
 
   .big-file-percent {
     display: flex;
+    align-items: center;
     &-title {
       display: block;
-      width: 80px;
+      width: 84px;
     }
-    &-unit {
-      line-height: 40px;
+    &-input {
+      margin-right: 5px;
+      width: 110px;
     }
   }
 }

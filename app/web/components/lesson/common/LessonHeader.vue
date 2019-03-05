@@ -81,12 +81,20 @@
       </el-col>
     </el-row>
     <keep-work-sticky>
-      <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
+      <el-row v-if="isPreview" :gutter="20" class="lesson-progress-wrap">
+        <el-col :span="20" :sm="20">
+          <lesson-preview-progress/>
+        </el-col>
+        <el-col :span="4" :sm="4" class="lesson-references">
+          <lesson-references />
+        </el-col>
+      </el-row>
+      <el-row v-else-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
         <el-col :span="20" :sm="20">
           <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
-          <lesson-referencse />
+          <lesson-references />
         </el-col>
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
@@ -97,7 +105,7 @@
           <lesson-student-progress :isVisitor="isVisitor" />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
-          <lesson-referencse />
+          <lesson-references />
         </el-col>
       </el-row>
     </keep-work-sticky>
@@ -114,16 +122,18 @@ import colI18n from '@/lib/utils/i18n/column'
 import LessonJewelBox from '../student/LessonJewelBox'
 import LessonStudentProgress from '../student/LessonStudentProgress'
 import LessonTeacherProgress from '../teacher/LessonTeacherProgress'
+import LessonPreviewProgress from '../preview/LessonPreviewProgress'
 import LessonReferences from './LessonReferences'
 import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
   components: {
-    'lesson-jewel-box': LessonJewelBox,
-    'lesson-student-progress': LessonStudentProgress,
-    'lesson-teacher-progress': LessonTeacherProgress,
-    'keep-work-sticky': KeepWorkSticky,
-    'lesson-referencse': LessonReferences
+    LessonJewelBox,
+    LessonStudentProgress,
+    LessonTeacherProgress,
+    KeepWorkSticky,
+    LessonReferences,
+    LessonPreviewProgress
   },
   filters: {
     idPretty(value) {
@@ -143,6 +153,10 @@ export default {
       default: true
     },
     isVisitor: {
+      type: Boolean,
+      default: false
+    },
+    isPreview: {
       type: Boolean,
       default: false
     }
@@ -326,7 +340,7 @@ export default {
       return !this.isTeacher && !this.isBeInClassroom
     },
     haqiCode() {
-      const { packageId, lessonId } = this.$route.params
+      const { packageId = 0, lessonId = 0 } = this.$route.params
       return `${packageId}x${lessonId}`
     }
   }
@@ -414,7 +428,7 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-family: 'MicrosoftYaHei'
+        font-family: 'MicrosoftYaHei';
       }
       &.intro {
         color: #4c4c4c;
@@ -429,7 +443,6 @@ export default {
           word-break: break-all;
           overflow-x: none;
           overflow-y: auto;
-   
         }
       }
 
