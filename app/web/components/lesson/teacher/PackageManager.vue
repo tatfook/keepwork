@@ -300,7 +300,13 @@ export default {
       ) {
         return false
       }
-      await this.lessonGetLessonList({ packageId: this.editingPackageId })
+      let isOffline = false
+      await this.lessonGetLessonList({ packageId: this.editingPackageId }).catch(error => {
+        this.isOffline = true
+      })
+      if (this.isOffline) {
+        return true
+      }
       let { lessons } = this.editingPackageDetail
       if (!lessons || lessons.length <= 0) {
         return false
