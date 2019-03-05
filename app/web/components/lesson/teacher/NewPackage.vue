@@ -224,14 +224,16 @@ export default {
     overflow: auto;
   }
   &-media-setter {
-    padding: 35px;
+    padding: 26px 36px;
   }
 }
 </style>
 <style lang="scss">
-.new-package {
-  &-media-setter {
-    padding: 16px;
+@media (max-width: 768px) {
+  .new-package {
+    &-media-setter {
+      padding: 16px;
+    }
   }
 }
 </style>
