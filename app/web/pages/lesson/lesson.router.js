@@ -349,6 +349,11 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'LessonPreview',
           component: LessonPreview
+        },
+        {
+          path: 'lesson/:lessonId',
+          name: 'SingleLessonPreview',
+          component: LessonPreview
         }
       ]
     },

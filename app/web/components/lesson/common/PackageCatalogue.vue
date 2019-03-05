@@ -51,7 +51,8 @@ export default {
     isPreview: {
       type: Boolean,
       default: false
-    }
+    },
+    previewToken: String
   },
   computed: {
     ...mapGetters({
@@ -153,7 +154,7 @@ export default {
     toLessonDetail(lesson) {
       if (this.isPreview) {
          return this.$router.push({
-          path: `/preview/package/${this.packageDetail.id}/lesson/${lesson.id}`
+          path: `/preview/package/${this.packageDetail.id}/lesson/${lesson.id}?token=${this.previewToken}`
         })
       }
       if (!this.isTeacher && this.isPendingReview) {

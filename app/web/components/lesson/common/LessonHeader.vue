@@ -340,7 +340,7 @@ export default {
       return !this.isTeacher && !this.isBeInClassroom
     },
     haqiCode() {
-      const { packageId, lessonId } = this.$route.params
+      const { packageId = 0, lessonId = 0 } = this.$route.params
       return `${packageId}x${lessonId}`
     }
   }

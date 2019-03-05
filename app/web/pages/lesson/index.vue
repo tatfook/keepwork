@@ -170,7 +170,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 const TeacherColumnActivePageNameReg = /^TeacherColumn+/
-
+const HIDE_ROUTE_NAMES = ['SingleLessonPreview', 'PackagePreview', 'LessonPreview']
 export default {
   name: 'LessonPage',
   router,
@@ -209,7 +209,7 @@ export default {
       return TeacherColumnActivePageNameReg.test(this.nowPagename)
     },
     isPreview() {
-      return this.$route.name === 'PackagePreview' || this.$route.name === 'LessonPreview'
+      return HIDE_ROUTE_NAMES.includes(this.$route.name)
     }
   },
   methods: {

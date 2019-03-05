@@ -9,7 +9,8 @@ let {
   GET_ALL_SKILLS_SUCCESS,
   GET_ALL_SUBJECTS_SUCCESS,
   LOGOUT,
-  TOGGLE_LOGIN_DIALOG
+  TOGGLE_LOGIN_DIALOG,
+  SET_PREVIEW_FLAG
   // TO_BE_TEACHER
 } = props
 
@@ -83,6 +84,9 @@ const actions = {
   },
   async toggleLoginDialog({ commit }, payload) {
     commit(TOGGLE_LOGIN_DIALOG, payload)
+  },
+  async setPreviewFlag({ commit }, payload) {
+    commit(SET_PREVIEW_FLAG, payload)
   }
 }
 

@@ -28,12 +28,12 @@
         <div class="package-basic-detail-costs-item">
           <span class="package-basic-detail-costs-label">{{$t('lesson.rmbPrice')}}:</span>
           <span class="package-basic-detail-costs-value">￥ {{packageDetail.rmb}}</span>
-          <el-button v-show="!isPendingReview && !isPurchaseButtonHide" class="package-basic-detail-costs-button" type="warning" @click="addPackage('rmb')">{{$t('lesson.add')}}</el-button>
+          <el-button v-show="!isPreview && !isPendingReview && !isPurchaseButtonHide" class="package-basic-detail-costs-button" type="warning" @click="addPackage('rmb')">{{$t('lesson.add')}}</el-button>
         </div>
         <div class="package-basic-detail-costs-item">
           <span class="package-basic-detail-costs-label">{{$t('lesson.coinsPrice')}}:</span>
           <span class="package-basic-detail-costs-value">{{packageDetail.coin}} {{$t('lesson.coins')}}</span>
-          <el-button v-show="!isPendingReview && !isPurchaseButtonHide" class="package-basic-detail-costs-button" type="primary" @click="addPackage('coin')">{{$t('lesson.add')}}</el-button>
+          <el-button v-show="!isPreview && !isPendingReview && !isPurchaseButtonHide" class="package-basic-detail-costs-button" type="primary" @click="addPackage('coin')">{{$t('lesson.add')}}</el-button>
         </div>
       </div>
       <div v-show="!isPendingReview && isFreeLabelShow" class="package-basic-detail-free">{{$t('lesson.free')}}</div>
