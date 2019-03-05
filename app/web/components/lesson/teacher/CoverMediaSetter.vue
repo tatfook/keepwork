@@ -28,7 +28,7 @@
             <div class="cover-media-setter-image-preview-wrap">
               <img class="cover-media-setter-image-preview-inner" :src="urlTypeUrl" :alt="$t('lesson.packageManage.preview')">
             </div>
-            <el-button slot="reference">{{$t('lesson.packageManage.preview')}}</el-button>
+            <el-button :disabled='isPreviewDisabled' slot="reference">{{$t('lesson.packageManage.preview')}}</el-button>
           </el-popover>
         </template>
       </el-input>
@@ -86,6 +86,12 @@ export default {
     }
   },
   computed: {
+    isPreviewDisabled() {
+      if (/^(http:|https:)/.test(this.urlTypeUrl)) {
+        return false
+      }
+      return true
+    },
     componentTitle() {
       return this.title || this.$t('lesson.packageManage.cover')
     },
@@ -201,6 +207,10 @@ export default {
         background-color: transparent;
         border: none;
       }
+    }
+    .el-button.is-disabled {
+      border-color: transparent;
+      color: #c0c4cc;
     }
   }
   &-image-preview {
