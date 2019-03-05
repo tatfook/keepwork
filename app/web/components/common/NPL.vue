@@ -78,7 +78,7 @@
         <p class="npl-center-points-text"><span class="text-icon"></span>作品评分时间自作品提交开始，自本期大赛截止终止。</p>
         <p class="npl-center-points-text"><span class="text-icon"></span>作品评分分为主动评分类型及被动系统邀请类型。</p>
         <p class="npl-center-points-text"><span class="text-icon"></span>为获得客观评分，参赛选手可尽早提交作品邀请他人为自己评分。</p>
-        <p class="npl-center-points-text"><span class="text-icon"></span>本次未获奖作品，在修改完善后重新提交，可以参加下一届NPL大赛的评比。</p>
+        <p class="npl-center-points-text"><span class="text-icon"></span>本次未获奖作品，在修改完善后重新提交获取新ID，以新ID参加下一届NPL大赛的评比。</p>
         <p class="npl-center-points-text"><span class="text-icon"></span>评选获奖作品需满足最低标准要求，当本次比赛提交的所有作品未达到对应奖项最低标准要求时，该奖项本次不进行评选。</p>
         <p class="npl-center-points-text"><span class="text-icon"></span>此前已获奖作品，包括但不限于获得PAC大赛、IICC大赛、NPL大赛奖项的作品不再参与评选（人气奖不受此条规则限制）。</p>
         <p class="npl-center-points-text"><span class="text-icon"></span>2018年10月10日前上传作品不再参与评选（原作品修改后不受此条限制）。</p>
