@@ -139,7 +139,7 @@ export default {
     getUserInfo() {
       let info = _.cloneDeep(_.get(this.loginUserProfile, 'info', {}))
       this.userInfo = {...this.loginUserProfile, qq: _.get(info, 'qq', '')}
-      this.userInfo.info = info
+      this.userInfo.info = info || {}
       this.copiedLoginUserProfile = _.cloneDeep(this.userInfo)
       this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
     },
