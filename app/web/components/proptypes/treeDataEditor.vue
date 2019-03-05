@@ -18,7 +18,7 @@
         </span>
         <span class="node-link">
           <el-tooltip class="item" :disabled='warningInput(data)' effect="dark" :content="$t('editor.warningInput')" placement="top">
-            <el-input :ref='"link"+node.id' :style="warningInput(data, node)" :placeholder='$t("editor.inputConnection")' @change="changeInputColor(data, node)" :class="{'is-focus': data.linkInputShow}" size='mini' v-model='data.link' @blur='hideInput(data, "link", node)' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-input>
+            <el-autocomplete class="node-link-selector" :class="{'link-input-warning': !warningInput(data, node), 'is-focus': data.linkInputShow}" :ref='"link"+node.id' :style="warningInput(data, node)" :placeholder='$t("editor.inputConnection")' :fetch-suggestions="querySearch" size='mini' v-model='data.link' @blur='hideInput(data, "link", node)' clearable @keyup.enter.native.prevent='finishInput(node.id, "link")'></el-autocomplete>
           </el-tooltip>
         </span>
         <span class="node-prompt">
@@ -51,7 +51,7 @@
   </el-dialog>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { setTimeout } from 'timers'
 import { types } from 'util'
 
@@ -69,16 +69,26 @@ export default {
         children: 'child',
         label: 'name'
       },
+      test: '',
       notButton: false
     }
   },
-  mounted() {
+  async mounted() {
     this.keyupSubmit()
+    await this.getAllPersonalPageList()
   },
   computed: {
     ...mapGetters({
+      personalAllPagePathList: 'user/personalAllPagePathList',
       activePageInfo: 'activePageInfo'
     }),
+    allPagePathToObj() {
+      return _.map(this.personalAllPagePathList, path => {
+        return {
+          value: location.origin + '/' + path
+        }
+      })
+    },
     treeData() {
       return this.originalTreeData
     },
@@ -87,6 +97,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getAllPersonalPageList: 'user/getAllPersonalPageList'
+    }),
     keyupSubmit() {
       document.onkeydown = e => {
         let _key = window.event.keyCode
@@ -131,35 +144,10 @@ export default {
         let currentUrl = item.link
         let url = /(^(http|https):\/\/.+|^\/(\w)+)/
         let self = this
-        function inputStyle(data) {
-          if (!node) {
-            return
-          }
-          let name = 'link' + node.id
-          setTimeout(() => {
-            if (self.$refs[name]) {
-              let inputStyle = self.$refs[name].$refs['input']
-              if (!inputStyle) {
-                return
-              }
-              if (data) {
-                inputStyle.style.borderWidth = null
-                inputStyle.style.borderStyle = null
-                inputStyle.style.borderColor = null
-              } else {
-                inputStyle.style.borderWidth = '1px'
-                inputStyle.style.borderStyle = 'solid'
-                inputStyle.style.borderColor = 'red'
-              }
-            }
-          }, 0)
-        }
         if (currentUrl.match(url)) {
-          inputStyle(true)
           this.notButton = false
           return true
         } else {
-          inputStyle(false)
           this.notButton = true
           return false
         }
@@ -206,20 +194,6 @@ export default {
       let targetInputElement = this.$refs[inputRefId]
       targetInputElement.focus()
     },
-    changeInputColor(data, node) {
-      let name = 'link' + node.id
-      if (data && data.link == '') {
-        if (this.$refs[name]) {
-          let inputStyle = this.$refs[name].$refs['input']
-          if (!inputStyle) {
-            return
-          }
-          inputStyle.style.borderWidth = null
-          inputStyle.style.borderStyle = null
-          inputStyle.style.borderColor = null
-        }
-      }
-    },
     hideInput(data, type, node) {
       if (data && data.link == '') {
         this.notButton = false
@@ -230,7 +204,7 @@ export default {
     },
     finishInput(inputRefId, type) {
       inputRefId = type + inputRefId
-      let targetInputElement = this.$refs[inputRefId]
+      let targetInputElement = this.$refs[inputRefId].$el
       targetInputElement.blur()
     },
     fixMaxHeight() {
@@ -305,6 +279,25 @@ export default {
           newMenuId = 0
         }
       })
+    },
+    querySearch(queryString, cb) {
+      var restaurants = this.allPagePathToObj
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createFilter(queryString) {
+      return restaurant => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) !=
+          -1
+        )
+      }
+    },
+    getLocationUrl(url) {
+      return url ? location.origin + '/' + url : ''
     }
   },
   destroyed() {
@@ -345,6 +338,10 @@ export default {
     text-overflow: ellipsis;
     position: relative;
     cursor: text;
+  }
+  .node-link-selector {
+    width: 100%;
+    height: 100%;
   }
   .node-operate {
     flex-basis: 135px;
@@ -417,6 +414,11 @@ export default {
   }
   .icon-prompt {
     color: red;
+  }
+  .link-input-warning {
+    .el-input__inner {
+      border: 1px solid red;
+    }
   }
 }
 </style>

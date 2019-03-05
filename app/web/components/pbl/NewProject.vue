@@ -1,11 +1,11 @@
 <template>
-  <div class="new-project container">
+  <div class="new-project container" v-loading='isLoading'>
     <div class="new-project-step-0" v-show="nowStep === 0">
       <h1 class="new-project-title">{{$t("project.newProject")}}</h1>
       <p class="new-project-info">{{$t("create.projectIsWhereWorksStart")}}<br>{{$t("create.whatYouLearnFromProject")}}</p>
       <div class="new-project-name">
         <label for="projectName" class="new-project-label">{{$t("project.projectName")}}</label>
-        <el-input id="projectName" maxlength="40" v-model="newProjectData.name" @blur='checkProjectName'></el-input>
+        <el-input id="projectName" maxlength="40" v-model="newProjectData.name"></el-input>
       </div>
       <div class="new-project-type">
         <label for="projectName" class="new-project-label">{{$t("project.projectType")}}</label>
@@ -21,7 +21,7 @@
     <div class="new-project-step-1" v-show="nowStep === 1">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
     </div>
-    <el-button :loading="isCreating" v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">{{$t("project.createProject")}}</el-button>
+    <el-button v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">{{$t("project.createProject")}}</el-button>
     <el-button v-show="isNextShow" type="primary" :disabled="isNameEmpty" @click="goNextStep">{{$t("project.next")}}</el-button>
     <el-button v-show="isPrevShow" type="primary" @click="goPrevStep">{{$t("project.prev")}}</el-button>
   </div>
@@ -36,20 +36,20 @@ export default {
   name: 'NewProject',
   data() {
     return {
-      isCreating: false,
+      isLoading: false,
       nowStep: 0,
       webFinishStepCount: 1,
       projectTypes: [
         {
           type: 1,
-          label: this.$t("common.paracraft"),
-          subLabel: this.$t("project.3DGameAndAnim"),
+          label: this.$t('common.paracraft'),
+          subLabel: this.$t('project.3DGameAndAnim'),
           iconImgSrc: require('@/assets/pblImg/project_paracraft.png'),
           activeIconImgSrc: require('@/assets/pblImg/project_paracraft_active.png')
         },
         {
           type: 0,
-          label: this.$t("create.website"),
+          label: this.$t('create.website'),
           iconImgSrc: require('@/assets/pblImg/project_web.png'),
           activeIconImgSrc: require('@/assets/pblImg/project_web_active.png')
         }
@@ -96,34 +96,38 @@ export default {
       this.createNewProject()
     },
     async checkProjectName() {
+      this.isLoading = true
       let sensitiveResult = await checkSensitiveWords({
         checkedWords: this.newProjectData.name
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.isLoading = false
         return false
       }
       let name = this.newProjectData.name
       keepwork.projects
-      .getUserProjectsByName({ name })
-      .then(res => {
-        if(res.count > 0){
-          this.$message.error(this.$t('project.projectAlreadyExists'))
-          return false
-        }
-      })
-      .catch(e => {
-        console.error(e)
-      })
+        .getUserProjectsByName({ name })
+        .then(res => {
+          if (res.count > 0) {
+            this.$message.error(this.$t('project.projectAlreadyExists'))
+            this.isLoading = false
+            return false
+          }
+        })
+        .catch(e => {
+          console.error(e)
+        })
+      this.isLoading = false
       return true
     },
     async createNewProject() {
       if (!(await this.checkProjectName())) {
         return
       }
-      this.isCreating = true
+      this.isLoading = true
       await this.pblCreateNewProject(this.newProjectData)
         .then(projectDetail => {
-          this.isCreating = false
+          this.isLoading = false
           this.$message({
             type: 'success',
             message: this.$t('project.projectCreated')
@@ -132,20 +136,23 @@ export default {
           projectId && this.$router.push(`/project/${projectId}`)
         })
         .catch(error => {
-          if(error.response.status == 409){
+          if (error.response.status == 409) {
             this.$message.error(this.$t('project.projectAlreadyExists'))
-          }else{
+          } else {
             this.$message.error(this.$t('project.ProjectCreationFailed'))
           }
-          this.isCreating = false
+          this.isLoading = false
         })
     },
     goPrevStep() {
       this.nowStep--
     },
     async goNextStep() {
-      if (this.nowStep === 0 && !(await this.checkProjectName())) {
-        return
+      if (this.nowStep === 0) {
+        let isNameValid = await this.checkProjectName()
+        if (!isNameValid) {
+          return
+        }
       }
       this.nowStep++
     }

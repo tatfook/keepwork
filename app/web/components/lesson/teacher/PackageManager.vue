@@ -34,7 +34,9 @@
         </el-table-column>
         <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
           <template slot-scope="scope">
-            <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
+            <el-tooltip effect="dark" :content="$t('lesson.packageManage.clickToPreview')" placement="top-start">
+              <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column :label="$t('lesson.subjectLabel')" width="190">

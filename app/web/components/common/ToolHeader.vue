@@ -54,12 +54,12 @@
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
-      <span class="icon-item" v-loading='starPending'>
+      <!-- <span class="icon-item" v-loading='starPending'>
         <el-tooltip :content="$t('editor.praise')">
           <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
         </el-tooltip>
         <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
-      </span>
+      </span> -->
     </div>
     <div @click.stop v-if="isLoginDialogShow">
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>

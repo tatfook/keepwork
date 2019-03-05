@@ -2,6 +2,8 @@
 
 // @author  ZhangGuolu <986673640@qq.com>
 
+// depend on moment http://momentjs.com/docs/
+
 // @example
 // <pre>
 // contributionCalendarGenerator("containerId",{});
@@ -19,10 +21,11 @@
 //     "2016-06-01":6,
 //   }
 // });
+const moment = require('moment')
 
 let defaults = {
   year: new Date().getFullYear(),
-  week: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+  week: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
   monthChars: Array(12).join().split(',')
     .map(function(x, i) { return (i + 1) + '月' }),
   step: 5,
@@ -32,7 +35,7 @@ let defaults = {
   defaultTextFillColor: '#303133',
   languageLocaleIsForGlobalUser: false
 }
-let svg, gEle, yearLen
+let svg, gEle, yearColDates
 let languageLocaleIsForGlobalUser = defaults.languageLocaleIsForGlobalUser
 let startX = 36
 let startY = 45
@@ -77,14 +80,38 @@ function getDay(nowDay) {
   result.day = nowDay
   return result
 }
-// 获取一年的总天数
-function getYearLen(year) {
-  for (let i = 1; i <= 12; i++) {
-    let date = new Date(year, i, 0).getDate()
-    month[i] = date
-    yearLen += date
+
+function getYearMondayRow(yearStart, yearEnd) {
+  let yearMondayRow = []
+  let nextDate = yearStart.day(-6)
+  while (nextDate <= yearEnd && nextDate.day(8) <= yearEnd) {
+    const date = nextDate.format('YYYY-MM-DD')
+    yearMondayRow.push({
+      date
+    })
   }
-  return yearLen
+  return yearMondayRow
+}
+
+function getYearColDates(year) {
+  let yearColDates = []
+  let yearStart = moment(`${year}-01-01`).day(1)
+  let yearEnd = moment(`${year}-12-31`)
+  let yearMondayRow = getYearMondayRow(yearStart, yearEnd)
+  yearMondayRow.forEach(dateObj => {
+    let perCol = []
+    for (let i = 1; i <= 7; i++) {
+      let waitPushedDate = moment(dateObj.date).day(i)
+      if (waitPushedDate > yearEnd) {
+        break
+      }
+      perCol.push({
+        date: waitPushedDate.format('YYYY-MM-DD')
+      })
+    }
+    yearColDates.push(perCol)
+  })
+  return yearColDates
 }
 
 // 显示月份
@@ -103,13 +130,13 @@ function showMonth(svg) {
 }
 // 显示星期
 function showWeek(svg) {
-  for (let i = 1; i <= 7; i++) {
-    let weekItem = week[new Date(year, 0, i).getDay()]
+  for (let i = 0; i < 7; i++) {
+    let weekItem = week[i]
     let text = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-    if (i % 2 === 0) {
+    if (i % 2 !== 0) {
       text.setAttribute('style', 'display:none')
     }
-    text.setAttribute('y', 10 + 12 * (i - 1))
+    text.setAttribute('y', 10 + 12 * i)
     text.setAttribute('x', -36)
     text.setAttribute('class', 'month')
     text.setAttribute('fill', defaultTextFillColor)
@@ -120,36 +147,30 @@ function showWeek(svg) {
   return svg
 }
 // 显示年贡献小框
-function showTables(svg, yearLen) {
-  let g
-  for (let j = 0; j < yearLen; j++) {
-    if (j % 7 === 0) {
-      g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-      g.setAttribute('transform', 'translate(' + (13 * (j / 7)) + ',0)')
+function showTables(svg, yearColDates) {
+  for (let colIndex = 0; colIndex < yearColDates.length; colIndex++) {
+    let g
+    g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+    g.setAttribute('transform', 'translate(' + (13 * colIndex) + ',0)')
+    for (let rowIndex = 0; rowIndex < yearColDates[colIndex].length; rowIndex++) {
+      let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      let dataDate = yearColDates[colIndex][rowIndex].date
+      r.setAttribute('data-date', dataDate)
+      let dataCount = getCount(dataDate)
+      let color = getColor(dataCount)
+      r.setAttribute('data-count', dataCount)
+      r.setAttribute('fill', color)
+      r.setAttribute('class', 'day')
+      r.setAttribute('width', '10')
+      r.setAttribute('height', '10')
+      r.setAttribute('x', (14 - colIndex))
+      r.setAttribute('y', (12 * rowIndex))
+      let title = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+      let textNode = document.createTextNode(dataDate + ' 的活跃度为 ' + dataCount)
+      title.appendChild(textNode)
+      r.appendChild(title)
+      g.appendChild(r)
     }
-    let locX = j / 7 // day 位于第几列
-    let locY = j % 7 // day 位于第几行
-    let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-    let nowDay = getDay(j + 1)
-    let dataDate = year + '-' + fixNum(nowDay.month, 2) + '-' + fixNum(nowDay.day, 2)
-    r.setAttribute('data-date', dataDate)
-    let dataCount = getCount(dataDate)
-
-    let color = getColor(dataCount)
-    r.setAttribute('data-count', dataCount)
-    r.setAttribute('fill', color)
-    r.setAttribute('class', 'day')
-    r.setAttribute('width', '10')
-    r.setAttribute('height', '10')
-    r.setAttribute('x', (14 - locX))
-    r.setAttribute('y', (12 * locY))
-
-    let title = document.createElementNS('http://www.w3.org/2000/svg', 'title')
-    let textNode = document.createTextNode(dataDate + ' 的活跃度为 ' + dataCount)
-    title.appendChild(textNode)
-    r.appendChild(title)
-
-    g.appendChild(r)
     gEle.appendChild(g)
   }
   return svg
@@ -167,7 +188,6 @@ function init() {
   gEle = document.createElementNS('http://www.w3.org/2000/svg', 'g')
   gEle.setAttribute('transform', 'translate(' + startX + ', ' + startY + ')')
   svg.appendChild(gEle)
-  yearLen = 0
 }
 
 export const contributionCalendarGenerator = (id, options) => {
@@ -186,7 +206,7 @@ export const contributionCalendarGenerator = (id, options) => {
     year = options.year
   }
 
-  week = languageLocaleIsForGlobalUser ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : week
+  week = languageLocaleIsForGlobalUser ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : week
 
   monthChars = languageLocaleIsForGlobalUser
     ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
@@ -197,10 +217,10 @@ export const contributionCalendarGenerator = (id, options) => {
   options.stepColor && (stepColor = options.stepColor)
   options.defaultColor && (defaultColor = options.defaultColor)
   options.defaultTextFillColor && (defaultTextFillColor = options.defaultTextFillColor)
-  yearLen = getYearLen(year)
+  yearColDates = getYearColDates(year)
   svg = showMonth(svg)
   svg = showWeek(svg)
-  svg = showTables(svg, yearLen)
+  svg = showTables(svg, yearColDates)
   if (options.before) {
     let elemSibling = document.getElementById(options.before)
     if (elemSibling) {

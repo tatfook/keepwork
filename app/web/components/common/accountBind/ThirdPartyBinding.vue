@@ -101,12 +101,12 @@ export default {
           username: this.username
         })
         this.$message({
-          message: this.$t('user.binding') + this.$t('common.success'),
+          message: this.$t('user.bindingSuccess'),
           type: 'success'
         })
       } else {
         let defaultErrorMessage =
-          this.$t('user.binding') + this.$t('common.failure')
+          this.$t('user.bindingFailed')
         let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
         this.$message({
           message: failureMessage,

@@ -15,7 +15,7 @@ export default {
       let count = discount.rewardRmb || discount.rewardCoin || discount.rewardBean
       return `${this.$t('account.returnOneCoupon')}${this.$t(`account.${payment}Unit`, {
         money: count
-      })}`
+      })}.`
     }
   }
 }
