@@ -943,7 +943,9 @@
       "searchByName": "Search lessons by name",
       "lessonListIsEmpty": "You have not created any lessons.",
       "searchResultIsEmpty": "No results.",
-      "formatType": "HH:mm DD/MM/YYYY"
+      "formatType": "HH:mm DD/MM/YYYY",
+      "createLesson": "No content, click {here}",
+      "clickHere": "here"
     },
     "lessonManage": {
       "pageLinkInvalidInfo": "Only support letters, numbers,  / and _ . And cannot begin with  / .",
