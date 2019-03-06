@@ -75,7 +75,7 @@ export default {
     padding-bottom: 42px;
 
     .vjs-control-bar {
-      position: unset;
+      overflow: hidden;
       display: flex;
     }
 
