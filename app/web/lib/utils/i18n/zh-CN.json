@@ -934,7 +934,9 @@
       "searchByName": "按课程名称搜索",
       "lessonListIsEmpty": "您暂未创建课程。",
       "searchResultIsEmpty": "无法搜索到该课程。",
-      "formatType": "YYYY-MM-DD HH:mm"
+      "formatType": "YYYY-MM-DD HH:mm",
+      "createLesson": "暂无数据，点击{here}去创建",
+      "clickHere": "这里"
     },
     "lessonManage": {
       "pageLinkInvalidInfo": "只支持字母、数字、/、_ 且不能以 / 开头。",
