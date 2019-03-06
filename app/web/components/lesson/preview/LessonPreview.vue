@@ -28,12 +28,12 @@ export default {
   async created() {
     const { lessonId = '' } = this.$route.params
     const { token } = this.$route.query
-    // if (!token) {
-    //   return this.$router.push('/')
-    // }
-    // const res = await users.verifyToken({ token }).catch(e => {
-    //   this.$router.push('/')
-    // })
+    if (!token) {
+      return this.$router.push('/')
+    }
+    const res = await users.verifyToken({ token }).catch(e => {
+      this.$router.push('/')
+    })
     try {
       const { href } = this.$router.resolve({ path: this.$route.path })
       history.replaceState('', '', href)
