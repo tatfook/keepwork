@@ -86,9 +86,9 @@
 
         <h4 class="npl-center-points-title">一二三等奖评比规则</h4>
         <h5 class="npl-center-points-subtitle"><span class="subtitle-icon"></span>最低标准要求：</h5>
-        <p class="npl-center-points-prize">一等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/709/" target="_blank">《BlockBot》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/805/" target="_blank">《呵护》</a>；解谜类参考作品：<a href="https://keepwork.com/pbl/project/177/" target="_blank">《解救游戏》</a></p>
-        <p class="npl-center-points-prize">二等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/821/" target="_blank">《坦克大战》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/456/" target="_blank">《肇庆一中·记忆永存》</a>；解谜类参考作品：<a href="https://keepwork.com/pbl/project/105/" target="_blank">《百货商店》</a></p>
-        <p class="npl-center-points-prize">三等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/840/" target="_blank">《道路通畅》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/166/" target="_blank">《悲伤的巴塞罗那》</a>；解谜类参考作品: <a href="https://keepwork.com/pbl/project/167/" target="_blank">《飞机奇遇记》</a></p>
+        <p class="npl-center-points-prize">一等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/709/" target="_blank">《BlockBot》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/805/" target="_blank">《呵护》</a>；解谜类参考作品：<a href="https://keepwork.com/pbl/project/507/" target="_blank">《爷爷的宝藏》</a></p>
+        <p class="npl-center-points-prize">二等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/821/" target="_blank">《坦克大战》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/456/" target="_blank">《肇庆一中·记忆永存》</a>；解谜类参考作品：<a href="https://keepwork.com/pbl/project/141/" target="_blank">《寻找小萱》</a></p>
+        <p class="npl-center-points-prize">三等奖：游戏类参考作品：<a href="https://keepwork.com/pbl/project/840/" target="_blank">《道路通畅》</a>；动画类参考作品：<a href="https://keepwork.com/pbl/project/166/" target="_blank">《悲伤的巴塞罗那》</a>；解谜类参考作品: <a href="https://keepwork.com/pbl/project/510/" target="_blank">《忆回童心岛》</a></p>
 
         <h5 class="npl-center-points-subtitle"><span class="subtitle-icon"></span>评比方法：</h5>
         <p class="npl-center-points-prize">获奖作品须满足对应奖项最低标准要求。</p>
