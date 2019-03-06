@@ -353,7 +353,7 @@ export default {
     }
   }
   .quiz-text-match {
-    padding: 20px 70px 0;
+    padding: 20px 30px 0 70px;
     user-select: none;
     pre {
       white-space: pre-line;
