@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-preview" v-if="!isLoading">
     <lesson-header :data="lessonHeaderData" :isPreview="true" />
-    <lesson-wrap v-for="mod in modList" :key="mod.key" :mod="mod" />
+    <lesson-wrap v-for="mod in modList" :key="mod.key" :mod="mod" :isPreview="true" />
   </div>
 </template>
 
