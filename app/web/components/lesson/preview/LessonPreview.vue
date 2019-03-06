@@ -53,9 +53,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .lesson-preview {
   padding-bottom: 100px;
+  counter-reset: no;
+}
+
+.quiz-no::after {
+  counter-increment: no;
+  content: counter(no);
 }
 </style>
 
