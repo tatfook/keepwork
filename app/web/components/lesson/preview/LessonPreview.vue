@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-preview" v-if="!isLoading">
     <lesson-header :data="lessonHeaderData" :isPreview="true" />
-    <lesson-wrap v-for="mod in modList" :key="mod.key" :mod="mod" :isPreview="true" />
+    <lesson-wrap v-for="mod in modList" :key="mod.key" :mod="mod" />
   </div>
 </template>
 
@@ -26,14 +26,14 @@ export default {
     }
   },
   async created() {
-    const { packageId = '', lessonId = '' } = this.$route.params
+    const { lessonId = '' } = this.$route.params
     const { token } = this.$route.query
-    if (!lessonId || !token) {
-      return this.$router.push('/')
-    }
-    const res = await users.verifyToken({ token }).catch(e => {
-      this.$router.push('/')
-    })
+    // if (!token) {
+    //   return this.$router.push('/')
+    // }
+    // const res = await users.verifyToken({ token }).catch(e => {
+    //   this.$router.push('/')
+    // })
     try {
       const { href } = this.$router.resolve({ path: this.$route.path })
       history.replaceState('', '', href)
@@ -57,11 +57,10 @@ export default {
 .lesson-preview {
   padding-bottom: 100px;
   counter-reset: no;
-}
-
-.quiz-no::after {
-  counter-increment: no;
-  content: counter(no);
+  .quiz-no::after {
+    counter-increment: no;
+    content: counter(no);
+  }
 }
 </style>
 
