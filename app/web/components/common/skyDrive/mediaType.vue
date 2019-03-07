@@ -22,7 +22,7 @@
       <el-row class='media-type-header-tabs-and-search'>
         <el-col :span="18" class='media-type-header-tabs'>
           <div>
-            <span :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+            <span v-if="isImageAvailable" :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
             <span v-if="isVideoAvailable" :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
           </div>
         </el-col>
@@ -84,6 +84,10 @@ export default {
     isVideoTabShow: {
       type: Boolean,
       default: false
+    },
+    isImageTabShow: {
+      type: Boolean,
+      default: true
     }
   },
   mounted(){
@@ -91,7 +95,7 @@ export default {
   },
   data() {
     return {
-      mediaFilterType: 'image',
+      mediaFilterType: this.isImageTabShow ? 'image':'video',
       selectedMediaItem: null,
       searchWord: '',
       loading: false
@@ -111,6 +115,9 @@ export default {
     },
     isVideoAvailable() {
       return this.isVideoTabShow
+    },
+    isImageAvailable() {
+      return this.isImageTabShow || !this.isVideoAvailable
     },
     availableSelectedMediaItem() {
       let item = this.itemFilterBySearchWord(this.selectedMediaItem)

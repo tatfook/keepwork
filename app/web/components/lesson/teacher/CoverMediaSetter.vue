@@ -6,11 +6,18 @@
     </label>
     <p v-show="false">{{newPackageCoverUrl}}</p>
     <el-radio-group :disabled="!isEditable" class="cover-media-setter-radio-group" v-model="imageSourceType">
-      <el-radio v-if="isBigfileTypeAvailable" label="bigfile">{{$t('lesson.packageManage.selectFile')}}</el-radio>
+      <el-radio label="bigfile">{{$t('lesson.packageManage.selectFile')}}</el-radio>
       <el-radio label="url">{{$t('lesson.packageManage.inputUrl')}}</el-radio>
     </el-radio-group>
-    <div class="cover-media-setter-from-bigfile" v-if="isBigfileTypeAvailable" v-show="imageSourceType === 'bigfile'">
-      <div class="cover-media-setter-add-button" @click="showSkyDriveManagerDialog">
+    <div class="cover-media-setter-from-bigfile" v-show="imageSourceType === 'bigfile'">
+      <div v-if="bigfileTypeUrl" class="cover-media-setter-bigfile" @click="showSkyDriveManagerDialog">
+        <img v-if='isImageTabShow' class="cover-media-setter-bigfile-preview" :src="bigfileTypeUrl" alt="">
+        <video v-else class="cover-media-setter-bigfile-video" :src='bigfileTypeUrl'></video>
+        <div class="cover-media-setter-bigfile-edit">
+          <i class="el-icon-edit-outline"></i>
+        </div>
+      </div>
+      <div v-else class="cover-media-setter-add-button" @click="showSkyDriveManagerDialog">
         <i class="el-icon-plus"></i>
       </div>
     </div>
@@ -21,12 +28,12 @@
             <div class="cover-media-setter-image-preview-wrap">
               <img class="cover-media-setter-image-preview-inner" :src="urlTypeUrl" :alt="$t('lesson.packageManage.preview')">
             </div>
-            <el-button slot="reference">{{$t('lesson.packageManage.preview')}}</el-button>
+            <el-button :disabled='isPreviewDisabled' slot="reference">{{$t('lesson.packageManage.preview')}}</el-button>
           </el-popover>
         </template>
       </el-input>
     </div>
-    <sky-drive-manager-dialog :show='isSkyDriveShow' :mediaLibrary='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' :show='isSkyDriveShow' :mediaLibrary='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
@@ -40,6 +47,11 @@ export default {
     subTitle: String,
     editingPackageDetail: Object,
     editingCoverUrl: String,
+    isImageTabShow: {
+      type: Boolean,
+      default: true
+    },
+    isVideoTabShow: Boolean,
     isEditable: {
       type: Boolean,
       default: true
@@ -55,11 +67,7 @@ export default {
       let editingPackageDetail = this.editingPackageDetail
       let coverUrl =
         this.editingCoverUrl || _.get(editingPackageDetail, 'extra.coverUrl')
-      if (
-        this.isBigfileTypeAvailable &&
-        coverUrl &&
-        BigfileUrlReg.test(coverUrl)
-      ) {
+      if (coverUrl && BigfileUrlReg.test(coverUrl)) {
         this.imageSourceType = 'bigfile'
         this.bigfileTypeUrl = coverUrl
       } else {
@@ -70,15 +78,20 @@ export default {
   },
   data() {
     return {
-      isBigfileTypeAvailable: false,
       editingPackageId: _.get(this.$route.params, 'id'),
-      imageSourceType: 'url', // bigfile or url
+      imageSourceType: 'bigfile', // bigfile or url
       bigfileTypeUrl: '',
       urlTypeUrl: '',
       isSkyDriveShow: false
     }
   },
   computed: {
+    isPreviewDisabled() {
+      if (/^(http:|https:)/.test(this.urlTypeUrl)) {
+        return false
+      }
+      return true
+    },
     componentTitle() {
       return this.title || this.$t('lesson.packageManage.cover')
     },
@@ -99,7 +112,7 @@ export default {
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.isSkyDriveShow = false
-      console.log(file, url)
+      url && (this.bigfileTypeUrl = url)
     }
   },
   components: {
@@ -126,16 +139,48 @@ export default {
       margin-left: 40px;
     }
   }
-  &-add-button {
+  &-add-button,
+  &-bigfile {
     width: 211px;
     height: 132px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  &-add-button {
     line-height: 132px;
     font-size: 46px;
     text-align: center;
     background-color: #f6f6f6;
     border: 1px dashed #b9bcc2;
     color: #b9bcc2;
-    margin-top: 10px;
+  }
+  &-bigfile {
+    position: relative;
+    &-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    &-video {
+      width: 100%;
+      height: 100%;
+    }
+    &-edit {
+      display: none;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.5);
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      color: #fff;
+      font-size: 32px;
+      text-align: center;
+      line-height: 132px;
+    }
+    &:hover .cover-media-setter-bigfile-edit {
+      display: inline-block;
+    }
   }
   &-from-url {
     &-success {
@@ -162,6 +207,10 @@ export default {
         background-color: transparent;
         border: none;
       }
+    }
+    .el-button.is-disabled {
+      border-color: transparent;
+      color: #c0c4cc;
     }
   }
   &-image-preview {

@@ -35,7 +35,7 @@ export default {
   },
   async mounted() {
     await this.getUserLessons({})
-    this.lessonList = _.cloneDeep(this.userLessons)
+    this.initLessonIsSelect()
   },
   data() {
     return {
@@ -66,13 +66,17 @@ export default {
     ...mapActions({
       getUserLessons: 'lesson/teacher/getUserLessons'
     }),
-    initLessonIsSelect(deletLessonIds) {
-      for (let i = 0; i < deletLessonIds.length; i++) {
-        let index = _.findIndex(this.lessonList, { id: deletLessonIds[i] })
-        index >= 0 && (this.lessonList[index].isSelect = false)
-      }
+    initLessonIsSelect() {
+      let clonedLessonList = _.cloneDeep(this.userLessons)
+      this.lessonList = _.map(clonedLessonList, lesson => {
+        let { id } = lesson
+        if (_.indexOf(this.selectedLessonIds, id) !== -1) lesson.isSelect = true
+        else lesson.isSelect = false
+        return lesson
+      })
     },
     handleClose() {
+      this.initLessonIsSelect()
       this.$emit('close')
     },
     toAdd() {
@@ -81,8 +85,7 @@ export default {
   },
   watch: {
     selectedLessonIds(newVal, oldVal) {
-      let deletLessonIds = _.difference(oldVal, newVal)
-      this.initLessonIsSelect(deletLessonIds)
+      this.initLessonIsSelect()
     }
   },
   filters: {

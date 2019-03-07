@@ -136,7 +136,9 @@
     "viewMore": "查看更多",
     "untitled": "Untitled",
     "noSelfIntro": "这家伙很懒，没有简介！",
-    "identification": "立即认证"
+    "identification": "立即认证",
+    "contestEntry": "我要参赛",
+    "star": "星"
   },
   "editor": {
     "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",
@@ -841,6 +843,7 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "lessonIndexLabel": "课程",
     "formatError": "格式错误",
     "viewMore": "了解更多",
     "teachingContent": "教学内容",
@@ -1479,7 +1482,9 @@
     "rejected": "已拒绝",
     "operations": "操作",
     "joinAt": "加入时间",
-    "removeMember": "移出"
+    "removeMember": "移出",
+    "hasRate": "已有{number}人评分",
+    "noGames": "当前没有可供参加的比赛"
   },
   "footer": {
     "lettersTo": "致社区",
