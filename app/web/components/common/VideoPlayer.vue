@@ -76,6 +76,7 @@ export default {
 
     .vjs-control-bar {
       overflow: hidden;
+      position: inherit;
       display: flex;
     }
 
