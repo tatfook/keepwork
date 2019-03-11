@@ -10,12 +10,7 @@
     "syntax-dynamic-import",
     "transform-object-assign",
     "transform-vue-jsx",
-    "transform-runtime",
     "dynamic-import-node"
-  ],
-  "ignore": [
-    "app/web/lib/mod/parser/*",
-    "app/web/lib/global.js"
   ],
   "comments": false,
   "env": {
