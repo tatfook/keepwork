@@ -371,6 +371,10 @@ export const games = {
   submitGameWorks: async (...args) => post('gameWorks', ...args)
 }
 
+export const lessonOrganizations = {
+  login: async ({ organizationName, username, password }) => post('lessonOrganizations/login', { organizationName, username, password })
+}
+
 export const keepwork = {
   user,
   website,
