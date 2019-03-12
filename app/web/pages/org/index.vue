@@ -1,8 +1,8 @@
 <template>
   <div class="org-page" v-loading="loading">
-    <div class="org-page-header">
+    <!-- <div class="org-page-header">
       <org-header class="container"></org-header>
-    </div>
+    </div> -->
     <router-view class="org-page-main-content" id="org-page" />
   </div>
 </template>
@@ -81,6 +81,8 @@ body {
   padding: 0;
 }
 .org-page {
+  width: 100%;
+  height: 100%;
   .container {
     max-width: 1200px;
     margin: 0 auto;
