@@ -1688,5 +1688,12 @@
      "rmbToHaqiBeans": "1RMB = 10 Haqi Beans",
      "haqiBeansCount": "{count} Haqi Beans",
      "forMoreInformation": "For more information, please contact QQ: {qq}"
+  },
+  "org": {
+    "loginToOrg": "Login To Organization",
+    "kpUsername": "Keepwork Account",
+    "kpPassword": "Keepwork Password",
+    "accountNotFound": "The account with this password was not found.",
+    "pageNotFound": "The page was not found."
   }
 }

@@ -3,21 +3,21 @@
     <div class="org-login-container" v-if="isOrgExist">
       <img v-loading='isLoading' :src="orgLogo" alt="" class="org-login-logo">
       <el-form ref='loginForm' :model='loginData' class="org-login-form" :rules='loginDataRules'>
-        <div class="org-login-form-label">机构登录</div>
+        <div class="org-login-form-label">{{$t('org.loginToOrg')}}</div>
         <el-form-item class="org-login-form-item" prop='username'>
-          <el-input v-model="loginData.username" @keyup.enter.native='loginToOrg'></el-input>
+          <el-input v-model="loginData.username" :placeholder="$t('org.kpUsername')" @keyup.enter.native='loginToOrg'></el-input>
         </el-form-item>
         <el-form-item class="org-login-form-item" prop='password'>
-          <el-input type="password" v-model="loginData.password" @keyup.enter.native='loginToOrg'></el-input>
+          <el-input type="password" v-model="loginData.password" :placeholder="$t('org.kpPassword')" @keyup.enter.native='loginToOrg'></el-input>
         </el-form-item>
         <el-form-item class="org-login-form-item">
-          <el-button v-loading='isLoading' class="org-login-submit" type="primary" @click="loginToOrg">登录</el-button>
+          <el-button v-loading='isLoading' class="org-login-submit" type="primary" @click="loginToOrg">{{$t("common.login")}}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="org-login-empty" v-else>
       <img class="org-login-empty-img" src="@/assets/img/404.png" alt="">
-      <div class="org-login-empty-info">该机构不存在!</div>
+      <div class="org-login-empty-info">{{$t("org.pageNotFound")}}!</div>
     </div>
   </div>
 </template>
@@ -102,7 +102,7 @@ export default {
         let errorMsg = ''
         switch (error.status) {
           case 400:
-            errorMsg = '账号密码错误'
+            errorMsg = this.$t('org.accountNotFound')
             break
           default:
             errorMsg = this.$t('common.logonFailed')
