@@ -1,42 +1,134 @@
 <template>
   <div class="org-login">
-    <div class="org-login-container">
-      <img :src="defaultLogo" alt="" class="org-login-logo">
-      <el-form :model='loginData' class="org-login-form">
+    <div class="org-login-container" v-if="isOrgExist">
+      <img v-loading='isLoading' :src="orgLogo" alt="" class="org-login-logo">
+      <el-form ref='loginForm' :model='loginData' class="org-login-form" :rules='loginDataRules'>
         <div class="org-login-form-label">机构登录</div>
-        <el-form-item class="org-login-form-item">
-          <el-input v-model="loginData.username"></el-input>
+        <el-form-item class="org-login-form-item" prop='username'>
+          <el-input v-model="loginData.username" @keyup.enter.native='loginToOrg'></el-input>
+        </el-form-item>
+        <el-form-item class="org-login-form-item" prop='password'>
+          <el-input type="password" v-model="loginData.password" @keyup.enter.native='loginToOrg'></el-input>
         </el-form-item>
         <el-form-item class="org-login-form-item">
-          <el-input type="password" v-model="loginData.password"></el-input>
-        </el-form-item>
-        <el-form-item class="org-login-form-item">
-          <el-button class="org-login-submit" type="primary">登录</el-button>
+          <el-button v-loading='isLoading' class="org-login-submit" type="primary" @click="loginToOrg">登录</el-button>
         </el-form-item>
       </el-form>
+    </div>
+    <div class="org-login-empty" v-else>
+      <img class="org-login-empty-img" src="@/assets/img/404.png" alt="">
+      <div class="org-login-empty-info">该机构不存在!</div>
     </div>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'OrgLogin',
-  mounted() {
+  async mounted() {
+    this.isLoading = true
+    let orgName = _.get(this.$route, 'params.orgName')
+    await this.getOrgDetailByName({ orgName }).catch(() => {
+      this.isOrgExist = false
+      this.isLoading = false
+    })
+    this.isLoading = false
     this.setOrganizationName()
   },
   data() {
     return {
+      isLoading: false,
+      isOrgExist: true,
       defaultLogo: require('@/assets/img/logo_old.svg'),
       loginData: {
         username: undefined,
         password: undefined,
         organizationName: undefined
+      },
+      loginDataRules: {
+        username: {
+          required: true,
+          message: this.$t('common.inputUsername'),
+          trigger: 'blur'
+        },
+        password: {
+          required: true,
+          message: this.$t('common.inputPassword'),
+          trigger: 'blur'
+        }
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      orgGetOrgDetailByName: 'org/getOrgDetailByName'
+    }),
+    orgName() {
+      return _.get(this.$route, 'params.orgName')
+    },
+    orgDetail() {
+      return this.orgGetOrgDetailByName({ name: this.orgName })
+    },
+    orgLogo() {
+      let logo = _.get(this.orgDetail, 'logo', this.defaultLogo)
+      return _.isNull(logo) ? this.defaultLogo : logo
+    }
+  },
   methods: {
+    ...mapActions({
+      getOrgDetailByName: 'org/getOrgDetailByName',
+      orgLogin: 'org/login'
+    }),
+    toRolePage({ roleId }) {
+      let roleName = ''
+      switch (roleId) {
+        case 1:
+          roleName = 'student'
+          break
+        case 2:
+          roleName = 'teacher'
+          break
+        case 64:
+          roleName = 'admin'
+          break
+        default:
+          roleName = 'notMember'
+          break
+      }
+    },
+    async toLogin() {
+      this.isLoading = true
+      let userinfo = await this.orgLogin(this.loginData).catch(error => {
+        let errorMsg = ''
+        switch (error.status) {
+          case 400:
+            errorMsg = '账号密码错误'
+            break
+          default:
+            errorMsg = this.$t('common.logonFailed')
+            break
+        }
+        this.$message({
+          message: errorMsg,
+          type: 'error'
+        })
+        this.isLoading = false
+      })
+      this.isLoading = false
+      let { roleId } = userinfo
+      this.toRolePage({ roleId })
+    },
+    loginToOrg() {
+      this.$refs['loginForm'].validate(valid => {
+        if (valid) {
+          this.toLogin()
+        } else {
+          return false
+        }
+      })
+    },
     setOrganizationName() {
-      let { orgName } = this.$route.params
-      this.loginData.organizationName = orgName
+      this.loginData.organizationName = this.orgName
     }
   },
   watch: {
@@ -73,13 +165,21 @@ export default {
       font-weight: bold;
       text-align: left;
     }
-    &-item {
-      margin-bottom: 16px;
-    }
   }
   &-submit {
     width: 100%;
     margin-top: 32px;
+  }
+  &-empty {
+    text-align: center;
+    &-img {
+      max-width: 100%;
+    }
+    &-info {
+      font-size: 24px;
+      margin-top: 32px;
+      font-weight: bold;
+    }
   }
 }
 </style>

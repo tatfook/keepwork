@@ -372,7 +372,8 @@ export const games = {
 }
 
 export const lessonOrganizations = {
-  login: async ({ organizationName, username, password }) => post('lessonOrganizations/login', { organizationName, username, password })
+  login: async ({ organizationName, username, password }) => post('lessonOrganizations/login', { organizationName, username, password }),
+  getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`)
 }
 
 export const keepwork = {
@@ -394,7 +395,8 @@ export const keepwork = {
   issues,
   groups,
   account,
-  games
+  games,
+  lessonOrganizations
 }
 
 export default keepwork

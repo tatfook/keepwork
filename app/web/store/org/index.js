@@ -3,7 +3,9 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
-  userinfo: {}
+  userinfo: {},
+  orgsDetailForId: [],
+  orgsDetailForName: []
 }
 export default {
   namespaced: true,
