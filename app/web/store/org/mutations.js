@@ -9,7 +9,7 @@ export const props = {
 }
 
 const mutations = {
-  [LOGIN_SUCCESS](state, userinfo) {
+  [LOGIN_SUCCESS](state, { userinfo }) {
     Vue.set(state, 'userinfo', userinfo)
   },
   [GET_ORG_SUCCESS](state, { id, name, orgDetail }) {
