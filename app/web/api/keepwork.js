@@ -371,6 +371,11 @@ export const games = {
   submitGameWorks: async (...args) => post('gameWorks', ...args)
 }
 
+export const lessonOrganizations = {
+  login: async ({ organizationName, username, password }) => post('lessonOrganizations/login', { organizationName, username, password }),
+  getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`)
+}
+
 export const keepwork = {
   user,
   website,
@@ -390,7 +395,8 @@ export const keepwork = {
   issues,
   groups,
   account,
-  games
+  games,
+  lessonOrganizations
 }
 
 export default keepwork
