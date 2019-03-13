@@ -1679,5 +1679,12 @@
     "rmbToHaqiBeans": "1RMB等于10魔豆",
     "haqiBeansCount": "{count} 魔豆",
     "forMoreInformation": "如有疑问，请联系客服QQ: {qq}"
+  },
+  "org": {
+    "loginToOrg": "机构登录",
+    "kpUsername": "keepwork账号",
+    "kpPassword": "keepwork密码",
+    "accountNotFound": "账号密码错误",
+    "pageNotFound": "该页面不存在!"
   }
 }
