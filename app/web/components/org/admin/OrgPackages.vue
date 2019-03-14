@@ -1,8 +1,84 @@
 <template>
-  <div class="org-packages">OrgPackages</div>
+  <div class="org-packages">
+    <div class="org-packages-header">
+      <div class="org-packages-header-count">
+        <span class="org-packages-header-label">{{$t('org.includes')}} </span> {{orgPackages.length}}{{$t('org.packagesCount')}}
+      </div>
+      <a href="#" class="org-packages-header-link">{{$t('org.moreLessons')}}<i class="el-icon-arrow-right"></i></a>
+    </div>
+    <div class="org-packages-content">
+      <div class="org-packages-item" v-for="(lessonPackage,index) in orgPackages" :key="index">
+        <lesson-package-cell :lessonPackage='lessonPackage.package'></lesson-package-cell>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
+import LessonPackageCell from '@/components/common/LessonPackageCell'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'OrgPackages'
+  name: 'OrgPackages',
+  mounted() {
+    this.toGetOrgPackages()
+  },
+  data() {
+    return {
+      isLoading: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentOrg: 'org/currentOrg',
+      getOrgPackagesById: 'org/getOrgPackagesById'
+    }),
+    organizationId() {
+      return this.currentOrg.id
+    },
+    orgPackages() {
+      return this.getOrgPackagesById({ id: this.organizationId }) || []
+    }
+  },
+  methods: {
+    ...mapActions({
+      getOrgPackages: 'org/getOrgPackages'
+    }),
+    async toGetOrgPackages() {
+      this.isLoading = true
+      await this.getOrgPackages({ organizationId: this.organizationId }).catch()
+      this.isLoading = false
+    }
+  },
+  components: {
+    LessonPackageCell
+  }
 }
 </script>
+<style lang="scss" scoped>
+.org-packages {
+  &-header {
+    display: flex;
+    color: #303133;
+    margin-bottom: 24px;
+    font-size: 14px;
+    &-count {
+      flex: 1;
+    }
+    &-label {
+      color: #909399;
+    }
+    &-link {
+      font-size: 14px;
+      color: #909399;
+      text-decoration: none;
+    }
+  }
+  &-item {
+    width: 290px;
+    display: inline-block;
+    margin-right: 16px;
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+}
+</style>

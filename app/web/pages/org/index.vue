@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue'
-import Vuex, { mapGetters } from 'vuex'
+import Vuex, { mapGetters, mapActions } from 'vuex'
 import VueI18n from 'vue-i18n'
 import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'

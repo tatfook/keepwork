@@ -1694,6 +1694,14 @@
     "kpUsername": "Keepwork Account",
     "kpPassword": "Keepwork Password",
     "accountNotFound": "The account with this password was not found.",
-    "pageNotFound": "The page was not found."
+    "pageNotFound": "The page was not found.",
+    "admin": "Admin",
+    "lessonPackage": "Lesson Packages",
+    "classInfoManage": "Class Infor. Management",
+    "settings": "Settings",
+    "includes": "Includes:",
+    "packagesCount": " packages",
+    "moreLessons": "More Lessons",
+    "logout": "Logout"
   }
 }

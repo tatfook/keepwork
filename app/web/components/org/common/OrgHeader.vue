@@ -2,25 +2,41 @@
   <div class="org-header">
     <el-menu class="org-header-menu" mode="horizontal">
       <el-menu-item index='1'>
-        <img class="org-header-brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
+        <img class="org-header-brand" :src="orgLogo" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='2'>
-        机构名称
+        {{currentOrg.name}}
       </el-menu-item>
       <el-menu-item index='3' class="pull-right">
-        退出
+        {{$t('org.logout')}}
       </el-menu-item>
     </el-menu>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'OrgHeader'
+  name: 'OrgHeader',
+  data() {
+    return {
+      defaultLogo: require('@/assets/img/logo_old.svg')
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentOrg: 'org/currentOrg'
+    }),
+    orgLogo() {
+      let logo = _.get(this.currentOrg, 'logo', this.defaultLogo)
+      return _.isNull(logo) ? this.defaultLogo : logo
+    }
+  }
 }
 </script>
 <style lang="scss">
 .org-header {
   border-bottom: solid 1px #e6e6e6;
+  background-color: #fff;
   &-menu {
     padding: 12px 0;
     max-width: 1200px;

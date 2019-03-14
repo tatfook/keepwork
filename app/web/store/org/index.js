@@ -4,8 +4,10 @@ import mutations from './mutations'
 
 const state = {
   userinfo: {},
-  orgsDetailForId: [],
-  orgsDetailForName: []
+  orgsDetailForId: {},
+  orgsDetailForName: {},
+  currentOrg: {},
+  orgPackages: {}
 }
 export default {
   namespaced: true,
