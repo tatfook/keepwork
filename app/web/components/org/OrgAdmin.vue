@@ -5,8 +5,8 @@
       <div class="org-admin-sidebar">
         <div class="org-admin-message">
           <div class="org-admin-role-label">{{$t('org.admin')}}</div>
-          <img :src="defaultPortrait" class="org-admin-profile" />
-          <div class="org-admin-username">chiyu</div>
+          <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
+          <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
         </div>
         <ul class="org-admin-menu">
           <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
@@ -20,6 +20,7 @@
 </template>
 <script>
 import OrgHeader from './common/OrgHeader'
+import { mapGetters } from 'vuex'
 export default {
   name: 'OrgAdmin',
   data() {
@@ -42,6 +43,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      orgUserinfo: 'org/userinfo'
+    }),
     nowPageName() {
       return _.get(this.$route, 'name')
     }
@@ -97,6 +101,7 @@ $borderColor: #e8e8e8;
     object-fit: cover;
     line-height: 1;
     margin-bottom: 16px;
+    border-radius: 50%;
   }
   &-username {
     font-size: 20px;

@@ -374,6 +374,7 @@ export const games = {
 export const lessonOrganizations = {
   login: async ({ organizationName, username, password }) => post('lessonOrganizations/login', { organizationName, username, password }),
   getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`),
+  getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
   getOrgPackages: async ({ organizationId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}`)
 }
 

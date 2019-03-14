@@ -5,7 +5,7 @@ import mutations from './mutations'
 const state = {
   userinfo: {},
   orgsDetailForId: {},
-  orgsDetailForName: {},
+  orgsDetailForLoginUrl: {},
   currentOrg: {},
   orgPackages: {}
 }

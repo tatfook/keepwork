@@ -18,12 +18,12 @@ export default new Router({
       component: OrgLogin
     },
     {
-      path: '/:orgName/login',
+      path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
       component: OrgLogin
     },
     {
-      path: '/:orgName/admin',
+      path: '/:orgLoginUrl/admin',
       component: OrgAdmin,
       children: [
         {
