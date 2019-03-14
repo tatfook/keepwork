@@ -14,6 +14,10 @@ export default new Router({
       component: OrgLogin
     },
     {
+      path: '/:orgName',
+      redirect: { name: 'OrgLogin' }
+    },
+    {
       path: '/:orgName/login',
       name: 'OrgLogin',
       component: OrgLogin
