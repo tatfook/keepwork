@@ -5,6 +5,10 @@ const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
 const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
+const OrgAdmin = () => import('@/components/org/OrgAdmin')
+const OrgPackages = () => import('@/components/org/admin/OrgPackages')
+const OrgClasses = () => import('@/components/org/admin/OrgClasses')
+const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 
 Vue.use(Router)
 
@@ -43,9 +47,30 @@ export default new Router({
           component: OrgTeacherStatistics
         },
         {
-          path: 'class',
+          path: 'classes',
           name: 'OrgTeacherClass',
           component: OrgTeacherClass
+        }
+      ]
+    },
+    {
+      path: '/:orgName/admin',
+      component: OrgAdmin,
+      children: [
+        {
+          path: 'packages',
+          name: 'OrgPackages',
+          component: OrgPackages
+        },
+        {
+          path: 'classes',
+          name: 'OrgClasses',
+          component: OrgClasses
+        },
+        {
+          path: 'setting',
+          name: 'OrgSetting',
+          component: OrgSetting
         }
       ]
     }

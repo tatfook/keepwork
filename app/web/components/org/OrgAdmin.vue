@@ -1,42 +1,42 @@
 <template>
-  <div class="org-teacher">
+  <div class="org-admin">
     <org-header></org-header>
-    <div class="org-teacher-container">
-      <div class="org-teacher-sidebar">
-        <div class="org-teacher-message">
-          <div class="org-teacher-role-label">教师</div>
-          <img :src="defaultPortrait" class="org-teacher-profile" />
-          <div class="org-teacher-username">chiyu</div>
+    <div class="org-admin-container">
+      <div class="org-admin-sidebar">
+        <div class="org-admin-message">
+          <div class="org-admin-role-label">{{$t('org.admin')}}</div>
+          <img :src="defaultPortrait" class="org-admin-profile" />
+          <div class="org-admin-username">chiyu</div>
         </div>
-        <ul class="org-teacher-menu">
-          <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
-            <router-link class="org-teacher-menu-link" :to="{name: menuItem.pageName}">{{menuItem.text}}</router-link>
+        <ul class="org-admin-menu">
+          <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
+            <router-link class="org-admin-menu-link" :to="{name: menuItem.pageName}">{{menuItem.text}}</router-link>
           </li>
         </ul>
       </div>
-      <router-view class="org-teacher-main"></router-view>
+      <router-view class="org-admin-main"></router-view>
     </div>
   </div>
 </template>
 <script>
-import OrgHeader from '@/components/org/common/OrgHeader'
+import OrgHeader from './common/OrgHeader'
 export default {
-  name: 'OrgTeacher',
+  name: 'OrgAdmin',
   data() {
     return {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
-      teacherMenu: [
+      adminMenu: [
         {
-          pageName: 'OrgTeacherTeach',
-          text: '上课'
+          pageName: 'OrgPackages',
+          text: this.$t('org.lessonPackage')
         },
         {
-          pageName: 'OrgTeacherStatistics',
-          text: '数据统计'
+          pageName: 'OrgClasses',
+          text: this.$t('org.classInfoManage')
         },
         {
-          pageName: 'OrgTeacherClass',
-          text: '我的班级'
+          pageName: 'OrgSetting',
+          text: this.$t('org.settings')
         }
       ]
     }
@@ -53,7 +53,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 $borderColor: #e8e8e8;
-.org-teacher {
+.org-admin {
   width: 100%;
   height: 100%;
   background-color: #f5f5f5;
@@ -65,19 +65,19 @@ $borderColor: #e8e8e8;
   }
   &-sidebar {
     width: 270px;
-    border: 1px solid $borderColor;
-    border-radius: 4px;
     margin-right: 24px;
-    background-color: #fff;
   }
   &-main {
     flex: 1;
+    min-width: 0;
   }
   &-message {
     padding: 32px 16px 48px;
-    border-bottom: 1px solid $borderColor;
     position: relative;
     text-align: center;
+    background-color: #fff;
+    border: 1px solid $borderColor;
+    border-radius: 4px 4px 0 0;
   }
   &-role-label {
     position: absolute;
@@ -107,6 +107,10 @@ $borderColor: #e8e8e8;
     padding: 0;
     list-style: none;
     padding: 24px 16px 8px;
+    background-color: #fff;
+    border: 1px solid $borderColor;
+    border-width: 0 1px 1px;
+    border-radius: 0 0 4px 4px;
     &-item {
       margin-bottom: 16px;
       text-align: center;

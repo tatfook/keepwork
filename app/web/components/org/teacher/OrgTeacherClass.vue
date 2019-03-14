@@ -1,11 +1,40 @@
 <template>
-  <div>
-    OrgTeacherClass.vue
+  <div class="org-teacher-classes">
+    <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
   </div>
 </template>
 
 <script>
+import OrgClassesTabbar from '../common/OrgClassesTabbar'
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'OrgTeacherClass'
+  name: 'OrgTeacherClass',
+  components: {
+    OrgClassesTabbar
+  },
+  async created() {
+    await this.getOrgClasses()
+    this.selectedClassId = this.firstOrgClassId
+    this.isLoading = false
+  },
+  methods: {
+    ...mapActions({
+      getOrgClasses: 'org/teacher/getOrgClasses'
+    }),
+    async handleSwitchClass(id) {
+      this.selectedClassId = id
+    }
+  },
+  computed: {
+    ...mapGetters({
+      orgClasses: 'org/teacher/orgClasses'
+    }),
+    firstOrgClassId() {
+      return _.get(this.orgClasses, '[0].id', '')
+    },
+    orgClassesCount() {
+      return _.get(this.orgClasses, 'length', 0)
+    }
+  }
 }
 </script>

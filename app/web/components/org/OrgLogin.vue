@@ -77,7 +77,8 @@ export default {
   methods: {
     ...mapActions({
       getOrgDetailByName: 'org/getOrgDetailByName',
-      orgLogin: 'org/login'
+      orgLogin: 'org/login',
+      setCurrentOrg: 'org/setCurrentOrg'
     }),
     toRolePage({ roleId }) {
       let roleName = ''
@@ -89,7 +90,9 @@ export default {
           roleName = 'teacher'
           break
         case 64:
-          roleName = 'admin'
+          this.$router.push({
+            name: 'OrgPackages'
+          })
           break
         default:
           roleName = 'notMember'
@@ -114,6 +117,7 @@ export default {
         })
         this.isLoading = false
       })
+      await this.setCurrentOrg({ orgDetail: this.orgDetail })
       this.isLoading = false
       let { roleId } = userinfo
       this.toRolePage({ roleId })

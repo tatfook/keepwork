@@ -1,26 +1,57 @@
 <template>
-  <div class="org-teacher-teach">
-    <div class="teach-class-tab">
-      <el-button v-for="item in classList" :key="item" @click="handleSwitchClass(item)" :class="['teach-class-tab-button', { 'tab-button-selected': item === selectedClassId }]" icon="iconfont icon-member">班级名称1</el-button>
+  <div class="org-teacher-teach" v-if="!isLoading">
+    <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
+    <div class="package-count">
+      包含: <span class="package-count-number">{{orgClassesCount}}个班级</span>
     </div>
+    <el-row>
+      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(pacakge,index) in packageList" :key="index">
+        <org-package-cell-by-time></org-package-cell-by-time>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+import OrgPackageCellByTime from '../common/OrgPackageCellByTime'
+import OrgClassesTabbar from '../common/OrgClassesTabbar'
+import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'OrgTeacherTeach',
+  components: {
+    OrgPackageCellByTime,
+    OrgClassesTabbar
+  },
   data() {
     return {
-      classList: [1, 2, 3, 4, 5, 6, 7, 8],
-      selectedClassId: 1
+      packageList: [1, 2, 3, 4, 5],
+      selectedClassId: '',
+      isLoading: true
     }
   },
-  created() {
-    console.log('OrgTeacherTeach')
+  async created() {
+    await this.getOrgClasses()
+    this.selectedClassId = this.firstOrgClassId
+    this.isLoading = false
   },
   methods: {
-    handleSwitchClass(id) {
+    ...mapActions({
+      getOrgClasses: 'org/teacher/getOrgClasses'
+    }),
+    async handleSwitchClass(id) {
       this.selectedClassId = id
+    }
+  },
+  computed: {
+    ...mapGetters({
+      orgClasses: 'org/teacher/orgClasses'
+    }),
+    firstOrgClassId() {
+      return _.get(this.orgClasses, '[0].id', '')
+    },
+    orgClassesCount() {
+      return _.get(this.orgClasses, 'length', 0)
     }
   }
 }
@@ -28,22 +59,13 @@ export default {
 
 <style lang="scss">
 .org-teacher-teach {
-  .teach-class-tab {
-    background: #ffff;
-    padding: 13px 16px;
-    &-button {
-      height: 40px;
-      border-radius: 20px;
-      font-size: 16px;
-      margin: 13px 16px 0 0;
-      color: #030313;
-      &.tab-button-selected {
-        color: #fff;
-        background: #409efe;
-      }
-      span {
-        margin-left: 8px;
-      }
+  .package-count {
+    color: #909399;
+    margin-top: 20px;
+    font-size: 14px;
+    &-number {
+      margin-left: 7px;
+      color: #303133;
     }
   }
 }
