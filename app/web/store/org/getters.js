@@ -3,8 +3,8 @@ const getters = {
   userinfo: state => state.userinfo,
   isOrgMember: (state, { userinfo }) => Boolean(_.get(userinfo, 'roleId')),
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
-  getOrgDetailByName: state => ({ name }) =>
-    _.get(state.orgsDetailForName, name),
+  getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
+    _.get(state.orgsDetailForLoginUrl, loginUrl),
   currentOrg: state => state.currentOrg,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id)
 }
