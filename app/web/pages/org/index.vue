@@ -1,15 +1,12 @@
 <template>
   <div class="org-page" v-loading="loading">
-    <!-- <div class="org-page-header">
-      <org-header class="container"></org-header>
-    </div> -->
     <router-view class="org-page-main-content" id="org-page" />
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { mapGetters, mapActions } from 'vuex'
 import VueI18n from 'vue-i18n'
 import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -18,7 +15,6 @@ import userModule from '@/store/user'
 import orgModule from '@/store/org'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
-import OrgHeader from '@/components/org/common/OrgHeader'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -60,9 +56,6 @@ export default {
   async created() {
     await this.loadOrgPresets()
   },
-  components: {
-    OrgHeader
-  },
   methods: {
     async loadOrgPresets() {
       this.loading = false
@@ -83,9 +76,5 @@ body {
 .org-page {
   width: 100%;
   height: 100%;
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
 }
 </style>
