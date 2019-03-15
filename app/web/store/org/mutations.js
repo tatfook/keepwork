@@ -16,14 +16,15 @@ const mutations = {
   [LOGIN_SUCCESS](state, { userinfo }) {
     Vue.set(state, 'userinfo', userinfo)
   },
-  [GET_ORG_SUCCESS](state, { id, name, orgDetail }) {
+  [GET_ORG_SUCCESS](state, { orgDetail }) {
+    let { id, loginUrl } = orgDetail
     Vue.set(state, 'orgsDetailForId', {
       ...state.orgsDetailForId,
       [id]: orgDetail
     })
-    Vue.set(state, 'orgsDetailForName', {
-      ...state.orgsDetailForName,
-      [name]: orgDetail
+    Vue.set(state, 'orgsDetailForLoginUrl', {
+      ...state.orgsDetailForLoginUrl,
+      [loginUrl]: orgDetail
     })
   },
   [SET_CURRENT_ORG](state, { orgDetail }) {

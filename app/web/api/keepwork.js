@@ -375,7 +375,8 @@ export const lessonOrganizations = {
   login: async ({ organizationName, username, password }) => post('lessonOrganizations/login', { organizationName, username, password }),
   getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`),
   getOrgPackages: async ({ organizationId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}`),
-  getOrgClasses: async () => get('lessonOrganizationClasses')
+  getOrgClasses: async () => get('lessonOrganizationClasses'),
+  getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
 }
 
 export const keepwork = {

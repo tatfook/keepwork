@@ -26,7 +26,7 @@ export default new Router({
       redirect: { name: 'OrgLogin' }
     },
     {
-      path: '/:orgName/login',
+      path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
       component: OrgLogin
     },
@@ -54,7 +54,7 @@ export default new Router({
       ]
     },
     {
-      path: '/:orgName/admin',
+      path: '/:orgLoginUrl/admin',
       component: OrgAdmin,
       children: [
         {

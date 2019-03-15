@@ -27,8 +27,8 @@ export default {
   name: 'OrgLogin',
   async mounted() {
     this.isLoading = true
-    let orgName = _.get(this.$route, 'params.orgName')
-    await this.getOrgDetailByName({ orgName }).catch(() => {
+    let orgLoginUrl = _.get(this.$route, 'params.orgLoginUrl')
+    await this.getOrgDetailByLoginUrl({ orgLoginUrl }).catch(() => {
       this.isOrgExist = false
       this.isLoading = false
     })
@@ -61,13 +61,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgGetOrgDetailByName: 'org/getOrgDetailByName'
+      orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl'
     }),
-    orgName() {
-      return _.get(this.$route, 'params.orgName')
+    orgLoginUrl() {
+      return _.get(this.$route, 'params.orgLoginUrl')
     },
     orgDetail() {
-      return this.orgGetOrgDetailByName({ name: this.orgName })
+      return this.orgGetOrgDetailByLoginUrl({ loginUrl: this.orgLoginUrl })
+    },
+    orgName(){
+      return _.get(this.orgDetail, 'name')
     },
     orgLogo() {
       let logo = _.get(this.orgDetail, 'logo', this.defaultLogo)
@@ -76,7 +79,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getOrgDetailByName: 'org/getOrgDetailByName',
+      getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgLogin: 'org/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),

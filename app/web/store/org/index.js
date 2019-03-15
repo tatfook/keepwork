@@ -6,7 +6,7 @@ import teacher from './teacher'
 const state = {
   userinfo: {},
   orgsDetailForId: {},
-  orgsDetailForName: {},
+  orgsDetailForLoginUrl: {},
   currentOrg: {},
   orgPackages: {}
 }

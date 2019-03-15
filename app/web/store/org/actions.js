@@ -29,13 +29,12 @@ const actions = {
     }
     return userinfo
   },
-  async getOrgDetailByName(context, { orgName }) {
+  async getOrgDetailByLoginUrl(context, { orgLoginUrl }) {
     let { commit } = context
-    let orgDetail = await keepwork.lessonOrganizations.getByName({
-      name: orgName
+    let orgDetail = await keepwork.lessonOrganizations.getByUrl({
+      url: orgLoginUrl
     })
-    let { id, name } = orgDetail
-    commit(GET_ORG_SUCCESS, { id, name, orgDetail })
+    commit(GET_ORG_SUCCESS, { orgDetail })
   },
   setCurrentOrg(context, { orgDetail }) {
     let { commit } = context

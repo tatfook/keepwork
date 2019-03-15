@@ -10,6 +10,7 @@ import Vuex, { mapGetters, mapActions } from 'vuex'
 import VueI18n from 'vue-i18n'
 import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
+import createPersistedState from '@/store/createPersistedState'
 import router from './org.router'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
@@ -41,7 +42,12 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     org: orgModule
-  }
+  },
+  plugins: [
+    createPersistedState({
+      paths: ['org.currentOrg', 'org.userinfo']
+    })
+  ]
 })
 
 export default {
@@ -56,8 +62,31 @@ export default {
   async created() {
     await this.loadOrgPresets()
   },
+  computed: {
+    ...mapGetters({
+      userIsLogined: 'user/isLogined',
+      currentOrg: 'org/currentOrg'
+    }),
+    routeLoginUrl() {
+      return _.get(this.$route, 'params.orgLoginUrl')
+    },
+    isUserLoginForOrg() {
+      let currentOrgloginUrl = _.get(this.currentOrg, 'loginUrl')
+      return (
+        this.userIsLogined &&
+        currentOrgloginUrl &&
+        currentOrgloginUrl === this.routeLoginUrl
+      )
+    }
+  },
   methods: {
+    ...mapActions({
+      getUserProfile: 'user/getProfile'
+    }),
     async loadOrgPresets() {
+      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
+        console.error(err)
+      )
       this.loading = false
     }
   }
