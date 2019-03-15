@@ -98,7 +98,7 @@
                   <el-button class="iconfont icon-link_" @click="insertLink"></el-button>
                 </el-tooltip>
               </el-button-group>
-              <el-button-group v-if="!isZenMode" :style="isDisplayButton">
+              <el-button-group v-if="!isZenMode">
                 <el-tooltip :content="$t('tips.mod')">
                   <el-button class="iconfont icon-module" @click="addModToMarkdown"></el-button>
                 </el-tooltip>
