@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const OrgLogin = () => import('@/components/org/OrgLogin')
+const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
+const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
+const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
@@ -18,9 +22,36 @@ export default new Router({
       component: OrgLogin
     },
     {
+      path: '/:orgLoginUrl',
+      redirect: { name: 'OrgLogin' }
+    },
+    {
       path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
       component: OrgLogin
+    },
+    {
+      path: '/:orgLoginUrl/teacher',
+      name: 'OrgTeacher',
+      component: OrgTeacher,
+      redirect: { name: 'OrgTeacherTeach' },
+      children: [
+        {
+          path: 'teach',
+          name: 'OrgTeacherTeach',
+          component: OrgTeacherTeach
+        },
+        {
+          path: 'statistics',
+          name: 'OrgTeacherStatistics',
+          component: OrgTeacherStatistics
+        },
+        {
+          path: 'classes',
+          name: 'OrgTeacherClass',
+          component: OrgTeacherClass
+        }
+      ]
     },
     {
       path: '/:orgLoginUrl/admin',

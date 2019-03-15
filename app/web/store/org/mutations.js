@@ -9,7 +9,7 @@ export const props = {
   LOGIN_SUCCESS,
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
-  GET_ORG_PACKAGES_SUCCESS
+  GET_ORG_PACKAGES_SUCCESS,
 }
 
 const mutations = {

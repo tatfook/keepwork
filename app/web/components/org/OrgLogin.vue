@@ -90,7 +90,10 @@ export default {
           roleName = 'student'
           break
         case 2:
-          roleName = 'teacher'
+          roleName = 'OrgTeacher'
+          this.$router.push({
+            name: 'OrgTeacherTeach'
+          })
           break
         case 64:
           this.$router.push({
