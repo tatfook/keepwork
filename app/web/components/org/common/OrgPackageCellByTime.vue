@@ -1,7 +1,7 @@
 <template>
   <div class="org-package-append">
-    <div class="org-package-append-header">最近上课: <span class="last-teach-time">2019-2-25 18:30</span></div>
-    <org-package-cell></org-package-cell>
+    <div class="org-package-append-header">最近上课: <span class="last-teach-time">{{lastTeachTime}}</span></div>
+    <org-package-cell :packageData="packageData"></org-package-cell>
   </div>
 </template>
 
@@ -10,11 +10,16 @@ import OrgPackageCell from './OrgPackageCell'
 export default {
   name: 'OrgPackageCellByTime',
   props: {
-    package: {
+    packageData: {
       type: Object,
       default() {
         return {}
       }
+    },
+  },
+  computed: {
+    lastTeachTime() {
+      return this.packageData.lastTeachTime || ''
     }
   },
   components: {

@@ -3,7 +3,8 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
-  classes: []
+  orgClasses: [],
+  orgClassPackages: {}
 }
 export default {
   namespaced: true,

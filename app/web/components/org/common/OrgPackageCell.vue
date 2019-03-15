@@ -1,18 +1,64 @@
 <template>
-  <div class="org-package-cell">
-    <img class="org-package-cover" src="https://api.keepwork.com/storage/v0/siteFiles/2910/raw#34_Black_4k_.jpg" alt="">
+  <div class="org-package-cell" @click="handleToPackageDetail">
+    <img class="org-package-cover" :src="packageCover" alt="">
     <div class="org-package-desc">
-      <div class="org-package-desc-title">Paracraft动画</div>
-      <div class="org-package-desc-line">{{$t('lesson.include')}}:<span class="line-strong">11个课程</span></div>
-      <div class="org-package-desc-line">{{$t('lesson.ages')}}:<span class="line-strong">100</span></div>
-      <div class="org-package-desc-line">{{$t('lesson.intro')}}:<span class="line-strong">握手佛安家了发了房间辣椒粉垃圾发发拉法基拉风就拉菲垃圾费拉菲拉发了疯拉菲案例发发了发发发发阿发啊发了房间拉法基拉风就啊握手佛安家了发了房间辣椒粉垃圾发发拉法基拉风就拉菲垃圾费拉菲拉发了疯拉菲案例发发了发发发发阿发啊发了房间拉法基拉风就啊</span></div>
+      <div class="org-package-desc-name">{{packageName}}</div>
+      <div class="org-package-desc-line">{{$t('lesson.include')}}:<span class="line-strong">{{packageLessonsCount}}个课程</span></div>
+      <div class="org-package-desc-line">{{$t('lesson.ages')}}:<span class="line-strong">{{packageSuitAge}}</span></div>
+      <div class="org-package-desc-line">{{$t('lesson.intro')}}:<span class="line-strong">{{packageIntro}}</span></div>
     </div>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 export default {
-  name: 'OrgPackageCell'
+  name: 'OrgPackageCell',
+  props: {
+    packageData: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  methods: {
+    handleToPackageDetail() {
+      this.$message({
+        type: 'success',
+        message: this.packageId
+      })
+    }
+  },
+  computed: {
+    packageCover() {
+      return _.get(this.packageData, 'extra.coverUrl', 'https://api-stage.keepwork.com/storage/v0/siteFiles/236/raw#Sarlia2_.jpg')
+    },
+    packageId() {
+      return _.get(this.packageData, 'id', '')
+    },
+    packageName() {
+      return _.get(this.packageData, 'packageName', '')
+    },
+    packageIntro() {
+      return _.get(this.packageData, 'intro', '')
+    },
+    packageMaxAge() {
+      return _.get(this.packageData, 'maxAge', 0)
+    },
+    packageMinAge() {
+      return _.get(this.packageData, 'minAge', 0)
+    },
+    packageLessonsCount() {
+      return _.get(this.packageData, 'lessons', []).length
+    },
+    packageSuitAge() {
+      if (this.packageMaxAge == 0 && this.packageMinAge == 0) {
+        return this.$t('lesson.packageManage.SuitableForAll')
+      }
+      return `${this.packageMinAge}-${this.packageMaxAge}`
+    }
+  }
 }
 </script>
 
@@ -32,13 +78,16 @@ export default {
   }
   &-cover {
     width: 256px;
-    height: 100%;
+    height: 143px;
+    display: block;
+    background: #c0c4cc;
+    object-fit: cover;
     border-radius: 4px;
   }
   &-desc {
     font-size: 12px;
     color: #c0c4cc;
-    &-title {
+    &-name {
       font-size: 14px;
       margin: 10px 0;
       color: #333;

@@ -1,6 +1,9 @@
 <template>
   <div class="org-teacher-classes">
     <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
+    <div class="org-teacher-classes-students">
+      <div class="students-table-header"></div>
+    </div>
   </div>
 </template>
 

@@ -1,14 +1,16 @@
 <template>
-  <div class="org-teacher-teach" v-if="!isLoading">
-    <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
-    <div class="package-count">
-      包含: <span class="package-count-number">{{orgClassesCount}}个班级</span>
-    </div>
-    <el-row>
-      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(pacakge,index) in packageList" :key="index">
-        <org-package-cell-by-time></org-package-cell-by-time>
-      </el-col>
-    </el-row>
+  <div class="org-teacher-teach">
+    <template v-if="!isLoading">
+      <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
+      <div class="package-count">
+        {{$t('org.includes')}} <span class="package-count-number">{{selectedClassPackagesCount}}{{$t('org.packagesCount')}}</span>
+      </div>
+      <el-row>
+        <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in selectedClassPackges" :key="index">
+          <org-package-cell-by-time :packageData="packageData"></org-package-cell-by-time>
+        </el-col>
+      </el-row>
+    </template>
   </div>
 </template>
 
@@ -25,33 +27,53 @@ export default {
   },
   data() {
     return {
-      packageList: [1, 2, 3, 4, 5],
       selectedClassId: '',
       isLoading: true
     }
   },
   async created() {
-    await this.getOrgClasses()
-    this.selectedClassId = this.firstOrgClassId
+    try {
+      await this.getOrgClasses()
+      await this.getClassPackagesById({ classId: this.firstOrgClassId })
+      this.selectedClassId = this.firstOrgClassId
+    } catch (error) {
+      console.error(error)
+    }
     this.isLoading = false
   },
   methods: {
     ...mapActions({
-      getOrgClasses: 'org/teacher/getOrgClasses'
+      getOrgClasses: 'org/teacher/getOrgClasses',
+      getClassPackagesById: 'org/teacher/getClassPackagesById'
     }),
     async handleSwitchClass(id) {
+      await this.getClassPackagesById({ classId: id })
       this.selectedClassId = id
     }
   },
   computed: {
     ...mapGetters({
-      orgClasses: 'org/teacher/orgClasses'
+      orgClasses: 'org/teacher/orgClasses',
+      orgClassPackages: 'org/teacher/orgClassPackages'
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')
     },
-    orgClassesCount() {
-      return _.get(this.orgClasses, 'length', 0)
+    selectedClassPackagesCount() {
+      return _.get(this.selectedClassPackges, 'length', 0)
+    },
+    selectedClassPackges() {
+      const packags = _.get(this.orgClassPackages, [this.selectedClassId], [])
+      return _.map(packags, item => {
+        const { organizationId, classId, lastTeachTime, lessons } = item
+        return {
+          ...item.package,
+          lessons,
+          organizationId,
+          classId,
+          lastTeachTime
+        }
+      })
     }
   }
 }
