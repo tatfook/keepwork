@@ -39,8 +39,8 @@ export default {
       color: #fff;
       background: #409efe;
     }
-    span {
-      margin-left: 8px;
+    /deep/ span {
+      margin-left: 7px;
     }
   }
 }

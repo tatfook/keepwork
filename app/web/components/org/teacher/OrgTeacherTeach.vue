@@ -34,7 +34,7 @@ export default {
   async created() {
     try {
       await this.getOrgClasses()
-      await this.getClassPackagesById({ classId: this.firstOrgClassId })
+      await this.getOrgClassPackagesById({ classId: this.firstOrgClassId })
       this.selectedClassId = this.firstOrgClassId
     } catch (error) {
       console.error(error)
@@ -44,11 +44,11 @@ export default {
   methods: {
     ...mapActions({
       getOrgClasses: 'org/teacher/getOrgClasses',
-      getClassPackagesById: 'org/teacher/getClassPackagesById'
+      getOrgClassPackagesById: 'org/teacher/getOrgClassPackagesById'
     }),
-    async handleSwitchClass(id) {
-      await this.getClassPackagesById({ classId: id })
-      this.selectedClassId = id
+    async handleSwitchClass(classId) {
+      await this.getOrgClassPackagesById({ classId })
+      this.selectedClassId = classId
     }
   },
   computed: {
