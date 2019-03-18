@@ -9,15 +9,21 @@
         </span>
       </div>
       <div class="students-add-main">
-        <el-row>
-          <el-col :span="10">
-            <el-input></el-input>
-          </el-col>
-          <el-col :span="10">
-            <el-input></el-input>
-          </el-col>
-          <el-col></el-col>
-        </el-row>
+        <div class="add-form-header">
+          <span class="add-form-header-label">学生姓名</span>
+          <span class="add-form-header-label">用户名</span>
+        </div>
+        <el-form :inline="true" v-for="(item, index) in formStudents" :key="index" :model="item">
+          <el-form-item>
+            <el-input v-model="item.name"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input v-model="item.account"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button>XX</el-button>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="students-add-bottom">
         <span><i class="el-icon-circle-plus-outline"></i> 继续添加</span>
@@ -59,7 +65,7 @@ export default {
   data() {
     return {
       selectedClassId: '',
-      isShowAddStudentForm: false,
+      isShowAddStudentForm: true,
       tableData: [
         {
           date: '2016-05-02',
@@ -80,6 +86,20 @@ export default {
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
+        }
+      ],
+      formStudents: [
+        {
+          name: '',
+          account: ''
+        },
+        {
+          name: '',
+          account: ''
+        },
+        {
+          name: '',
+          account: ''
         }
       ]
     }
@@ -152,6 +172,7 @@ export default {
 
   &-add {
     min-height: 330px;
+    padding-bottom: 32px;
     background: #fff;
     position: relative;
     .students-add {
@@ -167,6 +188,19 @@ export default {
         }
       }
       &-main {
+        width: 600px;
+        margin: 0 auto;
+        .add-form-header {
+          &-label {
+            display: inline-block;
+            width: 215px;
+            padding-left: 10px;
+            font-size: 14px;
+            height: 36px;
+            line-height: 36px;
+            color: #909399;
+          }
+        }
       }
 
       &-bottom {
