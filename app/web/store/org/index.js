@@ -8,7 +8,11 @@ const state = {
   orgsDetailForId: {},
   orgsDetailForLoginUrl: {},
   currentOrg: {},
-  orgPackages: {}
+  orgPackages: {},
+  orgPackagesGraphql: {},
+  orgClasses: {},
+  orgTeachers: {},
+  orgStudents: {}
 }
 export default {
   namespaced: true,

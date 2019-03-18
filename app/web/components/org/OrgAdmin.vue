@@ -9,8 +9,8 @@
           <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
         </div>
         <ul class="org-admin-menu">
-          <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
-            <router-link class="org-admin-menu-link" :to="{name: menuItem.pageName}">{{menuItem.text}}</router-link>
+          <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': isMenuItemActive(menuItem)}" :key="index">
+            <router-link class="org-admin-menu-link" :to="{name: menuItem.indexPageName}">{{menuItem.text}}</router-link>
           </li>
         </ul>
       </div>
@@ -28,15 +28,18 @@ export default {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       adminMenu: [
         {
-          pageName: 'OrgPackages',
+          pageNames: ['OrgPackages'],
+          indexPageName: 'OrgPackages',
           text: this.$t('org.lessonPackage')
         },
         {
-          pageName: 'OrgClasses',
+          pageNames: ['OrgClassList', 'OrgNewClass', 'OrgTeacherList', 'OrgStudentList'],
+          indexPageName: 'OrgClassList',
           text: this.$t('org.classInfoManage')
         },
         {
-          pageName: 'OrgSetting',
+          pageNames: ['OrgSetting'],
+          indexPageName: 'OrgSetting',
           text: this.$t('org.settings')
         }
       ]
@@ -48,6 +51,11 @@ export default {
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
+    }
+  },
+  methods: {
+    isMenuItemActive(menuItem) {
+      return _.indexOf(menuItem.pageNames, this.nowPageName) !== -1
     }
   },
   components: {
