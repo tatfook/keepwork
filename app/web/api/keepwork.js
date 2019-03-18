@@ -36,49 +36,49 @@ const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
-  getUser: async (username) => get(`users/${username}`),
+  getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
   getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
-  getDetailByName: async (args) => get(`/users/${args.username}`),
+  getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
-  getByEmail: async (args) => get(`/users?email=${args.email}`),
-  getByCellphone: async (args) => get(`/users?cellphone=${args.cellphone}`),
-  getResetCodeByEmail: async (args) => get(`/users/email_captcha?email=${args.email}`),
-  getResetCodeByCellphone: async (args) => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
-  passwordReset: async (args) => post('/users/reset_password', args),
+  getByEmail: async args => get(`/users?email=${args.email}`),
+  getByCellphone: async args => get(`/users?cellphone=${args.cellphone}`),
+  getResetCodeByEmail: async args => get(`/users/email_captcha?email=${args.email}`),
+  getResetCodeByCellphone: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  passwordReset: async args => post('/users/reset_password', args),
   // getUserByEmail: async args => get(`/users/?email=${args.email}`),
-  verifyEmailOne: async (args) => get(`/users/email_captcha?email=${args.email}`),
-  verifyEmailTwo: async (args) => post('/users/email_captcha', args),
+  verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
+  verifyEmailTwo: async args => post('/users/email_captcha', args),
   // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
-  verifyCellphoneOne: async (args) => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  verifyCellphoneOne: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
   verifyCellphoneTwo: async (...args) => post('/users/cellphone_captcha', ...args),
-  unbindCellphone: async (args) => post('/users/cellphone_captcha', args),
-  unbindEmail: async (args) => post('/users/email_captcha', args),
-  register: async (args) => {
+  unbindCellphone: async args => post('/users/cellphone_captcha', args),
+  unbindEmail: async args => post('/users/email_captcha', args),
+  register: async args => {
     const res = await post('/users/register', args)
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
   bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
   searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
-  searchByField: async (args) => post('users/search', args)
+  searchByField: async args => post('users/search', args)
 }
 
 export const account = {
   getBalance: async () => get('/users/account'),
   // getTrades: async () => get('/trades'),
-  getTrades: async (args) => post('/trades/search', args),
+  getTrades: async args => post('/trades/search', args),
   getDiscounts: async () => get('/discounts'),
-  createRechargeOrder: async (args) => post('/orders', args),
-  getRechargeOrderState: async (args) => get(`/orders/${args.id}`),
-  createTradeOrder: async (args) => post('/trades', args),
-  getGoods: async (args) => get('/goods'),
-  getDigitalAccounts: async (args) => haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
+  createRechargeOrder: async args => post('/orders', args),
+  getRechargeOrderState: async args => get(`/orders/${args.id}`),
+  createTradeOrder: async args => post('/trades', args),
+  getGoods: async args => get('/goods'),
+  getDigitalAccounts: async args => haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
 }
 
 /*doc
@@ -124,19 +124,19 @@ payload: {
 */
 export const website = {
   // upsert: async (...args) => post('website/upsert', ...args),
-  upsert: async (args) => post('sites', args),
+  upsert: async args => post('sites', args),
   getByName: async (...args) => post('website/getByName', ...args),
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
   getSiteGroups: async ({ siteId }) => get(`sites/${siteId}/groups`),
   createSiteGroup: async ({ siteId, groupId, level }) => post(`sites/${siteId}/groups`, { groupId, level }),
   deleteSiteGroup: async ({ siteId, groupId }) => deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
-  getAllSitesByName: async (name) => get(`users/${name}/sites`),
+  getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
-  getDetailInfo: async (args) => get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
+  getDetailInfo: async args => get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
   // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args),
-  updateById: async (args) => put(`sites/${args.id}`, args),
+  updateById: async args => put(`sites/${args.id}`, args),
   getUserPrivilege: async ({ siteId }) => get(`sites/${siteId}/privilege`)
 }
 
@@ -205,12 +205,12 @@ payload: {
 ```
 */
 export const websiteComment = {
-  create: async (args) => post('comments', args),
-  getByPageUrl: async (args) =>
+  create: async args => post('comments', args),
+  getByPageUrl: async args =>
     get(
       `comments?objectType=${args.objectType}&objectId=${args.objectId}&x-per-page=10&x-page=${args.page}&x-order=updatedAt-desc`
     ),
-  deleteById: async (args) => deleteMethod(`comments/${args.id}`)
+  deleteById: async args => deleteMethod(`comments/${args.id}`)
 }
 
 export const sensitiveWords = {
@@ -236,11 +236,11 @@ export const qiniu = {
 }
 
 export const userThreeService = {
-  getOauthUsers: async (args) => get('oauth_users'),
+  getOauthUsers: async args => get('oauth_users'),
   // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
   // unbind: async (...args) => post('user_three_service/unbind', ...args)
-  unbind: async (args) => deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
+  unbind: async args => deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
 }
 
 export const favorites = {
@@ -252,11 +252,11 @@ export const favorites = {
   getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
   getUserFollows: async ({ objectType, objectId }) =>
     get(`favorites/follows?objectId=${objectId}&objectType=${objectType}`),
-  getUserSearchAllFavorites: async (args) => post('favorites/search', args)
+  getUserSearchAllFavorites: async args => post('favorites/search', args)
 }
 
 export const projects = {
-  getProjects: async (args) => post('projects/search', args),
+  getProjects: async args => post('projects/search', args),
   getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
   updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
@@ -280,7 +280,7 @@ export const projects = {
     get(`projects/join?userId=${userId}&exclude=${exclude}`),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
   getProjectGames: async ({ projectId }) => get(`projects/${projectId}/game`),
-  visitProject: async (projectId) => get(`projects/${projectId}/visit`)
+  visitProject: async projectId => get(`projects/${projectId}/visit`)
 }
 
 export const applies = {
@@ -313,7 +313,7 @@ export const comments = {
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
-  getSingleProjectIssues: async (params) => post('issues/search', params),
+  getSingleProjectIssues: async params => post('issues/search', params),
   updateIssue: async ({ objectId, params }) => put(`issues/${objectId}`, { ...params }),
   getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
 }
@@ -340,7 +340,9 @@ export const lessonOrganizations = {
   getOrgPackages: async ({ organizationId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}`),
   getOrgClasses: async () => get('lessonOrganizationClasses'),
   getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
-  getClassPackagesById: async (params) => get('lessonOrganizations/packages', { params })
+  getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
+  getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
+  addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 })
 }
 
 export const lessonOrganizationClasses = {
@@ -351,7 +353,9 @@ export const lessonOrganizationClasses = {
 export const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
   getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
-  createClassMember: async ({ organizationId, classId, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, memberName, realname, roleId })
+  createClassMember: async ({ organizationId, classId, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, memberName, realname, roleId }),
+  getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
+  removeStudentFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
 
 export const graphql = {

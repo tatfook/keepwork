@@ -2,10 +2,12 @@ import Vue from 'vue'
 
 const GET_ORG_CLASSES_SUCCESS = 'GET_ORG_CLASSES_SUCCESS'
 const GET_CLASS_PACKAGES_SUCCESS = 'GET_CLASS_PACKAGES_SUCCESS'
+const GET_CLASS_STUDENTS_SUCCESS = 'GET_CLASS_STUDENTS_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
-  GET_CLASS_PACKAGES_SUCCESS
+  GET_CLASS_PACKAGES_SUCCESS,
+  GET_CLASS_STUDENTS_SUCCESS
 }
 
 
@@ -14,10 +16,15 @@ const mutations = {
     Vue.set(state, 'orgClasses', payload)
   },
   [GET_CLASS_PACKAGES_SUCCESS](state, { classId, classPackages }) {
-    console.log(classId)
     Vue.set(state, 'orgClassPackages', {
       ...state.orgClassPackages,
       [classId]: classPackages
+    })
+  },
+  [GET_CLASS_STUDENTS_SUCCESS](state, { classId, classStudents }) {
+    Vue.set(state, 'orgClassStudents', {
+      ...state.orgClassStudents,
+      [classId]: classStudents
     })
   }
 }
