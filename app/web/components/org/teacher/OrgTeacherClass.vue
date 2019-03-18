@@ -31,13 +31,13 @@
     </div>
     <div v-else class="org-teacher-classes-students">
       <div class="students-table-header">
-        学生数:2
+        学生数:{{selectedClassStudentsCount}}
         <span class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> 添加学生</span>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
-        <el-table-column prop="realname" label="姓名" >
+        <el-table-column prop="realname" label="姓名">
         </el-table-column>
-        <el-table-column prop="username" label="用户名" >
+        <el-table-column prop="username" label="用户名">
         </el-table-column>
         <el-table-column prop="createdAt" label="添加时间">
         </el-table-column>
@@ -113,10 +113,13 @@ export default {
     },
     async handleRemoveStudent({ row }) {
       try {
-        await this.removeStudentFromClass({ classId: this.selectedClassId, studentId: row.id})
+        await this.removeStudentFromClass({
+          classId: this.selectedClassId,
+          studentId: row.id
+        })
         this.$message({
           type: 'success',
-          message: "移出成功"
+          message: '移出成功'
         })
       } catch (error) {
         this.$message.error(error)
@@ -153,6 +156,9 @@ export default {
                 }
                 if (error.data.indexOf('成员不存在') !== -1) {
                   this.$message.error(`用户名:[${student.account}]不存在`)
+                  sucessfullItems
+                    .reverse()
+                    .forEach(index => this.handleRemoveFormItem(index))
                   reject()
                 }
               }
@@ -194,7 +200,10 @@ export default {
       return _.get(this.orgClasses, 'length', 0)
     },
     selectedClassStudents() {
-      return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], {})
+      return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], [])
+    },
+    selectedClassStudentsCount() {
+      return this.selectedClassStudents.length
     },
     orgClassStudentsTable() {
       return _.map(this.selectedClassStudents, item => ({
