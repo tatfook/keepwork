@@ -40,6 +40,7 @@ const actions = {
       url: orgLoginUrl
     })
     commit(GET_ORG_SUCCESS, { orgDetail })
+    return orgDetail
   },
   setCurrentOrg(context, { orgDetail }) {
     let { commit } = context
@@ -113,6 +114,12 @@ const actions = {
       }
     )
     commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents })
+  },
+  async updateOrg(context, { orgLoginUrl, orgId, orgData }) {
+    let { dispatch } = context
+    await keepwork.lessonOrganizations.updateOrg({ orgId, orgData })
+    let orgDetail = await dispatch('getOrgDetailByLoginUrl', { orgLoginUrl })
+    await dispatch('setCurrentOrg', { orgDetail })
   }
 }
 
