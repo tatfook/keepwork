@@ -460,4 +460,9 @@ export default {
     }
   }
 }
+@media print {
+  .tool-header {
+    display: none;
+  }
+}
 </style>
