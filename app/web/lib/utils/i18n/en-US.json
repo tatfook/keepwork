@@ -1702,6 +1702,7 @@
     "includes": "Includes:",
     "packagesCount": " packages",
     "moreLessons": "More Lessons",
-    "logout": "Logout"
+    "logout": "Logout",
+    "allowTeacherToManage": "Allow teachers to manage student information"
   }
 }
