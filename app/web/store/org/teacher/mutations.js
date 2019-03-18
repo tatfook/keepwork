@@ -23,7 +23,7 @@ const mutations = {
   },
   [GET_CLASS_STUDENTS_SUCCESS](state, { classId, classStudents }) {
     Vue.set(state, 'orgClassStudents', {
-      ...state.classStudents,
+      ...state.orgClassStudents,
       [classId]: classStudents
     })
   }
