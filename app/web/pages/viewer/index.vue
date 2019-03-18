@@ -241,6 +241,9 @@ body {
   overflow: hidden;
 }
 @media print {
+  .index-page-header {
+    display: none;
+  }
   @media (max-width: 767px) {
     .hidden-xs-only {
       display: none !important;
