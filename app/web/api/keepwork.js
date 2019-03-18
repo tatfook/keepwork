@@ -343,6 +343,21 @@ export const lessonOrganizations = {
   getClassPackagesById: async (params) => get('lessonOrganizations/packages', { params })
 }
 
+export const lessonOrganizationClasses = {
+  getClasses: async ({ organizationId }) => get(`lessonOrganizationClasses?organizationId=${organizationId}`),
+  createClasses: async ({ organizationId, name, packages }) => post('lessonOrganizationClasses', { organizationId, name, packages })
+}
+
+export const lessonOrganizationClassMembers = {
+  getTeachers: async ({ organizationId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
+  getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
+  createClassMember: async ({ organizationId, classId, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, memberName, realname, roleId })
+}
+
+export const graphql = {
+  getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
+}
+
 export const keepwork = {
   user,
   website,
@@ -363,7 +378,10 @@ export const keepwork = {
   groups,
   account,
   games,
-  lessonOrganizations
+  lessonOrganizations,
+  lessonOrganizationClasses,
+  lessonOrganizationClassMembers,
+  graphql
 }
 
 export default keepwork

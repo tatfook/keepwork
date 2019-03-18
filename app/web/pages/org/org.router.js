@@ -9,6 +9,11 @@ const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
 const OrgSetting = () => import('@/components/org/admin/OrgSetting')
+const ClassList = () => import('@/components/org/admin/ClassList')
+const NewClass = () => import('@/components/org/admin/NewClass')
+const NewTeacher = () => import('@/components/org/admin/NewTeacher')
+const TeacherList = () => import('@/components/org/admin/TeacherList')
+const StudentList = () => import('@/components/org/admin/StudentList')
 
 Vue.use(Router)
 
@@ -55,6 +60,7 @@ export default new Router({
     },
     {
       path: '/:orgLoginUrl/admin',
+      name: 'OrgAdmin',
       component: OrgAdmin,
       children: [
         {
@@ -64,8 +70,34 @@ export default new Router({
         },
         {
           path: 'classes',
-          name: 'OrgClasses',
-          component: OrgClasses
+          component: OrgClasses,
+          children: [
+            {
+              path: 'class',
+              name: 'OrgClassList',
+              component: ClassList
+            },
+            {
+              path: 'class/new',
+              name: 'OrgNewClass',
+              component: NewClass
+            },
+            {
+              path: 'teacher',
+              name: 'OrgTeacherList',
+              component: TeacherList
+            },
+            {
+              path: 'teacher/new',
+              name: 'OrgNewTeacher',
+              component: NewTeacher
+            },
+            {
+              path: 'student',
+              name: 'OrgStudentList',
+              component: StudentList
+            }
+          ]
         },
         {
           path: 'setting',
