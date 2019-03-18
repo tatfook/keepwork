@@ -6,7 +6,7 @@
         <div class="org-setting-item">
           <div class="org-setting-item-label">{{$t('org.allowTeacherToManage')}}</div>
           <el-radio-group v-model="teacherPrivilege">
-            <el-radio :label="1">{{$t('common.Yes')}}</el-radio>
+            <el-radio :label="teacherPrivilegeVal">{{$t('common.Yes')}}</el-radio>
             <el-radio :label="0">{{$t('common.No')}}</el-radio>
           </el-radio-group>
         </div>
@@ -20,11 +20,12 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgSetting',
   mounted() {
-    this.teacherPrivilege = this.orgPriviledge & 1
+    this.teacherPrivilege = this.orgPriviledge & this.teacherPrivilegeVal
     this.originTeacherPrivilege = this.teacherPrivilege
   },
   data() {
     return {
+      teacherPrivilegeVal: 3,
       isSaving: false,
       teacherPrivilege: undefined,
       originTeacherPrivilege: undefined
@@ -73,7 +74,7 @@ export default {
   },
   watch: {
     orgPriviledge(privilege) {
-      this.teacherPrivilege = privilege & 1
+      this.teacherPrivilege = privilege & this.teacherPrivilegeVal
     }
   }
 }
