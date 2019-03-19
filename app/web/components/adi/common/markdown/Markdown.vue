@@ -113,8 +113,11 @@ export default {
 }
 @media print {
   .comp-markdown {
-    p{
-      font-size: 9pt;
+    p {
+      font-size: 14px;
+    }
+    pre>code {
+      font-size: 12px;
     }
   }
 }
