@@ -1,5 +1,5 @@
 <template>
-  <div class="org-package-cell" @click="handleToPackageDetail">
+  <div class="org-package-cell" @click="handleCallback">
     <img class="org-package-cover" :src="packageCover" alt="">
     <div class="org-package-desc">
       <div class="org-package-desc-name">{{packageName}}</div>
@@ -23,16 +23,17 @@ export default {
     }
   },
   methods: {
-    handleToPackageDetail() {
-      this.$message({
-        type: 'success',
-        message: this.packageId
-      })
+    handleCallback() {
+      this.$emit('package-click', this.packageId)
     }
   },
   computed: {
     packageCover() {
-      return _.get(this.packageData, 'extra.coverUrl', 'https://api-stage.keepwork.com/storage/v0/siteFiles/236/raw#Sarlia2_.jpg')
+      return _.get(
+        this.packageData,
+        'extra.coverUrl',
+        ''
+      )
     },
     packageId() {
       return _.get(this.packageData, 'id', '')

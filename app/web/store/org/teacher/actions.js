@@ -1,8 +1,8 @@
 import { props } from './mutations'
 import { keepwork } from '@/api'
-const { lessonOrganizations, lessonOrganizationClassMembers } = keepwork
+const { lessonOrganizations, lessonOrganizationClassMembers, lessonOrganizationClasses } = keepwork
 
-const { GET_ORG_CLASSES_SUCCESS, GET_CLASS_PACKAGES_SUCCESS, GET_CLASS_STUDENTS_SUCCESS } = props
+const { GET_ORG_CLASSES_SUCCESS, GET_CLASS_PACKAGES_SUCCESS, GET_CLASS_STUDENTS_SUCCESS, GET_CLASS_PACKAGE_DETAIL_SUCCESS } = props
 
 const actions = {
   async getOrgClasses({ commit }) {
@@ -23,6 +23,10 @@ const actions = {
       const classStudents = await lessonOrganizationClassMembers.getClassStudentsById({ classId })
       commit(GET_CLASS_STUDENTS_SUCCESS, { classId, classStudents })
     }
+  },
+  async getOrgClassPackageDetail({ commit }, { classId, packageId }) {
+    const packageDetail = await lessonOrganizationClasses.getClassPackageDetail({ classId, packageId })
+    commit(GET_CLASS_PACKAGE_DETAIL_SUCCESS, { classId, packageId, packageDetail })
   },
   async addStudentToClass(
     { dispatch, rootGetters: { 'org/currentOrg': { id: organizationId } } },

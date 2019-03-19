@@ -5,6 +5,7 @@ const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
 const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
+const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
@@ -57,6 +58,11 @@ export default new Router({
           component: OrgTeacherClass
         }
       ]
+    },
+    {
+      path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId',
+      name: 'OrgTeacherClassPackage',
+      component: OrgTeacherClassPackage,
     },
     {
       path: '/:orgLoginUrl/admin',

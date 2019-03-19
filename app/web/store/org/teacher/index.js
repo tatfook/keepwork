@@ -5,7 +5,8 @@ import mutations from './mutations'
 const state = {
   orgClasses: [],
   orgClassPackages: {},
-  orgClassStudents: {}
+  orgClassStudents: {},
+  orgClassPackagesDetail: {}
 }
 export default {
   namespaced: true,

@@ -7,7 +7,7 @@
       </div>
       <el-row>
         <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in selectedClassPackges" :key="index">
-          <org-package-cell-by-time :packageData="packageData"></org-package-cell-by-time>
+          <org-package-cell-by-time :packageData="packageData" @package-click="handleToClassPackagePage"></org-package-cell-by-time>
         </el-col>
       </el-row>
     </template>
@@ -49,6 +49,13 @@ export default {
     async handleSwitchClass(classId) {
       await this.getOrgClassPackagesById({ classId })
       this.selectedClassId = classId
+    },
+    handleToClassPackagePage(packageId) {
+      this.$router.push({
+        name: 'OrgTeacherClassPackage',
+        params: { classId: this.selectedClassId, packageId: packageId }
+      })
+      console.warn('packageId: ', packageId)
     }
   },
   computed: {
