@@ -113,11 +113,13 @@ export default {
 }
 @media print {
   .comp-markdown {
+    font-family: "宋体";
     p {
       font-size: 14px;
     }
     pre>code {
       font-size: 12px;
+      font-family: "宋体";
     }
   }
 }
