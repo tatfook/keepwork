@@ -111,5 +111,12 @@ export default {
     }
   }
 }
+@media print {
+  .comp-markdown {
+    p{
+      font-size: 9pt;
+    }
+  }
+}
 </style>
 
