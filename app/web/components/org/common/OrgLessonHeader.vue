@@ -7,7 +7,7 @@
     </el-dialog>
     <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="600px">
       <div>{{$t('lesson.curentClassId')}}
-        <span class="class-id">C{{classroomId}}</span>
+        <span class="class-id">C{{classroomKey}}</span>
       </div>
       <div v-html="$t('lesson.studentEnterClassId',{studentsPerformance:`<span class='performance'>${$t('lesson.studentsPerformance')}</span>`})">
       </div>
@@ -18,17 +18,17 @@
       </span>
     </el-dialog>
     <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
-      <div class="full-font">C {{classroomId | idPretty}}</div>
+      <div class="full-font">C {{classroomKey | idPretty}}</div>
     </el-dialog>
     <el-row>
       <el-col :sm="12" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
         <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
       <el-col :sm="12" :xm="24" class="lesson-desc">
-        <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
+        <div v-if="isTeacher && isTeaching && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">{{$t('lesson.fullPage')}}</div>
-            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: C{{classroomId}}</div>
+            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: C{{classroomKey}}</div>
           </el-tooltip>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
@@ -71,10 +71,10 @@
           </el-scrollbar>
         </div>
         <div v-if="isTeacher" class="lesson-button-wrap">
-          <el-button v-if="isBeInClass && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-          <el-button v-if="(!isBeInClass || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="isBeInClass && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-          <span v-if="isBeInClass && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
-          <span v-if="(!isBeInClass || !isInCurrentClass) && userIsTeacher" class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+          <el-button v-if="isTeaching && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+          <el-button v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="isTeaching && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+          <span v-if="isTeaching && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
+          <span v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
         </div>
       </el-col>
     </el-row>
@@ -182,9 +182,6 @@ export default {
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    leaveConfirm(event) {
-      event.returnValue = 'are you ok?'
-    },
     async handleBeginTheClass() {
       if (!this.isInCurrentClass) return
       const { classId, packageId, lessonId } = this.$route.params
@@ -197,7 +194,6 @@ export default {
           this.classIdDialogVisible = true
           this.copyClassroomQuiz()
           this.$emit('intervalUpdateLearnRecords')
-          window.addEventListener('beforeunload', this.leaveConfirm, true)
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
@@ -223,20 +219,15 @@ export default {
               this.$emit('clearUpdateLearnRecords')
               const { lessonId, id } = this.classroom
               this.$router.push({
-                name: 'LessonTeacherSummary',
+                name: 'OrgTeacherLessonSummary',
                 params: {
                   classId: id,
                   lessonId: Number(lessonId)
                 }
               })
-              window.removeEventListener(
-                'beforeunload',
-                this.leaveConfirm,
-                true
-              )
             })
             .catch(e => {
-              this.$message.error(this.$t('lesson.failure'))
+              this.$message.error(this.$t('common.failure'))
               console.error(e)
             })
         })
@@ -249,8 +240,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isBeInClass: 'org/teacher/isBeInClass',
-      classroomId: 'org/teacher/orgClassroomId',
+      isTeaching: 'org/teacher/isTeaching',
+      // isBeInClass: 'org/teacher/isBeInClass',
+      classroomKey: 'org/teacher/classroomKey',
       isClassIsOver: 'org/teacher/isClassIsOver',
       classroom: 'org/teacher/classroom',
       isBeInClassroom: 'org/student/isBeInClassroom',

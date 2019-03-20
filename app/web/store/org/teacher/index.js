@@ -9,7 +9,8 @@ const state = {
   orgClassStudents: {},
   orgClassPackagesDetail: {},
   orgLessonData: {},
-  orgLessonDetail: {}
+  orgLessonDetail: {},
+  classroom: {}
 }
 export default {
   namespaced: true,

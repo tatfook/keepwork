@@ -100,9 +100,8 @@ const actions = {
   toggleLessonHint({ commit }) {
     commit(TOGGLE_LESSON_HINT)
   },
-  async beginTheClass(context, payload) {
-    const { commit } = context
-    let classroom = await lesson.classrooms.begin({
+  async beginTheClass({ commit }, payload) {
+    const classroom = await lesson.classrooms.begin({
       payload
     })
     commit(BEGIN_THE_CLASS_SUCCESS, classroom)

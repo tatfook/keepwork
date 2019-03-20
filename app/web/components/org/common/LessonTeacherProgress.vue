@@ -4,12 +4,12 @@
       <div :class="['name',{'light': isShowPlan}]">{{$t('lesson.lessonPlan')}}</div>
       <div :class="['pointer','light',{'selected': isShowPlan}]" @click="handleChangeView('OrgTeacherLessonPlan')"></div>
     </span>
-    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isBeInClass ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isTeaching ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
       <div :class="['name',{'light': isShowPerformance}]">
         {{$t('lesson.performance')}}
       </div>
-      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isBeInClass}]" @click="handleChangeView('OrgTeacherLessonPerformance')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isTeaching}]" @click="handleChangeView('OrgTeacherLessonPerformance')"></div>
     </span>
     <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage=" !reset && isClassIsOver ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isBeInClass: 'org/teacher/isBeInClass',
+      isTeaching: 'org/teacher/isTeaching',
       isClassIsOver: 'org/teacher/isClassIsOver',
       classId: 'org/teacher/classId'
     }),
@@ -52,7 +52,7 @@ export default {
       this.isShowSummary = false
       this[
         `isShow${name
-          .replace(/LessonTeacher/, '')
+          .replace(/OrgTeacherLesson/, '')
           .toLowerCase()
           .replace(/\b[a-z]/g, s => s.toUpperCase())}`
       ] = true
@@ -60,18 +60,20 @@ export default {
   },
   methods: {
     handleChangeView(name) {
+      console.log(this.reset)
+      console.log(name)
       if (this.reset) return
-      if (!this.isClassIsOver && name === 'LessonTeacherSummary') return
-      if (!this.isBeInClass && name === 'LessonTeacherPerformance') return
+      if (!this.isClassIsOver && name === 'OrgTeacherLessonSummary') return
+      if (!this.isTeaching && name === 'OrgTeacherLessonPerformance') return
 
-      'LessonTeacherPlan' === name && this.$router.push({ name })
+      'OrgTeacherLessonPlan' === name && this.$router.push({ name })
 
-      this.isBeInClass &&
-        'LessonTeacherPerformance' === name &&
+      this.isTeaching &&
+        'OrgTeacherLessonPerformance' === name &&
         this.$router.push({ name })
 
       this.isClassIsOver &&
-        'LessonTeacherSummary' === name &&
+        'OrgTeacherLessonSummary' === name &&
         this.$router.push({
           name,
           params: { classId: this.classId, lessonId: Number(this.lessonId) }

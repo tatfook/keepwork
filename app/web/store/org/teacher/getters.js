@@ -1,4 +1,6 @@
 
+import _ from 'lodash'
+
 const getters = {
   orgClasses: state => state.orgClasses,
   orgClassPackages: state => state.orgClassPackages,
@@ -6,7 +8,11 @@ const getters = {
   orgClassPackagesDetail: state => state.orgClassPackagesDetail,
   orgLessonData: state => state.lessonData,
   orgLessonDetail: state => state.orgLessonDetail,
-  orgClassroomId: state => 'OrgClassroomId',
+  classroom: state => state.classroom,
+  classroomKey: (state, { classroom }) => _.get(classroom, 'key', ''),
+  isTeaching: (state, { classroom }) => _.get(classroom, 'state', '') === 1,
+  isClassIsOver: (state, { classroom }) => _.get(classroom, 'state', '') === 2,
+  classId: (state, { classroom }) => classroom.id,
   isShowLessonHint: state => state.isShowLessonHint
 }
 
