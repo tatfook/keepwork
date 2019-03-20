@@ -113,6 +113,7 @@ export default {
 }
 @media print {
   .comp-markdown {
+    font-size: 14px;
     font-family: "宋体";
     p {
       font-size: 14px;
@@ -123,6 +124,9 @@ export default {
         font-size: 12px;
         font-family: "宋体";
       }
+    }
+    li+li {
+      margin-top: 0;
     }
     .icon-link_ {
       display: none;
