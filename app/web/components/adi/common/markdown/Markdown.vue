@@ -117,9 +117,15 @@ export default {
     p {
       font-size: 14px;
     }
-    pre>code {
-      font-size: 12px;
-      font-family: "宋体";
+    pre {
+      line-height: 1.2;
+      & > code{
+        font-size: 12px;
+        font-family: "宋体";
+      }
+    }
+    .icon-link_ {
+      display: none;
     }
   }
 }
