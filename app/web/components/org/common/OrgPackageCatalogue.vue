@@ -1,6 +1,6 @@
 <template>
   <div class="package-catalogue">
-    <div class="package-catalogue-progress">
+    <div class="package-catalogue-progress" v-show="!isTeacher">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
         <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
@@ -121,11 +121,9 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
-      if (!this.isTeacher && this.isPendingReview) {
-        return this.$message({
-          type: 'warning',
-          message: this.$t('lesson.packagePendingReview')
-        })
+      console.log(lesson)
+      if (this.isTeacher) {
+        return this.$router.push({ name: 'OrgTeacherClassPackageLesson', params: { lessonId: lesson.lessonId } })
       }
       if (this.isBeInClassroom) {
         const {
