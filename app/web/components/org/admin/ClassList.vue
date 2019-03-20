@@ -11,7 +11,7 @@
       </el-table-column>
       <el-table-column label="可使用的课程包">
         <template slot-scope="scope">
-          <router-link class='class-list-table-link' :to='{path: "detail"}'>详情</router-link>
+          <router-link class='class-list-table-link' :to='{name: "OrgClassDetail", query: scope.row}'>详情</router-link>
         </template>
       </el-table-column>
     </el-table>

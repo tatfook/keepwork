@@ -65,6 +65,13 @@ const actions = {
     let orgPackages = _.get(result, 'organization.organizationPackages')
     commit(GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS, { organizationId, orgPackages })
   },
+  async getOrgClassPackages(context, { organizationId, classId }) {
+    let classPackages = await keepwork.lessonOrganizations.getOrgClassPackages({
+      organizationId,
+      classId
+    })
+    return classPackages
+  },
   async getOrgClassList(context, { organizationId }) {
     let { commit } = context
     let orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
@@ -79,6 +86,13 @@ const actions = {
         return Promise.reject(error.response)
       })
     return Promise.resolve(result)
+  },
+  async updateClass(context, { organizationId, classId, name, packages }) {
+    await keepwork.lessonOrganizationClasses
+      .updateClass({ organizationId, classId, name, packages })
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
   },
   async getOrgTeacherList(context, { organizationId }) {
     let { commit } = context
