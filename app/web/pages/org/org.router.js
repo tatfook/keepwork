@@ -16,6 +16,7 @@ const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
+const NewStudent = () => import('@/components/org/admin/NewStudent')
 
 Vue.use(Router)
 
@@ -108,6 +109,11 @@ export default new Router({
               path: 'student',
               name: 'OrgStudentList',
               component: StudentList
+            },
+            {
+              path: 'student/new',
+              name: 'OrgNewStudent',
+              component: NewStudent
             }
           ]
         },

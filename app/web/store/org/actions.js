@@ -103,9 +103,9 @@ const actions = {
     )
     commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers })
   },
-  async createNewTeacher(
+  async createNewMember(
     context,
-    { organizationId, classId, memberName, realname }
+    { organizationId, classId, memberName, realname, roleId }
   ) {
     let result = await keepwork.lessonOrganizationClassMembers
       .createClassMember({
@@ -113,7 +113,7 @@ const actions = {
         classId,
         memberName,
         realname,
-        roleId: 2
+        roleId
       })
       .catch(error => {
         return Promise.reject(error.response)
@@ -129,11 +129,10 @@ const actions = {
   },
   async getOrgStudentList(context, { organizationId }) {
     let { commit } = context
-    let orgStudents = await keepwork.lessonOrganizationClassMembers.getStudents(
-      {
-        organizationId
-      }
-    )
+    let result = await keepwork.lessonOrganizationClassMembers.getStudents({
+      organizationId
+    })
+    let orgStudents = result.rows
     commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents })
   },
   async updateOrg(context, { orgLoginUrl, orgId, orgData }) {
