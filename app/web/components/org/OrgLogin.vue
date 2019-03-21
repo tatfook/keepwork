@@ -88,9 +88,11 @@ export default {
       switch (roleId) {
         case 1:
           roleName = 'student'
+          this.$router.push({
+            name: 'OrgStudent'
+          })
           break
         case 2:
-          roleName = 'OrgTeacher'
           this.$router.push({
             name: 'OrgTeacherTeach'
           })

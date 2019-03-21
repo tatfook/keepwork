@@ -343,7 +343,8 @@ export const lessonOrganizations = {
   getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
   getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
-  addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 })
+  addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
+  getOrgStudentPackages: async () => get('lessonOrganizations/packages')
 }
 
 export const lessonOrganizationClasses = {

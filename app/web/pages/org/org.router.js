@@ -10,6 +10,8 @@ const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgT
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
 const OrgTeacherLessonPerformance = () => import('@/components/org/teacher/OrgTeacherLessonPerformance')
 const OrgTeacherLessonSummary = () => import('@/components/org/teacher/OrgTeacherLessonSummary')
+const OrgStudent = () => import('@/components/org/student/OrgStudent')
+const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
@@ -39,6 +41,17 @@ export default new Router({
       path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
       component: OrgLogin
+    },
+    {
+      path: '/:orgLoginUrl/student',
+      name: 'OrgStudent',
+      component: OrgStudent,
+      redirect: { name: 'OrgStudentClass' },
+      children: [{
+        path: 'OrgStudentClass',
+        name: 'OrgStudentClass',
+        component: OrgStudentClass
+      }]
     },
     {
       path: '/:orgLoginUrl/teacher',
