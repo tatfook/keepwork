@@ -120,6 +120,13 @@ const actions = {
       })
     return Promise.resolve(result)
   },
+  async removeMemberFromClass(context, { id }) {
+    await keepwork.lessonOrganizationClassMembers
+      .removeMemberFromClass(id)
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
+  },
   async getOrgStudentList(context, { organizationId }) {
     let { commit } = context
     let orgStudents = await keepwork.lessonOrganizationClassMembers.getStudents(

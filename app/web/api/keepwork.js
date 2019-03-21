@@ -358,7 +358,7 @@ export const lessonOrganizationClassMembers = {
   getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
   createClassMember: async ({ organizationId, classId, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, memberName, realname, roleId }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
-  removeStudentFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
+  removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
 
 export const graphql = {
