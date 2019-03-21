@@ -84,11 +84,16 @@ export default {
           name,
           params: { classId, packageId, lessonId }
         } = this.$route
+        // if (name !== 'OrgTeacherLessonPlan') {
+        //   this.$router.push({ name: 'OrgTeacherLessonPlan' })
+        // }
         await Promise.all([
           this.getLessonDetail({ classId, packageId, lessonId }),
           this.getOrgClassPackageDetail({ classId, packageId }),
-          this.getOrgClasses({ cache: true})
+          this.getOrgClasses({ cache: true })
         ])
+
+        window.document.title = this.currentLessonName
       } catch (error) {
         console.error(error)
       }
@@ -118,14 +123,19 @@ export default {
       // isShowSummary: 'lesson/teacher/isShowSummary',
       lessonDetail: 'org/teacher/orgLessonDetail',
       orgClassPackagesDetail: 'org/teacher/orgClassPackagesDetail',
-      orgClasses: 'org/teacher/orgClasses'
+      orgClasses: 'org/teacher/orgClasses',
+      isBeInclassroom: 'org/teacher/isBeInclassroom'
       // isBeInClass: 'lesson/teacher/isBeInClass',
       // isClassIsOver: 'lesson/teacher/isClassIsOver',
       // classroom: 'lesson/teacher/classroom',
       // userinfo: 'lesson/userinfo',
     }),
     currentClassName() {
-      return _.get(_.find(this.orgClasses, item => item.id === this.classId), 'name', '')
+      return _.get(
+        _.find(this.orgClasses, item => item.id === this.classId),
+        'name',
+        ''
+      )
     },
     currentPackageLessons() {
       return _.map(_.get(this.packageDetail, 'lessons', []), item => ({

@@ -74,16 +74,16 @@ export default new Router({
       component: OrgTeacherClassPackageLesson,
       redirect: { name: 'OrgTeacherLessonPlan' },
       children: [{
-        path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId/lessonPlan',
+        path: 'lessonPlan',
         name: 'OrgTeacherLessonPlan',
         component: OrgTeacherLessonPlan
       }, {
-        path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId/lessonPerformance',
+        path: 'lessonPerformance',
         name: 'OrgTeacherLessonPerformance',
         component: OrgTeacherLessonPerformance
       },
       {
-        path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId/lessonSummary',
+        path: 'lessonSummary/:classId/:lessonId',
         name: 'OrgTeacherLessonSummary',
         component: OrgTeacherLessonSummary
       }]

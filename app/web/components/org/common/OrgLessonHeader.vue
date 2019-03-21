@@ -72,7 +72,7 @@
         </div>
         <div v-if="isTeacher" class="lesson-button-wrap">
           <el-button v-if="isTeaching && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-          <el-button v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="isTeaching && !isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+          <el-button v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="!isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
           <span v-if="isTeaching && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
           <span v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
         </div>
@@ -119,7 +119,7 @@ export default {
     LessonStudentProgress,
     LessonTeacherProgress,
     KeepWorkSticky,
-    LessonReferences,
+    LessonReferences
   },
   filters: {
     idPretty(value) {
@@ -184,13 +184,19 @@ export default {
     },
     async handleBeginTheClass() {
       if (!this.isInCurrentClass) return
-      const { classId, packageId, lessonId } = this.$route.params
+      const {
+        name,
+        params: { classId, packageId, lessonId }
+      } = this.$route
       await this.beginTheClass({
         classId: Number(classId),
         packageId: Number(packageId),
         lessonId: Number(lessonId)
       })
         .then(res => {
+          if (name !== 'OrgTeacherLessonPlan') {
+            this.$router.push({ name: 'OrgTeacherLessonPlan' })
+          }
           this.classIdDialogVisible = true
           this.copyClassroomQuiz()
           this.$emit('intervalUpdateLearnRecords')
@@ -221,7 +227,7 @@ export default {
               this.$router.push({
                 name: 'OrgTeacherLessonSummary',
                 params: {
-                  classId: id,
+                  classroomId: id,
                   lessonId: Number(lessonId)
                 }
               })

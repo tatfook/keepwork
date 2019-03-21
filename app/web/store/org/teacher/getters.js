@@ -10,8 +10,9 @@ const getters = {
   orgLessonDetail: state => state.orgLessonDetail,
   classroom: state => state.classroom,
   classroomKey: (state, { classroom }) => _.get(classroom, 'key', ''),
+  isBeInClassroom: (state, { classroom }) => !_.isEmpty(classroom),
   isTeaching: (state, { classroom }) => _.get(classroom, 'state', '') === 1,
-  isClassIsOver: (state, { classroom }) => _.get(classroom, 'state', '') === 2,
+  isClassOver: (state, { classroom }) => _.get(classroom, 'state', '') === 2,
   classId: (state, { classroom }) => classroom.id,
   isShowLessonHint: state => state.isShowLessonHint
 }

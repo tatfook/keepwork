@@ -4,19 +4,19 @@
       <div :class="['name',{'light': isShowPlan}]">{{$t('lesson.lessonPlan')}}</div>
       <div :class="['pointer','light',{'selected': isShowPlan}]" @click="handleChangeView('OrgTeacherLessonPlan')"></div>
     </span>
-    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isTeaching ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-1" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="!reset && isBeInClassroom  ? 100 : 0" status="success"></el-progress>
     <span class="progress-point middle">
       <div :class="['name',{'light': isShowPerformance}]">
         {{$t('lesson.performance')}}
       </div>
-      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isTeaching}]" @click="handleChangeView('OrgTeacherLessonPerformance')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowPerformance, 'light': !reset && isBeInClassroom }]" @click="handleChangeView('OrgTeacherLessonPerformance')"></div>
     </span>
-    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage=" !reset && isClassIsOver ? 100 : 0" status="success"></el-progress>
+    <el-progress class="progress-line line-2" :text-inside="true" :show-text="false" :stroke-width="18" :percentage=" !reset && isClassOver ? 100 : 0" status="success"></el-progress>
     <span class="progress-point end">
       <div :class="['name',{'light': isShowSummary}]">
         {{$t('lesson.summary')}}
       </div>
-      <div :class="['pointer',{'selected': !reset && isShowSummary, 'light': !reset && isClassIsOver}]" @click="handleChangeView('OrgTeacherLessonSummary')"></div>
+      <div :class="['pointer',{'selected': !reset && isShowSummary, 'light': !reset && isClassOver}]" @click="handleChangeView('OrgTeacherLessonSummary')"></div>
     </span>
   </div>
 </template>
@@ -37,8 +37,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isTeaching: 'org/teacher/isTeaching',
-      isClassIsOver: 'org/teacher/isClassIsOver',
+      isBeInClassroom: 'org/teacher/isBeInClassroom',
+      isClassOver: 'org/teacher/isClassOver',
       classId: 'org/teacher/classId'
     }),
     lessonId() {
@@ -60,19 +60,17 @@ export default {
   },
   methods: {
     handleChangeView(name) {
-      console.log(this.reset)
-      console.log(name)
       if (this.reset) return
-      if (!this.isClassIsOver && name === 'OrgTeacherLessonSummary') return
-      if (!this.isTeaching && name === 'OrgTeacherLessonPerformance') return
+      if (!this.isClassOver && name === 'OrgTeacherLessonSummary') return
+      if (!this.isBeInClassroom && name === 'OrgTeacherLessonPerformance') return
 
       'OrgTeacherLessonPlan' === name && this.$router.push({ name })
 
-      this.isTeaching &&
+      this.isBeInClassroom &&
         'OrgTeacherLessonPerformance' === name &&
         this.$router.push({ name })
 
-      this.isClassIsOver &&
+      this.isClassOver &&
         'OrgTeacherLessonSummary' === name &&
         this.$router.push({
           name,
