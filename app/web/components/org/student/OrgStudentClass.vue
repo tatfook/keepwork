@@ -25,7 +25,7 @@ import OrgPackageCellForStudent from '../common/OrgPackageCellForStudent'
 import _ from 'lodash'
 export default {
   name: 'OrgStudentClass',
-    components: {
+  components: {
     OrgPackageCellForStudent
   },
   data() {
@@ -45,15 +45,19 @@ export default {
     ...mapActions({
       getOrgPackages: 'org/student/getOrgPackages'
     }),
-    handleToPackagePage(pacakgeId) {
-      console.log(pacakgeId)
+    handleToPackagePage(packageId) {
+      this.$router.push({
+        name: 'OrgStudentPackage',
+        params: { packageId }
+      })
+      console.log(packageId)
     },
-    handleContinueLearn(pacakgeId) {
-      console.log(pacakgeId)
+    handleContinueLearn(packageId) {
+      console.log(packageId)
       console.log('handleContinueLearn')
     },
-    handleStartLearn(pacakgeId) {
-      console.log(pacakgeId)
+    handleStartLearn(packageId) {
+      console.log(packageId)
       console.log('handleStartLearn')
     }
   },

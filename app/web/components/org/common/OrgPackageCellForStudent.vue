@@ -27,11 +27,8 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log(this.packageData)
-  },
   methods: {
-    handlePackageclick(packageId) {
+    handlePackageclick() {
       this.$emit('package-click', this.packageId)
     },
     handleContinueLearn() {

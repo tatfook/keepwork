@@ -95,12 +95,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      doQuiz: 'lesson/student/doQuiz',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
-      createLearnRecords: 'lesson/student/createLearnRecords',
-      uploadSelfLearnRecords: 'lesson/student/uploadSelfLearnRecords',
-      uploadVisitorLearnRecords: 'lesson/student/uploadVisitorLearnRecords',
-      switchSummary: 'lesson/student/switchSummary'
+      doQuiz: 'org/student/doQuiz',
+      uploadLearnRecords: 'org/student/uploadLearnRecords',
+      createLearnRecords: 'org/student/createLearnRecords',
+      uploadSelfLearnRecords: 'org/student/uploadSelfLearnRecords',
+      uploadVisitorLearnRecords: 'org/student/uploadVisitorLearnRecords',
+      switchSummary: 'org/student/switchSummary'
     }),
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
@@ -153,39 +153,27 @@ export default {
         return await this.uploadLearnRecords(state).catch(e => console.error(e))
       }
       // 一次只能自学一个页面
-      if (!this.isVisitor) {
-        let lastLearnRecords = await lesson.lessons
-          .getLastLearnRecords()
-          .catch(e => console.error(e))
-        lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
-        if (
-          lastLearnRecords.length > 0 &&
-          this.learnRecordsId !== lastLearnRecords[0].id
-        ) {
-          return this.$router.push({ name: 'StudentCenter' })
-        }
+      // if (!this.isVisitor) {
+      let lastLearnRecords = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
+      if (
+        lastLearnRecords.length > 0 &&
+        this.learnRecordsId !== lastLearnRecords[0].id
+      ) {
+        return this.$router.push({ name: 'StudentCenter' })
       }
+      // }
 
       // FIXME: 这里应该改成从store里面去课程包和课程的id
       const { packageId, lessonId } = this.$route.params
       // 首次需要先创建学习记录
-      // if (!this.learnRecordsId && !this.isVisitor) {
-      //   await this.createLearnRecords({
-      //     packageId: Number(packageId),
-      //     lessonId: Number(lessonId)
-      //   })
-      // }
-      this.isVisitor
-        ? await this.uploadVisitorLearnRecords({
-            packageId: Number(packageId),
-            lessonId: Number(lessonId),
-            state: this.lessonIsDone ? 1 : 0
-          })
-        : await this.uploadSelfLearnRecords({
-            packageId: Number(packageId),
-            lessonId: Number(lessonId),
-            state: this.lessonIsDone ? 1 : 0
-          })
+      await this.uploadSelfLearnRecords({
+        packageId: Number(packageId),
+        lessonId: Number(lessonId),
+        state: this.lessonIsDone ? 1 : 0
+      })
     }
   },
   watch: {
@@ -208,10 +196,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonDetail: 'lesson/student/lessonDetail',
-      isBeInClassroom: 'lesson/student/isBeInClassroom',
-      learnRecordsId: 'lesson/student/learnRecordsId',
-      lessonIsDone: 'lesson/student/lessonIsDone'
+      lessonDetail: 'org/student/orgLessonDetail',
+      isBeInClassroom: 'org/student/isBeInClassroom',
+      learnRecordsId: 'org/student/learnRecordsId',
+      lessonIsDone: 'org/student/lessonIsDone'
     }),
     modList() {
       return this.lessonDetail.modList || []
@@ -285,7 +273,7 @@ export default {
   max-width: 1229px;
   margin: 0 auto;
   .is-format-error {
-    color: #F56C6C;
+    color: #f56c6c;
     margin-left: 60px;
   }
   &.is-preview {

@@ -6,11 +6,14 @@ import mutations from './mutations'
 const state = {
   orgClasses: [],
   orgPackages: [],
-  orgClassPackages: {},
   orgLessonData: {},
   orgLessonDetail: {},
   classroom: {},
-  orgClassPackagesDetail: {}
+  orgPackagesDetail: {},
+  enterClassId: '',
+  learnRecordsId: '',
+  lessonDetail: {},
+  lessonQuiz: {},
 }
 
 export default {

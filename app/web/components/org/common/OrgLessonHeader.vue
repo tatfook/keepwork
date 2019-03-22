@@ -89,10 +89,10 @@
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
         <el-col :span="2" :sm="2" class="lesson-award">
-          <lesson-jewel-box v-if="!isVisitor" />
+          <!-- <lesson-jewel-box /> -->
         </el-col>
         <el-col :span="18" :sm="18">
-          <lesson-student-progress :isVisitor="isVisitor" />
+          <lesson-student-progress />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
           <lesson-references />
@@ -107,7 +107,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
-import LessonJewelBox from './LessonJewelBox'
+// import LessonJewelBox from './LessonJewelBox'
 import LessonStudentProgress from './LessonStudentProgress'
 import LessonTeacherProgress from './LessonTeacherProgress'
 import LessonReferences from './LessonReferences'
@@ -115,7 +115,7 @@ import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
   components: {
-    LessonJewelBox,
+    // LessonJewelBox,
     LessonStudentProgress,
     LessonTeacherProgress,
     KeepWorkSticky,

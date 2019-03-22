@@ -56,7 +56,7 @@ export default {
     actorType: String
   },
   mounted() {
-    console.dir(this.lessonsList)
+    console.warn(this.lessonProgressPercent)
   },
   computed: {
     isInClassroom() {
@@ -85,10 +85,10 @@ export default {
       return _.find(this.lessonsList, lesson => !lesson.isLearned)
     },
     learnedLessons() {
-      return _.filter(_.get(this.packageDetail, 'learnedLessons', []), item => item.isLearned)
+      return _.filter(this.lessonsList, item => item.isLearned)
     },
     teachedLessons() {
-      return _.filter(_.get(this.packageDetail, 'lessons', []), item => item.isTeached)
+      return _.filter(this.lessonsList, item => item.isTeached)
     },
     lessonFinishedList() {
       return this.actorType === 'teacher'
@@ -121,9 +121,11 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
-      console.log(lesson)
       if (this.isTeacher) {
-        return this.$router.push({ name: 'OrgTeacherClassPackageLesson', params: { lessonId: lesson.lessonId } })
+        return this.$router.push({
+          name: 'OrgTeacherClassPackageLesson',
+          params: { lessonId: lesson.lessonId }
+        })
       }
       if (this.isBeInClassroom) {
         const {
@@ -156,13 +158,20 @@ export default {
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
-      let targetLessonPath = `/${this.actorType}/package/${
-        this.packageDetail.id
-      }/lesson/${this.continueLearnedLesson.id}`
+      // let targetLessonPath = `/${this.actorType}/package/${
+      //   this.packageDetail.id
+      // }/lesson/${this.continueLearnedLesson.id}`
+      const rotuerObject = {
+        name: `OrgStudentPackageLesson`,
+        params: {
+          packageId: this.packageDetail.id,
+          lessonId: this.continueLearnedLesson.id
+        }
+      }
       this.toLearnConfirm(
         this.packageDetail.id,
         this.continueLearnedLesson.id,
-        targetLessonPath
+        rotuerObject
       )
     },
     toLearnAgain(lesson) {
@@ -178,33 +187,27 @@ export default {
       let targetLessonPath = `/${this.actorType}/package/${
         this.packageDetail.id
       }/lesson/${lesson.id}`
-      return this.toLearnConfirm(
-        this.packageDetail.id,
-        lesson.id,
-        targetLessonPath
-      )
+      const routerObject = {
+        name: 'OrgStudentClassPackageLesson',
+        params: { packageId: this.packageDetail.id, lessonId: this.lesson.id }
+      }
+      return this.toLearnConfirm(this.packageDetail.id, lesson.id, routerObject)
     },
-    async toLearnConfirm(_packageId, _lessonId, path) {
+    async toLearnConfirm(_packageId, _lessonId, routerObject) {
       let res = await lesson.lessons
         .getLastLearnRecords()
         .catch(e => console.error(e))
       let lastLearnRecods = _.get(res, 'rows', [])
       if (lastLearnRecods.length === 0) {
-        return this.$router.push({
-          path
-        })
+        return this.$router.push(routerObject)
       }
       if (lastLearnRecods[0].state === 1) {
-        return this.$router.push({
-          path
-        })
+        return this.$router.push(routerObject)
       }
 
       const { packageId, lessonId } = lastLearnRecods[0]
       if (_packageId === packageId && _lessonId === lessonId) {
-        return this.$router.push({
-          path
-        })
+        return this.$router.push(routerObject)
       }
       this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
         confirmButtonText: this.$t('common.Yes'),
@@ -212,7 +215,7 @@ export default {
         type: 'warning',
         customClass: 'leave-current-class'
       })
-        .then(() => this.$router.push({ path }))
+        .then(() => this.$router.push(routerObject))
         .catch(e => console.error(e))
     }
   }

@@ -2,13 +2,17 @@ import { props } from './mutations'
 import { keepwork, lesson } from '@/api'
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
-const { lessonOrganizations, lessonOrganizationClassMembers, lessonOrganizationClasses } = keepwork
+const { lessonOrganizations } = keepwork
 
 const {
   GET_ORG_CLASSES_SUCCESS,
-  GET_CLASS_PACKAGES_SUCCESS,
-  GET_CLASS_PACKAGE_DETAIL_SUCCESS,
-  GET_ORG_PACKAGES_SUCCESS
+  GET_ORG_PACKAGE_DETAIL_SUCCESS,
+  GET_ORG_PACKAGES_SUCCESS,
+  GET_LESSON_CONTENT_SUCCESS,
+  SAVE_LESSON_DETAIL,
+  DO_QUIZ,
+  CREATE_LEARN_RECORDS_SUCCESS,
+  RESUME_QUIZ
 } = props
 
 const actions = {
@@ -18,19 +22,106 @@ const actions = {
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
-  async getOrgClassPackagesById({ commit, getters: { orgClassPackages } }, { classId }) {
-    if (!orgClassPackages[classId]) {
-      const classPackages = await lessonOrganizations.getClassPackagesById({ classId })
-      commit(GET_CLASS_PACKAGES_SUCCESS, { classId, classPackages })
+  async getOrgPackages({ commit }) {
+    const orgPackages = await lessonOrganizations.getOrgStudentPackages()
+    commit(GET_ORG_PACKAGES_SUCCESS, orgPackages)
+  },
+  async getOrgPackageDetail({ commit }, { packageId }) {
+    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })
+    commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
+  },
+  async getLessonDetail({ commit }, { packageId, lessonId }) {
+    let [ res, detail ] = await Promise.all([
+      lesson.lessons.lessonContent({ lessonId }),
+      lesson.lessons.lessonDetail({ lessonId })
+    ])
+
+    let modList = Parser.buildBlockList(res.content)
+    let quiz = modList
+      .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
+      .map(({ data: { quiz: { data } } }) => ({
+        key: data[0].id,
+        data: data[0],
+        result: null,
+        answer: null
+      }))
+    commit(GET_LESSON_CONTENT_SUCCESS, {
+      lessonId,
+      content: res.content
+    })
+    commit(SAVE_LESSON_DETAIL, {
+      lessonId,
+      lesson: detail,
+      quiz,
+      modList
+    })
+  },
+  async doQuiz({ commit, getters: { orgLessonDetail } }, { key, question, result, answer }) {
+    let _lessonDetail = _.clone(orgLessonDetail)
+    let index = _.findIndex(_lessonDetail.quiz, o => o.data.title === question)
+    _lessonDetail.quiz[index].result = result
+    _lessonDetail.quiz[index].answer = answer
+    commit(DO_QUIZ, _lessonDetail)
+  },
+  async uploadSelfLearnRecords({ getters: { learnRecordsId, learnRecords } }, { packageId, lessonId, state = 0 }) {
+    if (learnRecordsId) {
+      await lesson.users
+        .uploadSelfLearnRecords(learnRecordsId, {
+          packageId,
+          lessonId,
+          state,
+          extra: learnRecords
+        })
+        .catch(e => console.error(e))
     }
   },
-  async getOrgPackages({ commit }) {
-    const studentPackages = await lessonOrganizations.getOrgStudentPackages()
-    commit(GET_ORG_PACKAGES_SUCCESS, studentPackages)
+  async createLearnRecords({ commit, getters: { learnRecords, lessonUserId } }, { packageId, lessonId, state = 0 }) {
+    let res = await lesson.users
+      .createLearnRecords({
+        packageId,
+        lessonId,
+        state,
+        extra: learnRecords
+      })
+      .catch(e => console.error(e))
+    if (res) {
+      commit(CREATE_LEARN_RECORDS_SUCCESS, res.id)
+    }
   },
-  async getOrgClassPackageDetail({ commit }, { classId, packageId }) {
-    const packageDetail = await lessonOrganizationClasses.getClassPackageDetail({ classId, packageId })
-    commit(GET_CLASS_PACKAGE_DETAIL_SUCCESS, { classId, packageId, packageDetail })
+  resumeLearnRecordsId({ commit }, id) {
+    commit(CREATE_LEARN_RECORDS_SUCCESS, id)
+  },
+  async resumeQuiz(
+    {
+      commit,
+      getters: { lessonQuiz, orgLessonDetail }
+    },
+    { id, learnRecords = null }
+  ) {
+    if (!learnRecords && id) {
+      learnRecords = await lesson.classrooms
+        .learnRecordsById(id)
+        .catch(e => console.error("can't find learnRecords"))
+    }
+    if (learnRecords && learnRecords.extra.quiz) {
+      let quiz = _.get(learnRecords, 'extra.quiz', lessonQuiz)
+      let _lessonDetail = _.clone(orgLessonDetail)
+      _lessonDetail.quiz = quiz
+      let filterQuiz = _.filter(quiz, ({ answer }) => answer)
+      _.forEach(_lessonDetail.modList, q => {
+        if (q.cmd === 'Quiz') {
+          let quiz = _.find(filterQuiz, o => o.data.title === q.data.quiz.data[0].title)
+          if (quiz) {
+            q.state = { result: quiz.result, answer: quiz.answer }
+          }
+        }
+      })
+      commit(RESUME_QUIZ, _lessonDetail)
+    }
+    // if (learnRecords && learnRecords.extra.status) {
+    //   let status = learnRecords.extra.status.split('')[0]
+    //   commit(SWITCH_DEVICE, status)
+    // }
   },
 }
 

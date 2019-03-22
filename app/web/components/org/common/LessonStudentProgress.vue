@@ -46,16 +46,19 @@ export default {
       redoLoading: false
     }
   },
+  mounted() {
+      console.log(this.lessonQuizCount)
+  },
   computed: {
     ...mapGetters({
-      lessonQuiz: 'lesson/student/lessonQuiz',
-      lessonQuizCount: 'lesson/student/lessonQuizCount',
-      lessonQuizDone: 'lesson/student/lessonQuizDone',
-      lessonQuizProgress: 'lesson/student/lessonQuizProgress',
-      lessonIsDone: 'lesson/student/lessonIsDone',
-      isShowSummary: 'lesson/student/isShowSummary',
-      isQuizAllRight: 'lesson/student/isQuizAllRight',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
+      lessonQuiz: 'org/student/lessonQuiz',
+      lessonQuizCount: 'org/student/lessonQuizCount',
+      lessonQuizDone: 'org/student/lessonQuizDone',
+      lessonQuizProgress: 'org/student/lessonQuizProgress',
+      lessonIsDone: 'org/student/lessonIsDone',
+      isShowSummary: 'org/student/isShowSummary',
+      isQuizAllRight: 'org/student/isQuizAllRight',
+      isBeInClassroom: 'org/student/isBeInClassroom'
     }),
     isQuizLight() {
       return !this.isShowSummary
@@ -129,13 +132,13 @@ export default {
   flex-direction: row;
   align-items: center;
   .progress-point {
-    $size: 30px;
+    $size: 33px;
     display: inline-block;
     height: $size;
     width: $size;
     border-radius: 50%;
     background: $green;
-    border: 6px solid white;
+    border: 3px solid white;
     box-shadow: 1px 3px 6px rgb(185, 185, 185);
     &.grey {
       $size: 33px;

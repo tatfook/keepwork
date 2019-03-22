@@ -11,7 +11,8 @@ const getters = {
   getOrgPackagesGraphqlById: state => ({ id }) => _.get(state.orgPackagesGraphql, id),
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
-  getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id)
+  getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
+  howManyDays: state => 0
 }
 
 export default getters

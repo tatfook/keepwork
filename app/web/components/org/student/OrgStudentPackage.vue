@@ -1,10 +1,10 @@
 <template>
-  <div class="org-teahcer-class-package" v-if="!isLoading">
+  <div class="org-student-class-package" v-if="!isLoading">
     <org-header></org-header>
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgTeacher' }">上课</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgStudent' }">课程包</el-breadcrumb-item>
           <el-breadcrumb-item>
             <el-dropdown @command="handleSelectPackage">
               <span class="el-dropdown-link">
@@ -18,18 +18,18 @@
         </el-breadcrumb>
       </div>
     </div>
-    <org-package-detail :actorType="actorType" :packageDetail="packageDetail"></org-package-detail>
+    <org-package-detail actorType="student" :packageDetail="packageDetail"></org-package-detail>
   </div>
 </template>
+
 
 <script>
 import OrgHeader from '../common/OrgHeader'
 import OrgPackageDetail from '../common/OrgPackageDetail'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
-
 export default {
-  name: 'OrgTeacherClassPackage',
+  name: 'OrgStudentPackage',
   components: {
     OrgHeader,
     OrgPackageDetail
@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       isLoading: true,
-      classId: '',
       packageId: ''
     }
   },
@@ -54,43 +53,45 @@ export default {
       await this.gettPackageDetail()
     }
   },
+  destroyed() {
+    window.document.title = 'Keepwork'
+  },
   methods: {
     ...mapActions({
-      getOrgClassPackageDetail: 'org/teacher/getOrgClassPackageDetail',
-      getOrgClassPackagesById: 'org/teacher/getOrgClassPackagesById'
+      getOrgPackageDetail: 'org/student/getOrgPackageDetail',
+      getOrgPackages: 'org/student/getOrgPackages'
     }),
     handleSelectPackage(packageId) {
       const { name, params } = this.$route
       this.$router.push({ name, params: { ...params, packageId } })
     },
     async gettPackageDetail() {
-      const { classId, packageId, orgLoginUrl } = this.$route.params
-      this.classId = _.toNumber(classId)
+      const { packageId, orgLoginUrl } = this.$route.params
       this.packageId = _.toNumber(packageId)
       await Promise.all([
-        this.getOrgClassPackageDetail({
-          classId: this.classId,
+        this.getOrgPackageDetail({
           packageId: this.packageId
         }),
-        this.getOrgClassPackagesById({ classId: this.classId })
+        this.getOrgPackages({ classId: this.classId })
       ])
+      window.document.title = this.currentPackageName
     }
   },
   computed: {
     ...mapGetters({
-      orgClassPackagesDetail: 'org/teacher/orgClassPackagesDetail',
-      orgClassPackages: 'org/teacher/orgClassPackages'
+      orgPackagesDetail: 'org/student/orgPackagesDetail',
+      orgPackages: 'org/student/orgPackages'
     }),
     currentClassPackages() {
-      return _.map(_.get(this.orgClassPackages, [this.classId], []), item => ({
+      return _.map(this.orgPackages, item => ({
         ...item,
         ...item.package
       }))
     },
     currentPackageDetail() {
       return _.get(
-        this.orgClassPackagesDetail,
-        [this.classId, this.packageId],
+        this.orgPackagesDetail,
+        [this.packageId],
         {}
       )
     },
@@ -102,16 +103,14 @@ export default {
         ...this.currentPackageDetail,
         ...this.currentPackageDetail.package
       }
-    },
-    actorType() {
-      return 'teacher'
     }
   }
 }
 </script>
 
+
 <style lang="scss" scoped>
-.org-teahcer-class-package {
+.org-student-class-package {
   .org-breadcrumb {
     background: #fff;
     color: #999;
@@ -132,4 +131,3 @@ export default {
   }
 }
 </style>
-

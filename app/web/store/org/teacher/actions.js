@@ -78,6 +78,7 @@ const actions = {
     ])
     // if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
+    console.log(modList)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
       .map(({ data: { quiz: { data } } }) => ({
