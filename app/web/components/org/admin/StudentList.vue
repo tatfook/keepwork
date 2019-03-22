@@ -13,12 +13,12 @@
       </el-table-column>
       <el-table-column prop="classesString" label="班级" width="172" :show-overflow-tooltip="true">
       </el-table-column>
-       <el-table-column prop="createdAt" label="时间" width="172" :show-overflow-tooltip="true">
+      <el-table-column prop="createdAt" label="时间" width="172" :show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column prop="id" label="操作">
         <template slot-scope="scope">
           <div class="student-list-table-operations">
-            <div class="student-list-table-button student-list-table-button-primary">编辑</div>
+            <div class="student-list-table-button student-list-table-button-primary" @click="toEditPage(scope.row)">编辑</div>
             <div class="student-list-table-button" @click="confirmRemoveStudent(scope.row)">移出</div>
           </div>
         </template>
@@ -56,7 +56,6 @@ export default {
     orgStudentsWithClassesString() {
       return _.map(this.orgStudents, student => {
         let classes = student.lessonOrganizationClasses
-        console.log(classes)
         let classNameArr = _.map(classes, classDetail => classDetail.name)
         student.classesString = _.join(classNameArr, '、')
         return student
@@ -76,14 +75,28 @@ export default {
       }).catch(() => {})
       this.isLoading = false
     },
-    confirmRemoveStudent(teacherDetail) {
-      let { id, realname } = teacherDetail
+    confirmRemoveStudent(studentDetail) {
+      let { id, realname } = studentDetail
       this.$confirm(`是否确定删除学生${realname}?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.removeStudent(id)
+      })
+    },
+    toEditPage(studentDetail) {
+      let { realname, users, lessonOrganizationClasses, roleId } = studentDetail
+      this.$router.push({
+        name: 'OrgEditStudent',
+        query: {
+          roleId,
+          realname,
+          memberName: users.username,
+          classIds: JSON.stringify(
+            _.map(lessonOrganizationClasses, classObj => classObj.id)
+          )
+        }
       })
     }
   }
