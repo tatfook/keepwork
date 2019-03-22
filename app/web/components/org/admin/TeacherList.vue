@@ -1,23 +1,23 @@
 <template>
   <div class="teacher-list" v-loading="isLoading">
     <div class="teacher-list-header">
-      <div class="teacher-list-header-count">教师数：{{orgTeachers.length}}</div>
+      <div class="teacher-list-header-count">{{$t('org.IncludeTeachers') + orgTeachers.length + $t('org.teacherCountUnit')}}</div>
       <router-link class="teacher-list-header-new" :to="{name: 'OrgNewTeacher'}">
-        <i class="el-icon-circle-plus-outline"></i>添加老师
+        <i class="el-icon-circle-plus-outline"></i>{{$t('org.addTeachers')}}
       </router-link>
     </div>
     <el-table class="teacher-list-table" border :data="orgTeachersWithClassesString" header-row-class-name="teacher-list-table-header">
-      <el-table-column prop="realname" label="姓名" width="214">
+      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="214">
       </el-table-column>
-      <el-table-column prop="username" label="用户名" width="214">
+      <el-table-column prop="username" :label="$t('org.usernameLabel')" width="214">
       </el-table-column>
-      <el-table-column prop="classesString" label="班级" width="214" :show-overflow-tooltip="true">
+      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="214" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="id" label="操作">
+      <el-table-column prop="id" :label="$t('org.operationLabel')">
         <template slot-scope="scope">
           <div class="teacher-list-table-operations">
-            <div class="teacher-list-table-button teacher-list-table-button-primary" @click="toEditPage(scope.row)">编辑</div>
-            <div class="teacher-list-table-button" @click="confirmRemoveTeacher(scope.row)">移出</div>
+            <div class="teacher-list-table-button teacher-list-table-button-primary" @click="toEditPage(scope.row)">{{$t('org.Edit')}}</div>
+            <div class="teacher-list-table-button" @click="confirmRemoveTeacher(scope.row)">{{$t('org.Remove')}}</div>
           </div>
         </template>
       </el-table-column>

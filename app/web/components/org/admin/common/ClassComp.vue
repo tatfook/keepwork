@@ -2,12 +2,12 @@
   <div class="class-comp">
     <div class="class-comp-header">
       <el-breadcrumb class="class-comp-header-breadcrumb" separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ name: 'OrgClassList' }">班级</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'OrgClassList' }">{{$t('org.ClassesLabel')}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{nowPageText}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="class-comp-header-operate">
-        <el-button v-if="!isDetailPage" size="medium" @click="toClassListPage">取消</el-button>
-        <el-button v-if="!isDetailPage" size="medium" type="primary" @click="save" :disabled="!isClassDataValid">保存</el-button>
+        <el-button v-if="!isDetailPage" size="medium" @click="toClassListPage">{{$t('common.Cancel')}}</el-button>
+        <el-button v-if="!isDetailPage" size="medium" type="primary" @click="save" :disabled="!isClassDataValid">{{$t('common.Save')}}</el-button>
         <router-link class="class-comp-header-edit" v-if="isDetailPage" :to="{name: 'OrgEditClass', query: classDetail}">
           <i class="el-icon-edit-outline"></i>
         </router-link>
@@ -15,12 +15,12 @@
     </div>
     <div class="class-comp-form">
       <div class="class-comp-form-item">
-        <div class="class-comp-form-label">班级名称</div>
-        <el-input :disabled='!isNewPage' placeholder="请输入班级名称" v-model="classData.name"></el-input>
-        <div class="class-comp-form-danger">（注意：班级名称，一经设置，不得修改。）</div>
+        <div class="class-comp-form-label">{{$t('org.ClassNameLabel')}}</div>
+        <el-input :disabled='!isNewPage' :placeholder="$t('org.pleaseInput')" v-model="classData.name"></el-input>
+        <div class="class-comp-form-danger">{{$t('org.classNameCannotBeModifiedAfterSaved')}}</div>
       </div>
       <div class="class-comp-form-item">
-        <div class="class-comp-form-label">可使用的课程包</div>
+        <div class="class-comp-form-label">{{$t('org.LessonPackagesAvailable')}}:</div>
         <el-tree ref="lessonTree" v-loading='isTreeLoading' class="class-comp-form-tree" :data='formatedTreeData' default-expand-all show-checkbox check-on-click-node :expand-on-click-node='false' node-key="id">
         </el-tree>
       </div>
@@ -70,7 +70,7 @@ export default {
       let pageText = ''
       switch (this.$route.name) {
         case 'OrgNewClass':
-          pageText = '创建班级'
+          pageText = this.$t('org.NewClass')
           break
         case 'OrgEditClass':
         case 'OrgClassDetail':

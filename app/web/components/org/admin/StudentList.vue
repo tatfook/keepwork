@@ -1,25 +1,25 @@
 <template>
   <div class="student-list" v-loading="isLoading">
     <div class="student-list-header">
-      <div class="student-list-header-count">学生数：{{orgStudents.length}}</div>
+      <div class="student-list-header-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
       <router-link class="student-list-header-new" :to="{name: 'OrgNewStudent'}">
-        <i class="el-icon-circle-plus-outline"></i>添加学生
+        <i class="el-icon-circle-plus-outline"></i>{{$t('org.addStudents')}}
       </router-link>
     </div>
     <el-table class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
-      <el-table-column prop="realname" label="姓名" width="172">
+      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="172">
       </el-table-column>
-      <el-table-column prop="users.username" label="用户名" width="172">
+      <el-table-column prop="users.username" :label="$t('org.usernameLabel')" width="172">
       </el-table-column>
-      <el-table-column prop="classesString" label="班级" width="172" :show-overflow-tooltip="true">
+      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="172" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="createdAt" label="时间" width="172" :show-overflow-tooltip="true">
+      <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="172" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="id" label="操作">
+      <el-table-column prop="id" :label="$t('org.operationLabel')">
         <template slot-scope="scope">
           <div class="student-list-table-operations">
-            <div class="student-list-table-button student-list-table-button-primary" @click="toEditPage(scope.row)">编辑</div>
-            <div class="student-list-table-button" @click="confirmRemoveStudent(scope.row)">移出</div>
+            <div class="student-list-table-button student-list-table-button-primary" @click="toEditPage(scope.row)">{{$t('org.Edit')}}</div>
+            <div class="student-list-table-button" @click="confirmRemoveStudent(scope.row)">{{$t('org.Remove')}}</div>
           </div>
         </template>
       </el-table-column>

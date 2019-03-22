@@ -6,7 +6,7 @@
           <router-link class="org-classes-menu-link" :to='{name: menu.pageName}'>{{menu.text}}</router-link>
         </div>
       </div>
-      <div class="org-classes-available">可添加用户数：<span class="org-classes-available-warning">50人</span></div>
+      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">50{{$t('org.usersCount')}}</span></div>
     </div>
     <router-view></router-view>
   </div>
@@ -19,15 +19,15 @@ export default {
       menuData: [
         {
           pageName: 'OrgClassList',
-          text: '班级'
+          text: this.$t('org.ClassesLabel')
         },
         {
           pageName: 'OrgTeacherList',
-          text: '教师'
+          text: this.$t('org.TeachersLabel')
         },
         {
           pageName: 'OrgStudentList',
-          text: '学生'
+          text: this.$t('org.StudentsLabel')
         }
       ]
     }
