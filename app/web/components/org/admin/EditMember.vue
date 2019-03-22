@@ -3,22 +3,22 @@
     <div class="edit-member-header">
       <el-breadcrumb class="edit-member-header-breadcrumb" separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ name: memberTypeListPageName }">{{memberTypeText}}</el-breadcrumb-item>
-        <el-breadcrumb-item>编辑{{memberTypeText}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{editMemberTypeText}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="edit-member-header-operate">
-        <el-button size="medium" @click="toMemberListPage">取消</el-button>
-        <el-button v-loading="isLoading" size="medium" @click="updateMember" type="primary">保存</el-button>
+        <el-button size="medium" @click="toMemberListPage">{{$t('common.Cancel')}}</el-button>
+        <el-button v-loading="isLoading" size="medium" @click="updateMember" type="primary">{{$t('common.Save')}}</el-button>
       </div>
     </div>
     <el-form ref="memberForm" class="edit-member-form" label-position="left" label-width="78px" :model="memberData" :hide-required-asterisk="true">
-      <el-form-item :label="`${memberTypeText}姓名`" :rules="memberRules.realname">
-        <el-input placeholder="请输入教师姓名" v-model="memberData.realname"></el-input>
+      <el-form-item :label="memberTypeNameLabel" :rules="memberRules.realname">
+        <el-input :placeholder="$t('org.pleaseInput')" v-model="memberData.realname"></el-input>
       </el-form-item>
-      <el-form-item label="用户名" :rules="memberRules.memberName">
-        <el-input disabled placeholder="请输入keepwork用户名" v-model="memberData.memberName"></el-input>
+      <el-form-item :label="$t('org.usernameLabel')" :rules="memberRules.memberName">
+        <el-input disabled :placeholder="$t('org.KeepworkUsername')" v-model="memberData.memberName"></el-input>
       </el-form-item>
-      <el-form-item label="班级">
-        <el-select v-model="memberData.classIds" placeholder="请选择班级" multiple>
+      <el-form-item :label="$t('org.classLabel')">
+        <el-select v-model="memberData.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
           <span :title="memberData.classIds | idToTextFilter(orgClasses)" class="edit-member-form-selected" slot="prefix">{{memberData.classIds | idToTextFilter(orgClasses)}}</span>
           <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
         </el-select>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'EditMember',
@@ -66,6 +67,9 @@ export default {
       currentOrg: 'org/currentOrg',
       getOrgClassesById: 'org/getOrgClassesById'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
@@ -79,10 +83,22 @@ export default {
       return _.get(this.queryData, 'roleId')
     },
     memberTypeText() {
-      return this.memberRoleId === 1 ? '学生' : '教师'
+      return this.memberRoleId === 1
+        ? this.$t('org.StudentsLabel')
+        : this.$t('org.TeachersLabel')
     },
     memberTypeListPageName() {
       return this.memberRoleId === 1 ? 'OrgStudentList' : 'OrgTeacherList'
+    },
+    editMemberTypeText() {
+      return this.isEn
+        ? this.$t('org.Edit') + ' ' + this.memberTypeText
+        : this.$t('org.Edit') + this.memberTypeText
+    },
+    memberTypeNameLabel() {
+      return this.isEn
+        ? this.$t('org.nameLabel')
+        : this.memberTypeText + this.$t('org.nameLabel')
     }
   },
   methods: {

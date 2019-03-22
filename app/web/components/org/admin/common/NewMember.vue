@@ -3,23 +3,23 @@
     <div class="new-member-header">
       <el-breadcrumb class="new-member-header-breadcrumb" separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ name: memberTypeListPageName }">{{memberTypeText}}</el-breadcrumb-item>
-        <el-breadcrumb-item>添加{{memberTypeText}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('org.Add')}}{{memberTypeText}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="new-member-header-operate">
-        <el-button size="medium" @click="toMemberListPage">取消</el-button>
-        <el-button v-loading="isLoading" size="medium" @click="saveNewMembers" type="primary">保存</el-button>
+        <el-button size="medium" @click="toMemberListPage">{{$t('common.Cancel')}}</el-button>
+        <el-button v-loading="isLoading" size="medium" @click="saveNewMembers" type="primary">{{$t('common.Save')}}</el-button>
       </div>
     </div>
     <div class="new-member-list">
       <el-form :ref="`form-${index}`" class="new-member-item" :inline="true" v-for="(newMemberItem, index) in newMembers" :key="index" :model="newMemberItem">
-        <el-form-item class="new-member-item-form-item" :label="`${memberTypeText}姓名`" :rules="newMemberRules.realname">
-          <el-input v-model="newMemberItem.realname" placeholder="请输入"></el-input>
+        <el-form-item class="new-member-item-form-item" :label="memberTypeNameLabel" :rules="newMemberRules.realname">
+          <el-input v-model="newMemberItem.realname" :placeholder="$t('org.pleaseInput')"></el-input>
         </el-form-item>
-        <el-form-item class="new-member-item-form-item" label="用户名" :rules="newMemberRules.memberName">
-          <el-input v-model="newMemberItem.memberName" placeholder="keepwork用户名"></el-input>
+        <el-form-item class="new-member-item-form-item" :label="$t('org.usernameLabel')" :rules="newMemberRules.memberName">
+          <el-input v-model="newMemberItem.memberName" :placeholder="$t('org.KeepworkUsername')"></el-input>
         </el-form-item>
-        <el-form-item class="new-member-item-form-item" label="班级">
-          <el-select v-model="newMemberItem.classIds" placeholder="请选择" multiple>
+        <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')">
+          <el-select v-model="newMemberItem.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
             <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses)}}</span>
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
@@ -31,12 +31,13 @@
     </div>
     <div class="new-member-add">
       <span @click="pushNewMemberData" class="new-member-add-button">
-        <i class="el-icon-circle-plus-outline"></i>继续添加
+        <i class="el-icon-circle-plus-outline"></i>{{$t('org.continueAdd')}}
       </span>
     </div>
   </div>
 </template>
 <script>
+import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'NewMember',
@@ -78,6 +79,9 @@ export default {
       currentOrg: 'org/currentOrg',
       getOrgClassesById: 'org/getOrgClassesById'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
@@ -88,10 +92,17 @@ export default {
       return this.memberType === 'student' ? 'OrgStudentList' : 'OrgTeacherList'
     },
     memberTypeText() {
-      return this.memberType === 'student' ? '学生' : '教师'
+      return this.memberType === 'student'
+        ? this.$t('org.StudentsLabel')
+        : this.$t('org.TeachersLabel')
     },
     memberTypeRoleId() {
       return this.memberType === 'student' ? 1 : 2
+    },
+    memberTypeNameLabel() {
+      return this.isEn
+        ? this.$t('org.nameLabel')
+        : this.memberTypeText + this.$t('org.nameLabel')
     }
   },
   methods: {
