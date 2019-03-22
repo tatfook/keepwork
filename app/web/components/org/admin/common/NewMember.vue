@@ -19,7 +19,8 @@
           <el-input v-model="newMemberItem.memberName" placeholder="keepwork用户名"></el-input>
         </el-form-item>
         <el-form-item class="new-member-item-form-item" label="班级">
-          <el-select v-model="newMemberItem.classId" placeholder="请选择">
+          <el-select v-model="newMemberItem.classIds" placeholder="请选择" multiple @change="handleSelectedChanged">
+            <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses)}}</span>
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
@@ -102,7 +103,7 @@ export default {
       this.newMembers.push({
         realname: '',
         memberName: '',
-        classId: this.orgClasses[0].id
+        classIds: [this.orgClasses[0].id]
       })
     },
     removeNewMember(index) {
@@ -117,12 +118,12 @@ export default {
       await new Promise(async (resolve, reject) => {
         const form = this.$refs[`form-${index}`][0]
         const newMemberData = this.newMembers[index]
-        const { realname, memberName, classId } = newMemberData
+        const { realname, memberName, classIds } = newMemberData
         form.validate(async valid => {
           if (valid) {
             await this.orgCreateNewMember({
               organizationId: this.orgId,
-              classId,
+              classIds,
               memberName,
               realname,
               roleId: this.memberTypeRoleId
@@ -134,7 +135,9 @@ export default {
               .catch(error => {
                 switch (error.status) {
                   case 409:
-                    this.$message.error(`用户名:[${memberName}]已在${this.memberTypeText}列表中`)
+                    this.$message.error(
+                      `用户名:[${memberName}]已在${this.memberTypeText}列表中`
+                    )
                     break
                   case 400:
                     this.$message.error(`用户名:[${memberName}]不存在`)
@@ -163,6 +166,13 @@ export default {
         })
         this.toMemberListPage()
       }
+    }
+  },
+  filters: {
+    idToTextFilter(ids, classes) {
+      return _.map(ids, id => {
+        return _.find(classes, { id }).name
+      }).join('、')
     }
   }
 }
@@ -198,6 +208,14 @@ $borderColor: #e8e8e8;
     margin-bottom: 24px;
     &-form-item {
       margin: 0 16px 0 0;
+      &-selected {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: inline-block;
+        color: #606266;
+      }
       .el-form-item__content {
         width: 215px;
       }
@@ -218,6 +236,29 @@ $borderColor: #e8e8e8;
       text-align: left;
       padding: 0 16px;
       line-height: unset;
+    }
+    .el-select {
+      .el-input__prefix {
+        right: 32px;
+        z-index: 2;
+        background-color: #fff;
+        top: 2px;
+        height: 36px;
+        line-height: 36px;
+        text-align: left;
+        padding-left: 11px;
+        cursor: pointer;
+      }
+      .el-select__tags {
+        overflow: hidden;
+        & > span {
+          display: inline-block;
+          white-space: nowrap;
+        }
+      }
+      .el-tag__close.el-icon-close {
+        display: none;
+      }
     }
     .el-icon-error {
       font-size: 22px;

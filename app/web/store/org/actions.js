@@ -105,12 +105,13 @@ const actions = {
   },
   async createNewMember(
     context,
-    { organizationId, classId, memberName, realname, roleId }
+    { organizationId, classId, classIds, memberName, realname, roleId }
   ) {
     let result = await keepwork.lessonOrganizationClassMembers
       .createClassMember({
         organizationId,
         classId,
+        classIds,
         memberName,
         realname,
         roleId

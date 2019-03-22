@@ -356,7 +356,7 @@ export const lessonOrganizationClasses = {
 export const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
   getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
-  createClassMember: async ({ organizationId, classId, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, memberName, realname, roleId }),
+  createClassMember: async ({ organizationId, classId, classIds, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, classIds, memberName, realname, roleId }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
