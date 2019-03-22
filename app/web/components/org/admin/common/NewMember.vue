@@ -19,7 +19,7 @@
           <el-input v-model="newMemberItem.memberName" placeholder="keepwork用户名"></el-input>
         </el-form-item>
         <el-form-item class="new-member-item-form-item" label="班级">
-          <el-select v-model="newMemberItem.classIds" placeholder="请选择" multiple @change="handleSelectedChanged">
+          <el-select v-model="newMemberItem.classIds" placeholder="请选择" multiple>
             <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses)}}</span>
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>

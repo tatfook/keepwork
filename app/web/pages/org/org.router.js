@@ -3,7 +3,8 @@ import Router from 'vue-router'
 const OrgLogin = () => import('@/components/org/OrgLogin')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
-const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherStatistics = () =>
+  import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
@@ -17,6 +18,7 @@ const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
 const NewStudent = () => import('@/components/org/admin/NewStudent')
+const EditMember = () => import('@/components/org/admin/EditMember')
 
 Vue.use(Router)
 
@@ -106,6 +108,11 @@ export default new Router({
               component: NewTeacher
             },
             {
+              path: 'teacher/edit',
+              name: 'OrgEditTeacher',
+              component: EditMember
+            },
+            {
               path: 'student',
               name: 'OrgStudentList',
               component: StudentList
@@ -114,6 +121,11 @@ export default new Router({
               path: 'student/new',
               name: 'OrgNewStudent',
               component: NewStudent
+            },
+            {
+              path: 'student/edit',
+              name: 'OrgEditStudent',
+              component: EditMember
             }
           ]
         },

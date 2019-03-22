@@ -16,7 +16,7 @@
       <el-table-column prop="id" label="操作">
         <template slot-scope="scope">
           <div class="teacher-list-table-operations">
-            <div class="teacher-list-table-button teacher-list-table-button-primary">编辑</div>
+            <div class="teacher-list-table-button teacher-list-table-button-primary" @click="toEditPage(scope.row)">编辑</div>
             <div class="teacher-list-table-button" @click="confirmRemoveTeacher(scope.row)">移出</div>
           </div>
         </template>
@@ -81,6 +81,18 @@ export default {
         type: 'warning'
       }).then(() => {
         this.removeTeacher(id)
+      })
+    },
+    toEditPage(teacherDetail) {
+      let { realname, username, classes, roleId } = teacherDetail
+      this.$router.push({
+        name: 'OrgEditTeacher',
+        query: {
+          roleId,
+          realname,
+          memberName: username,
+          classIds: JSON.stringify(_.map(classes, classObj => classObj.id))
+        }
       })
     }
   }
