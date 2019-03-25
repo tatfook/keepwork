@@ -128,13 +128,13 @@ const actions = {
         return Promise.reject(error.response)
       })
   },
-  async getOrgStudentList(context, { organizationId }) {
+  async getOrgStudentList(context, { organizationId, classId }) {
     let { commit } = context
-    let result = await keepwork.lessonOrganizationClassMembers.getStudents({
-      organizationId
-    })
+    let result = classId
+      ? await keepwork.lessonOrganizationClassMembers.getStudentsByClassId({ organizationId, classId })
+      : await keepwork.lessonOrganizationClassMembers.getStudents({ organizationId })
     let orgStudents = result.rows
-    commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents })
+    commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents, classId })
   },
   async updateOrg(context, { orgLoginUrl, orgId, orgData }) {
     let { dispatch } = context
