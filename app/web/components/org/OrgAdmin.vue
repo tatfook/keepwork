@@ -33,7 +33,18 @@ export default {
           text: this.$t('org.lessonPackage')
         },
         {
-          pageNames: ['OrgClassList', 'OrgNewClass', 'OrgTeacherList', 'OrgStudentList'],
+          pageNames: [
+            'OrgClassList',
+            'OrgNewClass',
+            'OrgEditClass',
+            'OrgClassDetail',
+            'OrgTeacherList',
+            'OrgNewTeacher',
+            'OrgEditTeacher',
+            'OrgStudentList',
+            'OrgNewStudent',
+            'OrgEditStudent'
+          ],
           indexPageName: 'OrgClassList',
           text: this.$t('org.classInfoManage')
         },
