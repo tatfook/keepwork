@@ -12,6 +12,7 @@ import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
 import createPersistedState from '@/store/createPersistedState'
 import router from './org.router'
+import appModule from '@/store/app'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
 import ElementUI from 'element-ui'
@@ -40,6 +41,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    app: appModule,
     user: userModule,
     org: orgModule
   },

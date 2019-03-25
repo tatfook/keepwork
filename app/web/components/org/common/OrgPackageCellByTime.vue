@@ -1,7 +1,7 @@
 <template>
   <div class="org-package-append">
     <div class="org-package-append-header">最近上课: <span class="last-teach-time">{{lastTeachTime}}</span></div>
-    <org-package-cell :packageData="packageData"></org-package-cell>
+    <org-package-cell :packageData="packageData" @package-click="handleCallback"></org-package-cell>
   </div>
 </template>
 
@@ -15,7 +15,12 @@ export default {
       default() {
         return {}
       }
-    },
+    }
+  },
+  methods: {
+    handleCallback(packageId) {
+      this.$emit('package-click', packageId)
+    }
   },
   computed: {
     lastTeachTime() {
