@@ -9,6 +9,9 @@ const DO_QUIZ = 'DO_QUIZ'
 const RESUME_QUIZ = 'RESUME_QUIZ'
 const CLEAR_LESSON_DATA = 'CLEAR_LESSON_DATA'
 const CREATE_LEARN_RECORDS_SUCCESS = 'CREATE_LEARN_RECORDS_SUCCESS'
+const ENTER_CLASSROOM = 'ENTER_CLASSROOM'
+const RESUME_CLASSROOM = 'RESUME_CLASSROOM'
+const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -20,6 +23,9 @@ export const props = {
   RESUME_QUIZ,
   CLEAR_LESSON_DATA,
   CREATE_LEARN_RECORDS_SUCCESS,
+  ENTER_CLASSROOM,
+  RESUME_CLASSROOM,
+  LEAVE_THE_CLASS
 }
 
 const mutations = {
@@ -42,7 +48,6 @@ const mutations = {
     Vue.set(state, 'orgLessonDetail', payload)
   },
   [DO_QUIZ](state, payload) {
-    console.log(payload)
     Vue.set(state, 'orgLessonDetail', payload)
   },
   [RESUME_QUIZ](state, payload) {
@@ -54,6 +59,15 @@ const mutations = {
   [CREATE_LEARN_RECORDS_SUCCESS](state, id) {
     Vue.set(state, 'learnRecordsId', id)
   },
+  [ENTER_CLASSROOM](state, payload) {
+    Vue.set(state, 'classroom', payload)
+  },
+  [RESUME_CLASSROOM](state, payload) {
+    Vue.set(state, 'classroom', payload)
+  },
+  [LEAVE_THE_CLASS](state) {
+    Vue.set('classroom', {})
+  }
 }
 
 export default mutations

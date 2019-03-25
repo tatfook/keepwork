@@ -14,7 +14,13 @@ const getters = {
   isTeaching: (state, { classroom }) => _.get(classroom, 'state', '') === 1,
   isClassOver: (state, { classroom }) => _.get(classroom, 'state', '') === 2,
   classId: (state, { classroom }) => classroom.id,
-  isShowLessonHint: state => state.isShowLessonHint
+  classroomId: (state, { classroom }) => classroom.id,
+  isShowLessonHint: state => state.isShowLessonHint,
+  isClassIsOver: (state, { classroom }) => classroom.state === 2,
+  classroomLearnRecord: state => state.classroomLearnRecord,
+  learnRecords: state => state.learnRecords,
+  classroomQuiz: state => state.classroomQuiz,
+  isBeInClass: (state, { classroom }) => !_.isEmpty(classroom)
 }
 
 export default getters

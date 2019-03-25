@@ -10,7 +10,11 @@ const state = {
   orgClassPackagesDetail: {},
   orgLessonData: {},
   orgLessonDetail: {},
-  classroom: {}
+  classroom: {},
+  learnRecords: [],
+  lessonContent: {},
+  classroomLearnRecord: [],
+  classroomQuiz: []
 }
 export default {
   namespaced: true,

@@ -1,6 +1,5 @@
 <template>
   <div class="org-teacher">
-    <org-header></org-header>
     <div class="org-teacher-container">
       <div class="org-teacher-sidebar">
         <div class="org-teacher-message">
@@ -19,7 +18,6 @@
   </div>
 </template>
 <script>
-import OrgHeader from '@/components/org/common/OrgHeader'
 export default {
   name: 'OrgTeacher',
   data() {
@@ -45,9 +43,6 @@ export default {
     nowPageName() {
       return _.get(this.$route, 'name')
     }
-  },
-  components: {
-    OrgHeader
   }
 }
 </script>

@@ -78,7 +78,6 @@ const actions = {
     ])
     // if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
-    console.log(modList)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
       .map(({ data: { quiz: { data } } }) => ({
@@ -121,12 +120,8 @@ const actions = {
       commit(DISMISS_THE_CLASS_SUCCESS, _classroom)
     }
   },
-  async updateLearnRecords(context, payload) {
-    const {
-      commit,
-      getters: { classId }
-    } = context
-    let learnRecords = await lesson.classrooms.learnRecords({
+  async updateLearnRecords({ commit, getters: { classId } }, payload) {
+    const learnRecords = await lesson.classrooms.learnRecords({
       classId
     })
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
@@ -143,14 +138,14 @@ const actions = {
   async resumeClassData({ commit }, payload) {
     commit(GET_CURRENT_CLASSROOM_SUCCESS, payload)
   },
-  async copyClassroomQuiz({ commit, getters: { isBeInClass, isClassIsOver, lessonDetail } }) {
+  async copyClassroomQuiz({ commit, getters: { isBeInClass, isClassIsOver, orgLessonDetail } }) {
     if (isBeInClass && !isClassIsOver) {
-      commit(COPY_CLASSROOM_QUIZ, _.get(lessonDetail, 'quiz', []))
+      commit(COPY_CLASSROOM_QUIZ, _.get(orgLessonDetail, 'quiz', []))
     }
   },
   async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
     isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
-  },
+  }
 }
 
 export default actions

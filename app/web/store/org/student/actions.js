@@ -12,7 +12,10 @@ const {
   SAVE_LESSON_DETAIL,
   DO_QUIZ,
   CREATE_LEARN_RECORDS_SUCCESS,
-  RESUME_QUIZ
+  RESUME_QUIZ,
+  ENTER_CLASSROOM,
+  RESUME_CLASSROOM,
+  LEAVE_THE_CLASS
 } = props
 
 const actions = {
@@ -118,10 +121,44 @@ const actions = {
       })
       commit(RESUME_QUIZ, _lessonDetail)
     }
-    // if (learnRecords && learnRecords.extra.status) {
-    //   let status = learnRecords.extra.status.split('')[0]
-    //   commit(SWITCH_DEVICE, status)
-    // }
+  },
+  async enterClassroom({ commit }, { key }) {
+    const classInfo = await lesson.classrooms.join({ key })
+    commit(ENTER_CLASSROOM, { ...classInfo, key })
+    return classInfo
+  },
+  async resumeClassroom({ dispatch }) {
+    try {
+      const classroom = await lesson.classrooms.currentClass()
+      if (classroom) {
+        dispatch('resumeClassData', classroom)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async resumeClassData({ commit }, payload) {
+    const { learnRecordId, id } = payload
+    if (learnRecordId) {
+      let _classroom = _.clone(payload)
+      _classroom['id'] = learnRecordId
+      _classroom['classroomId'] = id
+      commit(RESUME_CLASSROOM, _classroom)
+    }
+  },
+  async uploadLearnRecords({ getters: { classId, learnRecords } }, state = 0) {
+    const { username, name } = learnRecords
+    if (username && name) {
+      await lesson.classrooms.uploadLearnRecords({
+        classId,
+        learnRecords,
+        state
+      })
+    }
+  },
+  async leaveTheClass({ commit, dispatch }) {
+    await lesson.classrooms.leave()
+    commit(LEAVE_THE_CLASS)
   },
 }
 

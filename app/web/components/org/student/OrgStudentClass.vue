@@ -3,8 +3,8 @@
     <div class="org-student-class-header">
       <span class="join-classroom-icon"></span>
       <span class="join-classroom-title">快速进入课堂</span>
-      <el-input placeholder="请输入课堂ID或课程id" class="join-classroom-input"></el-input>
-      <el-button size="small" type="primary">进入</el-button>
+      <el-input placeholder="请输入课堂ID或课程ID" class="join-classroom-input" v-model.trim="classroomkey"></el-input>
+      <el-button @click="handleEnterClassroom" size="small" type="primary" :disabled="!isCanEnterClassroom">进入</el-button>
     </div>
     <div class="org-student-class-count">
       共有：<span class="org-student-class-count-number">{{orgPackageCount}}个课程包</span>
@@ -30,7 +30,8 @@ export default {
   },
   data() {
     return {
-      isLoading: true
+      isLoading: true,
+      classroomkey: ''
     }
   },
   async created() {
@@ -43,7 +44,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getOrgPackages: 'org/student/getOrgPackages'
+      getOrgPackages: 'org/student/getOrgPackages',
+      enterClassroom: 'org/student/enterClassroom'
     }),
     handleToPackagePage(packageId) {
       this.$router.push({
@@ -59,6 +61,34 @@ export default {
     handleStartLearn(packageId) {
       console.log(packageId)
       console.log('handleStartLearn')
+    },
+    async handleEnterClassroom() {
+      try {
+        const key = _.lowerCase(this.classroomkey)
+        if (_.includes(key, 'x')) {
+          const [packageId, lessonId] = key.split('x').map(_.toNumber)
+          if (packageId && lessonId) {
+            // 这里可以再做个效验
+            this.$router.push({
+              name: 'OrgStudentLessonContent',
+              params: { packageId, lessonId }
+            })
+          }
+        } else {
+          // join the classrom
+          const _key = _.trim(key.replace('c', ''))
+          const classInfo = await this.enterClassroom({ key: _key })
+          const { packageId, lessonId } = classInfo
+          if (packageId && lessonId) {
+            this.$router.push({
+              name: 'OrgStudentLessonContent',
+              params: { packageId, lessonId }
+            })
+          }
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   computed: {
@@ -70,6 +100,9 @@ export default {
     },
     orgPackageCount() {
       return this.orgPackages.length
+    },
+    isCanEnterClassroom() {
+      return this.classroomkey
     }
   }
 }

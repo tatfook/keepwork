@@ -43,20 +43,31 @@ import avatar from '@/assets/lessonImg/default_avatar.png'
 import TableHeaderPopover from './TableHeaderPopover'
 export default {
   name: 'OrgTeacherLessonPerformance',
+    components: {
+      TableHeaderPopover
+    },
   data() {
     return {
       windowWidth: window.innerWidth,
       TRF: '2',
       defaultAvatar: avatar,
       KEEPWORK_SIGN: 'k',
-      PARACRAFT_SIGN: 'p'
+      PARACRAFT_SIGN: 'p',
+      _interval: null
     }
+  },
+  async created() {
+    if(this.isInCurrentClass) {
+      this.copyClassroomQuiz()
+      this.intervalUpdateLearnRecords()
+    }
+  },
+  async destroyed() {
+    await this.clearIntervalUpdateLearnRecords()
+    this.leaveTheClassroom()
   },
   mounted() {
     window.addEventListener('resize', this.handleWindowResize)
-  },
-  components: {
-    TableHeaderPopover
   },
   filters: {
     formatQuiz(value) {
@@ -64,6 +75,27 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      updateLearnRecords: 'org/teacher/updateLearnRecords',
+      leaveTheClassroom: 'org/teacher/leaveTheClassroom',
+      copyClassroomQuiz: 'org/teacher/copyClassroomQuiz'
+    }),
+    async intervalUpdateLearnRecords(delay = 4000) {
+      try {
+        await this.updateLearnRecords()
+        clearTimeout(this._interval)
+        this._interval = setTimeout(
+          () => this.intervalUpdateLearnRecords(),
+          delay
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async clearIntervalUpdateLearnRecords() {
+      clearTimeout(this._interval)
+      await this.updateLearnRecords()
+    },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     },
@@ -155,6 +187,14 @@ export default {
       classroomQuiz: 'org/teacher/classroomQuiz',
       classroom: 'org/teacher/classroom'
     }),
+    isInCurrentClass() {
+      const { classId: cid, packageId: pid, lessonId: lid } = this.$route.params
+      const { classId, packageId, lessonId } = this.classroom
+      if (this.isBeInClass) {
+        return cid == classId && pid == packageId && lid == lessonId
+      }
+      return true
+    },
     isPhoneSize() {
       return this.windowWidth < 768
     },

@@ -153,20 +153,16 @@ export default {
         return await this.uploadLearnRecords(state).catch(e => console.error(e))
       }
       // 一次只能自学一个页面
-      // if (!this.isVisitor) {
       let lastLearnRecords = await lesson.lessons
         .getLastLearnRecords()
         .catch(e => console.error(e))
-      lastLearnRecords = _.get(lastLearnRecords, 'rows', [])
+      lastLearnRecords = _.get(lastLearnRecords, 'rows.[0]', [])
       if (
-        lastLearnRecords.length > 0 &&
-        this.learnRecordsId !== lastLearnRecords[0].id
+        this.learnRecordsId !== lastLearnRecords.id
       ) {
-        return this.$router.push({ name: 'StudentCenter' })
+        return this.$router.push({ name: 'OrgStudentClass' })
       }
-      // }
 
-      // FIXME: 这里应该改成从store里面去课程包和课程的id
       const { packageId, lessonId } = this.$route.params
       // 首次需要先创建学习记录
       await this.uploadSelfLearnRecords({

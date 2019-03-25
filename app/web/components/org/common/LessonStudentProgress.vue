@@ -46,9 +46,6 @@ export default {
       redoLoading: false
     }
   },
-  mounted() {
-      console.log(this.lessonQuizCount)
-  },
   computed: {
     ...mapGetters({
       lessonQuiz: 'org/student/lessonQuiz',

@@ -1,13 +1,12 @@
 <template>
   <div class="org-student">
-    <org-header></org-header>
-    <div class="org-student-tips">
+    <div class="org-student-tips" v-if="isBeInClassroom">
       <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">正在上课: {{className}}</span>
-      <span class="org-student-tips-button">进入课堂</span>
+      <span class="org-student-tips-text">正在上课: {{currentClassroomLessonName}}</span>
+      <span @click="handleEnterCurrentClassroom" class="org-student-tips-button">进入课堂</span>
     </div>
-    <div class="org-student-container">
-      <div class="org-student-sidebar">
+    <div class="org-student-container" >
+      <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-message">
           <div class="org-student-role-label">学生</div>
           <img :src="defaultPortrait" class="org-student-profile" />
@@ -37,23 +36,39 @@ export default {
     }
   },
   async created() {
-    await this.getOrgClasses()
+    await Promise.all([
+      this.getOrgClasses(),
+      this.resumeClassroom()
+    ])
   },
   methods: {
     ...mapActions({
-      getOrgClasses: 'org/student/getOrgClasses'
-    })
+      getOrgClasses: 'org/student/getOrgClasses',
+      resumeClassroom: 'org/student/resumeClassroom'
+    }),
+    handleEnterCurrentClassroom() {
+      const { packageId, lessonId } = this.classroom
+      this.$router.push({ name: 'OrgStudentLessonContent', params: { packageId, lessonId }})
+    }
   },
   computed: {
     ...mapGetters({
       userinfo: 'org/userinfo',
-      orgClasses: 'org/student/orgClasses'
+      orgClasses: 'org/student/orgClasses',
+      classroom: 'org/student/classroom',
+      isBeInClassroom: 'org/student/isBeInClassroom'
     }),
+    currentClassroomLessonName() {
+      return _.get(this.classroom, 'extra.lessonName', '')
+    },
     username() {
       return _.get(this.userinfo, 'username', '')
     },
     nowPageName() {
       return _.get(this.$route, 'name')
+    },
+    isShowSidebar() {
+      return ['OrgStudentClass'].includes(this.nowPageName)
     }
   },
   components: {
@@ -66,7 +81,6 @@ $borderColor: #e8e8e8;
 .org-student {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
   &-tips {
     max-width: 1200px;
     height: 48px;

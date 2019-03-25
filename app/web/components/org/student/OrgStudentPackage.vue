@@ -1,6 +1,5 @@
 <template>
   <div class="org-student-class-package" v-if="!isLoading">
-    <org-header></org-header>
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -24,14 +23,12 @@
 
 
 <script>
-import OrgHeader from '../common/OrgHeader'
 import OrgPackageDetail from '../common/OrgPackageDetail'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'OrgStudentPackage',
   components: {
-    OrgHeader,
     OrgPackageDetail
   },
   data() {

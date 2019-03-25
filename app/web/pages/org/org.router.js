@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const OrgLogin = () => import('@/components/org/OrgLogin')
+
+const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
 const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
@@ -10,6 +12,7 @@ const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgT
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
 const OrgTeacherLessonPerformance = () => import('@/components/org/teacher/OrgTeacherLessonPerformance')
 const OrgTeacherLessonSummary = () => import('@/components/org/teacher/OrgTeacherLessonSummary')
+const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
 const OrgStudentPackage = () => import('@/components/org/student/OrgStudentPackage')
@@ -48,86 +51,102 @@ export default new Router({
     },
     {
       path: '/:orgLoginUrl/student',
-      name: 'OrgStudent',
-      component: OrgStudent,
-      redirect: { name: 'OrgStudentClass' },
+      name: 'OrgStudentContainer',
+      component: OrgStudentContainer,
+      redirect: { name: 'OrgStudent' },
       children: [
         {
-          path: 'OrgStudentClass',
-          name: 'OrgStudentClass',
-          component: OrgStudentClass
-        }
+          path: '/',
+          name: 'OrgStudent',
+          component: OrgStudent,
+          redirect: { name: 'OrgStudentClass' },
+          children: [
+            {
+              path: 'OrgStudentClass',
+              name: 'OrgStudentClass',
+              component: OrgStudentClass
+            }
+          ]
+        },
+        {
+          path: 'package/:packageId',
+          name: 'OrgStudentPackage',
+          component: OrgStudentPackage
+        },
+        {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'OrgStudentPackageLesson',
+          component: OrgStudentPackageLesson,
+          redirect: { name: 'OrgStudentLessonContent' },
+          children: [{
+            path: '/',
+            name: 'OrgStudentLessonContent',
+            component: OrgStudentLessonContent
+          }, {
+            path: '/summary',
+            name: 'OrgStudentLessonSummary',
+            component: OrgStudentLessonSummary
+          }]
+        },
       ]
-    },
-    {
-      path: '/:orgLoginUrl/student/package/:packageId',
-      name: 'OrgStudentPackage',
-      component: OrgStudentPackage
-    },
-    {
-      path: '/:orgLoginUrl/student/package/:packageId/lesson/:lessonId',
-      name: 'OrgStudentPackageLesson',
-      component: OrgStudentPackageLesson,
-      redirect: { name: 'OrgStudentLessonContent' },
-      children: [{
-        path: '/',
-        name: 'OrgStudentLessonContent',
-        component: OrgStudentLessonContent
-      }, {
-        path: '/summary',
-        name: 'OrgStudentLessonSummary',
-        component: OrgStudentLessonSummary
-      }]
     },
     {
       path: '/:orgLoginUrl/teacher',
-      name: 'OrgTeacher',
-      component: OrgTeacher,
-      redirect: { name: 'OrgTeacherTeach' },
+      name: 'OrgTeacherContainer',
+      component: OrgTeacherContainer,
+      redirect: { name: 'OrgTeacher' },
       children: [
         {
-          path: 'teach',
-          name: 'OrgTeacherTeach',
-          component: OrgTeacherTeach
+          path: '/',
+          name: 'OrgTeacher',
+          component: OrgTeacher,
+          redirect: { name: 'OrgTeacherTeach' },
+          children: [
+            {
+              path: 'teach',
+              name: 'OrgTeacherTeach',
+              component: OrgTeacherTeach
+            },
+            {
+              path: 'statistics',
+              name: 'OrgTeacherStatistics',
+              component: OrgTeacherStatistics
+            },
+            {
+              path: 'classes',
+              name: 'OrgTeacherClass',
+              component: OrgTeacherClass
+            }
+          ]
         },
         {
-          path: 'statistics',
-          name: 'OrgTeacherStatistics',
-          component: OrgTeacherStatistics
+          path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId',
+          name: 'OrgTeacherClassPackage',
+          component: OrgTeacherClassPackage
         },
         {
-          path: 'classes',
-          name: 'OrgTeacherClass',
-          component: OrgTeacherClass
-        }
-      ]
-    },
-    {
-      path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId',
-      name: 'OrgTeacherClassPackage',
-      component: OrgTeacherClassPackage
-    },
-    {
-      path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId',
-      name: 'OrgTeacherClassPackageLesson',
-      component: OrgTeacherClassPackageLesson,
-      redirect: { name: 'OrgTeacherLessonPlan' },
-      children: [
-        {
-          path: 'lessonPlan',
-          name: 'OrgTeacherLessonPlan',
-          component: OrgTeacherLessonPlan
+          path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId',
+          name: 'OrgTeacherClassPackageLesson',
+          component: OrgTeacherClassPackageLesson,
+          redirect: { name: 'OrgTeacherLessonPlan' },
+          children: [
+            {
+              path: 'lessonPlan',
+              name: 'OrgTeacherLessonPlan',
+              component: OrgTeacherLessonPlan
+            },
+            {
+              path: 'lessonPerformance',
+              name: 'OrgTeacherLessonPerformance',
+              component: OrgTeacherLessonPerformance
+            },
+            {
+              path: 'lessonSummary/:cId/:lId',
+              name: 'OrgTeacherLessonSummary',
+              component: OrgTeacherLessonSummary
+            }
+          ]
         },
-        {
-          path: 'lessonPerformance',
-          name: 'OrgTeacherLessonPerformance',
-          component: OrgTeacherLessonPerformance
-        },
-        {
-          path: 'lessonSummary/:cId/:lId',
-          name: 'OrgTeacherLessonSummary',
-          component: OrgTeacherLessonSummary
-        }
       ]
     },
     {

@@ -13,9 +13,6 @@ export default {
   components: {
     LessonWrap
   },
-  mounted() {
-    console.warn(this.lessonQuiz)
-  },
   computed: {
     ...mapGetters({
       lessonDetail: 'org/student/orgLessonDetail',

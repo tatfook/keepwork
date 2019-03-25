@@ -1,6 +1,6 @@
 <template>
   <div class="org-student-class-package-lesson" v-if="!isLoading">
-    <org-header></org-header>
+    <org-student-lesson-status></org-student-lesson-status>
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -26,8 +26,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import OrgStudentLessonStatus from './OrgStudentLessonStatus'
 import LessonHeader from '../common/OrgLessonHeader'
-import OrgHeader from '../common/OrgHeader'
 import { lesson } from '@/api'
 import _ from 'lodash'
 
@@ -35,7 +35,7 @@ export default {
   name: 'OrgStudentPackageLesson',
   components: {
     LessonHeader,
-    OrgHeader
+    OrgStudentLessonStatus
   },
   data() {
     return {
@@ -54,7 +54,7 @@ export default {
     // await this.getCurrentClass().catch(e => console.error(e))
     // if (
     //   name === 'LessonstudentSummary' ||
-    //   (name === 'LessonstudentPerformance' && !this.isBeInClass) ||
+    //   (name === 'LessonstudentPerformance' && !this.isBeInClassroom) ||
     //   !this.isInCurrentClass
     // ) {
     //   this.$router.push({ name: 'LessonstudentPlan' })
@@ -76,7 +76,8 @@ export default {
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
       createLearnRecords: 'org/student/createLearnRecords',
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
-      resumeQuiz: 'org/student/resumeQuiz'
+      resumeQuiz: 'org/student/resumeQuiz',
+      uploadLearnRecords: 'org/student/uploadLearnRecords'
       // getCurrentClass: 'org/student/getCurrentClass',
       // updateLearnRecords: 'org/student/updateLearnRecords',
       // leaveTheClassroom: 'org/student/leaveTheClassroom',
@@ -94,7 +95,11 @@ export default {
           this.getLessonDetail({ packageId, lessonId }),
           this.getOrgPackageDetail({ packageId })
         ])
-        this.initSelfLearning({ packageId, lessonId})
+        if (this.isBeInClassroom && this.isInCurrentClass) {
+          await this.uploadLearnRecords()
+        } else {
+          this.initSelfLearning({ packageId, lessonId })
+        }
         // const learnRecords = await lesson.lessons.getLastLearnRecords()
         // const lastRecord = _.get(learnRecords, 'rows.[0]', {})
         // if (
@@ -127,8 +132,9 @@ export default {
         if (_.some(quizzes, item => item.answer)) {
           this.resumeQuiz({ learnRecords: lastRecord })
         }
-      }else {
-       await this.createLearnRecords({ packageId, lessonId })
+        this.resumeLearnRecordsId(lastRecord.id)
+      } else {
+        await this.createLearnRecords({ packageId, lessonId })
       }
     },
     async intervalUpdateLearnRecords(delay = 3000) {
@@ -144,24 +150,22 @@ export default {
       // await this.updateLearnRecords()
     },
     handleSelectLesson(lessonId) {
+      if(!this.isBeInClassroom) {
+        const { name, params } = this.$route
+        this.$router.push({ name, params: { ...params, lessonId } })
+      }
       // FIXME: 效验是否正在学习
-      const { name, params } = this.$route
-      this.$router.push({ name, params: { ...params, lessonId } })
     }
   },
   computed: {
     ...mapGetters({
-      // isShowLesson: 'lesson/student/isShowLesson',
-      // isShowPerformance: 'lesson/student/isShowPerformance',
-      // isShowSummary: 'lesson/student/isShowSummary',
       lessonDetail: 'org/student/orgLessonDetail',
       orgPackagesDetail: 'org/student/orgPackagesDetail',
       orgClasses: 'org/student/orgClasses',
-      isBeInclassroom: 'org/student/isBeInclassroom'
-      // isBeInClass: 'lesson/student/isBeInClass',
-      // isClassIsOver: 'lesson/student/isClassIsOver',
-      // classroom: 'lesson/student/classroom',
-      // userinfo: 'lesson/userinfo',
+      isBeInClassroom: 'org/student/isBeInClassroom',
+      isClassIsOver: 'org/student/isClassIsOver',
+      classroom: 'org/student/classroom',
+      userinfo: 'org/userinfo'
     }),
     currentClassName() {
       return _.get(
@@ -177,10 +181,10 @@ export default {
       }))
     },
     isInCurrentClass() {
-      // const { packageId: pid, lessonId: lid } = this.$route.params
-      // const { packageId, lessonId } = this.classroom
-      // let flag = packageId == pid && lessonId == lid
-      // return this.isBeInClass ? flag : true
+      const { packageId: pid, lessonId: lid } = this.$route.params
+      const { packageId, lessonId } = this.classroom
+      let flag = packageId == pid && lessonId == lid
+      return this.isBeInClassroom ? flag : true
     },
     packageName() {
       return _.get(this.packageDetail, ['package', 'packageName'], '')
@@ -214,7 +218,7 @@ export default {
     if (name === 'LessonstudentSummary' && !this.isClassIsOver) {
       return this.$router.push({ name: 'plan' })
     }
-    if (name === 'LessonstudentPerformance' && !this.isBeInClass) {
+    if (name === 'LessonstudentPerformance' && !this.isBeInClassroom) {
       this.intervalUpdateLearnRecords()
       return this.$router.push({ name: 'plan' })
     }

@@ -1,6 +1,5 @@
 <template>
   <div class="org-teacher-class-package-lesson" v-if="!isLoading">
-    <org-header></org-header>
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -28,13 +27,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import LessonHeader from '../common/OrgLessonHeader'
-import OrgHeader from '../common/OrgHeader'
 import { lesson } from '@/api'
 export default {
   name: 'OrgTeacherClassPacakgeLesson',
   components: {
-    LessonHeader,
-    OrgHeader
+    LessonHeader
   },
   data() {
     return {
@@ -84,9 +81,9 @@ export default {
           name,
           params: { classId, packageId, lessonId }
         } = this.$route
-        // if (name !== 'OrgTeacherLessonPlan') {
-        //   this.$router.push({ name: 'OrgTeacherLessonPlan' })
-        // }
+        if (!this.isBeInClass && name !== 'OrgTeacherLessonPlan') {
+          this.$router.push({ name: 'OrgTeacherLessonPlan' })
+        }
         await Promise.all([
           this.getLessonDetail({ classId, packageId, lessonId }),
           this.getOrgClassPackageDetail({ classId, packageId }),
@@ -112,8 +109,10 @@ export default {
       // await this.updateLearnRecords()
     },
     handleSelectLesson(lessonId) {
-      const { name, params } = this.$route
-      this.$router.push({ name, params: { ...params, lessonId } })
+      if (!this.isBeInClass) {
+        const { name, params } = this.$route
+        this.$router.push({ name, params: { ...params, lessonId } })
+      }
     }
   },
   computed: {
@@ -124,11 +123,10 @@ export default {
       lessonDetail: 'org/teacher/orgLessonDetail',
       orgClassPackagesDetail: 'org/teacher/orgClassPackagesDetail',
       orgClasses: 'org/teacher/orgClasses',
-      isBeInclassroom: 'org/teacher/isBeInclassroom'
-      // isBeInClass: 'lesson/teacher/isBeInClass',
-      // isClassIsOver: 'lesson/teacher/isClassIsOver',
-      // classroom: 'lesson/teacher/classroom',
-      // userinfo: 'lesson/userinfo',
+      isBeInClass: 'org/teacher/isBeInClass',
+      isClassIsOver: 'org/teacher/isClassIsOver',
+      classroom: 'org/teacher/classroom',
+      userinfo: 'org/userinfo',
     }),
     currentClassName() {
       return _.get(
@@ -144,10 +142,10 @@ export default {
       }))
     },
     isInCurrentClass() {
-      // const { packageId: pid, lessonId: lid } = this.$route.params
-      // const { packageId, lessonId } = this.classroom
-      // let flag = packageId == pid && lessonId == lid
-      // return this.isBeInClass ? flag : true
+      const { classId: cid, packageId: pid, lessonId: lid } = this.$route.params
+      const { classId, packageId, lessonId } = this.classroom
+      let flag = classId == cid && packageId == pid && lessonId == lid
+      return this.isBeInClass ? flag : true
     },
     packageName() {
       return _.get(this.packageDetail, ['package', 'packageName'], '')
