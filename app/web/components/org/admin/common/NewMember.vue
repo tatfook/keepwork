@@ -77,6 +77,7 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
+      getOrgRestCount: 'org/getOrgRestCount',
       getOrgClassesById: 'org/getOrgClassesById'
     }),
     isEn() {
@@ -87,6 +88,9 @@ export default {
     },
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    orgRestUserCount() {
+      return this.getOrgRestCount({ id: this.orgId })
     },
     memberTypeListPageName() {
       return this.memberType === 'student' ? 'OrgStudentList' : 'OrgTeacherList'
@@ -111,6 +115,17 @@ export default {
       orgCreateNewMember: 'org/createNewMember'
     }),
     pushNewMemberData() {
+      let waitingAddedLen = this.newMembers.length
+      if (waitingAddedLen >= this.orgRestUserCount) {
+        this.$alert(
+          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
+          '提示',
+          {
+            type: 'warning'
+          }
+        )
+        return
+      }
       this.newMembers.push({
         realname: '',
         memberName: '',

@@ -6,12 +6,13 @@
           <router-link class="org-classes-menu-link" :to='{name: menu.indexPageName}'>{{menu.text}}</router-link>
         </div>
       </div>
-      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">50{{$t('org.usersCount')}}</span></div>
+      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
     </div>
     <router-view></router-view>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'OrgClasses',
   data() {
@@ -41,6 +42,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currentOrg: 'org/currentOrg',
+      getOrgRestCount: 'org/getOrgRestCount'
+    }),
+    orgId() {
+      return _.get(this.currentOrg, 'id')
+    },
+    orgRestUserCount() {
+      return this.getOrgRestCount({ id: this.orgId })
+    },
     currentPageName() {
       return _.get(this.$route, 'name')
     }
