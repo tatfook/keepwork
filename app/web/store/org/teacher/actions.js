@@ -62,7 +62,7 @@ const actions = {
   },
   async removeStudentFromClass({ dispatch }, { classId, studentId }) {
     try {
-      await lessonOrganizationClassMembers.removeStudentFromClass(studentId)
+      await lessonOrganizationClassMembers.removeMemberFromClass(studentId)
       await dispatch('getOrgClassStudentsById', { classId })
     } catch (error) {
       return Promise.reject(error)

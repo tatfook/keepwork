@@ -1,10 +1,10 @@
 <template>
-  <new-member memberType="teacher"></new-member>
+  <new-member memberType="student"></new-member>
 </template>
 <script>
 import NewMember from './common/NewMember'
 export default {
-  name: 'NewTeacher',
+  name: 'NewStudent',
   components: {
     NewMember
   }

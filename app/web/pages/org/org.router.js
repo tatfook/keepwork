@@ -5,7 +5,8 @@ const OrgLogin = () => import('@/components/org/OrgLogin')
 const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
-const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherStatistics = () =>
+  import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
 const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
 const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
@@ -25,9 +26,13 @@ const OrgClasses = () => import('@/components/org/admin/OrgClasses')
 const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 const ClassList = () => import('@/components/org/admin/ClassList')
 const NewClass = () => import('@/components/org/admin/NewClass')
+const EditClass = () => import('@/components/org/admin/EditClass')
+const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
+const NewStudent = () => import('@/components/org/admin/NewStudent')
+const EditMember = () => import('@/components/org/admin/EditMember')
 
 Vue.use(Router)
 
@@ -174,6 +179,16 @@ export default new Router({
               component: NewClass
             },
             {
+              path: 'class/edit',
+              name: 'OrgEditClass',
+              component: EditClass
+            },
+            {
+              path: 'class/detail',
+              name: 'OrgClassDetail',
+              component: ClassDetail
+            },
+            {
               path: 'teacher',
               name: 'OrgTeacherList',
               component: TeacherList
@@ -184,9 +199,24 @@ export default new Router({
               component: NewTeacher
             },
             {
+              path: 'teacher/edit',
+              name: 'OrgEditTeacher',
+              component: EditMember
+            },
+            {
               path: 'student',
               name: 'OrgStudentList',
               component: StudentList
+            },
+            {
+              path: 'student/new',
+              name: 'OrgNewStudent',
+              component: NewStudent
+            },
+            {
+              path: 'student/edit',
+              name: 'OrgEditStudent',
+              component: EditMember
             }
           ]
         },

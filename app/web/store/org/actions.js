@@ -5,6 +5,7 @@ import { props } from './mutations'
 
 const {
   LOGIN_SUCCESS,
+  GET_ORG_COUNT_SUCCESS,
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
@@ -33,6 +34,18 @@ const actions = {
       commit(LOGIN_SUCCESS, { userinfo })
     }
     return userinfo
+  },
+  async getOrgUserCountsByGraphql(context, { orgId }) {
+    let { commit } = context
+    let result = await keepwork.graphql.getQueryResult({
+      query:
+        'query($id: Int, $name: String) {organization(id: $id, name: $name) {id, studentCount, teacherCount, count }}',
+      variables: {
+        id: orgId
+      }
+    })
+    let userCounts = _.get(result, 'organization')
+    commit(GET_ORG_COUNT_SUCCESS, { orgId, userCounts })
   },
   async getOrgDetailByLoginUrl(context, { orgLoginUrl }) {
     let { commit } = context
@@ -65,6 +78,13 @@ const actions = {
     let orgPackages = _.get(result, 'organization.organizationPackages')
     commit(GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS, { organizationId, orgPackages })
   },
+  async getOrgClassPackages(context, { organizationId, classId }) {
+    let classPackages = await keepwork.lessonOrganizations.getOrgClassPackages({
+      organizationId,
+      classId
+    })
+    return classPackages
+  },
   async getOrgClassList(context, { organizationId }) {
     let { commit } = context
     let orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
@@ -80,6 +100,13 @@ const actions = {
       })
     return Promise.resolve(result)
   },
+  async updateClass(context, { organizationId, classId, name, packages }) {
+    await keepwork.lessonOrganizationClasses
+      .updateClass({ organizationId, classId, name, packages })
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
+  },
   async getOrgTeacherList(context, { organizationId }) {
     let { commit } = context
     let orgTeachers = await keepwork.lessonOrganizationClassMembers.getTeachers(
@@ -89,31 +116,51 @@ const actions = {
     )
     commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers })
   },
-  async createNewTeacher(
+  async createNewMember(
     context,
-    { organizationId, classId, memberName, realname }
+    { organizationId, classId, classIds, memberName, realname, roleId }
   ) {
+    let { dispatch } = context
     let result = await keepwork.lessonOrganizationClassMembers
       .createClassMember({
         organizationId,
         classId,
+        classIds,
         memberName,
         realname,
-        roleId: 2
+        roleId
       })
       .catch(error => {
         return Promise.reject(error.response)
       })
+    await dispatch('getOrgUserCountsByGraphql', {
+      orgId: organizationId
+    })
     return Promise.resolve(result)
   },
-  async getOrgStudentList(context, { organizationId }) {
+  async removeMemberFromClass(context, { id }) {
+    let { dispatch, getters: { currentOrg } } = context
+    await keepwork.lessonOrganizationClassMembers
+      .removeMemberFromClass(id)
+      .catch(error => {
+        return Promise.reject(error.response)
+      })
+    await dispatch('getOrgUserCountsByGraphql', {
+      orgId: currentOrg.id
+    })
+  },
+  async getOrgStudentList(context, { organizationId, classId }) {
     let { commit } = context
-    let orgStudents = await keepwork.lessonOrganizationClassMembers.getStudents(
-      {
+    let result = classId
+      ? await keepwork.lessonOrganizationClassMembers.getStudentsByClassId({
+        organizationId,
+        classId
+      })
+      : await keepwork.lessonOrganizationClassMembers.getStudents({
         organizationId
-      }
-    )
-    commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents })
+      })
+    let orgStudents = result.rows
+    commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents, classId })
   },
   async updateOrg(context, { orgLoginUrl, orgId, orgData }) {
     let { dispatch } = context

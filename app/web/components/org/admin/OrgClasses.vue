@@ -2,39 +2,63 @@
   <div class="org-classes">
     <div class="org-classes-header">
       <div class="org-classes-menu">
-        <div class="org-classes-menu-item" :class="{'org-classes-menu-item-active': currentPageName === menu.pageName}" v-for="(menu, index) in menuData" :key="index">
-          <router-link class="org-classes-menu-link" :to='{name: menu.pageName}'>{{menu.text}}</router-link>
+        <div class="org-classes-menu-item" :class="{'org-classes-menu-item-active': isMenuItemActive(menu)}" v-for="(menu, index) in menuData" :key="index">
+          <router-link class="org-classes-menu-link" :to='{name: menu.indexPageName}'>{{menu.text}}</router-link>
         </div>
       </div>
-      <div class="org-classes-available">可添加用户数：<span class="org-classes-available-warning">50人</span></div>
+      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
     </div>
     <router-view></router-view>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'OrgClasses',
   data() {
     return {
       menuData: [
         {
-          pageName: 'OrgClassList',
-          text: '班级'
+          pageNames: [
+            'OrgClassList',
+            'OrgNewClass',
+            'OrgEditClass',
+            'OrgClassDetail'
+          ],
+          indexPageName: 'OrgClassList',
+          text: this.$t('org.ClassesLabel')
         },
         {
-          pageName: 'OrgTeacherList',
-          text: '教师'
+          pageNames: ['OrgTeacherList', 'OrgNewTeacher', 'OrgEditTeacher'],
+          indexPageName: 'OrgTeacherList',
+          text: this.$t('org.TeachersLabel')
         },
         {
-          pageName: 'OrgStudentList',
-          text: '学生'
+          pageNames: ['OrgStudentList', 'OrgNewStudent', 'OrgEditStudent'],
+          indexPageName: 'OrgStudentList',
+          text: this.$t('org.StudentsLabel')
         }
       ]
     }
   },
   computed: {
+    ...mapGetters({
+      currentOrg: 'org/currentOrg',
+      getOrgRestCount: 'org/getOrgRestCount'
+    }),
+    orgId() {
+      return _.get(this.currentOrg, 'id')
+    },
+    orgRestUserCount() {
+      return this.getOrgRestCount({ id: this.orgId })
+    },
     currentPageName() {
       return _.get(this.$route, 'name')
+    }
+  },
+  methods: {
+    isMenuItemActive(menuItem) {
+      return _.indexOf(menuItem.pageNames, this.currentPageName) !== -1
     }
   }
 }
@@ -47,6 +71,8 @@ export default {
     height: 56px;
     line-height: 56px;
     border-bottom: 1px solid #e8e8e8;
+    z-index: 1;
+    position: relative;
   }
   &-menu {
     flex: 1;

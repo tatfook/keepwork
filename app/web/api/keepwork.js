@@ -339,6 +339,7 @@ export const lessonOrganizations = {
   updateOrg: async ({ orgId, orgData }) => put(`lessonOrganizations/${orgId}`, orgData),
   getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`),
   getOrgPackages: async ({ organizationId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}`),
+  getOrgClassPackages: async ({ organizationId, classId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}&classId=${classId}`),
   getOrgClasses: async () => get('lessonOrganizationClasses'),
   getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
   getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
@@ -351,15 +352,17 @@ export const lessonOrganizations = {
 export const lessonOrganizationClasses = {
   getClasses: async ({ organizationId }) => get(`lessonOrganizationClasses?organizationId=${organizationId}`),
   createClasses: async ({ organizationId, name, packages }) => post('lessonOrganizationClasses', { organizationId, name, packages }),
-  getClassPackageDetail: async ({ classId, packageId }) => get('lessonOrganizations/packageDetail', { params: { classId, packageId } })
+  getClassPackageDetail: async ({ classId, packageId }) => get('lessonOrganizations/packageDetail', { params: { classId, packageId } }),
+  updateClass: async ({ organizationId, classId, name, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, packages }),
 }
 
 export const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
   getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
-  createClassMember: async ({ organizationId, classId, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, memberName, realname, roleId }),
+  getStudentsByClassId: async ({ organizationId, classId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`),
+  createClassMember: async ({ organizationId, classId, classIds, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, classIds, memberName, realname, roleId }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
-  removeStudentFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
+  removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
 
 export const graphql = {

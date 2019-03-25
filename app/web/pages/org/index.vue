@@ -79,16 +79,24 @@ export default {
         currentOrgloginUrl &&
         currentOrgloginUrl === this.routeLoginUrl
       )
+    },
+    orgId() {
+      return _.get(this.currentOrg, 'id')
     }
   },
   methods: {
     ...mapActions({
+      getOrgUserCountsByGraphql: 'org/getOrgUserCountsByGraphql',
       getUserProfile: 'user/getProfile'
     }),
     async loadOrgPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)
       )
+      this.orgId &&
+        (await this.getOrgUserCountsByGraphql({
+          orgId: this.orgId
+        }))
       this.loading = false
     }
   }

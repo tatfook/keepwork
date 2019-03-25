@@ -8,13 +8,13 @@
     </div>
     <div class="org-packages-content">
       <div class="org-packages-item" v-for="(lessonPackage,index) in orgPackages" :key="index">
-        <lesson-package-cell :lessonPackage='lessonPackage.package'></lesson-package-cell>
+        <org-package-cell :packageData='lessonPackage.package'></org-package-cell>
       </div>
     </div>
   </div>
 </template>
 <script>
-import LessonPackageCell from '@/components/common/LessonPackageCell'
+import OrgPackageCell from '../common/OrgPackageCell'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgPackages',
@@ -49,7 +49,7 @@ export default {
     }
   },
   components: {
-    LessonPackageCell
+    OrgPackageCell
   }
 }
 </script>
@@ -67,6 +67,7 @@ export default {
       color: #909399;
     }
     &-link {
+      display: none;
       font-size: 14px;
       color: #909399;
       text-decoration: none;
@@ -75,7 +76,7 @@ export default {
   &-item {
     width: 290px;
     display: inline-block;
-    margin-right: 16px;
+    margin: 0 16px 16px 0;
     &:nth-child(3n) {
       margin-right: 0;
     }

@@ -1,13 +1,13 @@
 <template>
-  <div class="new-class" v-loading="isLoading">
-    <class-comp @save="createNewClass"></class-comp>
+  <div class="edit-class" v-loading="isLoading">
+    <class-comp :classDetail='classDetail' @save="updateClass"></class-comp>
   </div>
 </template>
 <script>
 import ClassComp from './common/ClassComp'
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'NewClass',
+  name: 'EditClass',
   data() {
     return {
       isLoading: false
@@ -19,46 +19,48 @@ export default {
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
+    },
+    classDetail() {
+      return _.get(this.$route, 'query')
     }
+  },
+  toClassListPage() {
+    this.$router.push({
+      name: 'OrgClassList'
+    })
   },
   methods: {
     ...mapActions({
-      orgCreateNewClass: 'org/createNewClass'
+      orgUpdateClass: 'org/updateClass'
     }),
     toClassListPage() {
       this.$router.push({
         name: 'OrgClassList'
       })
     },
-    async createNewClass(newClassData) {
+    async updateClass(updatedClassData) {
+      console.log('update', updatedClassData)
       this.isLoading = true
-      await this.orgCreateNewClass({
-        ...newClassData,
-        organizationId: this.orgId
+      await this.orgUpdateClass({
+        organizationId: this.orgId,
+        classId: this.classDetail.id,
+        ...updatedClassData
       })
-        .then(result => {
+        .then(() => {
           this.$message({
-            message: '班级创建成功',
+            message: '班级更新成功',
             type: 'success'
           })
           this.isLoading = false
           this.toClassListPage()
         })
         .catch(error => {
-          let message = ''
-          switch (error.status) {
-            case 409:
-              message = '该班级已存在'
-              break
-            default:
-              message = '班级创建失败'
-              break
-          }
-          this.isLoading = false
+          console.log(error)
           this.$message({
-            message: message,
+            message: '班级更新失败',
             type: 'error'
           })
+          this.isLoading = false
         })
     }
   },
