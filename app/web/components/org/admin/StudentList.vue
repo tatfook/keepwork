@@ -8,9 +8,7 @@
     </el-select>
     <div class="student-list-header">
       <div class="student-list-header-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
-      <router-link class="student-list-header-new" :to="{name: 'OrgNewStudent'}">
-        <i class="el-icon-circle-plus-outline"></i>{{$t('org.addStudents')}}
-      </router-link>
+      <div class="student-list-header-new" @click="toNewStudentPage"><i class="el-icon-circle-plus-outline"></i>{{$t('org.addStudents')}}</div>
     </div>
     <el-table class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
       <el-table-column prop="realname" :label="$t('org.nameLabel')" width="172">
@@ -55,6 +53,7 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
+      getOrgRestCount: 'org/getOrgRestCount',
       getOrgClassesById: 'org/getOrgClassesById',
       getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
     }),
@@ -68,6 +67,9 @@ export default {
           classId: this.selectedClassId
         }) || []
       )
+    },
+    orgRestUserCount() {
+      return this.getOrgRestCount({ id: this.orgId })
     },
     orgStudentsWithClassesString() {
       return _.map(this.orgStudents, student => {
@@ -96,6 +98,19 @@ export default {
       getOrgStudentList: 'org/getOrgStudentList',
       removeMemberFromClass: 'org/removeMemberFromClass'
     }),
+    toNewStudentPage() {
+      if (this.orgRestUserCount == 0) {
+        this.$alert(
+          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
+          '提示',
+          {
+            type: 'warning'
+          }
+        )
+        return
+      }
+      this.$router.push({ name: 'OrgNewStudent' })
+    },
     async handleChangeSelectClass() {
       this.isLoading = true
       await this.getOrgStudentList({
@@ -160,7 +175,6 @@ export default {
     &-new {
       color: #2397f3;
       cursor: pointer;
-      text-decoration: none;
     }
   }
   &-table {

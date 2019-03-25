@@ -2,9 +2,7 @@
   <div class="teacher-list" v-loading="isLoading">
     <div class="teacher-list-header">
       <div class="teacher-list-header-count">{{$t('org.IncludeTeachers') + orgTeachers.length + $t('org.teacherCountUnit')}}</div>
-      <router-link class="teacher-list-header-new" :to="{name: 'OrgNewTeacher'}">
-        <i class="el-icon-circle-plus-outline"></i>{{$t('org.addTeachers')}}
-      </router-link>
+      <div class="teacher-list-header-new" @click="toNewTeacherPage"><i class="el-icon-circle-plus-outline"></i>{{$t('org.addTeachers')}}</div>
     </div>
     <el-table class="teacher-list-table" border :data="orgTeachersWithClassesString" header-row-class-name="teacher-list-table-header">
       <el-table-column prop="realname" :label="$t('org.nameLabel')" width="214">
@@ -43,10 +41,14 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
+      getOrgRestCount: 'org/getOrgRestCount',
       getOrgTeachersById: 'org/getOrgTeachersById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
+    },
+    orgRestUserCount() {
+      return this.getOrgRestCount({ id: this.orgId })
     },
     orgTeachers() {
       return this.getOrgTeachersById({ id: this.orgId }) || []
@@ -65,6 +67,19 @@ export default {
       getOrgTeacherList: 'org/getOrgTeacherList',
       removeMemberFromClass: 'org/removeMemberFromClass'
     }),
+    toNewTeacherPage() {
+      if (this.orgRestUserCount == 0) {
+        this.$alert(
+          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
+          '提示',
+          {
+            type: 'warning'
+          }
+        )
+        return
+      }
+      this.$router.push({ name: 'OrgNewTeacher' })
+    },
     async removeTeacher(id) {
       this.isLoading = true
       await this.removeMemberFromClass({ id }).catch(() => {})
@@ -110,7 +125,6 @@ export default {
     &-new {
       color: #2397f3;
       cursor: pointer;
-      text-decoration: none;
     }
   }
   &-table {
