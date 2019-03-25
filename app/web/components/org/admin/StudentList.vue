@@ -1,5 +1,11 @@
 <template>
   <div class="student-list" v-loading="isLoading">
+    <el-select v-model="selectedClassId">
+      <el-option label="全部" :value="undefined">
+      </el-option>
+      <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
+      </el-option>
+    </el-select>
     <div class="student-list-header">
       <div class="student-list-header-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
       <router-link class="student-list-header-new" :to="{name: 'OrgNewStudent'}">
@@ -35,23 +41,33 @@ export default {
     await this.getOrgStudentList({
       organizationId: this.orgId
     }).catch(() => {})
+    await this.getOrgClassList({
+      organizationId: this.orgId
+    })
     this.isLoading = false
   },
   data() {
     return {
+      selectedClassId: undefined,
       isLoading: false
     }
   },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgStudentsById: 'org/getOrgStudentsById'
+      getOrgClassesById: 'org/getOrgClassesById',
+      getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
     orgStudents() {
-      return this.getOrgStudentsById({ id: this.orgId }) || []
+      return (
+        this.getOrgStudentsByClassId({
+          orgId: this.orgId,
+          classId: this.selectedClassId
+        }) || []
+      )
     },
     orgStudentsWithClassesString() {
       return _.map(this.orgStudents, student => {
@@ -60,13 +76,34 @@ export default {
         student.classesString = _.join(classNameArr, '、')
         return student
       })
+    },
+    orgClasses() {
+      return (
+        this.getOrgClassesById({
+          id: this.orgId
+        }) || []
+      )
+    },
+    selectedClassName() {
+      return this.selectedClassId
+        ? _.find(this.orgClasses, { id: this.selectedClassId }).name
+        : '全部'
     }
   },
   methods: {
     ...mapActions({
+      getOrgClassList: 'org/getOrgClassList',
       getOrgStudentList: 'org/getOrgStudentList',
       removeMemberFromClass: 'org/removeMemberFromClass'
     }),
+    async handleChangeSelectClass() {
+      this.isLoading = true
+      await this.getOrgStudentList({
+        organizationId: this.orgId,
+        classId: this.selectedClassId
+      }).catch(() => {})
+      this.isLoading = false
+    },
     async removeStudent(id) {
       this.isLoading = true
       await this.removeMemberFromClass({ id }).catch(() => {})
@@ -99,12 +136,21 @@ export default {
         }
       })
     }
+  },
+  watch: {
+    selectedClassId() {
+      this.handleChangeSelectClass()
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
 .student-list {
-  padding: 24px;
+  padding: 16px 24px;
+  .el-select {
+    width: 120px;
+    margin-bottom: 18px;
+  }
   &-header {
     display: flex;
     margin-bottom: 16px;

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import _ from 'lodash'
 
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const GET_ORG_SUCCESS = 'GET_ORG_SUCCESS'
@@ -62,10 +63,13 @@ const mutations = {
       [organizationId]: orgTeachers
     })
   },
-  [GET_ORG_STUDENTS_SUCCESS](state, { organizationId, orgStudents }) {
+  [GET_ORG_STUDENTS_SUCCESS](state, { organizationId, orgStudents, classId }) {
     Vue.set(state, 'orgStudents', {
       ...state.orgStudents,
-      [organizationId]: orgStudents
+      [organizationId]: {
+        ..._.get(state, `orgStudents.${organizationId}`),
+        [classId]: orgStudents
+      }
     })
   }
 }
