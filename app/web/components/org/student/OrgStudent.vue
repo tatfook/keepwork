@@ -9,7 +9,7 @@
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-message">
           <div class="org-student-role-label">学生</div>
-          <img :src="defaultPortrait" class="org-student-profile" />
+          <img :src="userPortrait" class="org-student-profile" />
           <div class="org-student-username">{{username}}</div>
         </div>
         <div class="org-student-menu">
@@ -69,6 +69,9 @@ export default {
     },
     isShowSidebar() {
       return ['OrgStudentClass'].includes(this.nowPageName)
+    },
+    userPortrait() {
+      return _.get(this.userinfo, 'portrait') || this.defaultPortrait
     }
   },
   components: {
@@ -157,6 +160,7 @@ $borderColor: #e8e8e8;
     object-fit: cover;
     line-height: 1;
     margin-bottom: 16px;
+    border-radius: 50%;
   }
   &-username {
     font-size: 20px;
@@ -166,11 +170,13 @@ $borderColor: #e8e8e8;
     margin: 0;
     padding-bottom: 10px;
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
     padding: 10px;
     box-sizing: border-box;
     &-item {
       text-align: center;
+      margin-top: 10px;
+      margin-left: 8px;
       width: 112px;
       height: 32px;
       line-height: 32px;

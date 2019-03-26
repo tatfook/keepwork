@@ -19,7 +19,7 @@
         </el-breadcrumb>
       </div>
     </div>
-    <lesson-header class='lesson-header' :lesson="lessonHeader" :isstudent="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
+    <lesson-header class='lesson-header' :lesson="lessonHeader" :isstudent="true" :isInCurrentClass="isInCurrentClass" />
     <router-view></router-view>
   </div>
 </template>
@@ -67,7 +67,7 @@ export default {
   },
   async destroyed() {
     // this.clearUpdateLearnRecords()
-    // this.leaveTheClassroom()
+    this.leaveTheClassroom()
     window.document.title = 'Keepwork'
   },
   methods: {
@@ -77,10 +77,10 @@ export default {
       createLearnRecords: 'org/student/createLearnRecords',
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
       resumeQuiz: 'org/student/resumeQuiz',
-      uploadLearnRecords: 'org/student/uploadLearnRecords'
+      uploadLearnRecords: 'org/student/uploadLearnRecords',
       // getCurrentClass: 'org/student/getCurrentClass',
       // updateLearnRecords: 'org/student/updateLearnRecords',
-      // leaveTheClassroom: 'org/student/leaveTheClassroom',
+      leaveTheClassroom: 'org/student/leaveTheClassroom'
       // copyClassroomQuiz: 'org/student/copyClassroomQuiz'
     }),
     async getLessonData() {
@@ -91,6 +91,7 @@ export default {
         // if (name !== 'OrgstudentLessonPlan') {
         //   this.$router.push({ name: 'OrgstudentLessonPlan' })
         // }
+        //FIXME: 在获取学生答题情况刷新的问题
         await Promise.all([
           this.getLessonDetail({ packageId, lessonId }),
           this.getOrgPackageDetail({ packageId })
@@ -100,20 +101,6 @@ export default {
         } else {
           this.initSelfLearning({ packageId, lessonId })
         }
-        // const learnRecords = await lesson.lessons.getLastLearnRecords()
-        // const lastRecord = _.get(learnRecords, 'rows.[0]', {})
-        // if (
-        //   lastRecord.state === 0 &&
-        //   lastRecord.packageId === packageId &&
-        //   lastRecord.lessonId === lessonId
-        // ) {
-        //   const quizzes = _.get(lastRecord, 'extra.quiz', [])
-        //   if (_.some(quizzes, item => item.answer)) {
-        //     this.resumeQuiz({ learnRecords: lastRecord })
-        //   }
-        // }
-        // await this.createLearnRecords({ packageId, lessonId })
-
         window.document.title = this.currentLessonName
       } catch (error) {
         console.error(error)
@@ -137,24 +124,40 @@ export default {
         await this.createLearnRecords({ packageId, lessonId })
       }
     },
-    async intervalUpdateLearnRecords(delay = 3000) {
-      // await this.updateLearnRecords()
-      // clearTimeout(this._interval)
-      // this._interval = setTimeout(
-      //   () => this.intervalUpdateLearnRecords(),
-      //   delay
-      // )
-    },
-    async clearUpdateLearnRecords() {
-      // clearTimeout(this._interval)
-      // await this.updateLearnRecords()
-    },
     handleSelectLesson(lessonId) {
-      if(!this.isBeInClassroom) {
+      if (this.isBeInClassroom) {
+        this.$message({
+          type: 'warning',
+          message: this.$t('lesson.beInClass')
+        })
+      } else {
         const { name, params } = this.$route
         this.$router.push({ name, params: { ...params, lessonId } })
       }
-      // FIXME: 效验是否正在学习
+    },
+    async toLearnConfirm(_packageId, _lessonId, routerObject) {
+      let res = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      let lastLearnRecods = _.get(res, 'rows', [])
+      if (lastLearnRecods.length === 0) {
+        return this.$router.push(routerObject)
+      }
+      if (lastLearnRecods[0].state === 1) {
+        return this.$router.push(routerObject)
+      }
+
+      const { packageId, lessonId } = lastLearnRecods[0]
+      if (_packageId === packageId && _lessonId === lessonId) {
+        return this.$router.push(routerObject)
+      }
+      this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
+        type: 'warning'
+      })
+        .then(() => this.$router.push(routerObject))
+        .catch(e => console.error(e))
     }
   },
   computed: {

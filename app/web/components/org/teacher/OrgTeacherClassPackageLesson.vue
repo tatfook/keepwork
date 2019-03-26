@@ -19,7 +19,7 @@
         </el-breadcrumb>
       </div>
     </div>
-    <lesson-header class='lesson-header' :lesson="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" @intervalUpdateLearnRecords="intervalUpdateLearnRecords" @clearUpdateLearnRecords="clearUpdateLearnRecords" />
+    <lesson-header class='lesson-header' :lesson="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" />
     <router-view></router-view>
   </div>
 </template>
@@ -46,33 +46,18 @@ export default {
   },
   async created() {
     await this.getLessonData()
-
-    // await this.getCurrentClass().catch(e => console.error(e))
-    // if (
-    //   name === 'LessonTeacherSummary' ||
-    //   (name === 'LessonTeacherPerformance' && !this.isBeInClass) ||
-    //   !this.isInCurrentClass
-    // ) {
-    //   this.$router.push({ name: 'LessonTeacherPlan' })
-    // }
-    // if (this.isInCurrentClass) {
-    //   this.copyClassroomQuiz()
-    //   this.intervalUpdateLearnRecords()
-    // }
-    // window.document.title = this.currentLessonName
   },
   async destroyed() {
-    // this.clearUpdateLearnRecords()
-    // this.leaveTheClassroom()
+    this.leaveTheClassroom()
   },
   methods: {
     ...mapActions({
       getLessonDetail: 'org/teacher/getLessonDetail',
       getOrgClassPackageDetail: 'org/teacher/getOrgClassPackageDetail',
-      getOrgClasses: 'org/teacher/getOrgClasses'
+      getOrgClasses: 'org/teacher/getOrgClasses',
       // getCurrentClass: 'org/teacher/getCurrentClass',
       // updateLearnRecords: 'org/teacher/updateLearnRecords',
-      // leaveTheClassroom: 'org/teacher/leaveTheClassroom',
+      leaveTheClassroom: 'org/teacher/leaveTheClassroom',
       // copyClassroomQuiz: 'org/teacher/copyClassroomQuiz'
     }),
     async getLessonData() {
@@ -96,18 +81,6 @@ export default {
       }
       this.isLoading = false
     },
-    async intervalUpdateLearnRecords(delay = 3000) {
-      // await this.updateLearnRecords()
-      // clearTimeout(this._interval)
-      // this._interval = setTimeout(
-      //   () => this.intervalUpdateLearnRecords(),
-      //   delay
-      // )
-    },
-    async clearUpdateLearnRecords() {
-      // clearTimeout(this._interval)
-      // await this.updateLearnRecords()
-    },
     handleSelectLesson(lessonId) {
       if (!this.isBeInClass) {
         const { name, params } = this.$route
@@ -117,9 +90,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // isShowLesson: 'lesson/teacher/isShowLesson',
-      // isShowPerformance: 'lesson/teacher/isShowPerformance',
-      // isShowSummary: 'lesson/teacher/isShowSummary',
       lessonDetail: 'org/teacher/orgLessonDetail',
       orgClassPackagesDetail: 'org/teacher/orgClassPackagesDetail',
       orgClasses: 'org/teacher/orgClasses',

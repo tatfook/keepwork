@@ -5,7 +5,7 @@
       <el-progress :percentage="learnedLessonPercent" color="#64f78a" :show-text="false"></el-progress>
       <div class="org-package-status-text">{{packageStatusText}}</div>
       <el-button v-if="isStartStatus" @click="handleStartLearn" class="org-package-status-button start-button">开始学习</el-button>
-      <el-button v-else-if="isContinueStatus" class="org-package-status-button continue-button">继续学习</el-button>
+      <el-button v-else-if="isContinueStatus" @click="handleContinueLearn" class="org-package-status-button continue-button">继续学习</el-button>
       <div v-else-if="isFinishStatus" class="finish-status"> <i class="el-icon-circle-check finish-status-icon"></i> 完成</div>
     </div>
   </div>

@@ -66,7 +66,7 @@ const mutations = {
     Vue.set(state, 'classroom', payload)
   },
   [LEAVE_THE_CLASS](state) {
-    Vue.set('classroom', {})
+    Vue.set(state, 'classroom', {})
   }
 }
 
