@@ -9,8 +9,8 @@
       <div class="org-teacher-sidebar">
         <div class="org-teacher-message">
           <div class="org-teacher-role-label">教师</div>
-          <img :src="defaultPortrait" class="org-teacher-profile" />
-          <div class="org-teacher-username">chiyu</div>
+          <img :src="userPortrait" class="org-teacher-profile" />
+          <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">
           <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
@@ -61,13 +61,20 @@ export default {
   computed: {
     ...mapGetters({
       classroom: 'org/teacher/classroom',
-      isBeInClassroom: 'org/teacher/isBeInClassroom'
+      isBeInClassroom: 'org/teacher/isBeInClassroom',
+      userinfo: 'org/userinfo'
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
     },
     currentClassroomLessonName() {
       return _.get(this.classroom, 'extra.lessonName', '')
+    },
+    userPortrait() {
+      return this.userinfo.portrait || this.defaultPortrait
+    },
+    username() {
+      return this.userinfo.username
     }
   }
 }
@@ -154,6 +161,7 @@ $borderColor: #e8e8e8;
     object-fit: cover;
     line-height: 1;
     margin-bottom: 16px;
+    border-radius: 50%;
   }
   &-username {
     font-size: 20px;
