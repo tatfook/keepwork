@@ -57,7 +57,7 @@ export default {
       getOrgClasses: 'org/teacher/getOrgClasses',
       // getCurrentClass: 'org/teacher/getCurrentClass',
       // updateLearnRecords: 'org/teacher/updateLearnRecords',
-      leaveTheClassroom: 'org/teacher/leaveTheClassroom',
+      leaveTheClassroom: 'org/teacher/leaveTheClassroom'
       // copyClassroomQuiz: 'org/teacher/copyClassroomQuiz'
     }),
     async getLessonData() {
@@ -82,10 +82,8 @@ export default {
       this.isLoading = false
     },
     handleSelectLesson(lessonId) {
-      if (!this.isBeInClass) {
-        const { name, params } = this.$route
-        this.$router.push({ name, params: { ...params, lessonId } })
-      }
+      const { name, params } = this.$route
+      this.$router.push({ name, params: { ...params, lessonId } })
     }
   },
   computed: {
@@ -96,7 +94,7 @@ export default {
       isBeInClass: 'org/teacher/isBeInClass',
       isClassIsOver: 'org/teacher/isClassIsOver',
       classroom: 'org/teacher/classroom',
-      userinfo: 'org/userinfo',
+      userinfo: 'org/userinfo'
     }),
     currentClassName() {
       return _.get(
