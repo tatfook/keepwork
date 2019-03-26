@@ -93,11 +93,19 @@ export default {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)
       )
+      this.loadUserCounts()
+      this.loading = false
+    },
+    async loadUserCounts() {
       this.orgId &&
         (await this.getOrgUserCountsByGraphql({
           orgId: this.orgId
         }))
-      this.loading = false
+    }
+  },
+  watch:{
+    $route(){
+      this.loadUserCounts()
     }
   }
 }
