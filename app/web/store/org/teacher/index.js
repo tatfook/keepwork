@@ -7,6 +7,7 @@ const state = {
   orgClasses: [],
   orgClassPackages: {},
   orgClassStudents: {},
+  classroomCoursesData: {},
   orgClassPackagesDetail: {},
   orgLessonData: {},
   orgLessonDetail: {},
