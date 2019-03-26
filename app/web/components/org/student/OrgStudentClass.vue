@@ -22,6 +22,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import OrgPackageCellForStudent from '../common/OrgPackageCellForStudent'
+import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
   name: 'OrgStudentClass',
@@ -45,22 +46,63 @@ export default {
   methods: {
     ...mapActions({
       getOrgPackages: 'org/student/getOrgPackages',
-      enterClassroom: 'org/student/enterClassroom'
+      enterClassroom: 'org/student/enterClassroom',
+      getOrgPackageDetail: 'org/student/getOrgPackageDetail'
     }),
     handleToPackagePage(packageId) {
       this.$router.push({
         name: 'OrgStudentPackage',
         params: { packageId }
       })
-      console.log(packageId)
     },
-    handleContinueLearn(packageId) {
-      console.log(packageId)
-      console.log('handleContinueLearn')
+    async handleContinueLearn(packageId) {
+      const packageDetail = await this.getOrgPackageDetail({ packageId })
+      const lessons = _.get(packageDetail, 'lessons', [])
+      const { lessonId } = _.find(lessons, item => !item.isLearned)
+      if (packageId && lessonId) {
+        this.toLearnConfirm(packageId, lessonId, {
+          name: 'OrgStudentPackageLesson',
+          params: { packageId, lessonId }
+        })
+      } else {
+        this.$message.error(this.$t('common.failure'))
+      }
     },
-    handleStartLearn(packageId) {
-      console.log(packageId)
-      console.log('handleStartLearn')
+    async handleStartLearn(packageId) {
+      const packageDetail = await this.getOrgPackageDetail({ packageId })
+      const lessonId = _.get(packageDetail, 'lessons.[0].lesson.id', '')
+      if (packageId && lessonId) {
+        this.toLearnConfirm(packageId, lessonId, {
+          name: 'OrgStudentPackageLesson',
+          params: { packageId, lessonId }
+        })
+      } else {
+        this.$message.error(this.$t('common.failure'))
+      }
+    },
+    async toLearnConfirm(_packageId, _lessonId, routerObject) {
+      let res = await lesson.lessons
+        .getLastLearnRecords()
+        .catch(e => console.error(e))
+      let lastLearnRecods = _.get(res, 'rows', [])
+      if (lastLearnRecods.length === 0) {
+        return this.$router.push(routerObject)
+      }
+      if (lastLearnRecods[0].state === 1) {
+        return this.$router.push(routerObject)
+      }
+
+      const { packageId, lessonId } = lastLearnRecods[0]
+      if (_packageId === packageId && _lessonId === lessonId) {
+        return this.$router.push(routerObject)
+      }
+      this.$confirm(this.$t('lesson.learnLessonConfirm'), '', {
+        confirmButtonText: this.$t('common.Yes'),
+        cancelButtonText: this.$t('common.No'),
+        type: 'warning'
+      })
+        .then(() => this.$router.push(routerObject))
+        .catch(e => console.error(e))
     },
     async handleEnterClassroom() {
       try {

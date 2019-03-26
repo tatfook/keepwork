@@ -39,7 +39,7 @@ export default {
   },
   async created() {
     try {
-      await this.gettPackageDetail()
+      await this.getPackageDetail()
     } catch (error) {
       console.error(error)
     }
@@ -47,7 +47,7 @@ export default {
   },
   watch: {
     async $route(route) {
-      await this.gettPackageDetail()
+      await this.getPackageDetail()
     }
   },
   destroyed() {
@@ -62,7 +62,7 @@ export default {
       const { name, params } = this.$route
       this.$router.push({ name, params: { ...params, packageId } })
     },
-    async gettPackageDetail() {
+    async getPackageDetail() {
       const { packageId, orgLoginUrl } = this.$route.params
       this.packageId = _.toNumber(packageId)
       await Promise.all([

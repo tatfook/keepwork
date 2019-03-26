@@ -32,6 +32,7 @@ const actions = {
   async getOrgPackageDetail({ commit }, { packageId }) {
     const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
+    return packageDetail
   },
   async getLessonDetail({ commit }, { packageId, lessonId }) {
     let [ res, detail ] = await Promise.all([
@@ -94,13 +95,7 @@ const actions = {
   resumeLearnRecordsId({ commit }, id) {
     commit(CREATE_LEARN_RECORDS_SUCCESS, id)
   },
-  async resumeQuiz(
-    {
-      commit,
-      getters: { lessonQuiz, orgLessonDetail }
-    },
-    { id, learnRecords = null }
-  ) {
+  async resumeQuiz({ commit, getters: { lessonQuiz, orgLessonDetail } }, { id, learnRecords = null }) {
     if (!learnRecords && id) {
       learnRecords = await lesson.classrooms
         .learnRecordsById(id)
@@ -159,7 +154,7 @@ const actions = {
   async leaveTheClass({ commit, dispatch }) {
     await lesson.classrooms.leave()
     commit(LEAVE_THE_CLASS)
-  },
+  }
 }
 
 export default actions

@@ -9,12 +9,14 @@
 <script>
 import OrgHeader from './common/OrgHeader'
 import { mapActions } from 'vuex'
+import { lesson } from '@/api'
+
 export default {
   name: 'OrgStudentContainer',
   components: {
     OrgHeader
   },
-  data(){
+  data() {
     return {
       isLoading: true
     }
@@ -26,6 +28,7 @@ export default {
       console.error(error)
     }
     this.isLoading = false
+    lesson.users.getUserDetail()
   },
   methods: {
     ...mapActions({

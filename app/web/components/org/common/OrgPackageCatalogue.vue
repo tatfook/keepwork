@@ -22,7 +22,7 @@
         </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
-            <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}}</span>
+            <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>(课程ID: {{packageId}}x{{lesson.id}} )</span></span>
           </div>
           <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
           <div class="package-catalogue-item-goals">
@@ -55,10 +55,10 @@ export default {
     },
     actorType: String
   },
-  mounted() {
-    console.warn(this.lessonProgressPercent)
-  },
   computed: {
+    ...mapGetters({
+      classroom: 'org/student/classroom'
+    }),
     isInClassroom() {
       const state = this.enterClassInfo.state
       return state == undefined ? false : state != 2
@@ -117,6 +117,9 @@ export default {
     },
     isPendingReview() {
       return this.packageDetail.state === 0 || this.packageDetail.state === 1
+    },
+    packageId() {
+      return _.get(this.packageDetail, 'packageId', '')
     }
   },
   methods: {
@@ -127,17 +130,25 @@ export default {
           params: { lessonId: lesson.lessonId }
         })
       }
+      const {
+        name,
+        params: { packageId: _packageId }
+      } = this.$route
       if (this.isBeInClassroom) {
-        const {
-          name,
-          params: { id: _packageId }
-        } = this.$route
-        const { packageId, lessonId } = this.enterClassInfo
-        if (
-          name === 'StudentPackage' &&
-          (_packageId != packageId || lesson.id != lessonId)
-        )
-          return this.$message.error(this.$t('lesson.beInClass'))
+        const { packageId, lessonId } = this.classroom
+        if (_packageId == packageId && lesson.id == lessonId) {
+          this.$router.push({
+            name: 'OrgStudentPackageLesson',
+            params: { lessonId: lesson.lessonId }
+          })
+        } else {
+          this.$message.error(this.$t('lesson.beInClass'))
+        }
+      } else {
+        this.toLearnConfirm(_packageId, lesson.id, {
+          name: 'OrgStudentPackageLesson',
+          params: { packageId: _packageId, lessonId: lesson.id }
+        })
       }
     },
     toViewSummary(lesson) {
@@ -149,18 +160,9 @@ export default {
       })
     },
     continueToLearn() {
-      if (!this.isTeacher && this.isPendingReview) {
-        return this.$message({
-          type: 'warning',
-          message: this.$t('lesson.packagePendingReview')
-        })
-      }
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
-      // let targetLessonPath = `/${this.actorType}/package/${
-      //   this.packageDetail.id
-      // }/lesson/${this.continueLearnedLesson.id}`
       const rotuerObject = {
         name: `OrgStudentPackageLesson`,
         params: {
@@ -175,21 +177,12 @@ export default {
       )
     },
     toLearnAgain(lesson) {
-      if (!this.isTeacher && this.isPendingReview) {
-        return this.$message({
-          type: 'warning',
-          message: this.$t('lesson.packagePendingReview')
-        })
-      }
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
-      let targetLessonPath = `/${this.actorType}/package/${
-        this.packageDetail.id
-      }/lesson/${lesson.id}`
       const routerObject = {
-        name: 'OrgStudentClassPackageLesson',
-        params: { packageId: this.packageDetail.id, lessonId: this.lesson.id }
+        name: 'OrgStudentPackageLesson',
+        params: { packageId: this.packageDetail.id, lessonId: lesson.id }
       }
       return this.toLearnConfirm(this.packageDetail.id, lesson.id, routerObject)
     },

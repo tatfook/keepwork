@@ -4,37 +4,17 @@
       <el-col :span="5" :sm="5">
         <span>{{$t('lesson.classId')}} C{{classroomKey}}</span>
       </el-col>
-      <!-- <el-col :span="5" :sm="5" v-if="isVisitor">
-        <span class="nickname-wrap">
-          <span>{{$t('lesson.nickName')}} visitor</span>
-        </span>
-      </el-col> -->
       <el-col :span="5">
-        <span class="nickname-wrap" v-if="isEditNickName">
-          <span style="display:inline-block; width: 70px">{{$t('lesson.nickName')}}</span>
-          <el-input class="name-input" :autofocus="true" :value="name" v-model="name">
-          </el-input>
-          <i v-show="isLoading" class="el-icon-loading edit-loading"></i>
-          <i v-show="!isLoading" @click="setNicknameHandle" class="el-icon-circle-check-outline edit-confirm"></i>
-          <!-- <i v-show="!isLoading" @click="switchEdit" class="el-icon-circle-close-outline edit-cancel"></i> -->
-        </span>
-        <span class="nickname-wrap" v-else>
+        <span class="nickname-wrap">
           <span>{{$t('lesson.nickName')}} {{username}}</span>
-          <!-- <i @click="switchEdit" class="el-icon-edit-outline edit-status"></i> -->
         </span>
       </el-col>
       <el-col :span="14" :sm="14">
         <el-row type="flex" justify="end">
-          <el-button v-if="!isVisitor" class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
+          <el-button class="leave-button" type="primary" @click="handleLeaveTheClass" size="mini">{{$t('lesson.leaveTheClass')}}</el-button>
         </el-row>
       </el-col>
     </el-row>
-    <el-dialog :title="$t('lesson.pleaseInputName')" center custom-class="input-name-dialog" :visible.sync="isDialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
-      <el-input v-model="name" :placeholder="$t('lesson.name')" :autofocus="true"></el-input>
-      <div slot="footer">
-        <el-button @click="handleSetNickname" :disabled="name && !name.trim()" style="width: 140px" type="primary">{{$t('common.OK')}}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -42,33 +22,11 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'OrgStudentLessonStatus',
-  props: {
-    classKey: {
-      type: String,
-      default: ''
-    },
-    isVisitor: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      isDialogVisible: false,
-      name: '',
-      editInput: '',
-      isEditNickName: false,
-      isLoading: false
-    }
-  },
   computed: {
     ...mapGetters({
       classroomKey: 'org/student/classroomKey',
-      studentName: 'org/student/studentName',
       isBeInClassroom: 'org/student/isBeInClassroom',
-      userinfo: 'org/userinfo',
-      // visitorInfo: 'org/student/visitorInfo',
-      lessonIsDone: 'org/student/lessonIsDone'
+      userinfo: 'org/userinfo'
     }),
     nickname() {
       return ''
@@ -77,36 +35,11 @@ export default {
       return _.get(this.userinfo, 'username', '')
     }
   },
-  mounted() {
-    if (
-      this.isBeInClassroom &&
-      (this.isNeedToSetNickname || this.$route.query.dialog)
-    ) {
-      this.isDialogVisible = true
-    }
-    this.name = this.nickname || this.username
-  },
   methods: {
     ...mapActions({
       leaveTheClass: 'org/student/leaveTheClass',
-      uploadLearnRecords: 'org/student/uploadLearnRecords',
+      uploadLearnRecords: 'org/student/uploadLearnRecords'
     }),
-    switchEdit() {
-      this.isEditNickName = !this.isEditNickName
-    },
-    async setNicknameHandle() {
-      if (this.name.trim() === '') return
-      this.isLoading = true
-      await this.setNickname(this.name)
-        .then(() => {
-          this.isLoading = false
-          this.switchEdit()
-        })
-        .catch(e => {
-          this.isLoading = false
-          this.switchEdit()
-        })
-    },
     async handleLeaveTheClass() {
       this.$confirm(
         this.$t('lesson.leaveTheClassTips'),
@@ -121,24 +54,14 @@ export default {
       )
         .then(async () => {
           await this.leaveTheClass()
-          this.$router.push({ name: 'OrgStudentClass' })
+            .then(res => {
+              this.$router.push({ name: 'OrgStudentClass' })
+            })
+            .catch(e => {
+              this.$message.error(this.$t('common.failure'))
+            })
         })
-        .catch(action => console.log(action))
-    },
-    async handleSetNickname() {
-      if (this.name && this.name.trim() !== '') {
-        await this.setNickname(this.name)
-          .then(res => {
-            this.isDialogVisible = false
-            let { device } = this.$route.query
-            history.replaceState('', '', this.$router.resolve(this.$route.path).href)
-            this.uploadLearnRecords().catch(e => console.error(e))
-          })
-          .catch(e => {
-            console.error(e)
-            this.$message.error(this.$t('common.failure'))
-          })
-      }
+        .catch(action => console.error(action))
     }
   }
 }
