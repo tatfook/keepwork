@@ -611,5 +611,101 @@ export default [
         })
       }
     }
-  }
+  },
+  // style 16
+  {
+    templateID: 0,
+    data: {
+      menu: {
+        margin: 'auto'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 }
+    },
+    theme: {
+      root: [],
+      menu: ['mod-full-width', 'auxiliaryText'],
+      colMenu: ['bgColor']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'bgColor',
+          fontColor: 'fontsColor'
+        }
+      },
+      config: {
+        menu: {
+          type: 'menu',
+          mode: 'vertical',
+          emptyLinkTarget: '_blank'
+        }
+      }
+    }
+  },
+  // style 17
+  {
+    templateID: 0,
+    data: {
+      menu: {
+        margin: 'auto'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 }
+    },
+    theme: {
+      root: [],
+      menu: ['mod-full-width', 'auxiliaryText'],
+      colMenu: ['bg_color_4']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'bg_color_4',
+          fontColor: 'fontsColor'
+        }
+      },
+      config: {
+        menu: {
+          type: 'menu',
+          mode: 'vertical',
+          emptyLinkTarget: '_blank'
+        }
+      }
+    }
+  },
+  // style 18
+  {
+    templateID: 0,
+    data: {
+      menu: {
+        margin: 'auto'
+      }
+    },
+    props: {
+      rootRow: { gutter: 10 }
+    },
+    theme: {
+      root: [],
+      menu: ['mod-full-width', 'auxiliaryText'],
+      colMenu: ['bg_color_0']
+    },
+    options: {
+      theme: {
+        menu: {
+          menuBackground: 'bg_color_0',
+          fontColor: 'color_4'
+        }
+      },
+      config: {
+        menu: {
+          type: 'menu',
+          mode: 'vertical',
+          emptyLinkTarget: '_blank'
+        }
+      }
+    }
+  },
 ]
