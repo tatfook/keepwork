@@ -639,7 +639,6 @@ export default [
         menu: {
           type: 'menu',
           mode: 'vertical',
-          emptyLinkTarget: '_blank'
         }
       }
     }
@@ -671,7 +670,6 @@ export default [
         menu: {
           type: 'menu',
           mode: 'vertical',
-          emptyLinkTarget: '_blank'
         }
       }
     }
@@ -703,7 +701,6 @@ export default [
         menu: {
           type: 'menu',
           mode: 'vertical',
-          emptyLinkTarget: '_blank'
         }
       }
     }
