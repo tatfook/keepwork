@@ -17,7 +17,8 @@ const {
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS,
   LEAVE_THE_CLASSROOM,
-  COPY_CLASSROOM_QUIZ
+  COPY_CLASSROOM_QUIZ,
+  GET_TAUGHT_CLASSROOM_COURSES_SUCCESS
 } = props
 
 const actions = {
@@ -37,6 +38,13 @@ const actions = {
     if (!(cache && orgClassStudents[classId])) {
       const classStudents = await lessonOrganizationClassMembers.getClassStudentsById({ classId })
       commit(GET_CLASS_STUDENTS_SUCCESS, { classId, classStudents })
+    }
+  },
+  async getTaughtClassroomCourses({ commit, getters: { classroomCoursesData } }, { classId, cache = false }) {
+    if (!(cache && classroomCoursesData[classId])) {
+      const classroomCourses = await lesson.classrooms.getTaughtClassroomCourses({ classId })
+      console.log('classroomcourse', classroomCourses)
+      commit(GET_TAUGHT_CLASSROOM_COURSES_SUCCESS, { classId, classroomCourses })
     }
   },
   async getOrgClassPackageDetail({ commit }, { classId, packageId }) {

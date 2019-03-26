@@ -14,6 +14,7 @@ const UPDATE_LEARN_RECORDS_SUCCESS = 'UPDATE_LEARN_RECORDS_SUCCESS'
 const GET_CURRENT_CLASSROOM_SUCCESS = 'GET_CURRENT_CLASSROOM_SUCCESS'
 const LEAVE_THE_CLASSROOM = 'LEAVE_THE_CLASSROOM'
 const COPY_CLASSROOM_QUIZ = 'COPY_CLASSROOM_QUIZ'
+const GET_TAUGHT_CLASSROOM_COURSES_SUCCESS = 'GET_TAUGHT_CLASSROOM_COURSES_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -28,7 +29,8 @@ export const props = {
   UPDATE_LEARN_RECORDS_SUCCESS,
   GET_CURRENT_CLASSROOM_SUCCESS,
   LEAVE_THE_CLASSROOM,
-  COPY_CLASSROOM_QUIZ
+  COPY_CLASSROOM_QUIZ,
+  GET_TAUGHT_CLASSROOM_COURSES_SUCCESS
 }
 
 
@@ -46,6 +48,12 @@ const mutations = {
     Vue.set(state, 'orgClassStudents', {
       ...state.orgClassStudents,
       [classId]: classStudents
+    })
+  },
+  [GET_TAUGHT_CLASSROOM_COURSES_SUCCESS](state, { classId, classroomCourses }) {
+    Vue.set(state, 'classroomCoursesData', {
+      ...state.classroomCoursesData,
+      [classId]: classroomCourses
     })
   },
   [GET_CLASS_PACKAGE_DETAIL_SUCCESS](state, { classId, packageId, packageDetail }) {
