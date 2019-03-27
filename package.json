@@ -46,6 +46,7 @@
     "js-base64": "^2.4.3",
     "js-cookie": "^2.2.0",
     "js-yaml": "^3.11.0",
+    "jsrsasign": "^8.0.12",
     "jss": "^9.8.1",
     "jss-preset-default": "^4.3.0",
     "lodash": "^4.17.5",
