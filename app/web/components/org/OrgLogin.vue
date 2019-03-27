@@ -15,10 +15,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="org-login-empty" v-else>
-      <img class="org-login-empty-img" src="@/assets/img/404.png" alt="">
-      <div class="org-login-empty-info">{{$t("org.pageNotFound")}}!</div>
-    </div>
   </div>
 </template>
 <script>
@@ -181,17 +177,6 @@ export default {
   &-submit {
     width: 100%;
     margin-top: 32px;
-  }
-  &-empty {
-    text-align: center;
-    &-img {
-      max-width: 100%;
-    }
-    &-info {
-      font-size: 24px;
-      margin-top: 32px;
-      font-weight: bold;
-    }
   }
 }
 </style>

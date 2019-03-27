@@ -35,6 +35,12 @@ const actions = {
     }
     return userinfo
   },
+  async getOrgToken(context, { orgId }) {
+    let token = await keepwork.lessonOrganizations
+      .getOrgToken({ orgId })
+      .catch()
+    return token
+  },
   async getOrgUserCountsByGraphql(context, { orgId }) {
     let { commit } = context
     let result = await keepwork.graphql.getQueryResult({
