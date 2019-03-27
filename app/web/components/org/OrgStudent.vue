@@ -8,7 +8,7 @@
 
 <script>
 import OrgHeader from './common/OrgHeader'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { lesson } from '@/api'
 
 export default {
@@ -18,12 +18,16 @@ export default {
   },
   data() {
     return {
-      isLoading: true
+      isLoading: true,
+      _notify: null,
+      _interval: null
     }
   },
   async created() {
     try {
       await this.resumeClassroom()
+      this.checkIsInClassroom(this.$route)
+      this.intervalCheckClass()
     } catch (error) {
       console.error(error)
     }
@@ -32,17 +36,97 @@ export default {
   },
   methods: {
     ...mapActions({
-      resumeClassroom: 'org/student/resumeClassroom'
+      resumeClassroom: 'org/student/resumeClassroom',
+      checkClassroom: 'org/student/checkClassroom'
+    }),
+    backToClassroom() {
+      const { packageId, lessonId } = this.classroom
+      if (packageId && lessonId) {
+        this.$router.push({
+          name: 'OrgStudentPackageLesson',
+          params: { packageId, lessonId }
+        })
+      }
+    },
+    checkIsInClassroom(route) {
+      const {
+        params: { packageId, lessonId }
+      } = route
+      const { packageId: pid, lessonId: lid } = this.classroom
+
+      if (this.isBeInClassroom && !(packageId == pid && lessonId == lid)) {
+        if (!this._notify) {
+          this._notify = this.$notify({
+            customClass: 'back-to-classroom-notify',
+            iconClass: 'el-icon-warning',
+            dangerouslyUseHTMLString: true,
+            message: this.$t('lesson.notifyTipsStudent', {
+              spanStart: '<span class="back-to-classroom">',
+              spanEnd: '</span>'
+            }),
+            duration: 0,
+            position: 'top-left',
+            onClick: this.backToClassroom,
+            onClose: () => (this._notify = null)
+          })
+        }
+      } else {
+        this._notify && this._notify.close()
+        this._notify = null
+      }
+    },
+    async intervalCheckClass(delay = 30) {
+      await this.checkClassroom()
+      clearTimeout(this._interval)
+      this._interval = setTimeout(async () => {
+        await this.intervalCheckClass().catch(e => {
+          this.$message({
+            message: this.$t('lesson.classIsOver'),
+            type: 'warning'
+          })
+          this._notify && this._notify.close()
+          this._notify = null
+        })
+      }, delay * 1000)
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isBeInClassroom: 'org/student/isBeInClassroom',
+      classroom: 'org/student/classroom'
     })
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.checkIsInClassroom(to)
+    next()
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .org-student-router {
   width: 100%;
   min-height: 100%;
   background-color: #f5f5f5;
+}
+.back-to-classroom-notify {
+  background: #ed9f21;
+  /deep/.el-notification__icon {
+    color: #e54104;
+    background: white;
+    border-radius: 50%;
+  }
+  /deep/.el-notification__content {
+    color: white;
+    line-height: 14px;
+  }
+  .back-to-classroom {
+    color: #5353ff;
+    cursor: pointer;
+  }
+  /deep/.el-notification__closeBtn {
+    color: white;
+  }
 }
 </style>
 

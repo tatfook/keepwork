@@ -1,5 +1,6 @@
 import { props } from './mutations'
 import { keepwork, lesson } from '@/api'
+const { graphql } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 const { lessonOrganizations } = keepwork
@@ -15,7 +16,8 @@ const {
   RESUME_QUIZ,
   ENTER_CLASSROOM,
   RESUME_CLASSROOM,
-  LEAVE_THE_CLASS
+  LEAVE_THE_CLASS,
+  GET_TEACHING_LESSON_SUCCESS
 } = props
 
 const actions = {
@@ -154,7 +156,33 @@ const actions = {
   async leaveTheClass({ commit, dispatch }) {
     await lesson.classrooms.leave()
     commit(LEAVE_THE_CLASS)
-  }
+  },
+  async getTeachingLesson({ commit, rootGetters: { 'org/userinfo': { username, organizationId } } }) {
+    const res = await graphql.getQueryResult({
+      query:
+				'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id,key,state}, organizationClasses{id, classroom{id, packageId, lessonId, state, key, extra}} } }',
+      variables: {
+        organizationId,
+        username
+      }
+    })
+    const organizationClasses = _.filter(_.get(res, 'organizationUser.organizationClasses', []), item => item.classroom)
+    const teachingLesson = _.map(organizationClasses, item => {
+      const { extra = {}, ...reset } = item.classroom
+      return {
+        id: item.id,
+        ...extra,
+        ...reset
+      }
+    })
+    commit(GET_TEACHING_LESSON_SUCCESS, teachingLesson)
+  },
+  async checkClassroom({ commit, dispatch }) {
+    await lesson.classrooms.currentClass().catch(e => {
+      commit(LEAVE_THE_CLASS)
+      return Promise.reject(e)
+    })
+  },
 }
 
 export default actions

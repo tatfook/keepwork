@@ -52,7 +52,6 @@ export default {
     await this.getLessonData()
   },
   async destroyed() {
-    // this.clearUpdateLearnRecords()
     window.document.title = 'Keepwork'
   },
   methods: {
@@ -63,18 +62,12 @@ export default {
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
       resumeQuiz: 'org/student/resumeQuiz',
       uploadLearnRecords: 'org/student/uploadLearnRecords',
-      // getCurrentClass: 'org/student/getCurrentClass',
-      // updateLearnRecords: 'org/student/updateLearnRecords',
     }),
     async getLessonData() {
       try {
         const { name, params } = this.$route
         const packageId = _.toNumber(params.packageId)
         const lessonId = _.toNumber(params.lessonId)
-        // if (name !== 'OrgstudentLessonPlan') {
-        //   this.$router.push({ name: 'OrgstudentLessonPlan' })
-        // }
-        //FIXME: 在获取学生答题情况刷新的问题
         await Promise.all([
           this.getLessonDetail({ packageId, lessonId }),
           this.getOrgPackageDetail({ packageId })

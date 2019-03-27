@@ -14,6 +14,7 @@ const state = {
   learnRecordsId: '',
   lessonDetail: {},
   lessonQuiz: {},
+  teachingLesson: []
 }
 
 export default {

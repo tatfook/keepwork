@@ -1,9 +1,9 @@
 <template>
   <div class="org-student">
-    <div class="org-student-tips" v-if="isBeInClassroom">
+    <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
       <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">正在上课: {{currentClassroomLessonName}},课堂ID: C{{classroomKey}}</span>
-      <span @click="handleEnterCurrentClassroom" class="org-student-tips-button">进入课堂</span>
+      <span class="org-student-tips-text">正在上课: {{item.lessonName}},课堂ID: C{{item.key}}</span>
+      <span @click="handleJoinClassroom(item)" class="org-student-tips-button">进入课堂</span>
     </div>
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
@@ -20,6 +20,14 @@
       </div>
       <router-view class="org-student-main"></router-view>
     </div>
+    <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
+      <div class="hint">
+        <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
+        <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -27,38 +35,61 @@ import OrgHeader from '@/components/org/common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork } from '@/api'
 const { graphql } = keepwork
+import _ from 'lodash'
 export default {
   name: 'OrgStudent',
   data() {
     return {
       isLoading: true,
       defaultPortrait: require('@/assets/img/default_portrait.png'),
-      className: '',
-      selectedClassId: ''
+      selectedClassId: '',
+      beInClassDialog: false,
+      joinKey: ''
     }
   },
   async created() {
-    await Promise.all([this.getOrgClasses(), this.resumeClassroom()])
-    const teachingClass = await graphql.getQueryResult({
-      query:
-        'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id, classroom{id, state, extra}} } }',
-      variables: {
-        organizationId: this.organizationId,
-        username: this.username
-      }
-    })
+    await Promise.all([this.getOrgClasses(), this.getTeachingLesson()])
   },
   methods: {
     ...mapActions({
       getOrgClasses: 'org/student/getOrgClasses',
-      resumeClassroom: 'org/student/resumeClassroom'
+      resumeClassroom: 'org/student/resumeClassroom',
+      getTeachingLesson: 'org/student/getTeachingLesson',
+      enterClassroom: 'org/student/enterClassroom'
     }),
-    handleEnterCurrentClassroom() {
+    async handleJoinClassroom({ key, packageId, lessonId }) {
+      try {
+        if (key !== this.classroomKey) {
+          this.beInClassDialog = true
+          this.joinKey = key
+        } else {
+          this.$router.push({
+            name: 'OrgStudentLessonContent',
+            params: { packageId, lessonId }
+          })
+        }
+      } catch (error) {
+        this.$message.error(error)
+        console.dir(error)
+      }
+    },
+    backCurrentClass() {
       const { packageId, lessonId } = this.classroom
       this.$router.push({
         name: 'OrgStudentLessonContent',
         params: { packageId, lessonId }
       })
+    },
+    async enterNewClass() {
+      const classInfo = await this.enterClassroom({ key: this.joinKey })
+      const { packageId, lessonId } = classInfo
+      if (packageId && lessonId) {
+        this.$router.push({
+          name: 'OrgStudentLessonContent',
+          params: { packageId, lessonId }
+        })
+      }
+      this.beInClassDialog = false
     }
   },
   computed: {
@@ -66,7 +97,7 @@ export default {
       userinfo: 'org/userinfo',
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
-      isBeInClassroom: 'org/student/isBeInClassroom'
+      teachingLesson: 'org/student/teachingLesson'
     }),
     currentClassroomLessonName() {
       return _.get(this.classroom, 'extra.lessonName', '')
