@@ -1,6 +1,8 @@
 import _ from 'lodash'
+import Cookies from 'js-cookie'
+import jsrsasign from 'jsrsasign'
 const getters = {
-  userinfo: state => state.userinfo,
+  token: state => Cookies.get('token'),
   getOrgUserCountById: state => ({ id }) => _.get(state.userCounts, id),
   getOrgRestCount: (state, { getOrgUserCountById }) => ({ id }) => {
     let userCounts = getOrgUserCountById({ id })
@@ -10,8 +12,15 @@ const getters = {
     let { count, teacherCount, studentCount } = userCounts
     return count - teacherCount - studentCount
   },
-  isOrgMember: (state, { userinfo }) => Boolean(_.get(userinfo, 'roleId')),
-  isTeacher: (sate, { userinfo }) => userinfo.roleId === 2,
+  roleId: (state, { token }) => {
+    if (!token) return
+    let { roleId } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+      jsrsasign.b64utoutf8(token.split('.')[1])
+    )
+    return roleId
+  },
+  isOrgMember: (state, { roleId }) => Boolean(roleId),
+  isTeacher: (sate, { roleId }) => roleId === 2,
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),

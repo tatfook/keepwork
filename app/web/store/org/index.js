@@ -5,7 +5,6 @@ import teacher from './teacher'
 import student from './student'
 
 const state = {
-  userinfo: {},
   orgsDetailForId: {},
   orgsDetailForLoginUrl: {},
   currentOrg: {},

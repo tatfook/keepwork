@@ -252,7 +252,6 @@ export default {
       isClassIsOver: 'org/teacher/isClassIsOver',
       classroom: 'org/teacher/classroom',
       isBeInClassroom: 'org/student/isBeInClassroom',
-      userInfo: 'org/userinfo',
       userIsTeacher: 'org/isTeacher'
     }),
     codeReadLine() {

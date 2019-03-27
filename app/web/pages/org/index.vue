@@ -17,7 +17,7 @@ import router from './org.router'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
-import orgLesson from '@/store/lesson'
+import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
@@ -48,8 +48,8 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
-    org: orgModule,
-    lesson: orgLesson
+    lesson: lessonModule,
+    org: orgModule
   },
   plugins: [
     createPersistedState({
@@ -106,7 +106,13 @@ const checkIsOrgExist = async function(
   }
 }
 
-const checkIsOrgMember = async function(name, next, params, orgId, nowPageRole) {
+const checkIsOrgMember = async function(
+  name,
+  next,
+  params,
+  orgId,
+  nowPageRole
+) {
   let orgToken = await store
     .dispatch('org/getOrgToken', { orgId })
     .catch(err => console.log(err))

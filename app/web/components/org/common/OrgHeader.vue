@@ -7,14 +7,14 @@
       <el-menu-item index='2'>
         {{currentOrg.name}}
       </el-menu-item>
-      <el-menu-item index='3' class="pull-right">
+      <el-menu-item index='3' class="pull-right" @click="logout">
         {{$t('org.logout')}}
       </el-menu-item>
     </el-menu>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgHeader',
   data() {
@@ -29,6 +29,14 @@ export default {
     orgLogo() {
       let logo = _.get(this.currentOrg, 'logo', this.defaultLogo)
       return _.isNull(logo) ? this.defaultLogo : logo
+    }
+  },
+  methods: {
+    ...mapActions({
+      userLogout: 'user/logout'
+    }),
+    async logout() {
+      await this.userLogout().catch()
     }
   }
 }
