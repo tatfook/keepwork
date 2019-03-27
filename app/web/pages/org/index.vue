@@ -17,11 +17,14 @@ import router from './org.router'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
+import orgLesson from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
+import Vhistogram from 'v-charts/lib/histogram.common'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.component(Vhistogram.name, Vhistogram)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,
@@ -45,7 +48,8 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
-    org: orgModule
+    org: orgModule,
+    lesson: orgLesson
   },
   plugins: [
     createPersistedState({

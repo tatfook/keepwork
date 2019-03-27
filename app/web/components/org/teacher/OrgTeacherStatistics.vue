@@ -18,7 +18,7 @@
           <p class="org-teacher-statistics-packages-taught-desc-time">{{course.updatedAt | formatTime}}</p>
         </div>
         <div class="org-teacher-statistics-packages-taught-view">
-          <span class="org-teacher-statistics-packages-taught-view-button">查看课堂总结</span>
+          <span class="org-teacher-statistics-packages-taught-view-button" @click="viewSummary(course)">查看课堂总结</span>
         </div>
       </div>
     </div>
@@ -84,6 +84,13 @@ export default {
       getOrgClasses: 'org/teacher/getOrgClasses',
       getTaughtClassroomCourses: 'org/teacher/getTaughtClassroomCourses'
     }),
+    viewSummary(course) {
+      this.$router.push({
+        path: `package/${course.packageId}/lesson/${
+          course.lessonId
+        }/classroom/${course.id}/summary`
+      })
+    },
     async handleSwitchClass(classId) {
       this.selectedClassId = classId
       await this.getTaughtClassroomCourses({ classId })
