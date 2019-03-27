@@ -5,6 +5,7 @@ const getters = {
   orgClasses: state => state.orgClasses,
   orgClassPackages: state => state.orgClassPackages,
   orgClassStudents: state => state.orgClassStudents,
+  classroomCoursesData: state => state.classroomCoursesData,
   orgClassPackagesDetail: state => state.orgClassPackagesDetail,
   orgLessonData: state => state.lessonData,
   orgLessonDetail: state => state.orgLessonDetail,

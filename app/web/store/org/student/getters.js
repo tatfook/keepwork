@@ -28,7 +28,7 @@ const getters = {
     state,
     { lessonQuiz },
     rootState,
-    { 'org/userinfo': { nickname, username }, 'user/profile': { portrait }, 'org/howManyDays': howManyDays }
+    { 'user/profile': { portrait, nickname, username }, 'org/howManyDays': howManyDays }
   ) => ({
     name: nickname,
     quiz: lessonQuiz,

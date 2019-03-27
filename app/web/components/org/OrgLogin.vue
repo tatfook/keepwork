@@ -13,16 +13,27 @@
         <el-form-item class="org-login-form-item">
           <el-button v-loading='isLoading' class="org-login-submit" type="primary" @click="loginToOrg">{{$t("common.login")}}</el-button>
         </el-form-item>
+        <el-form-item class="org-login-form-operations">
+          <div class="org-login-form-operations-left org-login-form-operations-cursor" @click="isShowPasswordResetForm = true">忘记密码？</div>
+          <div>没有账号？
+            <span class="org-login-form-operations-cursor" @click="isRegisterForm = true">立即注册</span>
+          </div>
+        </el-form-item>
       </el-form>
-    </div>
-    <div class="org-login-empty" v-else>
-      <img class="org-login-empty-img" src="@/assets/img/404.png" alt="">
-      <div class="org-login-empty-info">{{$t("org.pageNotFound")}}!</div>
+      <el-dialog class="org-login-dialog" :visible.sync="isRegisterForm" width="352px">
+        <register-dialog @close="handleClose"></register-dialog>
+      </el-dialog>
+      <el-dialog class="org-login-dialog" :visible.sync="isShowPasswordResetForm" width="352px">
+        <password-reset-form v-show="isShowPasswordResetForm"></password-reset-form>
+      </el-dialog>
+
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import RegisterDialog from '@/components/common/RegisterComp'
+import PasswordResetForm from '@/components/common/PasswordResetForm'
 export default {
   name: 'OrgLogin',
   async mounted() {
@@ -37,6 +48,8 @@ export default {
   },
   data() {
     return {
+      isRegisterForm: false,
+      isShowPasswordResetForm: false,
       isLoading: false,
       isOrgExist: true,
       defaultLogo: require('@/assets/img/logo_old.svg'),
@@ -69,7 +82,7 @@ export default {
     orgDetail() {
       return this.orgGetOrgDetailByLoginUrl({ loginUrl: this.orgLoginUrl })
     },
-    orgName(){
+    orgName() {
       return _.get(this.orgDetail, 'name')
     },
     orgLogo() {
@@ -83,6 +96,9 @@ export default {
       orgLogin: 'org/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),
+    handleClose() {
+      this.isRegisterForm = false
+    },
     toRolePage({ roleId }) {
       let roleName = ''
       switch (roleId) {
@@ -143,6 +159,10 @@ export default {
       this.loginData.organizationName = this.orgName
     }
   },
+  components: {
+    RegisterDialog,
+    PasswordResetForm
+  },
   watch: {
     $route() {
       this.setOrganizationName()
@@ -150,7 +170,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .org-login {
   width: 100%;
   height: 100%;
@@ -177,20 +197,39 @@ export default {
       font-weight: bold;
       text-align: left;
     }
+    &-operations {
+      margin-top: -8px;
+      color: #909399;
+      &-left {
+        flex: 1;
+        text-align: left;
+      }
+      &-cursor {
+        color: #1272cc;
+        cursor: pointer;
+      }
+      .el-form-item__content {
+        display: flex;
+        line-height: unset;
+      }
+    }
   }
   &-submit {
     width: 100%;
     margin-top: 32px;
   }
-  &-empty {
-    text-align: center;
-    &-img {
-      max-width: 100%;
+  &-dialog {
+    .el-dialog__header {
+      display: none;
     }
-    &-info {
-      font-size: 24px;
-      margin-top: 32px;
-      font-weight: bold;
+    .el-dialog__body {
+      padding: 0;
+    }
+    .register-dialog-form {
+      box-shadow: none;
+    }
+    .password-reset-form {
+      padding-bottom: 20px;
     }
   }
 }

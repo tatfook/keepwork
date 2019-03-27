@@ -12,10 +12,10 @@
     </div>
     <div class="new-member-list">
       <el-form :ref="`form-${index}`" class="new-member-item" :inline="true" v-for="(newMemberItem, index) in newMembers" :key="index" :model="newMemberItem">
-        <el-form-item class="new-member-item-form-item" :label="memberTypeNameLabel" :rules="newMemberRules.realname">
+        <el-form-item class="new-member-item-form-item" :label="memberTypeNameLabel" prop="realname" :rules="newMemberRules.realname">
           <el-input v-model="newMemberItem.realname" :placeholder="$t('org.pleaseInput')"></el-input>
         </el-form-item>
-        <el-form-item class="new-member-item-form-item" :label="$t('org.usernameLabel')" :rules="newMemberRules.memberName">
+        <el-form-item class="new-member-item-form-item" :label="$t('org.usernameLabel')" prop="memberName" :rules="newMemberRules.memberName" :error="newMemberItem.error">
           <el-input v-model="newMemberItem.memberName" :placeholder="$t('org.KeepworkUsername')"></el-input>
         </el-form-item>
         <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')">
@@ -55,6 +55,13 @@ export default {
     this.pushNewMemberData()
   },
   data() {
+    const checkMemberName = (rule, username, callback) => {
+      if (!username) {
+        return callback(new Error('请输入用户名'))
+      } else {
+        this.testUsername({ username, callback })
+      }
+    }
     return {
       isLoading: false,
       newMembers: [],
@@ -67,8 +74,8 @@ export default {
         ],
         memberName: [
           {
-            required: true,
-            message: '请输入用户名'
+            validator: checkMemberName,
+            trigger: 'blur'
           }
         ]
       }
@@ -111,6 +118,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
       getOrgClassList: 'org/getOrgClassList',
       orgCreateNewMember: 'org/createNewMember'
     }),
@@ -140,6 +148,34 @@ export default {
         name: this.memberTypeListPageName
       })
     },
+    async testUsername({ username, callback }) {
+      await this.getUserOrgRoleByGraphql({
+        organizationId: this.orgId,
+        username
+      })
+        .then(result => {
+          callback()
+        })
+        .catch(error => {
+          switch (error) {
+            case 1:
+              callback(new Error(`用户名:[${username}]已在学生列表中`))
+              break
+            case 2:
+              callback(new Error(`用户名:[${username}]已在教师列表中`))
+              break
+            case 64:
+              callback(new Error(`用户名:[${username}]已在管理员列表中`))
+              break
+            case 400:
+              callback(new Error(`用户名:[${username}]不存在`))
+              break
+            default:
+              callback(new Error(`用户名:[${username}]校验失败`))
+              break
+          }
+        })
+    },
     async saveNewMember(index) {
       await new Promise(async (resolve, reject) => {
         const form = this.$refs[`form-${index}`][0]
@@ -147,6 +183,7 @@ export default {
         const { realname, memberName, classIds } = newMemberData
         form.validate(async valid => {
           if (valid) {
+            this.newMembers[index].error = ''
             await this.orgCreateNewMember({
               organizationId: this.orgId,
               classIds,
@@ -159,21 +196,25 @@ export default {
                 resolve()
               })
               .catch(error => {
+                let errorMessage = ''
                 switch (error.status) {
                   case 409:
-                    this.$message.error(
-                      `用户名:[${memberName}]已在${this.memberTypeText}列表中`
-                    )
+                    errorMessage = `用户名:[${memberName}]已在${
+                      this.memberTypeText
+                    }列表中`
                     break
                   case 400:
-                    this.$message.error(`用户名:[${memberName}]不存在`)
+                    errorMessage = `用户名:[${memberName}]不存在`
                     break
                   default:
-                    this.$message.error(`用户名:[${student.account}]添加失败`)
+                    errorMessage = `用户名:[${student.account}]添加失败`
                     break
                 }
+                this.newMembers[index].error = errorMessage
                 reject()
               })
+          } else {
+            reject()
           }
         })
       })

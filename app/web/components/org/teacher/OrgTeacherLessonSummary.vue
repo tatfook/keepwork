@@ -104,8 +104,8 @@
   </div>
 </template>
 <script>
-import AccuracyRateChart from './AccuracyRateChart'
-import NumberOfStudentsChart from './NumberOfStudentsChart'
+import AccuracyRateChart from '@/components/lesson/teacher/AccuracyRateChart'
+import NumberOfStudentsChart from '@/components/lesson/teacher/NumberOfStudentsChart'
 import html2canvas from 'html2canvas'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
@@ -127,7 +127,7 @@ export default {
       emailAddress: '',
       isEn: locale === 'en-US',
       currenClassInfo: { extra: {} },
-      classid: this.$route.params.classId,
+      classid: this.$route.params.classroomId,
       loading: true,
       lessonName: null,
       lessonGoals: null,
@@ -162,14 +162,14 @@ export default {
   },
   async mounted() {
     await lesson.classrooms
-      .getClassroomById(this.$route.params.classId)
+      .getClassroomById(this.$route.params.classroomId)
       .then(res => {
         this.currenClassInfo = res
         this.lessonNo = res.extra.lessonNo || 0
         this.lessonName = res.extra.lessonName
       })
       .catch(err => console.log(err))
-    await this.getClassLearnRecords({ id: this.$route.params.classId })
+    await this.getClassLearnRecords({ id: this.$route.params.classroomId })
     let res = await lesson.lessons.lessonContent({
       lessonId: this.$route.params.lessonId
     })
@@ -191,7 +191,8 @@ export default {
     ...mapGetters({
       userProfile: 'user/profile',
       username: 'user/username',
-      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord'
+      classroomLearnRecord: 'lesson/teacher/classroomLearnRecord',
+      currentOrg: 'org/currentOrg'
     }),
     getWeekDay() {
       let time = dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
@@ -382,7 +383,7 @@ export default {
     },
     modifiedGrades(record) {
       let learnRecordsArr = _.map(record, student => {
-        if(student.extra.quiz){
+        if (student.extra.quiz) {
           for (let i = 0; i < student.extra.quiz.length; i++) {
             let standardAnswer =
               student.extra.quiz[i].data.answer.toString() || ''
@@ -452,9 +453,11 @@ export default {
     },
     singleStudentRecord(index, student) {
       let _page = this.$router.resolve({
-        path: `/teacher/student/${student.userId}/classId/${
-          this.classid
-        }/lessonNo/${this.lessonNo}/lessonName/${this.lessonName}/record`
+        path: `/${this.currentOrg.loginUrl}/teacher/student/${
+          student.userId
+        }/classId/${this.classid}/lessonNo/${this.lessonNo}/lessonName/${
+          this.lessonName
+        }/record`
       })
       window.open(_page.href)
     },

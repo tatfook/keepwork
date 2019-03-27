@@ -4,7 +4,6 @@ import { keepwork } from '@/api'
 import { props } from './mutations'
 
 const {
-  LOGIN_SUCCESS,
   GET_ORG_COUNT_SUCCESS,
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
@@ -31,9 +30,14 @@ const actions = {
       let { token } = userinfo
       Cookies.set('token', token)
       window.localStorage.setItem('satellizer_token', token)
-      commit(LOGIN_SUCCESS, { userinfo })
     }
     return userinfo
+  },
+  async getOrgToken(context, { orgId }) {
+    let token = await keepwork.lessonOrganizations
+      .getOrgToken({ orgId })
+      .catch()
+    return token
   },
   async getOrgUserCountsByGraphql(context, { orgId }) {
     let { commit } = context
@@ -116,6 +120,25 @@ const actions = {
     )
     commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers })
   },
+  async getUserOrgRoleByGraphql(context, { organizationId, username }) {
+    let result = await keepwork.graphql.getQueryResult({
+      query:
+        'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId} }}',
+      variables: {
+        organizationId,
+        username
+      }
+    })
+    let organizationUser = result.organizationUser
+    if (!organizationUser) {
+      return Promise.reject(400)
+    }
+    let organizationClassMembers = organizationUser.organizationClassMembers
+    if (organizationClassMembers.length === 0) {
+      return Promise.resolve()
+    }
+    return Promise.reject(organizationClassMembers[0].roleId)
+  },
   async createNewMember(
     context,
     { organizationId, classId, classIds, memberName, realname, roleId }
@@ -139,7 +162,10 @@ const actions = {
     return Promise.resolve(result)
   },
   async removeMemberFromClass(context, { id }) {
-    let { dispatch, getters: { currentOrg } } = context
+    let {
+      dispatch,
+      getters: { currentOrg }
+    } = context
     await keepwork.lessonOrganizationClassMembers
       .removeMemberFromClass(id)
       .catch(error => {

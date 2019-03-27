@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const OrgLogin = () => import('@/components/org/OrgLogin')
-
+const OrgContact = () => import('@/components/org/OrgContact')
+const OrgNotFound = () => import('@/components/org/OrgNotFound')
 const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
@@ -13,6 +14,7 @@ const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgT
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
 const OrgTeacherLessonPerformance = () => import('@/components/org/teacher/OrgTeacherLessonPerformance')
 const OrgTeacherLessonSummary = () => import('@/components/org/teacher/OrgTeacherLessonSummary')
+const OrgTeacherLessonStudentRecord = () => import('@/components/org/teacher/OrgTeacherLessonStudentRecord')
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
@@ -48,6 +50,16 @@ export default new Router({
     {
       path: '/:orgLoginUrl',
       redirect: { name: 'OrgLogin' }
+    },
+    {
+      path: '/:orgLoginUrl/contact',
+      name: 'OrgContact',
+      component: OrgContact
+    },
+    {
+      path: '/:orgLoginUrl/notfound',
+      name: 'OrgNotFound',
+      component: OrgNotFound
     },
     {
       path: '/:orgLoginUrl/login',
@@ -115,7 +127,7 @@ export default new Router({
             {
               path: 'statistics',
               name: 'OrgTeacherStatistics',
-              component: OrgTeacherStatistics
+              component: OrgTeacherStatistics,
             },
             {
               path: 'classes',
@@ -123,6 +135,16 @@ export default new Router({
               component: OrgTeacherClass
             }
           ]
+        },
+        {
+          path: 'package/:packageId/lesson/:lessonId/classroom/:classroomId/summary',
+          name: 'OrgTeacherLessonSummaryPage',
+          component: OrgTeacherLessonSummary
+        },
+        {
+          path: '/:orgLoginUrl/teacher/student/:userId/classId/:classId/lessonNo/:lessonNo/lessonName/:lessonName/record',
+          name: 'OrgTeacherLessonStudentRecord',
+          component: OrgTeacherLessonStudentRecord
         },
         {
           path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId',
