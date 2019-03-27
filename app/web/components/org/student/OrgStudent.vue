@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userinfo: 'org/userinfo',
+      userinfo: 'user/profile',
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
       isBeInClassroom: 'org/student/isBeInClassroom'

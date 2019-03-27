@@ -4,7 +4,6 @@ import { keepwork } from '@/api'
 import { props } from './mutations'
 
 const {
-  LOGIN_SUCCESS,
   GET_ORG_COUNT_SUCCESS,
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
@@ -31,7 +30,6 @@ const actions = {
       let { token } = userinfo
       Cookies.set('token', token)
       window.localStorage.setItem('satellizer_token', token)
-      commit(LOGIN_SUCCESS, { userinfo })
     }
     return userinfo
   },
