@@ -2,10 +2,10 @@
   <div class="org-student">
     <div class="org-student-tips" v-if="isBeInClassroom">
       <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">正在上课: {{currentClassroomLessonName}}</span>
+      <span class="org-student-tips-text">正在上课: {{currentClassroomLessonName}},课堂ID: C{{classroomKey}}</span>
       <span @click="handleEnterCurrentClassroom" class="org-student-tips-button">进入课堂</span>
     </div>
-    <div class="org-student-container" >
+    <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-message">
           <div class="org-student-role-label">学生</div>
@@ -25,6 +25,8 @@
 <script>
 import OrgHeader from '@/components/org/common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
+const { graphql } = keepwork
 export default {
   name: 'OrgStudent',
   data() {
@@ -36,10 +38,15 @@ export default {
     }
   },
   async created() {
-    await Promise.all([
-      this.getOrgClasses(),
-      this.resumeClassroom()
-    ])
+    await Promise.all([this.getOrgClasses(), this.resumeClassroom()])
+    const teachingClass = await graphql.getQueryResult({
+      query:
+        'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id, classroom{id, state, extra}} } }',
+      variables: {
+        organizationId: this.organizationId,
+        username: this.username
+      }
+    })
   },
   methods: {
     ...mapActions({
@@ -48,7 +55,10 @@ export default {
     }),
     handleEnterCurrentClassroom() {
       const { packageId, lessonId } = this.classroom
-      this.$router.push({ name: 'OrgStudentLessonContent', params: { packageId, lessonId }})
+      this.$router.push({
+        name: 'OrgStudentLessonContent',
+        params: { packageId, lessonId }
+      })
     }
   },
   computed: {
@@ -61,6 +71,9 @@ export default {
     currentClassroomLessonName() {
       return _.get(this.classroom, 'extra.lessonName', '')
     },
+    classroomKey() {
+      return _.get(this.classroom, 'key', '')
+    },
     username() {
       return _.get(this.userinfo, 'username', '')
     },
@@ -72,6 +85,9 @@ export default {
     },
     userPortrait() {
       return _.get(this.userinfo, 'portrait') || this.defaultPortrait
+    },
+    organizationId() {
+      return _.get(this.userinfo, 'organizationId', '')
     }
   },
   components: {
@@ -112,7 +128,7 @@ $borderColor: #e8e8e8;
       width: 102px;
       height: 32px;
       line-height: 32px;
-      margin-left: 40px;
+      margin-left: 20px;
       background-color: #f4b744;
       color: #fff;
       box-shadow: inset 0px -3px 0px 0px rgba(151, 21, 0, 0.28);
@@ -166,6 +182,11 @@ $borderColor: #e8e8e8;
     font-size: 20px;
     color: #333;
   }
+  &-skills {
+    font-size: 14px;
+    color: #606266;
+    cursor: pointer;
+  }
   &-menu {
     margin: 0;
     padding-bottom: 10px;
@@ -174,13 +195,12 @@ $borderColor: #e8e8e8;
     padding: 10px;
     box-sizing: border-box;
     &-item {
-      text-align: center;
       margin-top: 10px;
       margin-left: 8px;
       width: 112px;
       height: 32px;
       line-height: 32px;
-      padding: 0 7px;
+      padding: 0 10px;
       box-sizing: border-box;
       overflow: hidden;
       white-space: nowrap;

@@ -135,7 +135,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgPackages: 'org/student/orgPackages'
+      orgPackages: 'org/student/orgPackages',
+      isBeInClassroom: 'org/student/isBeInClassroom'
     }),
     orgPackageList() {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))

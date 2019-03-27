@@ -108,7 +108,7 @@ const actions = {
       let filterQuiz = _.filter(quiz, ({ answer }) => answer)
       _.forEach(_lessonDetail.modList, q => {
         if (q.cmd === 'Quiz') {
-          let quiz = _.find(filterQuiz, o => o.data.title === q.data.quiz.data[0].title)
+          let quiz = _.find(filterQuiz, o => o.data.title === _.get(q, 'data.quiz.data[0].title', ''))
           if (quiz) {
             q.state = { result: quiz.result, answer: quiz.answer }
           }

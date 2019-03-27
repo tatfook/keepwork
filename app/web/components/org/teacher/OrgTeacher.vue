@@ -1,10 +1,5 @@
 <template>
   <div class="org-teacher">
-    <div class="org-teacher-tips" v-if="isBeInClassroom">
-      <span class="org-teacher-tips-icon"></span>
-      <span class="org-teacher-tips-text">正在上课: {{currentClassroomLessonName}}</span>
-      <span @click="handleEnterCurrentClassroom" class="org-teacher-tips-button">进入课堂</span>
-    </div>
     <div class="org-teacher-container">
       <div class="org-teacher-sidebar">
         <div class="org-teacher-message">
@@ -45,19 +40,6 @@ export default {
       ]
     }
   },
-  methods: {
-    async handleEnterCurrentClassroom() {
-      const { classId, packageId, lessonId } = this.classroom
-      this.$router.push({
-        name: 'OrgTeacherClassPackageLesson',
-        params: {
-          classId,
-          packageId,
-          lessonId
-        }
-      })
-    }
-  },
   computed: {
     ...mapGetters({
       classroom: 'org/teacher/classroom',
@@ -66,9 +48,6 @@ export default {
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
-    },
-    currentClassroomLessonName() {
-      return _.get(this.classroom, 'extra.lessonName', '')
     },
     userPortrait() {
       return this.userinfo.portrait || this.defaultPortrait
@@ -84,43 +63,6 @@ $borderColor: #e8e8e8;
 .org-teacher {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
-  &-tips {
-    max-width: 1200px;
-    height: 48px;
-    line-height: 48px;
-    text-align: center;
-    box-sizing: border-box;
-    margin: 20px auto 0;
-    background-color: rgba($color: #e6a23c, $alpha: 0.2);
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &-icon {
-      height: 41px;
-      width: 41px;
-      object-fit: cover;
-      background: url('../../../assets/org/teacher.png');
-    }
-    &-text {
-      color: #333;
-      font-size: 14px;
-      margin-left: 10px;
-    }
-    &-button {
-      display: inline-block;
-      width: 102px;
-      height: 32px;
-      line-height: 32px;
-      margin-left: 40px;
-      background-color: #f4b744;
-      color: #fff;
-      box-shadow: inset 0px -3px 0px 0px rgba(151, 21, 0, 0.28);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  }
   &-container {
     max-width: 1200px;
     margin: 0 auto;

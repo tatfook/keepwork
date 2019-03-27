@@ -50,24 +50,9 @@ export default {
   },
   async created() {
     await this.getLessonData()
-
-    // await this.getCurrentClass().catch(e => console.error(e))
-    // if (
-    //   name === 'LessonstudentSummary' ||
-    //   (name === 'LessonstudentPerformance' && !this.isBeInClassroom) ||
-    //   !this.isInCurrentClass
-    // ) {
-    //   this.$router.push({ name: 'LessonstudentPlan' })
-    // }
-    // if (this.isInCurrentClass) {
-    //   this.copyClassroomQuiz()
-    //   this.intervalUpdateLearnRecords()
-    // }
-    // window.document.title = this.currentLessonName
   },
   async destroyed() {
     // this.clearUpdateLearnRecords()
-    this.leaveTheClassroom()
     window.document.title = 'Keepwork'
   },
   methods: {
@@ -80,8 +65,6 @@ export default {
       uploadLearnRecords: 'org/student/uploadLearnRecords',
       // getCurrentClass: 'org/student/getCurrentClass',
       // updateLearnRecords: 'org/student/updateLearnRecords',
-      leaveTheClassroom: 'org/student/leaveTheClassroom'
-      // copyClassroomQuiz: 'org/student/copyClassroomQuiz'
     }),
     async getLessonData() {
       try {
@@ -96,8 +79,17 @@ export default {
           this.getLessonDetail({ packageId, lessonId }),
           this.getOrgPackageDetail({ packageId })
         ])
-        if (this.isBeInClassroom && this.isInCurrentClass) {
-          await this.uploadLearnRecords()
+        if (this.isBeInClassroom) {
+          if (this.isInCurrentClass) {
+            await this.resumeQuiz({ id: this.classroomId })
+            await this.uploadLearnRecords()
+          } else {
+            const { packageId, lessonId } = this.classroom
+            return this.$router.push({
+              name: 'OrgStudentPackageLesson',
+              params: { packageId, lessonId }
+            })
+          }
         } else {
           this.initSelfLearning({ packageId, lessonId })
         }
@@ -215,6 +207,9 @@ export default {
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
+    },
+    classroomId() {
+      return _.get(this.classroom, 'id', '')
     }
   },
   beforeRouteUpdate({ name }, from, next) {

@@ -40,8 +40,9 @@ export default {
 
 <style lang="scss" scoped>
 .org-student-router {
-  height: 100%;
-  background: #f5f5f5;
+  width: 100%;
+  min-height: 100%;
+  background-color: #f5f5f5;
 }
 </style>
 

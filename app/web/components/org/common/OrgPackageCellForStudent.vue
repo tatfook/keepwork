@@ -13,6 +13,7 @@
 
 <script>
 import OrgPackageCell from './OrgPackageCell'
+import { mapGetters } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'OrgPacakgeCellForStudent',
@@ -32,13 +33,28 @@ export default {
       this.$emit('package-click', this.packageId)
     },
     handleContinueLearn() {
+      if (this.isBeInClassroom) {
+        return this.$message({
+          type: 'warning',
+          message: this.$t('lesson.beInClass')
+        })
+      }
       this.$emit('continue-click', this.packageId)
     },
     handleStartLearn() {
+      if (this.isBeInClassroom) {
+        return this.$message({
+          type: 'warning',
+          message: this.$t('lesson.beInClass')
+        })
+      }
       this.$emit('start-click', this.packageId)
     }
   },
   computed: {
+    ...mapGetters({
+      isBeInClassroom: 'org/student/isBeInClassroom'
+    }),
     packageId() {
       return _.get(this.packageData, 'packageId', '')
     },
