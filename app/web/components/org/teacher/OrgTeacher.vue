@@ -44,7 +44,7 @@ export default {
     ...mapGetters({
       classroom: 'org/teacher/classroom',
       isBeInClassroom: 'org/teacher/isBeInClassroom',
-      userinfo: 'user/profile'
+      userinfo: 'org/userinfo'
     }),
     nowPageName() {
       return _.get(this.$route, 'name')

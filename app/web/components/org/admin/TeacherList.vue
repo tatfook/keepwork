@@ -1,10 +1,10 @@
 <template>
   <div class="teacher-list" v-loading="isLoading">
-    <div class="teacher-list-header">
+    <div class="teacher-list-header" v-if="orgTeachersLength > 0">
       <div class="teacher-list-header-count">{{$t('org.IncludeTeachers') + orgTeachers.length + $t('org.teacherCountUnit')}}</div>
       <div class="teacher-list-header-new" @click="toNewTeacherPage"><i class="el-icon-circle-plus-outline"></i>{{$t('org.addTeachers')}}</div>
     </div>
-    <el-table class="teacher-list-table" border :data="orgTeachersWithClassesString" header-row-class-name="teacher-list-table-header">
+    <el-table v-if="orgTeachersLength > 0" class="teacher-list-table" border :data="orgTeachersWithClassesString" header-row-class-name="teacher-list-table-header">
       <el-table-column prop="realname" :label="$t('org.nameLabel')" width="214">
       </el-table-column>
       <el-table-column prop="username" :label="$t('org.usernameLabel')" width="214">
@@ -20,6 +20,11 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="teacher-list-empty" v-if="orgTeachersLength == 0">
+      <img class="teacher-list-empty-img" src="@/assets/org/list_empty.png" alt="">
+      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <router-link :to="{name: 'OrgNewTeacher'}" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</router-link>
+      </p>
+    </div>
   </div>
 </template>
 <script>
@@ -52,6 +57,9 @@ export default {
     },
     orgTeachers() {
       return this.getOrgTeachersById({ id: this.orgId }) || []
+    },
+    orgTeachersLength() {
+      return this.orgTeachers.length
     },
     orgTeachersWithClassesString() {
       return _.map(this.orgTeachers, teacher => {
@@ -153,6 +161,22 @@ export default {
       &-primary {
         color: #2397f3;
       }
+    }
+  }
+  &-empty {
+    padding-top: 58px;
+    text-align: center;
+    &-img {
+      width: auto;
+      max-width: 100%;
+    }
+    &-info {
+      color: #999;
+      margin: 52px 0 32px;
+    }
+    &-cursor {
+      color: #409efe;
+      text-decoration: none;
     }
   }
   .el-icon-circle-plus-outline {

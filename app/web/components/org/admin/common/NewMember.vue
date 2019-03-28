@@ -49,9 +49,6 @@ export default {
     }
   },
   async mounted() {
-    await this.getOrgClassList({
-      organizationId: this.orgId
-    })
     this.pushNewMemberData()
   },
   data() {
@@ -119,7 +116,6 @@ export default {
   methods: {
     ...mapActions({
       getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
-      getOrgClassList: 'org/getOrgClassList',
       orgCreateNewMember: 'org/createNewMember'
     }),
     pushNewMemberData() {

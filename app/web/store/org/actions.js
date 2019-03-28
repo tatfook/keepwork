@@ -97,11 +97,13 @@ const actions = {
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
   async createNewClass(context, { organizationId, name, packages }) {
+    let { dispatch } = context
     let result = await keepwork.lessonOrganizationClasses
       .createClasses({ organizationId, name, packages })
       .catch(error => {
         return Promise.reject(error.response)
       })
+    await dispatch('getOrgClassList', { organizationId })
     return Promise.resolve(result)
   },
   async updateClass(context, { organizationId, classId, name, packages }) {

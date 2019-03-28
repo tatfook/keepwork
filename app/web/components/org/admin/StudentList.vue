@@ -1,16 +1,16 @@
 <template>
   <div class="student-list" v-loading="isLoading">
-    <el-select v-model="selectedClassId">
+    <el-select v-model="selectedClassId" v-if="orgStudentsCount > 0">
       <el-option label="全部" :value="undefined">
       </el-option>
       <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
       </el-option>
     </el-select>
-    <div class="student-list-header">
+    <div class="student-list-header" v-if="orgStudentsCount > 0">
       <div class="student-list-header-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
       <div class="student-list-header-new" @click="toNewStudentPage"><i class="el-icon-circle-plus-outline"></i>{{$t('org.addStudents')}}</div>
     </div>
-    <el-table class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
+    <el-table v-if="orgStudentsCount > 0" class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
       <el-table-column prop="realname" :label="$t('org.nameLabel')" width="172">
       </el-table-column>
       <el-table-column prop="users.username" :label="$t('org.usernameLabel')" width="172">
@@ -28,6 +28,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="student-list-empty" v-if="orgStudentsCount == 0">
+      <p class="student-list-empty-info">{{$t('org.noStudents')}} <router-link :to="{name: 'OrgNewStudent'}" class="student-list-empty-cursor">{{$t('org.addStudentsImmediately')}}</router-link>
+      </p>
+    </div>
   </div>
 </template>
 <script>
@@ -39,9 +43,6 @@ export default {
     await this.getOrgStudentList({
       organizationId: this.orgId
     }).catch(() => {})
-    await this.getOrgClassList({
-      organizationId: this.orgId
-    })
     this.isLoading = false
   },
   data() {
@@ -54,6 +55,7 @@ export default {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       getOrgRestCount: 'org/getOrgRestCount',
+      getOrgUserCountById: 'org/getOrgUserCountById',
       getOrgClassesById: 'org/getOrgClassesById',
       getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
     }),
@@ -70,6 +72,13 @@ export default {
     },
     orgRestUserCount() {
       return this.getOrgRestCount({ id: this.orgId })
+    },
+    orgStudentsCount() {
+      return _.get(
+        this.getOrgUserCountById({ id: this.orgId }),
+        'studentCount',
+        0
+      )
     },
     orgStudentsWithClassesString() {
       return _.map(this.orgStudents, student => {
@@ -94,7 +103,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      getOrgClassList: 'org/getOrgClassList',
       getOrgStudentList: 'org/getOrgStudentList',
       removeMemberFromClass: 'org/removeMemberFromClass'
     }),
@@ -203,6 +211,17 @@ export default {
       &-primary {
         color: #2397f3;
       }
+    }
+  }
+  &-empty {
+    padding-top: 140px;
+    text-align: center;
+    &-info {
+      color: #999;
+    }
+    &-cursor {
+      color: #409efe;
+      text-decoration: none;
     }
   }
   .el-icon-circle-plus-outline {

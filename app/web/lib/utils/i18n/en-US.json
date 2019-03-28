@@ -1733,6 +1733,13 @@
     "pleaseInput": "Please input",
     "KeepworkUsername": "Keepwork username",
     "pleaseSelect": "Please select",
-    "classNameCannotBeModifiedAfterSaved": "(Class name cannot be modified after saved.)"
+    "classNameCannotBeModifiedAfterSaved": "(Class name cannot be modified after saved.)",
+    "classInformationLabel": "Class Information",
+    "getStarted": "Get started,",
+    "addFirstClass": "add your first class",
+    "noTeaches": "There are no teachers. ",
+    "addTeachersImmediately": "Add teachers",
+    "noStudents": "There are no students. ",
+    "addStudentsImmediately": "Add students"
   }
 }
