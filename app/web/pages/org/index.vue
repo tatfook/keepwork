@@ -64,6 +64,7 @@ const OrgTeacherPageName = 'OrgTeacher'
 const OrgStudentPageName = 'OrgStudent'
 const OrgContactPageName = 'OrgContact'
 const OrgNotFoundPageName = 'OrgNotFound'
+const OrgIndexPageName = 'OrgIndex'
 
 const checkIsLogined = function(name, next, params) {
   let nowToken = Cookies.get('token')
@@ -89,7 +90,7 @@ const checkIsOrgExist = async function(
 ) {
   let orgDetail = await store
     .dispatch('org/getOrgDetailByLoginUrl', { orgLoginUrl })
-    .catch(error => {})
+    .catch(err => console.log(err))
   if (orgDetail && orgDetail.id) {
     store.dispatch('org/setCurrentOrg', { orgDetail })
     return { isContinue: true, orgId: orgDetail.id }
@@ -117,6 +118,7 @@ const checkIsOrgMember = async function(
     .dispatch('org/getOrgToken', { orgId })
     .catch(err => console.log(err))
   if (orgToken) {
+    Cookies.set('token', orgToken)
     return { isContinue: true, orgToken }
   }
   if (nowPageRole != 'contact') {

@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import jsrsasign from 'jsrsasign'
 const getters = {
   token: state => Cookies.get('token'),
+  userinfo: (state, getters, rootState) => _.get(rootState, 'user.profile'),
   getOrgUserCountById: state => ({ id }) => _.get(state.userCounts, id),
   getOrgRestCount: (state, { getOrgUserCountById }) => ({ id }) => {
     let userCounts = getOrgUserCountById({ id })

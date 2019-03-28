@@ -26,7 +26,7 @@ export default {
     ...mapGetters({
       classroomKey: 'org/student/classroomKey',
       isBeInClassroom: 'org/student/isBeInClassroom',
-      userinfo: 'user/profile'
+      userinfo: 'org/userinfo'
     }),
     nickname() {
       return ''
