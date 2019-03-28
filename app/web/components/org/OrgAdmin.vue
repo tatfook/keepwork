@@ -1,7 +1,7 @@
 <template>
   <div class="org-admin">
     <org-header></org-header>
-    <div class="org-admin-container">
+    <div class="org-admin-container" v-if="isSidebarShow">
       <div class="org-admin-sidebar">
         <div class="org-admin-message">
           <div class="org-admin-role-label">{{$t('org.admin')}}</div>
@@ -16,6 +16,7 @@
       </div>
       <router-view class="org-admin-main"></router-view>
     </div>
+    <router-view v-if="!isSidebarShow"></router-view>
   </div>
 </template>
 <script>
@@ -62,6 +63,9 @@ export default {
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
+    },
+    isSidebarShow() {
+      return this.nowPageName !== 'OrgPackageDetail'
     }
   },
   methods: {

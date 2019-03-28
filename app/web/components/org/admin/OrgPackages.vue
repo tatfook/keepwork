@@ -7,8 +7,8 @@
       <a href="#" class="org-packages-header-link">{{$t('org.moreLessons')}}<i class="el-icon-arrow-right"></i></a>
     </div>
     <div class="org-packages-content">
-      <div class="org-packages-item" v-for="(lessonPackage,index) in orgPackages" :key="index">
-        <org-package-cell :packageData='lessonPackage.package'></org-package-cell>
+      <div class="org-packages-item" v-for="(lessonPackage,index) in orgPackagesFormated" :key="index">
+        <org-package-cell :packageData='lessonPackage.package' @package-click="toPackageDetailPage(lessonPackage.package.id)"></org-package-cell>
       </div>
     </div>
   </div>
@@ -36,6 +36,12 @@ export default {
     },
     orgPackages() {
       return this.getOrgPackagesById({ id: this.organizationId }) || []
+    },
+    orgPackagesFormated() {
+      return _.map(this.orgPackages, packageDetail => {
+        packageDetail.package.lessons = packageDetail.lessons
+        return packageDetail
+      })
     }
   },
   methods: {
@@ -46,6 +52,11 @@ export default {
       this.isLoading = true
       await this.getOrgPackages({ organizationId: this.organizationId }).catch()
       this.isLoading = false
+    },
+    toPackageDetailPage(packageId) {
+      this.$router.push({
+        path: `package/${packageId}`
+      })
     }
   },
   components: {

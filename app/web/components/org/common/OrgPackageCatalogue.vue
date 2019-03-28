@@ -1,6 +1,6 @@
 <template>
   <div class="package-catalogue">
-    <div class="package-catalogue-progress" v-show="!isTeacher">
+    <div class="package-catalogue-progress" v-show="isStudent">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
         <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
@@ -31,9 +31,9 @@
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>45{{$t('lesson.minUnit')}}</span>
           </div>
-          <el-button v-show="lesson.isLearned && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
-          <el-button v-show="lesson.isLearned && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
-          <el-button v-show="!lesson.isLearned && !isTeacher" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
+          <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
+          <el-button v-show="lesson.isLearned && isStudent" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
+          <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
           <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> 本章已经教完</span>
         </div>
       </div>
@@ -115,6 +115,9 @@ export default {
     },
     isTeacher() {
       return this.actorType === 'teacher'
+    },
+    isStudent() {
+      return this.actorType === 'student'
     },
     isPendingReview() {
       return this.packageDetail.state === 0 || this.packageDetail.state === 1
