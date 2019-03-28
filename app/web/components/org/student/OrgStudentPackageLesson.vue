@@ -20,9 +20,6 @@
       </div>
     </div>
     <lesson-header class='lesson-header' :lesson="lessonHeader" :isstudent="true" :isInCurrentClass="isInCurrentClass" />
-    <!-- <keep-alive include="OrgStudentLessonContent, OrgStudentLessonSummary">
-      <router-view></router-view>
-    </keep-alive> -->
     <org-student-lesson-content v-show="!isShowSummary"></org-student-lesson-content>
     <org-student-lesson-summary v-show="isShowSummary"></org-student-lesson-summary>
   </div>
@@ -106,7 +103,8 @@ export default {
       if (
         lastRecord.state === 0 &&
         lastRecord.packageId === packageId &&
-        lastRecord.lessonId === lessonId
+        lastRecord.lessonId === lessonId &&
+        lastRecord.classroomId === 0
       ) {
         const quizzes = _.get(lastRecord, 'extra.quiz', [])
         if (_.some(quizzes, item => item.answer)) {
@@ -159,7 +157,6 @@ export default {
       orgPackagesDetail: 'org/student/orgPackagesDetail',
       orgClasses: 'org/student/orgClasses',
       isBeInClassroom: 'org/student/isBeInClassroom',
-      isClassIsOver: 'org/student/isClassIsOver',
       classroom: 'org/student/classroom',
       userinfo: 'org/userinfo',
       isShowSummary: 'org/student/isShowSummary'
@@ -214,16 +211,6 @@ export default {
       return _.get(this.classroom, 'id', '')
     }
   },
-  beforeRouteUpdate({ name }, from, next) {
-    if (name === 'LessonstudentSummary' && !this.isClassIsOver) {
-      return this.$router.push({ name: 'plan' })
-    }
-    if (name === 'LessonstudentPerformance' && !this.isBeInClassroom) {
-      this.intervalUpdateLearnRecords()
-      return this.$router.push({ name: 'plan' })
-    }
-    next()
-  }
 }
 </script>
 

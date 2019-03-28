@@ -65,12 +65,21 @@ export default {
         if (this.classroomKey && key !== this.classroomKey) {
           this.beInClassDialog = true
           this.joinKey = key
+        } else if (this.classroomKey && key == this.classroomKey) {
+          console.log(packageId)
+          console.log(lessonId)
+          if (packageId && lessonId) {
+            this.$router.push({
+              name: 'OrgStudentPackageLesson',
+              params: { packageId, lessonId }
+            })
+          }
         } else {
           const classInfo = await this.enterClassroom({ key })
           const { packageId, lessonId } = classInfo
           if (packageId && lessonId) {
             this.$router.push({
-              name: 'OrgStudentLessonContent',
+              name: 'OrgStudentPackageLesson',
               params: { packageId, lessonId }
             })
           }
@@ -82,7 +91,7 @@ export default {
     backCurrentClass() {
       const { packageId, lessonId } = this.classroom
       this.$router.push({
-        name: 'OrgStudentLessonContent',
+        name: 'OrgStudentPackageLesson',
         params: { packageId, lessonId }
       })
     },
@@ -91,7 +100,7 @@ export default {
       const { packageId, lessonId } = classInfo
       if (packageId && lessonId) {
         this.$router.push({
-          name: 'OrgStudentLessonContent',
+          name: 'OrgStudentPackageLesson',
           params: { packageId, lessonId }
         })
       }

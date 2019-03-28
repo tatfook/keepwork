@@ -1,19 +1,30 @@
 <template>
-  <div class="learn-summary-container">
-    <div class="summary-row summary-name">
-      {{$t('card.lesson')}}: {{lessonName}}
+  <div class="learn-summary">
+    <div class="org-breadcrumb">
+      <div class="org-breadcrumb-main">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ name: 'OrgStudent' }">课程包</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgStudentPackage', params: { packageId } }">{{packageName}}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{lessonName}}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
     </div>
-    <div class="summary-row summary-desc">
-      {{goals}}
+    <div class="learn-summary-container">
+      <div class="summary-row summary-name">
+        {{$t('card.lesson')}}: {{lessonName}}
+      </div>
+      <div class="summary-row summary-desc">
+        {{goals}}
+      </div>
+      <div class="summary-row summary-time">
+        <span class="duration">{{$t('lesson.duration')}}:</span> 45 {{$t('lesson.mins')}}
+        <span class="lasttime">{{lastTimeFormat}}</span>
+      </div>
+      <div class="summary-row summary-title">
+        {{$t('lesson.summary')}}:
+      </div>
+      <student-summary v-if="!isLoading" :summary="summary" :isShowShare="false" :isShowTitle="false" />
     </div>
-    <div class="summary-row summary-time">
-      <span class="duration">{{$t('lesson.duration')}}:</span> 45 {{$t('lesson.mins')}}
-      <span class="lasttime">{{lastTimeFormat}}</span>
-    </div>
-    <div class="summary-row summary-title">
-      {{$t('lesson.summary')}}:
-    </div>
-    <student-summary v-if="!isLoading" :summary="summary" :isShowShare="false" :isShowTitle="false" />
   </div>
 </template>
 
@@ -28,7 +39,7 @@ import 'moment/locale/zh-cn'
 export default {
   name: 'LearnSummary',
   components: {
-    'student-summary': StudentSummary
+    StudentSummary
   },
   data() {
     return {
@@ -40,19 +51,17 @@ export default {
   },
   async mounted() {
     const { packageId, lessonId } = this.$route.params
-    console.log(packageId)
-    console.log(lessonId)
-    // const [learnRecords, lessonDetail] = await Promise.all([
-    //   lesson.lessons.getLastLearnRecordById({ lessonId: Number(lessonId) }),
-    //   lesson.lessons.lessonDetail({ lessonId: Number(lessonId) })
-    // ]).catch(e => console.error(e))
-    // this.lessonDetail = lessonDetail || {}
-    // this.learnRecords = learnRecords.rows || []
-    // this.summary = {
-    //   name: this.lessonName,
-    //   day: this.day,
-    //   skills: this.skills
-    // }
+    const [learnRecords, lessonDetail] = await Promise.all([
+      lesson.lessons.getLastLearnRecordById({ lessonId: Number(lessonId) }),
+      lesson.lessons.lessonDetail({ lessonId: Number(lessonId) })
+    ]).catch(e => console.error(e))
+    this.lessonDetail = lessonDetail || {}
+    this.learnRecords = learnRecords.rows || []
+    this.summary = {
+      name: this.lessonName,
+      day: this.day,
+      skills: this.skills
+    }
     this.isLoading = false
   },
   computed: {
@@ -94,53 +103,81 @@ export default {
         '  ' +
         moment(this.lastTime).format('LL')
       )
+    },
+    packageId() {
+      return this.$route.params.packageId
+    },
+    packageName() {
+      return _.get(this.lessonDetail, 'packages[0].packageName', '')
     }
   }
 }
 </script>
 
 <style lang="scss">
-.learn-summary-container {
-  max-width: 1080px;
-  margin: 20px auto;
-  overflow: hidden;
-  .summary {
-    &-row {
-      margin-top: 20px;
-      width: 90%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      &.summary-desc {
-        margin-top: 5px;
+.learn-summary {
+  &-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    overflow: hidden;
+    .summary {
+      &-row {
+        margin-top: 20px;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &.summary-desc {
+          margin-top: 5px;
+        }
       }
-    }
-    &-name {
-      font-weight: bold;
-      font-size: 20px;
-      color: #303133;
-    }
-    &-desc {
-      color: #909399;
-    }
-    &-time {
-      .duration {
+      &-name {
         font-weight: bold;
+        font-size: 20px;
         color: #303133;
       }
-      .lasttime {
-        margin-left: 50px;
+      &-desc {
+        color: #909399;
+      }
+      &-time {
+        .duration {
+          font-weight: bold;
+          color: #303133;
+        }
+        .lasttime {
+          margin-left: 50px;
+        }
+      }
+      &-title {
+        color: #303133;
+        font-weight: bold;
       }
     }
-    &-title {
-      color: #303133;
-      font-weight: bold;
+  }
+  .org-breadcrumb {
+    background: #fff;
+    color: #999;
+    border-bottom: solid 1px #e6e6e6;
+    &-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding-left: 20px;
+      .el-breadcrumb {
+        height: 58px;
+        line-height: 58px;
+      }
+      .el-dropdown-link {
+        cursor: pointer;
+      }
     }
   }
 }
-@media screen and (max-width: 768px){
-.learn-summary-container {
-  margin: 10px;
-}
+@media screen and (max-width: 768px) {
+  .learn-summary {
+    &-container {
+      margin: 10px;
+    }
+  }
 }
 </style>
 

@@ -77,15 +77,15 @@ export default {
         this._notify = null
       }
     },
-    async intervalCheckClass(delay = 30) {
+    async intervalCheckClass(delay = 3) {
       await this.checkClassroom()
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
         await this.intervalCheckClass().catch(e => {
-          this.$message({
-            message: this.$t('lesson.classIsOver'),
-            type: 'warning'
-          })
+          // this.$message({
+          //   message: this.$t('lesson.classIsOver'),
+          //   type: 'warning'
+          // })
           this._notify && this._notify.close()
           this._notify = null
         })
