@@ -43,7 +43,6 @@ const actions = {
   async getTaughtClassroomCourses({ commit, getters: { classroomCoursesData } }, { classId, cache = false }) {
     if (!(cache && classroomCoursesData[classId])) {
       const classroomCourses = await lesson.classrooms.getTaughtClassroomCourses({ classId })
-      console.log('classroomcourse', classroomCourses)
       commit(GET_TAUGHT_CLASSROOM_COURSES_SUCCESS, { classId, classroomCourses })
     }
   },
