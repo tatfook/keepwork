@@ -50,24 +50,8 @@ export default {
   },
   async created() {
     await this.getLessonData()
-
-    // await this.getCurrentClass().catch(e => console.error(e))
-    // if (
-    //   name === 'LessonstudentSummary' ||
-    //   (name === 'LessonstudentPerformance' && !this.isBeInClassroom) ||
-    //   !this.isInCurrentClass
-    // ) {
-    //   this.$router.push({ name: 'LessonstudentPlan' })
-    // }
-    // if (this.isInCurrentClass) {
-    //   this.copyClassroomQuiz()
-    //   this.intervalUpdateLearnRecords()
-    // }
-    // window.document.title = this.currentLessonName
   },
   async destroyed() {
-    // this.clearUpdateLearnRecords()
-    this.leaveTheClassroom()
     window.document.title = 'Keepwork'
   },
   methods: {
@@ -78,26 +62,27 @@ export default {
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
       resumeQuiz: 'org/student/resumeQuiz',
       uploadLearnRecords: 'org/student/uploadLearnRecords',
-      // getCurrentClass: 'org/student/getCurrentClass',
-      // updateLearnRecords: 'org/student/updateLearnRecords',
-      leaveTheClassroom: 'org/student/leaveTheClassroom'
-      // copyClassroomQuiz: 'org/student/copyClassroomQuiz'
     }),
     async getLessonData() {
       try {
         const { name, params } = this.$route
         const packageId = _.toNumber(params.packageId)
         const lessonId = _.toNumber(params.lessonId)
-        // if (name !== 'OrgstudentLessonPlan') {
-        //   this.$router.push({ name: 'OrgstudentLessonPlan' })
-        // }
-        //FIXME: 在获取学生答题情况刷新的问题
         await Promise.all([
           this.getLessonDetail({ packageId, lessonId }),
           this.getOrgPackageDetail({ packageId })
         ])
-        if (this.isBeInClassroom && this.isInCurrentClass) {
-          await this.uploadLearnRecords()
+        if (this.isBeInClassroom) {
+          if (this.isInCurrentClass) {
+            await this.resumeQuiz({ id: this.classroomId })
+            await this.uploadLearnRecords()
+          } else {
+            const { packageId, lessonId } = this.classroom
+            return this.$router.push({
+              name: 'OrgStudentPackageLesson',
+              params: { packageId, lessonId }
+            })
+          }
         } else {
           this.initSelfLearning({ packageId, lessonId })
         }
@@ -215,6 +200,9 @@ export default {
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
+    },
+    classroomId() {
+      return _.get(this.classroom, 'id', '')
     }
   },
   beforeRouteUpdate({ name }, from, next) {

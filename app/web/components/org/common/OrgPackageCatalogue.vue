@@ -57,7 +57,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      classroom: 'org/student/classroom'
+      classroom: 'org/student/classroom',
+      isBeInClassroom: 'org/student/isBeInClassroom'
     }),
     isInClassroom() {
       const state = this.enterClassInfo.state

@@ -16,6 +16,14 @@
         <org-package-cell-for-student :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell-for-student>
       </el-col>
     </el-row>
+    <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
+      <div class="hint">
+        <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
+        <el-button type="primary" @click="enterNewClass(classroomkey)">{{$t('lesson.enterNewClass')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -32,7 +40,8 @@ export default {
   data() {
     return {
       isLoading: true,
-      classroomkey: ''
+      classroomkey: '',
+      beInClassDialog: false
     }
   },
   async created() {
@@ -108,34 +117,85 @@ export default {
       try {
         const key = _.lowerCase(this.classroomkey)
         if (_.includes(key, 'x')) {
+          if (this.isBeInClassroom) {
+            return this.$message.error(this.$t('lesson.beInClass'))
+          }
+          const OrgHasTheLesson = _.get(
+            this.orgPackagesDict,
+            [packageId],
+            []
+          ).includes(lessonId)
           const [packageId, lessonId] = key.split('x').map(_.toNumber)
-          if (packageId && lessonId) {
-            // 这里可以再做个效验
+          const res = await lesson.classrooms.isValidLessonId({
+            packageId,
+            lessonId
+          })
+          const isHasTheLesson = res.count > 0
+          if (isHasTheLesson && OrgHasTheLesson) {
             this.$router.push({
               name: 'OrgStudentLessonContent',
               params: { packageId, lessonId }
             })
           }
-        } else {
-          // join the classrom
-          const _key = _.trim(key.replace('c', ''))
-          const classInfo = await this.enterClassroom({ key: _key })
-          const { packageId, lessonId } = classInfo
-          if (packageId && lessonId) {
-            this.$router.push({
-              name: 'OrgStudentLessonContent',
-              params: { packageId, lessonId }
-            })
+          if (isHasTheLesson && !OrgHasTheLesson) {
+            this.$message.error('你没有购买该课程')
           }
+          if (!isHasTheLesson) {
+            this.$message.error('课堂ID不存在，请确认')
+          }
+          return
         }
+        // join the classroom
+        const _key = _.trim(key.replace('c', ''))
+        if (this.isBeInClassroom && this.currentClassroomKey == _key) {
+          const { packageId, lessonId } = this.classroom
+          return this.$router.push({
+            name: 'OrgStudentLessonContent',
+            params: { packageId, lessonId }
+          })
+        }
+        if (this.isBeInClassroom && this.currentClassroomKey != _key) {
+          return (this.beInClassDialog = true)
+        }
+        this.enterNewClass(this.classroomkey)
       } catch (error) {
         console.error(error)
+      }
+    },
+    backCurrentClass() {
+      const { packageId, lessonId } = this.classroom
+      this.$router.push({
+        name: 'OrgStudentLessonContent',
+        params: { packageId, lessonId }
+      })
+    },
+    async enterNewClass(classroomkey) {
+      const key = _.trim(_.replace(_.lowerCase(classroomkey), 'c', ''))
+      const res = await lesson.classrooms.isValidKey(key)
+      if (res == true) {
+        const classInfo = await this.enterClassroom({ key })
+        const { packageId, lessonId } = classInfo
+        if (packageId && lessonId) {
+          this.$router.push({
+            name: 'OrgStudentLessonContent',
+            params: { packageId, lessonId }
+          })
+        }
+        this.beInClassDialog = false
+      } else {
+        this.$message({
+          showClose: true,
+          message: this.$t('lesson.wrongKey'),
+          type: 'error'
+        })
       }
     }
   },
   computed: {
     ...mapGetters({
-      orgPackages: 'org/student/orgPackages'
+      orgPackages: 'org/student/orgPackages',
+      isBeInClassroom: 'org/student/isBeInClassroom',
+      classroom: 'org/student/classroom'
     }),
     orgPackageList() {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))
@@ -143,8 +203,22 @@ export default {
     orgPackageCount() {
       return this.orgPackages.length
     },
+    orgPackagesDict() {
+      return _.reduce(
+        this.orgPackageList,
+        (obj, cur) => {
+          const { packageId, lessons = [] } = cur
+          obj[packageId] = _.map(lessons, item => item.lessonId)
+          return obj
+        },
+        {}
+      )
+    },
     isCanEnterClassroom() {
-      return this.classroomkey
+      return Boolean(this.classroomkey)
+    },
+    currentClassroomKey() {
+      return _.get(this.classroom, 'key', '')
     }
   }
 }

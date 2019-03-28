@@ -1,16 +1,11 @@
 <template>
   <div class="org-teacher">
-    <div class="org-teacher-tips" v-if="isBeInClassroom">
-      <span class="org-teacher-tips-icon"></span>
-      <span class="org-teacher-tips-text">正在上课: {{currentClassroomLessonName}}</span>
-      <span @click="handleEnterCurrentClassroom" class="org-teacher-tips-button">进入课堂</span>
-    </div>
     <div class="org-teacher-container">
       <div class="org-teacher-sidebar">
         <div class="org-teacher-message">
           <div class="org-teacher-role-label">教师</div>
-          <img :src="defaultPortrait" class="org-teacher-profile" />
-          <div class="org-teacher-username">chiyu</div>
+          <img :src="userPortrait" class="org-teacher-profile" />
+          <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">
           <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
@@ -45,29 +40,20 @@ export default {
       ]
     }
   },
-  methods: {
-    async handleEnterCurrentClassroom() {
-      const { classId, packageId, lessonId } = this.classroom
-      this.$router.push({
-        name: 'OrgTeacherClassPackageLesson',
-        params: {
-          classId,
-          packageId,
-          lessonId
-        }
-      })
-    }
-  },
   computed: {
     ...mapGetters({
       classroom: 'org/teacher/classroom',
-      isBeInClassroom: 'org/teacher/isBeInClassroom'
+      isBeInClassroom: 'org/teacher/isBeInClassroom',
+      userinfo: 'user/profile'
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
     },
-    currentClassroomLessonName() {
-      return _.get(this.classroom, 'extra.lessonName', '')
+    userPortrait() {
+      return this.userinfo.portrait || this.defaultPortrait
+    },
+    username() {
+      return this.userinfo.username
     }
   }
 }
@@ -77,43 +63,6 @@ $borderColor: #e8e8e8;
 .org-teacher {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
-  &-tips {
-    max-width: 1200px;
-    height: 48px;
-    line-height: 48px;
-    text-align: center;
-    box-sizing: border-box;
-    margin: 20px auto 0;
-    background-color: rgba($color: #e6a23c, $alpha: 0.2);
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &-icon {
-      height: 41px;
-      width: 41px;
-      object-fit: cover;
-      background: url('../../../assets/org/teacher.png');
-    }
-    &-text {
-      color: #333;
-      font-size: 14px;
-      margin-left: 10px;
-    }
-    &-button {
-      display: inline-block;
-      width: 102px;
-      height: 32px;
-      line-height: 32px;
-      margin-left: 40px;
-      background-color: #f4b744;
-      color: #fff;
-      box-shadow: inset 0px -3px 0px 0px rgba(151, 21, 0, 0.28);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  }
   &-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -154,6 +103,7 @@ $borderColor: #e8e8e8;
     object-fit: cover;
     line-height: 1;
     margin-bottom: 16px;
+    border-radius: 50%;
   }
   &-username {
     font-size: 20px;

@@ -1,6 +1,5 @@
 <template>
   <div class="quiz-container" :class="{'is-preview': isPreview}" :id="key">
-    <!-- <div class="splic"></div> -->
     <div class="quiz-no-wrap">
       <i class="quiz-icon"></i>
       <span class="quiz-no">
@@ -84,6 +83,9 @@ export default {
       default: false
     }
   },
+  mounted() {
+    this.checkQuiz(this.quizzes)
+  },
   data() {
     return {
       quizAnswer: '',
@@ -157,9 +159,7 @@ export default {
         .getLastLearnRecords()
         .catch(e => console.error(e))
       lastLearnRecords = _.get(lastLearnRecords, 'rows.[0]', [])
-      if (
-        this.learnRecordsId !== lastLearnRecords.id
-      ) {
+      if (this.learnRecordsId !== lastLearnRecords.id) {
         return this.$router.push({ name: 'OrgStudentClass' })
       }
 
@@ -170,16 +170,11 @@ export default {
         lessonId: Number(lessonId),
         state: this.lessonIsDone ? 1 : 0
       })
-    }
-  },
-  watch: {
-    quizzes(quizzes) {
-      let quiz = quizzes.find(
-        ({
-          data: {
-            quiz: { data }
-          }
-        }) => data[0].id === this.key
+    },
+    checkQuiz(quizzes) {
+      const quiz = _.find(
+        quizzes,
+        item => _.get(item, 'data.quiz.data.[0].title') === this.question
       )
       if (quiz && quiz.state && quiz.state.answer) {
         this.isDone = true
@@ -188,6 +183,11 @@ export default {
         this.quizAnswer = quiz.state.answer
         this.quizMutipleAnswer = quiz.state.answer
       }
+    }
+  },
+  watch: {
+    quizzes(quizzes) {
+      this.checkQuiz(quizzes)
     }
   },
   computed: {

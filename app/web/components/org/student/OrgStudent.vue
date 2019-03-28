@@ -1,11 +1,11 @@
 <template>
   <div class="org-student">
-    <div class="org-student-tips" v-if="isBeInClassroom">
+    <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
       <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">正在上课: {{currentClassroomLessonName}}</span>
-      <span @click="handleEnterCurrentClassroom" class="org-student-tips-button">进入课堂</span>
+      <span class="org-student-tips-text">正在上课: {{item.lessonName}},课堂ID: C{{item.key}}</span>
+      <span @click="handleJoinClassroom(item)" class="org-student-tips-button">进入课堂</span>
     </div>
-    <div class="org-student-container" >
+    <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-message">
           <div class="org-student-role-label">学生</div>
@@ -20,35 +20,76 @@
       </div>
       <router-view class="org-student-main"></router-view>
     </div>
+    <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
+      <div class="hint">
+        <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
+        <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import OrgHeader from '@/components/org/common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
+const { graphql } = keepwork
+import _ from 'lodash'
 export default {
   name: 'OrgStudent',
   data() {
     return {
       isLoading: true,
       defaultPortrait: require('@/assets/img/default_portrait.png'),
-      className: '',
-      selectedClassId: ''
+      selectedClassId: '',
+      beInClassDialog: false,
+      joinKey: ''
     }
   },
   async created() {
-    await Promise.all([
-      this.getOrgClasses(),
-      this.resumeClassroom()
-    ])
+    await Promise.all([this.getOrgClasses(), this.getTeachingLesson()])
   },
   methods: {
     ...mapActions({
       getOrgClasses: 'org/student/getOrgClasses',
-      resumeClassroom: 'org/student/resumeClassroom'
+      resumeClassroom: 'org/student/resumeClassroom',
+      getTeachingLesson: 'org/student/getTeachingLesson',
+      enterClassroom: 'org/student/enterClassroom'
     }),
-    handleEnterCurrentClassroom() {
+    async handleJoinClassroom({ key, packageId, lessonId }) {
+      try {
+        if (key !== this.classroomKey) {
+          this.beInClassDialog = true
+          this.joinKey = key
+        } else {
+          this.$router.push({
+            name: 'OrgStudentLessonContent',
+            params: { packageId, lessonId }
+          })
+        }
+      } catch (error) {
+        this.$message.error(error)
+        console.dir(error)
+      }
+    },
+    backCurrentClass() {
       const { packageId, lessonId } = this.classroom
-      this.$router.push({ name: 'OrgStudentLessonContent', params: { packageId, lessonId }})
+      this.$router.push({
+        name: 'OrgStudentLessonContent',
+        params: { packageId, lessonId }
+      })
+    },
+    async enterNewClass() {
+      const classInfo = await this.enterClassroom({ key: this.joinKey })
+      const { packageId, lessonId } = classInfo
+      if (packageId && lessonId) {
+        this.$router.push({
+          name: 'OrgStudentLessonContent',
+          params: { packageId, lessonId }
+        })
+      }
+      this.beInClassDialog = false
     }
   },
   computed: {
@@ -56,10 +97,13 @@ export default {
       userinfo: 'user/profile',
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
-      isBeInClassroom: 'org/student/isBeInClassroom'
+      teachingLesson: 'org/student/teachingLesson'
     }),
     currentClassroomLessonName() {
       return _.get(this.classroom, 'extra.lessonName', '')
+    },
+    classroomKey() {
+      return _.get(this.classroom, 'key', '')
     },
     username() {
       return _.get(this.userinfo, 'username', '')
@@ -72,6 +116,9 @@ export default {
     },
     userPortrait() {
       return _.get(this.userinfo, 'portrait') || this.defaultPortrait
+    },
+    organizationId() {
+      return _.get(this.userinfo, 'organizationId', '')
     }
   },
   components: {
@@ -112,7 +159,7 @@ $borderColor: #e8e8e8;
       width: 102px;
       height: 32px;
       line-height: 32px;
-      margin-left: 40px;
+      margin-left: 20px;
       background-color: #f4b744;
       color: #fff;
       box-shadow: inset 0px -3px 0px 0px rgba(151, 21, 0, 0.28);
@@ -166,6 +213,11 @@ $borderColor: #e8e8e8;
     font-size: 20px;
     color: #333;
   }
+  &-skills {
+    font-size: 14px;
+    color: #606266;
+    cursor: pointer;
+  }
   &-menu {
     margin: 0;
     padding-bottom: 10px;
@@ -174,13 +226,12 @@ $borderColor: #e8e8e8;
     padding: 10px;
     box-sizing: border-box;
     &-item {
-      text-align: center;
       margin-top: 10px;
       margin-left: 8px;
       width: 112px;
       height: 32px;
       line-height: 32px;
-      padding: 0 7px;
+      padding: 0 10px;
       box-sizing: border-box;
       overflow: hidden;
       white-space: nowrap;
