@@ -32,7 +32,7 @@ const getters = {
     rootState,
     { 'user/profile': { portrait, nickname, username } }
   ) => ({
-    name: nickname,
+    name: nickname || username,
     quiz: lessonQuiz,
     username,
     portrait,

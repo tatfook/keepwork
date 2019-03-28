@@ -26,10 +26,7 @@ export default {
   },
   async created() {
     try {
-      await Promise.all([
-        this.resumeClassroom(),
-        this.getUserInfo()
-      ])
+      await Promise.all([this.resumeClassroom(), this.getUserInfo()])
       this.checkIsInClassroom(this.$route)
       this.intervalCheckClass()
     } catch (error) {
@@ -81,11 +78,7 @@ export default {
       }
     },
     async intervalCheckClass(delay = 30) {
-      if (this.isFirstCheck) {
-        this.isFirstCheck = false
-      } else {
-        await this.checkClassroom()
-      }
+      await this.checkClassroom()
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
         await this.intervalCheckClass().catch(e => {

@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-student-progress">
-    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="showQuiz">
+    <span @mouseover="showProgressList" @mouseout="hideProgressList" class="progress-point start" @click="handleShowQuiz">
       <div :class="['progress-point-title', {'light': isQuizLight}]">{{$t('lesson.lessonPlan')}}</div>
       <div class="progress-point-number">{{lessonQuizDone}}/{{lessonQuizCount}}
         <div v-show="isShowQuizResult" class="quiz-result-list-wrap">
@@ -18,7 +18,7 @@
       </div>
     </span>
     <el-progress class="progress-line" :text-inside="true" :show-text="false" :stroke-width="18" :percentage="lessonQuizProgress" status="success"></el-progress>
-    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="showSummary">
+    <span class="progress-point end" :class="[lessonIsDone ? 'finish' : 'grey']" @click.stop="handleShowSummary">
       <div :class="['progress-point-title',{'light': !this.isQuizLight}]">{{$t('lesson.summary')}}</div>
     </span>
   </div>
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      switchSummary: 'lesson/student/switchSummary'
+      switchSummary: 'org/student/switchSummary'
     }),
     showMeTheQuiz(key) {
       let theQuiz = document.getElementById(key)
@@ -103,13 +103,14 @@ export default {
         this.isShowQuizResult = false
       }
     },
-    showSummary() {
+    handleShowSummary() {
       if (this.lessonIsDone) {
-        this.$router.push({ name: 'OrgStudentLessonSummary' })
+        this.switchSummary(true)
+        this.isShowQuizResult = false
       }
     },
-    showQuiz() {
-      this.$router.push({ name: 'OrgStudentLessonContent' })
+    handleShowQuiz() {
+      this.switchSummary(false)
     },
     handleRedo() {
       this.redoLoading = true

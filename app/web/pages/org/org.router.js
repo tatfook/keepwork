@@ -91,20 +91,7 @@ export default new Router({
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'OrgStudentPackageLesson',
-          component: OrgStudentPackageLesson,
-          redirect: { name: 'OrgStudentLessonContent' },
-          children: [
-            {
-              path: '/',
-              name: 'OrgStudentLessonContent',
-              component: OrgStudentLessonContent
-            },
-            {
-              path: 'summary',
-              name: 'OrgStudentLessonSummary',
-              component: OrgStudentLessonSummary
-            }
-          ]
+          component: OrgStudentPackageLesson
         }
       ]
     },

@@ -31,8 +31,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.org-student-lesson-content {
-}
-</style>
 

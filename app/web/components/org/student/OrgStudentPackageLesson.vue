@@ -20,15 +20,19 @@
       </div>
     </div>
     <lesson-header class='lesson-header' :lesson="lessonHeader" :isstudent="true" :isInCurrentClass="isInCurrentClass" />
-    <keep-alive include="OrgStudentLessonContent, OrgStudentLessonSummary">
+    <!-- <keep-alive include="OrgStudentLessonContent, OrgStudentLessonSummary">
       <router-view></router-view>
-    </keep-alive>
+    </keep-alive> -->
+    <org-student-lesson-content v-show="!isShowSummary"></org-student-lesson-content>
+    <org-student-lesson-summary v-show="isShowSummary"></org-student-lesson-summary>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import OrgStudentLessonStatus from './OrgStudentLessonStatus'
+import OrgStudentLessonContent from './OrgStudentLessonContent'
+import OrgStudentLessonSummary from './OrgStudentLessonSummary'
 import LessonHeader from '../common/OrgLessonHeader'
 import { lesson } from '@/api'
 import _ from 'lodash'
@@ -37,7 +41,9 @@ export default {
   name: 'OrgStudentPackageLesson',
   components: {
     LessonHeader,
-    OrgStudentLessonStatus
+    OrgStudentLessonStatus,
+    OrgStudentLessonContent,
+    OrgStudentLessonSummary
   },
   data() {
     return {
@@ -155,7 +161,8 @@ export default {
       isBeInClassroom: 'org/student/isBeInClassroom',
       isClassIsOver: 'org/student/isClassIsOver',
       classroom: 'org/student/classroom',
-      userinfo: 'org/userinfo'
+      userinfo: 'org/userinfo',
+      isShowSummary: 'org/student/isShowSummary'
     }),
     currentClassName() {
       return _.get(

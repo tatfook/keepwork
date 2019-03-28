@@ -18,7 +18,8 @@ const {
   RESUME_CLASSROOM,
   LEAVE_THE_CLASS,
   GET_TEACHING_LESSON_SUCCESS,
-  GET_USER_INFO_SUCCESS
+  GET_USER_INFO_SUCCESS,
+  SWITCH_SUMMARY
 } = props
 
 const actions = {
@@ -149,8 +150,8 @@ const actions = {
     }
   },
   async uploadLearnRecords({ getters: { classId, learnRecords } }, state = 0) {
-    const { username, name } = learnRecords
-    if (username && name) {
+    const { username } = learnRecords
+    if (username) {
       await lesson.classrooms.uploadLearnRecords({
         classId,
         learnRecords,
@@ -188,6 +189,9 @@ const actions = {
       return Promise.reject(e)
     })
   },
+  switchSummary({ commit }, flag) {
+    commit(SWITCH_SUMMARY, flag)
+  }
 }
 
 export default actions
