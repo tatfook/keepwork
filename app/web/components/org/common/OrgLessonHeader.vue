@@ -199,11 +199,9 @@ export default {
           }
           this.classIdDialogVisible = true
           this.copyClassroomQuiz()
-          this.$emit('intervalUpdateLearnRecords')
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
-          this.$emit('clearUpdateLearnRecords')
           console.error(e)
         })
     },
@@ -222,13 +220,11 @@ export default {
         .then(async () => {
           await this.dismissTheClass()
             .then(res => {
-              this.$emit('clearUpdateLearnRecords')
               const { lessonId, id } = this.classroom
               this.$router.push({
                 name: 'OrgTeacherLessonSummary',
                 params: {
-                  classroomId: id,
-                  lessonId: Number(lessonId)
+                  classroomId: id
                 }
               })
             })

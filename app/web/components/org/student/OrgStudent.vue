@@ -40,7 +40,6 @@ export default {
   name: 'OrgStudent',
   data() {
     return {
-      isLoading: true,
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       selectedClassId: '',
       beInClassDialog: false,
@@ -48,35 +47,51 @@ export default {
     }
   },
   async created() {
-    await Promise.all([this.getOrgClasses(), this.getTeachingLesson()])
+    await Promise.all([
+      this.getOrgClasses(),
+      this.getTeachingLesson(),
+      this.getUserInfo()
+    ])
   },
   methods: {
     ...mapActions({
       getOrgClasses: 'org/student/getOrgClasses',
-      resumeClassroom: 'org/student/resumeClassroom',
       getTeachingLesson: 'org/student/getTeachingLesson',
-      enterClassroom: 'org/student/enterClassroom'
+      enterClassroom: 'org/student/enterClassroom',
+      getUserInfo: 'org/student/getUserInfo'
     }),
     async handleJoinClassroom({ key, packageId, lessonId }) {
       try {
-        if (key !== this.classroomKey) {
+        if (this.classroomKey && key !== this.classroomKey) {
           this.beInClassDialog = true
           this.joinKey = key
+        } else if (this.classroomKey && key == this.classroomKey) {
+          console.log(packageId)
+          console.log(lessonId)
+          if (packageId && lessonId) {
+            this.$router.push({
+              name: 'OrgStudentPackageLesson',
+              params: { packageId, lessonId }
+            })
+          }
         } else {
-          this.$router.push({
-            name: 'OrgStudentLessonContent',
-            params: { packageId, lessonId }
-          })
+          const classInfo = await this.enterClassroom({ key })
+          const { packageId, lessonId } = classInfo
+          if (packageId && lessonId) {
+            this.$router.push({
+              name: 'OrgStudentPackageLesson',
+              params: { packageId, lessonId }
+            })
+          }
         }
       } catch (error) {
-        this.$message.error(error)
-        console.dir(error)
+        console.error(error)
       }
     },
     backCurrentClass() {
       const { packageId, lessonId } = this.classroom
       this.$router.push({
-        name: 'OrgStudentLessonContent',
+        name: 'OrgStudentPackageLesson',
         params: { packageId, lessonId }
       })
     },
@@ -85,7 +100,7 @@ export default {
       const { packageId, lessonId } = classInfo
       if (packageId && lessonId) {
         this.$router.push({
-          name: 'OrgStudentLessonContent',
+          name: 'OrgStudentPackageLesson',
           params: { packageId, lessonId }
         })
       }

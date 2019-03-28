@@ -24,13 +24,15 @@ const getters = {
   teachingLesson: state => state.teachingLesson,
   enterClassId: (state, { classroom }) => classroom.key,
   learnRecordsId: state => state.learnRecordsId,
+  userInfo: state => state.userInfo,
+  howManyDays: (state, { userInfo }) => _.get(userInfo, 'extra.learn.learnDayCount', 0),
   learnRecords: (
     state,
-    { lessonQuiz },
+    { lessonQuiz, howManyDays },
     rootState,
-    { 'user/profile': { portrait, nickname, username }, 'org/howManyDays': howManyDays }
+    { 'org/userinfo': { portrait, nickname, username } }
   ) => ({
-    name: nickname,
+    name: nickname || username,
     quiz: lessonQuiz,
     username,
     portrait,

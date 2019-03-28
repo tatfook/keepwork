@@ -28,9 +28,6 @@ export default {
       isBeInClassroom: 'org/student/isBeInClassroom',
       userinfo: 'org/userinfo'
     }),
-    nickname() {
-      return ''
-    },
     username() {
       return _.get(this.userinfo, 'username', '')
     }

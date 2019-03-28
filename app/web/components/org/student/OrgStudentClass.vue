@@ -133,7 +133,7 @@ export default {
           const isHasTheLesson = res.count > 0
           if (isHasTheLesson && OrgHasTheLesson) {
             this.$router.push({
-              name: 'OrgStudentLessonContent',
+              name: 'OrgStudentPackageLesson',
               params: { packageId, lessonId }
             })
           }
@@ -150,7 +150,7 @@ export default {
         if (this.isBeInClassroom && this.currentClassroomKey == _key) {
           const { packageId, lessonId } = this.classroom
           return this.$router.push({
-            name: 'OrgStudentLessonContent',
+            name: 'OrgStudentPackageLesson',
             params: { packageId, lessonId }
           })
         }
@@ -165,7 +165,7 @@ export default {
     backCurrentClass() {
       const { packageId, lessonId } = this.classroom
       this.$router.push({
-        name: 'OrgStudentLessonContent',
+        name: 'OrgStudentPackageLesson',
         params: { packageId, lessonId }
       })
     },
@@ -177,7 +177,7 @@ export default {
         const { packageId, lessonId } = classInfo
         if (packageId && lessonId) {
           this.$router.push({
-            name: 'OrgStudentLessonContent',
+            name: 'OrgStudentPackageLesson',
             params: { packageId, lessonId }
           })
         }

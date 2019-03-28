@@ -20,12 +20,13 @@ export default {
     return {
       isLoading: true,
       _notify: null,
-      _interval: null
+      _interval: null,
+      isFirstCheck: true
     }
   },
   async created() {
     try {
-      await this.resumeClassroom()
+      await Promise.all([this.resumeClassroom(), this.getUserInfo()])
       this.checkIsInClassroom(this.$route)
       this.intervalCheckClass()
     } catch (error) {
@@ -37,7 +38,8 @@ export default {
   methods: {
     ...mapActions({
       resumeClassroom: 'org/student/resumeClassroom',
-      checkClassroom: 'org/student/checkClassroom'
+      checkClassroom: 'org/student/checkClassroom',
+      getUserInfo: 'org/student/getUserInfo'
     }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom
@@ -75,15 +77,15 @@ export default {
         this._notify = null
       }
     },
-    async intervalCheckClass(delay = 30) {
+    async intervalCheckClass(delay = 3) {
       await this.checkClassroom()
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
         await this.intervalCheckClass().catch(e => {
-          this.$message({
-            message: this.$t('lesson.classIsOver'),
-            type: 'warning'
-          })
+          // this.$message({
+          //   message: this.$t('lesson.classIsOver'),
+          //   type: 'warning'
+          // })
           this._notify && this._notify.close()
           this._notify = null
         })
