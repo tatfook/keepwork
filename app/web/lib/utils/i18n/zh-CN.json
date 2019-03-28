@@ -1724,6 +1724,13 @@
     "pleaseInput": "请输入",
     "KeepworkUsername": "keepwork用户名",
     "pleaseSelect": "请选择",
-    "classNameCannotBeModifiedAfterSaved": "（注意：班级名称，一经设置，不得修改。）"
+    "classNameCannotBeModifiedAfterSaved": "（注意：班级名称，一经设置，不得修改。）",
+    "classInformationLabel": "班级信息",
+    "getStarted": "暂未创建班级，",
+    "addFirstClass": "立即创建",
+    "noTeaches": "暂未添加教师信息，",
+    "addTeachersImmediately": "立即添加",
+    "noStudents": "暂未添加学生信息，",
+    "addStudentsImmediately": "立即添加"
   }
 }

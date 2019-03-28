@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgUserinfo: 'user/profile'
+      orgUserinfo: 'org/userinfo'
     }),
     nowPageName() {
       return _.get(this.$route, 'name')

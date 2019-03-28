@@ -43,8 +43,7 @@ export default new Router({
   routes: [
     {
       path: '*',
-      name: 'OrgIndex',
-      component: OrgLogin
+      component: OrgNotFound
     },
     {
       path: '/:orgLoginUrl',
@@ -192,6 +191,7 @@ export default new Router({
         {
           path: 'classes',
           component: OrgClasses,
+          redirect: { name: 'OrgClassList' },
           children: [
             {
               path: 'class',
@@ -251,6 +251,10 @@ export default new Router({
           component: OrgSetting
         }
       ]
+    },
+    {
+      path: '/:orgLoginUrl/*',
+      component: OrgNotFound
     }
   ]
 })

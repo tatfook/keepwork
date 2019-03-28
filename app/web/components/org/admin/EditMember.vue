@@ -33,9 +33,6 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'EditMember',
   async mounted() {
-    await this.getOrgClassList({
-      organizationId: this.orgId
-    })
     this.initMemberData()
   },
   data() {
@@ -103,7 +100,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      getOrgClassList: 'org/getOrgClassList',
       orgCreateNewMember: 'org/createNewMember'
     }),
     toMemberListPage() {

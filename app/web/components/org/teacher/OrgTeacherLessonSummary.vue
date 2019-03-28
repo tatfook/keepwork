@@ -189,7 +189,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/profile',
+      userProfile: 'org/userinfo',
       username: 'user/username',
       classroomLearnRecord: 'lesson/teacher/classroomLearnRecord',
       currentOrg: 'org/currentOrg'

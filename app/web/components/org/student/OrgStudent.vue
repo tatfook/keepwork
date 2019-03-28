@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userinfo: 'user/profile',
+      userinfo: 'org/userinfo',
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson'

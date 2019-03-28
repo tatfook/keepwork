@@ -155,7 +155,7 @@ export default {
       isBeInClassroom: 'org/student/isBeInClassroom',
       isClassIsOver: 'org/student/isClassIsOver',
       classroom: 'org/student/classroom',
-      userinfo: 'user/profile'
+      userinfo: 'org/userinfo'
     }),
     currentClassName() {
       return _.get(

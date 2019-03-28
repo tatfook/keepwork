@@ -1,20 +1,26 @@
 <template>
   <div class="org-classes">
     <div class="org-classes-header">
-      <div class="org-classes-menu">
+      <div class="org-classes-menu" v-if="orgClassesLength > 0">
         <div class="org-classes-menu-item" :class="{'org-classes-menu-item-active': isMenuItemActive(menu)}" v-for="(menu, index) in menuData" :key="index">
           <router-link class="org-classes-menu-link" :to='{name: menu.indexPageName}'>{{menu.text}}</router-link>
         </div>
       </div>
-      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
+      <div class="org-classes-available" v-if="orgClassesLength > 0">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
+      <span class="org-classes-header-empty-title" v-if="orgClassesLength == 0">{{$t('org.classInformationLabel')}}</span>
     </div>
     <router-view></router-view>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgClasses',
+  async mounted() {
+    await this.getOrgClassList({
+      organizationId: this.orgId
+    })
+  },
   data() {
     return {
       menuData: [
@@ -44,7 +50,8 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgRestCount: 'org/getOrgRestCount'
+      getOrgRestCount: 'org/getOrgRestCount',
+      getOrgClassesById: 'org/getOrgClassesById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -54,9 +61,18 @@ export default {
     },
     currentPageName() {
       return _.get(this.$route, 'name')
+    },
+    orgClasses() {
+      return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    orgClassesLength() {
+      return this.orgClasses.length
     }
   },
   methods: {
+    ...mapActions({
+      getOrgClassList: 'org/getOrgClassList'
+    }),
     isMenuItemActive(menuItem) {
       return _.indexOf(menuItem.pageNames, this.currentPageName) !== -1
     }
@@ -66,6 +82,8 @@ export default {
 <style lang="scss" scoped>
 .org-classes {
   background-color: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   &-header {
     display: flex;
     height: 56px;
@@ -73,6 +91,9 @@ export default {
     border-bottom: 1px solid #e8e8e8;
     z-index: 1;
     position: relative;
+    &-empty-title {
+      padding-left: 24px;
+    }
   }
   &-menu {
     flex: 1;
