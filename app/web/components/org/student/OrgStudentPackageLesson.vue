@@ -20,7 +20,9 @@
       </div>
     </div>
     <lesson-header class='lesson-header' :lesson="lessonHeader" :isstudent="true" :isInCurrentClass="isInCurrentClass" />
-    <router-view></router-view>
+    <keep-alive include="OrgStudentLessonContent, OrgStudentLessonSummary">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -61,7 +63,7 @@ export default {
       createLearnRecords: 'org/student/createLearnRecords',
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
       resumeQuiz: 'org/student/resumeQuiz',
-      uploadLearnRecords: 'org/student/uploadLearnRecords',
+      uploadLearnRecords: 'org/student/uploadLearnRecords'
     }),
     async getLessonData() {
       try {

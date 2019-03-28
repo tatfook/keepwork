@@ -31,7 +31,6 @@ const getters = {
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
   getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
-  howManyDays: state => 0,
   getOrgStudentsByClassId: state => ({ orgId, classId }) =>
     _.get(state.orgStudents, `${orgId}.${classId}`)
 }

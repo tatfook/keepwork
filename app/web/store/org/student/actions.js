@@ -17,7 +17,8 @@ const {
   ENTER_CLASSROOM,
   RESUME_CLASSROOM,
   LEAVE_THE_CLASS,
-  GET_TEACHING_LESSON_SUCCESS
+  GET_TEACHING_LESSON_SUCCESS,
+  GET_USER_INFO_SUCCESS
 } = props
 
 const actions = {
@@ -26,6 +27,10 @@ const actions = {
       const classes = await lessonOrganizations.getOrgClasses()
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
+  },
+  async getUserInfo({ commit }) {
+    const userInfo = await lesson.users.getUserDetail()
+    commit(GET_USER_INFO_SUCCESS, userInfo)
   },
   async getOrgPackages({ commit }) {
     const orgPackages = await lessonOrganizations.getOrgStudentPackages()
@@ -157,7 +162,7 @@ const actions = {
     await lesson.classrooms.leave()
     commit(LEAVE_THE_CLASS)
   },
-  async getTeachingLesson({ commit, rootGetters: { 'org/userinfo': { username, organizationId } } }) {
+  async getTeachingLesson({ commit, getters: { currentOrg: organizationId }, rootGetters: { 'user/profile': { username } } }) {
     const res = await graphql.getQueryResult({
       query:
 				'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id,key,state}, organizationClasses{id, classroom{id, packageId, lessonId, state, key, extra}} } }',

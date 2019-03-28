@@ -13,6 +13,7 @@ const ENTER_CLASSROOM = 'ENTER_CLASSROOM'
 const RESUME_CLASSROOM = 'RESUME_CLASSROOM'
 const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 const GET_TEACHING_LESSON_SUCCESS = 'GET_TEACHING_LESSON_SUCCESS'
+const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -27,7 +28,8 @@ export const props = {
   ENTER_CLASSROOM,
   RESUME_CLASSROOM,
   LEAVE_THE_CLASS,
-  GET_TEACHING_LESSON_SUCCESS
+  GET_TEACHING_LESSON_SUCCESS,
+  GET_USER_INFO_SUCCESS
 }
 
 const mutations = {
@@ -72,6 +74,9 @@ const mutations = {
   },
   [GET_TEACHING_LESSON_SUCCESS](state, payload) {
     Vue.set(state, 'teachingLesson', payload)
+  },
+  [GET_USER_INFO_SUCCESS](state, payload) {
+    Vue.set(state, 'userInfo', payload)
   }
 }
 

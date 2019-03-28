@@ -20,12 +20,16 @@ export default {
     return {
       isLoading: true,
       _notify: null,
-      _interval: null
+      _interval: null,
+      isFirstCheck: true
     }
   },
   async created() {
     try {
-      await this.resumeClassroom()
+      await Promise.all([
+        this.resumeClassroom(),
+        this.getUserInfo()
+      ])
       this.checkIsInClassroom(this.$route)
       this.intervalCheckClass()
     } catch (error) {
@@ -37,7 +41,8 @@ export default {
   methods: {
     ...mapActions({
       resumeClassroom: 'org/student/resumeClassroom',
-      checkClassroom: 'org/student/checkClassroom'
+      checkClassroom: 'org/student/checkClassroom',
+      getUserInfo: 'org/student/getUserInfo'
     }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom
@@ -76,7 +81,11 @@ export default {
       }
     },
     async intervalCheckClass(delay = 30) {
-      await this.checkClassroom()
+      if (this.isFirstCheck) {
+        this.isFirstCheck = false
+      } else {
+        await this.checkClassroom()
+      }
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
         await this.intervalCheckClass().catch(e => {

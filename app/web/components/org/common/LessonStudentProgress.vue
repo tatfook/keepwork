@@ -105,11 +105,11 @@ export default {
     },
     showSummary() {
       if (this.lessonIsDone) {
-        this.switchSummary(true)
+        this.$router.push({ name: 'OrgStudentLessonSummary' })
       }
     },
     showQuiz() {
-      this.switchSummary(false)
+      this.$router.push({ name: 'OrgStudentLessonContent' })
     },
     handleRedo() {
       this.redoLoading = true
