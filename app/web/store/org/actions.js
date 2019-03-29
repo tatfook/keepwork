@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 import _ from 'lodash'
-import { keepwork } from '@/api'
+import Parser from '@/lib/mod/parser'
+import { keepwork, lesson } from '@/api'
 import { props } from './mutations'
 
 const {
@@ -9,6 +10,9 @@ const {
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
   GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS,
+  GET_ORG_PACKAGE_DETAIL_SUCCESS,
+  GET_LESSON_CONTENT_SUCCESS,
+  SAVE_LESSON_DETAIL,
   GET_ORG_CLASSES_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
   GET_ORG_STUDENTS_SUCCESS
@@ -88,6 +92,37 @@ const actions = {
       classId
     })
     return classPackages
+  },
+  async getOrgPackageDetail({ commit }, { packageId }) {
+    const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail({ packageId })
+    commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
+    return packageDetail
+  },
+  async getLessonDetail({ commit }, { packageId, lessonId }) {
+    let [ res, detail ] = await Promise.all([
+      lesson.lessons.lessonContent({ lessonId }),
+      lesson.lessons.lessonDetail({ lessonId })
+    ])
+
+    let modList = Parser.buildBlockList(res.content)
+    let quiz = modList
+      .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
+      .map(({ data: { quiz: { data } } }) => ({
+        key: data[0].id,
+        data: data[0],
+        result: null,
+        answer: null
+      }))
+    commit(GET_LESSON_CONTENT_SUCCESS, {
+      lessonId,
+      content: res.content
+    })
+    commit(SAVE_LESSON_DETAIL, {
+      lessonId,
+      lesson: detail,
+      quiz,
+      modList
+    })
   },
   async getOrgClassList(context, { organizationId }) {
     let { commit } = context

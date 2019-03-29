@@ -33,7 +33,9 @@ const getters = {
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
   getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
   getOrgStudentsByClassId: state => ({ orgId, classId }) =>
-    _.get(state.orgStudents, `${orgId}.${classId}`)
+    _.get(state.orgStudents, `${orgId}.${classId}`),
+  orgLessonDetail: state => state.orgLessonDetail,
+  orgPackagesDetail: state => state.orgPackagesDetail
 }
 
 export default getters

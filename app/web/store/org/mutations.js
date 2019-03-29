@@ -5,7 +5,11 @@ const GET_ORG_COUNT_SUCCESS = 'GET_ORG_COUNT_SUCCESS'
 const GET_ORG_SUCCESS = 'GET_ORG_SUCCESS'
 const SET_CURRENT_ORG = 'SET_CURRENT_ORG'
 const GET_ORG_PACKAGES_SUCCESS = 'GET_ORG_PACKAGES_SUCCESS'
-const GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS = 'GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS'
+const GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS =
+  'GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS'
+const GET_ORG_PACKAGE_DETAIL_SUCCESS = 'GET_ORG_PACKAGE_DETAIL_SUCCESS'
+const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
+const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const GET_ORG_CLASSES_SUCCESS = 'GET_ORG_CLASSES_SUCCESS'
 const GET_ORG_TEACHERS_SUCCESS = 'GET_ORG_TEACHERS_SUCCESS'
 const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
@@ -16,6 +20,9 @@ export const props = {
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
   GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS,
+  GET_ORG_PACKAGE_DETAIL_SUCCESS,
+  GET_LESSON_CONTENT_SUCCESS,
+  SAVE_LESSON_DETAIL,
   GET_ORG_CLASSES_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
   GET_ORG_STUDENTS_SUCCESS
@@ -48,11 +55,26 @@ const mutations = {
       [organizationId]: orgPackages
     })
   },
-  [GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS](state, { organizationId, orgPackages }) {
+  [GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS](
+    state,
+    { organizationId, orgPackages }
+  ) {
     Vue.set(state, 'orgPackagesGraphql', {
       ...state.orgPackagesGraphql,
       [organizationId]: orgPackages
     })
+  },
+  [GET_ORG_PACKAGE_DETAIL_SUCCESS](state, { packageId, packageDetail }) {
+    Vue.set(state, 'orgPackagesDetail', {
+      ...state.orgPackagesDetail,
+      [packageId]: packageDetail
+    })
+  },
+  [GET_LESSON_CONTENT_SUCCESS](state, payload) {
+    Vue.set(state, 'orgLessonData', payload)
+  },
+  [SAVE_LESSON_DETAIL](state, payload) {
+    Vue.set(state, 'orgLessonDetail', payload)
   },
   [GET_ORG_CLASSES_SUCCESS](state, { organizationId, orgClasses }) {
     Vue.set(state, 'orgClasses', {

@@ -48,7 +48,8 @@ export default {
       } = route
       const { classId: cid, packageId: pid, lessonId: lid } = this.classroom
       if (
-        this.isBeInClass &&
+        this.isBeInClassroom &&
+        this.isTeaching &&
         !(classId == cid && packageId == pid && lessonId == lid)
       ) {
         if (!this._notify) {
@@ -75,7 +76,8 @@ export default {
   computed: {
     ...mapGetters({
       classroom: 'org/teacher/classroom',
-      isBeInClass: 'org/teacher/isBeInClass'
+      isBeInClassroom: 'org/teacher/isBeInClassroom',
+      isTeaching: 'org/teacher/isTeaching'
     })
   },
   beforeRouteUpdate(to, from, next) {

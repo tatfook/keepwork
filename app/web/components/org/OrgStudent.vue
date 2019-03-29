@@ -56,7 +56,7 @@ export default {
       } = route
       const { packageId: pid, lessonId: lid } = this.classroom
 
-      if (this.isBeInClassroom && !(packageId == pid && lessonId == lid)) {
+      if (this.isBeInClassroom && this.isTeaching && !(packageId == pid && lessonId == lid)) {
         if (!this._notify) {
           this._notify = this.$notify({
             customClass: 'back-to-classroom-notify',
@@ -82,10 +82,6 @@ export default {
       clearTimeout(this._interval)
       this._interval = setTimeout(async () => {
         await this.intervalCheckClass().catch(e => {
-          // this.$message({
-          //   message: this.$t('lesson.classIsOver'),
-          //   type: 'warning'
-          // })
           this._notify && this._notify.close()
           this._notify = null
         })
@@ -95,7 +91,8 @@ export default {
   computed: {
     ...mapGetters({
       isBeInClassroom: 'org/student/isBeInClassroom',
-      classroom: 'org/student/classroom'
+      classroom: 'org/student/classroom',
+      isTeaching: 'org/student/isTeaching'
     })
   },
   beforeRouteUpdate(to, from, next) {

@@ -1,11 +1,10 @@
 <template>
-  <div class="org-teacher-class-package-lesson" v-if="!isLoading">
+  <div class="org-adin-package-lesson" v-if="!isLoading">
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgTeacher' }">上课</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ name: 'OrgTeacher' }">{{currentClassName}}</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ name: 'OrgTeacherClassPackage', params: { packageId } }">{{packageName}}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgPackages'}">课程包</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgAdminPackageDetail', params: { packageId } }">{{packageName}}</el-breadcrumb-item>
           <el-breadcrumb-item>
             <el-dropdown @command="handleSelectLesson">
               <span class="el-dropdown-link">
@@ -17,25 +16,28 @@
             </el-dropdown>
           </el-breadcrumb-item>
         </el-breadcrumb>
+        <org-lesson-header :isTeacher="true" :isInCurrentClass="false"></org-lesson-header>
+        <org-admin-lesson-content></org-admin-lesson-content>
       </div>
     </div>
-    <lesson-header class='lesson-header' :lesson="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" />
-    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import LessonHeader from '../common/OrgLessonHeader'
+import OrgLessonHeader from '../common/OrgLessonHeader'
+import OrgAdminLessonContent from './OrgAdminLessonContent'
 import { lesson } from '@/api'
+import _ from 'lodash'
+
 export default {
-  name: 'OrgTeacherClassPacakgeLesson',
+  name: 'OrgAdminPackageLesson',
   components: {
-    LessonHeader
+    OrgLessonHeader,
+    OrgAdminLessonContent
   },
   data() {
     return {
-      _interval: null,
       isLoading: true
     }
   },
@@ -48,30 +50,22 @@ export default {
     await this.getLessonData()
   },
   async destroyed() {
-    this.leaveTheClassroom()
+    window.document.title = 'Keepwork'
   },
   methods: {
     ...mapActions({
-      getLessonDetail: 'org/teacher/getLessonDetail',
-      getOrgClassPackageDetail: 'org/teacher/getOrgClassPackageDetail',
-      getOrgClasses: 'org/teacher/getOrgClasses',
-      leaveTheClassroom: 'org/teacher/leaveTheClassroom'
+      getLessonDetail: 'org/getLessonDetail',
+      getOrgPackageDetail: 'org/getOrgPackageDetail'
     }),
     async getLessonData() {
       try {
-        const {
-          name,
-          params: { classId, packageId, lessonId }
-        } = this.$route
-        if (!this.isBeInClass && name !== 'OrgTeacherLessonPlan') {
-          this.$router.push({ name: 'OrgTeacherLessonPlan' })
-        }
+        const { name, params } = this.$route
+        const packageId = _.toNumber(params.packageId)
+        const lessonId = _.toNumber(params.lessonId)
         await Promise.all([
-          this.getLessonDetail({ classId, packageId, lessonId }),
-          this.getOrgClassPackageDetail({ classId, packageId }),
-          this.getOrgClasses({ cache: true })
+          this.getLessonDetail({ packageId, lessonId }),
+          this.getOrgPackageDetail({ packageId })
         ])
-
         window.document.title = this.currentLessonName
       } catch (error) {
         console.error(error)
@@ -85,42 +79,21 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonDetail: 'org/teacher/orgLessonDetail',
-      orgClassPackagesDetail: 'org/teacher/orgClassPackagesDetail',
-      orgClasses: 'org/teacher/orgClasses',
-      isBeInClass: 'org/teacher/isBeInClass',
-      isClassIsOver: 'org/teacher/isClassIsOver',
-      classroom: 'org/teacher/classroom',
+      lessonDetail: 'org/orgLessonDetail',
+      orgPackagesDetail: 'org/orgPackagesDetail',
       userinfo: 'org/userinfo'
     }),
-    currentClassName() {
-      return _.get(
-        _.find(this.orgClasses, item => item.id === this.classId),
-        'name',
-        ''
-      )
-    },
     currentPackageLessons() {
       return _.map(_.get(this.packageDetail, 'lessons', []), item => ({
         ...item,
         ...item.lesson
       }))
     },
-    isInCurrentClass() {
-      const { classId: cid, packageId: pid, lessonId: lid } = this.$route.params
-      const { classId, packageId, lessonId } = this.classroom
-      let flag = classId == cid && packageId == pid && lessonId == lid
-      return this.isBeInClass ? flag : true
-    },
     packageName() {
       return _.get(this.packageDetail, ['package', 'packageName'], '')
     },
     packageDetail() {
-      return _.get(
-        this.orgClassPackagesDetail,
-        [this.classId, this.packageId],
-        {}
-      )
+      return _.get(this.orgPackagesDetail, [this.packageId], {})
     },
     packageId() {
       return _.toNumber(_.get(this.$route, ['params', 'packageId'], ''))
@@ -142,23 +115,16 @@ export default {
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
+    },
+    classroomId() {
+      return _.get(this.classroom, 'id', '')
     }
-  },
-  beforeRouteUpdate({ name }, from, next) {
-    if (name === 'LessonTeacherSummary' && !this.isClassIsOver) {
-      return this.$router.push({ name: 'plan' })
-    }
-    if (name === 'LessonTeacherPerformance' && !this.isBeInClass) {
-      this.intervalUpdateLearnRecords()
-      return this.$router.push({ name: 'plan' })
-    }
-    next()
   }
 }
 </script>
 
 <style lang="scss">
-.org-teacher-class-package-lesson {
+.org-adin-package-lesson {
   counter-reset: no;
   padding-bottom: 20px;
   .org-breadcrumb {
