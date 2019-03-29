@@ -19,7 +19,8 @@ const {
   LEAVE_THE_CLASS,
   GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
-  SWITCH_SUMMARY
+  SWITCH_SUMMARY,
+  GET_ORG_REAL_NAME_SUCCESS
 } = props
 
 const actions = {
@@ -32,6 +33,18 @@ const actions = {
   async getUserInfo({ commit }) {
     const userInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userInfo)
+  },
+  async getUserOrgRealName({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
+    const res = await graphql.getQueryResult({
+      query:
+      'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId, realname} }}',
+      variables: {
+        organizationId,
+        username
+      }
+    })
+    const realName = _.get(res, 'organizationUser.organizationClassMembers[0].realname', '')
+    commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
   async getOrgPackages({ commit }) {
     const orgPackages = await lessonOrganizations.getOrgStudentPackages()
@@ -163,16 +176,18 @@ const actions = {
     await lesson.classrooms.leave()
     commit(LEAVE_THE_CLASS)
   },
-  async getTeachingLesson({ commit, getters: { currentOrg: organizationId }, rootGetters: { 'user/profile': { username } } }) {
+  async getTeachingLesson({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
     const res = await graphql.getQueryResult({
-      query:
-				'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id,key,state}, organizationClasses{id, classroom{id, packageId, lessonId, state, key, extra}} } }',
+      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id, classroom{id, state, extra}} } }',
       variables: {
         organizationId,
         username
       }
     })
-    const organizationClasses = _.filter(_.get(res, 'organizationUser.organizationClasses', []), item => item.classroom)
+    const organizationClasses = _.filter(
+      _.get(res, 'organizationUser.organizationClasses', []),
+      item => item.classroom
+    )
     const teachingLesson = _.map(organizationClasses, item => {
       const { extra = {}, ...reset } = item.classroom
       return {

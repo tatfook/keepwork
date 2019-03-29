@@ -16,7 +16,8 @@ const state = {
   lessonQuiz: {},
   teachingLesson: [],
   userInfo: {},
-  isShowSummary: false
+  isShowSummary: false,
+  orgRealName: ''
 }
 
 export default {
