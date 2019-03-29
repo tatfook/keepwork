@@ -6,6 +6,7 @@ const getters = {
   orgPackagesDetail: state => state.orgPackagesDetail,
   orgLessonData: state => state.lessonData,
   orgLessonDetail: state => state.orgLessonDetail,
+  orgRealName: state => state.orgRealName,
   classroom: state => state.classroom,
   classroomKey: (state, { classroom }) => _.get(classroom, 'key', ''),
   isBeInClassroom: (state, { classroom }) => !_.isEmpty(classroom),
@@ -28,11 +29,11 @@ const getters = {
   howManyDays: (state, { userInfo }) => _.get(userInfo, 'extra.learn.learnDayCount', 0),
   learnRecords: (
     state,
-    { lessonQuiz, howManyDays },
+    { lessonQuiz, howManyDays, orgRealName },
     rootState,
-    { 'org/userinfo': { portrait, nickname, username } }
+    { 'org/userinfo': { portrait, username } }
   ) => ({
-    name: nickname || username,
+    name: orgRealName,
     quiz: lessonQuiz,
     username,
     portrait,

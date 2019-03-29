@@ -15,6 +15,7 @@ const LEAVE_THE_CLASS = 'LEAVE_THE_CLASS'
 const GET_TEACHING_LESSON_SUCCESS = 'GET_TEACHING_LESSON_SUCCESS'
 const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS'
 const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
+const GET_ORG_REAL_NAME_SUCCESS = 'GET_ORG_REAL_NAME_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -31,7 +32,8 @@ export const props = {
   LEAVE_THE_CLASS,
   GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
-  SWITCH_SUMMARY
+  SWITCH_SUMMARY,
+  GET_ORG_REAL_NAME_SUCCESS
 }
 
 const mutations = {
@@ -82,6 +84,9 @@ const mutations = {
   },
   [SWITCH_SUMMARY](state, flag) {
     Vue.set(state, 'isShowSummary', flag)
+  },
+  [GET_ORG_REAL_NAME_SUCCESS](state, realName) {
+    Vue.set(state, 'orgRealName', realName)
   }
 }
 

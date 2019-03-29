@@ -74,7 +74,7 @@ export default {
         'OrgTeacherLessonSummary' === name &&
         this.$router.push({
           name,
-          params: { classId: this.classId, lessonId: Number(this.lessonId) }
+          params: { classroomId: this.classId }
         })
     }
   }
