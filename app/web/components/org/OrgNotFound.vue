@@ -1,7 +1,7 @@
 <template>
   <div class="org-not-found">
     <img class="org-not-found-img" src="@/assets/img/404.png" alt="">
-    <div class="org-not-found-info">{{$t("org.pageNotFound")}}!</div>
+    <div class="org-not-found-info">{{$t("org.pageNotFound")}}</div>
   </div>
 
 </template>
