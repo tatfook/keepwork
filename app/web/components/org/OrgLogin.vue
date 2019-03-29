@@ -21,9 +21,11 @@
         </el-form-item>
       </el-form>
       <el-dialog class="org-login-dialog" :visible.sync="isRegisterForm" width="352px">
+        <i class="el-icon-close org-login-dialog-close" @click="handleClose"></i>
         <register-dialog @close="handleClose"></register-dialog>
       </el-dialog>
       <el-dialog class="org-login-dialog" :visible.sync="isShowPasswordResetForm" width="352px">
+        <i class="el-icon-close org-login-dialog-close" @click="isShowPasswordResetForm = false"></i>
         <password-reset-form v-show="isShowPasswordResetForm"></password-reset-form>
       </el-dialog>
 
@@ -219,11 +221,20 @@ export default {
     margin-top: 32px;
   }
   &-dialog {
+    &-close {
+      position: absolute;
+      right: 24px;
+      top: 16px;
+      z-index: 1;
+      cursor: pointer;
+      font-size: 18px;
+    }
     .el-dialog__header {
       display: none;
     }
     .el-dialog__body {
       padding: 0;
+      position: relative;
     }
     .register-dialog-form {
       box-shadow: none;
