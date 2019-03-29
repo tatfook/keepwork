@@ -65,7 +65,7 @@ export default {
       return _.get(this.$route, 'name')
     },
     isSidebarShow() {
-      return this.nowPageName !== 'OrgPackageDetail'
+      return !['OrgAdminPackageDetail', 'OrgAdminPackageLesson'].includes(this.nowPageName)
     }
   },
   methods: {

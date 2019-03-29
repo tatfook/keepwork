@@ -29,12 +29,13 @@ const getters = {
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
   getOrgPackagesGraphqlById: state => ({ id }) =>
     _.get(state.orgPackagesGraphql, id),
-  orgPackagesDetail: state => state.orgPackagesDetail,
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
   getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
   getOrgStudentsByClassId: state => ({ orgId, classId }) =>
-    _.get(state.orgStudents, `${orgId}.${classId}`)
+    _.get(state.orgStudents, `${orgId}.${classId}`),
+  orgLessonDetail: state => state.orgLessonDetail,
+  orgPackagesDetail: state => state.orgPackagesDetail
 }
 
 export default getters

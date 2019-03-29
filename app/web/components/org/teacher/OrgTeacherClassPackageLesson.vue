@@ -55,10 +55,7 @@ export default {
       getLessonDetail: 'org/teacher/getLessonDetail',
       getOrgClassPackageDetail: 'org/teacher/getOrgClassPackageDetail',
       getOrgClasses: 'org/teacher/getOrgClasses',
-      // getCurrentClass: 'org/teacher/getCurrentClass',
-      // updateLearnRecords: 'org/teacher/updateLearnRecords',
       leaveTheClassroom: 'org/teacher/leaveTheClassroom'
-      // copyClassroomQuiz: 'org/teacher/copyClassroomQuiz'
     }),
     async getLessonData() {
       try {

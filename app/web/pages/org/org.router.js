@@ -24,8 +24,6 @@ const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const PackageDetail = () => import('@/components/org/admin/PackageDetail')
 const OrgAdminPackageLesson = () => import('@/components/org/admin/OrgAdminPackageLesson')
-const OrgAdminLessonContent = () => import('@/components/org/admin/OrgAdminLessonContent')
-const OrgAdminLessonSummary = () => import('@/components/org/admin/OrgAdminLessonSummary')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
 const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 const ClassList = () => import('@/components/org/admin/ClassList')
@@ -192,16 +190,6 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'OrgAdminPackageLesson',
           component: OrgAdminPackageLesson,
-          redirect: { name: 'OrgAdminLessonContent' },
-          children: [{
-            path: '/',
-            name: 'OrgAdminLessonContent',
-            component: OrgAdminLessonContent
-          }, {
-            path: '/summary',
-            name: 'OrgAdminLessonSummary',
-            component: OrgAdminLessonSummary
-          }]
         },
         {
           path: 'classes',

@@ -92,9 +92,13 @@ export default {
       return _.filter(this.lessonsList, item => item.isTeached)
     },
     lessonFinishedList() {
-      return this.actorType === 'teacher'
-        ? this.teachedLessons
-        : this.learnedLessons
+      if (this.isTeacher) {
+        return this.teachedLessons
+      }
+      if (this.isStudent) {
+        return this.learnedLessons
+      }
+      return this.learnedLessons
     },
     lessonProgressPercent() {
       return (
@@ -119,6 +123,9 @@ export default {
     isStudent() {
       return this.actorType === 'student'
     },
+    isAdmin() {
+      return this.actorType === 'admin'
+    },
     isPendingReview() {
       return this.packageDetail.state === 0 || this.packageDetail.state === 1
     },
@@ -128,6 +135,13 @@ export default {
   },
   methods: {
     toLessonDetail(lesson) {
+      if (this.isAdmin) {
+        return this.$router.push({
+          name: 'OrgAdminPackageLesson',
+          params: { lessonId: lesson.lessonId }
+        })
+      }
+
       if (this.isTeacher) {
         return this.$router.push({
           name: 'OrgTeacherClassPackageLesson',
