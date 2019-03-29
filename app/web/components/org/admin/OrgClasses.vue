@@ -9,7 +9,7 @@
       <div class="org-classes-available" v-if="orgClassesLength > 0">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
       <span class="org-classes-header-empty-title" v-if="orgClassesLength == 0">{{$t('org.classInformationLabel')}}</span>
     </div>
-    <router-view></router-view>
+    <router-view v-if="!isLoadPreset"></router-view>
   </div>
 </template>
 <script>
@@ -20,9 +20,11 @@ export default {
     await this.getOrgClassList({
       organizationId: this.orgId
     })
+    this.isLoadPreset = false
   },
   data() {
     return {
+      isLoadPreset: true,
       menuData: [
         {
           pageNames: [
