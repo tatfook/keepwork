@@ -238,7 +238,7 @@ export default {
     orgClassStudentsTable() {
       return _.map(this.selectedClassStudents, item => ({
         ...item,
-        createdAt: moment(item.createdAt).format('YYYY-MM-DD'),
+        createdAt: moment(item.createdAt).format('YYYY-MM-DD HH:mm'),
         username: item.users.username
       }))
     },

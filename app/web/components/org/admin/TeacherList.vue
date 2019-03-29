@@ -22,7 +22,7 @@
     </el-table>
     <div class="teacher-list-empty" v-if="orgTeachersLength == 0">
       <img class="teacher-list-empty-img" src="@/assets/org/list_empty.png" alt="">
-      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <router-link :to="{name: 'OrgNewTeacher'}" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</router-link>
+      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <span  @click="toNewTeacherPage" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</span>
       </p>
     </div>
   </div>
@@ -176,7 +176,7 @@ export default {
     }
     &-cursor {
       color: #409efe;
-      text-decoration: none;
+      cursor: pointer;
     }
   }
   .el-icon-circle-plus-outline {
