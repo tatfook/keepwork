@@ -20,7 +20,7 @@ const {
 
 const actions = {
   async login(context, { organizationName, username, password }) {
-    let { commit } = context
+    let { dispatch } = context
     const userinfo = await keepwork.lessonOrganizations
       .login({
         organizationName,
@@ -34,6 +34,11 @@ const actions = {
       let { token } = userinfo
       Cookies.set('token', token)
       window.localStorage.setItem('satellizer_token', token)
+      await dispatch(
+        'user/getProfile',
+        { forceLogin: false, useCache: false },
+        { root: true }
+      )
     }
     return userinfo
   },
@@ -94,12 +99,14 @@ const actions = {
     return classPackages
   },
   async getOrgPackageDetail({ commit }, { packageId }) {
-    const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail({ packageId })
+    const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail(
+      { packageId }
+    )
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
   async getLessonDetail({ commit }, { packageId, lessonId }) {
-    let [ res, detail ] = await Promise.all([
+    let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId })
     ])
