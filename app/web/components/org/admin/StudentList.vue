@@ -29,7 +29,7 @@
       </el-table-column>
     </el-table>
     <div class="student-list-empty" v-if="orgStudentsCount == 0">
-      <p class="student-list-empty-info">{{$t('org.noStudents')}} <router-link :to="{name: 'OrgNewStudent'}" class="student-list-empty-cursor">{{$t('org.addStudentsImmediately')}}</router-link>
+      <p class="student-list-empty-info">{{$t('org.noStudents')}} <span @click="toNewStudentPage" class="student-list-empty-cursor">{{$t('org.addStudentsImmediately')}}</span>
       </p>
     </div>
   </div>
@@ -222,8 +222,8 @@ export default {
       color: #999;
     }
     &-cursor {
+      cursor: pointer;
       color: #409efe;
-      text-decoration: none;
     }
   }
   .el-icon-circle-plus-outline {
