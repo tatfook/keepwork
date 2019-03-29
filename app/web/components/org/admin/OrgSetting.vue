@@ -82,6 +82,8 @@ export default {
 <style lang="scss" scoped>
 .org-setting {
   background-color: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   &-header {
     height: 56px;
     line-height: 56px;
