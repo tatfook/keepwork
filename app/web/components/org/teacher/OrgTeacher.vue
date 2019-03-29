@@ -89,12 +89,16 @@ $borderColor: #e8e8e8;
     position: absolute;
     left: 8px;
     top: 10px;
-    color: #2397f3;
-    border: 1px solid;
     font-size: 12px;
     padding: 0 10px;
     height: 20px;
     line-height: 20px;
+    border-radius: 4px;
+    // width: 45px;
+    // height: 20px;
+    color: #a65f2c;
+    background-color: #ffd21f;
+    box-shadow: inset 0px -1px 3px 0px rgba(113, 20, 46, 0.28);
     border-radius: 4px;
   }
   &-profile {

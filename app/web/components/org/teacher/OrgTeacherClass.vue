@@ -32,7 +32,7 @@
     <div v-else class="org-teacher-classes-students">
       <div class="students-table-header">
         学生数:{{selectedClassStudentsCount}}
-        <span class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> 添加学生</span>
+        <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> 添加学生</span>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
         <el-table-column prop="realname" label="姓名">
@@ -41,7 +41,7 @@
         </el-table-column>
         <el-table-column prop="createdAt" label="添加时间">
         </el-table-column>
-        <el-table-column align="center" label="操作">
+        <el-table-column align="center" label="操作" v-if="isCanEdit">
           <template slot-scope="scope">
             <el-button @click="handleEditStudent(scope)" size="mini">编辑</el-button>
             <el-button @click="handleRemoveStudent(scope)" size="mini">移出</el-button>
@@ -100,6 +100,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getCurrentOrgUserCounts: 'org/getCurrentOrgUserCounts',
       getOrgClasses: 'org/teacher/getOrgClasses',
       getOrgClassStudentsById: 'org/teacher/getOrgClassStudentsById',
       addStudentToClass: 'org/teacher/addStudentToClass',
@@ -198,13 +199,35 @@ export default {
   computed: {
     ...mapGetters({
       orgClasses: 'org/teacher/orgClasses',
-      orgClassStudents: 'org/teacher/orgClassStudents'
+      orgClassStudents: 'org/teacher/orgClassStudents',
+      currentOrg: 'org/currentOrg',
+      userCounts: 'org/userCounts'
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')
     },
     orgClassesCount() {
       return _.get(this.orgClasses, 'length', 0)
+    },
+    orgId() {
+      return _.get(this.currentOrg, 'id', '')
+    },
+    orgUserCount() {
+      return _.get(this.userCounts, [this.orgId], {})
+    },
+    orgCurrentStudentCount() {
+      return _.get(this.orgUserCount, 'studentCount', 0)
+    },
+    orgStudentUpperLimit() {
+      const count = _.get(this.orgUserCount, 'count', 0)
+      const teacherCount = _.get(this.orgUserCount, 'teacherCount', 0)
+      return count - teacherCount
+    },
+    isCanAddStudent() {
+      return (
+        this.orgStudentUpperLimit > 0 &&
+        this.orgStudentUpperLimit > this.orgCurrentStudentCount
+      )
     },
     selectedClassStudents() {
       return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], [])
@@ -225,6 +248,12 @@ export default {
         'name',
         ''
       )
+    },
+    currentOrgPrivilege() {
+      return _.get(this.currentOrg, 'privilege', 0)
+    },
+    isCanEdit() {
+      return this.currentOrgPrivilege === 3
     }
   }
 }
