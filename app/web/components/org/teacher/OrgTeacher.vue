@@ -94,8 +94,6 @@ $borderColor: #e8e8e8;
     height: 20px;
     line-height: 20px;
     border-radius: 4px;
-    // width: 45px;
-    // height: 20px;
     color: #a65f2c;
     background-color: #ffd21f;
     box-shadow: inset 0px -1px 3px 0px rgba(113, 20, 46, 0.28);
