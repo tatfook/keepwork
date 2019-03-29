@@ -12,6 +12,9 @@
           <img :src="userPortrait" class="org-student-profile" />
           <div class="org-student-username">{{username}}</div>
         </div>
+        <div class="org-student-skill">
+          <p>{{skillpointsCount}}技能点<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></p>
+        </div>
         <div class="org-student-menu">
           <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
             <i class="iconfont icon-member"></i> {{item.name}}
@@ -28,14 +31,25 @@
         <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
       </span>
     </el-dialog>
+    <el-dialog class="org-student-skill-dialog" :class="{'org-student-skill-dialog-en': isEn}" title="技能点详情" :visible.sync="isSkillDetailShow">
+      <div class="org-student-skill-dialog-info">{{skillpointsCount}} {{$t('lesson.skillPoints')}}:</div>
+      <ul class="org-student-skill-dialog-skills">
+        <li class="org-student-skill-dialog-skills-item" v-for="(skill,index) in skillsList" :key="index">
+          {{skillName(skill)}}：<span class="org-student-skill-dialog-skills-count">{{skill.score}}</span>
+        </li>
+      </ul>
+    </el-dialog>
   </div>
 </template>
 <script>
 import OrgHeader from '@/components/org/common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
-import { keepwork } from '@/api'
+import { keepwork, lesson } from '@/api'
 const { graphql } = keepwork
 import _ from 'lodash'
+import colI18n from '@/lib/utils/i18n/column'
+import { locale } from '@/lib/utils/i18n'
+
 export default {
   name: 'OrgStudent',
   data() {
@@ -43,14 +57,61 @@ export default {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       selectedClassId: '',
       beInClassDialog: false,
-      joinKey: ''
+      joinKey: '',
+      skillsList: [],
+      isSkillDetailShow: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      userinfo: 'org/userinfo',
+      orgClasses: 'org/student/orgClasses',
+      classroom: 'org/student/classroom',
+      teachingLesson: 'org/student/teachingLesson'
+    }),
+    isEn() {
+      return locale === 'en-US' ? true : false
+    },
+    currentClassroomLessonName() {
+      return _.get(this.classroom, 'extra.lessonName', '')
+    },
+    classroomKey() {
+      return _.get(this.classroom, 'key', '')
+    },
+    skillpointsCount() {
+      let sum = 0
+      if (this.skillsList.length === 0) {
+        sum = 0
+      } else {
+        this.skillsList.every(skill => (sum += skill.score * 1))
+      }
+      return sum
+    },
+    username() {
+      return _.get(this.userinfo, 'username', '')
+    },
+    userId() {
+      return _.get(this.userinfo, 'id', '')
+    },
+    nowPageName() {
+      return _.get(this.$route, 'name')
+    },
+    isShowSidebar() {
+      return ['OrgStudentClass'].includes(this.nowPageName)
+    },
+    userPortrait() {
+      return _.get(this.userinfo, 'portrait') || this.defaultPortrait
+    },
+    organizationId() {
+      return _.get(this.userinfo, 'organizationId', '')
     }
   },
   async created() {
     await Promise.all([
       this.getOrgClasses(),
       this.getTeachingLesson(),
-      this.getUserInfo()
+      this.getUserInfo(),
+      this.getSkills()
     ])
   },
   methods: {
@@ -60,6 +121,17 @@ export default {
       enterClassroom: 'org/student/enterClassroom',
       getUserInfo: 'org/student/getUserInfo'
     }),
+    getSkills() {
+      lesson.users
+        .userSkills({ userId: this.userId })
+        .then(res => {
+          this.skillsList = res
+        })
+        .catch(() => {})
+    },
+    skillName(skill) {
+      return colI18n.getLangValue(skill, 'skillName')
+    },
     async handleJoinClassroom({ key, packageId, lessonId }) {
       try {
         if (this.classroomKey && key !== this.classroomKey) {
@@ -105,35 +177,6 @@ export default {
         })
       }
       this.beInClassDialog = false
-    }
-  },
-  computed: {
-    ...mapGetters({
-      userinfo: 'org/userinfo',
-      orgClasses: 'org/student/orgClasses',
-      classroom: 'org/student/classroom',
-      teachingLesson: 'org/student/teachingLesson'
-    }),
-    currentClassroomLessonName() {
-      return _.get(this.classroom, 'extra.lessonName', '')
-    },
-    classroomKey() {
-      return _.get(this.classroom, 'key', '')
-    },
-    username() {
-      return _.get(this.userinfo, 'username', '')
-    },
-    nowPageName() {
-      return _.get(this.$route, 'name')
-    },
-    isShowSidebar() {
-      return ['OrgStudentClass'].includes(this.nowPageName)
-    },
-    userPortrait() {
-      return _.get(this.userinfo, 'portrait') || this.defaultPortrait
-    },
-    organizationId() {
-      return _.get(this.userinfo, 'organizationId', '')
     }
   },
   components: {
@@ -199,10 +242,23 @@ $borderColor: #e8e8e8;
     flex: 1;
   }
   &-message {
-    padding: 32px 16px 48px;
+    padding: 32px 16px 0;
     // border-bottom: 1px solid $borderColor;
     position: relative;
     text-align: center;
+  }
+  &-skill {
+    text-align: center;
+    font-size: 14px;
+    &-detail {
+      color: #409eff;
+      cursor: pointer;
+      padding-left: 6px;
+      .el-icon-back {
+        transform: rotate(180deg);
+        margin-left: 3px;
+      }
+    }
   }
   &-role-label {
     position: absolute;
@@ -258,6 +314,72 @@ $borderColor: #e8e8e8;
       border: solid 1px #dddddd;
       color: #030313;
       font-size: 14px;
+    }
+  }
+  &-skill-dialog {
+    /deep/ .el-dialog {
+      width: 396px;
+      max-width: 100%;
+    }
+    /deep/ .el-dialog__header {
+      padding: 0;
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+      background-color: #309efe;
+    }
+    /deep/ .el-dialog__title {
+      color: #fff;
+      font-size: 16px;
+    }
+    /deep/ .el-dialog__headerbtn {
+      top: 14px;
+      right: 16px;
+    }
+    /deep/ .el-dialog__headerbtn .el-dialog__close {
+      color: #fff;
+      font-weight: bold;
+    }
+    /deep/ .el-dialog__body {
+      padding: 24px 42px 36px 42px;
+    }
+    &-skills {
+      &-count {
+        color: #303133;
+      }
+    }
+    &-info {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 16px;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    li {
+      list-style: none;
+      width: 145px;
+      border-bottom: 1px solid #ececec;
+      font-size: 14px;
+      color: #818181;
+      height: 32px;
+      line-height: 32px;
+      &:nth-child(1),
+      &:nth-child(2) {
+        border-top: 1px solid #ececec;
+      }
+    }
+    &-en {
+      .el-dialog {
+        width: 566px;
+      }
+      li {
+        width: 230px;
+      }
     }
   }
 }
