@@ -28,11 +28,9 @@ const actions = {
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
-  async getOrgClassPackagesById({ commit, getters: { orgClassPackages } }, { classId }) {
-    if (!orgClassPackages[classId]) {
-      const classPackages = await lessonOrganizations.getClassPackagesById({ classId })
-      commit(GET_CLASS_PACKAGES_SUCCESS, { classId, classPackages })
-    }
+  async getOrgClassPackagesById({ commit }, { classId }) {
+    const classPackages = await lessonOrganizations.getClassPackagesById({ classId })
+    commit(GET_CLASS_PACKAGES_SUCCESS, { classId, classPackages })
   },
   async getOrgClassStudentsById({ commit, getters: { orgClassStudents } }, { classId, cache = false }) {
     if (!(cache && orgClassStudents[classId])) {

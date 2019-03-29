@@ -48,6 +48,9 @@ const actions = {
       .catch()
     return token
   },
+  async getCurrentOrgUserCounts({ dispatch, getters: { currentOrg } }) {
+    await dispatch('getOrgUserCountsByGraphql', currentOrg)
+  },
   async getOrgUserCountsByGraphql(context, { orgId }) {
     let { commit } = context
     let result = await keepwork.graphql.getQueryResult({

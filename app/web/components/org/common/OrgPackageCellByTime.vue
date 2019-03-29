@@ -1,12 +1,17 @@
 <template>
   <div class="org-package-append">
-    <div class="org-package-append-header">最近上课: <span class="last-teach-time">{{lastTeachTime}}</span></div>
+    <div class="org-package-append-header">
+      <div v-if="lastTeachTime">
+        最近上课: <span class="last-teach-time">{{lastTeachTime | formatTime }}</span>
+      </div>
+    </div>
     <org-package-cell :packageData="packageData" @package-click="handleCallback"></org-package-cell>
   </div>
 </template>
 
 <script>
 import OrgPackageCell from './OrgPackageCell'
+import moment from 'moment'
 export default {
   name: 'OrgPackageCellByTime',
   props: {
@@ -15,6 +20,11 @@ export default {
       default() {
         return {}
       }
+    }
+  },
+  filters: {
+    formatTime(time) {
+      return moment(time).format('YYYY-MM-DD HH:MM')
     }
   },
   methods: {
