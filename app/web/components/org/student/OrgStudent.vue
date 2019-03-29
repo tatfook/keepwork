@@ -31,7 +31,7 @@
         <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog class="org-student-skill-dialog" :class="{'org-student-skill-dialog-en': isEn}" :title="$('lesson.skillPointDetails')" :visible.sync="isSkillDetailShow">
+    <el-dialog class="org-student-skill-dialog" :class="{'org-student-skill-dialog-en': isEn}" :title="$t('lesson.skillPointDetails')" :visible.sync="isSkillDetailShow">
       <div class="org-student-skill-dialog-info">{{skillpointsCount}} {{$t('lesson.skillPoints')}}:</div>
       <ul class="org-student-skill-dialog-skills">
         <li class="org-student-skill-dialog-skills-item" v-for="(skill,index) in skillsList" :key="index">
