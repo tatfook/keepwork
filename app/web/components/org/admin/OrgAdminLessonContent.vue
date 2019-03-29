@@ -24,7 +24,7 @@ export default {
     lessonMain() {
       return _.filter(
         this.modList,
-        item => item.cmd !== 'Lesson' && item.cmd !== 'Hint'
+        item => item.cmd !== 'Lesson'
       )
     }
   }
