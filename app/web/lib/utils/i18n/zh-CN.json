@@ -843,6 +843,7 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "skillPointDetails": "技能点详情",
     "lessonIndexLabel": "课程",
     "formatError": "格式错误",
     "viewMore": "了解更多",

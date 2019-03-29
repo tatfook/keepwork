@@ -13,7 +13,7 @@
           <div class="org-student-username">{{username}}</div>
         </div>
         <div class="org-student-skill">
-          <p>{{skillpointsCount}}技能点<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></p>
+          <p>{{skillpointsCount}} {{$t('lesson.skillPoints')}}<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></p>
         </div>
         <div class="org-student-menu">
           <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
@@ -31,7 +31,7 @@
         <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog class="org-student-skill-dialog" :class="{'org-student-skill-dialog-en': isEn}" title="技能点详情" :visible.sync="isSkillDetailShow">
+    <el-dialog class="org-student-skill-dialog" :class="{'org-student-skill-dialog-en': isEn}" :title="$('lesson.skillPointDetails')" :visible.sync="isSkillDetailShow">
       <div class="org-student-skill-dialog-info">{{skillpointsCount}} {{$t('lesson.skillPoints')}}:</div>
       <ul class="org-student-skill-dialog-skills">
         <li class="org-student-skill-dialog-skills-item" v-for="(skill,index) in skillsList" :key="index">
