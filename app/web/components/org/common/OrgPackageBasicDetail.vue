@@ -52,7 +52,7 @@ import LoginDialog from '@/components/common/LoginDialog'
 export default {
   name: 'OrgPackageBasicDetail',
   props: {
-    packageDetail:Object,
+    packageDetail: Object,
     actorType: String
   },
   computed: {
@@ -225,7 +225,9 @@ $dangerColor: #e4461f;
 }
 </style>
 <style lang="scss">
-.el-scrollbar__wrap {
-  overflow-x: auto;
+.package-basic-detail-skills-detail {
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+  }
 }
 </style>
