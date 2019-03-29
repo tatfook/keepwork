@@ -54,7 +54,7 @@ export default {
   data() {
     const checkMemberName = (rule, username, callback) => {
       if (!username) {
-        return callback(new Error('请输入用户名'))
+        return callback(new Error(`${this.$t('org.usernameIsRequired')}`))
       } else {
         this.testUsername({ username, callback })
       }
@@ -62,11 +62,15 @@ export default {
     return {
       isLoading: false,
       newMembers: [],
+      roleType: this.memberType,
       newMemberRules: {
         realname: [
           {
             required: true,
-            message: `请输入${this.memberType}姓名`
+            message: `${this.$t('org.pleaseInputMemberName', {
+              zhRroleType: this.memberType == 'student' ? '学生' : '教师',
+              enRroleType: this.memberType == 'student' ? 'student' : 'teacher'
+            })}`
           }
         ],
         memberName: [
