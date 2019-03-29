@@ -108,8 +108,8 @@ export default {
       })
     },
     async handleSwitchClass(classId) {
-      this.selectedClassId = classId
       await this.getTaughtClassroomCourses({ classId })
+      this.selectedClassId = classId
     },
     enterPackage(course) {
       this.$router.push({
