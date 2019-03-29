@@ -20,12 +20,12 @@
           <el-form-item prop="account" :rules="rules.account">
             <el-input v-model="item.account"></el-input>
           </el-form-item>
-          <el-form-item class="add-form-item">
+          <el-form-item class="add-form-item" v-if="!isEditType">
             <i class="el-icon-error" @click="handleRemoveFormItem(index)"></i>
           </el-form-item>
         </el-form>
       </div>
-      <div class="students-add-bottom">
+      <div class="students-add-bottom" v-if="!isEditType">
         <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>继续添加</span>
       </div>
     </div>
@@ -43,6 +43,7 @@
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
+            <el-button @click="handleEditStudent(scope)" size="mini">编辑</el-button>
             <el-button @click="handleRemoveStudent(scope)" size="mini">移出</el-button>
           </template>
         </el-table-column>
@@ -111,6 +112,11 @@ export default {
       await this.getOrgClassStudentsById({ classId, cache: true })
       this.selectedClassId = classId
     },
+    handleEditStudent({ row }) {
+      this.isShowAddStudentForm = true
+      this.isEditType = true
+      this.studentsFormData = [{ name: row.realname, account: row.username }]
+    },
     async handleRemoveStudent({ row }) {
       try {
         await this.removeStudentFromClass({
@@ -127,6 +133,7 @@ export default {
     },
     handleAddStudent() {
       this.isShowAddStudentForm = true
+      this.isEditType = false
       this.studentsFormData = [{ name: '', account: '' }]
     },
     handleCancel() {
