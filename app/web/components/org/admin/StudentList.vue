@@ -86,7 +86,7 @@ export default {
         let classes = student.lessonOrganizationClasses
         let classNameArr = _.map(classes, classDetail => classDetail.name)
         student.classesString = _.join(classNameArr, '、')
-        student.createdAt = moment(student.createdAt).format('YYYY-MM-DD')
+        student.createdAt = moment(student.createdAt).format('YYYY-MM-DD HH:mm')
         return student
       })
     },
