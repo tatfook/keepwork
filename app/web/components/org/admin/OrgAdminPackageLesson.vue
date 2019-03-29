@@ -16,7 +16,7 @@
             </el-dropdown>
           </el-breadcrumb-item>
         </el-breadcrumb>
-        <org-lesson-header :isTeacher="true" :isInCurrentClass="false"></org-lesson-header>
+        <org-lesson-header :lesson="lessonHeader" :isTeacher="true" :isInCurrentClass="false"></org-lesson-header>
         <org-admin-lesson-content></org-admin-lesson-content>
       </div>
     </div>
