@@ -2,8 +2,8 @@
   <div class="org-teacher-statistics" v-if="!isLoading">
     <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
     <div class="org-teacher-statistics-summary">
-      <p class="org-teacher-statistics-summary-count"><span class="org-teacher-statistics-summary-count-key">{{$t('lesson.attended')}}：</span><span class="org-teacher-statistics-summary-count-value">{{lessonCount}} {{$t('lesson.classes')}}</span><span class="org-teacher-statistics-summary-count-key">{{$t('lesson.totalTeachingTime')}}：</span>{{hours}} {{$t('lesson.hours')}}{{mins}} {{$t('lesson.mins')}}</p>
-      <p class="org-teacher-statistics-summary-sort"><img class="org-teacher-statistics-summary-sort-img" src="@/assets/lessonImg/summary/sort.png" alt=""><span class="org-teacher-statistics-summary-sort-text" @click="sequence">{{$t('lesson.sortByTeachingTime')}}</span></p>
+      <p class="org-teacher-statistics-summary-count"><span class="org-teacher-statistics-summary-count-key" v-show="lessonCount">{{$t('lesson.attended')}}：</span><span class="org-teacher-statistics-summary-count-value" v-show="lessonCount">{{lessonCount}} {{$t('lesson.classes')}}</span><span class="org-teacher-statistics-summary-count-key" v-show="hours || mins">{{$t('lesson.totalTeachingTime')}}：</span><span v-show="hours">{{hours}} {{$t('lesson.hours')}}</span><span v-show="mins">{{mins}} {{$t('lesson.mins')}}</span></p>
+      <p class="org-teacher-statistics-summary-sort" v-show="lessonCount"><img class="org-teacher-statistics-summary-sort-img" src="@/assets/lessonImg/summary/sort.png" alt=""><span class="org-teacher-statistics-summary-sort-text" @click="sequence">{{$t('lesson.sortByTeachingTime')}}</span></p>
     </div>
     <div class="org-teacher-statistics-packages">
       <div class="org-teacher-statistics-packages-taught" v-for="(course,index) in selectedClassPackges" :key="index">
@@ -21,6 +21,9 @@
           <span class="org-teacher-statistics-packages-taught-view-button" @click="viewSummary(course)">{{$t('lesson.viewSummary')}}</span>
         </div>
       </div>
+    </div>
+    <div class="org-teacher-statistics-nothing" v-if="!selectedClassPackges.length">
+      <p>该班级暂无上课记录</p>
     </div>
   </div>
 </template>
@@ -106,7 +109,6 @@ export default {
     },
     async handleSwitchClass(classId) {
       this.selectedClassId = classId
-      console.log('classid', classId)
       await this.getTaughtClassroomCourses({ classId })
     },
     enterPackage(course) {
@@ -220,6 +222,11 @@ export default {
         }
       }
     }
+  }
+  &-nothing {
+    color: #0090ff;
+    text-align: center;
+    padding-top: 100px;
   }
 }
 </style>
