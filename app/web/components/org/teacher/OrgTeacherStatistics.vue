@@ -2,23 +2,23 @@
   <div class="org-teacher-statistics" v-if="!isLoading">
     <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
     <div class="org-teacher-statistics-summary">
-      <p class="org-teacher-statistics-summary-count"><span class="org-teacher-statistics-summary-count-key">已教：</span><span class="org-teacher-statistics-summary-count-value">{{lessonCount}}堂课</span><span class="org-teacher-statistics-summary-count-key">总授课时长：</span>{{hours}}小时{{mins}}分钟</p>
-      <p class="org-teacher-statistics-summary-sort"><img class="org-teacher-statistics-summary-sort-img" src="@/assets/lessonImg/summary/sort.png" alt=""><span class="org-teacher-statistics-summary-sort-text">点击按授课时间排序</span></p>
+      <p class="org-teacher-statistics-summary-count"><span class="org-teacher-statistics-summary-count-key">{{$t('lesson.attended')}}：</span><span class="org-teacher-statistics-summary-count-value">{{lessonCount}} {{$t('lesson.classes')}}</span><span class="org-teacher-statistics-summary-count-key">{{$t('lesson.totalTeachingTime')}}：</span>{{hours}} {{$t('lesson.hours')}}{{mins}} {{$t('lesson.mins')}}</p>
+      <p class="org-teacher-statistics-summary-sort"><img class="org-teacher-statistics-summary-sort-img" src="@/assets/lessonImg/summary/sort.png" alt=""><span class="org-teacher-statistics-summary-sort-text" @click="sequence">{{$t('lesson.sortByTeachingTime')}}</span></p>
     </div>
     <div class="org-teacher-statistics-packages">
       <div class="org-teacher-statistics-packages-taught" v-for="(course,index) in selectedClassPackges" :key="index">
-        <div class="org-teacher-statistics-packages-taught-cover">
+        <div class="org-teacher-statistics-packages-taught-cover" @click="enterLesson(course)">
           <img class="org-teacher-statistics-packages-taught-cover-img" :src="course.extra.coverUrl" alt="">
         </div>
         <div class="org-teacher-statistics-packages-taught-desc">
-          <h4 class="org-teacher-statistics-packages-taught-desc-title">课程包：{{course.extra.packageName}}</h4>
-          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">课程{{course.extra.lessonNo}}：</span>{{course.extra.lessonName}}</p>
-          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">简介：</span>{{course.extra.lessonGoals}}</p>
-          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">时长：</span>45分钟</p>
-          <p class="org-teacher-statistics-packages-taught-desc-time">{{course.updatedAt | formatTime}}</p>
+          <h4 class="org-teacher-statistics-packages-taught-desc-title" @click="enterPackage(course)">{{$t('modList.package')}}：{{course.extra.packageName}}</h4>
+          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('modList.lesson')}}{{course.extra.lessonNo}}：</span>{{course.extra.lessonName}}</p>
+          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('lesson.intro')}}：</span>{{course.extra.lessonGoals}}</p>
+          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('lesson.duration')}}：</span>45{{$t('lesson.mins')}}</p>
+          <p class="org-teacher-statistics-packages-taught-desc-time">{{course.createdAt | formatTime}}</p>
         </div>
         <div class="org-teacher-statistics-packages-taught-view">
-          <span class="org-teacher-statistics-packages-taught-view-button" @click="viewSummary(course)">查看课堂总结</span>
+          <span class="org-teacher-statistics-packages-taught-view-button" @click="viewSummary(course)">{{$t('lesson.viewSummary')}}</span>
         </div>
       </div>
     </div>
@@ -37,6 +37,7 @@ export default {
     return {
       isLoading: true,
       selectedClassId: '',
+      positiveSequence: true,
       currentClassPackages: []
     }
   },
@@ -59,13 +60,13 @@ export default {
       return _.get(this.orgClasses, '[0].id', '')
     },
     selectedClassPackges() {
-      const packags = _.get(
+      const packages = _.get(
         this.classroomCoursesData,
         [this.selectedClassId],
         []
       )
-      let packagesData = _.get(packags, 'rows', [])
-      return packagesData
+      let packagesData = _.get(packages, 'rows', [])
+      return packagesData.sort(this.sortByCreatedAt)
     },
     lessonCount() {
       return this.selectedClassPackges.length
@@ -84,6 +85,18 @@ export default {
       getOrgClasses: 'org/teacher/getOrgClasses',
       getTaughtClassroomCourses: 'org/teacher/getTaughtClassroomCourses'
     }),
+    sortByCreatedAt(obj1, obj2) {
+      return this.positiveSequence
+        ? obj1.createdAt >= obj2.createdAt
+          ? -1
+          : 1
+        : obj1.createdAt <= obj2.createdAt
+        ? -1
+        : 1
+    },
+    sequence() {
+      this.positiveSequence = !this.positiveSequence
+    },
     viewSummary(course) {
       this.$router.push({
         path: `package/${course.packageId}/lesson/${
@@ -93,7 +106,20 @@ export default {
     },
     async handleSwitchClass(classId) {
       this.selectedClassId = classId
+      console.log('classid', classId)
       await this.getTaughtClassroomCourses({ classId })
+    },
+    enterPackage(course) {
+      this.$router.push({
+        path: `teach/class/${course.classId}/package/${course.packageId}`
+      })
+    },
+    enterLesson(course) {
+      this.$router.push({
+        path: `teach/class/${course.classId}/package/${
+          course.packageId
+        }/lesson/${course.lessonId}/lessonPlan`
+      })
     }
   },
   filters: {
@@ -142,6 +168,7 @@ export default {
       margin-top: -1px;
       &-cover {
         width: 266px;
+        cursor: pointer;
         &-img {
           width: 100%;
           object-fit: cover;
@@ -154,6 +181,10 @@ export default {
         &-title {
           margin: 0 0 15px;
           font-size: 20px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          cursor: pointer;
         }
         &-text {
           font-size: 14px;
