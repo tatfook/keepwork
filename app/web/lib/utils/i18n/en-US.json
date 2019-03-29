@@ -852,6 +852,7 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "skillPointDetails": "Skill point details",
     "lessonIndexLabel": "Lesson ",
     "formatError": "format error",
     "viewMore": "View More",
