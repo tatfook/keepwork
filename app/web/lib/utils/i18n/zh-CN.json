@@ -1702,7 +1702,7 @@
     "usersCount": "人",
     "IncludeTeachers": "教师数：",
     "teacherCountUnit": "",
-    "addTeachers": "添加老师",
+    "addTeachers": "添加教师",
     "nameLabel": "姓名",
     "usernameLabel": "用户名",
     "classLabel": "班级",
@@ -1731,6 +1731,8 @@
     "noTeaches": "暂未添加教师信息，",
     "addTeachersImmediately": "立即添加",
     "noStudents": "暂未添加学生信息，",
-    "addStudentsImmediately": "立即添加"
+    "addStudentsImmediately": "立即添加",
+    "usernameIsRequired": "请输入用户名",
+    "pleaseInputMemberName": "请输入{zhRroleType}姓名"
   }
 }

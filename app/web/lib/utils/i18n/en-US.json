@@ -1740,6 +1740,8 @@
     "noTeaches": "There are no teachers. ",
     "addTeachersImmediately": "Add teachers",
     "noStudents": "There are no students. ",
-    "addStudentsImmediately": "Add students"
+    "addStudentsImmediately": "Add students",
+    "usernameIsRequired": "Keepwork username is required",
+    "pleaseInputMemberName": "Please input {enRroleType} name"
   }
 }
