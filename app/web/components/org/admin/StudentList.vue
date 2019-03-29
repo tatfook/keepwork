@@ -35,6 +35,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'StudentList',
@@ -85,6 +86,7 @@ export default {
         let classes = student.lessonOrganizationClasses
         let classNameArr = _.map(classes, classDetail => classDetail.name)
         student.classesString = _.join(classNameArr, '、')
+        student.createdAt = moment(student.createdAt).format('YYYY-MM-DD')
         return student
       })
     },
