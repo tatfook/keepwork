@@ -1742,6 +1742,6 @@
     "noStudents": "There are no students. ",
     "addStudentsImmediately": "Add students",
     "usernameIsRequired": "Keepwork username is required",
-    "pleaseInputMemberName": "Please input {zhRroleType} name"
+    "pleaseInputMemberName": "Please input {enRroleType} name"
   }
 }
