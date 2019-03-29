@@ -66,10 +66,12 @@ export default {
       createLearnRecords: 'org/student/createLearnRecords',
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
       resumeQuiz: 'org/student/resumeQuiz',
-      uploadLearnRecords: 'org/student/uploadLearnRecords'
+      uploadLearnRecords: 'org/student/uploadLearnRecords',
+      switchSummary: 'org/student/switchSummary'
     }),
     async getLessonData() {
       try {
+        this.switchSummary(false)
         const { name, params } = this.$route
         const packageId = _.toNumber(params.packageId)
         const lessonId = _.toNumber(params.lessonId)
@@ -210,7 +212,7 @@ export default {
     classroomId() {
       return _.get(this.classroom, 'id', '')
     }
-  },
+  }
 }
 </script>
 
