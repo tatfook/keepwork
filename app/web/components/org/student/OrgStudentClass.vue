@@ -120,12 +120,12 @@ export default {
           if (this.isBeInClassroom) {
             return this.$message.error(this.$t('lesson.beInClass'))
           }
+          const [packageId, lessonId] = key.split('x').map(_.toNumber)
           const OrgHasTheLesson = _.get(
             this.orgPackagesDict,
             [packageId],
             []
           ).includes(lessonId)
-          const [packageId, lessonId] = key.split('x').map(_.toNumber)
           const res = await lesson.classrooms.isValidLessonId({
             packageId,
             lessonId
