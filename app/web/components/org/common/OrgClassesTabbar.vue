@@ -1,6 +1,6 @@
 <template>
   <div class="classes-tabbar">
-    <el-button v-for="item in classes" :key="item.id" @click="handleClick(item.id)" :class="['classes-tabbar-button', { 'tab-button-selected': item.id === value }]" icon="iconfont icon-member">{{item.name}}</el-button>
+    <el-button v-for="item in classes" :key="item.id" @click="handleClick(item.id)" :class="['classes-tabbar-button', { 'tab-button-selected': item.id === value }]" icon="iconfont icon-team">{{item.name}}</el-button>
   </div>
 </template>
 
