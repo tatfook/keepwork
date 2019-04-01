@@ -57,6 +57,8 @@ export default {
     await this.getLessonData()
   },
   async destroyed() {
+    clearTimeout(this._interval)
+    this._interval = null
     window.document.title = 'Keepwork'
   },
   methods: {
@@ -67,7 +69,8 @@ export default {
       resumeLearnRecordsId: 'org/student/resumeLearnRecordsId',
       resumeQuiz: 'org/student/resumeQuiz',
       uploadLearnRecords: 'org/student/uploadLearnRecords',
-      switchSummary: 'org/student/switchSummary'
+      switchSummary: 'org/student/switchSummary',
+      checkClassroom: 'org/student/checkClassroom'
     }),
     async getLessonData() {
       try {
@@ -83,6 +86,7 @@ export default {
           if (this.isInCurrentClass) {
             await this.resumeQuiz({ id: this.classroomId })
             await this.uploadLearnRecords()
+            !this._interval && this.intervalCheckClassroom()
           } else {
             const { packageId, lessonId } = this.classroom
             return this.$router.push({
@@ -151,6 +155,22 @@ export default {
       })
         .then(() => this.$router.push(routerObject))
         .catch(e => console.error(e))
+    },
+    async intervalCheckClassroom(delay = 10) {
+      await this.checkClassroom()
+        .then(res => {
+          this._interval = setTimeout(async () => {
+            await this.intervalCheckClassroom()
+          }, delay * 1000)
+        })
+        .catch(e => {
+          this.$message({
+            message: this.$t('lesson.classIsOver'),
+            type: 'warning',
+            duration: 10000
+          })
+          clearTimeout(this._interval)
+        })
     }
   },
   computed: {

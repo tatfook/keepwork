@@ -6,7 +6,7 @@
       </el-col>
       <el-col :span="5">
         <span class="nickname-wrap">
-          <span>{{$t('lesson.nickName')}} {{username}}</span>
+          <span>{{$t('lesson.nickName')}} {{orgRealName}}</span>
         </span>
       </el-col>
       <el-col :span="14" :sm="14">
@@ -26,7 +26,8 @@ export default {
     ...mapGetters({
       classroomKey: 'org/student/classroomKey',
       isBeInClassroom: 'org/student/isBeInClassroom',
-      userinfo: 'org/userinfo'
+      userinfo: 'org/userinfo',
+      orgRealName: 'org/student/orgRealName'
     }),
     username() {
       return _.get(this.userinfo, 'username', '')
