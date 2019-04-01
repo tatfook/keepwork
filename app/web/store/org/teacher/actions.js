@@ -18,7 +18,8 @@ const {
   GET_CURRENT_CLASSROOM_SUCCESS,
   LEAVE_THE_CLASSROOM,
   COPY_CLASSROOM_QUIZ,
-  GET_TAUGHT_CLASSROOM_COURSES_SUCCESS
+  GET_TAUGHT_CLASSROOM_COURSES_SUCCESS,
+  GET_ORG_STUDENTS_SUCCESS
 } = props
 
 const actions = {
@@ -32,11 +33,14 @@ const actions = {
     const classPackages = await lessonOrganizations.getClassPackagesById({ classId })
     commit(GET_CLASS_PACKAGES_SUCCESS, { classId, classPackages })
   },
-  async getOrgClassStudentsById({ commit, getters: { orgClassStudents } }, { classId, cache = false }) {
-    if (!(cache && orgClassStudents[classId])) {
-      const classStudents = await lessonOrganizationClassMembers.getClassStudentsById({ classId })
-      commit(GET_CLASS_STUDENTS_SUCCESS, { classId, classStudents })
-    }
+  async getOrgClassStudentsById({ commit, getters: { orgClassStudents } }, { classId }) {
+    const classStudents = await lessonOrganizationClassMembers.getClassStudentsById({ classId })
+    commit(GET_CLASS_STUDENTS_SUCCESS, { classId, classStudents })
+  },
+  async getOrgStudents({ commit, rootGetters: { 'org/currentOrg': { id: organizationId } } }) {
+    const res = await lessonOrganizationClassMembers.getStudents({ organizationId })
+    const orgStudents = _.map(_.get(res, 'rows', []), item => _.get(item, 'users.username', ''))
+    commit(GET_ORG_STUDENTS_SUCCESS, orgStudents)
   },
   async getTaughtClassroomCourses({ commit, getters: { classroomCoursesData } }, { classId, cache = false }) {
     if (!(cache && classroomCoursesData[classId])) {
@@ -65,7 +69,7 @@ const actions = {
       return Promise.reject(error.response)
     }
   },
-  async removeStudentFromClass({ dispatch }, { classId, studentId }) {
+  async removeStudentFromClass({ dispatch, rootDispatch }, { classId, studentId }) {
     try {
       await lessonOrganizationClassMembers.removeMemberFromClass(studentId)
       await dispatch('getOrgClassStudentsById', { classId })
@@ -112,10 +116,7 @@ const actions = {
     commit(BEGIN_THE_CLASS_SUCCESS, classroom)
   },
   async dismissTheClass(context, payload) {
-    const {
-      commit,
-      getters: { classroom, classId }
-    } = context
+    const { commit, getters: { classroom, classId } } = context
     let flag = await lesson.classrooms.dismiss({
       classId
     })

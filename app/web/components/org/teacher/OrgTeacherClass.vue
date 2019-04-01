@@ -18,7 +18,7 @@
             <el-input v-model="item.name"></el-input>
           </el-form-item>
           <el-form-item prop="account" :rules="rules.account">
-            <el-input v-model="item.account"></el-input>
+            <el-input :disabled="isEditType"  v-model="item.account"></el-input>
           </el-form-item>
           <el-form-item class="add-form-item" v-if="!isEditType">
             <i class="el-icon-error" @click="handleRemoveFormItem(index)"></i>
@@ -66,6 +66,13 @@ export default {
     OrgClassesTabbar
   },
   data() {
+    const checkMemberName = (rule, username, callback) => {
+      if (!username) {
+        return callback(new Error(`${this.$t('org.usernameIsRequired')}`))
+      } else {
+        this.testUsername({ username, callback })
+      }
+    }
     return {
       selectedClassId: '',
       isShowAddStudentForm: false,
@@ -79,8 +86,8 @@ export default {
         ],
         account: [
           {
-            required: true,
-            message: '请输入账号'
+            validator: checkMemberName,
+            trigger: 'blur'
           }
         ]
       },
@@ -93,7 +100,7 @@ export default {
     }
   },
   async created() {
-    await this.getOrgClasses()
+    await Promise.all([this.getOrgStudents(), this.getOrgClasses()])
     await this.getOrgClassStudentsById({ classId: this.firstOrgClassId })
     this.selectedClassId = this.firstOrgClassId
     this.isLoading = false
@@ -104,7 +111,9 @@ export default {
       getOrgClasses: 'org/teacher/getOrgClasses',
       getOrgClassStudentsById: 'org/teacher/getOrgClassStudentsById',
       addStudentToClass: 'org/teacher/addStudentToClass',
-      removeStudentFromClass: 'org/teacher/removeStudentFromClass'
+      removeStudentFromClass: 'org/teacher/removeStudentFromClass',
+      getOrgStudents: 'org/teacher/getOrgStudents',
+      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql'
     }),
     async handleSwitchClass(classId) {
       if (this.isShowAddStudentForm && classId !== this.selectedClassId) {
@@ -124,6 +133,7 @@ export default {
           classId: this.selectedClassId,
           studentId: row.id
         })
+        await this.getCurrentOrgUserCounts()
         this.$message({
           type: 'success',
           message: '移出成功'
@@ -143,6 +153,17 @@ export default {
     },
     async handleSave() {
       const sucessfullItems = []
+      if (this.studentsFormData.length === 0) {
+        return (this.isShowAddStudentForm = false)
+      }
+      if (this.orgRestCount === 0) {
+        const flag = _.every(this.studentsFormData, item =>
+          this.orgStudents.includes(item.account)
+        )
+        if (!flag) {
+          return this.alertCountError()
+        }
+      }
       for (let index = 0; index < this.studentsFormData.length; index++) {
         await new Promise(async (resolve, reject) => {
           const forms = this.$refs[`form-${index}`][0]
@@ -175,6 +196,7 @@ export default {
           })
         })
       }
+      await this.getCurrentOrgUserCounts()
       sucessfullItems
         .reverse()
         .forEach(index => this.handleRemoveFormItem(index))
@@ -186,7 +208,38 @@ export default {
         this.isShowAddStudentForm = false
       }
     },
+    async testUsername({ username, callback }) {
+      await this.getUserOrgRoleByGraphql({
+        organizationId: this.orgId,
+        username
+      })
+        .then(result => {
+          callback()
+        })
+        .catch(error => {
+          switch (error) {
+            case 1:
+              callback()
+              break
+            case 2:
+              callback(new Error(`用户名:[${username}]已在教师列表中`))
+              break
+            case 64:
+              callback(new Error(`用户名:[${username}]已在管理员列表中`))
+              break
+            case 400:
+              callback(new Error(`用户名:[${username}]不存在`))
+              break
+            default:
+              callback(new Error(`用户名:[${username}]校验失败`))
+              break
+          }
+        })
+    },
     handleAddFormItem() {
+      if (this.selectedClassStudents.length + this.studentsFormData.length >= this.orgStudents.length) {
+        return this.alertCountError()
+      }
       this.studentsFormData.push({
         name: '',
         account: ''
@@ -194,6 +247,15 @@ export default {
     },
     handleRemoveFormItem(index) {
       this.studentsFormData.splice(index, 1)
+    },
+    alertCountError() {
+      return this.$alert(
+        '已到达添加上限，只能添加现有学生进入班级，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
+        '提示',
+        {
+          type: 'warning'
+        }
+      )
     }
   },
   computed: {
@@ -201,33 +263,14 @@ export default {
       orgClasses: 'org/teacher/orgClasses',
       orgClassStudents: 'org/teacher/orgClassStudents',
       currentOrg: 'org/currentOrg',
-      userCounts: 'org/userCounts'
+      orgRestCount: 'org/teacher/orgRestCount',
+      orgStudents: 'org/teacher/orgStudents'
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')
     },
     orgClassesCount() {
       return _.get(this.orgClasses, 'length', 0)
-    },
-    orgId() {
-      return _.get(this.currentOrg, 'id', '')
-    },
-    orgUserCount() {
-      return _.get(this.userCounts, [this.orgId], {})
-    },
-    orgCurrentStudentCount() {
-      return _.get(this.orgUserCount, 'studentCount', 0)
-    },
-    orgStudentUpperLimit() {
-      const count = _.get(this.orgUserCount, 'count', 0)
-      const teacherCount = _.get(this.orgUserCount, 'teacherCount', 0)
-      return count - teacherCount
-    },
-    isCanAddStudent() {
-      return (
-        this.orgStudentUpperLimit > 0 &&
-        this.orgStudentUpperLimit > this.orgCurrentStudentCount
-      )
     },
     selectedClassStudents() {
       return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], [])
@@ -254,6 +297,9 @@ export default {
     },
     isCanEdit() {
       return this.currentOrgPrivilege === 3
+    },
+    orgId() {
+      return _.get(this.currentOrg, 'id')
     }
   }
 }

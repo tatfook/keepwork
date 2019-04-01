@@ -9,6 +9,7 @@
 <script>
 import OrgHeader from './common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
+import { lesson } from '@/api'
 export default {
   name: 'OrgTeacherContainer',
   components: {
@@ -28,6 +29,7 @@ export default {
       console.error(error)
     }
     this.isLoading = false
+    lesson.users.getUserDetail()
   },
   methods: {
     ...mapActions({

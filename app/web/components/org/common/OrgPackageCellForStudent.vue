@@ -16,7 +16,7 @@ import OrgPackageCell from './OrgPackageCell'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 export default {
-  name: 'OrgPacakgeCellForStudent',
+  name: 'OrgPackgeCellForStudent',
   components: {
     OrgPackageCell
   },
