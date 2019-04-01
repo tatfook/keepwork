@@ -78,9 +78,15 @@ export default {
       }
       this.isLoading = false
     },
-    handleSelectLesson(lessonId) {
-      const { name, params } = this.$route
-      this.$router.push({ name, params: { ...params, lessonId } })
+    handleSelectLesson(_lessonId) {
+      const { packageId, lessonId } = this.$route.params
+      if (lessonId != _lessonId) {
+        this.leaveTheClassroom()
+        this.$router.push({
+          name: 'OrgTeacherLessonPlan',
+          params: { packageId, lessonId: _lessonId }
+        })
+      }
     }
   },
   computed: {

@@ -1,106 +1,116 @@
 <template>
-  <div class="teacher-summary" v-loading="loading" ref="print">
-    <div class="teacher-summary-print-and-email">
-      <div class="teacher-summary-print-and-email-wrap">
-        <el-button type="primary" @click="gotoPrint">{{$t('lesson.print')}}</el-button>
-        <el-button type="primary" @click="sendEmail">{{$t('lesson.sendToMailbox')}}</el-button>
+  <div class="teacher-summary-container">
+    <div class="org-breadcrumb">
+      <div class="org-breadcrumb-main">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ name: 'OrgTeacherStatistics' }">数据统计</el-breadcrumb-item>
+          <el-breadcrumb-item>{{currenClassInfo.extra.lessonName}}</el-breadcrumb-item>
+        </el-breadcrumb>
       </div>
     </div>
-    <div class="teacher-summary-print-header">
-      <div class="profile">
-        <img :src='userProfile.portrait' alt="portrait">
-      </div>
-      <div class="nickname">{{username}}</div>
-    </div>
-    <div class="teacher-summary-brief" ref="lessonIntro">
-      <p class="date">
-        <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span class="print-show">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
-      <p class="package-text">
-        <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
-      <p class="package-text">
-        <span class="brief-title">{{$t('lesson.intro')}}:</span> {{currenClassInfo.extra.lessonGoals}}</p>
-      <p>
-        <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
-      <div class="skillpoints package-text">
-        <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
-        <div class="points">
-          <ul class="points-list">
-            <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}} + {{skill.score}}</li>
-          </ul>
+    <div class="teacher-summary" v-loading="loading" ref="print">
+      <div class="teacher-summary-print-and-email">
+        <div class="teacher-summary-print-and-email-wrap">
+          <el-button type="primary" @click="gotoPrint">{{$t('lesson.print')}}</el-button>
+          <el-button type="primary" @click="sendEmail">{{$t('lesson.sendToMailbox')}}</el-button>
         </div>
       </div>
-    </div>
-    <div class="teacher-summary-chart" ref="lessonChart">
-      <h4>{{$t('lesson.accuracyAnalysis')}}:</h4>
-      <div class="teacher-summary-chart-box">
-        <div class="teacher-summary-chart-box-accuracy-rate">
-          <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
+      <div class="teacher-summary-print-header">
+        <div class="profile">
+          <img :src='userProfile.portrait' alt="portrait">
         </div>
-        <div class="teacher-summary-chart-box-student-number">
-          <number-of-students-chart :studentChartData="studentChartData" :totalStudent.sync="totalStudent"></number-of-students-chart>
+        <div class="nickname">{{username}}</div>
+      </div>
+      <div class="teacher-summary-brief" ref="lessonIntro">
+        <p class="date">
+          <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span class="print-show">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
+        <p class="package-text">
+          <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
+        <p class="package-text">
+          <span class="brief-title">{{$t('lesson.intro')}}:</span> {{currenClassInfo.extra.lessonGoals}}</p>
+        <p>
+          <span class="brief-title">{{$t('lesson.duration')}}:</span> 45{{$t('lesson.mins')}}</p>
+        <div class="skillpoints package-text">
+          <div class="brief-title skill">{{$t('lesson.skillPoints')}}:</div>
+          <div class="points">
+            <ul class="points-list">
+              <li v-for="(skill,index) in skillsList" :key="index">{{index + 1}}.{{skillName(skill)}} + {{skill.score}}</li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="teacher-summary-chart-copy">
-    </div>
-    <div class="teacher-summary-detailed" ref="lessonSummary">
-      <h4>{{$t('lesson.detailed')}}:</h4>
-      <div class="teacher-summary-detailed-change hidden web-page-show">
-        <span class="chang-button">
-          <el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})
+      <div class="teacher-summary-chart" ref="lessonChart">
+        <h4>{{$t('lesson.accuracyAnalysis')}}:</h4>
+        <div class="teacher-summary-chart-box">
+          <div class="teacher-summary-chart-box-accuracy-rate">
+            <accuracy-rate-chart :quizChartData="quizChartData"></accuracy-rate-chart>
+          </div>
+          <div class="teacher-summary-chart-box-student-number">
+            <number-of-students-chart :studentChartData="studentChartData" :totalStudent.sync="totalStudent"></number-of-students-chart>
+          </div>
+        </div>
+      </div>
+      <div class="teacher-summary-chart-copy">
+      </div>
+      <div class="teacher-summary-detailed" ref="lessonSummary">
+        <h4>{{$t('lesson.detailed')}}:</h4>
+        <div class="teacher-summary-detailed-change hidden web-page-show">
+          <span class="chang-button">
+            <el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('changeAll')">{{$t('lesson.changeAll')}}</el-button> ({{$t('lesson.fullAllStudents')}})
+          </span>
+          <span class="chang-button">
+            <el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})
+          </span>
+        </div>
+        <div class="teacher-summary-detailed-table">
+          <el-table ref='gradeMultipleTable' :data="newCurrentRecord" border style="width: 100%" class="email-text-center" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="portrait" label="NO." width="80px">
+              <template slot-scope="props">
+                <div class="portrait"><img style="width:100%;object-fit:cover" :src="props.row.portrait || avatar" alt=""></div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" sortable :label='$t("lesson.name")'>
+            </el-table-column>
+            <el-table-column prop="username" sortable :label='$t("lesson.username")'>
+            </el-table-column>
+            <el-table-column prop="accuracyRate" sortable width="180" :label='$t("lesson.accuracyRate")'>
+            </el-table-column>
+            <el-table-column prop="right" sortable :label='$t("lesson.rightNumber")'>
+            </el-table-column>
+            <el-table-column prop="wrong" sortable :label='$t("lesson.wrongNumber")'>
+            </el-table-column>
+            <el-table-column prop="empty" sortable :label='$t("lesson.emptyNumber")'>
+            </el-table-column>
+            <el-table-column>
+              <template slot-scope="scope">
+                <el-button class="hidden web-page-show" size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <div class="teacher-summary-print-lesson-plan">
+        <lesson-wrap v-for="(item,index) in modListFilter" :key="index" :mod="item" :isPreview="true" :isPrint="true"></lesson-wrap>
+      </div>
+      <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
+        <div class="tip">
+          <div class="tip-img"><img src="@/assets/lessonImg/reminder.png" alt=""></div>
+          <div class="tip-text">{{changeSelected == 'changeAll' ? $t('lesson.confirmFullAll') : $t('lesson.confirmFullSelected')}}</div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="cancelChangeStudentMarks">{{$t('common.Cancel')}}</el-button>
+          <el-button type="primary" @click="toChangeStudentMarks">{{$t('common.Sure')}}</el-button>
         </span>
-        <span class="chang-button">
-          <el-button :disabled="newCurrentRecord.length === 0" type="primary" size="mini" @click="change('change')">{{$t('lesson.change')}}</el-button> ({{$t('lesson.fullSelectedStudents')}})
-        </span>
-      </div>
-      <div class="teacher-summary-detailed-table">
-        <el-table ref='gradeMultipleTable' :data="newCurrentRecord" border style="width: 100%" class="email-text-center" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55">
-          </el-table-column>
-          <el-table-column prop="portrait" label="NO." width="80px">
-            <template slot-scope="props">
-              <div class="portrait"><img style="width:100%;object-fit:cover" :src="props.row.portrait || avatar" alt=""></div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" sortable :label='$t("lesson.name")'>
-          </el-table-column>
-          <el-table-column prop="username" sortable :label='$t("lesson.username")'>
-          </el-table-column>
-          <el-table-column prop="accuracyRate" sortable width="180" :label='$t("lesson.accuracyRate")'>
-          </el-table-column>
-          <el-table-column prop="right" sortable :label='$t("lesson.rightNumber")'>
-          </el-table-column>
-          <el-table-column prop="wrong" sortable :label='$t("lesson.wrongNumber")'>
-          </el-table-column>
-          <el-table-column prop="empty" sortable :label='$t("lesson.emptyNumber")'>
-          </el-table-column>
-          <el-table-column>
-            <template slot-scope="scope">
-              <el-button class="hidden web-page-show" size="mini" type="primary" @click="singleStudentRecord(scope.$index, scope.row)">{{$t('lesson.viewDetail')}}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+      </el-dialog>
+      <el-dialog class="teacher-summary-success-send-email" :visible.sync="successSendEmailDialogVisible" width="30%" center>
+        <div class="success">
+          <img src="@/assets/lessonImg/email.png" alt="">
+          <p>{{$t('lesson.successSendToEmail')}}(<span class="email-address">{{emailAddress}}</span>).</p>
+        </div>
+      </el-dialog>
     </div>
-    <div class="teacher-summary-print-lesson-plan">
-      <lesson-wrap v-for="(item,index) in modListFilter" :key="index" :mod="item" :isPreview="true" :isPrint="true"></lesson-wrap>
-    </div>
-    <el-dialog class="teacher-summary-change" :visible.sync="changeDialogVisible" width="30%" center>
-      <div class="tip">
-        <div class="tip-img"><img src="@/assets/lessonImg/reminder.png" alt=""></div>
-        <div class="tip-text">{{changeSelected == 'changeAll' ? $t('lesson.confirmFullAll') : $t('lesson.confirmFullSelected')}}</div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancelChangeStudentMarks">{{$t('common.Cancel')}}</el-button>
-        <el-button type="primary" @click="toChangeStudentMarks">{{$t('common.Sure')}}</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog class="teacher-summary-success-send-email" :visible.sync="successSendEmailDialogVisible" width="30%" center>
-      <div class="success">
-        <img src="@/assets/lessonImg/email.png" alt="">
-        <p>{{$t('lesson.successSendToEmail')}}(<span class="email-address">{{emailAddress}}</span>).</p>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -539,121 +549,141 @@ export default {
 }
 </script>
 <style lang="scss">
-.teacher-summary {
-  max-width: 1150px;
-  margin: 0 auto;
-  padding: 0 40px 40px;
-  background: #fff;
-  .web-page-show {
-    display: block;
-  }
-  &-print-and-email {
-    display: flex;
-    flex-direction: row-reverse;
-    padding: 22px 10px 10px;
-  }
-  &-print-header {
-    display: none;
-  }
-  &-print-lesson-plan {
-    display: none;
-  }
-  &-brief {
-    margin-bottom: 40px;
-    .date {
-      font-size: 18px;
-      line-height: 30px;
-      letter-spacing: 0px;
-      color: #111111;
-      .week {
-        margin-right: 25px;
+.teacher-summary-container {
+  .org-breadcrumb {
+    background: #fff;
+    color: #999;
+    border-bottom: solid 1px #e6e6e6;
+    &-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding-left: 20px;
+      .el-breadcrumb {
+        height: 58px;
+        line-height: 58px;
       }
-      .print-show {
-        display: none;
+      .el-dropdown-link {
+        cursor: pointer;
       }
     }
-    .package-text {
-      word-break: break-all;
-      word-wrap: break-word;
+  }
+  .teacher-summary {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 0 40px 40px;
+    background: #fff;
+    .web-page-show {
+      display: block;
     }
-    .brief-title {
-      font-size: 16px;
-      color: #111111;
-      font-weight: bold;
-    }
-    .skillpoints {
+    &-print-and-email {
       display: flex;
-      .skill {
-        width: 100px;
-        display: inline-block;
+      flex-direction: row-reverse;
+      padding: 22px 10px 10px;
+    }
+    &-print-header {
+      display: none;
+    }
+    &-print-lesson-plan {
+      display: none;
+    }
+    &-brief {
+      margin-bottom: 40px;
+      .date {
+        font-size: 18px;
+        line-height: 30px;
+        letter-spacing: 0px;
+        color: #111111;
+        .week {
+          margin-right: 25px;
+        }
+        .print-show {
+          display: none;
+        }
       }
-      .points {
-        flex: 1;
-        .points-list {
-          margin: 0;
-          list-style: none;
-          li {
-            margin-bottom: 5px;
+      .package-text {
+        word-break: break-all;
+        word-wrap: break-word;
+      }
+      .brief-title {
+        font-size: 16px;
+        color: #111111;
+        font-weight: bold;
+      }
+      .skillpoints {
+        display: flex;
+        .skill {
+          width: 100px;
+          display: inline-block;
+        }
+        .points {
+          flex: 1;
+          .points-list {
+            margin: 0;
+            list-style: none;
+            li {
+              margin-bottom: 5px;
+            }
           }
         }
       }
     }
-  }
-  &-chart {
-    padding: 12px;
-    background: #f8f8ff;
-    &-box {
-      display: flex;
-      &-accuracy-rate {
-        flex: 1;
-      }
-      &-student-number {
-        flex: 1;
-      }
-    }
-  }
-  &-detailed {
-    margin-top: 59px;
-    &-change {
-      margin-bottom: 22px;
-      .chang-button {
-        margin-right: 40px;
-      }
-    }
-    &-table {
-      border: 1px solid #a4a4a4;
-      .portrait {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        overflow: hidden;
-        img {
-          width: 100%;
-          object-fit: cover;
+    &-chart {
+      padding: 12px;
+      background: #f8f8ff;
+      &-box {
+        display: flex;
+        &-accuracy-rate {
+          flex: 1;
+        }
+        &-student-number {
+          flex: 1;
         }
       }
     }
-  }
-  &-change {
-    text-align: center;
-    .tip {
-      display: flex;
-      &-text {
-        font-size: 18px;
-        line-height: 49px;
-        color: #f75858;
-        text-align: center;
-        text-indent: 16px;
+    &-detailed {
+      margin-top: 59px;
+      &-change {
+        margin-bottom: 22px;
+        .chang-button {
+          margin-right: 40px;
+        }
+      }
+      &-table {
+        border: 1px solid #a4a4a4;
+        .portrait {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          overflow: hidden;
+          img {
+            width: 100%;
+            object-fit: cover;
+          }
+        }
       }
     }
-  }
-  &-success-send-email {
-    .success {
+    &-change {
       text-align: center;
-      margin: 0 auto;
+      .tip {
+        display: flex;
+        &-text {
+          font-size: 18px;
+          line-height: 49px;
+          color: #f75858;
+          text-align: center;
+          text-indent: 16px;
+        }
+      }
     }
-    .email-address {
-      color: #409eff;
+    &-success-send-email {
+      .success {
+        text-align: center;
+        margin: 0 auto;
+      }
+      .email-address {
+        color: #409eff;
+      }
     }
   }
 }
@@ -678,47 +708,52 @@ export default {
   }
 }
 @media print {
-  .teacher-summary {
-    &-detailed {
-      .web-page-show {
-        display: none;
-      }
-    }
-    &-print-and-email {
+  .teacher-summary-container {
+    .org-breadcrumb {
       display: none;
     }
-    &-print-header {
-      display: block;
-      width: 1150px;
-      margin: 0 auto;
-      padding: 40px;
-      background: #fff;
-      text-align: center;
-      .profile {
-        margin: 0 auto;
-        height: 100px;
-        width: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        img {
-          width: 100%;
-          object-fit: cover;
+    .teacher-summary {
+      &-detailed {
+        .web-page-show {
+          display: none;
         }
       }
-      .nickname {
-        font-size: 24px;
-        line-height: 34px;
-        letter-spacing: 1px;
-        color: #333333;
+      &-print-and-email {
+        display: none;
       }
-    }
-    &-print-lesson-plan {
-      display: block;
-    }
-    &-brief {
-      .date {
-        .print-show {
-          display: inline-block;
+      &-print-header {
+        display: block;
+        width: 1150px;
+        margin: 0 auto;
+        padding: 40px;
+        background: #fff;
+        text-align: center;
+        .profile {
+          margin: 0 auto;
+          height: 100px;
+          width: 100px;
+          border-radius: 50%;
+          overflow: hidden;
+          img {
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        .nickname {
+          font-size: 24px;
+          line-height: 34px;
+          letter-spacing: 1px;
+          color: #333333;
+        }
+      }
+      &-print-lesson-plan {
+        display: block;
+      }
+      &-brief {
+        .date {
+          .print-show {
+            display: inline-block;
+          }
         }
       }
     }
