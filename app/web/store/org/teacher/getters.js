@@ -3,6 +3,16 @@ import _ from 'lodash'
 
 const getters = {
   orgClasses: state => state.orgClasses,
+  orgStudents: state => state.orgStudents,
+  orgUserCounts: (state, getters, rootState, rootGetters) => {
+    const { 'org/getOrgUserCountById': getOrgUserCountById, 'org/currentOrg': currentOrg } = rootGetters
+    return getOrgUserCountById(currentOrg)
+  },
+  orgRestCount: (state, { orgUserCounts }) => {
+    const { count, teacherCount, studentCount } = orgUserCounts
+    const residue = count - teacherCount - studentCount
+    return residue > -1 ? residue : 0
+  },
   orgClassPackages: state => state.orgClassPackages,
   orgClassStudents: state => state.orgClassStudents,
   classroomCoursesData: state => state.classroomCoursesData,

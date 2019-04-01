@@ -49,7 +49,7 @@ const actions = {
     return token
   },
   async getCurrentOrgUserCounts({ dispatch, getters: { currentOrg } }) {
-    await dispatch('getOrgUserCountsByGraphql', currentOrg)
+    await dispatch('getOrgUserCountsByGraphql', { orgId: currentOrg.id })
   },
   async getOrgUserCountsByGraphql(context, { orgId }) {
     let { commit } = context

@@ -138,8 +138,6 @@ export default {
           this.beInClassDialog = true
           this.joinKey = key
         } else if (this.classroomKey && key == this.classroomKey) {
-          console.log(packageId)
-          console.log(lessonId)
           if (packageId && lessonId) {
             this.$router.push({
               name: 'OrgStudentPackageLesson',

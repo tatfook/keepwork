@@ -15,6 +15,7 @@ const GET_CURRENT_CLASSROOM_SUCCESS = 'GET_CURRENT_CLASSROOM_SUCCESS'
 const LEAVE_THE_CLASSROOM = 'LEAVE_THE_CLASSROOM'
 const COPY_CLASSROOM_QUIZ = 'COPY_CLASSROOM_QUIZ'
 const GET_TAUGHT_CLASSROOM_COURSES_SUCCESS = 'GET_TAUGHT_CLASSROOM_COURSES_SUCCESS'
+const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -30,13 +31,17 @@ export const props = {
   GET_CURRENT_CLASSROOM_SUCCESS,
   LEAVE_THE_CLASSROOM,
   COPY_CLASSROOM_QUIZ,
-  GET_TAUGHT_CLASSROOM_COURSES_SUCCESS
+  GET_TAUGHT_CLASSROOM_COURSES_SUCCESS,
+  GET_ORG_STUDENTS_SUCCESS
 }
 
 
 const mutations = {
   [GET_ORG_CLASSES_SUCCESS](state, payload) {
     Vue.set(state, 'orgClasses', payload)
+  },
+  [GET_ORG_STUDENTS_SUCCESS](state, payload) {
+    Vue.set(state, 'orgStudents', payload)
   },
   [GET_CLASS_PACKAGES_SUCCESS](state, { classId, classPackages }) {
     Vue.set(state, 'orgClassPackages', {
