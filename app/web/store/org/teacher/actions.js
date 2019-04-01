@@ -78,14 +78,14 @@ const actions = {
     }
   },
   async getLessonDetail({ commit, dispatch, getters }, { classId, packageId, lessonId }) {
-    await dispatch('getOrgClassPackageDetail', { classId, packageId })
-    // const { teacherPackageDetail } = getters
-    // const packageIndex = teacherPackageDetail({ packageId }).lessons.map(l => l.id).indexOf(Number(lessonId))
     let [ res, detail ] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
-      lesson.lessons.lessonDetail({ lessonId })
+      lesson.lessons.lessonDetail({ lessonId }),
+      dispatch('getOrgClassPackageDetail', { classId, packageId })
     ])
-    // if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
+    const { orgClassPackagesDetail } = getters
+    const packageIndex = _.findIndex(_.get(orgClassPackagesDetail, [classId, packageId, 'lessons'], []), item => item.lessonId === _.toNumber(lessonId))
+    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))

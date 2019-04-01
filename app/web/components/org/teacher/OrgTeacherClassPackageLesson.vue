@@ -53,7 +53,6 @@ export default {
   methods: {
     ...mapActions({
       getLessonDetail: 'org/teacher/getLessonDetail',
-      getOrgClassPackageDetail: 'org/teacher/getOrgClassPackageDetail',
       getOrgClasses: 'org/teacher/getOrgClasses',
       leaveTheClassroom: 'org/teacher/leaveTheClassroom'
     }),
@@ -68,7 +67,6 @@ export default {
         }
         await Promise.all([
           this.getLessonDetail({ classId, packageId, lessonId }),
-          this.getOrgClassPackageDetail({ classId, packageId }),
           this.getOrgClasses({ cache: true })
         ])
 
