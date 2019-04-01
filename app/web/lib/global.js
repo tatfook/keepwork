@@ -9,6 +9,7 @@ const gClasses = {
 
 const gThemeData = {
   'mod-full-width': '1080px',
+  'mod-full-max-width': '100%',
   'mod-space-computer': '60px',
   'mod-space-mobile': '45px'
 }
@@ -16,6 +17,7 @@ const gThemeData = {
 const gTheme = {
   '@media only screen and (min-width: 1080px)': {
     'mod-full-width': {
+      maxWidth: gThemeData['mod-full-max-width'],
       width: gThemeData['mod-full-width'],
       margin: 'auto'
     },

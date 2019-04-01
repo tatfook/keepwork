@@ -9,10 +9,8 @@ const getters = {
   classroom: state => state.classroom,
   isBeInClass: (
     state,
-    { classId, classroom },
-    rootState,
-    { 'lesson/userinfo': userinfo }
-  ) => !!classId && classroom.userId === userinfo.id,
+    { classroom },
+  ) => !_.isEmpty(classroom),
   isClassIsOver: (state, { classroom }) => classroom.state === 2,
   classroomId: (state, { classroom }) => classroom.key || '',
   learnRecords: state => state.learnRecords || null,

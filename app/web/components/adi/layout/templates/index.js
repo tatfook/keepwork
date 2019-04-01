@@ -14,6 +14,7 @@ import HeaderFooterSidebar from './HeaderFooterSidebar'
 import Sidebar from './Sidebar'
 import SidebarHeader from './SidebarHeader'
 import SidebarHeaderFooter from './SidebarHeaderFooter'
+import SideBarMaxWidth from './SidebarMaxWidth'
 
 export default {
   basic: {
@@ -92,5 +93,11 @@ export default {
     sidebar: true,
     footer: true,
     component: SidebarHeaderFooter
+  },
+  sidebar_max_width: {
+    header: false,
+    sidebar: true,
+    footer: false,
+    component: SideBarMaxWidth
   }
 }

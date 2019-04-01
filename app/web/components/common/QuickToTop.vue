@@ -89,6 +89,11 @@ export default {
     }
   }
 }
+@media print {
+  .quickToTop {
+    display: none;
+  }
+}
 </style>
 
 

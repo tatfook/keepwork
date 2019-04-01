@@ -26,9 +26,9 @@ export default {
     }
   },
   async created() {
-    const { packageId = '', lessonId = '' } = this.$route.params
+    const { lessonId = '' } = this.$route.params
     const { token } = this.$route.query
-    if (!lessonId || !token) {
+    if (!token) {
       return this.$router.push('/')
     }
     const res = await users.verifyToken({ token }).catch(e => {
@@ -53,9 +53,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .lesson-preview {
   padding-bottom: 100px;
+  counter-reset: no;
+  .quiz-no::after {
+    counter-increment: no;
+    content: counter(no);
+  }
 }
 </style>
 

@@ -241,6 +241,12 @@ body {
   overflow: hidden;
 }
 @media print {
+  .index-page-header {
+    border-bottom: none;
+  }
+  .index-page-footer {
+    display: none;
+  }
   @media (max-width: 767px) {
     .hidden-xs-only {
       display: none !important;

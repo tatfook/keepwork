@@ -16,11 +16,11 @@
     <div class="lessons-list-dialog-empty" v-show="nameFilteredLessonList.length <= 0">
       <img src="@/assets/lessonImg/no_packages.png" alt="">
       <p class="lessons-list-dialog-empty-info" v-show="searchName.length > 0">{{$t('lesson.packageManage.searchResultIsEmpty')}}</p>
-      <p class="lessons-list-dialog-empty-info" v-show="searchName.length <= 0">{{$t('lesson.packageManage.lessonListIsEmpty')}}</p>
+      <p class="lessons-list-dialog-empty-info" v-show="searchName.length <= 0" v-html="$t('lesson.packageManage.createLesson', {here: `<a href='/l/teacher/lesson/new'>${$t('lesson.packageManage.clickHere')}</a>`})"></p>
     </div>
     <div class="lessons-list-dialog-operations">
       <el-button type="info" @click="handleClose">{{$t('common.Cancel')}}</el-button>
-      <el-button type="primary" @click="toAdd">{{$t('common.add')}}</el-button>
+      <el-button type="primary" @click="toAdd" :disabled="searchName.length <= 0">{{$t('common.add')}}</el-button>
     </div>
   </el-dialog>
 </template>

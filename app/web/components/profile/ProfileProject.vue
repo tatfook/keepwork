@@ -245,7 +245,7 @@ export default {
       width: 100%;
     }
     .el-tabs__nav-wrap {
-      padding: 10px 16px;
+      padding: 10px 17px;
       &::after {
         height: 1px;
         background-color: #e8e8e8;

@@ -251,7 +251,7 @@ a {
     .el-submenu__title {
       i {
         margin-left: -20px;
-        color: #fff;
+        color: #ccc;
       }
     }
   }
