@@ -1,13 +1,5 @@
 <template>
   <div class="teacher-summary-container">
-    <div class="org-breadcrumb">
-      <div class="org-breadcrumb-main">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgTeacherStatistics' }">数据统计</el-breadcrumb-item>
-          <el-breadcrumb-item>{{currenClassInfo.extra.lessonName}}</el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
-    </div>
     <div class="teacher-summary" v-loading="loading" ref="print">
       <div class="teacher-summary-print-and-email">
         <div class="teacher-summary-print-and-email-wrap">
@@ -550,24 +542,7 @@ export default {
 </script>
 <style lang="scss">
 .teacher-summary-container {
-  .org-breadcrumb {
-    background: #fff;
-    color: #999;
-    border-bottom: solid 1px #e6e6e6;
-    &-main {
-      max-width: 1200px;
-      margin: 0 auto;
-      box-sizing: border-box;
-      padding-left: 20px;
-      .el-breadcrumb {
-        height: 58px;
-        line-height: 58px;
-      }
-      .el-dropdown-link {
-        cursor: pointer;
-      }
-    }
-  }
+
   .teacher-summary {
     max-width: 1150px;
     margin: 0 auto;
@@ -708,52 +683,47 @@ export default {
   }
 }
 @media print {
-  .teacher-summary-container {
-    .org-breadcrumb {
-      display: none;
-    }
-    .teacher-summary {
-      &-detailed {
-        .web-page-show {
-          display: none;
-        }
-      }
-      &-print-and-email {
+  .teacher-summary {
+    &-detailed {
+      .web-page-show {
         display: none;
       }
-      &-print-header {
-        display: block;
-        width: 1150px;
+    }
+    &-print-and-email {
+      display: none;
+    }
+    &-print-header {
+      display: block;
+      width: 1150px;
+      margin: 0 auto;
+      padding: 40px;
+      background: #fff;
+      text-align: center;
+      .profile {
         margin: 0 auto;
-        padding: 40px;
-        background: #fff;
-        text-align: center;
-        .profile {
-          margin: 0 auto;
-          height: 100px;
-          width: 100px;
-          border-radius: 50%;
-          overflow: hidden;
-          img {
-            width: 100%;
-            object-fit: cover;
-          }
-        }
-        .nickname {
-          font-size: 24px;
-          line-height: 34px;
-          letter-spacing: 1px;
-          color: #333333;
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        img {
+          width: 100%;
+          object-fit: cover;
         }
       }
-      &-print-lesson-plan {
-        display: block;
+      .nickname {
+        font-size: 24px;
+        line-height: 34px;
+        letter-spacing: 1px;
+        color: #333333;
       }
-      &-brief {
-        .date {
-          .print-show {
-            display: inline-block;
-          }
+    }
+    &-print-lesson-plan {
+      display: block;
+    }
+    &-brief {
+      .date {
+        .print-show {
+          display: inline-block;
         }
       }
     }

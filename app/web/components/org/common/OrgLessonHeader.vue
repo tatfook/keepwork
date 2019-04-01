@@ -72,7 +72,7 @@
         </div>
         <div v-if="isTeacher" class="lesson-button-wrap">
           <el-button v-if="isTeaching && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-          <el-button v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="!isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+          <el-button v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="!isInCurrentClass || isClassIsOver" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
           <span v-if="isTeaching && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
           <span v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
         </div>

@@ -13,6 +13,7 @@ const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgT
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
 const OrgTeacherLessonPerformance = () => import('@/components/org/teacher/OrgTeacherLessonPerformance')
 const OrgTeacherLessonSummary = () => import('@/components/org/teacher/OrgTeacherLessonSummary')
+const OrgTeacherLessonSummaryPage = () => import('@/components/org/teacher/OrgTeacherLessonSummaryPage')
 const OrgTeacherLessonStudentRecord = () => import('@/components/org/teacher/OrgTeacherLessonStudentRecord')
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
@@ -133,7 +134,7 @@ export default new Router({
         {
           path: 'package/:packageId/lesson/:lessonId/classroom/:classroomId/summary',
           name: 'OrgTeacherLessonSummaryPage',
-          component: OrgTeacherLessonSummary
+          component: OrgTeacherLessonSummaryPage
         },
         {
           path:
