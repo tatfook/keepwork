@@ -173,15 +173,33 @@ export default {
       const key = _.trim(_.replace(_.lowerCase(classroomkey), 'c', ''))
       const res = await lesson.classrooms.isValidKey(key)
       if (res == true) {
+        console.warn('res:', res)
         const classInfo = await this.enterClassroom({ key })
-        const { packageId, lessonId } = classInfo
-        if (packageId && lessonId) {
-          this.$router.push({
-            name: 'OrgStudentPackageLesson',
-            params: { packageId, lessonId }
+          .then(classInfo => {
+            const { packageId, lessonId } = classInfo
+            if (packageId && lessonId) {
+              this.$router.push({
+                name: 'OrgStudentPackageLesson',
+                params: { packageId, lessonId }
+              })
+            }
+            this.beInClassDialog = false
           })
-        }
-        this.beInClassDialog = false
+          .catch(e => {
+            if (e.response.data.indexOf('不是该班级学生') !== -1) {
+              this.$message({
+                showClose: true,
+                message: this.$t('你不是该班级的学生'),
+                type: 'error'
+              })
+            } else {
+              this.$message({
+                showClose: true,
+                message: this.$t('common.failure'),
+                type: 'error'
+              })
+            }
+          })
       } else {
         this.$message({
           showClose: true,
