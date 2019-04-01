@@ -173,7 +173,6 @@ export default {
       const key = _.trim(_.replace(_.lowerCase(classroomkey), 'c', ''))
       const res = await lesson.classrooms.isValidKey(key)
       if (res == true) {
-        console.warn('res:', res)
         const classInfo = await this.enterClassroom({ key })
           .then(classInfo => {
             const { packageId, lessonId } = classInfo
