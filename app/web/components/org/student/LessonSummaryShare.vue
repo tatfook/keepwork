@@ -10,7 +10,7 @@
           </video>
           <img v-else :src="decodeURIComponent(summary.coverUrl)" />
         </div>
-        <div v-if="isEn" class="summary-word" >
+        <div v-if="isEn" class="summary-word">
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
           </div>
@@ -45,27 +45,28 @@
             {{$t('lesson.todayIs', {date: today})}}
           </div>
           <div class="summary-word-link">
-            我正在keepwork学习 {{summary.name}} . 点击
-            <a @click.prevent="toAboutPage" href="" class="highlight link">这里</a> 加入，并和我一起学习
+            {{$t("org.IAmLearningOnKp", {lessonName: summary.name})}}
+            <a @click.prevent="toAboutPage" href="" class="highlight link">{{$t('org.here')}}</a>
+            {{$t('org.joinAndLearn')}}
           </div>
-          <div class="summary-word-line">
-            这是我第
-            <span class="highlight">{{summary.day}}</span> 天在keepwork学习
-            <span class="highlight">{{summary.name}}</span>
+          <div class="summary-word-line">{{$t('lesson.StudiedForManyDays', {howManyDays: `<span class='highlight'> ${summary.day} </span>`,lessonTitle: `<span class='highlight'> ${summary.name} </span>`})}}
           </div>
           <div class="summary-word-line" v-if="hasSkills">
-            今天，我
+            {{$t('lesson.todayRecords0')}}
             <template v-if="summary.read > 0">
-              读了
-              <span class="highlight">{{summary.read}}</span> 行代码,
+              {{$t('lesson.todayRecords1', readCodeLinesCount: `<span class='highlight'>${
+                summary.read
+                }</span>`)}},
             </template>
             <template v-if="summary.write > 0">
-              写了
-              <span class="highlight">{{summary.write}}</span> 行代码,
+              {{$t('lesson.todayRecords2', wroteCodeLinesCount: `<span class='highlight'>${
+                summary.write
+                }</span>`)}},
             </template>
             <template v-if="summary.command > 0">
-              学习了
-              <span class="highlight">{{summary.command}}</span> 个电脑命令
+              {{$t('lesson.todayRecords3', commandLines: `<span class='highlight'>${
+                summary.command
+                }</span>`)}},
             </template>
           </div>
         </div>

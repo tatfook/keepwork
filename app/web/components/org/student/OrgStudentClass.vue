@@ -2,12 +2,12 @@
   <div class="org-student-class" v-if="!isLoading">
     <div class="org-student-class-header">
       <span class="join-classroom-icon"></span>
-      <span class="join-classroom-title">快速进入课堂</span>
-      <el-input placeholder="请输入课堂ID或课程ID" class="join-classroom-input" v-model.trim="classroomkey"></el-input>
-      <el-button @click="handleEnterClassroom" size="small" type="primary" :disabled="!isCanEnterClassroom">进入</el-button>
+      <span class="join-classroom-title">{{$t("lesson.enterClass")}}</span>
+      <el-input :placeholder="$t('org.pleaseInputClassIdOrLessonId')" class="join-classroom-input" v-model.trim="classroomkey"></el-input>
+      <el-button @click="handleEnterClassroom" size="small" type="primary" :disabled="!isCanEnterClassroom">{{$t("lesson.enter")}}</el-button>
     </div>
     <div class="org-student-class-count">
-      共有：<span class="org-student-class-count-number">{{orgPackageCount}}个课程包</span>
+      {{$t('lesson.include')}}: <span class="org-student-class-count-number">{{orgPackageCount + $t('lesson.packagesCount')}}</span>
     </div>
     <div class="org-student-class-main">
     </div>
@@ -138,10 +138,10 @@ export default {
             })
           }
           if (isHasTheLesson && !OrgHasTheLesson) {
-            this.$message.error('你没有购买该课程')
+            this.$message.error(this.$t('org.haveNotBoughtLesson'))
           }
           if (!isHasTheLesson) {
-            this.$message.error('课堂ID不存在，请确认')
+            this.$message.error(this.$t('org.classIdNotExist'))
           }
           return
         }

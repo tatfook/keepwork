@@ -2,9 +2,9 @@
   <div class="org-contact">
     <org-header></org-header>
     <img src="@/assets/img/no_right_to_access.png" alt="">
-    <h1>你没有访问该页面的权限哦！</h1>
-    <p class="org-contact-info">该页面为{{orgName}}的用户提供服务。如果权限未开通，请联系你的管理员。</p>
-    <p class="org-contact-info org-contact-detail">{{orgName}} 联系电话: <span class="org-contact-phone">{{orgPhone}}</span></p>
+    <h1>{{$t("org.doNotHaveAccessTo")}}</h1>
+    <p class="org-contact-info">{{$t("org.pageOpenToUsers", {orgName})}}</p>
+    <p class="org-contact-info org-contact-detail">{{orgName}} {{$t('org.tel')}}: <span class="org-contact-phone">{{orgPhone}}</span></p>
   </div>
 </template>
 

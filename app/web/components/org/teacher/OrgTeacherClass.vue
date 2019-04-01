@@ -3,15 +3,15 @@
     <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
     <div v-if="isShowAddStudentForm" class="org-teacher-classes-add">
       <div class="students-add-header">
-        {{selectedClassName}}>添加学生 <span class="pull-right">
-          <el-button class="students-add-header-button" @click="handleCancel">取消</el-button>
-          <el-button class="students-add-header-button" @click="handleSave" type="primary">保存</el-button>
+        {{selectedClassName}}>{{$t("org.addStudents")}} <span class="pull-right">
+          <el-button class="students-add-header-button" @click="handleCancel">{{$t("common.Cancel")}}</el-button>
+          <el-button class="students-add-header-button" @click="handleSave" type="primary">{{$t("common.Save")}}</el-button>
         </span>
       </div>
       <div class="students-add-main">
         <div class="add-form-header">
-          <span class="add-form-header-label">学生姓名</span>
-          <span class="add-form-header-label">用户名</span>
+          <span class="add-form-header-label">{{$t("org.nameLabel")}}</span>
+          <span class="add-form-header-label">{{$t("org.usernameLabel")}}</span>
         </div>
         <el-form :ref="`form-${index}`" :inline="true" v-for="(item, index) in studentsFormData" :key="index" :model="item">
           <el-form-item prop="name" :rules="rules.name">
@@ -26,25 +26,25 @@
         </el-form>
       </div>
       <div class="students-add-bottom" v-if="!isEditType">
-        <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>继续添加</span>
+        <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>{{$t("org.continueAdd")}}</span>
       </div>
     </div>
     <div v-else class="org-teacher-classes-students">
       <div class="students-table-header">
-        学生数:{{selectedClassStudentsCount}}
-        <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> 添加学生</span>
+        {{$t("org.IncludeStudents") + selectedClassStudentsCount}}
+        <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> {{$t("org.addStudents")}}</span>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
-        <el-table-column prop="realname" label="姓名">
+        <el-table-column prop="realname" :label="$t('org.nameLabel')">
         </el-table-column>
-        <el-table-column prop="username" label="用户名">
+        <el-table-column prop="username" :label="$t('org.usernameLabel')">
         </el-table-column>
-        <el-table-column prop="createdAt" label="添加时间">
+        <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')">
         </el-table-column>
-        <el-table-column align="center" label="操作" v-if="isCanEdit">
+        <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
           <template slot-scope="scope">
-            <el-button @click="handleEditStudent(scope)" size="mini">编辑</el-button>
-            <el-button @click="handleRemoveStudent(scope)" size="mini">移出</el-button>
+            <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
+            <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -184,7 +184,11 @@ export default {
                   reject()
                 }
                 if (error.data.indexOf('成员不存在') !== -1) {
-                  this.$message.error(`用户名:[${student.account}]不存在`)
+                  this.$message.error(
+                    `${this.$t('org.theUsername')}[${student.account}]${this.$t(
+                      'org.wasNotFound'
+                    )}`
+                  )
                   sucessfullItems
                     .reverse()
                     .forEach(index => this.handleRemoveFormItem(index))
@@ -203,7 +207,7 @@ export default {
       if (this.studentsFormData.length === 0) {
         this.$message({
           type: 'success',
-          message: '添加成功'
+          message: this.$t('org.successfullyAdd')
         })
         this.isShowAddStudentForm = false
       }

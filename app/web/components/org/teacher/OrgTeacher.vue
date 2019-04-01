@@ -3,7 +3,7 @@
     <div class="org-teacher-container">
       <div class="org-teacher-sidebar">
         <div class="org-teacher-message">
-          <div class="org-teacher-role-label">教师</div>
+          <div class="org-teacher-role-label">{{$t("org.teacherRole")}}</div>
           <img :src="userPortrait" class="org-teacher-profile" />
           <div class="org-teacher-username">{{username}}</div>
         </div>
@@ -27,15 +27,15 @@ export default {
       teacherMenu: [
         {
           pageName: 'OrgTeacherTeach',
-          text: '上课'
+          text: this.$t('org.TeachLabel')
         },
         {
           pageName: 'OrgTeacherStatistics',
-          text: '数据统计'
+          text: this.$t('org.DataStaticsLabel')
         },
         {
           pageName: 'OrgTeacherClass',
-          text: '我的班级'
+          text: this.$t('org.MyClassLabel')
         }
       ]
     }
