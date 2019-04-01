@@ -22,7 +22,7 @@
         </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
-            <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>(课程ID: {{packageId}}x{{lesson.id}} )</span></span>
+            <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>({{$t('lesson.classId')}}: {{packageId}}x{{lesson.id}} )</span></span>
           </div>
           <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
           <div class="package-catalogue-item-goals">
@@ -34,7 +34,7 @@
           <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
           <el-button v-show="lesson.isLearned && isStudent" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
           <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
-          <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> 本章已经教完</span>
+          <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> {{$t('org.chapterIsFinished')}}</span>
         </div>
       </div>
     </div>
@@ -352,8 +352,6 @@ export default {
       margin-bottom: 16px;
       &.start-button {
         margin-left: 0;
-      }
-      &.learn-again {
       }
     }
     &-goals {

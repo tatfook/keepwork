@@ -3,7 +3,7 @@
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgTeacher' }">上课</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgTeacher' }">{{$t("org.TeachLabel")}}</el-breadcrumb-item>
           <el-breadcrumb-item>
             <el-dropdown @command="handleSelectPackage">
               <span class="el-dropdown-link">

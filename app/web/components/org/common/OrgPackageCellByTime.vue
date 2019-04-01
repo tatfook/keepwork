@@ -2,7 +2,7 @@
   <div class="org-package-append">
     <div class="org-package-append-header">
       <div v-if="lastTeachTime">
-        最近上课: <span class="last-teach-time">{{lastTeachTime | formatTime }}</span>
+        {{$t('org.latestTeachingTime')}} <span class="last-teach-time">{{lastTeachTime | formatTime }}</span>
       </div>
     </div>
     <org-package-cell :packageData="packageData" @package-click="handleCallback"></org-package-cell>
