@@ -23,7 +23,8 @@
       </div>
     </div>
     <div class="org-teacher-statistics-nothing" v-if="!selectedClassPackges.length">
-      <p>该班级暂无上课记录</p>
+      <img class="org-teacher-statistics-nothing-img" src="@/assets/lessonImg/class.png" alt="">
+      <p class="org-teacher-statistics-nothing-text">该班级暂无上课记录</p>
     </div>
   </div>
 </template>
@@ -226,7 +227,15 @@ export default {
   &-nothing {
     color: #0090ff;
     text-align: center;
-    padding-top: 100px;
+    padding-top: 62px;
+    &-img {
+      max-width: 163px;
+    }
+    &-text {
+      color: #909399;
+      font-size: 18px;
+      line-height: 44px;
+    }
   }
 }
 </style>
