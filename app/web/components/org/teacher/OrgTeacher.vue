@@ -9,7 +9,7 @@
         </div>
         <ul class="org-teacher-menu">
           <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
-            <router-link class="org-teacher-menu-link" :to="{name: menuItem.pageName}">{{menuItem.text}}</router-link>
+            <router-link class="org-teacher-menu-link" :to="{name: menuItem.pageName}"><i class="iconfont icon-class" v-show="index == 0"></i>{{menuItem.text}}</router-link>
           </li>
         </ul>
       </div>
@@ -129,12 +129,16 @@ $borderColor: #e8e8e8;
       }
     }
     &-link {
-      display: inline-block;
+      display: inline-flex;
       text-decoration: none;
       color: inherit;
       height: 40px;
       line-height: 40px;
       width: 100%;
+      justify-content: center;
+      .icon-class {
+        font-size: 26px;
+      }
     }
   }
 }

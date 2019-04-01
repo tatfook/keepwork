@@ -17,7 +17,7 @@
         </div>
         <div class="org-student-menu">
           <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
-            <i class="iconfont icon-member"></i> {{item.name}}
+            <i class="iconfont icon-team"></i> {{item.name}}
           </span>
         </div>
       </div>
