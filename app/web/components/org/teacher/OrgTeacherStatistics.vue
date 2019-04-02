@@ -157,7 +157,8 @@ export default {
     }
     &-sort {
       font-size: 12px;
-      .icon-down, .icon-up {
+      .icon-down,
+      .icon-up {
         font-size: 12px;
         cursor: pointer;
         color: #515253;
