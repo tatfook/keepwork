@@ -83,7 +83,7 @@ export default {
       try {
         await this.updateLearnRecords()
         clearTimeout(this._interval)
-        if(!this.isClassIsOver) {
+        if (!this.isClassIsOver) {
           this._interval = setTimeout(
             () => this.intervalUpdateLearnRecords(),
             delay

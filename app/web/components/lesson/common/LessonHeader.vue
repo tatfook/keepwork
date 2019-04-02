@@ -99,7 +99,7 @@
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
         <el-col :span="2" :sm="2" class="lesson-award">
-          <lesson-jewel-box v-if="!isVisitor" />
+          <!-- <lesson-jewel-box v-if="!isVisitor" /> -->
         </el-col>
         <el-col :span="18" :sm="18">
           <lesson-student-progress :isVisitor="isVisitor" />
