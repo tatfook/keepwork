@@ -116,3 +116,10 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@media print {
+  .back-to-classroom-notify {
+    display: none;
+  }
+}
+</style>
