@@ -64,6 +64,7 @@ export default {
   .forsted-glass-shade {
     pointer-events: none;
     cursor: not-allowed;
+    user-select: none;
     min-height: 600px;
     opacity: 0.6;
     top: 0;
