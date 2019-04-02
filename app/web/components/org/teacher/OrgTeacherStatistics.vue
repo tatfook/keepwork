@@ -5,7 +5,7 @@
       <p class="org-teacher-statistics-summary-count"><span class="org-teacher-statistics-summary-count-key" v-show="lessonCount">{{$t('lesson.attended')}}：</span><span class="org-teacher-statistics-summary-count-value" v-show="lessonCount">{{lessonCount}} {{$t('lesson.classes')}}</span><span class="org-teacher-statistics-summary-count-key" v-show="hours || mins">{{$t('lesson.totalTeachingTime')}}：</span><span v-show="hours">{{hours}} {{$t('lesson.hours')}}</span><span v-show="mins">{{mins}} {{$t('lesson.mins')}}</span></p>
       <p class="org-teacher-statistics-summary-sort" v-show="lessonCount">
         <!-- <img class="org-teacher-statistics-summary-sort-img" src="@/assets/lessonImg/summary/sort.png" alt=""> -->
-        <i :class="['iconfont','icon-down', {'icon-active': !positiveSequence }]" @click="positiveSequence = false"></i><i :class="['iconfont','icon-up',{'icon-active': positiveSequence }]" @click="positiveSequence = true"></i>
+        <i :class="['iconfont','icon-down', {'icon-active': positiveSequence }]" @click="positiveSequence = false"></i><i :class="['iconfont','icon-up',{'icon-active': !positiveSequence }]" @click="positiveSequence = true"></i>
         <span class="org-teacher-statistics-summary-sort-text" @click="sequence">{{$t('lesson.sortByTeachingTime')}}</span>
       </p>
     </div>
