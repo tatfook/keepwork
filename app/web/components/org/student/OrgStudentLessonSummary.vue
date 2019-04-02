@@ -143,7 +143,7 @@ export default {
     },
     summary() {
       return {
-        day: this.howManyDays,
+        day: this.howManyDays > 0 ? this.howManyDays : 1,
         name: this.lessonName,
         skills: this.lessonSkills
       }
