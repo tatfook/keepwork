@@ -1776,6 +1776,7 @@
     "pageOpenToUsers": "该页面为{orgName}的用户提供服务。如果权限未开通，请联系你的管理员。",
     "tel": "联系电话",
     "warningTitle": "提示",
-    "pleaseInputClassIdOrLessonId": "请输入课堂ID或课程ID"
+    "pleaseInputClassIdOrLessonId": "请输入课堂ID或课程ID",
+    "toNextLesson": "进入下一课"
   }
 }
