@@ -268,7 +268,7 @@ export default {
 </script>
 <style lang="scss">
 .breadcrumb-item-dropdown {
-  padding: 0;
+  padding: 16px 0;
   min-width: 40px;
   border-color: #e4e7ed;
   max-height: 380px;
