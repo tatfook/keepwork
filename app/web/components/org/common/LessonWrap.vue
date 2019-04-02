@@ -63,7 +63,7 @@ export default {
 <style lang="scss">
 .mod-item-container {
   background: white;
-  max-width: 100%;
+  max-width: 1229px;
   overflow: auto;
   margin: 0 auto;
 }

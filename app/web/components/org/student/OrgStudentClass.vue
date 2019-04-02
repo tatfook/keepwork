@@ -2,7 +2,7 @@
   <div class="org-student-class" v-if="!isLoading">
     <div class="org-student-class-header">
       <span class="join-classroom-icon"></span>
-      <span class="join-classroom-title">快速进入课堂</span>
+      <span class="join-classroom-title">快速进入课堂学习</span>
       <el-input placeholder="请输入课堂ID或课程ID" class="join-classroom-input" v-model.trim="classroomkey"></el-input>
       <el-button @click="handleEnterClassroom" size="small" type="primary" :disabled="!isCanEnterClassroom">进入</el-button>
     </div>
