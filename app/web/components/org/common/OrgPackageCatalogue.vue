@@ -11,7 +11,7 @@
     <div class="package-catalogue-box">
       <div :class="['package-catalogue-item', { 'package-is-teached': isTeacher && lesson.isTeached }]" v-for="(lesson, index) in lessonsList" :key='index'>
         <div class="package-catalogue-item-cover-box">
-          <div class="package-catalogue-item-mark" v-show="lesson.isLearned">
+          <div class="package-catalogue-item-mark" v-show="lesson.isLearned && !isAdmin">
             <i class="el-icon-check"></i>
           </div>
           <div class="package-catalogue-item-cover" @click="toLessonDetail(lesson)">
