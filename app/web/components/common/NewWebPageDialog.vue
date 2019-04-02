@@ -22,9 +22,9 @@
       </el-row>
     </div>
     <div v-if="stepIndex===1">
-      <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm">
+      <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm" @submit.native.prevent>
         <el-form-item prop="value">
-          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value">
+          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value" @keyup.enter.native="handleSubmit">
           </el-input>
         </el-form-item>
       </el-form>
@@ -162,6 +162,7 @@ export default {
   async mounted() {
     await this.userGetWebPageTemplateConfig()
     this.loading = false
+    this.keyupSubmit()
   },
   methods: {
     ...mapActions({
@@ -169,6 +170,22 @@ export default {
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       userGetWebPageTemplateConfig: 'user/getWebPageTemplateConfig'
     }),
+    keyupSubmit() {
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if (_key === 13) {
+          if (this.stepIndex === 0) {
+            this.handleNextStep()
+          }
+          if (this.stepIndex === 1) {
+            this.handleSubmit()
+          }
+          if (this.stepIndex === 2) {
+            this.handleEdit()
+          }
+        }
+      }
+    },
     setSelectedCategoryIndex(index) {
       this.selectedCategoryIndex = index
       this.resetSelectedTemplateIndex()
