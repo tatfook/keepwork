@@ -70,3 +70,12 @@ export default {
   }
 }
 </style>
+<style lang="scss" scoped>
+@media print {
+  .org-header {
+    & .pull-right {
+      display: none;
+    }
+  }
+}
+</style>
