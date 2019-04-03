@@ -10,8 +10,8 @@ const getters = {
     if (!userCounts) {
       return
     }
-    let { count, teacherCount, studentCount } = userCounts
-    return count - teacherCount - studentCount
+    let { count, studentCount } = userCounts
+    return count - studentCount
   },
   roleId: (state, { token }) => {
     if (!token) return
