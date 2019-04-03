@@ -81,14 +81,8 @@ export default {
     },
     uploadingFiles: Array,
     skyDriveMediaLibraryData: Array,
-    isVideoTabShow: {
-      type: Boolean,
-      default: false
-    },
-    isImageTabShow: {
-      type: Boolean,
-      default: true
-    }
+    isImageTabShow: Boolean,
+    isVideoTabShow: Boolean
   },
   mounted(){
     this.keyupSubmit()

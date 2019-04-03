@@ -71,10 +71,14 @@
           </el-scrollbar>
         </div>
         <div v-if="isTeacher" class="lesson-button-wrap">
-          <el-button v-if="isTeaching && isInCurrentClass" @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-          <el-button v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" @click="handleBeginTheClass" :disabled="!isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-          <span v-if="isTeaching && isInCurrentClass" class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
-          <span v-if="(!isTeaching || !isInCurrentClass) && userIsTeacher" class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+          <template v-if="isTeacherBeInClasroom && isInCurrentClass">
+            <el-button @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+            <span class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
+          </template>
+          <template v-else>
+            <el-button @click="handleBeginTheClass" :disabled="!isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+            <span class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
+          </template>
         </div>
       </el-col>
     </el-row>
@@ -243,11 +247,11 @@ export default {
   computed: {
     ...mapGetters({
       isTeaching: 'org/teacher/isTeaching',
-      // isBeInClass: 'org/teacher/isBeInClass',
       classroomKey: 'org/teacher/classroomKey',
       isClassIsOver: 'org/teacher/isClassIsOver',
       classroom: 'org/teacher/classroom',
-      isBeInClassroom: 'org/student/isBeInClassroom',
+      isTeacherBeInClasroom: 'org/teacher/isBeInClass',
+      isStudentBeInClassroom: 'org/student/isBeInClassroom',
       userIsTeacher: 'org/isTeacher'
     }),
     codeReadLine() {
@@ -287,7 +291,7 @@ export default {
       return _.get(this.lesson, 'extra.videoUrl', '')
     },
     isSelfLearning() {
-      return !this.isTeacher && !this.isBeInClassroom
+      return !this.isTeacher && !this.isStudentBeInClassroom
     },
     haqiCode() {
       const { packageId = 0, lessonId = 0 } = this.$route.params

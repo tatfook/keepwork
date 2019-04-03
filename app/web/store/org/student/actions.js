@@ -55,12 +55,15 @@ const actions = {
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
-  async getLessonDetail({ commit }, { packageId, lessonId }) {
+  async getLessonDetail({ commit, dispatch, getters }, { packageId, lessonId }) {
     let [ res, detail ] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
-      lesson.lessons.lessonDetail({ lessonId })
+      lesson.lessons.lessonDetail({ lessonId }),
+      dispatch('getOrgPackageDetail', { packageId })
     ])
-
+    const { orgPackagesDetail } = getters
+    const packageIndex = _.findIndex(_.get(orgPackagesDetail, [ packageId, 'lessons'], []), item => item.lessonId === _.toNumber(lessonId))
+    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))

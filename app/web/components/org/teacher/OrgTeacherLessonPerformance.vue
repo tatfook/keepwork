@@ -43,9 +43,9 @@ import avatar from '@/assets/lessonImg/default_avatar.png'
 import TableHeaderPopover from './TableHeaderPopover'
 export default {
   name: 'OrgTeacherLessonPerformance',
-    components: {
-      TableHeaderPopover
-    },
+  components: {
+    TableHeaderPopover
+  },
   data() {
     return {
       windowWidth: window.innerWidth,
@@ -57,14 +57,13 @@ export default {
     }
   },
   async created() {
-    if(this.isInCurrentClass) {
+    if (this.isInCurrentClass) {
       this.copyClassroomQuiz()
       this.intervalUpdateLearnRecords()
     }
   },
   async destroyed() {
     await this.clearIntervalUpdateLearnRecords()
-    this.leaveTheClassroom()
   },
   mounted() {
     window.addEventListener('resize', this.handleWindowResize)
@@ -84,10 +83,12 @@ export default {
       try {
         await this.updateLearnRecords()
         clearTimeout(this._interval)
-        this._interval = setTimeout(
-          () => this.intervalUpdateLearnRecords(),
-          delay
-        )
+        if (!this.isClassIsOver) {
+          this._interval = setTimeout(
+            () => this.intervalUpdateLearnRecords(),
+            delay
+          )
+        }
       } catch (error) {
         console.error(error)
       }
@@ -185,7 +186,8 @@ export default {
       isBeInClass: 'org/teacher/isBeInClass',
       learnRecords: 'org/teacher/learnRecords',
       classroomQuiz: 'org/teacher/classroomQuiz',
-      classroom: 'org/teacher/classroom'
+      classroom: 'org/teacher/classroom',
+      isClassIsOver: 'org/teacher/isClassIsOver'
     }),
     isInCurrentClass() {
       const { classId: cid, packageId: pid, lessonId: lid } = this.$route.params

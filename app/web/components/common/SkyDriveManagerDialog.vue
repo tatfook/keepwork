@@ -26,8 +26,14 @@ export default {
     },
     show: Boolean,
     mediaLibrary: Boolean,
-    isImageTabShow: Boolean,
-    isVideoTabShow: Boolean,
+    isVideoTabShow: {
+      type: Boolean,
+      default: false
+    },
+    isImageTabShow: {
+      type: Boolean,
+      default: true
+    },
     insertable: {
       type: Boolean,
       default: true

@@ -1,5 +1,4 @@
 <template>
-
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
     <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
     <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
