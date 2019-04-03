@@ -1,7 +1,7 @@
 <template>
   <div class="student-list" v-loading="isLoading">
     <el-select v-model="selectedClassId" v-if="orgStudentsCount > 0">
-      <el-option label="全部" :value="undefined">
+      <el-option :label="$t('org.all')" :value="undefined">
       </el-option>
       <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
       </el-option>
@@ -100,7 +100,7 @@ export default {
     selectedClassName() {
       return this.selectedClassId
         ? _.find(this.orgClasses, { id: this.selectedClassId }).name
-        : '全部'
+        : this.$t('org.all')
     }
   },
   methods: {
@@ -110,13 +110,9 @@ export default {
     }),
     toNewStudentPage() {
       if (this.orgRestUserCount == 0) {
-        this.$alert(
-          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-          '提示',
-          {
-            type: 'warning'
-          }
-        )
+        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
+          type: 'warning'
+        })
         return
       }
       this.$router.push({ name: 'OrgNewStudent' })
@@ -139,11 +135,15 @@ export default {
     },
     confirmRemoveStudent(studentDetail) {
       let { id, realname } = studentDetail
-      this.$confirm(`是否确定删除学生${realname}?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        `${this.$t('org.delConfirm')} ${realname}?`,
+        this.$t('org.deleteWarining'),
+        {
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.removeStudent(id)
       })
     },
@@ -197,6 +197,7 @@ export default {
     }
     &-operations {
       text-align: center;
+      margin: 0 -10px;
     }
     &-button {
       display: inline-block;

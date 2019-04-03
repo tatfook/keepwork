@@ -36,6 +36,7 @@ export default {
     this.initMemberData()
   },
   data() {
+    let memberRoleId = _.get(this.$route, 'query.roleId')
     return {
       isLoading: false,
       memberData: {
@@ -47,13 +48,16 @@ export default {
         realname: [
           {
             required: true,
-            message: `请输入${this.memberType}姓名`
+            message: this.$t('org.pleaseInputMemberName', {
+              zhRroleType: memberRoleId == 1 ? '学生' : '教师',
+              enRroleType: memberRoleId == 1 ? 'student' : 'teacher'
+            })
           }
         ],
         memberName: [
           {
             required: true,
-            message: '请输入用户名'
+            message: this.$t('org.usernameIsRequired')
           }
         ]
       }
@@ -128,7 +132,7 @@ export default {
               this.isLoading = false
               this.$message({
                 type: 'success',
-                message: '更新成功'
+                message: this.$t('org.successfullyUpdated')
               })
               this.toMemberListPage()
             })
@@ -139,7 +143,7 @@ export default {
                   this.$message.error(`用户名:[${memberName}]不存在`)
                   break
                 default:
-                  this.$message.error('更新失败')
+                  this.$message.error(this.$t('org.failureUpdated'))
                   break
               }
             })

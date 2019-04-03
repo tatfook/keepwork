@@ -4,9 +4,9 @@
     <div class="org-package-status">
       <el-progress :percentage="learnedLessonPercent" color="#64f78a" :show-text="false"></el-progress>
       <div class="org-package-status-text">{{packageStatusText}}</div>
-      <el-button v-if="isStartStatus" @click="handleStartLearn" class="org-package-status-button start-button">开始学习</el-button>
-      <el-button v-else-if="isContinueStatus" @click="handleContinueLearn" class="org-package-status-button continue-button">继续学习</el-button>
-      <div v-else-if="isFinishStatus" class="finish-status"> <i class="el-icon-circle-check finish-status-icon"></i> 完成</div>
+      <el-button v-if="isStartStatus" @click="handleStartLearn" class="org-package-status-button start-button">{{$t('org.startToLearn')}}</el-button>
+      <el-button v-else-if="isContinueStatus" @click="handleContinueLearn" class="org-package-status-button continue-button">{{$t('org.continue')}}</el-button>
+      <div v-else-if="isFinishStatus" class="finish-status"> <i class="el-icon-circle-check finish-status-icon"></i> {{$t('org.finished')}}</div>
     </div>
   </div>
 </template>
@@ -87,12 +87,14 @@ export default {
     },
     packageStatusText() {
       if (this.isStartStatus) {
-        return '尚未开始学习'
+        return this.$t('org.notYetStarted')
       }
       if (this.isContinueStatus) {
-        return `已经学习${this.packageLearnedLessonCount}个课程`
+        return this.$t('org.learnedLessonsCount', {
+          learnedLessonsCount: this.packageLearnedLessonCount
+        })
       }
-      return '学完了!'
+      return this.$t('org.learnedFinished')
     }
   }
 }

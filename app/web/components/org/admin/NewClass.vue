@@ -38,7 +38,7 @@ export default {
       })
         .then(result => {
           this.$message({
-            message: '班级创建成功',
+            message: this.$t('org.successfullyCreatedANewClass'),
             type: 'success'
           })
           this.isLoading = false
@@ -48,10 +48,10 @@ export default {
           let message = ''
           switch (error.status) {
             case 409:
-              message = '该班级已存在'
+              message = this.$t('org.classNameAlreadyExist')
               break
             default:
-              message = '班级创建失败'
+              message = this.$t('org.failedToCreateANewClass')
               break
           }
           this.isLoading = false

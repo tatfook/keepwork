@@ -39,7 +39,6 @@ export default {
       })
     },
     async updateClass(updatedClassData) {
-      console.log('update', updatedClassData)
       this.isLoading = true
       await this.orgUpdateClass({
         organizationId: this.orgId,
@@ -48,7 +47,7 @@ export default {
       })
         .then(() => {
           this.$message({
-            message: '班级更新成功',
+            message: this.$t('org.successfullyUpdatedClass'),
             type: 'success'
           })
           this.isLoading = false
@@ -57,7 +56,7 @@ export default {
         .catch(error => {
           console.log(error)
           this.$message({
-            message: '班级更新失败',
+            message: this.$t('org.failedUpdatedClass'),
             type: 'error'
           })
           this.isLoading = false
