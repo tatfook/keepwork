@@ -3,7 +3,7 @@
     <img class="org-package-cover" :src="packageCover" alt="">
     <div class="org-package-desc">
       <div class="org-package-desc-name">{{packageName}}</div>
-      <div class="org-package-desc-line">{{$t('lesson.include')}}:<span class="line-strong">{{packageLessonsCount}}个课程</span></div>
+      <div class="org-package-desc-line">{{$t('lesson.include')}}:<span class="line-strong">{{packageLessonsCount + $t('lesson.lessonsCount')}}</span></div>
       <div class="org-package-desc-line">{{$t('lesson.ages')}}:<span class="line-strong">{{packageSuitAge}}</span></div>
       <div class="org-package-desc-line">{{$t('lesson.intro')}}:<span class="line-strong">{{packageIntro}}</span></div>
     </div>

@@ -2,13 +2,13 @@
   <div class="org-student">
     <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
       <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">正在上课: {{item.lessonName}},课堂ID: C{{item.key}}</span>
-      <span @click="handleJoinClassroom(item)" class="org-student-tips-button">进入课堂</span>
+      <span class="org-student-tips-text">{{$t('org.classBegins') + item.lessonName}},{{$t('lesson.curentClassId')}}: C{{item.key}}</span>
+      <span @click="handleJoinClassroom(item)" class="org-student-tips-button">{{$t("org.enterClass")}}</span>
     </div>
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-message">
-          <div class="org-student-role-label">学生</div>
+          <div class="org-student-role-label">{{$t("org.studentRole")}}</div>
           <img :src="userPortrait" class="org-student-profile" />
           <div class="org-student-username">{{username}}</div>
         </div>

@@ -62,7 +62,6 @@ export default {
     return {
       isLoading: false,
       newMembers: [],
-      roleType: this.memberType,
       newMemberRules: {
         realname: [
           {
@@ -125,13 +124,9 @@ export default {
     pushNewMemberData() {
       let waitingAddedLen = this.newMembers.length
       if (waitingAddedLen >= this.orgRestUserCount) {
-        this.$alert(
-          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-          '提示',
-          {
-            type: 'warning'
-          }
-        )
+        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
+          type: 'warning'
+        })
         return
       }
       this.newMembers.push({
@@ -159,19 +154,58 @@ export default {
         .catch(error => {
           switch (error) {
             case 1:
-              callback(new Error(`用户名:[${username}]已在学生列表中`))
+              callback(
+                new Error(
+                  this.$t('org.theUsername') +
+                    `[${username}]` +
+                    this.$t('org.alreadyInList', {
+                      zhRole: '学生',
+                      enRole: 'student'
+                    })
+                )
+              )
               break
             case 2:
-              callback(new Error(`用户名:[${username}]已在教师列表中`))
+              callback(
+                new Error(
+                  this.$t('org.theUsername') +
+                    `[${username}]` +
+                    this.$t('org.alreadyInList', {
+                      zhRole: '教师',
+                      enRole: 'teacher'
+                    })
+                )
+              )
               break
             case 64:
-              callback(new Error(`用户名:[${username}]已在管理员列表中`))
+              callback(
+                new Error(
+                  this.$t('org.theUsername') +
+                    `[${username}]` +
+                    this.$t('org.alreadyInList', {
+                      zhRole: '管理员',
+                      enRole: 'admin'
+                    })
+                )
+              )
               break
             case 400:
-              callback(new Error(`用户名:[${username}]不存在`))
+              callback(
+                new Error(
+                  this.$t('org.theUsername') +
+                    `[${username}]` +
+                    this.$t('org.wasNotFound')
+                )
+              )
               break
             default:
-              callback(new Error(`用户名:[${username}]校验失败`))
+              callback(
+                new Error(
+                  this.$t('org.theUsername') +
+                    `[${username}]` +
+                    this.$t('org.verifyFailed')
+                )
+              )
               break
           }
         })
@@ -199,15 +233,23 @@ export default {
                 let errorMessage = ''
                 switch (error.status) {
                   case 409:
-                    errorMessage = `用户名:[${memberName}]已在${
-                      this.memberTypeText
-                    }列表中`
+                    errorMessage =
+                      $t('org.theUsername') +
+                      `[${memberName}]` +
+                      $t('org.alreadyInList', {
+                        zhRole: this.memberTypeText,
+                        enRole: this.memberTypeText
+                      })
                     break
                   case 400:
-                    errorMessage = `用户名:[${memberName}]不存在`
+                    errorMessage = `${this.$t(
+                      'org.theUsername'
+                    )}[${memberName}]${this.$t('org.wasNotFound')}`
                     break
                   default:
-                    errorMessage = `用户名:[${student.account}]添加失败`
+                    errorMessage =
+                      `${this.$t('org.theUsername')}[${student.account}]` +
+                      this.$t('org.failedToAdd')
                     break
                 }
                 this.newMembers[index].error = errorMessage
@@ -229,7 +271,7 @@ export default {
       if (this.newMembers.length == 0) {
         this.$message({
           type: 'success',
-          message: '添加成功'
+          message: this.$t('org.successfullyAdd')
         })
         this.toMemberListPage()
       }

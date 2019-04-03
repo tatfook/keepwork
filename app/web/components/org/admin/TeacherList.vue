@@ -22,7 +22,7 @@
     </el-table>
     <div class="teacher-list-empty" v-if="orgTeachersLength == 0">
       <img class="teacher-list-empty-img" src="@/assets/org/list_empty.png" alt="">
-      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <span  @click="toNewTeacherPage" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</span>
+      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <span @click="toNewTeacherPage" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</span>
       </p>
     </div>
   </div>
@@ -77,13 +77,9 @@ export default {
     }),
     toNewTeacherPage() {
       if (this.orgRestUserCount == 0) {
-        this.$alert(
-          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-          '提示',
-          {
-            type: 'warning'
-          }
-        )
+        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
+          type: 'warning'
+        })
         return
       }
       this.$router.push({ name: 'OrgNewTeacher' })
@@ -98,11 +94,15 @@ export default {
     },
     confirmRemoveTeacher(teacherDetail) {
       let { id, realname } = teacherDetail
-      this.$confirm(`是否确定删除教师${realname}?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        `${this.$t('org.delConfirm')} ${realname}?`,
+        this.$t('org.deleteWarining'),
+        {
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.removeTeacher(id)
       })
     },
