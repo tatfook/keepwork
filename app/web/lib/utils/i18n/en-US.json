@@ -1743,6 +1743,7 @@
     "noStudents": "There are no students. ",
     "addStudentsImmediately": "Add students",
     "usernameIsRequired": "Keepwork username is required",
+    "pleaseSelectClasses": "Please select classes.",
     "pleaseInputMemberName": "Please input {enRroleType} name",
     "all": "All",
     "deleteWarining": "Warning",
