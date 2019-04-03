@@ -542,7 +542,6 @@ export default {
 </script>
 <style lang="scss">
 .teacher-summary-container {
-
   .teacher-summary {
     max-width: 1150px;
     margin: 0 auto;
@@ -683,47 +682,49 @@ export default {
   }
 }
 @media print {
-  .teacher-summary {
-    &-detailed {
-      .web-page-show {
-        display: none;
-      }
-    }
-    &-print-and-email {
-      display: none;
-    }
-    &-print-header {
-      display: block;
-      width: 1150px;
-      margin: 0 auto;
-      padding: 40px;
-      background: #fff;
-      text-align: center;
-      .profile {
-        margin: 0 auto;
-        height: 100px;
-        width: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        img {
-          width: 100%;
-          object-fit: cover;
+  .teacher-summary-container {
+    .teacher-summary {
+      &-detailed {
+        .web-page-show {
+          display: none;
         }
       }
-      .nickname {
-        font-size: 24px;
-        line-height: 34px;
-        letter-spacing: 1px;
-        color: #333333;
+      &-print-and-email {
+        display: none;
       }
-    }
-    &-print-lesson-plan {
-      display: block;
-    }
-    &-brief {
-      .date {
-        .print-show {
-          display: inline-block;
+      &-print-header {
+        display: block;
+        width: 1150px;
+        margin: 0 auto;
+        padding: 40px;
+        background: #fff;
+        text-align: center;
+        .profile {
+          margin: 0 auto;
+          height: 100px;
+          width: 100px;
+          border-radius: 50%;
+          overflow: hidden;
+          img {
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        .nickname {
+          font-size: 24px;
+          line-height: 34px;
+          letter-spacing: 1px;
+          color: #333333;
+        }
+      }
+      &-print-lesson-plan {
+        display: block;
+      }
+      &-brief {
+        .date {
+          .print-show {
+            display: inline-block;
+          }
         }
       }
     }
