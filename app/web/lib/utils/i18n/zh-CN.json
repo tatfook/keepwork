@@ -1734,6 +1734,7 @@
     "noStudents": "暂未添加学生信息，",
     "addStudentsImmediately": "立即添加",
     "usernameIsRequired": "请输入用户名",
+    "pleaseSelectClasses": "请选择班级",
     "pleaseInputMemberName": "请输入{zhRroleType}姓名",
     "all": "全部",
     "deleteWarining": "提示",

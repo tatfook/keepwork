@@ -73,27 +73,38 @@ export default {
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      removeMemberFromClass: 'org/removeMemberFromClass'
+      orgCreateNewMember: 'org/createNewMember'
     }),
     toNewTeacherPage() {
       if (this.orgRestUserCount == 0) {
-        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
-          type: 'warning'
-        })
+        this.$alert(
+          this.$t('org.cannotAddMoreMember'),
+          this.$t('org.warningTitle'),
+          {
+            type: 'warning'
+          }
+        )
         return
       }
       this.$router.push({ name: 'OrgNewTeacher' })
     },
-    async removeTeacher(id) {
+    async removeTeacher(teacherDetail) {
       this.isLoading = true
-      await this.removeMemberFromClass({ id }).catch(() => {})
+      let { username, realname, roleId } = teacherDetail
+      await this.orgCreateNewMember({
+        organizationId: this.orgId,
+        classIds: [],
+        memberName: username,
+        realname,
+        roleId
+      }).catch(() => {})
       await this.getOrgTeacherList({
         organizationId: this.orgId
       }).catch(() => {})
       this.isLoading = false
     },
     confirmRemoveTeacher(teacherDetail) {
-      let { id, realname } = teacherDetail
+      let { realname } = teacherDetail
       this.$confirm(
         `${this.$t('org.delConfirm')} ${realname}?`,
         this.$t('org.deleteWarining'),
@@ -103,7 +114,7 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        this.removeTeacher(id)
+        this.removeTeacher(teacherDetail)
       })
     },
     toEditPage(teacherDetail) {

@@ -18,7 +18,7 @@
         <el-form-item class="new-member-item-form-item" :label="$t('org.usernameLabel')" prop="memberName" :rules="newMemberRules.memberName" :error="newMemberItem.error">
           <el-input v-model="newMemberItem.memberName" :placeholder="$t('org.KeepworkUsername')"></el-input>
         </el-form-item>
-        <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')">
+        <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')" :rules="newMemberRules.classIds" prop="classIds">
           <el-select v-model="newMemberItem.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
             <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses)}}</span>
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
@@ -59,6 +59,13 @@ export default {
         this.testUsername({ username, callback })
       }
     }
+    let classIdsValidate = (rule, value, callback) => {
+      if (value.length == 0) {
+        callback(new Error(this.$t('org.pleaseSelectClasses')))
+      } else {
+        callback()
+      }
+    }
     return {
       isLoading: false,
       newMembers: [],
@@ -77,7 +84,8 @@ export default {
             validator: checkMemberName,
             trigger: 'blur'
           }
-        ]
+        ],
+        classIds: [{ validator: classIdsValidate, trigger: 'change' }]
       }
     }
   },
@@ -124,9 +132,13 @@ export default {
     pushNewMemberData() {
       let waitingAddedLen = this.newMembers.length
       if (waitingAddedLen >= this.orgRestUserCount) {
-        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
-          type: 'warning'
-        })
+        this.$alert(
+          this.$t('org.cannotAddMoreMember'),
+          this.$t('org.warningTitle'),
+          {
+            type: 'warning'
+          }
+        )
         return
       }
       this.newMembers.push({
