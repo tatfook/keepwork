@@ -160,8 +160,9 @@ export default {
         return (this.isShowAddStudentForm = false)
       }
       if (this.orgRestCount === 0) {
-        const flag = _.every(_.filter(this.studentsFormData, v => v.account), item =>
-          Boolean(this.orgStudents[item.account])
+        const flag = _.every(
+          _.filter(this.studentsFormData, v => v.account),
+          item => Boolean(this.orgStudents[item.account])
         )
         if (!flag) {
           return this.alertCountError()
@@ -264,8 +265,8 @@ export default {
     },
     alertCountError() {
       return this.$alert(
-        '已到达添加上限，只能添加现有学生进入班级，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-        '提示',
+        this.$t('org.cannotAddMoreMember'),
+        this.$t('org.warningTitle'),
         {
           type: 'warning'
         }
