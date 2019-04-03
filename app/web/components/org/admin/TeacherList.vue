@@ -46,14 +46,10 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgRestCount: 'org/getOrgRestCount',
       getOrgTeachersById: 'org/getOrgTeachersById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
-    },
-    orgRestUserCount() {
-      return this.getOrgRestCount({ id: this.orgId })
     },
     orgTeachers() {
       return this.getOrgTeachersById({ id: this.orgId }) || []
@@ -76,16 +72,6 @@ export default {
       orgCreateNewMember: 'org/createNewMember'
     }),
     toNewTeacherPage() {
-      if (this.orgRestUserCount == 0) {
-        this.$alert(
-          this.$t('org.cannotAddMoreMember'),
-          this.$t('org.warningTitle'),
-          {
-            type: 'warning'
-          }
-        )
-        return
-      }
       this.$router.push({ name: 'OrgNewTeacher' })
     },
     async removeTeacher(teacherDetail) {

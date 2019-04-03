@@ -131,7 +131,7 @@ export default {
     }),
     pushNewMemberData() {
       let waitingAddedLen = this.newMembers.length
-      if (waitingAddedLen >= this.orgRestUserCount) {
+      if (waitingAddedLen >= this.orgRestUserCount && this.memberType == 'student') {
         this.$alert(
           this.$t('org.cannotAddMoreMember'),
           this.$t('org.warningTitle'),
