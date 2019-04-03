@@ -35,7 +35,7 @@
         <project-grade v-if="!isWebType" :projectDetail='originProjectDetail'></project-grade>
         <div class="project-basic-info-detail-operations">
           <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
-          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{$t("project.edit")}}</el-button>
+          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{toggleSetWebsiteWord}}</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
           <game-entry v-if="projectType === 1 && isLoginUserBeCreator" :projectId='projectId' class="project-basic-info-detail-operations-item"></game-entry>
         </div>
@@ -68,6 +68,7 @@
       </span>
     </el-dialog>
     <paracraft-info :isDialogVisible='isParacraftInfoDialogVisible' :paracraftUrl='paracraftUrl' @close='handleParacraftInfoDialogClose'></paracraft-info>
+    <el-dialog title="提示" :visible.sync="showAssociatedWebsiteDialog" width="30%" :before-close="handleCloseAssociatedWebsiteDialog"></el-dialog>
   </div>
 </template>
 <script>
@@ -125,10 +126,15 @@ export default {
       undefined
     )
     this.isLogined &&
-      (await this.userGetUserPrivilege({
-        siteId: this.projectSiteId,
-        userId: this.loginUserId
-      }))
+      Promise.all([
+        this.userGetUserPrivilege({
+          siteId: this.projectSiteId,
+          userId: this.loginUserId
+        }),
+        this.getWebsiteDetailBySiteId({
+          siteId: this.projectSiteId
+        })
+      ])
   },
   data() {
     return {
@@ -156,7 +162,8 @@ export default {
       applyText: '',
       isApplyDialogVisible: false,
       maxDescWithHtmlLen: 65535,
-      isParacraftInfoDialogVisible: false
+      isParacraftInfoDialogVisible: false,
+      showAssociatedWebsiteDialog: false
     }
   },
   computed: {
@@ -239,13 +246,22 @@ export default {
     },
     projectSiteId() {
       // FIXME: 确认清楚是哪个id
-      return this.originProjectDetail.siteId || this.originProjectDetail.id
+      // return this.originProjectDetail.siteId || this.originProjectDetail.id
+      console.log(
+        'this.originProjectDetail.siteId',
+        this.originProjectDetail.siteId
+      )
+      console.log('this.originProjectDetail', this.originProjectDetail)
+      return this.originProjectDetail.siteId
     },
     siteDetailInfo() {
       if (!this.isWebType) {
         return
       }
       return this.getSiteDetailInfoById({ siteId: this.projectSiteId })
+    },
+    toggleSetWebsiteWord() {
+      return this.siteDetailInfo ? this.$t('project.edit') : '重新设定网站'
     },
     siteUrl() {
       if (!this.isWebType) {
@@ -417,18 +433,27 @@ export default {
       }
     },
     async toEditWebsite() {
+      console.log('this.projetSiteId', this.projectSiteId)
       if (this.projectSiteId) {
-        let tempWin = window.open('_blank')
         await this.getWebsiteDetailBySiteId({
           siteId: this.projectSiteId
         }).catch(e => console.error(e))
-        if (this.siteUrl) {
-          return (tempWin.location = `/ed${this.siteUrl}`)
+        console.log('this.siteDetail', this.siteDetailInfo)
+        if (this.siteDetailInfo) {
+          let tempWin = window.open('_blank')
+          if (this.siteUrl) {
+            return (tempWin.location = `/ed${this.siteUrl}`)
+          }
+          tempWin.close()
+        } else {
+          this.showAssociatedWebsiteDialog = true
         }
-        tempWin.close()
       } else {
         this.binderDialogVisible = true
       }
+    },
+    handleCloseAssociatedWebsiteDialog() {
+      this.showAssociatedWebsiteDialog = false
     },
     async toSitePage() {
       let tempWin = window.open('_blank')
