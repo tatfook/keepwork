@@ -5,7 +5,6 @@
     <div v-else class="mod-item-container">
       <mod-loader :mod="mod" :theme="theme" :key="mod.key"></mod-loader>
     </div>
-
   </div>
 </template>
 
