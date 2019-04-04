@@ -137,7 +137,8 @@ export const website = {
   // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args),
   updateById: async args => put(`sites/${args.id}`, args),
-  getUserPrivilege: async ({ siteId }) => get(`sites/${siteId}/privilege`)
+  getUserPrivilege: async ({ siteId }) => get(`sites/${siteId}/privilege`),
+  deleteWebsite: async ({ siteId }) => deleteMethod(`sites/${siteId}`)
 }
 
 /*doc
