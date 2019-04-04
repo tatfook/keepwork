@@ -134,27 +134,40 @@ const checkIsOrgMember = async function(
 }
 
 const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
-  if (roleId == 1 && nowPageRole != 'student') {
+  let isAdmin = (roleId & 64) > 0
+  let isTeacher = (roleId & 2) > 0
+  let isStudent = (roleId & 1) > 0
+  if (nowPageRole == 'student' && !isStudent) {
     return next({
-      name: OrgStudentPageName,
+      name: isAdmin ? OrgAdminPageName : OrgTeacherPageName,
       params
     })
   }
-  if (roleId == 2 && nowPageRole != 'teacher') {
+  if (nowPageRole == 'teacher' && !isTeacher) {
     return next({
-      name: OrgTeacherPageName,
+      name: isAdmin ? OrgAdminPageName : OrgStudentPageName,
       params
     })
   }
-  if (roleId == 64 && nowPageRole != 'admin') {
+  if (nowPageRole == 'admin' && !isAdmin) {
     return next({
-      name: OrgAdminPageName,
+      name: isTeacher ? OrgTeacherPageName : OrgStudentPageName,
       params
     })
   }
   if (_.isUndefined(roleId) && nowPageRole != 'contact') {
     return next({
       name: OrgContactPageName,
+      params
+    })
+  }
+  if (nowPageRole == 'login') {
+    return next({
+      name: isAdmin
+        ? OrgAdminPageName
+        : isTeacher
+        ? OrgTeacherPageName
+        : OrgStudentPageName,
       params
     })
   }
