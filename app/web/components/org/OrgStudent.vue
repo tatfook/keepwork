@@ -108,6 +108,9 @@ export default {
       isTeaching: 'org/student/isTeaching'
     })
   },
+  destroyed() {
+    this._notify && this._notify.close()
+  },
   beforeRouteUpdate(to, from, next) {
     this.checkIsInClassroom(to)
     next()
