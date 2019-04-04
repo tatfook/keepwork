@@ -131,13 +131,13 @@ export default {
     },
     async removeStudent(studentDetail) {
       this.isLoading = true
-      let { users, realname, roleId } = studentDetail
+      let { users, realname } = studentDetail
       await this.orgCreateNewMember({
         organizationId: this.orgId,
         classIds: [],
         memberName: users.username,
         realname,
-        roleId
+        roleId: 1
       }).catch(() => {})
       await this.getOrgStudentList({
         organizationId: this.orgId
