@@ -53,7 +53,7 @@
       <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
-    <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
+    <el-dialog :title="$t('editor.hint')" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleBinderDialogClose">{{$t("common.Cancel")}}</el-button>
@@ -68,7 +68,6 @@
       </span>
     </el-dialog>
     <paracraft-info :isDialogVisible='isParacraftInfoDialogVisible' :paracraftUrl='paracraftUrl' @close='handleParacraftInfoDialogClose'></paracraft-info>
-    <el-dialog title="提示" :visible.sync="showAssociatedWebsiteDialog" width="30%" :before-close="handleCloseAssociatedWebsiteDialog"></el-dialog>
   </div>
 </template>
 <script>
@@ -162,8 +161,7 @@ export default {
       applyText: '',
       isApplyDialogVisible: false,
       maxDescWithHtmlLen: 65535,
-      isParacraftInfoDialogVisible: false,
-      showAssociatedWebsiteDialog: false
+      isParacraftInfoDialogVisible: false
     }
   },
   computed: {
@@ -247,11 +245,6 @@ export default {
     projectSiteId() {
       // FIXME: 确认清楚是哪个id
       // return this.originProjectDetail.siteId || this.originProjectDetail.id
-      console.log(
-        'this.originProjectDetail.siteId',
-        this.originProjectDetail.siteId
-      )
-      console.log('this.originProjectDetail', this.originProjectDetail)
       return this.originProjectDetail.siteId
     },
     siteDetailInfo() {
@@ -261,7 +254,9 @@ export default {
       return this.getSiteDetailInfoById({ siteId: this.projectSiteId })
     },
     toggleSetWebsiteWord() {
-      return this.siteDetailInfo ? this.$t('project.edit') : '重新设定网站'
+      return this.siteDetailInfo
+        ? this.$t('project.edit')
+        : this.$t('editor.associationWebsite')
     },
     siteUrl() {
       if (!this.isWebType) {
@@ -433,12 +428,10 @@ export default {
       }
     },
     async toEditWebsite() {
-      console.log('this.projetSiteId', this.projectSiteId)
       if (this.projectSiteId) {
         await this.getWebsiteDetailBySiteId({
           siteId: this.projectSiteId
         }).catch(e => console.error(e))
-        console.log('this.siteDetail', this.siteDetailInfo)
         if (this.siteDetailInfo) {
           let tempWin = window.open('_blank')
           if (this.siteUrl) {
@@ -446,14 +439,11 @@ export default {
           }
           tempWin.close()
         } else {
-          this.showAssociatedWebsiteDialog = true
+          this.binderDialogVisible = true
         }
       } else {
         this.binderDialogVisible = true
       }
-    },
-    handleCloseAssociatedWebsiteDialog() {
-      this.showAssociatedWebsiteDialog = false
     },
     async toSitePage() {
       let tempWin = window.open('_blank')

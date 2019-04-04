@@ -1,9 +1,9 @@
 <template>
   <div class="website-delete">
-    <p class="website-delete-alert">您确定要删除网站吗？</p>
-    <el-checkbox v-model="checked" class="website-delete-hint">我知道网站删除后将清除相关的全部数据，且连接到该网站的URL都将失效。</el-checkbox>
+    <p class="website-delete-alert">{{$t('common.deleteWebsiteHint')}}</p>
+    <el-checkbox v-model="checked" class="website-delete-hint">{{$t('common.deleteWebsiteNotice')}}</el-checkbox>
     <p class="website-delete-btn">
-      <el-button type="primary" :disabled="!checked" @click="confirmDeleteWebsite" :loading="deleteSuccessLoading">删除网站</el-button>
+      <el-button type="primary" :disabled="!checked" @click="confirmDeleteWebsite" :loading="deleteSuccessLoading">{{$t('common.deleteWebsite')}}</el-button>
     </p>
   </div>
 </template>
@@ -33,11 +33,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      deleteWebsite: 'user/deleteWebsite'
+      deleteWebsite: 'user/deleteWebsite',
+      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
     }),
     async confirmDeleteWebsite() {
       this.deleteSuccessLoading = true
       await this.deleteWebsite({ siteId: this.siteDetail.id })
+      await this.getWebsiteDetailBySiteId({
+        siteId: this.siteDetail.id,
+        useCache: false
+      }).catch(e => console.error(e))
       this.deleteSuccessLoading = false
       this.$emit('close')
     }
