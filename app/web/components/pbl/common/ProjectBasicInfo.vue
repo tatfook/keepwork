@@ -34,7 +34,7 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <project-grade v-if="!isWebType" :projectDetail='originProjectDetail'></project-grade>
         <div class="project-basic-info-detail-operations">
-          <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
+          <el-button type="primary" @click="toProjectPage" v-show="visitButtonVisiable">{{ buttonName }}</el-button>
           <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{toggleSetWebsiteWord}}</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
           <game-entry v-if="projectType === 1 && isLoginUserBeCreator" :projectId='projectId' class="project-basic-info-detail-operations-item"></game-entry>
@@ -191,6 +191,9 @@ export default {
         return this.$t('project.creating')
       }
       return this.$t('project.visitWorld')
+    },
+    visitButtonVisiable() {
+      return this.siteDetailInfo ? true : false
     },
     isCreating() {
       return !(

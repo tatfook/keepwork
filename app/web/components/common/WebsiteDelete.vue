@@ -1,7 +1,7 @@
 <template>
   <div class="website-delete">
     <p class="website-delete-alert">{{$t('common.deleteWebsiteHint')}}</p>
-    <el-checkbox v-model="checked" class="website-delete-hint">{{$t('common.deleteWebsiteNotice')}}</el-checkbox>
+    <p class="website-delete-hint" @click="agreeDelete"><span :class="['website-delete-hint-check',{'website-delete-hint-agree':checked}]"></span>{{$t('common.deleteWebsiteNotice')}}</p>
     <p class="website-delete-btn">
       <el-button type="primary" :disabled="!checked" @click="confirmDeleteWebsite" :loading="deleteSuccessLoading">{{$t('common.deleteWebsite')}}</el-button>
     </p>
@@ -36,6 +36,9 @@ export default {
       deleteWebsite: 'user/deleteWebsite',
       getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
     }),
+    agreeDelete() {
+      this.checked = !this.checked
+    },
     async confirmDeleteWebsite() {
       this.deleteSuccessLoading = true
       await this.deleteWebsite({ siteId: this.siteDetail.id })
@@ -54,10 +57,41 @@ export default {
   padding: 70px;
   &-alert {
     font-size: 20px;
-    // color: #409eff;
   }
   &-hint {
-    color: red;
+    color: #333;
+    max-width: 480px;
+    word-break:break-all;
+    line-height: 30px;
+    padding-left: 26px;
+    position: relative;
+    cursor: pointer;
+    &-agree {
+      background: #409eff;
+    }
+    &-check {
+      position: absolute;
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      top: 5px;
+      left: 4px;
+      border: 1px solid #409eff;
+      border-radius: 1px;
+      &::after{
+        content: '';
+        width: 10px;
+        height: 5px;
+        display: inline-block;
+        border: 1px solid #fff;
+        transform: rotate(-45deg);
+        border-top-color: transparent;
+        border-right-color: transparent;
+        position: absolute;
+        top: 1px;
+        left: 1px;
+      }
+    }
   }
   &-btn {
     margin-top: 80px;
