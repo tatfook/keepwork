@@ -83,7 +83,7 @@ export default {
           isShow: this.isBasicSettingShow
         },
         {
-          text: '删除网站',
+          text: this.$t('common.deleteWebsite'),
           comp: WebsiteDelete,
           isShow: this.isBasicSettingShow
         }
