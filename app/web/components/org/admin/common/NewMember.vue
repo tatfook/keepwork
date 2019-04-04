@@ -131,7 +131,10 @@ export default {
     }),
     pushNewMemberData() {
       let waitingAddedLen = this.newMembers.length
-      if (waitingAddedLen >= this.orgRestUserCount && this.memberType == 'student') {
+      if (
+        waitingAddedLen >= this.orgRestUserCount &&
+        this.memberType == 'student'
+      ) {
         this.$alert(
           this.$t('org.cannotAddMoreMember'),
           this.$t('org.warningTitle'),
@@ -164,60 +167,35 @@ export default {
           callback()
         })
         .catch(error => {
-          switch (error) {
-            case 1:
-              if (this.memberType == 'student') {
-                callback(
-                  new Error(
-                    this.$t('org.theUsername') +
-                      `[${username}]` +
-                      this.$t('org.alreadyInList', {
-                        zhRole: '学生',
-                        enRole: 'student'
-                      })
-                  )
-                )
-              } else {
-                callback()
-              }
-              break
-            case 2:
-              if (this.memberType == 'teacher') {
-                callback(
-                  new Error(
-                    this.$t('org.theUsername') +
-                      `[${username}]` +
-                      this.$t('org.alreadyInList', {
-                        zhRole: '教师',
-                        enRole: 'teacher'
-                      })
-                  )
-                )
-              } else {
-                callback()
-              }
-              break
-            case 64:
-              callback()
-              break
-            case 400:
-              callback(
-                new Error(
-                  this.$t('org.theUsername') +
-                    `[${username}]` +
-                    this.$t('org.wasNotFound')
-                )
+          if (error == 400) {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.wasNotFound')
               )
+            )
+          }
+          let index
+          let memberLen = error.length
+          for (index = 0; index < memberLen; index++) {
+            if ((error[index].roleId & this.memberTypeRoleId) > 0) {
               break
-            default:
-              callback(
-                new Error(
-                  this.$t('org.theUsername') +
-                    `[${username}]` +
-                    this.$t('org.verifyFailed')
-                )
+            }
+          }
+          if (index >= memberLen) {
+            callback()
+          } else {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.alreadyInList', {
+                    zhRole: this.memberType == 'student' ? '学生' : '教师',
+                    enRole: this.memberType == 'student' ? 'student' : 'teacher'
+                  })
               )
-              break
+            )
           }
         })
     },

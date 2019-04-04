@@ -188,7 +188,7 @@ const actions = {
     if (organizationClassMembers.length === 0) {
       return Promise.resolve()
     }
-    return Promise.reject(organizationClassMembers[0].roleId)
+    return Promise.reject(organizationClassMembers)
   },
   async createNewMember(
     context,
