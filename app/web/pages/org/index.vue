@@ -1,6 +1,9 @@
 <template>
   <div class="org-page" v-loading="loading">
     <router-view class="org-page-main-content" id="org-page" />
+    <el-footer class="org-page-footer" height="auto">
+      <perfect-common-footer></perfect-common-footer>
+    </el-footer>
   </div>
 </template>
 
@@ -21,6 +24,7 @@ import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
+import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -239,6 +243,9 @@ export default {
         }))
     }
   },
+  components: {
+    PerfectCommonFooter
+  },
   watch: {
     $route() {
       this.loadUserCounts()
@@ -261,5 +268,14 @@ body {
   height: 100%;
   background: #f5f5f5;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  &-main-content {
+    flex: 1;
+  }
+  &-footer {
+    padding: 0;
+    margin-top: 40px;
+  }
 }
 </style>
