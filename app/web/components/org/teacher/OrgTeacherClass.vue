@@ -220,7 +220,7 @@ export default {
         this.isShowAddStudentForm = false
       }
     },
-   async testUsername({ username, callback }) {
+    async testUsername({ username, callback }) {
       await this.getUserOrgRoleByGraphql({
         organizationId: this.orgId,
         username
@@ -237,27 +237,8 @@ export default {
                   this.$t('org.wasNotFound')
               )
             )
-          }
-          let index
-          let memberLen = error.length
-          for (index = 0; index < memberLen; index++) {
-            if ((error[index].roleId & 1) > 0) {
-              break
-            }
-          }
-          if (index >= memberLen) {
-            callback()
           } else {
-            callback(
-              new Error(
-                this.$t('org.theUsername') +
-                  `[${username}]` +
-                  this.$t('org.alreadyInList', {
-                    zhRole: this.memberType == 'student' ? '学生' : '教师',
-                    enRole: this.memberType == 'student' ? 'student' : 'teacher'
-                  })
-              )
-            )
+            callback()
           }
         })
     },
