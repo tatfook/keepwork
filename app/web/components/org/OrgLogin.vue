@@ -101,26 +101,21 @@ export default {
     },
     toRolePage({ roleId }) {
       let roleName = ''
-      switch (roleId) {
-        case 1:
-          roleName = 'student'
-          this.$router.push({
-            name: 'OrgStudent'
-          })
-          break
-        case 2:
-          this.$router.push({
-            name: 'OrgTeacherTeach'
-          })
-          break
-        case 64:
-          this.$router.push({
-            name: 'OrgPackages'
-          })
-          break
-        default:
-          roleName = 'notMember'
-          break
+      if ((roleId & 64) > 0) {
+        return this.$router.push({
+          name: 'OrgPackages'
+        })
+      }
+      if ((roleId & 2) > 0) {
+        return this.$router.push({
+          name: 'OrgTeacherTeach'
+        })
+      }
+      if ((roleId & 1) > 0) {
+        roleName = 'student'
+        this.$router.push({
+          name: 'OrgStudent'
+        })
       }
     },
     async toLogin() {

@@ -8,7 +8,16 @@
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-message">
-          <div class="org-student-role-label">{{$t("org.studentRole")}}</div>
+          <el-dropdown class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
+            <span class="el-dropdown-link">
+              {{$t("org.studentRole")}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="orgIsAdmin" command="OrgPackages">{{$t("org.admin")}}</el-dropdown-item>
+              <el-dropdown-item v-if="orgIsTeacher" command="OrgTeacher">{{$t("org.teacherRole")}}</el-dropdown-item>
+              <el-dropdown-item class="org-student-role-label-active">{{$t("org.studentRole")}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <img :src="userPortrait" class="org-student-profile" />
           <div class="org-student-username">{{username}}</div>
         </div>
@@ -65,6 +74,8 @@ export default {
   computed: {
     ...mapGetters({
       userinfo: 'org/userinfo',
+      orgIsAdmin: 'org/isAdmin',
+      orgIsTeacher: 'org/isTeacher',
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson'
@@ -132,6 +143,11 @@ export default {
     skillName(skill) {
       return colI18n.getLangValue(skill, 'skillName')
     },
+    toRolePage(pageName) {
+      this.$router.push({
+        name: pageName
+      })
+    },
     async handleJoinClassroom({ key, packageId, lessonId }) {
       try {
         if (this.classroomKey && key !== this.classroomKey) {
@@ -182,7 +198,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 $borderColor: #e8e8e8;
 .org-student {
   width: 100%;
@@ -263,14 +279,17 @@ $borderColor: #e8e8e8;
     left: 8px;
     top: 10px;
     font-size: 12px;
-    padding: 0 10px;
+    padding: 0 5px;
     height: 20px;
     line-height: 20px;
     border-radius: 4px;
-    color: #a65f2c;
-    background-color: #ffd21f;
-    box-shadow: inset 0px -1px 3px 0px rgba(113, 20, 46, 0.28);
+    color: #409efe;
+    border: 1px solid;
     border-radius: 4px;
+    cursor: pointer;
+    &-active {
+      color: #409efe;
+    }
   }
   &-profile {
     width: 96px;

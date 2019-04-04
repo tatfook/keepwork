@@ -166,40 +166,39 @@ export default {
         .catch(error => {
           switch (error) {
             case 1:
-              callback(
-                new Error(
-                  this.$t('org.theUsername') +
-                    `[${username}]` +
-                    this.$t('org.alreadyInList', {
-                      zhRole: '学生',
-                      enRole: 'student'
-                    })
+              if (this.memberType == 'student') {
+                callback(
+                  new Error(
+                    this.$t('org.theUsername') +
+                      `[${username}]` +
+                      this.$t('org.alreadyInList', {
+                        zhRole: '学生',
+                        enRole: 'student'
+                      })
+                  )
                 )
-              )
+              } else {
+                callback()
+              }
               break
             case 2:
-              callback(
-                new Error(
-                  this.$t('org.theUsername') +
-                    `[${username}]` +
-                    this.$t('org.alreadyInList', {
-                      zhRole: '教师',
-                      enRole: 'teacher'
-                    })
+              if (this.memberType == 'teacher') {
+                callback(
+                  new Error(
+                    this.$t('org.theUsername') +
+                      `[${username}]` +
+                      this.$t('org.alreadyInList', {
+                        zhRole: '教师',
+                        enRole: 'teacher'
+                      })
+                  )
                 )
-              )
+              } else {
+                callback()
+              }
               break
             case 64:
-              callback(
-                new Error(
-                  this.$t('org.theUsername') +
-                    `[${username}]` +
-                    this.$t('org.alreadyInList', {
-                      zhRole: '管理员',
-                      enRole: 'admin'
-                    })
-                )
-              )
+              callback()
               break
             case 400:
               callback(
