@@ -76,13 +76,13 @@ export default {
     },
     async removeTeacher(teacherDetail) {
       this.isLoading = true
-      let { username, realname, roleId } = teacherDetail
+      let { username, realname } = teacherDetail
       await this.orgCreateNewMember({
         organizationId: this.orgId,
         classIds: [],
         memberName: username,
         realname,
-        roleId
+        roleId: 2
       }).catch(() => {})
       await this.getOrgTeacherList({
         organizationId: this.orgId
