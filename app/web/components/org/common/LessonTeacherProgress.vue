@@ -39,10 +39,14 @@ export default {
     ...mapGetters({
       isBeInClassroom: 'org/teacher/isBeInClassroom',
       isClassOver: 'org/teacher/isClassOver',
-      classId: 'org/teacher/classId'
+      classId: 'org/teacher/classId',
+      orgClasses: 'org/teacher/orgClasses'
     }),
     lessonId() {
       return this.$route.params.lessonId
+    },
+    className() {
+      return _.get(_.find(this.orgClasses, item => item.id === _.toNumber(_.get(this.$route, 'params.classId'))), 'name', '')
     }
   },
   watch: {
@@ -74,7 +78,8 @@ export default {
         'OrgTeacherLessonSummary' === name &&
         this.$router.push({
           name,
-          params: { classroomId: this.classId }
+          params: { classroomId: this.classId },
+          query: { className: this.className }
         })
     }
   }

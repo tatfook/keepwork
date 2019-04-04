@@ -229,6 +229,9 @@ export default {
                 name: 'OrgTeacherLessonSummary',
                 params: {
                   classroomId: id
+                },
+                query: {
+                  className: this.className
                 }
               })
             })
@@ -252,7 +255,8 @@ export default {
       classroom: 'org/teacher/classroom',
       isTeacherBeInClasroom: 'org/teacher/isBeInClass',
       isStudentBeInClassroom: 'org/student/isBeInClassroom',
-      userIsTeacher: 'org/isTeacher'
+      userIsTeacher: 'org/isTeacher',
+      orgClasses: 'org/teacher/orgClasses'
     }),
     codeReadLine() {
       return _.get(this.lesson, 'CodeReadLine', 0)
@@ -296,6 +300,9 @@ export default {
     haqiCode() {
       const { packageId = 0, lessonId = 0 } = this.$route.params
       return `${packageId}x${lessonId}`
+    },
+    className() {
+      return _.get(_.find(this.orgClasses, item => item.id === _.toNumber(_.get(this.$route, 'params.classId'))), 'name', '')
     }
   }
 }
