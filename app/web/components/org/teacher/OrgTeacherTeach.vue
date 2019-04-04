@@ -6,7 +6,7 @@
         {{$t('org.includes')}} <span class="package-count-number">{{selectedClassPackagesCount}}{{$t('org.packagesCount')}}</span>
       </div>
       <el-row>
-        <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in selectedClassPackges" :key="index">
+        <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in selectedClassPackgesSort" :key="index">
           <org-package-cell-by-time :packageData="packageData" @package-click="handleToClassPackagePage"></org-package-cell-by-time>
         </el-col>
       </el-row>
@@ -55,7 +55,6 @@ export default {
         name: 'OrgTeacherClassPackage',
         params: { classId: this.selectedClassId, packageId: packageId }
       })
-      console.warn('packageId: ', packageId)
     }
   },
   computed: {
@@ -81,6 +80,9 @@ export default {
           lastTeachTime
         }
       })
+    },
+    selectedClassPackgesSort() {
+      return _.sortBy(this.selectedClassPackges, item => item.lastTeachTime)
     }
   }
 }

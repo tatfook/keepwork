@@ -121,9 +121,9 @@ const actions = {
   toggleLessonHint({ commit }) {
     commit(TOGGLE_LESSON_HINT)
   },
-  async beginTheClass({ commit }, payload) {
+  async beginTheClass({ commit, rootGetters: { 'org/currentOrgId': organizationId } }, payload) {
     const classroom = await lesson.classrooms.begin({
-      payload
+      payload: { ...payload, organizationId }
     })
     commit(BEGIN_THE_CLASS_SUCCESS, classroom)
   },
@@ -144,10 +144,14 @@ const actions = {
     })
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
-  async getCurrentClass({ commit }) {
+  async getCurrentClass({ commit, rootGetters: { 'org/currentOrgId': organizationId } }) {
     await lesson.classrooms
       .currentClass()
-      .then(classroom => commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom))
+      .then(classroom => {
+        if (classroom.organizationId === organizationId) {
+          commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom)
+        }
+      })
       .catch(e => {
         console.error("can't find the classroom", e)
         commit(LEAVE_THE_CLASSROOM)

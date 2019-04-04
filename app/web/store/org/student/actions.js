@@ -146,10 +146,10 @@ const actions = {
     commit(ENTER_CLASSROOM, { ...classInfo, key })
     return classInfo
   },
-  async resumeClassroom({ dispatch }) {
+  async resumeClassroom({ dispatch, rootGetters: { 'org/currentOrgId': organizationId } }) {
     try {
       const classroom = await lesson.classrooms.currentClass()
-      if (classroom) {
+      if (classroom.organizationId === organizationId) {
         dispatch('resumeClassData', classroom)
       }
     } catch (error) {

@@ -28,6 +28,7 @@ const getters = {
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),
   currentOrg: state => state.currentOrg,
+  currentOrgId: (state, { currentOrg }) => currentOrg.id,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
   getOrgPackagesGraphqlById: state => ({ id }) =>
     _.get(state.orgPackagesGraphql, id),
