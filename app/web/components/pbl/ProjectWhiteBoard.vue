@@ -46,7 +46,7 @@
       </div>
     </div>
     <new-issue v-if="isNewIssueRendered" :show="showNewIssue" :projectId="projectId" @close="closeNewIssue"></new-issue>
-    <issue-detail v-if="isIssueDetailRendered" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
+    <issue-detail v-if="showIssueDetail" :show="showIssueDetail" @close="closeIssueDetail" :issue="selectedIssue" :projectDetail="pblProjectDetail" :isProhibitEdit="isProhibitEdit" :currPage="page" :searchKeyWord="searchKeyWord" :state='state'></issue-detail>
     <div class="all-issue-pages" v-if="issuesCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="issuesCount">
       </el-pagination>
@@ -72,7 +72,7 @@ export default {
       showNewIssue: false,
       showIssueDetail: false,
       isNewIssueRendered: false,
-      isIssueDetailRendered: false,
+      // isIssueDetailRendered: false,
       searchKeyWord: '',
       default_portrait,
       selectedIssue: {},
@@ -201,7 +201,7 @@ export default {
     },
     goIssueDetail(issue) {
       this.selectedIssue = issue
-      this.isIssueDetailRendered = true
+      // this.isIssueDetailRendered = true
       this.showIssueDetail = true
     },
     closeIssueDetail() {

@@ -14,10 +14,10 @@
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
           </div>
-          <div class="summary-word-link">
+          <!-- <div class="summary-word-link">
             I am learning {{summary.name}} on Keepwork. Click
             <a @click.prevent="toAboutPage" href="" class="highlight link">here</a> to join and learn with me
-          </div>
+          </div> -->
           <div class="summary-word-line">
             This is my
             <span class="highlight">{{summary.day}}</span> day of learning
@@ -43,10 +43,6 @@
         <div v-else class="summary-word">
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
-          </div>
-          <div class="summary-word-link">
-            我正在keepwork学习 {{summary.name}} . 点击
-            <a @click.prevent="toAboutPage" href="" class="highlight link">这里</a> 加入，并和我一起学习
           </div>
           <div class="summary-word-line">
             这是我第

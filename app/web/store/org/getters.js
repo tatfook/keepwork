@@ -2,7 +2,9 @@ import _ from 'lodash'
 import Cookies from 'js-cookie'
 import jsrsasign from 'jsrsasign'
 const getters = {
-  token: state => Cookies.get('token'),
+  tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
+  getToken: state => () => Cookies.get('token'),
+  token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
   userinfo: (state, getters, rootState) => _.get(rootState, 'user.profile'),
   getOrgUserCountById: state => ({ id }) => _.get(state.userCounts, id),
   getOrgRestCount: (state, { getOrgUserCountById }) => ({ id }) => {
@@ -10,8 +12,8 @@ const getters = {
     if (!userCounts) {
       return
     }
-    let { count, teacherCount, studentCount } = userCounts
-    return count - teacherCount - studentCount
+    let { count, studentCount } = userCounts
+    return count - studentCount
   },
   roleId: (state, { token }) => {
     if (!token) return
@@ -21,11 +23,14 @@ const getters = {
     return roleId
   },
   isOrgMember: (state, { roleId }) => Boolean(roleId),
-  isTeacher: (sate, { roleId }) => roleId === 2,
+  isAdmin: (sate, { roleId }) => (roleId & 64) > 0, // eslint-disable-line no-bitwise
+  isTeacher: (sate, { roleId }) => (roleId & 2) > 0, // eslint-disable-line no-bitwise
+  isStudent: (sate, { roleId }) => (roleId & 1) > 0, // eslint-disable-line no-bitwise
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),
   currentOrg: state => state.currentOrg,
+  currentOrgId: (state, { currentOrg }) => currentOrg.id,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
   getOrgPackagesGraphqlById: state => ({ id }) =>
     _.get(state.orgPackagesGraphql, id),

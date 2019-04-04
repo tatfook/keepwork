@@ -3,7 +3,16 @@
     <div class="org-teacher-container">
       <div class="org-teacher-sidebar">
         <div class="org-teacher-message">
-          <div class="org-teacher-role-label">教师</div>
+          <el-dropdown class="org-teacher-role-label" @command="toRolePage" trigger="click" placement="bottom">
+            <span class="el-dropdown-link">
+              {{$t("org.teacherRole")}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="orgIsAdmin" command="OrgPackages">{{$t("org.admin")}}</el-dropdown-item>
+              <el-dropdown-item class="org-teacher-role-label-active">{{$t("org.teacherRole")}}</el-dropdown-item>
+              <el-dropdown-item v-if="orgIsStudent" command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <img :src="userPortrait" class="org-teacher-profile" />
           <div class="org-teacher-username">{{username}}</div>
         </div>
@@ -27,21 +36,23 @@ export default {
       teacherMenu: [
         {
           pageName: 'OrgTeacherTeach',
-          text: '上课'
+          text: this.$t('org.TeachLabel')
         },
         {
           pageName: 'OrgTeacherStatistics',
-          text: '数据统计'
+          text: this.$t('org.DataStaticsLabel')
         },
         {
           pageName: 'OrgTeacherClass',
-          text: '我的班级'
+          text: this.$t('org.MyClassLabel')
         }
       ]
     }
   },
   computed: {
     ...mapGetters({
+      orgIsAdmin: 'org/isAdmin',
+      orgIsStudent: 'org/isStudent',
       classroom: 'org/teacher/classroom',
       isBeInClassroom: 'org/teacher/isBeInClassroom',
       userinfo: 'org/userinfo'
@@ -55,10 +66,17 @@ export default {
     username() {
       return this.userinfo.username
     }
+  },
+  methods: {
+    toRolePage(pageName) {
+      this.$router.push({
+        name: pageName
+      })
+    }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 $borderColor: #e8e8e8;
 .org-teacher {
   width: 100%;
@@ -90,14 +108,17 @@ $borderColor: #e8e8e8;
     left: 8px;
     top: 10px;
     font-size: 12px;
-    padding: 0 10px;
+    padding: 0 5px;
     height: 20px;
     line-height: 20px;
     border-radius: 4px;
-    color: #a65f2c;
-    background-color: #ffd21f;
-    box-shadow: inset 0px -1px 3px 0px rgba(113, 20, 46, 0.28);
+    color: #409efe;
+    border: 1px solid;
     border-radius: 4px;
+    cursor: pointer;
+    &-active {
+      color: #409efe;
+    }
   }
   &-profile {
     width: 96px;

@@ -4,7 +4,7 @@
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgStudent' }">课程包</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgStudent' }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ name: 'OrgStudentPackage', params: { packageId } }">{{packageName}}</el-breadcrumb-item>
           <el-breadcrumb-item>
             <el-dropdown @command="handleSelectLesson">
@@ -17,6 +17,7 @@
             </el-dropdown>
           </el-breadcrumb-item>
         </el-breadcrumb>
+        <div v-if="isNextButtonShow" class="org-breadcrumb-next-button" @click="toNextLesson">{{$t("org.toNextLesson")}}</div>
       </div>
     </div>
     <lesson-header class='lesson-header' :lesson="lessonHeader" :isstudent="true" :isInCurrentClass="isInCurrentClass" />
@@ -72,6 +73,15 @@ export default {
       switchSummary: 'org/student/switchSummary',
       checkClassroom: 'org/student/checkClassroom'
     }),
+    toNextLesson() {
+      let nextLessonId = this.currentPackageLessons[
+        this.currentLessonInPackageIndex + 1
+      ].id
+      this.$router.push({
+        name: 'OrgStudentPackageLesson',
+        params: { lessonId: nextLessonId }
+      })
+    },
     async getLessonData() {
       try {
         this.switchSummary(false)
@@ -223,6 +233,17 @@ export default {
     currentLessonName() {
       return _.get(this.lessonHeader, 'lessonName', 'Keepwork')
     },
+    currentLessonInPackageIndex() {
+      let currentLessonId = _.get(this.lessonHeader, 'id')
+      return _.findIndex(this.currentPackageLessons, { id: currentLessonId })
+    },
+    isNextButtonShow() {
+      let currentPackageLessonsLen = this.currentPackageLessons.length
+      return (
+        currentPackageLessonsLen > 1 &&
+        this.currentLessonInPackageIndex < currentPackageLessonsLen - 1
+      )
+    },
     lessonMain() {
       return this.lesson.filter(({ cmd }) => cmd !== 'Lesson')
     },
@@ -249,13 +270,26 @@ export default {
       margin: 0 auto;
       box-sizing: border-box;
       padding-left: 20px;
+      display: flex;
+      align-items: center;
       .el-breadcrumb {
+        flex: 1;
         height: 58px;
         line-height: 58px;
       }
       .el-dropdown-link {
         cursor: pointer;
       }
+    }
+    &-next-button {
+      height: 34px;
+      line-height: 34px;
+      color: #409efe;
+      border: 1px solid;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0 24px;
+      font-size: 14px;
     }
   }
 }

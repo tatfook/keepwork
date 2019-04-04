@@ -26,7 +26,11 @@ export default {
   },
   async created() {
     try {
-      await Promise.all([this.getUserOrgRealName(),this.resumeClassroom(), this.getUserInfo()])
+      await Promise.all([
+        this.getUserOrgRealName(),
+        this.resumeClassroom(),
+        this.getUserInfo()
+      ])
       this.checkIsInClassroom(this.$route)
       this.intervalCheckClass()
     } catch (error) {
@@ -57,7 +61,11 @@ export default {
       } = route
       const { packageId: pid, lessonId: lid } = this.classroom
 
-      if (this.isBeInClassroom && this.isTeaching && !(packageId == pid && lessonId == lid)) {
+      if (
+        this.isBeInClassroom &&
+        this.isTeaching &&
+        !(packageId == pid && lessonId == lid)
+      ) {
         if (!this._notify) {
           this._notify = this.$notify({
             customClass: 'back-to-classroom-notify',
@@ -100,6 +108,9 @@ export default {
       isTeaching: 'org/student/isTeaching'
     })
   },
+  destroyed() {
+    this._notify && this._notify.close()
+  },
   beforeRouteUpdate(to, from, next) {
     this.checkIsInClassroom(to)
     next()
@@ -110,7 +121,6 @@ export default {
 <style lang="scss">
 .org-student-router {
   width: 100%;
-  min-height: 100%;
   background-color: #f5f5f5;
 }
 .back-to-classroom-notify {
@@ -133,5 +143,10 @@ export default {
   }
 }
 </style>
-
-
+<style lang="scss">
+@media print {
+  .back-to-classroom-notify {
+    display: none;
+  }
+}
+</style>

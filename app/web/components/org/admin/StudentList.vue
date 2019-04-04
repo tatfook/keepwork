@@ -1,7 +1,7 @@
 <template>
   <div class="student-list" v-loading="isLoading">
     <el-select v-model="selectedClassId" v-if="orgStudentsCount > 0">
-      <el-option label="全部" :value="undefined">
+      <el-option :label="$t('org.all')" :value="undefined">
       </el-option>
       <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
       </el-option>
@@ -100,19 +100,19 @@ export default {
     selectedClassName() {
       return this.selectedClassId
         ? _.find(this.orgClasses, { id: this.selectedClassId }).name
-        : '全部'
+        : this.$t('org.all')
     }
   },
   methods: {
     ...mapActions({
       getOrgStudentList: 'org/getOrgStudentList',
-      removeMemberFromClass: 'org/removeMemberFromClass'
+      orgCreateNewMember: 'org/createNewMember'
     }),
     toNewStudentPage() {
       if (this.orgRestUserCount == 0) {
         this.$alert(
-          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-          '提示',
+          this.$t('org.cannotAddMoreMember'),
+          this.$t('org.warningTitle'),
           {
             type: 'warning'
           }
@@ -129,30 +129,41 @@ export default {
       }).catch(() => {})
       this.isLoading = false
     },
-    async removeStudent(id) {
+    async removeStudent(studentDetail) {
       this.isLoading = true
-      await this.removeMemberFromClass({ id }).catch(() => {})
+      let { users, realname } = studentDetail
+      await this.orgCreateNewMember({
+        organizationId: this.orgId,
+        classIds: [],
+        memberName: users.username,
+        realname,
+        roleId: 1
+      }).catch(() => {})
       await this.getOrgStudentList({
         organizationId: this.orgId
       }).catch(() => {})
       this.isLoading = false
     },
     confirmRemoveStudent(studentDetail) {
-      let { id, realname } = studentDetail
-      this.$confirm(`是否确定删除学生${realname}?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.removeStudent(id)
+      let { realname } = studentDetail
+      this.$confirm(
+        `${this.$t('org.delConfirm')} ${realname}?`,
+        this.$t('org.deleteWarining'),
+        {
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
+        this.removeStudent(studentDetail)
       })
     },
     toEditPage(studentDetail) {
-      let { realname, users, lessonOrganizationClasses, roleId } = studentDetail
+      let { realname, users, lessonOrganizationClasses } = studentDetail
       this.$router.push({
         name: 'OrgEditStudent',
         query: {
-          roleId,
+          roleId: 1,
           realname,
           memberName: users.username,
           classIds: JSON.stringify(
@@ -197,6 +208,7 @@ export default {
     }
     &-operations {
       text-align: center;
+      margin: 0 -10px;
     }
     &-button {
       display: inline-block;

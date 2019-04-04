@@ -5,7 +5,7 @@ import mutations from './mutations'
 const state = {
   isShowLessonHint: true,
   orgClasses: [],
-  orgStudents: [],
+  orgStudents: {},
   orgClassPackages: {},
   orgClassStudents: {},
   classroomCoursesData: {},

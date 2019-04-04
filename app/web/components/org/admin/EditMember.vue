@@ -11,13 +11,13 @@
       </div>
     </div>
     <el-form ref="memberForm" class="edit-member-form" label-position="left" label-width="78px" :model="memberData" :hide-required-asterisk="true">
-      <el-form-item :label="memberTypeNameLabel" :rules="memberRules.realname">
+      <el-form-item :label="memberTypeNameLabel" :rules="memberRules.realname" prop="realname">
         <el-input :placeholder="$t('org.pleaseInput')" v-model="memberData.realname"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('org.usernameLabel')" :rules="memberRules.memberName">
+      <el-form-item :label="$t('org.usernameLabel')" :rules="memberRules.memberName" prop="memberName">
         <el-input disabled :placeholder="$t('org.KeepworkUsername')" v-model="memberData.memberName"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('org.classLabel')">
+      <el-form-item :label="$t('org.classLabel')" :rules="memberRules.classIds" prop="classIds">
         <el-select v-model="memberData.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
           <span :title="memberData.classIds | idToTextFilter(orgClasses)" class="edit-member-form-selected" slot="prefix">{{memberData.classIds | idToTextFilter(orgClasses)}}</span>
           <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
@@ -36,6 +36,14 @@ export default {
     this.initMemberData()
   },
   data() {
+    let memberRoleId = _.get(this.$route, 'query.roleId')
+    let classIdsValidate = (rule, value, callback) => {
+      if (value.length == 0) {
+        callback(new Error(this.$t('org.pleaseSelectClasses')))
+      } else {
+        callback()
+      }
+    }
     return {
       isLoading: false,
       memberData: {
@@ -47,15 +55,19 @@ export default {
         realname: [
           {
             required: true,
-            message: `请输入${this.memberType}姓名`
+            message: this.$t('org.pleaseInputMemberName', {
+              zhRroleType: memberRoleId == 1 ? '学生' : '教师',
+              enRroleType: memberRoleId == 1 ? 'student' : 'teacher'
+            })
           }
         ],
         memberName: [
           {
             required: true,
-            message: '请输入用户名'
+            message: this.$t('org.usernameIsRequired')
           }
-        ]
+        ],
+        classIds: [{ validator: classIdsValidate, trigger: 'change' }]
       }
     }
   },
@@ -128,7 +140,7 @@ export default {
               this.isLoading = false
               this.$message({
                 type: 'success',
-                message: '更新成功'
+                message: this.$t('org.successfullyUpdated')
               })
               this.toMemberListPage()
             })
@@ -139,7 +151,7 @@ export default {
                   this.$message.error(`用户名:[${memberName}]不存在`)
                   break
                 default:
-                  this.$message.error('更新失败')
+                  this.$message.error(this.$t('org.failureUpdated'))
                   break
               }
             })

@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 import UserSitesSelector from '@/components/common/UserSitesSelector'
 export default {
@@ -37,6 +37,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
+    }),
     openNewSiteDialog() {
       this.isNewWebsiteDialogShow = true
     },
@@ -49,13 +52,19 @@ export default {
     closeUserSitesDialog() {
       this.isUserSitesDialogShow = false
     },
-    createNewProjectByBind() {
+    async createNewProjectByBind() {
       let siteId = _.get(this.$refs.userSitesRef, 'selectSiteId')
+      await this.getWebsiteDetailBySiteId({
+        siteId: siteId
+      }).catch(e => console.error(e))
       this.$emit('confirmSiteId', { siteId })
       this.closeUserSitesDialog()
     },
-    createNewProjectByNewSite() {
+    async createNewProjectByNewSite() {
       let siteId = _.get(this.newSiteInfo, 'id')
+      await this.getWebsiteDetailBySiteId({
+        siteId: siteId
+      }).catch(e => console.error(e))
       this.$emit('confirmSiteId', { siteId })
       this.closeNewWebsiteDialog()
     }

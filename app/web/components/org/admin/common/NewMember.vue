@@ -18,7 +18,7 @@
         <el-form-item class="new-member-item-form-item" :label="$t('org.usernameLabel')" prop="memberName" :rules="newMemberRules.memberName" :error="newMemberItem.error">
           <el-input v-model="newMemberItem.memberName" :placeholder="$t('org.KeepworkUsername')"></el-input>
         </el-form-item>
-        <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')">
+        <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')" :rules="newMemberRules.classIds" prop="classIds">
           <el-select v-model="newMemberItem.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
             <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses)}}</span>
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
@@ -59,10 +59,16 @@ export default {
         this.testUsername({ username, callback })
       }
     }
+    let classIdsValidate = (rule, value, callback) => {
+      if (value.length == 0) {
+        callback(new Error(this.$t('org.pleaseSelectClasses')))
+      } else {
+        callback()
+      }
+    }
     return {
       isLoading: false,
       newMembers: [],
-      roleType: this.memberType,
       newMemberRules: {
         realname: [
           {
@@ -78,7 +84,8 @@ export default {
             validator: checkMemberName,
             trigger: 'blur'
           }
-        ]
+        ],
+        classIds: [{ validator: classIdsValidate, trigger: 'change' }]
       }
     }
   },
@@ -124,10 +131,13 @@ export default {
     }),
     pushNewMemberData() {
       let waitingAddedLen = this.newMembers.length
-      if (waitingAddedLen >= this.orgRestUserCount) {
+      if (
+        waitingAddedLen >= this.orgRestUserCount &&
+        this.memberType == 'student'
+      ) {
         this.$alert(
-          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-          '提示',
+          this.$t('org.cannotAddMoreMember'),
+          this.$t('org.warningTitle'),
           {
             type: 'warning'
           }
@@ -157,22 +167,35 @@ export default {
           callback()
         })
         .catch(error => {
-          switch (error) {
-            case 1:
-              callback(new Error(`用户名:[${username}]已在学生列表中`))
+          if (error == 400) {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.wasNotFound')
+              )
+            )
+          }
+          let index
+          let memberLen = error.length
+          for (index = 0; index < memberLen; index++) {
+            if ((error[index].roleId & this.memberTypeRoleId) > 0) {
               break
-            case 2:
-              callback(new Error(`用户名:[${username}]已在教师列表中`))
-              break
-            case 64:
-              callback(new Error(`用户名:[${username}]已在管理员列表中`))
-              break
-            case 400:
-              callback(new Error(`用户名:[${username}]不存在`))
-              break
-            default:
-              callback(new Error(`用户名:[${username}]校验失败`))
-              break
+            }
+          }
+          if (index >= memberLen) {
+            callback()
+          } else {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.alreadyInList', {
+                    zhRole: this.memberType == 'student' ? '学生' : '教师',
+                    enRole: this.memberType == 'student' ? 'student' : 'teacher'
+                  })
+              )
+            )
           }
         })
     },
@@ -199,15 +222,23 @@ export default {
                 let errorMessage = ''
                 switch (error.status) {
                   case 409:
-                    errorMessage = `用户名:[${memberName}]已在${
-                      this.memberTypeText
-                    }列表中`
+                    errorMessage =
+                      $t('org.theUsername') +
+                      `[${memberName}]` +
+                      $t('org.alreadyInList', {
+                        zhRole: this.memberTypeText,
+                        enRole: this.memberTypeText
+                      })
                     break
                   case 400:
-                    errorMessage = `用户名:[${memberName}]不存在`
+                    errorMessage = `${this.$t(
+                      'org.theUsername'
+                    )}[${memberName}]${this.$t('org.wasNotFound')}`
                     break
                   default:
-                    errorMessage = `用户名:[${student.account}]添加失败`
+                    errorMessage =
+                      `${this.$t('org.theUsername')}[${student.account}]` +
+                      this.$t('org.failedToAdd')
                     break
                 }
                 this.newMembers[index].error = errorMessage
@@ -229,7 +260,7 @@ export default {
       if (this.newMembers.length == 0) {
         this.$message({
           type: 'success',
-          message: '添加成功'
+          message: this.$t('org.successfullyAdd')
         })
         this.toMemberListPage()
       }

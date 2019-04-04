@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div class="lesson-wrap-container">
     <hint v-if="isTeacher && mod.cmd === 'Hint' && isShowLessonHint" :data="mod" :key="mod.key"></hint>
     <quiz v-else-if="mod.cmd === 'Quiz'" :data="mod" :isPreview="isPreview" :isPrint="isPrint" :isVisitor="isVisitor" :key="mod.key"></quiz>
     <div v-else class="mod-item-container">
       <mod-loader :mod="mod" :theme="theme" :key="mod.key"></mod-loader>
     </div>
-
   </div>
 </template>
 
@@ -61,11 +60,13 @@ export default {
 </script>
 
 <style lang="scss">
-.mod-item-container {
-  background: white;
-  max-width: 100%;
-  overflow: auto;
-  margin: 0 auto;
+.lesson-wrap-container {
+  .mod-item-container {
+    background: white;
+    max-width: 1229px;
+    overflow: auto;
+    margin: 0 auto;
+  }
 }
 </style>
 

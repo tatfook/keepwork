@@ -3,22 +3,22 @@
     <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
     <div v-if="isShowAddStudentForm" class="org-teacher-classes-add">
       <div class="students-add-header">
-        {{selectedClassName}}>添加学生 <span class="pull-right">
-          <el-button class="students-add-header-button" @click="handleCancel">取消</el-button>
-          <el-button class="students-add-header-button" @click="handleSave" type="primary">保存</el-button>
+        {{selectedClassName}}>{{$t("org.addStudents")}} <span class="pull-right">
+          <el-button class="students-add-header-button" @click="handleCancel">{{$t("common.Cancel")}}</el-button>
+          <el-button class="students-add-header-button" @click="handleSave" type="primary">{{$t("common.Save")}}</el-button>
         </span>
       </div>
       <div class="students-add-main">
         <div class="add-form-header">
-          <span class="add-form-header-label">学生姓名</span>
-          <span class="add-form-header-label">用户名</span>
+          <span class="add-form-header-label">{{$t("org.nameLabel")}}</span>
+          <span class="add-form-header-label">{{$t("org.usernameLabel")}}</span>
         </div>
         <el-form :ref="`form-${index}`" :inline="true" v-for="(item, index) in studentsFormData" :key="index" :model="item">
           <el-form-item prop="name" :rules="rules.name">
             <el-input v-model="item.name"></el-input>
           </el-form-item>
           <el-form-item prop="account" :rules="rules.account">
-            <el-input :disabled="isEditType"  v-model="item.account"></el-input>
+            <el-input :disabled="isEditType" v-model="item.account"></el-input>
           </el-form-item>
           <el-form-item class="add-form-item" v-if="!isEditType">
             <i class="el-icon-error" @click="handleRemoveFormItem(index)"></i>
@@ -26,25 +26,25 @@
         </el-form>
       </div>
       <div class="students-add-bottom" v-if="!isEditType">
-        <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>继续添加</span>
+        <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>{{$t("org.continueAdd")}}</span>
       </div>
     </div>
     <div v-else class="org-teacher-classes-students">
       <div class="students-table-header">
-        学生数:{{selectedClassStudentsCount}}
-        <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> 添加学生</span>
+        {{$t("org.IncludeStudents") + selectedClassStudentsCount}}
+        <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> {{$t("org.addStudents")}}</span>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
-        <el-table-column prop="realname" label="姓名">
+        <el-table-column prop="realname" :label="$t('org.nameLabel')">
         </el-table-column>
-        <el-table-column prop="username" label="用户名">
+        <el-table-column prop="username" :label="$t('org.usernameLabel')">
         </el-table-column>
-        <el-table-column prop="createdAt" label="添加时间">
+        <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')">
         </el-table-column>
-        <el-table-column align="center" label="操作" v-if="isCanEdit">
+        <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
           <template slot-scope="scope">
-            <el-button @click="handleEditStudent(scope)" size="mini">编辑</el-button>
-            <el-button @click="handleRemoveStudent(scope)" size="mini">移出</el-button>
+            <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
+            <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -133,7 +133,10 @@ export default {
           classId: this.selectedClassId,
           studentId: row.id
         })
-        await this.getCurrentOrgUserCounts()
+        await Promise.all([
+          this.getCurrentOrgUserCounts(),
+          this.getOrgStudents()
+        ])
         this.$message({
           type: 'success',
           message: '移出成功'
@@ -157,8 +160,9 @@ export default {
         return (this.isShowAddStudentForm = false)
       }
       if (this.orgRestCount === 0) {
-        const flag = _.every(this.studentsFormData, item =>
-          this.orgStudents.includes(item.account)
+        const flag = _.every(
+          _.filter(this.studentsFormData, v => v.account),
+          item => Boolean(this.orgStudents[item.account])
         )
         if (!flag) {
           return this.alertCountError()
@@ -173,7 +177,11 @@ export default {
             if (valid) {
               try {
                 const res = await this.addStudentToClass({
-                  classId: this.selectedClassId,
+                  currentClassId: this.selectedClassId,
+                  classIds: [
+                    ..._.get(this.orgStudents, [student.account], []),
+                    this.selectedClassId
+                  ],
                   memberName: student.account,
                   realname: student.name
                 })
@@ -184,7 +192,11 @@ export default {
                   reject()
                 }
                 if (error.data.indexOf('成员不存在') !== -1) {
-                  this.$message.error(`用户名:[${student.account}]不存在`)
+                  this.$message.error(
+                    `${this.$t('org.theUsername')}[${student.account}]${this.$t(
+                      'org.wasNotFound'
+                    )}`
+                  )
                   sucessfullItems
                     .reverse()
                     .forEach(index => this.handleRemoveFormItem(index))
@@ -196,14 +208,14 @@ export default {
           })
         })
       }
-      await this.getCurrentOrgUserCounts()
+      await Promise.all([this.getCurrentOrgUserCounts(), this.getOrgStudents()])
       sucessfullItems
         .reverse()
         .forEach(index => this.handleRemoveFormItem(index))
       if (this.studentsFormData.length === 0) {
         this.$message({
           type: 'success',
-          message: '添加成功'
+          message: this.$t('org.successfullyAdd')
         })
         this.isShowAddStudentForm = false
       }
@@ -217,27 +229,24 @@ export default {
           callback()
         })
         .catch(error => {
-          switch (error) {
-            case 1:
-              callback()
-              break
-            case 2:
-              callback(new Error(`用户名:[${username}]已在教师列表中`))
-              break
-            case 64:
-              callback(new Error(`用户名:[${username}]已在管理员列表中`))
-              break
-            case 400:
-              callback(new Error(`用户名:[${username}]不存在`))
-              break
-            default:
-              callback(new Error(`用户名:[${username}]校验失败`))
-              break
+          if (error == 400) {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.wasNotFound')
+              )
+            )
+          } else {
+            callback()
           }
         })
     },
     handleAddFormItem() {
-      if (this.selectedClassStudents.length + this.studentsFormData.length >= this.orgStudents.length) {
+      if (
+        this.selectedClassStudents.length + this.studentsFormData.length >=
+        Object.keys(this.orgStudents).length
+      ) {
         return this.alertCountError()
       }
       this.studentsFormData.push({
@@ -250,8 +259,8 @@ export default {
     },
     alertCountError() {
       return this.$alert(
-        '已到达添加上限，只能添加现有学生进入班级，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-        '提示',
+        this.$t('org.cannotAddMoreMember'),
+        this.$t('org.warningTitle'),
         {
           type: 'warning'
         }

@@ -14,10 +14,8 @@
           <el-button v-loading='isLoading' class="org-login-submit" type="primary" @click="loginToOrg">{{$t("common.login")}}</el-button>
         </el-form-item>
         <el-form-item class="org-login-form-operations">
-          <div class="org-login-form-operations-left org-login-form-operations-cursor" @click="isShowPasswordResetForm = true">忘记密码？</div>
-          <div>没有账号？
-            <span class="org-login-form-operations-cursor" @click="isRegisterForm = true">立即注册</span>
-          </div>
+          <div class="org-login-form-operations-left org-login-form-operations-cursor" @click="isShowPasswordResetForm = true">{{$t('common.forgetPassword')}}?</div>
+          <div>{{$t('common.noAccount')}}<span class="org-login-form-operations-cursor" @click="isRegisterForm = true">{{$t('common.clickRegister')}}</span></div>
         </el-form-item>
       </el-form>
       <el-dialog class="org-login-dialog" :visible.sync="isRegisterForm" width="352px">
@@ -103,26 +101,21 @@ export default {
     },
     toRolePage({ roleId }) {
       let roleName = ''
-      switch (roleId) {
-        case 1:
-          roleName = 'student'
-          this.$router.push({
-            name: 'OrgStudent'
-          })
-          break
-        case 2:
-          this.$router.push({
-            name: 'OrgTeacherTeach'
-          })
-          break
-        case 64:
-          this.$router.push({
-            name: 'OrgPackages'
-          })
-          break
-        default:
-          roleName = 'notMember'
-          break
+      if ((roleId & 64) > 0) {
+        return this.$router.push({
+          name: 'OrgPackages'
+        })
+      }
+      if ((roleId & 2) > 0) {
+        return this.$router.push({
+          name: 'OrgTeacherTeach'
+        })
+      }
+      if ((roleId & 1) > 0) {
+        roleName = 'student'
+        this.$router.push({
+          name: 'OrgStudent'
+        })
       }
     },
     async toLogin() {
@@ -181,7 +174,7 @@ export default {
   align-items: center;
   justify-content: center;
   &-container {
-    width: 350px;
+    width: 352px;
     text-align: center;
   }
   &-logo {

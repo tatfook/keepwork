@@ -22,7 +22,7 @@
     </el-table>
     <div class="teacher-list-empty" v-if="orgTeachersLength == 0">
       <img class="teacher-list-empty-img" src="@/assets/org/list_empty.png" alt="">
-      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <span  @click="toNewTeacherPage" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</span>
+      <p class="teacher-list-empty-info">{{$t('org.noTeaches')}} <span @click="toNewTeacherPage" class="teacher-list-empty-cursor">{{$t('org.addTeachersImmediately')}}</span>
       </p>
     </div>
   </div>
@@ -46,14 +46,10 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgRestCount: 'org/getOrgRestCount',
       getOrgTeachersById: 'org/getOrgTeachersById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
-    },
-    orgRestUserCount() {
-      return this.getOrgRestCount({ id: this.orgId })
     },
     orgTeachers() {
       return this.getOrgTeachersById({ id: this.orgId }) || []
@@ -73,45 +69,46 @@ export default {
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      removeMemberFromClass: 'org/removeMemberFromClass'
+      orgCreateNewMember: 'org/createNewMember'
     }),
     toNewTeacherPage() {
-      if (this.orgRestUserCount == 0) {
-        this.$alert(
-          '已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-          '提示',
-          {
-            type: 'warning'
-          }
-        )
-        return
-      }
       this.$router.push({ name: 'OrgNewTeacher' })
     },
-    async removeTeacher(id) {
+    async removeTeacher(teacherDetail) {
       this.isLoading = true
-      await this.removeMemberFromClass({ id }).catch(() => {})
+      let { username, realname } = teacherDetail
+      await this.orgCreateNewMember({
+        organizationId: this.orgId,
+        classIds: [],
+        memberName: username,
+        realname,
+        roleId: 2
+      }).catch(() => {})
       await this.getOrgTeacherList({
         organizationId: this.orgId
       }).catch(() => {})
       this.isLoading = false
     },
     confirmRemoveTeacher(teacherDetail) {
-      let { id, realname } = teacherDetail
-      this.$confirm(`是否确定删除教师${realname}?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.removeTeacher(id)
+      let { realname } = teacherDetail
+      this.$confirm(
+        `${this.$t('org.delConfirm')} ${realname}?`,
+        this.$t('org.deleteWarining'),
+        {
+          confirmButtonText: this.$t('common.Sure'),
+          cancelButtonText: this.$t('common.Cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
+        this.removeTeacher(teacherDetail)
       })
     },
     toEditPage(teacherDetail) {
-      let { realname, username, classes, roleId } = teacherDetail
+      let { realname, username, classes } = teacherDetail
       this.$router.push({
         name: 'OrgEditTeacher',
         query: {
-          roleId,
+          roleId: 2,
           realname,
           memberName: username,
           classIds: JSON.stringify(_.map(classes, classObj => classObj.id))

@@ -1,6 +1,7 @@
 <template>
   <div class="teacher-summary-container">
     <div class="teacher-summary" v-loading="loading" ref="print">
+      <org-classes-tabbar :singleButton="true" :name="className" />
       <div class="teacher-summary-print-and-email">
         <div class="teacher-summary-print-and-email-wrap">
           <el-button type="primary" @click="gotoPrint">{{$t('lesson.print')}}</el-button>
@@ -108,6 +109,7 @@
 <script>
 import AccuracyRateChart from '@/components/lesson/teacher/AccuracyRateChart'
 import NumberOfStudentsChart from '@/components/lesson/teacher/NumberOfStudentsChart'
+import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import html2canvas from 'html2canvas'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
@@ -124,6 +126,7 @@ export default {
   name: 'OrgTeacherLessonSummary',
   data() {
     return {
+      className: '',
       avatar,
       modList: [],
       emailAddress: '',
@@ -163,6 +166,7 @@ export default {
     }
   },
   async mounted() {
+    this.className = _.get(this.$route, 'query.className', '')
     await lesson.classrooms
       .getClassroomById(this.$route.params.classroomId)
       .then(res => {
@@ -187,7 +191,7 @@ export default {
       this.getStudentChartData(this.newCurrentRecord),
       this.getProfile()
     ])
-    this.loading = false
+  this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -536,13 +540,13 @@ export default {
   components: {
     LessonWrap,
     AccuracyRateChart,
-    NumberOfStudentsChart
+    NumberOfStudentsChart,
+    OrgClassesTabbar
   }
 }
 </script>
 <style lang="scss">
 .teacher-summary-container {
-
   .teacher-summary {
     max-width: 1150px;
     margin: 0 auto;
@@ -683,47 +687,49 @@ export default {
   }
 }
 @media print {
-  .teacher-summary {
-    &-detailed {
-      .web-page-show {
-        display: none;
-      }
-    }
-    &-print-and-email {
-      display: none;
-    }
-    &-print-header {
-      display: block;
-      width: 1150px;
-      margin: 0 auto;
-      padding: 40px;
-      background: #fff;
-      text-align: center;
-      .profile {
-        margin: 0 auto;
-        height: 100px;
-        width: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        img {
-          width: 100%;
-          object-fit: cover;
+  .teacher-summary-container {
+    .teacher-summary {
+      &-detailed {
+        .web-page-show {
+          display: none;
         }
       }
-      .nickname {
-        font-size: 24px;
-        line-height: 34px;
-        letter-spacing: 1px;
-        color: #333333;
+      &-print-and-email {
+        display: none;
       }
-    }
-    &-print-lesson-plan {
-      display: block;
-    }
-    &-brief {
-      .date {
-        .print-show {
-          display: inline-block;
+      &-print-header {
+        display: block;
+        width: 1150px;
+        margin: 0 auto;
+        padding: 40px;
+        background: #fff;
+        text-align: center;
+        .profile {
+          margin: 0 auto;
+          height: 100px;
+          width: 100px;
+          border-radius: 50%;
+          overflow: hidden;
+          img {
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        .nickname {
+          font-size: 24px;
+          line-height: 34px;
+          letter-spacing: 1px;
+          color: #333333;
+        }
+      }
+      &-print-lesson-plan {
+        display: block;
+      }
+      &-brief {
+        .date {
+          .print-show {
+            display: inline-block;
+          }
         }
       }
     }

@@ -20,6 +20,7 @@
 import _ from 'lodash'
 import WebsiteSettingLayout from './WebsiteSettingLayout'
 import WebsiteSettingPermission from './WebsiteSettingPermission'
+import WebsiteDelete from './WebsiteDelete'
 import WebsiteSettingBasicMessage from './WebsiteSettingBasicMessage'
 import WebsiteSettingStyle from './WebsiteSettingStyle'
 import { mapGetters } from 'vuex'
@@ -80,6 +81,11 @@ export default {
           text: this.$t('setting.sitePermission'),
           comp: WebsiteSettingPermission,
           isShow: this.isBasicSettingShow
+        },
+        {
+          text: this.$t('common.deleteWebsite'),
+          comp: WebsiteDelete,
+          isShow: this.isBasicSettingShow
         }
       ]
     },
@@ -101,7 +107,8 @@ export default {
     WebsiteSettingLayout,
     WebsiteSettingPermission,
     WebsiteSettingBasicMessage,
-    WebsiteSettingStyle
+    WebsiteSettingStyle,
+    WebsiteDelete
   }
 }
 </script>
