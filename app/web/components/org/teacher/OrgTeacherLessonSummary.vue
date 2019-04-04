@@ -1,6 +1,7 @@
 <template>
   <div class="teacher-summary-container">
     <div class="teacher-summary" v-loading="loading" ref="print">
+      <org-classes-tabbar :singleButton="true" :name="className" />
       <div class="teacher-summary-print-and-email">
         <div class="teacher-summary-print-and-email-wrap">
           <el-button type="primary" @click="gotoPrint">{{$t('lesson.print')}}</el-button>
@@ -108,6 +109,7 @@
 <script>
 import AccuracyRateChart from '@/components/lesson/teacher/AccuracyRateChart'
 import NumberOfStudentsChart from '@/components/lesson/teacher/NumberOfStudentsChart'
+import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import html2canvas from 'html2canvas'
 import { lesson } from '@/api'
 import dayjs from 'dayjs'
@@ -124,6 +126,7 @@ export default {
   name: 'OrgTeacherLessonSummary',
   data() {
     return {
+      className: '',
       avatar,
       modList: [],
       emailAddress: '',
@@ -163,6 +166,7 @@ export default {
     }
   },
   async mounted() {
+    this.className = _.get(this.$route, 'query.className', '')
     await lesson.classrooms
       .getClassroomById(this.$route.params.classroomId)
       .then(res => {
@@ -187,7 +191,7 @@ export default {
       this.getStudentChartData(this.newCurrentRecord),
       this.getProfile()
     ])
-    this.loading = false
+  this.loading = false
   },
   computed: {
     ...mapGetters({
@@ -536,7 +540,8 @@ export default {
   components: {
     LessonWrap,
     AccuracyRateChart,
-    NumberOfStudentsChart
+    NumberOfStudentsChart,
+    OrgClassesTabbar
   }
 }
 </script>

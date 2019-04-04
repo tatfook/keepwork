@@ -220,7 +220,7 @@ export default {
         this.isShowAddStudentForm = false
       }
     },
-    async testUsername({ username, callback }) {
+   async testUsername({ username, callback }) {
       await this.getUserOrgRoleByGraphql({
         organizationId: this.orgId,
         username
@@ -229,22 +229,35 @@ export default {
           callback()
         })
         .catch(error => {
-          switch (error) {
-            case 1:
-              callback()
+          if (error == 400) {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.wasNotFound')
+              )
+            )
+          }
+          let index
+          let memberLen = error.length
+          for (index = 0; index < memberLen; index++) {
+            if ((error[index].roleId & 1) > 0) {
               break
-            case 2:
-              callback()
-              break
-            case 64:
-              callback()
-              break
-            case 400:
-              callback(new Error(`用户名:[${username}]不存在`))
-              break
-            default:
-              callback(new Error(`用户名:[${username}]校验失败`))
-              break
+            }
+          }
+          if (index >= memberLen) {
+            callback()
+          } else {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.alreadyInList', {
+                    zhRole: this.memberType == 'student' ? '学生' : '教师',
+                    enRole: this.memberType == 'student' ? 'student' : 'teacher'
+                  })
+              )
+            )
           }
         })
     },
