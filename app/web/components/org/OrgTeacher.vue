@@ -92,7 +92,6 @@ export default {
 <style lang="scss">
 .org-teacher-router {
   width: 100%;
-  min-height: 100%;
   background-color: #f5f5f5;
 }
 

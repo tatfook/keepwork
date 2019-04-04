@@ -84,7 +84,6 @@ export default {
 $borderColor: #e8e8e8;
 .org-admin {
   width: 100%;
-  min-height: 100%;
   background-color: #f5f5f5;
   &-container {
     max-width: 1200px;
