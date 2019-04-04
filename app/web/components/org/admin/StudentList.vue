@@ -159,11 +159,11 @@ export default {
       })
     },
     toEditPage(studentDetail) {
-      let { realname, users, lessonOrganizationClasses, roleId } = studentDetail
+      let { realname, users, lessonOrganizationClasses } = studentDetail
       this.$router.push({
         name: 'OrgEditStudent',
         query: {
-          roleId,
+          roleId: 1,
           realname,
           memberName: users.username,
           classIds: JSON.stringify(

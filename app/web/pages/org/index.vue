@@ -286,7 +286,7 @@ body {
   &-main-content {
     flex: 1;
   }
-  &-footer {
+  & &-footer {
     padding: 0;
     margin-top: 40px;
   }
