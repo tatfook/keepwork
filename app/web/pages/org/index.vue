@@ -293,3 +293,12 @@ body {
   }
 }
 </style>
+<style lang="scss">
+@media print {
+  .org-page {
+    &-footer {
+      display: none;
+    }
+  }
+}
+</style>
