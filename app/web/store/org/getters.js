@@ -21,7 +21,9 @@ const getters = {
     return roleId
   },
   isOrgMember: (state, { roleId }) => Boolean(roleId),
-  isTeacher: (sate, { roleId }) => roleId === 2,
+  isAdmin: (sate, { roleId }) => (roleId & 64) > 0, // eslint-disable-line no-bitwise
+  isTeacher: (sate, { roleId }) => (roleId & 2) > 0, // eslint-disable-line no-bitwise
+  isStudent: (sate, { roleId }) => (roleId & 1) > 0, // eslint-disable-line no-bitwise
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),
