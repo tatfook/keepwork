@@ -2,7 +2,9 @@ import _ from 'lodash'
 import Cookies from 'js-cookie'
 import jsrsasign from 'jsrsasign'
 const getters = {
-  token: state => Cookies.get('token'),
+  tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
+  getToken: state => () => Cookies.get('token'),
+  token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
   userinfo: (state, getters, rootState) => _.get(rootState, 'user.profile'),
   getOrgUserCountById: state => ({ id }) => _.get(state.userCounts, id),
   getOrgRestCount: (state, { getOrgUserCountById }) => ({ id }) => {

@@ -5,6 +5,7 @@ import teacher from './teacher'
 import student from './student'
 
 const state = {
+  tokenUpdateAt: null,
   orgsDetailForId: {},
   orgsDetailForLoginUrl: {},
   currentOrg: {},

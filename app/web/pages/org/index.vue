@@ -123,6 +123,7 @@ const checkIsOrgMember = async function(
     .catch(err => console.log(err))
   if (orgToken) {
     Cookies.set('token', orgToken)
+    store.dispatch('org/setTokenUpdateAt', { orgId })
     return { isContinue: true, orgToken }
   }
   if (nowPageRole != 'contact') {
