@@ -234,10 +234,10 @@ export default {
               callback()
               break
             case 2:
-              callback(new Error(`用户名:[${username}]已在教师列表中`))
+              callback()
               break
             case 64:
-              callback(new Error(`用户名:[${username}]已在管理员列表中`))
+              callback()
               break
             case 400:
               callback(new Error(`用户名:[${username}]不存在`))
