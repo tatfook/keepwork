@@ -28,7 +28,7 @@
     </div>
     <div class="org-teacher-statistics-nothing" v-if="!selectedClassPackges.length">
       <img class="org-teacher-statistics-nothing-img" src="@/assets/lessonImg/class.png" alt="">
-      <p class="org-teacher-statistics-nothing-text">该班级暂无上课记录</p>
+      <p class="org-teacher-statistics-nothing-text">{{$t("org.noTeachingRecord")}}</p>
     </div>
   </div>
 </template>
