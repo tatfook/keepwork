@@ -1771,6 +1771,7 @@
     "wasNotFound": " was not found.",
     "verifyFailed": " verify failed.",
     "failedToAdd": " failed to add.",
+    "removeSuccessfully": "Remove successfully",
     "successfullyAdd": "Successfully added.",
     "successfullyUpdatedClass": "Successfully updated class information.",
     "failedUpdatedClass": "Failed to update class information.",
