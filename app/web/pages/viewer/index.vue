@@ -1,5 +1,5 @@
 <template>
-  <el-container id='app' class="index-page-container">
+  <el-container id='app' class="index-page index-page-container">
     <el-header height='61px' class="index-page-header" v-if="!isSystemCompShow.isSystemHeaderHide">
       <common-header class="container"></common-header>
     </el-header>
