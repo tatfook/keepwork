@@ -91,7 +91,7 @@ export default {
       }
       if (this.isContinueStatus) {
         return this.$t('org.learnedLessonsCount', {
-          learnedLessonsCount: this.packageLearnedLessonCount
+          packageCount: this.packageLearnedLessonCount
         })
       }
       return this.$t('org.learnedFinished')
