@@ -82,7 +82,9 @@ export default {
       })
     },
     selectedClassPackgesSort() {
-      return _.sortBy(this.selectedClassPackges, item => item.lastTeachTime)
+      const hasTime = this.selectedClassPackges.filter(item => item.lastTeachTime).sort((a, b) =>  a.lastTeachTime < b.lastTeachTime ? 1 : -1)
+      const noTime = this.selectedClassPackges.filter(item => !item.lastTeachTime)
+      return [...hasTime, ...noTime]
     }
   }
 }
