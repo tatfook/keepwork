@@ -240,6 +240,7 @@ export default {
     isNextButtonShow() {
       let currentPackageLessonsLen = this.currentPackageLessons.length
       return (
+        !this.isBeInClassroom &&
         currentPackageLessonsLen > 1 &&
         this.currentLessonInPackageIndex < currentPackageLessonsLen - 1
       )
