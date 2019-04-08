@@ -1762,6 +1762,7 @@
     "wasNotFound": "不存在",
     "verifyFailed": "校验失败",
     "failedToAdd": "添加失败",
+    "removeSuccessfully": "移出成功",
     "successfullyAdd": "添加成功",
     "successfullyUpdatedClass": "班级更新成功",
     "failedUpdatedClass": "班级更新失败",

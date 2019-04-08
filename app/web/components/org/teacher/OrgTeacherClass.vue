@@ -139,7 +139,7 @@ export default {
         ])
         this.$message({
           type: 'success',
-          message: '移出成功'
+          message: this.$t('org.removeSuccessfully')
         })
       } catch (error) {
         this.$message.error(error)
