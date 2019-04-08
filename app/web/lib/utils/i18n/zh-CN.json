@@ -1767,6 +1767,7 @@
     "failedUpdatedClass": "班级更新失败",
     "successfullyCreatedANewClass": "班级创建成功",
     "classNameAlreadyExist": "该班级已存在",
+    "noTeachingRecord": "该班级暂无上课记录",
     "failedToCreateANewClass": "班级创建失败",
     "chapterIsFinished": "本章已经教完",
     "latestTeachingTime": "最近上课: ",

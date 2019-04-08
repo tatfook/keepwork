@@ -1776,6 +1776,7 @@
     "failedUpdatedClass": "Failed to update class information.",
     "successfullyCreatedANewClass": "Successfully created a new class.",
     "classNameAlreadyExist": "The class name already exists.",
+    "noTeachingRecord": "There is no teaching record yet.",
     "failedToCreateANewClass": "Failed to create a new class.",
     "chapterIsFinished": "The chapter is finished.",
     "latestTeachingTime": "Latest teaching time: ",
