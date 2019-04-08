@@ -315,6 +315,12 @@ const actions = {
     let list = await keepwork.website.getAllSites()
     commit(GET_ALL_WEBSITE_SUCCESS, { username, list })
   },
+  async deleteWebsite({ dispatch }, { siteId }) {
+    await keepwork.website.deleteWebsite({ siteId }).then(res => {
+      dispatch('getAllWebsite')
+    }).catch(err => {
+    })
+  },
   async getAllSiteDataSource(context, payload) {
     let { useCache = false } = payload || {}
     let { commit, getters } = context

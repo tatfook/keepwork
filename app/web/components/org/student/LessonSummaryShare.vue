@@ -10,14 +10,14 @@
           </video>
           <img v-else :src="decodeURIComponent(summary.coverUrl)" />
         </div>
-        <div v-if="isEn" class="summary-word">
+        <div v-if="isEn" class="summary-word" >
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
           </div>
-          <div class="summary-word-link">
+          <!-- <div class="summary-word-link">
             I am learning {{summary.name}} on Keepwork. Click
             <a @click.prevent="toAboutPage" href="" class="highlight link">here</a> to join and learn with me
-          </div>
+          </div> -->
           <div class="summary-word-line">
             This is my
             <span class="highlight">{{summary.day}}</span> day of learning
@@ -44,29 +44,24 @@
           <div class="summary-word-time">
             {{$t('lesson.todayIs', {date: today})}}
           </div>
-          <div class="summary-word-link">
-            {{$t("org.IAmLearningOnKp", {lessonName: summary.name})}}
-            <a @click.prevent="toAboutPage" href="" class="highlight link">{{$t('org.here')}}</a>
-            {{$t('org.joinAndLearn')}}
-          </div>
-          <div class="summary-word-line">{{$t('lesson.StudiedForManyDays', {howManyDays: `<span class='highlight'> ${summary.day} </span>`,lessonTitle: `<span class='highlight'> ${summary.name} </span>`})}}
+          <div class="summary-word-line">
+            这是我第
+            <span class="highlight">{{summary.day}}</span> 天在keepwork学习
+            <span class="highlight">{{summary.name}}</span>
           </div>
           <div class="summary-word-line" v-if="hasSkills">
-            {{$t('lesson.todayRecords0')}}
+            今天，我
             <template v-if="summary.read > 0">
-              {{$t('lesson.todayRecords1', readCodeLinesCount: `<span class='highlight'>${
-                summary.read
-                }</span>`)}},
+              读了
+              <span class="highlight">{{summary.read}}</span> 行代码,
             </template>
             <template v-if="summary.write > 0">
-              {{$t('lesson.todayRecords2', wroteCodeLinesCount: `<span class='highlight'>${
-                summary.write
-                }</span>`)}},
+              写了
+              <span class="highlight">{{summary.write}}</span> 行代码,
             </template>
             <template v-if="summary.command > 0">
-              {{$t('lesson.todayRecords3', commandLines: `<span class='highlight'>${
-                summary.command
-                }</span>`)}},
+              学习了
+              <span class="highlight">{{summary.command}}</span> 个电脑命令
             </template>
           </div>
         </div>

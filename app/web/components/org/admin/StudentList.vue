@@ -106,13 +106,17 @@ export default {
   methods: {
     ...mapActions({
       getOrgStudentList: 'org/getOrgStudentList',
-      removeMemberFromClass: 'org/removeMemberFromClass'
+      orgCreateNewMember: 'org/createNewMember'
     }),
     toNewStudentPage() {
       if (this.orgRestUserCount == 0) {
-        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
-          type: 'warning'
-        })
+        this.$alert(
+          this.$t('org.cannotAddMoreMember'),
+          this.$t('org.warningTitle'),
+          {
+            type: 'warning'
+          }
+        )
         return
       }
       this.$router.push({ name: 'OrgNewStudent' })
@@ -125,16 +129,23 @@ export default {
       }).catch(() => {})
       this.isLoading = false
     },
-    async removeStudent(id) {
+    async removeStudent(studentDetail) {
       this.isLoading = true
-      await this.removeMemberFromClass({ id }).catch(() => {})
+      let { users, realname } = studentDetail
+      await this.orgCreateNewMember({
+        organizationId: this.orgId,
+        classIds: [],
+        memberName: users.username,
+        realname,
+        roleId: 1
+      }).catch(() => {})
       await this.getOrgStudentList({
         organizationId: this.orgId
       }).catch(() => {})
       this.isLoading = false
     },
     confirmRemoveStudent(studentDetail) {
-      let { id, realname } = studentDetail
+      let { realname } = studentDetail
       this.$confirm(
         `${this.$t('org.delConfirm')} ${realname}?`,
         this.$t('org.deleteWarining'),
@@ -144,15 +155,15 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        this.removeStudent(id)
+        this.removeStudent(studentDetail)
       })
     },
     toEditPage(studentDetail) {
-      let { realname, users, lessonOrganizationClasses, roleId } = studentDetail
+      let { realname, users, lessonOrganizationClasses } = studentDetail
       this.$router.push({
         name: 'OrgEditStudent',
         query: {
-          roleId,
+          roleId: 1,
           realname,
           memberName: users.username,
           classIds: JSON.stringify(

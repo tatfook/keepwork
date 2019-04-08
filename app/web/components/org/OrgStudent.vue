@@ -108,6 +108,9 @@ export default {
       isTeaching: 'org/student/isTeaching'
     })
   },
+  destroyed() {
+    this._notify && this._notify.close()
+  },
   beforeRouteUpdate(to, from, next) {
     this.checkIsInClassroom(to)
     next()
@@ -118,7 +121,6 @@ export default {
 <style lang="scss">
 .org-student-router {
   width: 100%;
-  min-height: 100%;
   background-color: #f5f5f5;
 }
 .back-to-classroom-notify {

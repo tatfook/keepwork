@@ -22,7 +22,7 @@
         </div>
         <div class="package-catalogue-item-detail">
           <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
-            <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>({{$t('lesson.classId')}}: {{packageId}}x{{lesson.id}} )</span></span>
+            <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>({{$t('lesson.lessonId')}} {{packageId}}x{{lesson.id}} )</span></span>
           </div>
           <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
           <div class="package-catalogue-item-goals">

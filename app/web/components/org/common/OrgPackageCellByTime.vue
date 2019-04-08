@@ -24,7 +24,7 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return moment(time).format('YYYY-MM-DD HH:MM')
+      return moment(time).format('YYYY-MM-DD HH:mm')
     }
   },
   methods: {

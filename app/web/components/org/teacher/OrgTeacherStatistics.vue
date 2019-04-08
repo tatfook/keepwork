@@ -86,6 +86,9 @@ export default {
     mins() {
       let longTime = this.selectedClassPackges.length * 45
       return (longTime / 60 - parseInt(longTime / 60)) * 60
+    },
+    selectedClassName() {
+      return _.get(_.find(this.orgClasses, item => item.id === this.selectedClassId), 'name', '')
     }
   },
   methods: {
@@ -109,7 +112,7 @@ export default {
       this.$router.push({
         path: `package/${course.packageId}/lesson/${
           course.lessonId
-        }/classroom/${course.id}/summary`
+        }/classroom/${course.id}/summary?className=${this.selectedClassName}`
       })
     },
     async handleSwitchClass(classId) {

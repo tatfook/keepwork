@@ -46,14 +46,10 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgRestCount: 'org/getOrgRestCount',
       getOrgTeachersById: 'org/getOrgTeachersById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
-    },
-    orgRestUserCount() {
-      return this.getOrgRestCount({ id: this.orgId })
     },
     orgTeachers() {
       return this.getOrgTeachersById({ id: this.orgId }) || []
@@ -73,27 +69,28 @@ export default {
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      removeMemberFromClass: 'org/removeMemberFromClass'
+      orgCreateNewMember: 'org/createNewMember'
     }),
     toNewTeacherPage() {
-      if (this.orgRestUserCount == 0) {
-        this.$alert(this.$t('org.cannotAddMoreMember'), this.$t('org.warningTitle'), {
-          type: 'warning'
-        })
-        return
-      }
       this.$router.push({ name: 'OrgNewTeacher' })
     },
-    async removeTeacher(id) {
+    async removeTeacher(teacherDetail) {
       this.isLoading = true
-      await this.removeMemberFromClass({ id }).catch(() => {})
+      let { username, realname } = teacherDetail
+      await this.orgCreateNewMember({
+        organizationId: this.orgId,
+        classIds: [],
+        memberName: username,
+        realname,
+        roleId: 2
+      }).catch(() => {})
       await this.getOrgTeacherList({
         organizationId: this.orgId
       }).catch(() => {})
       this.isLoading = false
     },
     confirmRemoveTeacher(teacherDetail) {
-      let { id, realname } = teacherDetail
+      let { realname } = teacherDetail
       this.$confirm(
         `${this.$t('org.delConfirm')} ${realname}?`,
         this.$t('org.deleteWarining'),
@@ -103,15 +100,15 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        this.removeTeacher(id)
+        this.removeTeacher(teacherDetail)
       })
     },
     toEditPage(teacherDetail) {
-      let { realname, username, classes, roleId } = teacherDetail
+      let { realname, username, classes } = teacherDetail
       this.$router.push({
         name: 'OrgEditTeacher',
         query: {
-          roleId,
+          roleId: 2,
           realname,
           memberName: username,
           classIds: JSON.stringify(_.map(classes, classObj => classObj.id))

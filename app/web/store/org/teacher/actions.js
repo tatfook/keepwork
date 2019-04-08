@@ -39,7 +39,16 @@ const actions = {
   },
   async getOrgStudents({ commit, rootGetters: { 'org/currentOrg': { id: organizationId } } }) {
     const res = await lessonOrganizationClassMembers.getStudents({ organizationId })
-    const orgStudents = _.map(_.get(res, 'rows', []), item => _.get(item, 'users.username', ''))
+    const orgStudents = _.reduce(
+      _.get(res, 'rows', []),
+      (obj, item) => {
+        const name = _.get(item, 'users.username', '')
+        const classes = _.map(_.get(item, 'lessonOrganizationClasses', []), item => item.id)
+        obj[name] = classes
+        return obj
+      },
+      {}
+    )
     commit(GET_ORG_STUDENTS_SUCCESS, orgStudents)
   },
   async getTaughtClassroomCourses({ commit, getters: { classroomCoursesData } }, { classId, cache = false }) {
@@ -54,17 +63,17 @@ const actions = {
   },
   async addStudentToClass(
     { dispatch, rootGetters: { 'org/currentOrg': { id: organizationId } } },
-    { classId, memberName, realname }
+    { classIds, currentClassId, memberName, realname }
   ) {
     try {
       await lessonOrganizationClassMembers.createClassMember({
         organizationId,
-        classId,
+        classIds,
         realname,
         memberName,
         roleId: 1
       })
-      await dispatch('getOrgClassStudentsById', { classId })
+      await dispatch('getOrgClassStudentsById', { classId: currentClassId })
     } catch (error) {
       return Promise.reject(error.response)
     }
@@ -84,7 +93,10 @@ const actions = {
       dispatch('getOrgClassPackageDetail', { classId, packageId })
     ])
     const { orgClassPackagesDetail } = getters
-    const packageIndex = _.findIndex(_.get(orgClassPackagesDetail, [classId, packageId, 'lessons'], []), item => item.lessonId === _.toNumber(lessonId))
+    const packageIndex = _.findIndex(
+      _.get(orgClassPackagesDetail, [ classId, packageId, 'lessons' ], []),
+      item => item.lessonId === _.toNumber(lessonId)
+    )
     if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
@@ -109,9 +121,9 @@ const actions = {
   toggleLessonHint({ commit }) {
     commit(TOGGLE_LESSON_HINT)
   },
-  async beginTheClass({ commit }, payload) {
+  async beginTheClass({ commit, rootGetters: { 'org/currentOrgId': organizationId } }, payload) {
     const classroom = await lesson.classrooms.begin({
-      payload
+      payload: { ...payload, organizationId }
     })
     commit(BEGIN_THE_CLASS_SUCCESS, classroom)
   },
@@ -132,10 +144,14 @@ const actions = {
     })
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
-  async getCurrentClass({ commit }) {
+  async getCurrentClass({ commit, rootGetters: { 'org/currentOrgId': organizationId } }) {
     await lesson.classrooms
       .currentClass()
-      .then(classroom => commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom))
+      .then(classroom => {
+        if (classroom.organizationId === organizationId) {
+          commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom)
+        }
+      })
       .catch(e => {
         console.error("can't find the classroom", e)
         commit(LEAVE_THE_CLASSROOM)

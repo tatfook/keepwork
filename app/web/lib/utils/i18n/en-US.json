@@ -137,7 +137,10 @@
     "noSelfIntro": "No self intro.",
     "identification": "Certification",
     "contestEntry": "Contest Entry",
-    "star": "star"
+    "star": "star",
+    "deleteWebsiteHint": "Are you sure you want to delete the website?",
+    "deleteWebsiteNotice": "After the website is deleted, all the relevant data will be cleared and the URL that connects to the site will be invalid. And the project cannot be accessed if the website is part of it.",
+    "deleteWebsite": "Delete Website"
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
@@ -338,7 +341,9 @@
     "addVideoCover": "+ Add video cover",
     "deleteVideoCoverConfirmMsg": "Are you sure to delete this cover of the video ?",
 
-    "wrongModDirective": "Wrong Mod Directive"
+    "wrongModDirective": "Wrong Mod Directive",
+
+    "associationWebsite": "Reset website"
   },
   "tips": {
     "mod": "Module",
@@ -1709,7 +1714,7 @@
     "TeachersLabel": "Teachers",
     "StudentsLabel": "Students",
     "RemainingPlaces": "Remaining places: ",
-    "usersCount": " users",
+    "usersCount": " students",
     "IncludeTeachers": "Includes: ",
     "teacherCountUnit": " teachers",
     "addTeachers": "Add teachers",
@@ -1743,6 +1748,7 @@
     "noStudents": "There are no students. ",
     "addStudentsImmediately": "Add students",
     "usernameIsRequired": "Keepwork username is required",
+    "pleaseSelectClasses": "Please select classes.",
     "pleaseInputMemberName": "Please input {enRroleType} name",
     "all": "All",
     "deleteWarining": "Warning",

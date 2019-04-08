@@ -6,6 +6,7 @@ import { props } from './mutations'
 
 const {
   GET_ORG_COUNT_SUCCESS,
+  SET_TOKEN_UPDATE_AT,
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
@@ -33,6 +34,7 @@ const actions = {
     if (userinfo) {
       let { token } = userinfo
       Cookies.set('token', token)
+      dispatch('setTokenUpdateAt')
       window.localStorage.setItem('satellizer_token', token)
       await dispatch(
         'user/getProfile',
@@ -41,6 +43,9 @@ const actions = {
       )
     }
     return userinfo
+  },
+  setTokenUpdateAt({ commit }) {
+    commit(SET_TOKEN_UPDATE_AT)
   },
   async getOrgToken(context, { orgId }) {
     let token = await keepwork.lessonOrganizations
@@ -108,14 +113,20 @@ const actions = {
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
-  async getLessonDetail({ commit, dispatch, getters }, { packageId, lessonId }) {
-    let [ res, detail ] = await Promise.all([
+  async getLessonDetail(
+    { commit, dispatch, getters },
+    { packageId, lessonId }
+  ) {
+    let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId }),
       dispatch('getOrgPackageDetail', { packageId })
     ])
     const { orgPackagesDetail } = getters
-    const packageIndex = _.findIndex(_.get(orgPackagesDetail, [ packageId, 'lessons'], []), item => item.lessonId === _.toNumber(lessonId))
+    const packageIndex = _.findIndex(
+      _.get(orgPackagesDetail, [packageId, 'lessons'], []),
+      item => item.lessonId === _.toNumber(lessonId)
+    )
     if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
 
     let modList = Parser.buildBlockList(res.content)
@@ -188,7 +199,7 @@ const actions = {
     if (organizationClassMembers.length === 0) {
       return Promise.resolve()
     }
-    return Promise.reject(organizationClassMembers[0].roleId)
+    return Promise.reject(organizationClassMembers)
   },
   async createNewMember(
     context,

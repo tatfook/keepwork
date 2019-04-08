@@ -18,7 +18,7 @@
             <el-input v-model="item.name"></el-input>
           </el-form-item>
           <el-form-item prop="account" :rules="rules.account">
-            <el-input :disabled="isEditType"  v-model="item.account"></el-input>
+            <el-input :disabled="isEditType" v-model="item.account"></el-input>
           </el-form-item>
           <el-form-item class="add-form-item" v-if="!isEditType">
             <i class="el-icon-error" @click="handleRemoveFormItem(index)"></i>
@@ -133,7 +133,10 @@ export default {
           classId: this.selectedClassId,
           studentId: row.id
         })
-        await this.getCurrentOrgUserCounts()
+        await Promise.all([
+          this.getCurrentOrgUserCounts(),
+          this.getOrgStudents()
+        ])
         this.$message({
           type: 'success',
           message: '移出成功'
@@ -157,8 +160,9 @@ export default {
         return (this.isShowAddStudentForm = false)
       }
       if (this.orgRestCount === 0) {
-        const flag = _.every(this.studentsFormData, item =>
-          this.orgStudents.includes(item.account)
+        const flag = _.every(
+          _.filter(this.studentsFormData, v => v.account),
+          item => Boolean(this.orgStudents[item.account])
         )
         if (!flag) {
           return this.alertCountError()
@@ -173,7 +177,11 @@ export default {
             if (valid) {
               try {
                 const res = await this.addStudentToClass({
-                  classId: this.selectedClassId,
+                  currentClassId: this.selectedClassId,
+                  classIds: [
+                    ..._.get(this.orgStudents, [student.account], []),
+                    this.selectedClassId
+                  ],
                   memberName: student.account,
                   realname: student.name
                 })
@@ -200,7 +208,7 @@ export default {
           })
         })
       }
-      await this.getCurrentOrgUserCounts()
+      await Promise.all([this.getCurrentOrgUserCounts(), this.getOrgStudents()])
       sucessfullItems
         .reverse()
         .forEach(index => this.handleRemoveFormItem(index))
@@ -221,27 +229,24 @@ export default {
           callback()
         })
         .catch(error => {
-          switch (error) {
-            case 1:
-              callback()
-              break
-            case 2:
-              callback(new Error(`用户名:[${username}]已在教师列表中`))
-              break
-            case 64:
-              callback(new Error(`用户名:[${username}]已在管理员列表中`))
-              break
-            case 400:
-              callback(new Error(`用户名:[${username}]不存在`))
-              break
-            default:
-              callback(new Error(`用户名:[${username}]校验失败`))
-              break
+          if (error == 400) {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.wasNotFound')
+              )
+            )
+          } else {
+            callback()
           }
         })
     },
     handleAddFormItem() {
-      if (this.selectedClassStudents.length + this.studentsFormData.length >= this.orgStudents.length) {
+      if (
+        this.selectedClassStudents.length + this.studentsFormData.length >=
+        Object.keys(this.orgStudents).length
+      ) {
         return this.alertCountError()
       }
       this.studentsFormData.push({
@@ -254,8 +259,8 @@ export default {
     },
     alertCountError() {
       return this.$alert(
-        '已到达添加上限，只能添加现有学生进入班级，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）',
-        '提示',
+        this.$t('org.cannotAddMoreMember'),
+        this.$t('org.warningTitle'),
         {
           type: 'warning'
         }

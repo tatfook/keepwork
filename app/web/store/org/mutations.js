@@ -2,6 +2,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 
 const GET_ORG_COUNT_SUCCESS = 'GET_ORG_COUNT_SUCCESS'
+const SET_TOKEN_UPDATE_AT = 'SET_TOKEN_UPDATE_AT'
 const GET_ORG_SUCCESS = 'GET_ORG_SUCCESS'
 const SET_CURRENT_ORG = 'SET_CURRENT_ORG'
 const GET_ORG_PACKAGES_SUCCESS = 'GET_ORG_PACKAGES_SUCCESS'
@@ -16,6 +17,7 @@ const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
+  SET_TOKEN_UPDATE_AT,
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
@@ -29,6 +31,9 @@ export const props = {
 }
 
 const mutations = {
+  [SET_TOKEN_UPDATE_AT](state) {
+    Vue.set(state, 'tokenUpdateAt', Date.now())
+  },
   [GET_ORG_COUNT_SUCCESS](state, { orgId, userCounts }) {
     Vue.set(state, 'userCounts', {
       ...state.userCounts,

@@ -1,6 +1,9 @@
 <template>
   <div class="org-page" v-loading="loading">
     <router-view class="org-page-main-content" id="org-page" />
+    <el-footer class="org-page-footer" height="auto">
+      <perfect-common-footer></perfect-common-footer>
+    </el-footer>
   </div>
 </template>
 
@@ -21,6 +24,7 @@ import lessonModule from '@/store/lesson'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
+import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -119,6 +123,7 @@ const checkIsOrgMember = async function(
     .catch(err => console.log(err))
   if (orgToken) {
     Cookies.set('token', orgToken)
+    store.dispatch('org/setTokenUpdateAt', { orgId })
     return { isContinue: true, orgToken }
   }
   if (nowPageRole != 'contact') {
@@ -134,27 +139,40 @@ const checkIsOrgMember = async function(
 }
 
 const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
-  if (roleId == 1 && nowPageRole != 'student') {
+  let isAdmin = (roleId & 64) > 0
+  let isTeacher = (roleId & 2) > 0
+  let isStudent = (roleId & 1) > 0
+  if (nowPageRole == 'student' && !isStudent) {
     return next({
-      name: OrgStudentPageName,
+      name: isAdmin ? OrgAdminPageName : OrgTeacherPageName,
       params
     })
   }
-  if (roleId == 2 && nowPageRole != 'teacher') {
+  if (nowPageRole == 'teacher' && !isTeacher) {
     return next({
-      name: OrgTeacherPageName,
+      name: isAdmin ? OrgAdminPageName : OrgStudentPageName,
       params
     })
   }
-  if (roleId == 64 && nowPageRole != 'admin') {
+  if (nowPageRole == 'admin' && !isAdmin) {
     return next({
-      name: OrgAdminPageName,
+      name: isTeacher ? OrgTeacherPageName : OrgStudentPageName,
       params
     })
   }
   if (_.isUndefined(roleId) && nowPageRole != 'contact') {
     return next({
       name: OrgContactPageName,
+      params
+    })
+  }
+  if (nowPageRole == 'login') {
+    return next({
+      name: isAdmin
+        ? OrgAdminPageName
+        : isTeacher
+        ? OrgTeacherPageName
+        : OrgStudentPageName,
       params
     })
   }
@@ -239,6 +257,9 @@ export default {
         }))
     }
   },
+  components: {
+    PerfectCommonFooter
+  },
   watch: {
     $route() {
       this.loadUserCounts()
@@ -261,5 +282,23 @@ body {
   height: 100%;
   background: #f5f5f5;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  &-main-content {
+    flex: 1;
+  }
+  & &-footer {
+    padding: 0;
+    margin-top: 40px;
+  }
+}
+</style>
+<style lang="scss">
+@media print {
+  .org-page {
+    &-footer {
+      display: none;
+    }
+  }
 }
 </style>

@@ -9,8 +9,8 @@ const getters = {
     return getOrgUserCountById(currentOrg)
   },
   orgRestCount: (state, { orgUserCounts }) => {
-    const { count, teacherCount, studentCount } = orgUserCounts
-    const residue = count - teacherCount - studentCount
+    const { count, studentCount } = orgUserCounts
+    const residue = count - studentCount
     return residue > -1 ? residue : 0
   },
   orgClassPackages: state => state.orgClassPackages,
