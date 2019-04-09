@@ -12,10 +12,10 @@ class SimpleUndo {
    *
    */
   constructor(maxLength) {
-    this.initialItem = null
     this.maxLength = maxLength || DEFAULT_STACK_SIZE
     this.stack = [this.initialItem]
     this.position = 0
+    this.current = undefined
   }
 }
 
