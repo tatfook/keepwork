@@ -2,6 +2,7 @@ import _ from 'lodash'
 import ModFactory from '@/lib/mod/factory'
 import Parser from '@/lib/mod/parser'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
+import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 import { gConst } from '@/lib/global'
@@ -302,12 +303,14 @@ const actions = {
     const code = Parser.buildMarkdown(modList)
     dispatch('updateCode', { code })
   },
-  refreshModList({ commit, getters: { code } }) {
-    commit(SET_ACTIVE_MOD, null)
-    commit(SET_ACTIVE_PROPERTY, null)
+  refreshModList({ commit, getters: { code, activeMod } }) {
     let blockList = Parser.buildBlockList(code)
     commit(UPDATE_MODS, blockList)
-    commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
+    if (activeMod && activeMod.cmd !== CmdHelper.MARKDOWN_CMD) {
+      commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
+    } else {
+      commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
+    }
   },
   // rebuild all mods, will takes a little bit more time
   async updateMarkDown({ dispatch }, payload) {
