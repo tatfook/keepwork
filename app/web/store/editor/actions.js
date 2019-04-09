@@ -71,17 +71,10 @@ const actions = {
   // Page
   async setActivePage(context, { path, editorMode = true }) {
     path = decodeURIComponent(path)
-    let {
-      state,
-      getters,
-      commit,
-      dispatch
-    } = context
+    let { state, getters, commit, dispatch } = context
     // load profile and websites info to get correct projectIds for reading files
     // await dispatch('user/getAllPersonalAndContributedSite', {root: true})
-    let {
-      'user/username': username
-    } = context.rootGetters
+    let { 'user/username': username } = context.rootGetters
     if (path === '/') return commit(SET_ACTIVE_PAGE, { path, username })
     const fullPath = getFileFullPathByPath(path)
     const sitePath = getFileSitePathByPath(path)
@@ -110,7 +103,8 @@ const actions = {
   },
   async loadActivePage(
     { commit, dispatch, getters },
-    { path, editorMode = true }) {
+    { path, editorMode = true }
+  ) {
     const fullPath = getFileFullPathByPath(path)
     let file = getters.openedFiles[fullPath]
     if (!file) await dispatch('openFile', { path, editorMode })
@@ -150,10 +144,7 @@ const actions = {
   },
 
   // siteSetting
-  async refreshSiteSettings(
-    { commit, dispatch, rootGetters },
-    { sitePath }
-  ) {
+  async refreshSiteSettings({ commit, dispatch, rootGetters }, { sitePath }) {
     let siteSetting = initSiteState()
 
     await dispatch('user/getSiteLayoutConfig', { path: sitePath })
@@ -229,10 +220,7 @@ const actions = {
     }
     return commitPayload
   },
-  async openFile(
-    { dispatch, commit },
-    { path, editorMode = true }
-  ) {
+  async openFile({ dispatch, commit }, { path, editorMode = true }) {
     let payload = await dispatch('loadFile', { path, editorMode })
     commit(ADD_OPENED_FILE, payload)
   },
@@ -275,9 +263,7 @@ const actions = {
     }
   },
   closeAllOpenedFile({ commit, rootGetters }) {
-    let {
-      'user/username': username
-    } = rootGetters
+    let { 'user/username': username } = rootGetters
     commit(CLOSE_ALL_OPENED_FILE, { username })
   },
 
@@ -286,18 +272,16 @@ const actions = {
     { dispatch, getters, commit },
     { code: newCode, historyDisabled, cursor }
   ) {
-    let {
-      code: oldCode,
-      activePageUrl: path,
-      activeArea
-    } = getters
+    let { code: oldCode, activePageUrl: path, activeArea } = getters
     if (newCode === oldCode) return
     if (activeArea === LayoutHelper.Const.MAIN_AREA) {
       dispatch('updateOpenedFile', { content: newCode, saved: false, path })
     } else {
       dispatch('updateOpenedLayoutFile', { content: newCode, saved: false })
     }
-    if (!historyDisabled) { commit(SAVE_HISTORY, { newCode, cursor }) }
+    if (!historyDisabled) {
+      commit(SAVE_HISTORY, { newCode, cursor })
+    }
   },
   refreshCode({ dispatch, getters: { modList } }) {
     const code = Parser.buildMarkdown(modList)
@@ -528,7 +512,9 @@ const actions = {
     dispatch('resetCurrentItem')
   },
   resetCurrentItem({ getters, dispatch }) {
-    const currentItem = UndoHelper.currentItem(getters.activeAreaData.undoManager)
+    const currentItem = UndoHelper.currentItem(
+      getters.activeAreaData.undoManager
+    )
     let code = currentItem.newCode || ''
     let cursor = currentItem.cursor || { line: 0, ch: 0 }
     dispatch('updateMarkDown', { code, historyDisabled: true })
@@ -538,18 +524,22 @@ const actions = {
     commit(TOGGLE_SKY_DRIVE, { showSkyDrive })
   },
   addRecentOpenedSiteUrl(context, { updateRecentUrlList }) {
-    let { commit, rootGetters: { 'user/username': username } } = context
+    let {
+      commit,
+      rootGetters: { 'user/username': username }
+    } = context
     commit(ADD_RECENT_OPENED_SITE, { updateRecentUrlList, username })
   },
   toggleAngles({ commit }, { showAngle }) {
     commit(TOGGLE_ANGLES, { showAngle })
   },
   toggleFileHistoryVisibility({ commit }, { isVisible }) {
-    commit(TOGGLE_FILE_HISTORY, isVisible)
+    console.log(isVisible)
+    commit(TOGGLE_FILE_HISTORY, { isVisible })
   },
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)
-  },
+  }
 }
 
 export default actions

@@ -356,7 +356,8 @@ const mutations = {
   [TOGGLE_ANGLES](state, { showAngle = false }) {
     Vue.set(state, 'isAnglesToggle', showAngle)
   },
-  [TOGGLE_FILE_HISTORY](state, { isVisible = false }) {
+  [TOGGLE_FILE_HISTORY](state, { isVisible }) {
+    console.log(isVisible)
     Vue.set(state, 'isFileHistoryVisible', isVisible)
   },
   [TOGGLE_IFRAME_DIALOG](state, payload) {

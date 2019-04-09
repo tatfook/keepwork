@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="0" type="flex" class="full-height editor-page-container">
     <el-col id="managerWin" class="manager-win" v-show="isManagerShow">
-      <el-row class="editor-page-container-toolbar toolbar">
+      <el-row class="toolbar">
         <el-button-group>
           <el-tooltip :content="$t('editor.files')">
             <el-button id="file-manager-button" class="iconfont icon-list_directory" :class="{'el-button--primary': activeManagePaneComponentName=='FileManager'}" @click="changeView('FileManager')"></el-button>
@@ -13,16 +13,9 @@
             <el-button class="iconfont icon-upload" @click="openSkyDriveManagerDialog"></el-button>
           </el-tooltip>
         </el-button-group>
-        <div v-if="isFileHistoryVisible" class="editor-page-container-toolbar-history">
-          <i class="iconfont icon-historyrecord"></i>
-          <span class="editor-page-container-toolbar-history-title">历史记录</span>
-          <i class="iconfont icon-ziyuan1"></i>
-          <i class="iconfont icon-ziyuan3" @click="closeHistory"></i>
-        </div>
         <sky-drive-manager-dialog :show="showSkyDrive" @close="closeSkyDriveManagerDialog"></sky-drive-manager-dialog>
       </el-row>
-      <el-scrollbar wrap-class="editor-page-container-sidebar manager-content-box el-row" view-class="manager-content-inner" :native="false">
-        <history-list class="editor-page-container-sidebar-history" v-if="isFileHistoryVisible"></history-list>
+      <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>
           <component :is="activeManagePaneComponentName" v-bind="activeManagePaneComponentProps" v-keep-scroll-position></component>
         </keep-alive>
@@ -111,6 +104,7 @@
         <a href="https://keepwork.com/official/help/index" target="_blank">{{$t('editor.help')}}</a>
       </div>
     </el-col>
+    <file-history v-if="isFileHistoryVisible" class="editor-page-container-history"></file-history>
   </el-row>
 </template>
 
@@ -122,7 +116,7 @@ import EditorWelcome from './EditorWelcome'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
-import HistoryList from './HistoryList'
+import FileHistory from './FileHistory'
 import Search from './Search'
 import PageSetting from './PageSetting'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
@@ -200,7 +194,7 @@ export default {
     ModPropertyManager,
     Search,
     ModsList,
-    HistoryList,
+    FileHistory,
     FileManager,
     PageSetting,
     SkyDriveManagerDialog,
@@ -280,7 +274,6 @@ export default {
       setActivePropertyData: 'setActivePropertyData',
       toggleSkyDrive: 'toggleSkyDrive'
     }),
-    closeHistory() {},
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
@@ -426,25 +419,14 @@ bigFile:
 .editor-page-container {
   background-color: #cdd4db;
   padding: 17px 0;
-  &-toolbar {
-    position: relative;
-    &-history {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: 0;
-    }
-  }
-  &-sidebar {
-    position: relative;
-    &-history {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: 0;
-    }
+  &-history {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 4;
   }
 }
 .full-height {

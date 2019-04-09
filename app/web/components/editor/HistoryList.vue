@@ -1,6 +1,6 @@
 <template>
   <div class="history-list">
-    <div class="history-list-item" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)">
+    <div class="history-list-item" :class="{'history-list-item-active': selectedCommitId == history.short_id}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)">
       <div class="history-list-item-version">V{{history.version}}</div>
       <div class="history-list-item-username">{{history.author_name}}</div>
       <div class="history-list-item-date">{{history.authored_date | formatTime }}</div>
@@ -21,7 +21,8 @@ export default {
   },
   data() {
     return {
-      historyList: []
+      historyList: [],
+      selectedCommitId: ''
     }
   },
   computed: {
@@ -34,7 +35,9 @@ export default {
       gitlabGetFileHistoryList: 'gitlab/getFileHistoryList'
     }),
     getHistoryContent(history) {
-      let commitId = history._id
+      let commitId = history.short_id
+      this.selectedCommitId = commitId
+      this.$emit('selectHistory', commitId)
     }
   },
   filters: {
@@ -54,6 +57,13 @@ export default {
     height: 40px;
     line-height: 40px;
     padding: 0 20px;
+    cursor: pointer;
+    &:hover {
+      background-color: #f3f6f9;
+    }
+    &-active {
+      background-color: #d4e8fb;
+    }
     &-version {
       width: 80px;
     }
