@@ -2,15 +2,15 @@
   <div class="project-editing" v-loading='isLoading'>
     <div class='project-editing-item'>
       <label class="project-editing-item-label">{{$t('project.projectStatus')}}</label>
-      <el-radio-group v-model="projectVisibility">
+      <el-radio-group v-model="projectVisibility" @change="handleSwitchProjectVisibility">
         <el-radio :label="0">{{$t('project.publicProject')}}</el-radio>
         <el-radio :label="1">{{$t('project.privateProject')}}</el-radio>
       </el-radio-group>
     </div>
     <div class='project-editing-item' v-for="(privilege, index) in privilegeOptions" :key='index'>
       <label class="project-editing-item-label">{{privilege.label}}</label>
-      <el-radio-group v-model="projectPrivileges[privilege.dataKey]" :disabled="privilege.dataKey === 'boardEdit' && isMemberView" @change="handleChange">
-        <el-radio v-for="(option, index) in privilege.options" :key='index' :label="option.value">{{option.label}}</el-radio>
+      <el-radio-group v-model="projectPrivileges[privilege.dataKey]" :disabled="privilege.dataKey === 'boardEdit' && isMemberView || privilege.dataKey === 'boardView' && isPrivilegeProject" @change="handleChange">
+        <el-radio v-for="(option, index) in privilege.options" :key='index' :label="option.value" :disabled="option.value === 4 && isPrivilegeProject" >{{option.label}}</el-radio>
       </el-radio-group>
     </div>
     <div class="project-editing-operate">
@@ -111,6 +111,9 @@ export default {
     isMemberView() {
       return this.projectPrivileges['boardView'] === 64
     },
+    isPrivilegeProject() {
+      return this.projectVisibility === 1
+    }
   },
   methods: {
     ...mapActions({
@@ -160,6 +163,13 @@ export default {
           console.log(error)
           this.isLoading = false
         })
+    },
+    handleSwitchProjectVisibility(value) {
+      if(value === 1) {
+        this.projectPrivileges['comment'] = 8
+        this.projectPrivileges['boardView'] = 64
+        this.projectPrivileges['boardEdit'] = 256
+      }
     }
   }
 }
