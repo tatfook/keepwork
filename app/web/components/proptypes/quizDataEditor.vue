@@ -26,7 +26,7 @@
             <el-button type="danger" @click.prevent="removeOption(opt, quizType)" icon="el-icon-delete" circle></el-button>
           </el-radio>
           <!-- </div> -->
-        <el-button type="primary" round size="small" @click="addOption(quizType)">{{this.$t('card.addMoreOptions')}}</el-button>
+          <el-button type="primary" round size="small" @click="addOption(quizType)">{{this.$t('card.addMoreOptions')}}</el-button>
         </el-radio-group>
 
       </el-form-item>
@@ -80,7 +80,6 @@
       </el-form-item>
 
     </el-form>
-
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @change="validInput" @click="submitForm('quizData', quizType)">{{this.$t('card.submit')}}</el-button>
       <el-button @click="handleClose">{{this.$t('card.cancel')}}</el-button>
@@ -89,6 +88,7 @@
 </template>
 <script>
 import uuid from 'uuid/v1'
+import _ from 'lodash'
 
 const checkInputEmpty = () => {
   let opeInput = document.getElementsByClassName('writer-input')
@@ -239,7 +239,7 @@ export default {
   },
   computed: {
     quizData() {
-      return this.originalQuizData[0]
+      return _.cloneDeep(this.originalQuizData[0])
     },
     rightAnswer() {
       switch (this.quizType) {
@@ -276,12 +276,16 @@ export default {
       this.cloneQuiz = _.cloneDeep(quiz)
       const { type, options, answer } = this.cloneQuiz
       this.quizType = type
-      if (type === '0' && options.length > 1) {
-        this.singleOptions = options
+
+      if (type === '0') {
         this.singleAnswer = answer[0]
+        this.singleOptions = options
+        if (options.length === 1) {
+          this.singleOptions.push({ item: 'option' })
+        }
       }
 
-      if (type === '1' && options.length > 2) {
+      if (type === '1') {
         this.multipleOptions = options
         this.multipleAnswer = answer.length > 1 ? answer : []
       }
@@ -379,10 +383,16 @@ export default {
         if (!valid) return false
         this.cloneQuiz.id = this.cloneQuiz.id || uuid()
         if (type === '0') {
+          if (!this.singleOptions || this.singleOptions.length < 2) {
+            return this.$message.error(this.$t('card.keepTwoOptions'))
+          }
           this.cloneQuiz.answer = [this.singleAnswer]
           this.cloneQuiz.options = this.singleOptions
         }
         if (type === '1') {
+          if (!this.multipleOptions || this.multipleOptions.length < 3) {
+            return this.$message.error(this.$t('card.keepThreeOptions'))
+          }
           this.cloneQuiz.answer = this.multipleAnswer
           this.cloneQuiz.options = this.multipleOptions
         }
