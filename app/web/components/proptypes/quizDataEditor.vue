@@ -281,7 +281,7 @@ export default {
         this.singleAnswer = answer[0]
         this.singleOptions = options
         if (options.length === 1) {
-          this.singleOptions.push({ item: 'option' })
+          this.singleOptions.push({ item: 'option 2' })
         }
       }
 
