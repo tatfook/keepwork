@@ -62,6 +62,7 @@ const {
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
   ADD_RECENT_OPENED_SITE,
+  TOGGLE_FILE_HISTORY,
   TOGGLE_ANGLES,
   TOGGLE_IFRAME_DIALOG
 } = props
@@ -542,6 +543,9 @@ const actions = {
   },
   toggleAngles({ commit }, { showAngle }) {
     commit(TOGGLE_ANGLES, { showAngle })
+  },
+  toggleFileHistoryVisibility({ commit }, { isVisible }) {
+    commit(TOGGLE_FILE_HISTORY, isVisible)
   },
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)

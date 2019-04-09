@@ -35,11 +35,19 @@ const getGitlabParams = async (context, { path, content = '\n' }) => {
   // call user/getAllPersonalAndContributedSite then we can get git file options
   await dispatch('user/getAllPersonalAndContributedSite', null, { root: true })
 
-  let { 'user/getGitFileProjectIdAndRefByPath': getGitFileProjectIdAndRefByPath } = rootGetters
+  let {
+    'user/getGitFileProjectIdAndRefByPath': getGitFileProjectIdAndRefByPath
+  } = rootGetters
   let { projectId } = getGitFileProjectIdAndRefByPath(path)
 
   let gitlab = getGitlabAPI()
-  let options = { projectId, ref, branch, content, commit_message: `keepwork commit: ${path}` }
+  let options = {
+    projectId,
+    ref,
+    branch,
+    content,
+    commit_message: `keepwork commit: ${path}`
+  }
 
   return { username, name, gitlab, options, projectId, path }
 }
@@ -53,12 +61,10 @@ const getGitlabFileParams = async (
   context,
   { path: inputPath, content = '\n' }
 ) => {
-  let {
-    username,
-    name,
-    gitlab,
-    options
-  } = await getGitlabParams(context, { path: inputPath, content })
+  let { username, name, gitlab, options } = await getGitlabParams(context, {
+    path: inputPath,
+    content
+  })
   let path = getFileFullPathByPath(inputPath)
 
   return { username, name, gitlab, options, path }
@@ -72,7 +78,10 @@ const actions = {
       : await dispatch('getRepositoryTreeForGuest', payload)
   },
   async getRepositoryTreeForOwner(context, payload) {
-    let { commit, getters: { repositoryTrees } } = context
+    let {
+      commit,
+      getters: { repositoryTrees }
+    } = context
     let { path, useCache = true, recursive = true } = payload
     let { gitlab, projectId } = await getGitlabParams(context, { path })
     let children = _.get(repositoryTrees, [path, path])
@@ -85,7 +94,12 @@ const actions = {
     commit(GET_REPOSITORY_TREE_SUCCESS, { projectId, path, list })
   },
   async getRepositoryTreeForGuest(context, payload) {
-    let { commit, dispatch, getters: { repositoryTrees }, rootGetters } = context
+    let {
+      commit,
+      dispatch,
+      getters: { repositoryTrees },
+      rootGetters
+    } = context
     let { path, useCache = true, recursive = true } = payload
     await dispatch('user/getWebsiteDetailInfoByPath', { path }, { root: true })
     let {
@@ -118,8 +132,8 @@ const actions = {
   },
   async readFile({ dispatch }, { path, editorMode }) {
     if (editorMode) {
-      await dispatch('readFileForOwner', { path }).catch(
-        e => dispatch('readFileForGuest', { path, forceAsGuest: true })
+      await dispatch('readFileForOwner', { path }).catch(e =>
+        dispatch('readFileForGuest', { path, forceAsGuest: true })
       )
     } else {
       await dispatch('readFileForGuest', { path })
@@ -131,7 +145,10 @@ const actions = {
       path: inputPath
     })
     // let file = await gitlab.getFile(path, options)
-    const projectPath = path.split('/').slice(0, 2).join('/')
+    const projectPath = path
+      .split('/')
+      .slice(0, 2)
+      .join('/')
     let file = await gitlab.getFile({ projectPath, fullPath: path })
     let markdownExtraLineToCheck404 = /\.md$/.test(path) ? '\n' : ''
     let payload = {
@@ -150,62 +167,73 @@ const actions = {
       'user/getSiteDetailInfoDataSourceByPath': getSiteDetailInfoDataSourceByPath,
       'user/getSiteDetailInfoByPath': getSiteDetailInfoByPath
     } = rootGetters
-    let {
-      rawBaseUrl,
-      projectName
-    } = getSiteDetailInfoDataSourceByPath(path)
+    let { rawBaseUrl, projectName } = getSiteDetailInfoDataSourceByPath(path)
     let { siteinfo } = getSiteDetailInfoByPath(path)
 
     // this is special for private website
     let isPrivateWebsite = siteinfo.visibility === 1
     if (isPrivateWebsite) {
-      if (forceAsGuest) throw new Error('Cannot read private sites without permission!')
+      if (forceAsGuest) {
+        throw new Error('Cannot read private sites without permission!')
+      }
 
       await dispatch('readFileForOwner', { path })
       return
     }
 
     let fullPath = getFileFullPathByPath(path)
-    let content = await gitlabShowRawForGuest(
-      rawBaseUrl,
-      projectName,
-      fullPath
-    )
+    let content = await gitlabShowRawForGuest(rawBaseUrl, projectName, fullPath)
     let markdownExtraLineToCheck404 = /\.md$/.test(fullPath) ? '\n' : ''
-    content = typeof content === 'string' ? (content + markdownExtraLineToCheck404) : content
+    content =
+      typeof content === 'string'
+        ? content + markdownExtraLineToCheck404
+        : content
     let payload = { path: fullPath, file: { content } }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
   async saveFile(context, { path: inputPath, content }) {
     let { commit, dispatch } = context
-    let {
-      gitlab,
-      path,
-      options
-    } = await getGitlabFileParams(context, { path: inputPath, content })
-    await gitlab.editFile(path, {
-      ...options,
-      content: /\.md$/.test(path) ? content.replace(/\n$/, '') : content
+    let { gitlab, path, options } = await getGitlabFileParams(context, {
+      path: inputPath,
+      content
     })
+    await gitlab
+      .editFile(path, {
+        ...options,
+        content: /\.md$/.test(path) ? content.replace(/\n$/, '') : content
+      })
       .catch(async e => {
         console.error(e)
         // try create a new file
-        await dispatch('createFile', { path: getFileFullPathByPath(inputPath), content })
+        await dispatch('createFile', {
+          path: getFileFullPathByPath(inputPath),
+          content
+        })
       })
     let payload = { path, branch: options.branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
   },
-  async createFolder(
-    context,
-    { path, refreshRepositoryTree = true }
+  async getFileHistoryList(
+    {
+      getters: { getGitlabAPI }
+    },
+    { projectPath }
   ) {
+    let gitlab = getGitlabAPI()
+    let result = await gitlab
+      .getFileCommitList({ projectPath: encodeURIComponent(projectPath) })
+      .catch(error => {
+        console.log(error)
+      })
+    console.log(result)
+    return result.data
+  },
+  async createFolder(context, { path, refreshRepositoryTree = true }) {
     const { commit, dispatch } = context
-    const {
-      username,
-      name,
-      gitlab,
-      options
-    } = await getGitlabFileParams(context, { path })
+    const { username, name, gitlab, options } = await getGitlabFileParams(
+      context,
+      { path }
+    )
     await gitlab.createFolder(path)
 
     if (refreshRepositoryTree) {
@@ -217,15 +245,19 @@ const actions = {
   },
   async createFile(
     context,
-    { projectName, path, content = '', refreshRepositoryTree = true, userOptions }
+    {
+      projectName,
+      path,
+      content = '',
+      refreshRepositoryTree = true,
+      userOptions
+    }
   ) {
     let { commit, dispatch } = context
-    let {
-      username,
-      name,
-      gitlab,
-      options
-    } = await getGitlabParams(context, { path, content })
+    let { username, name, gitlab, options } = await getGitlabParams(context, {
+      path,
+      content
+    })
     options = _.merge(userOptions, options)
     await gitlab.createFile({
       projectName,
@@ -249,42 +281,57 @@ const actions = {
   },
   async renameFile(context, { currentFilePath, newFilePath }) {
     const { dispatch } = context
-    let {
-      username,
-      name,
-      options,
-      gitlab
-    } = await getGitlabParams(context, { path: currentFilePath })
+    let { username, name, options, gitlab } = await getGitlabParams(context, {
+      path: currentFilePath
+    })
     await gitlab.renameFile(currentFilePath, newFilePath, options)
-    await dispatch('user/renamePageFromConfig', { currentFilePath, newFilePath }, { root: true })
+    await dispatch(
+      'user/renamePageFromConfig',
+      { currentFilePath, newFilePath },
+      { root: true }
+    )
     await dispatch('closeOpenedFile', { path: currentFilePath }, { root: true })
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,
       useCache: false
     })
   },
-  async renameFolder(context, { currentFolderPath, newFolderPath, childrenFiles }) {
+  async renameFolder(
+    context,
+    { currentFolderPath, newFolderPath, childrenFiles }
+  ) {
     const { dispatch } = context
-    let { username, name, options, gitlab } = await getGitlabFileParams(context, { path: currentFolderPath })
-    await gitlab.renameFolder(currentFolderPath, newFolderPath, childrenFiles, options)
-    await dispatch('user/renamePagesFromConfig', { currentFolderPath, newFolderPath, childrenFiles }, { root: true })
-    await dispatch('closeOpenedFile', { path: currentFolderPath }, { root: true })
+    let { username, name, options, gitlab } = await getGitlabFileParams(
+      context,
+      { path: currentFolderPath }
+    )
+    await gitlab.renameFolder(
+      currentFolderPath,
+      newFolderPath,
+      childrenFiles,
+      options
+    )
+    await dispatch(
+      'user/renamePagesFromConfig',
+      { currentFolderPath, newFolderPath, childrenFiles },
+      { root: true }
+    )
+    await dispatch(
+      'closeOpenedFile',
+      { path: currentFolderPath },
+      { root: true }
+    )
     await dispatch('getRepositoryTree', {
       path: `${username}/${name}`,
       useCache: false
     })
   },
-  async addFolder(
-    context,
-    { path, refreshRepositoryTree = true }
-  ) {
+  async addFolder(context, { path, refreshRepositoryTree = true }) {
     const { commit, dispatch } = context
-    const {
-      username,
-      name,
-      gitlab,
-      options
-    } = await getGitlabFileParams(context, { path })
+    const { username, name, gitlab, options } = await getGitlabFileParams(
+      context,
+      { path }
+    )
     await gitlab.createFolder(path)
 
     if (refreshRepositoryTree) {
@@ -296,7 +343,10 @@ const actions = {
   },
   async removeFolder(context, { folder, paths }) {
     const { commit, dispatch } = context
-    const { username, name, options, gitlab } = await getGitlabFileParams(context, { path: folder })
+    const { username, name, options, gitlab } = await getGitlabFileParams(
+      context,
+      { path: folder }
+    )
     paths.forEach(path => dispatch('closeOpenedFile', { path }, { root: true }))
     try {
       await gitlab.removeFolder(folder)
@@ -313,16 +363,10 @@ const actions = {
   },
   async removeFile(context, { path }) {
     let { commit, dispatch } = context
-    let {
-      username,
-      name,
-      gitlab,
-      options
-    } = await getGitlabParams(context, { path })
-    await gitlab.deleteFile(
-      path,
-      options
-    )
+    let { username, name, gitlab, options } = await getGitlabParams(context, {
+      path
+    })
+    await gitlab.deleteFile(path, options)
 
     let payload = { path, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
@@ -334,7 +378,10 @@ const actions = {
       useCache: false
     })
   },
-  async uploadFile({ dispatch, rootGetters, getters }, { fileName, content, sitePath }) {
+  async uploadFile(
+    { dispatch, rootGetters, getters },
+    { fileName, content, sitePath }
+  ) {
     let {
       activePageUrl,
       'user/username': username,

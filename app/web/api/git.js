@@ -18,7 +18,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
     response => response,
     async error => {
       const CODES = [401]
-      if (CODES.some(code => code === _get(error, 'response.status', '')) && Cookies.get('token')) {
+      if (
+        CODES.some(code => code === _get(error, 'response.status', '')) &&
+        Cookies.get('token')
+      ) {
         Cookies.remove('token')
         Cookies.remove('token', { path: '/' })
         window.localStorage.removeItem('satellizer_token')
@@ -50,6 +53,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
           return total
         },
         files: {
+          getFileCommitList: async projectPath => {
+            let res = await instance.get(`projects/${projectPath}/commits`)
+            return res
+          },
           remove: async (projectName, filePath) => {
             const [projectPath, path] = [projectName, filePath].map(
               encodeURIComponent
@@ -210,6 +217,12 @@ export class GitAPI {
       })
   }
 
+  async getFileCommitList({ projectPath }) {
+    return this.client.projects.repository.files
+      .getFileCommitList(projectPath)
+      .then(data => data)
+  }
+
   async createMultipleFile({ projectName, files }) {
     return this.client.projects.repository.files
       .createMultiple(projectName, files)
@@ -318,7 +331,6 @@ export class GitAPI {
       this.config.projectName
     }/blob/master/${path}`
   }
-
 }
 
 export default GitAPI

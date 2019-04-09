@@ -1,23 +1,28 @@
 <template>
   <el-row :gutter="0" type="flex" class="full-height editor-page-container">
     <el-col id="managerWin" class="manager-win" v-show="isManagerShow">
-      <el-row class="toolbar">
+      <el-row class="editor-page-container-toolbar toolbar">
         <el-button-group>
           <el-tooltip :content="$t('editor.files')">
             <el-button id="file-manager-button" class="iconfont icon-list_directory" :class="{'el-button--primary': activeManagePaneComponentName=='FileManager'}" @click="changeView('FileManager')"></el-button>
           </el-tooltip>
-          <!-- <el-button class="btn-bigfile" :class='{"el-button--primary": activeManagePaneComponentName=="ModPropertyManager"}' @click="changeView('ModPropertyManager')"></el-button> -->
           <el-tooltip v-if="activePage && hasOpenedFiles" :content="$t('tips.mod')">
             <el-button class="iconfont icon-module" :class="{'el-button--primary': activeManagePaneComponentName == 'ModsList' || activeManagePaneComponentName == 'ModPropertyManager'}" @click="changeView('ModsList')"></el-button>
           </el-tooltip>
           <el-tooltip v-if="activePage && hasOpenedFiles" :content="$t('common.myWebDisk')">
             <el-button class="iconfont icon-upload" @click="openSkyDriveManagerDialog"></el-button>
           </el-tooltip>
-          <!-- <el-button class="btn-search" :class='{"el-button--primary": activeManagePaneComponentName=="Search"}' @click="changeView('Search')"></el-button> -->
         </el-button-group>
+        <div v-if="isFileHistoryVisible" class="editor-page-container-toolbar-history">
+          <i class="iconfont icon-historyrecord"></i>
+          <span class="editor-page-container-toolbar-history-title">历史记录</span>
+          <i class="iconfont icon-ziyuan1"></i>
+          <i class="iconfont icon-ziyuan3" @click="closeHistory"></i>
+        </div>
         <sky-drive-manager-dialog :show="showSkyDrive" @close="closeSkyDriveManagerDialog"></sky-drive-manager-dialog>
       </el-row>
-      <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
+      <el-scrollbar wrap-class="editor-page-container-sidebar manager-content-box el-row" view-class="manager-content-inner" :native="false">
+        <history-list class="editor-page-container-sidebar-history" v-if="isFileHistoryVisible"></history-list>
         <keep-alive>
           <component :is="activeManagePaneComponentName" v-bind="activeManagePaneComponentProps" v-keep-scroll-position></component>
         </keep-alive>
@@ -26,17 +31,7 @@
     <div class="col-between flex-order-one" v-show="isManagerShow"></div>
     <el-col id="previewWin" v-show="!isWelcomeShow && isPreviewShow" class="preview-win" :style="setPreviewWinStyle" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
       <el-row class="toolbar">
-        <!-- <el-button-group>
-                    <el-button class="iconfont icon-computer" title="电脑"></el-button>
-                    <el-button class="iconfont icon-phone" title="手机"></el-button>
-        </el-button-group>-->
-        <!-- <el-button-group>
-                    <el-button class="btn-scale" title="缩小"></el-button>
-                    <el-button class="btn-enlarge" title="放大"></el-button>
-        </el-button-group>-->
         <el-button-group>
-          <!-- <el-button class="btn-adaptive" title="自适应"></el-button> -->
-          <!-- <el-button class="iconfont icon-new_open_window" title="新窗口打开" @click='showPreview'></el-button> -->
           <el-tooltip :content="$t('editor.preview')">
             <el-button class="iconfont icon-new_open_window" @click="showPreview"></el-button>
           </el-tooltip>
@@ -45,7 +40,6 @@
       <iframe id="frameViewport" src="/vp" style="height: 100%; width: 100%; background: #fff" />
       <iframe-dialog></iframe-dialog>
       <div class="mouse-event-backup" v-show="resizeWinParams.isResizing"></div>
-      <!-- <editor-viewport></editor-viewport> -->
       <el-dialog class="multiple-text-dialog" :title="$t('card.paragraph')" :visible="isMultipleTextDialogShow" top="6vh" :before-close="handleMultipleTextDialogClose" @open="initMarkdownModDatas">
         <el-input type="textarea" resize="none" :placeholder="$t('field.' + editingMarkdownModDatas.key)" v-model="editingMarkdownModDatas.content"></el-input>
         <span slot="footer" class="dialog-footer">
@@ -60,10 +54,6 @@
           <el-col class="toolbar-content">
             <div class="zenmode-icon" v-if="isZenMode">
               <img :src="require('@/assets/img/zen.png')">
-              <!-- tooltip can not shoe in fullscreen -->
-              <!-- <el-tooltip :content="$t('editor.zenModeTips')">
-                          <i class="iconfont icon-help"></i>
-              </el-tooltip>-->
             </div>
             <div class="toolbar-content_left">
               <el-button-group>
@@ -84,10 +74,6 @@
                 </el-tooltip>
               </el-button-group>
               <el-button-group>
-                <!-- <el-button class="iconfont icon-sequence_1" title="无序列表"></el-button>
-                        <el-button class="iconfont icon-sequence_" title="有序列表"></el-button>
-                <el-button class="iconfont icon-reference" title="引用内容"></el-button>-->
-                <!-- <el-button class="iconfont icon-table" title="表格"></el-button> -->
                 <el-tooltip :content="$t('editor.horizontalDiv')">
                   <el-button class="iconfont icon-code_division_line" @click="insertLine"></el-button>
                 </el-tooltip>
@@ -136,6 +122,7 @@ import EditorWelcome from './EditorWelcome'
 import ModPropertyManager from './ModPropertyManager'
 import FileManager from './FileManager'
 import ModsList from './ModsList'
+import HistoryList from './HistoryList'
 import Search from './Search'
 import PageSetting from './PageSetting'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
@@ -213,6 +200,7 @@ export default {
     ModPropertyManager,
     Search,
     ModsList,
+    HistoryList,
     FileManager,
     PageSetting,
     SkyDriveManagerDialog,
@@ -225,6 +213,7 @@ export default {
       preModKey: 'preModKey',
       activePageUrl: 'activePageUrl',
       personalSiteList: 'user/personalSiteList',
+      isFileHistoryVisible: 'isFileHistoryVisible',
       activeManagePaneComponentName: 'activeManagePaneComponentName',
       activeManagePaneComponentProps: 'activeManagePaneComponentProps',
       showingCol: 'showingCol',
@@ -291,6 +280,7 @@ export default {
       setActivePropertyData: 'setActivePropertyData',
       toggleSkyDrive: 'toggleSkyDrive'
     }),
+    closeHistory() {},
     changeView(type) {
       this.$store.dispatch('setActiveManagePaneComponent', type)
     },
@@ -432,10 +422,30 @@ bigFile:
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .editor-page-container {
   background-color: #cdd4db;
   padding: 17px 0;
+  &-toolbar {
+    position: relative;
+    &-history {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+    }
+  }
+  &-sidebar {
+    position: relative;
+    &-history {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+    }
+  }
 }
 .full-height {
   height: 100%;
