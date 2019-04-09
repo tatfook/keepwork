@@ -23,6 +23,7 @@ const ModCategoryList = () => import('./web/categoryList')
 const ModPageSwitching = () => import('./web/pageSwitching')
 const ModLesson = () => import('./web/lesson')
 const ModQuiz = () => import('./web/quiz')
+const ModHint = () => import('./web/hint')
 const ModProject = () => import('./web/project')
 const ModPpt = () => import('./web/ppt')
 
@@ -52,6 +53,7 @@ export const modList = {
   ModPageSwitching,
   ModLesson,
   ModQuiz,
+  ModHint,
   ModProject,
   ModPpt
 }
