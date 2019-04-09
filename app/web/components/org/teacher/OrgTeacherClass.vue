@@ -31,7 +31,7 @@
     </div>
     <div v-else class="org-teacher-classes-students">
       <div class="students-table-header">
-        {{$t("org.IncludeStudents") + selectedClassStudentsCount}}
+        {{$t("org.IncludeStudents") + selectedClassStudentsCount + $t("org.studentCountUnit")}}
         <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> {{$t("org.addStudents")}}</span>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
@@ -139,7 +139,7 @@ export default {
         ])
         this.$message({
           type: 'success',
-          message: '移出成功'
+          message: this.$t('org.removeSuccessfully')
         })
       } catch (error) {
         this.$message.error(error)

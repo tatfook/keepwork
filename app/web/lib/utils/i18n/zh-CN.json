@@ -141,7 +141,9 @@
     "star": "星",
     "deleteWebsiteHint": "您确定要删除网站吗？",
     "deleteWebsiteNotice": "我知道网站删除后将清除相关的全部数据，且连接到该网站的URL都将失效。如果该网站是某个项目的一部分，将会影响该项目的访问。",
-    "deleteWebsite": "删除网站"
+    "deleteWebsite": "删除网站",
+
+    "support": "支持"
   },
   "editor": {
     "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",
@@ -1762,11 +1764,13 @@
     "wasNotFound": "不存在",
     "verifyFailed": "校验失败",
     "failedToAdd": "添加失败",
+    "removeSuccessfully": "移出成功",
     "successfullyAdd": "添加成功",
     "successfullyUpdatedClass": "班级更新成功",
     "failedUpdatedClass": "班级更新失败",
     "successfullyCreatedANewClass": "班级创建成功",
     "classNameAlreadyExist": "该班级已存在",
+    "noTeachingRecord": "该班级暂无上课记录",
     "failedToCreateANewClass": "班级创建失败",
     "chapterIsFinished": "本章已经教完",
     "latestTeachingTime": "最近上课: ",
