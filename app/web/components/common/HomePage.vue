@@ -2,7 +2,9 @@
   <div class="home-page">
     <div class="home-page-advertising">
       <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
-        <i class="iconfont icon-sound-fill"></i>{{$t('home.paracraftIsFree')}}
+        <i class="iconfont icon-sound-fill"></i>
+        <span class="home-page-advertising-text">{{$t('home.paracraftIsFree')}}</span>
+        <a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="home-page-advertising-download">{{$t('editor.paracraftDownload')}}</a>
         <span class="close" @click="closeAd">&times;</span>
       </div>
     </div>
@@ -17,6 +19,12 @@
             <div class="remainder">
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">{{$t("home.toEducators")}}</a>
               <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">{{$t("home.toParents")}}</a>
+            </div>
+            <a class="join-button download-button" href="http://paracraft.keepwork.com/download?lang=zh" target="_blank">{{$t('project.downloadParacraft')}}</a>
+            <div class="remainder">
+              <a target="_blank" class="pedagogue">{{$t('common.support')}} Windows</a>
+              <a target="_blank" class="pedagogue">Mac</a>
+              <a target="_blank">Android</a>
             </div>
           </div>
           <div class="flexible-info-board">
@@ -148,7 +156,7 @@ import RegisterDialog from './RegisterComp'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
-import {  mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import videoPlayer from '@/components/common/VideoPlayer'
 
 export default {
@@ -391,6 +399,7 @@ export default {
       border: solid 1px #2397f3;
       color: #2397f3;
       position: relative;
+      font-size: 14px;
       .iconfont {
         font-size: 20px;
         margin-right: 6px;
@@ -406,6 +415,13 @@ export default {
         top: 0;
         cursor: pointer;
       }
+    }
+    &-text {
+      color: #333;
+    }
+    &-download {
+      text-decoration: none;
+      color: #2397f3;
     }
     .hidden-ad {
       height: 0;
@@ -468,6 +484,11 @@ export default {
             border: none;
             box-shadow: 3px 15px 18px -12px #ff720ee0;
             text-shadow: 0px 1px 6px #a52e02b0;
+          }
+          .download-button {
+            background: linear-gradient(0deg, #2497f4 0%, #3ec8f8 100%);
+            box-shadow: 0px 7px 9px 0px rgba(192, 228, 255, 0.88);
+            text-decoration: none;
           }
           .remainder {
             a {
