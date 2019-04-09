@@ -7,6 +7,7 @@ const ProjectDetailPage = () => import('@/components/pbl/ProjectDetailPage')
 const ProjectIndex = () => import('@/components/pbl/ProjectIndex')
 const EditProject = () => import('@/components/pbl/EditProject')
 const ProjectWhiteBoard = () => import('@/components/pbl/ProjectWhiteBoard')
+const DeleteProject = () => import('@/components/pbl/DeleteProject')
 
 Vue.use(Router)
 
@@ -47,6 +48,11 @@ export default new Router({
         path: '/project/:id/edit',
         name: 'EditProject',
         component: EditProject
+      },
+      {
+        path: '/project/:id/delete',
+        name: 'DeleteProject',
+        component: DeleteProject
       }]
     }
   ]
