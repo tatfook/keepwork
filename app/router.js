@@ -10,18 +10,18 @@ module.exports = app => {
   router.get('/study', controller.home.index)
   router.get('/ed', controller.editor.index)
   router.get('/bx', controller.combo.index) // for comboBox component iframe router
-  router.get(/\/ed\//, controller.editor.index)
+  // router.get(/\/ed\//, controller.editor.index)
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)
-  router.get(/\/l\//, controller.lesson.index)
+  router.get(/^\/l\//, controller.lesson.index)
   router.get('/pbl', controller.pbl.index)
-  router.get(/\/pbl\//, controller.pbl.index)
+  router.get(/^\/pbl\//, controller.pbl.index)
   router.get('/org', controller.org.index)
-  router.get(/\/org\//, controller.org.index)
+  router.get(/^\/org\//, controller.org.index)
   router.get('/u', controller.profile.index)
-  router.get(/\/u\//, controller.profile.index)
+  router.get(/^\/u\//, controller.profile.index)
   router.get('/a', controller.account.index) // account
-  router.get(/\/a\//, controller.account.index) // account
+  router.get(/^\/a\//, controller.account.index) // account
   router.get('/vip', controller.vip.index)
   router.get('/wiki/pay', controller.wiki.index)
   router.post('/es/parser', controller.parser.parser)
