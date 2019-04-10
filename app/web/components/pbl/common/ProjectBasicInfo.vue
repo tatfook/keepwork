@@ -341,6 +341,7 @@ export default {
           checkedWords: editorText.text()
         }).catch()
         if (sensitiveResult && sensitiveResult.length > 0) {
+          this.descriptionEditor.txt.html(sensitiveResult[0].word)
           return
         }
         this.isLoading = true

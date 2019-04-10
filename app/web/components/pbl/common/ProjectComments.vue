@@ -117,6 +117,7 @@ export default {
         checkedWords: this.newCommenContent
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.newCommenContent = sensitiveResult[0].word
         this.isAddingComment = false
         return
       }

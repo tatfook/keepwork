@@ -173,12 +173,20 @@ export default {
     },
     async finishedCreateIssue() {
       this.cretateIssueLoading = true
-      let isSensitive = await this.checkSensitive([
+      // let isSensitive = await this.checkSensitive([
+      //   this.issueTitle,
+      //   this.descriptionText
+      // ])
+      const sensitiveResult = await checkSensitiveWords({checkedWords:[
         this.issueTitle,
         this.descriptionText
-      ])
+      ]}).catch(e => console.error(e))
       this.cretateIssueLoading = false
-      if (isSensitive) return
+      if (sensitiveResult && sensitiveResult.length > 0) {
+        this.issueTitle = sensitiveResult[0].word
+        this.descriptionText = sensitiveResult[1].word
+        return
+      }
       let payload = {
         objectType: 5,
         objectId: this.projectId,
