@@ -509,6 +509,7 @@ export default {
           min-width: 189px;
           padding-right: 20px;
           box-sizing: border-box;
+          border-right: 1px solid #9c9c9c;
         }
 
         &-title {
@@ -519,7 +520,6 @@ export default {
           display: inline-block;
           color: #666;
           font-size: 14px;
-          border-left: 1px solid #9c9c9c;
           padding-left: 20px;
           display: flex;
           align-items: center;
@@ -621,6 +621,7 @@ export default {
         min-width: 72px;
         color: #999;
         cursor: pointer;
+        text-align: right;
       }
     }
     &-submit {
