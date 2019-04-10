@@ -308,8 +308,6 @@ const actions = {
     commit(UPDATE_MODS, blockList)
     if (activeMod && activeMod.cmd !== CmdHelper.MARKDOWN_CMD) {
       commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
-    } else {
-      commit(UPDATE_MANAGE_PANE_COMPONENT, 'FileManager')
     }
   },
   // rebuild all mods, will takes a little bit more time
