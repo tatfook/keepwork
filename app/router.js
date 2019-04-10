@@ -10,7 +10,7 @@ module.exports = app => {
   router.get('/study', controller.home.index)
   router.get('/ed', controller.editor.index)
   router.get('/bx', controller.combo.index) // for comboBox component iframe router
-  // router.get(/\/ed\//, controller.editor.index)
+  router.get(/^\/ed\//, controller.editor.index)
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)
   router.get(/^\/l\//, controller.lesson.index)
