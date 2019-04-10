@@ -52,7 +52,7 @@
           <span slot="label" class="project-header-tabs-label">{{$t("project.setting")}}</span>
         </el-tab-pane>
         <el-tab-pane name="DeleteProject" v-if="isLoginUserEditable">
-          <span slot="label" class="project-header-tabs-label">删除项目</span>
+          <span slot="label" class="project-header-tabs-label">{{$t('project.deleteProject')}}</span>
         </el-tab-pane>
       </el-tabs>
     </div>

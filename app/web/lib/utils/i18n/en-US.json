@@ -1503,7 +1503,8 @@
     "hasRate": "{number} ratings",
     "noGames": "No contests",
     "deleteProjectHint": "Are you sure you want to delete the project? ",
-    "deleteProjectNotice": "After the project is deleted, all relevant data will be cleared and will not be restored.  "
+    "deleteProjectNotice": "After the project is deleted, all relevant data will be cleared and will not be restored. ",
+    "deleteProject": "Delete Project"
   },
   "footer": {
     "lettersTo": "Letters To",

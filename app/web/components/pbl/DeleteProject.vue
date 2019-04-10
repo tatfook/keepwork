@@ -33,7 +33,8 @@ export default {
       this.deleteSuccessLoading = true
       await keepwork.projects.deleteProject(this.projectId).then(res => {
         this.deleteSuccessLoading = false
-        this.$router.push('/')
+        // this.$router.push('/')
+        window.location.href = window.location.origin
       }).catch(err => {
         console.error(err)
         this.$message.error($t('editor.deleteFail'))
