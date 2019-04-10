@@ -53,7 +53,7 @@ export default {
     isEditorPage() {
       return _.get(this.$route, 'name') === 'Editor'
     },
-    isUseFileInSiteMode(){
+    isUseFileInSiteMode() {
       return this.isSiteMode === false ? false : this.isEditorPage
     },
     tableTypeComp() {
@@ -89,8 +89,8 @@ export default {
               checked === 1
                 ? this.$t('skydrive.checkPassed')
                 : checked === 2
-                  ? this.$t('skydrive.checkUnpassed')
-                  : this.$t('skydrive.checking')
+                ? this.$t('skydrive.checkUnpassed')
+                : this.$t('skydrive.checking')
           }
         })
         .filter(this.itemFilterBySearchWord)
@@ -227,7 +227,10 @@ export default {
     async handleInsert({ file }) {
       if (file.checkPassed) {
         let url = await this.handleGetUrl({ file })
-        this.$emit('close', { file, url: `${url}#${file.filename ? file.filename : ''}` })
+        this.$emit('close', {
+          file,
+          url: `${url}#${file.filename ? file.filename : ''}`
+        })
       }
     },
     async handleCopy(file) {
@@ -235,6 +238,7 @@ export default {
       let toCopyPrefix = await this.handleGetUrl({ file })
       let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
       await this.$confirm(toCopyLink, {
+        customClass: 'sky-drive-manager-messagebox',
         confirmButtonText: this.$t('common.copy'),
         cancelButtonText: this.$t('common.Cancel')
       })
@@ -305,3 +309,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.sky-drive-manager {
+  &-messagebox {
+    word-break: break-all;
+  }
+}
+</style>
