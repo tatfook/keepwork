@@ -1,49 +1,207 @@
 <template>
   <div class="file-history">
     <div class="file-history-sidebar">
-      <div class="file-history-header">
+      <div class="file-history-sidebar-header">
         <i class="iconfont icon-historyrecord"></i>
-        <span class="file-history-header-title">历史记录</span>
-        <i class="iconfont icon-ziyuan1"></i>
-        <i class="iconfont icon-ziyuan3" @click="closeHistory"></i>
+        <span class="file-history-sidebar-header-title">历史记录</span>
       </div>
       <history-list @selectHistory="getFileContentByCommitId"></history-list>
     </div>
-    <div class="file-history-preview">preview</div>
-    <div class="file-history-raw">raw</div>
+    <div class="file-history-main" v-loading="isLoading">
+      <div class="file-history-header">
+        <span class="file-history-header-version">{{activeCommitId}}</span>
+        <div class="file-history-main-operations">
+          <el-tooltip content="恢复到此版本">
+            <i class="iconfont icon-ziyuan1"></i>
+          </el-tooltip>
+          <div class='file-history-header-switch'>
+            <el-tooltip :content="$t('tips.ShowPreviewOnly')">
+              <span class="iconfont icon-preview1" :class='{"file-history-header-switch-active": isPreviewShow && !isCodeShow}' @click="switchViewShow(true, false)"></span>
+            </el-tooltip>
+            <el-tooltip :content="$t('tips.ShowBoth')">
+              <span class="iconfont icon-both" :class='{"file-history-header-switch-active": isPreviewShow && isCodeShow}' @click="switchViewShow(true, true)"></span>
+            </el-tooltip>
+            <el-tooltip :content="$t('tips.ShowCodeOnly')">
+              <span class="iconfont icon-code1" :class='{"file-history-header-switch-active": !isPreviewShow && isCodeShow}' @click="switchViewShow(false, true)"></span>
+            </el-tooltip>
+          </div>
+          <el-tooltip content="关闭">
+            <i class="iconfont icon-ziyuan3" @click="closeHistory"></i>
+          </el-tooltip>
+        </div>
+      </div>
+      <div class="file-history-main-col-between" v-if="isPreviewShow"></div>
+      <div class="file-history-main-preview" v-if="isPreviewShow">
+        <md-viewer :content="activeCommitIdContent"></md-viewer>
+      </div>
+      <div class="file-history-main-col-between" v-if="isCodeShow"></div>
+      <div class="file-history-main-raw" v-if="isCodeShow">
+        <codemirror ref='mdEditor' :options='options' :value='activeCommitIdContent' />
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import MdViewer from '@/components/viewer/MdViewer'
 import HistoryList from './HistoryList'
-import { mapActions } from 'vuex'
+import { codemirror } from 'vue-codemirror'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'FileHistory',
+  data() {
+    return {
+      isLoading: false,
+      activeCommitId: undefined,
+      isPreviewShow: true,
+      isCodeShow: true,
+      options: {
+        mode: 'markdown',
+        theme: 'default',
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        tabSize: 2,
+        indentWithTabs: false,
+        styleActiveLine: true,
+        foldGutter: true,
+        matchBrackets: true
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({
+      activePageInfo: 'activePageInfo',
+      getFileCommitContent: 'gitlab/getFileCommitContent'
+    }),
+    activeBarePath() {
+      return _.get(this.activePageInfo, 'barePath')
+    },
+    activeFullPath() {
+      return _.get(this.activePageInfo, 'fullPath')
+    },
+    activeCommitIdContent() {
+      return this.getFileCommitContent({
+        path: this.activeBarePath,
+        commitId: this.activeCommitId
+      })
+    }
+  },
   methods: {
     ...mapActions({
+      gitlabReadFileForOwnerWithCommitId: 'gitlab/readFileForOwnerWithCommitId',
       toggleFileHistoryVisibility: 'toggleFileHistoryVisibility'
     }),
+    switchViewShow(isPreviewShow, isCodeShow) {
+      this.isPreviewShow = isPreviewShow
+      this.isCodeShow = isCodeShow
+    },
     closeHistory() {
       this.toggleFileHistoryVisibility({ isVisible: false })
     },
-    getFileContentByCommitId(commitId) {
+    async getFileContentByCommitId(commitId) {
       console.log(commitId)
+      this.activeCommitId = commitId
+      this.isLoading = true
+      await this.gitlabReadFileForOwnerWithCommitId({
+        path: this.activeFullPath,
+        barePath: this.activeBarePath,
+        commitId
+      }).catch()
+      this.isLoading = false
     }
   },
   components: {
-    HistoryList
+    HistoryList,
+    MdViewer,
+    codemirror
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .file-history {
   display: flex;
   &-sidebar {
-    width: 440px;
+    width: 318px;
+    position: relative;
+    padding-top: 60px;
+    &-header {
+      height: 59px;
+      line-height: 59px;
+      border-bottom: 1px solid #eaecef;
+      padding: 0 20px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
   }
-  &-preview,
-  &-raw {
+  &-main {
     flex: 1;
-    border-left: 15px solid #cdd4db;
+    display: flex;
+    position: relative;
+    padding-top: 72px;
+    background-color: #cdd4db;
+    &-col-between {
+      width: 15px;
+      background-color: #cdd4db;
+    }
+    &-preview,
+    &-raw {
+      flex: 1;
+      background-color: #fff;
+    }
+    .iconfont {
+      cursor: pointer;
+    }
+    .vue-codemirror,
+    .CodeMirror-wrap {
+      height: 100%;
+    }
+  }
+  &-header {
+    padding: 0 18px;
+    background-color: #fff;
+    height: 60px;
+    line-height: 60px;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    right: 0;
+    display: flex;
+    &-version {
+      flex: 1;
+    }
+    &-switch {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 16px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 20px;
+      border-bottom: none;
+      background-color: #efefef;
+      .iconfont {
+        width: 60px;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+      }
+      &-active {
+        background-color: #1278e1;
+        color: #fff;
+        border-radius: 16px;
+      }
+    }
+    .icon-ziyuan1 {
+      font-size: 20px;
+      vertical-align: middle;
+    }
+    .icon-ziyuan1,
+    .icon-ziyuan3 {
+      &:hover {
+        color: #288ce9;
+      }
+    }
   }
 }
 </style>

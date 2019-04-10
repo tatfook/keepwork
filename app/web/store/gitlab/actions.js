@@ -11,6 +11,7 @@ import {
 
 const {
   GET_FILE_CONTENT_SUCCESS,
+  GET_FILE_CONTENT_WITH_COMMITID_SUCCESS,
   SAVE_FILE_CONTENT_SUCCESS,
   CREATE_FILE_CONTENT_SUCCESS,
   GET_REPOSITORY_TREE_SUCCESS,
@@ -157,6 +158,30 @@ const actions = {
       file: { ...file, content: file.content + markdownExtraLineToCheck404 }
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
+  },
+  async readFileForOwnerWithCommitId(
+    context,
+    { path: inputPath, barePath, commitId }
+  ) {
+    let { commit } = context
+    let { gitlab, path, options } = await getGitlabFileParams(context, {
+      path: inputPath
+    })
+    // let file = await gitlab.getFile(path, options)
+    const projectPath = path
+      .split('/')
+      .slice(0, 2)
+      .join('/')
+    let file = await gitlab.getFileWithCommitId({
+      projectPath,
+      fullPath: path,
+      commitId
+    })
+    commit(GET_FILE_CONTENT_WITH_COMMITID_SUCCESS, {
+      barePath,
+      commitId,
+      content: file.content
+    })
   },
   async readFileForGuest(context, { path, forceAsGuest = false }) {
     let { commit, dispatch, rootGetters } = context

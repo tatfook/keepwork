@@ -41,7 +41,7 @@ const buildOrigin = themeClasses => {
 }
 
 const generate = conf => {
-  let theme = themeData[conf.name] || 'classic'
+  let theme = themeData[conf.name] || themeData['classic']
   let colors = theme.colors[conf.colorID || 0]
   let fonts = theme.fonts[conf.fontID || 0]
   let themeBgColors = theme.bgColors || theme.colors
@@ -56,7 +56,7 @@ const generate = conf => {
 
   let data = buildOrigin(themeClasses)
   let sheet = jss.createStyleSheet(themeClasses)
-
+  console.log(data, sheet)
   return { data, sheet }
 }
 

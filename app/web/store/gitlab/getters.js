@@ -11,8 +11,7 @@ const gitlabAPICache = {}
 const getGitlabAPI = config => {
   let cacheKey = JSON.stringify(config)
   let gitlabAPI =
-    gitlabAPICache[cacheKey] ||
-    (gitlabAPICache[cacheKey] = new GitAPI(config))
+    gitlabAPICache[cacheKey] || (gitlabAPICache[cacheKey] = new GitAPI(config))
   return gitlabAPI
 }
 
@@ -58,16 +57,20 @@ const getters = {
       .map(name => name.replace(/\.md$/, ''))
     return _.uniq(names)
   },
-  childrenByPath: (
-    state,
-    { repositoryTreesAllFiles = [] }
-  ) => path => {
+  childrenByPath: (state, { repositoryTreesAllFiles = [] }) => path => {
     let children = gitTree2NestedArray(repositoryTreesAllFiles, path).filter(
-      ({ name, path: filePath }) => name !== CONFIG_FOLDER_NAME && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
+      ({ name, path: filePath }) =>
+        name !== CONFIG_FOLDER_NAME && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
     )
     return children
   },
   files: state => state.files,
+  getFileCommitContent: state => ({ path, commitId }) => {
+    console.log(
+      // _.get(state.filesCommitContent, `${path}.${commitId}`)
+    )
+    return _.get(state.filesCommitContent, `${path}.${commitId}`)
+  },
 
   getGitlabAPI: (state, getters, rootState, rootGetters) => () => {
     let config = rootGetters['user/gitlabConfig']

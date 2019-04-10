@@ -72,6 +72,14 @@ const gitLabAPIGenerator = ({ url, token }) => {
             )
             return res.data
           },
+          async showWithCommitId({ projectPath, fullPath, useCache, commitId }) {
+            projectPath = encodeURIComponent(projectPath)
+            fullPath = encodeURIComponent(fullPath)
+            let res = await instance.get(
+              `projects/${projectPath}/files/${fullPath}?ref=${commitId}`
+            )
+            return res.data
+          },
           async showRaw(projectId, filePath, ref) {
             const [pId, path] = [projectId, filePath].map(encodeURIComponent)
             let res = await instance.get(
@@ -189,6 +197,17 @@ export class GitAPI {
   async getFile({ projectPath, fullPath, useCache = false }) {
     return this.client.projects.repository.files
       .show({ projectPath, fullPath, useCache })
+      .then(file => file)
+  }
+
+  async getFileWithCommitId({
+    projectPath,
+    fullPath,
+    useCache = false,
+    commitId
+  }) {
+    return this.client.projects.repository.files
+      .showWithCommitId({ projectPath, fullPath, useCache, commitId })
       .then(file => file)
   }
 
