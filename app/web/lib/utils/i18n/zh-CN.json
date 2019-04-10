@@ -1494,7 +1494,8 @@
     "hasRate": "已有{number}人评分",
     "noGames": "当前没有可供参加的比赛",
     "deleteProjectHint": "您确定要删除项目吗？",
-    "deleteProjectNotice": "我知道项目删除后将清除相关的全部数据，且将无法恢复。"
+    "deleteProjectNotice": "我知道项目删除后将清除相关的全部数据，且将无法恢复。",
+    "deleteProject": "删除项目"
 
   },
   "footer": {
