@@ -164,21 +164,27 @@ export default {
         'Y',
         'Z'
       ],
-      singleOptions: [{ item: 'option 1' }, { item: 'option 2' }],
+      singleOptions: [],
+      singleOptionsBak: [{ item: 'option 1' }, { item: 'option 2' }],
       multipleOptions: [
-        { item: 'option 1' },
+      ],
+      multipleOptionsBak: [
+         { item: 'option 1' },
         { item: 'option 2' },
         { item: 'option 3' }
       ],
       judgeOptions: [
-        {
+      ],
+      judgeOptionsBak: [
+           {
           item: true
         },
         {
           item: false
         }
       ],
-      textOptions: [{ item: 'text match' }],
+      textOptions: [],
+      textOptionsBak: [{ item: 'text match' }],
 
       singleAnswer: '',
       multipleAnswer: [],
@@ -274,6 +280,14 @@ export default {
     },
     initQuizData(quiz) {
       this.cloneQuiz = _.cloneDeep(quiz)
+      this.singleOptions = _.cloneDeep(this.singleOptionsBak)
+      this.multipleOptions = _.cloneDeep(this.multipleOptionsBak)
+      this.judgeOptions = _.cloneDeep(this.judgeOptionsBak)
+      this.textOptions = _.cloneDeep(this.textOptionsBak)
+      this.singleAnswer = ''
+      this.multipleAnswer = []
+      this.judgeAnswer = ''
+
       const { type, options, answer } = this.cloneQuiz
       this.quizType = type
 
