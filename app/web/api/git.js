@@ -53,11 +53,16 @@ const gitLabAPIGenerator = ({ url, token }) => {
           return total
         },
         files: {
-          getFileCommitList: async ({ projectPath, filePath }) => {
+          getFileCommitList: async ({
+            projectPath,
+            filePath,
+            page,
+            perPage
+          }) => {
             projectPath = encodeURIComponent(projectPath)
             filePath = encodeURIComponent(filePath)
             let res = await instance.get(
-              `projects/${projectPath}/commits/${filePath}`
+              `projects/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
             )
             return res
           },
@@ -246,9 +251,9 @@ export class GitAPI {
       })
   }
 
-  async getFileCommitList({ projectPath, filePath }) {
+  async getFileCommitList({ projectPath, filePath, page, perPage }) {
     return this.client.projects.repository.files
-      .getFileCommitList({ projectPath, filePath })
+      .getFileCommitList({ projectPath, filePath, page, perPage })
       .then(data => data)
   }
 

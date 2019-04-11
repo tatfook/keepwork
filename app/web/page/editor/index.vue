@@ -6,12 +6,12 @@
     <el-main>
       <router-view @showPreview='showPreview' />
       <!-- <el-dialog class="preview-dialog" :visible.sync='previewDialogVisible' width='88% ' height='100% '> -->
-        <div class="preview-site-wrap" id="previewWinSite">
-            <div class="preview-site-close"><span @click="handleClosePreview">X</span></div>
-            <div class="preview-content-wrap" v-if="showPreviewClose">
-              <PageViewer/>
-            </div>
+      <div class="preview-site-wrap" id="previewWinSite">
+        <div class="preview-site-close"><span @click="handleClosePreview">X</span></div>
+        <div class="preview-content-wrap" v-if="showPreviewClose">
+          <PageViewer />
         </div>
+      </div>
       <!-- </el-dialog> -->
     </el-main>
     <div @click.stop v-if="showLoginDialog">
@@ -28,6 +28,7 @@ import VueAnalytics from 'vue-analytics'
 import { sync } from 'vuex-router-sync'
 import fullscreen from 'vue-fullscreen'
 import VueClipboard from 'vue-clipboard2'
+import infiniteScroll from 'vue-infinite-scroll'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './editor.router'
 import editorModule from '@/store/editor'
@@ -48,6 +49,7 @@ import EditorHeader from '@/components/editor/EditorHeader'
 
 Vue.use(fullscreen)
 Vue.use(VueClipboard)
+Vue.use(infiniteScroll)
 Vue.use(VueKeepScrollPosition)
 
 Vue.config.productionTip = false
@@ -82,9 +84,7 @@ const store = new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      paths: [
-        'editor.openedFiles'
-      ]
+      paths: ['editor.openedFiles']
     }),
     broadcast('frameViewport')
   ]
@@ -120,7 +120,7 @@ export default {
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
-      userIsLogined: 'user/isLogined',
+      userIsLogined: 'user/isLogined'
     }),
     showLoginDialog() {
       return !this.userIsLogined
@@ -137,9 +137,11 @@ export default {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
-      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(err => {
-        console.error(err)
-      })
+      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(
+        err => {
+          console.error(err)
+        }
+      )
     },
     async updateActivePage() {
       if (!this.presetLoaded) return
@@ -216,11 +218,11 @@ body {
 .preview-dialog .el-dialog__body {
   padding: 30px 0;
 }
-.preview-dialog .el-main{
+.preview-dialog .el-main {
   background-color: #fff;
   overflow: hidden;
 }
-.preview-site-wrap{
+.preview-site-wrap {
   background-color: #fff;
   height: 0;
   overflow: hidden;
@@ -231,7 +233,7 @@ body {
   padding: 10px;
   overflow: hidden;
 }
-.preview-content-wrap{
+.preview-content-wrap {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
@@ -240,7 +242,7 @@ body {
 .preview-site-close {
   overflow: hidden;
 }
-.preview-site-close span{
+.preview-site-close span {
   display: block;
   text-align: center;
   line-height: 50px;

@@ -5,13 +5,14 @@
       <div class="history-list-header-username">操作人</div>
       <div class="history-list-header-date">恢复时间</div>
     </div>
-    <div class="history-list-item" :class="{'history-list-item-active': activeVersion == history.version}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)">
+    <div class="history-list-item" :class="{'history-list-item-active': activeVersion == history.version}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)" :title='history | hoverMessageFilter'>
       <div class="history-list-item-version">{{history.version}}
         <span class="history-list-item-version-sub">{{history.message | sourceVersionFilter}}</span>
       </div>
       <div class="history-list-item-username">{{history.author_name}}</div>
       <div class="history-list-item-date">{{history.authored_date | formatTime }}</div>
     </div>
+    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="isBusy" infinite-scroll-distance="0"></div>
   </el-scrollbar>
 </template>
 <script>
@@ -20,20 +21,13 @@ import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'HistoryList',
-  async mounted() {
-    let projectPath = _.get(this.activePageInfo, 'sitepath')
-    let filePath = _.get(this.activePageInfo, 'fullPath')
-    let result = await this.gitlabGetFileHistoryList({
-      projectPath,
-      filePath
-    })
-    this.historyList = result.commits
-    this.getHistoryContent(this.historyList[0])
-  },
   data() {
     return {
+      perPage: 10,
       historyList: [],
-      activeVersion: ''
+      isBusy: false,
+      nowPage: 1,
+      activeVersion: undefined
     }
   },
   computed: {
@@ -45,11 +39,33 @@ export default {
     ...mapActions({
       gitlabGetFileHistoryList: 'gitlab/getFileHistoryList'
     }),
+    getHistoryList(page, perPage) {
+      let projectPath = _.get(this.activePageInfo, 'sitepath')
+      let filePath = _.get(this.activePageInfo, 'fullPath')
+      this.isBusy = true
+      return new Promise(async resolve => {
+        let result = await this.gitlabGetFileHistoryList({
+          projectPath,
+          filePath,
+          page,
+          perPage
+        }).catch()
+        this.historyList = _.concat(this.historyList, result.commits)
+        if (result.total - this.historyList.length >= this.perPage) {
+          this.isBusy = false
+        }
+        resolve()
+      })
+    },
     getHistoryContent(history) {
       let version = history.version
       let commitId = history.short_id
       this.activeVersion = version
       this.$emit('selectHistory', { commitId, version })
+    },
+    async loadMore() {
+      await this.getHistoryList(this.nowPage++, this.perPage)
+      !this.activeVersion && this.getHistoryContent(this.historyList[0])
     }
   },
   filters: {
@@ -61,6 +77,19 @@ export default {
       return index != -1
         ? '(' + commitMessage.substring(index + SourceVersionStr.length) + ')'
         : ''
+    },
+    hoverMessageFilter(history) {
+      let commitMessage = history.message
+      let index = commitMessage.indexOf(SourceVersionStr)
+      if (index == -1) {
+        return
+      } else {
+        let sourceVersion = commitMessage.substring(
+          index + SourceVersionStr.length
+        )
+        let nowVersion = history.version
+        return `${nowVersion}来自${sourceVersion}恢复`
+      }
     }
   }
 }
