@@ -176,11 +176,6 @@ export default {
   router,
   store,
   i18n,
-  data() {
-    return {
-      loading: true
-    }
-  },
   async created() {
     await this.loadLessonPresets()
   },

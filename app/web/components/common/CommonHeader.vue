@@ -261,7 +261,7 @@ const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
 const EXPLORATION_REG = /^\/exploration/
 const RANKING_REG = /^\/ranking/
-const STUDY_REG = /^\/l/
+const STUDY_REG = /^\/s/
 
 export default {
   name: 'CommonHeader',
@@ -358,7 +358,7 @@ export default {
     },
     goStudyPage() {
       if (this.userIsLogined) {
-        return (window.location.href = `${this.locationOrigin}/l/student`)
+        return (window.location.href = `${this.locationOrigin}/s`)
       }
       window.location.href = `${
         this.locationOrigin
