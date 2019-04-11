@@ -5,7 +5,7 @@
   "scripts": {
     "debug": "egg-bin debug",
     "clean": "cross-env easy clean",
-    "build": "cross-env NODE_OPTIONS=--max_old_space_size=8192 easy build prod",
+    "build": "cross-env easy build prod",
     "build:dev": "cross-env easy build dev",
     "build:test": "cross-env easy build test",
     "build:prod": "cross-env easy build prod",
@@ -106,7 +106,6 @@
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.22.0",
-    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "dotenv-webpack": "^1.5.7",
     "easywebpack-cli": "^4.0.0",
@@ -118,7 +117,6 @@
     "eslint-config-egg": "^5.0.0",
     "eslint-plugin-html": "^4.0.5",
     "eslint-plugin-vue": "^5.0.0-beta.3",
-    "imagemin-webpack-plugin": "^2.2.0",
     "ip": "^1.1.5",
     "jest": "^23.0.1",
     "jest-jenkins-reporter": "^1.0.2",
@@ -129,14 +127,11 @@
     "sass-loader": "^6.0.6",
     "sinon": "^6.3.4",
     "typescript": "^3.0.3",
-    "uglifyjs-webpack-plugin": "^1.1.2",
     "vconsole": "^3.0.0",
     "vue-hot-reload-api": "^2.1.0",
     "vue-jest": "^2.6.0",
     "vue-template-compiler": "^2.5.17",
-    "vue-test-utils": "^1.0.0-beta.11",
-    "webpack": "^4.19.1",
-    "webpack-bundle-analyzer": "^3.0.2"
+    "vue-test-utils": "^1.0.0-beta.11"
   },
   "engines": {
     "node": ">=8.0.0"

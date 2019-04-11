@@ -2,14 +2,7 @@
 
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const dotenv = new Dotenv()
-const copyWebpack = new CopyWebpackPlugin([
-  {
-    from: path.resolve(__dirname, 'app/static'),
-    to: path.resolve(__dirname, 'public')
-  }
-])
 
 module.exports = {
   egg: true,
@@ -21,7 +14,8 @@ module.exports = {
     framework: 'app/web/framework'
   },
   compile: {
-    thread: false
+    thread: false,
+    cache: true,
   },
   dll: [
     {
@@ -53,7 +47,7 @@ module.exports = {
       loader: 'raw-loader'
     },
     babel: {
-      exclude: [/node_modules/, /app\/web\/lib\/mod\/parser/, /app\/web\/lib\/global/]
+      exclude: [/node_modules/]
     }
   },
   plugins: {
@@ -61,9 +55,13 @@ module.exports = {
     // serviceworker: true,
     // analyzer: true,
     dotenv,
-    copyWebpack: {
-      name: copyWebpack
-    }
+    uglifyJs: {
+      parallel: false,
+    },
+    copy: [{
+      from: path.resolve(__dirname, 'app/static'),
+      to: path.resolve(__dirname, 'public')
+    }]
   },
   node: {
     console: true
