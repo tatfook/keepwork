@@ -77,9 +77,11 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: #f8f8f8;  
   &-header {
     height: 60px;
     border-bottom: 1px solid #e6e6e6;
+    background: #fff;
     .container {
       max-width: 1200px;
       margin: 0 auto;

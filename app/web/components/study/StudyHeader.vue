@@ -63,7 +63,7 @@ export default {
   zoom: 1;
 }
 .study-homepage-header {
-  background: #f8f8f8;
+  z-index: 999;
   &-menu {
     width: 1200px;
     min-height: 64px;
@@ -71,6 +71,7 @@ export default {
     border-radius: 10px;
     background: #fff;
     padding: 0 24px;
+    box-sizing: border-box;
     &-left {
       float: left;
     }
