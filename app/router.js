@@ -13,13 +13,9 @@ module.exports = app => {
   router.get(/^\/ed\//, controller.editor.index)
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)
-<<<<<<< HEAD
-  router.get(/\/l\//, controller.lesson.index)
-  router.get('/s', controller.study.index)
-  router.get(/\/s\//, controller.study.index)
-=======
   router.get(/^\/l\//, controller.lesson.index)
->>>>>>> 58512d2ccab5a36f50772ec6ee9fe6adbcd08478
+  router.get('/s', controller.study.index)
+  router.get(/^\/s\//, controller.study.index)
   router.get('/pbl', controller.pbl.index)
   router.get(/^\/pbl\//, controller.pbl.index)
   router.get('/org', controller.org.index)
