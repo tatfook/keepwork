@@ -14,6 +14,8 @@ module.exports = app => {
   router.get('/vp', controller.editor.viewport)
   router.get('/l', controller.lesson.index)
   router.get(/\/l\//, controller.lesson.index)
+  router.get('/s', controller.study.index)
+  router.get(/\/s\//, controller.study.index)
   router.get('/pbl', controller.pbl.index)
   router.get(/\/pbl\//, controller.pbl.index)
   router.get('/org', controller.org.index)
