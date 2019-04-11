@@ -431,6 +431,7 @@ export default {
         checkedWords: this.applyText
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.applyText = _.get(sensitiveResult, '[0].word', this.applyText)
         this.isApplyButtonLoading = false
         return
       }
