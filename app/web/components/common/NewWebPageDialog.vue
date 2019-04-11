@@ -231,6 +231,7 @@ export default {
         checkedWords: this.webpageNameForm.value
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.webpageNameForm.value = _.get(sensitiveResult, '[0].word', this.webpageNameForm.value)
         return
       }
       await this.createNewPage()

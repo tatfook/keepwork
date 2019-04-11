@@ -90,26 +90,23 @@ export default {
       this.width = this.originWidth
       this.height = this.originHeight
       this.alignment = this.originAligment
-      if (!this.cardValue.unit) {
-        this.handleDropdown('%')
-      }
     },
     handlePercentInput(percent) {
       if (/^[0-9]*$/.test(percent)) {
         if (percent < 0 || percent > 100) {
-          return this.$emit('onPropertyChange', { percent: 100 })
+          return this.$emit('onPropertyChange', { unit: '%', percent: 100 })
         }
-        this.$emit('onPropertyChange', { percent: Number(percent) })
+        this.$emit('onPropertyChange', { unit: '%', percent: _.toNumber(percent) })
       }
     },
     handleWidthInput(width) {
       if (/^[0-9]*$/.test(width)) {
-        this.$emit('onPropertyChange', { width: Number(width) })
+        this.$emit('onPropertyChange', { width: _.toNumber(width) })
       }
     },
     handleHeightInput(height) {
       if (/^[0-9]*$/.test(height)) {
-        this.$emit('onPropertyChange', { height: Number(height) })
+        this.$emit('onPropertyChange', { height: _.toNumber(height) })
       }
     },
     handleDropdown(unit) {
@@ -119,7 +116,6 @@ export default {
       this.$emit('onPropertyChange', { custom: !this.isCustom })
     },
     handleAlignmentSelect(alignment) {
-      console.log(alignment)
       this.$emit('onPropertyChange', { alignment })
     }
   },

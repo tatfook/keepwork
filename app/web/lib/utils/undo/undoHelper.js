@@ -1,4 +1,5 @@
 import _ from 'lodash'
+const diffpatcher = require('jsondiffpatch')
 
 export default {
   truncate(undoManager) {
@@ -7,12 +8,12 @@ export default {
     }
   },
   init(undoManager, initialItem) {
-    undoManager.initialItem = _.cloneDeep(initialItem)
+    undoManager.current = _.cloneDeep(initialItem)
     this.clear(undoManager)
   },
   clear(undoManager) {
-    undoManager.stack = [undoManager.initialItem]
-    undoManager.position = 0
+    undoManager.stack = []
+    undoManager.position = -1
   },
   save(undoManager, item) {
     if (undoManager.position >= undoManager.maxLength) {
@@ -24,35 +25,42 @@ export default {
     )
 
     undoManager.stack = undoManager.stack.slice(0, undoManager.position + 1)
-    undoManager.stack.push(item)
+    const delta = diffpatcher.diff(undoManager.current, item)
+    undoManager.stack.push(delta)
+    undoManager.current = _.cloneDeep(item)
     undoManager.position++
   },
   undo(undoManager, callback) {
     if (this.canUndo(undoManager)) {
-      let item = undoManager.stack[--undoManager.position]
+      const delta = undoManager.stack[undoManager.position--]
+      const reverseDelta = diffpatcher.reverse(delta)
+      const item = diffpatcher.patch(undoManager.current, reverseDelta)
+      undoManager.current = _.cloneDeep(item)
       if (callback && item) {
-        callback(item.newCode, item.cursor)
+        callback(item)
       }
     }
   },
   redo(undoManager, callback) {
     if (this.canRedo(undoManager)) {
-      let item = undoManager.stack[++undoManager.position]
+      const delta = undoManager.stack[++undoManager.position]
+      const item = diffpatcher.patch(undoManager.current, delta)
+      undoManager.current = _.cloneDeep(item)
       if (callback && item) {
-        callback(item.newCode, item.cursor)
+        callback(item)
       }
     }
   },
   canUndo(undoManager) {
-    return undoManager ? undoManager.position > 0 : false
+    return undoManager ? undoManager.position > -1 : false
   },
   canRedo(undoManager) {
-    return undoManager.position < this.count(undoManager)
+    return undoManager.position + 1 < this.count(undoManager)
   },
   count(undoManager) {
-    return undoManager.stack.length - 1 // -1 because of initial item
+    return undoManager.stack.length
   },
   currentItem(undoManager) {
-    return undoManager.stack[undoManager.position] || {}
+    return undoManager.current
   }
 }

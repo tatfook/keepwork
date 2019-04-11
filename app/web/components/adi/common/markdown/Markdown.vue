@@ -139,6 +139,8 @@ export default {
     font-family: '宋体';
     p {
       font-size: 14px;
+      margin: 0;
+      padding: 8px 0;
     }
     pre {
       line-height: 1.2;
@@ -149,6 +151,10 @@ export default {
     }
     li + li {
       margin-top: 0;
+    }
+    blockquote {
+      margin-bottom: 0;
+      padding: 0 1em;
     }
     .icon-link_ {
       display: none;

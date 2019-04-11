@@ -304,6 +304,7 @@ export default {
         checkedWords: this.currIssue.title
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.currIssue.title = _.get(sensitiveResult, '[0].word', this.currIssue.title)
         this.cretateIssueLoading = false
         return
       }
@@ -370,6 +371,7 @@ export default {
       }).catch()
       this.isTagLoading = false
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.inputValue = _.get(sensitiveResult, '[0].word', inputValue)
         return
       }
       if (inputValue) {
@@ -414,6 +416,7 @@ export default {
         checkedWords: this.myComment
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.myComment = _.get(sensitiveResult, '[0].word', this.myComment)
         this.createCommentLoading = false
         return
       }

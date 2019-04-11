@@ -693,7 +693,8 @@ export default {
   color: white;
 }
 .el-dropdown-link {
-  padding: 20px 0;
+  display: inline-block;
+  height: 60px;
 }
 .kp-logo {
   width: 127px;
