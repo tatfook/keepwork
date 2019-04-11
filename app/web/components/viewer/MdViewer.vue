@@ -13,7 +13,6 @@ export default {
   },
   mounted() {
     this.theme = themeFactory.generate({})
-    console.log(this.theme)
     this.changeMdToModList()
   },
   data() {
@@ -24,9 +23,7 @@ export default {
   },
   methods: {
     changeMdToModList() {
-      console.log(1111111, Parser.buildBlockList(this.content))
       this.blockList = Parser.buildBlockList(this.content)
-      console.log(this.blockList)
     }
   },
   components: {

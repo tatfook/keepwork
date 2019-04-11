@@ -53,8 +53,12 @@ const gitLabAPIGenerator = ({ url, token }) => {
           return total
         },
         files: {
-          getFileCommitList: async projectPath => {
-            let res = await instance.get(`projects/${projectPath}/commits`)
+          getFileCommitList: async ({ projectPath, filePath }) => {
+            projectPath = encodeURIComponent(projectPath)
+            filePath = encodeURIComponent(filePath)
+            let res = await instance.get(
+              `projects/${projectPath}/commits/${filePath}`
+            )
             return res
           },
           remove: async (projectName, filePath) => {
@@ -72,7 +76,12 @@ const gitLabAPIGenerator = ({ url, token }) => {
             )
             return res.data
           },
-          async showWithCommitId({ projectPath, fullPath, useCache, commitId }) {
+          async showWithCommitId({
+            projectPath,
+            fullPath,
+            useCache,
+            commitId
+          }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
             let res = await instance.get(
@@ -106,14 +115,15 @@ const gitLabAPIGenerator = ({ url, token }) => {
             })
             return res.data
           },
-          async edit(_projectName, filePath, content) {
+          async edit(_projectName, filePath, content, source_version) {
             const [projectName, path] = [_projectName, filePath].map(
               encodeURIComponent
             )
             let res = await instance.put(
               `projects/${projectName}/files/${path}`,
               {
-                content
+                content,
+                source_version
               }
             )
             return res.data
@@ -236,9 +246,9 @@ export class GitAPI {
       })
   }
 
-  async getFileCommitList({ projectPath }) {
+  async getFileCommitList({ projectPath, filePath }) {
     return this.client.projects.repository.files
-      .getFileCommitList(projectPath)
+      .getFileCommitList({ projectPath, filePath })
       .then(data => data)
   }
 
@@ -256,8 +266,9 @@ export class GitAPI {
       .splice(0, 2)
       .join('/')
     const content = options.content || ''
+    const source_version = options.source_version
     return this.client.projects.repository.files
-      .edit(projectName, path, content)
+      .edit(projectName, path, content, source_version)
       .then(data => {
         return data
       })

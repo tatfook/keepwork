@@ -9,10 +9,10 @@
     </div>
     <div class="file-history-main" v-loading="isLoading">
       <div class="file-history-header">
-        <span class="file-history-header-version">{{activeCommitId}}</span>
+        <span class="file-history-header-version">{{activeVersion}}</span>
         <div class="file-history-main-operations">
           <el-tooltip content="恢复到此版本">
-            <i class="iconfont icon-ziyuan1"></i>
+            <i class="iconfont icon-ziyuan1" @click="recoverVersion"></i>
           </el-tooltip>
           <div class='file-history-header-switch'>
             <el-tooltip :content="$t('tips.ShowPreviewOnly')">
@@ -52,6 +52,7 @@ export default {
     return {
       isLoading: false,
       activeCommitId: undefined,
+      activeVersion: undefined,
       isPreviewShow: true,
       isCodeShow: true,
       options: {
@@ -88,7 +89,9 @@ export default {
   },
   methods: {
     ...mapActions({
+      closeOpenedFile: 'closeOpenedFile',
       gitlabReadFileForOwnerWithCommitId: 'gitlab/readFileForOwnerWithCommitId',
+      gitlabSaveFile: 'gitlab/saveFile',
       toggleFileHistoryVisibility: 'toggleFileHistoryVisibility'
     }),
     switchViewShow(isPreviewShow, isCodeShow) {
@@ -98,9 +101,9 @@ export default {
     closeHistory() {
       this.toggleFileHistoryVisibility({ isVisible: false })
     },
-    async getFileContentByCommitId(commitId) {
-      console.log(commitId)
+    async getFileContentByCommitId({ commitId, version }) {
       this.activeCommitId = commitId
+      this.activeVersion = version
       this.isLoading = true
       await this.gitlabReadFileForOwnerWithCommitId({
         path: this.activeFullPath,
@@ -108,6 +111,21 @@ export default {
         commitId
       }).catch()
       this.isLoading = false
+    },
+    async recoverVersion() {
+      this.isLoading = true
+      await this.gitlabSaveFile({
+        path: this.activeFullPath,
+        content: this.activeCommitIdContent,
+        source_version: this.activeVersion
+      })
+        .then(async () => {
+          this.closeOpenedFile({ path: this.activeFullPath })
+          window.location.reload()
+        })
+        .catch()
+      this.isLoading = false
+      this.closeHistory()
     }
   },
   components: {

@@ -216,7 +216,7 @@ const actions = {
     let payload = { path: fullPath, file: { content } }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
-  async saveFile(context, { path: inputPath, content }) {
+  async saveFile(context, { path: inputPath, content, source_version }) {
     let { commit, dispatch } = context
     let { gitlab, path, options } = await getGitlabFileParams(context, {
       path: inputPath,
@@ -225,7 +225,8 @@ const actions = {
     await gitlab
       .editFile(path, {
         ...options,
-        content: /\.md$/.test(path) ? content.replace(/\n$/, '') : content
+        content: /\.md$/.test(path) ? content.replace(/\n$/, '') : content,
+        source_version
       })
       .catch(async e => {
         console.error(e)
@@ -242,15 +243,14 @@ const actions = {
     {
       getters: { getGitlabAPI }
     },
-    { projectPath }
+    { projectPath, filePath }
   ) {
     let gitlab = getGitlabAPI()
     let result = await gitlab
-      .getFileCommitList({ projectPath: encodeURIComponent(projectPath) })
+      .getFileCommitList({ projectPath, filePath })
       .catch(error => {
         console.log(error)
       })
-    console.log(result)
     return result.data
   },
   async createFolder(context, { path, refreshRepositoryTree = true }) {

@@ -56,7 +56,6 @@ const generate = conf => {
 
   let data = buildOrigin(themeClasses)
   let sheet = jss.createStyleSheet(themeClasses)
-  console.log(data, sheet)
   return { data, sheet }
 }
 
