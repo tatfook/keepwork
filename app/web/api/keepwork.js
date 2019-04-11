@@ -343,7 +343,7 @@ export const lessonOrganizations = {
   getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`),
   getOrgPackages: async ({ organizationId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}`),
   getOrgClassPackages: async ({ organizationId, classId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}&classId=${classId}`),
-  getOrgClasses: async () => get('lessonOrganizationClasses'),
+  getOrgClasses: async params => get('lessonOrganizationClasses', { params }),
   getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
   getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
