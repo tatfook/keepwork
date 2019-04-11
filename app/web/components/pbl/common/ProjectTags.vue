@@ -98,6 +98,7 @@ export default {
       }).catch()
       this.isLoading = false
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.inputValue = _.get(sensitiveResult, '[0].word', this.inputValue)
         return
       }
       let nowTagInTagsIndex = _.findIndex(

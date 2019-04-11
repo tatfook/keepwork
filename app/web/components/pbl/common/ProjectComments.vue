@@ -33,6 +33,7 @@ import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'ProjectComments',
   props: {
@@ -117,7 +118,7 @@ export default {
         checkedWords: this.newCommenContent
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
-        this.newCommenContent = sensitiveResult[0].word
+        this.newCommenContent = _.get(sensitiveResult, '[0].word', this.newCommenContent)
         this.isAddingComment = false
         return
       }
