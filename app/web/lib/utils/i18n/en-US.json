@@ -37,6 +37,7 @@
     "realNameAuthentication": "Verified",
     "thirdBanding": "Account binding",
     "chinese-englishSwitch": "Switch to Chinese(中文)",
+    "oldVersions": "Old versions",
     "left-rightAngles": "Toggle left and right angles",
     "accountNoChange": "Account name cannot be changed after registration",
     "useLettersOrNumber": "A combination of letters and numbers is allowed, for example, keep123.",
@@ -1501,7 +1502,10 @@
     "joinAt": "Join at",
     "removeMember": "Remove",
     "hasRate": "{number} ratings",
-    "noGames": "No contests"
+    "noGames": "No contests",
+    "deleteProjectHint": "Are you sure you want to delete the project? ",
+    "deleteProjectNotice": "After the project is deleted, all relevant data will be cleared and will not be restored. ",
+    "deleteProject": "Delete Project"
   },
   "footer": {
     "lettersTo": "Letters To",
