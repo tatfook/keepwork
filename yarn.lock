@@ -15620,6 +15620,11 @@ vue-i18n@^7.6.0:
   resolved "http://registry.npm.taobao.org/vue-i18n/download/vue-i18n-7.8.1.tgz#2ce4b6efde679a1e05ddb5d907bfc1bc218803b2"
   integrity sha1-LOS2795nmh4F3bXZB7/BvCGIA7I=
 
+vue-infinite-scroll@^2.0.2:
+  version "2.0.2"
+  resolved "http://registry.npm.taobao.org/vue-infinite-scroll/download/vue-infinite-scroll-2.0.2.tgz#ca37a91fe92ee0ad3b74acf8682c00917144b711"
+  integrity sha1-yjepH+ku4K07dKz4aCwAkXFEtxE=
+
 vue-jest@^2.6.0:
   version "2.6.0"
   resolved "http://registry.npm.taobao.org/vue-jest/download/vue-jest-2.6.0.tgz#23dc99a4dce0bb59fea3946e1317b234968cf12a"

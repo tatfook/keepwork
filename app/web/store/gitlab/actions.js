@@ -243,11 +243,11 @@ const actions = {
     {
       getters: { getGitlabAPI }
     },
-    { projectPath, filePath }
+    { projectPath, filePath, page, perPage }
   ) {
     let gitlab = getGitlabAPI()
     let result = await gitlab
-      .getFileCommitList({ projectPath, filePath })
+      .getFileCommitList({ projectPath, filePath, page, perPage })
       .catch(error => {
         console.log(error)
       })
