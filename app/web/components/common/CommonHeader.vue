@@ -66,9 +66,9 @@
             <!-- <el-dropdown-item>
               <a href="/ed" target="_blank"><i class="iconfont icon-bulb"></i>{{$t('common.pageEditor')}}</a>
             </el-dropdown-item> -->
-            <el-dropdown-item>
+            <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <!-- <el-dropdown-item divided>
               <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
             </el-dropdown-item> -->
@@ -120,6 +120,7 @@
           <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -177,9 +178,9 @@
             <!-- <el-dropdown-item>
               <a href="/ed" target="_blank"><i class="iconfont icon-bulb"></i>{{$t('common.pageEditor')}}</a>
             </el-dropdown-item> -->
-            <el-dropdown-item>
+            <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <!-- <el-dropdown-item divided>
               <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
             </el-dropdown-item> -->
@@ -207,6 +208,7 @@
           <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -438,10 +440,6 @@ export default {
 .el-menu .brand {
   width: 115px;
 }
-.el-menu a {
-  text-decoration: none;
-  color: inherit;
-}
 .el-menu .login-btn {
   background: #f5f5f5;
   border: solid 1px #dddddd;
@@ -479,6 +477,11 @@ export default {
 }
 .el-dropdown-menu__item {
   display: flex;
+  padding: 0;
+}
+.el-dropdown-menu__item a {
+  padding: 0 20px;
+  width: 100%;
 }
 .el-dropdown-menu .iconfont {
   margin-right: 14px;

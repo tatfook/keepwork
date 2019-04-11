@@ -140,7 +140,9 @@
     "star": "star",
     "deleteWebsiteHint": "Are you sure you want to delete the website?",
     "deleteWebsiteNotice": "After the website is deleted, all the relevant data will be cleared and the URL that connects to the site will be invalid. And the project cannot be accessed if the website is part of it.",
-    "deleteWebsite": "Delete Website"
+    "deleteWebsite": "Delete Website",
+
+    "support": "Support"
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
@@ -1499,7 +1501,10 @@
     "joinAt": "Join at",
     "removeMember": "Remove",
     "hasRate": "{number} ratings",
-    "noGames": "No contests"
+    "noGames": "No contests",
+    "deleteProjectHint": "Are you sure you want to delete the project? ",
+    "deleteProjectNotice": "After the project is deleted, all relevant data will be cleared and will not be restored. ",
+    "deleteProject": "Delete Project"
   },
   "footer": {
     "lettersTo": "Letters To",
@@ -1771,11 +1776,13 @@
     "wasNotFound": " was not found.",
     "verifyFailed": " verify failed.",
     "failedToAdd": " failed to add.",
+    "removeSuccessfully": "Remove successfully",
     "successfullyAdd": "Successfully added.",
     "successfullyUpdatedClass": "Successfully updated class information.",
     "failedUpdatedClass": "Failed to update class information.",
     "successfullyCreatedANewClass": "Successfully created a new class.",
     "classNameAlreadyExist": "The class name already exists.",
+    "noTeachingRecord": "There is no teaching record yet.",
     "failedToCreateANewClass": "Failed to create a new class.",
     "chapterIsFinished": "The chapter is finished.",
     "latestTeachingTime": "Latest teaching time: ",

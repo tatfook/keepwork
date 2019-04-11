@@ -1,5 +1,5 @@
 <template>
-  <el-container id='app' class="index-page-container">
+  <el-container id='app' class="index-page index-page-container">
     <el-header height='61px' class="index-page-header" v-if="!isSystemCompShow.isSystemHeaderHide">
       <common-header class="container"></common-header>
     </el-header>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueAnalytics from 'vue-analytics'
@@ -112,26 +111,31 @@ export default {
     }),
     async getPathWithPagename(path) {
       let originPath = path
-      path = path.split('/').filter(x => x).join('/')
+      path = path
+        .split('/')
+        .filter(x => x)
+        .join('/')
       await this.gitlabGetRepositoryTree({
         path,
         editorMode: false
       }).catch(e => console.error(e))
       let children = this.gitlabChildrenByPath(path)
       let indexChild = children.filter(file => file.name === 'index.md')[0]
-      let firstFileTypeChild = children.filter(
-        file => file.type === 'blob'
-      )[0]
+      let firstFileTypeChild = children.filter(file => file.type === 'blob')[0]
       let targetFile = indexChild || firstFileTypeChild
-      return targetFile && targetFile.path ? '/' + targetFile.path.replace(/\.md$/, '') : `${originPath}/index`
+      return targetFile && targetFile.path
+        ? '/' + targetFile.path.replace(/\.md$/, '')
+        : `${originPath}/index`
     },
     async loadEditorPresets() {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
-      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(err => {
-        console.error(err)
-      })
+      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(
+        err => {
+          console.error(err)
+        }
+      )
     },
     async updateActivePage() {
       if (!this.presetLoaded) return
@@ -153,7 +157,12 @@ export default {
     },
     setDocumentTitle() {
       let { username, sitename, pagename } = this.activePageInfo
-      document.title = this.activePageDisplayName || pagename || sitename || username || 'KeepWork'
+      document.title =
+        this.activePageDisplayName ||
+        pagename ||
+        sitename ||
+        username ||
+        'KeepWork'
     }
   },
   computed: {
@@ -197,7 +206,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 html,
 body {
   height: 100%;
@@ -207,7 +216,7 @@ body {
   padding: 0;
 }
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
@@ -217,23 +226,26 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
-.index-page-header {
-  border-bottom: 1px solid #e6e6e6;
+.index-page {
+  &-header {
+    border-bottom: 1px solid #e6e6e6;
+  }
+  &-footer {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+  }
+  &-footer {
+    padding: 0;
+  }
+  &-container {
+    min-height: 100%;
+  }
+  & &-main {
+    padding: 0;
+  }
 }
-.index-page-footer {
-  display: flex;
-  align-items: center;
-  background-color: #f9f9f9;
-}
-.home-page-footer {
-  padding: 0;
-}
-.index-page-container {
-  min-height: 100%;
-}
-.index-page-main {
-  padding: 0;
-}
+
 .index-page-container .el-main.index-page-main {
   background-color: transparent;
 }

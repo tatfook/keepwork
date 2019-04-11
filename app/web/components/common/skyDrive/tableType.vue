@@ -17,7 +17,7 @@
       </el-col>
     </el-row>
     <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" sortable width="40">
+      <el-table-column type="selection" sortable width="44">
       </el-table-column>
       <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" sortable width="300">
       </el-table-column>
