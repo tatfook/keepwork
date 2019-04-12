@@ -109,7 +109,7 @@
                   <i class="iconfont icon-qiehuan"></i>
                   {{$t('common.left-rightAngles')}}
                 </button>
-                <button :class=" isEnglish ? 'btn-angles' : '' " @click="showFileHistory">
+                <button :disabled='currentDisabled' :class=" isEnglish ? 'btn-angles' : '' " @click="showFileHistory">
                   <i class="iconfont icon-historyrecord"></i>
                   {{$t('common.oldVersions')}}
                 </button>

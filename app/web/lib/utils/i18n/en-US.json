@@ -345,7 +345,11 @@
     "deleteVideoCoverConfirmMsg": "Are you sure to delete this cover of the video ?",
 
     "wrongModDirective": "Wrong Mod Directive",
-
+    "recoverThisVersion": "Recover this version",
+    "versionRecoverFrom": "{nowVersion} recovered from {sourceVersion}",
+    "versionLabel": "Version",
+    "operatorLabel": "Operator",
+    "updateAtLabel": "Update at",
     "associationWebsite": "Reset website"
   },
   "tips": {

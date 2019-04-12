@@ -3,7 +3,7 @@
     <div class="file-history-sidebar">
       <div class="file-history-sidebar-header">
         <i class="iconfont icon-historyrecord"></i>
-        <span class="file-history-sidebar-header-title">历史记录</span>
+        <span class="file-history-sidebar-header-title">{{$t('common.oldVersions')}}</span>
       </div>
       <history-list @selectHistory="getFileContentByCommitId"></history-list>
     </div>
@@ -11,7 +11,7 @@
       <div class="file-history-header">
         <span class="file-history-header-version">{{activeVersion}}</span>
         <div class="file-history-main-operations">
-          <el-tooltip content="恢复到此版本">
+          <el-tooltip :content="$t('editor.recoverThisVersion')">
             <i class="iconfont icon-ziyuan1" @click="recoverVersion"></i>
           </el-tooltip>
           <div class='file-history-header-switch'>
@@ -25,7 +25,7 @@
               <span class="iconfont icon-code1" :class='{"file-history-header-switch-active": !isPreviewShow && isCodeShow}' @click="switchViewShow(false, true)"></span>
             </el-tooltip>
           </div>
-          <el-tooltip content="关闭">
+          <el-tooltip :content="$t('common.close')">
             <i class="iconfont icon-ziyuan3" @click="closeHistory"></i>
           </el-tooltip>
         </div>
