@@ -52,10 +52,12 @@ module.exports = {
   },
   plugins: {
     imagemini: false,
+    clean: false,
     // serviceworker: true,
     // analyzer: true,
     dotenv,
     uglifyJs: {
+      cache: true,
       parallel: false,
     },
     copy: [{
