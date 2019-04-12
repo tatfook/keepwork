@@ -51,7 +51,7 @@ export default {
           perPage
         }).catch()
         this.historyList = _.concat(this.historyList, result.commits)
-        if (result.total - this.historyList.length >= this.perPage) {
+        if (result.total > this.historyList.length) {
           this.isBusy = false
         }
         resolve()
