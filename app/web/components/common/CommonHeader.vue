@@ -357,12 +357,7 @@ export default {
       }
     },
     goStudyPage() {
-      if (this.userIsLogined) {
-        return (window.location.href = `${this.locationOrigin}/s`)
-      }
-      window.location.href = `${
-        this.locationOrigin
-      }/l/student/solution/teachingIdea`
+      return (window.location.href = `${this.locationOrigin}/s`)
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {
