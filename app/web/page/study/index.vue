@@ -19,6 +19,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './study.router'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
+import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import CommonHeader from '@/components/common/CommonHeader'
@@ -43,7 +44,8 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
-    lesson: lessonModule
+    lesson: lessonModule,
+    org: orgModule
   }
 })
 export default {

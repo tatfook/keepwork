@@ -18,6 +18,13 @@
         </div>
       </div>
     </div>
+    <div class="study-home-region-teachers">
+      <div class="study-home-region-teachers-desc">
+        <h4 class="study-home-region-teachers-desc-title">师资团队</h4>
+        <p class="study-home-region-teachers-desc-text">我们的师资团队由拥有丰富教学经验和多年开发经验的职业程序员组成，致力于拓展编程教育愿景，希望能够帮助中国培养下一代优秀的程序员，也帮助更广大家庭的孩子们学会自主学习的方法。</p>
+        <span class="study-home-region-teachers-desc-more" @click="learnMore(teachingGroupLink)">了解更多</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -44,7 +51,8 @@ export default {
           imgUrl: require('@/assets/study/lesson.png'),
           title: '在线课程',
           text_1: '通过一流的在线课程学习编程',
-          text_2: 'Keepwork官方认证课程可在线进行自主学习并提供系统的学习路径。',
+          text_2:
+            'Keepwork官方认证课程可在线进行自主学习并提供系统的学习路径。',
           moreLink: `${window.location.origin}/s/lessonPackage`
         },
         {
@@ -53,12 +61,13 @@ export default {
           text_1: '赋予学生创造力',
           text_2: '为学校、培训机构提供优惠的教学资源。',
           moreLink: 'https://biz.keepwork.com/'
-        },
-      ]
+        }
+      ],
+      teachingGroupLink: `${window.location.origin}/s/teachingGroup`
     }
   },
   methods: {
-    learnMore(link){
+    learnMore(link) {
       window.open(link)
     }
   }
@@ -125,6 +134,33 @@ export default {
             cursor: pointer;
           }
         }
+      }
+    }
+  }
+  &-teachers {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    min-height: 300px;
+    background: url(../../assets/study/teacher.png) center top no-repeat;
+    &-desc {
+      max-width: 630px;
+      color: #fff;
+      padding: 10px 0 0 30px;
+      &-title {
+        font-size: 24px;
+      }
+      &-text {
+        font-size: 14px;
+        line-height: 36px;
+      }
+      &-more {
+         display: inline-block;
+         padding: 9px 22px;
+         border: 1px solid #fff;
+         border-radius: 18px;
+         font-size: 14px;
+         margin-top: 48px;
+         cursor: pointer;
       }
     }
   }
