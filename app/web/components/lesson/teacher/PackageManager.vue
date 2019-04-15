@@ -443,7 +443,7 @@ export default {
         })
     },
     toNewPackagePage() {
-      this.$router.push({ path: '/teacher/newPackage' })
+      this.$router.push({ path: '/createPackage/newPackage' })
     },
     handleClose(continueFnNameAfterEnsure) {
       this.isInfoDialogVisible = false
