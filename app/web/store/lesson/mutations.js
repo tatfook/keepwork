@@ -10,6 +10,7 @@ const LOGOUT = 'LOGOUT'
 const SHOW_LOGIN_DIALOG = 'SHOW_LOGIN_DIALOG'
 const TOGGLE_LOGIN_DIALOG = 'TOGGLE_LOGIN_DIALOG'
 const SET_PREVIEW_FLAG = 'SET_PREVIEW_FLAG'
+const GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS = 'GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS'
 
 export const props = {
   GET_USER_INFO_SUCCESS,
@@ -21,7 +22,8 @@ export const props = {
   LOGOUT,
   SHOW_LOGIN_DIALOG,
   TOGGLE_LOGIN_DIALOG,
-  SET_PREVIEW_FLAG
+  SET_PREVIEW_FLAG,
+  GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS
 }
 
 const mutations = {
@@ -57,6 +59,12 @@ const mutations = {
   },
   [SET_PREVIEW_FLAG](state, payload) {
     Vue.set(state, 'previewFlag', payload)
+  },
+  [GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS](state, payload) {
+    Vue.set(state, 'TagsPackages', {
+      ...state.TagsPackages,
+      [payload.tag.id]: payload
+    })
   }
 }
 

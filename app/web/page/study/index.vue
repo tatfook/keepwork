@@ -6,6 +6,9 @@
     <study-header></study-header>
     <router-view class="study-page-main-content"></router-view>
     <perfect-common-footer></perfect-common-footer>
+    <div @click.stop v-if="isShowLoginDialog">
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    </div>
   </div>
 </template>
 
@@ -21,12 +24,15 @@ import appModule from '@/store/app'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
+import pblModule from '@/store/pbl'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
 import StudyHeader from '@/components/study/StudyHeader'
+import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -45,9 +51,27 @@ const store = new Vuex.Store({
     app: appModule,
     user: userModule,
     lesson: lessonModule,
-    org: orgModule
+    org: orgModule,
+    pbl: pblModule
   }
 })
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (!Cookies.get('token')) {
+      store.dispatch(
+        'lesson/toggleLoginDialog',
+        { show: true, to },
+        { root: true }
+      )
+      if (!from.name) {
+        return next({ name: 'StudyHome' })
+      }
+      return next(false)
+    }
+  }
+  next()
+})
+
 export default {
   name: 'StudyPage',
   router,
@@ -58,11 +82,25 @@ export default {
       loading: true
     }
   },
+  computed: {
+    ...mapGetters({
+      isShowLoginDialog: 'pbl/isShowLoginDialog'
+    })
+  },
   async created() {},
   components: {
     CommonHeader,
     StudyHeader,
-    PerfectCommonFooter
+    PerfectCommonFooter,
+    LoginDialog
+  },
+  methods: {
+    ...mapActions({
+      pblToggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
+    handleLoginDialogClose() {
+      this.pblToggleLoginDialog(false)
+    }
   }
 }
 </script>
@@ -79,7 +117,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f8f8f8;  
+  background: #f8f8f8;
   &-header {
     height: 60px;
     border-bottom: 1px solid #e6e6e6;

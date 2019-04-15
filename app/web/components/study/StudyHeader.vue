@@ -31,17 +31,45 @@ export default {
       this.getCurrentRoute()
     }
   },
-  mounted(){
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined'
+    })
+  },
+  mounted() {
     this.getCurrentRoute()
   },
   methods: {
+    ...mapActions({
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
     switchTab(tabname, index) {
+      if (index == 1) {
+        this.$message.info('敬请期待')
+        return
+      }
+      if (index == 4) {
+        window.open('https://biz.keepwork.com')
+        return
+      }
+      if (index == 5) {
+        if (!this.isLogined) {
+          return this.toggleLoginDialog(true)
+        }
+      }
       this.activeIndex = index
       this.$router.push(`/${tabname}`)
     },
-    getCurrentRoute(){
+    getCurrentRoute() {
       let name = this.$route.name
-      let tabArr = ['Textbook', 'Document', 'LessonPackage', 'Education', 'MyOrganization', 'CreatePackage']
+      let tabArr = [
+        'Textbook',
+        'Document',
+        'LessonPackage',
+        'Education',
+        'MyOrganization',
+        'CreatePackage'
+      ]
       this.activeIndex = tabArr.indexOf(name) + 1
     }
   }

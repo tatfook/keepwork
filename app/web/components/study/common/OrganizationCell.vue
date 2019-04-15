@@ -1,12 +1,12 @@
 <template>
   <div class="my-organization-cabinet-box">
-    <div class="my-organization-cabinet-box-left">
-      <img class="my-organization-cabinet-box-left-img" :src="organization.logo" alt="">
+    <div class="my-organization-cabinet-box-left" @click="goOrg(organization.loginUrl)">
+      <img class="my-organization-cabinet-box-left-img" :src="organization.logo" alt="" @click="goOrg(organization.loginUrl)">
     </div>
     <div class="my-organization-cabinet-box-right">
-      <h3 class="my-organization-cabinet-box-right-name">{{organization.name}}</h3>
+      <h3 class="my-organization-cabinet-box-right-name" @click="goOrg(organization.loginUrl)">{{organization.name}}</h3>
       <p class="my-organization-cabinet-box-right-contact"><i class="iconfont icon-phone-fill"></i>{{organization.cellphone}}</p>
-      <p class="my-organization-cabinet-box-right-address"><i class="iconfont icon-location-fill"></i>{{organization.extra.city && organization.extra.city.join('') || '未知'}}</p>
+      <p class="my-organization-cabinet-box-right-address"><i class="iconfont icon-location-fill"></i>{{organization.location || '未知'}}</p>
     </div>
   </div>
 </template>
@@ -17,6 +17,11 @@ export default {
     organization: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    goOrg(link) {
+      window.open(`${window.location.origin}/org/${link}`)
     }
   }
 }
@@ -34,6 +39,7 @@ export default {
     margin: 0 0 24px 0;
     &-left {
       width: 170px;
+      cursor: pointer;
       &-img {
         width: 100%;
         height: 99px;
@@ -48,6 +54,7 @@ export default {
         margin: 0 0 14px 0;
         font-family: 'PingFangSC-Medium';
         font-size: 16px;
+        cursor: pointer;
       }
       &-contact,
       &-address {

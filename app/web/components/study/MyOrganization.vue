@@ -39,7 +39,20 @@ export default {
     max-width: 1200px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    &-box {
+      margin: 24px 32px 0 0;
+    }
+  }
+}
+@media screen and(min-width: 1200px) {
+  .my-organization {
+    &-cabinet {
+      &-box {
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+    }
   }
 }
 </style>
