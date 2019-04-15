@@ -106,7 +106,7 @@ export default {
       this.activeTab = type
     },
     toPackageManagerPage() {
-      this.$router.push('/teacher/packageManager')
+      this.$router.push('/createPackage/packageManager')
     },
     async savePackage({ isShowMessage = true }) {
       if (this.isPackageNameEmpty) {
