@@ -1,11 +1,11 @@
 <template>
   <el-scrollbar class="history-list" :native="false">
     <div class="history-list-header">
-      <div class="history-list-header-version">版本</div>
-      <div class="history-list-header-username">操作人</div>
-      <div class="history-list-header-date">恢复时间</div>
+      <div class="history-list-header-version">{{$t("editor.versionLabel")}}</div>
+      <div class="history-list-header-username">{{$t("editor.operatorLabel")}}</div>
+      <div class="history-list-header-date">{{$t("editor.updateAtLabel")}}</div>
     </div>
-    <div class="history-list-item" :class="{'history-list-item-active': activeVersion == history.version}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)" :title='history | hoverMessageFilter'>
+    <div class="history-list-item" :class="{'history-list-item-active': activeVersion == history.version}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)" :title='getHoverMessage(history)'>
       <div class="history-list-item-version">{{history.version}}
         <span class="history-list-item-version-sub">{{history.message | sourceVersionFilter}}</span>
       </div>
@@ -51,7 +51,7 @@ export default {
           perPage
         }).catch()
         this.historyList = _.concat(this.historyList, result.commits)
-        if (result.total - this.historyList.length >= this.perPage) {
+        if (result.total > this.historyList.length) {
           this.isBusy = false
         }
         resolve()
@@ -66,6 +66,19 @@ export default {
     async loadMore() {
       await this.getHistoryList(this.nowPage++, this.perPage)
       !this.activeVersion && this.getHistoryContent(this.historyList[0])
+    },
+    getHoverMessage(history) {
+      let commitMessage = history.message
+      let index = commitMessage.indexOf(SourceVersionStr)
+      if (index == -1) {
+        return
+      } else {
+        let sourceVersion = commitMessage.substring(
+          index + SourceVersionStr.length
+        )
+        let nowVersion = history.version
+        return this.$t('editor.versionRecoverFrom', { nowVersion, sourceVersion })
+      }
     }
   },
   filters: {
@@ -77,19 +90,6 @@ export default {
       return index != -1
         ? '(' + commitMessage.substring(index + SourceVersionStr.length) + ')'
         : ''
-    },
-    hoverMessageFilter(history) {
-      let commitMessage = history.message
-      let index = commitMessage.indexOf(SourceVersionStr)
-      if (index == -1) {
-        return
-      } else {
-        let sourceVersion = commitMessage.substring(
-          index + SourceVersionStr.length
-        )
-        let nowVersion = history.version
-        return `${nowVersion}来自${sourceVersion}恢复`
-      }
     }
   }
 }

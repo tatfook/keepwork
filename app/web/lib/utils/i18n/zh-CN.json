@@ -345,7 +345,11 @@
     "deleteVideoCoverConfirmMsg": "你确定要删除视频封面吗？",
 
     "wrongModDirective": "错误的Mod指令",
-
+    "recoverThisVersion": "恢复到此版本",
+    "versionRecoverFrom": "{nowVersion}来自{sourceVersion}恢复",
+    "versionLabel": "版本",
+    "operatorLabel": "操作人",
+    "updateAtLabel": "更新时间",
     "associationWebsite": "重新设定网站"
   },
   "tips": {

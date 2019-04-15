@@ -14,6 +14,7 @@ const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const GET_ORG_CLASSES_SUCCESS = 'GET_ORG_CLASSES_SUCCESS'
 const GET_ORG_TEACHERS_SUCCESS = 'GET_ORG_TEACHERS_SUCCESS'
 const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
+const GET_USER_ORG_SUCCESS = 'GET_USER_ORG_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -27,7 +28,8 @@ export const props = {
   SAVE_LESSON_DETAIL,
   GET_ORG_CLASSES_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
-  GET_ORG_STUDENTS_SUCCESS
+  GET_ORG_STUDENTS_SUCCESS,
+  GET_USER_ORG_SUCCESS
 }
 
 const mutations = {
@@ -101,6 +103,9 @@ const mutations = {
         [classId]: orgStudents
       }
     })
+  },
+  [GET_USER_ORG_SUCCESS](state, org) {
+    Vue.set(state, 'userOrg', org)
   }
 }
 

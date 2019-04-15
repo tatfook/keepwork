@@ -1,22 +1,44 @@
 {
-  "presets": [
-    ["env", {
-      "modules": false
-    }],
-    "stage-2"
-  ],
-  "plugins": [
-    "transform-object-rest-spread",
-    "syntax-dynamic-import",
-    "transform-object-assign",
-    "transform-vue-jsx",
-    "dynamic-import-node"
-  ],
-  "comments": false,
-  "env": {
+  "env":{
+    "node": {
+      "presets": [
+        ["env", {
+          "modules": false,
+          "targets": {
+            "node": "current"
+          }
+        }],
+        "stage-2"
+      ],
+      "plugins": [
+        "transform-object-rest-spread",
+        "syntax-dynamic-import",
+        "transform-vue-jsx",
+        "dynamic-import-node"
+      ]
+    },
+    "web": {
+      "presets": [
+        ["env", {
+          "modules": false,
+          "targets": {
+            "browsers": ["last 2 versions", "safari >= 7"]
+          }
+        }],
+        "stage-2"
+      ],
+      "plugins": [
+        "transform-object-rest-spread",
+        "syntax-dynamic-import",
+        "transform-object-assign",
+        "transform-vue-jsx",
+        "dynamic-import-node"
+      ]
+    },
     "test": {
       "presets": ["env", "stage-2"],
       "plugins": ["transform-vue-jsx", "istanbul"]
     }
-  }
+  },
+  "comments":false
 }
