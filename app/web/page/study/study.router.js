@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Study from '@/components/study/Study'
 import Textbook from '@/components/study/Textbook'
 import Document from '@/components/study/Document'
+import Lesson from '@/components/study/Lesson'
 import LessonPackage from '@/components/study/LessonPackage'
 import Education from '@/components/study/Education'
 import MyOrganization from '@/components/study/MyOrganization'
@@ -32,9 +33,16 @@ export default new Router({
       component: Document
     },
     {
-      path: '/lessonPackage',
-      name: 'LessonPackage',
-      component: LessonPackage
+      path: '/lesson',
+      name: 'Lesson',
+      component: Lesson,
+      children: [
+        {
+          path: '/',
+          name: 'LessonPackage',
+          component: LessonPackage
+        }
+      ]
     },
     {
       path: '/education',

@@ -4,7 +4,7 @@
       <div class="study-homepage-header-menu-left">
         <span :class="['tab-cell', {'active':activeIndex == 1}]" @click="switchTab('textbook',1)">教材</span>
         <span :class="['tab-cell', {'active':activeIndex == 2}]" @click="switchTab('document',2)">文档</span>
-        <span :class="['tab-cell', {'active':activeIndex == 3}]" @click="switchTab('lessonPackage',3)">课程</span>
+        <span :class="['tab-cell', {'active':activeIndex == 3}]" @click="switchTab('lesson',3)">课程</span>
         <span :class="['tab-cell', {'active':activeIndex == 4}]" @click="switchTab('education',4)">教育</span>
       </div>
       <div class="study-homepage-header-menu-right">
