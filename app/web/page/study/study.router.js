@@ -10,6 +10,7 @@ import Education from '@/components/study/Education'
 import MyOrganization from '@/components/study/MyOrganization'
 import CreatePackage from '@/components/study/CreatePackage'
 import TeachingGroup from '@/components/study/TeachingGroup'
+import OrganizationCooperation from '@/components/study/OrganizationCooperation'
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ export default new Router({
           path: '/',
           name: 'LessonPackage',
           component: LessonPackage
+        },
+        {
+          path: '/organizationCooperation',
+          name: 'OrganizationCooperation',
+          component: OrganizationCooperation
         }
       ]
     },
