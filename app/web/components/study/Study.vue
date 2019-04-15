@@ -53,7 +53,7 @@ export default {
           text_1: '通过一流的在线课程学习编程',
           text_2:
             'Keepwork官方认证课程可在线进行自主学习并提供系统的学习路径。',
-          moreLink: `${window.location.origin}/s/lessonPackage`
+          moreLink: `${window.location.origin}/s/lesson`
         },
         {
           imgUrl: require('@/assets/study/teaching.png'),
