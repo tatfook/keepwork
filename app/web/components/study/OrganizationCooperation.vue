@@ -49,12 +49,14 @@ export default {
   methods: {
     async searchOrganizations() {
       const params = {}
-      if (this.selectedProvince && this.selectedCity && this.selectedArea) {
-        params['location-eq'] = [
-          this.selectedProvince,
-          this.selectedCity,
-          this.selectedArea
-        ].join(',')
+      if (this.selectedProvince) {
+        params['location-like'] = `%${[
+          _.get(this.districts, [PROVINCE_ID, this.selectedProvince], ''),
+          _.get(this.districts, [this.selectedProvince, this.selectedCity], ''),
+          _.get(this.districts, [this.selectedCity, this.selectedArea], '')
+        ]
+          .filter(v => v)
+          .join(',')}%`
       }
       const res = await keepwork.lessonOrganizations.searchOrganizations(params)
       this.res = res
