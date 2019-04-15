@@ -26,7 +26,7 @@ const {
 const actions = {
   async getOrgClasses({ commit, getters: { orgClasses } }, { cache = false } = {}) {
     if (!(cache && !_.isEmpty(orgClasses))) {
-      const classes = await lessonOrganizations.getOrgClasses()
+      const classes = await lessonOrganizations.getOrgClasses({ roleId: 1 })
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
