@@ -10,47 +10,76 @@
     </div>
     <div class="lesson-package-page-tab">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+        <el-tab-pane :label="i.tagname" :name="`${i.id}`" v-for="(i,index) in packageTagsData" :key="index">
+          <div class="lesson-package-page-tab-packages">
+            <el-row>
+              <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in PackagesDataByTag" :key="index">
+                <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
+              </el-col>
+            </el-row>
+          </div>
+        </el-tab-pane>
       </el-tabs>
-    </div>
-    <div class="lesson-package-page-cabinet">
-
     </div>
   </div>
 </template>
 <script>
 import { keepwork } from '@/api'
 import LessonPackageCell from '@/components/common/LessonPackageCell'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'LessonPackage',
   data() {
     return {
-      activeName: 'second'
+      activeName: '0',
+      packageTags: []
     }
   },
-  async mounted() {
-    await keepwork.graphql
-      .getQueryResult({
-        query:
-          'query($id: Int){tag(id: $id) {id, tagname, packages{id, lessonCount} }}',
-        variables: {
-          id: 13
+  async created() {
+    this.packageTags = await this.getPackageSystemTags(2)
+    this.activeName = _.toString(this.packageTagsData[0].id)
+    await this.getPackageBySystemTags({ typeId: this.activeName })
+  },
+  computed: {
+    ...mapGetters({
+      PackagesByTag: 'lesson/PackagesByTag'
+    }),
+    packageTagsData() {
+      let newData = _.map(this.packageTags, i => {
+        return {
+          ...i,
+          sn: _.get(i, 'extra.sn', 99999)
         }
       })
-      .then(res => {
-        console.log('res', res)
+      return newData.sort(this.sortBySn)
+    },
+    PackagesDataByTag() {
+      let data = this.PackagesByTag({ typeId: this.activeName })
+      let packageData = _.get(data, 'tag.packages', [])
+      return _.map(packageData, i => {
+        return {
+          cover: i.extra.coverUrl,
+          title: i.packageName,
+          total_lessons: i.lessonCount,
+          age_min: i.minAge,
+          age_max: i.maxAge,
+          description: i.intro
+        }
       })
-      .catch(err => {
-        console.error('err', err)
-      })
+    }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event)
+    ...mapActions({
+      getPackageSystemTags: 'lesson/getPackageSystemTags',
+      getPackageBySystemTags: 'lesson/getPackageBySystemTags'
+    }),
+    sortBySn(obj1, obj2) {
+      return obj1.sn <= obj2.sn ? -1 : 1
+    },
+    async handleClick(tab) {
+      this.activeName = tab.name
+      await this.getPackageBySystemTags({ typeId: tab.name })
     },
     toOrganizationCooperationPage() {
       this.$router.push({ name: 'OrganizationCooperation'})
@@ -105,6 +134,11 @@ export default {
   &-tab {
     max-width: 1200px;
     margin: 0 auto 24px;
+    &-packages {
+    // /deep/  .lesson-package-cell .lesson {
+    //     border: none !important;
+    //   }
+    }
   }
 }
 </style>

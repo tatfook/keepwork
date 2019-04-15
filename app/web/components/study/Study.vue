@@ -68,6 +68,10 @@ export default {
   },
   methods: {
     learnMore(link) {
+      if (link == `${window.location.origin}/s/textbook`) {
+        this.$message.info('敬请期待')
+        return
+      }
       window.open(link)
     }
   }
@@ -154,13 +158,13 @@ export default {
         line-height: 36px;
       }
       &-more {
-         display: inline-block;
-         padding: 9px 22px;
-         border: 1px solid #fff;
-         border-radius: 18px;
-         font-size: 14px;
-         margin-top: 48px;
-         cursor: pointer;
+        display: inline-block;
+        padding: 9px 22px;
+        border: 1px solid #fff;
+        border-radius: 18px;
+        font-size: 14px;
+        margin-top: 48px;
+        cursor: pointer;
       }
     }
   }

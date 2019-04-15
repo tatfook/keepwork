@@ -24,6 +24,11 @@ export default new Router({
       component: Study
     },
     {
+      path: '/',
+      name: 'StudyHome',
+      component: Study
+    },
+    {
       path: '/textbook',
       name: 'Textbook',
       component: Textbook
@@ -58,7 +63,8 @@ export default new Router({
     {
       path: '/myOrganization',
       name: 'MyOrganization',
-      component: MyOrganization
+      component: MyOrganization,
+      meta: { requireAuth: true }
     },
     {
       path: '/createPackage',

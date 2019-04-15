@@ -374,6 +374,10 @@ export const graphql = {
   getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
 }
 
+export const systemTags = {
+  getSystemTags: async (type) => get(`systemTags?classify=${type}`)
+}
+
 export const keepwork = {
   user,
   website,
@@ -397,7 +401,8 @@ export const keepwork = {
   lessonOrganizations,
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
-  graphql
+  graphql,
+  systemTags
 }
 
 export default keepwork
