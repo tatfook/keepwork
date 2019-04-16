@@ -104,6 +104,7 @@ export default {
     await this.getOrgClassStudentsById({ classId: this.firstOrgClassId })
     this.selectedClassId = this.firstOrgClassId
     this.isLoading = false
+    this.getCurrentOrgUserCounts()
   },
   methods: {
     ...mapActions({
@@ -245,7 +246,7 @@ export default {
     handleAddFormItem() {
       if (
         this.selectedClassStudents.length + this.studentsFormData.length >=
-        Object.keys(this.orgStudents).length
+        this.orgStudentLimit
       ) {
         return this.alertCountError()
       }
@@ -258,11 +259,12 @@ export default {
       this.studentsFormData.splice(index, 1)
     },
     alertCountError() {
-      return this.$alert(
+      this.$alert(
         this.$t('org.cannotAddMoreMember'),
         this.$t('org.warningTitle'),
         {
-          type: 'warning'
+          type: 'warning',
+          showClose: false
         }
       )
     }
@@ -273,7 +275,8 @@ export default {
       orgClassStudents: 'org/teacher/orgClassStudents',
       currentOrg: 'org/currentOrg',
       orgRestCount: 'org/teacher/orgRestCount',
-      orgStudents: 'org/teacher/orgStudents'
+      orgStudents: 'org/teacher/orgStudents',
+      orgStudentLimit: 'org/teacher/orgStudentLimit'
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')

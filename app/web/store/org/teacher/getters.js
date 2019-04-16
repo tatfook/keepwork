@@ -13,6 +13,7 @@ const getters = {
     const residue = count - studentCount
     return residue > -1 ? residue : 0
   },
+  orgStudentLimit: (state, { orgUserCounts }) => _.get(orgUserCounts, 'count', 0),
   orgClassPackages: state => state.orgClassPackages,
   orgClassStudents: state => state.orgClassStudents,
   classroomCoursesData: state => state.classroomCoursesData,
