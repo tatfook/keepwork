@@ -270,7 +270,7 @@ export default {
       return this.isEditable(lessonDetail)
     },
     toNewLessonPage() {
-      this.$router.push({ path: '/teacher/lesson/new' })
+      this.$router.push({ path: '/createPackage/lesson/new' })
     },
     toEdit(lessonDetail) {
       this.$router.push(`/teacher/lesson/${lessonDetail.id}/edit`)

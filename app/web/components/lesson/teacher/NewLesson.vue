@@ -160,7 +160,7 @@ export default {
         })
     },
     toLessonManagerPage() {
-      this.$router.push('/teacher/lessonManager')
+      this.$router.push('/createPackage/lessonManager')
     }
   },
   components: {

@@ -9,7 +9,7 @@
       </div>
       <div class="study-homepage-header-menu-right">
         <span :class="['tab-cell', {'active':activeIndex == 5}]" @click="switchTab('myOrganization',5)">我的机构</span>
-        <span :class="['tab-cell', {'active':activeIndex == 6}]" @click="switchTab('createPackage',6)">创建课程</span>
+        <span :class="['tab-cell', {'active':activeIndex == 6}]" @click="switchTab('createPackage',6)">我创建的课程</span>
       </div>
     </div>
   </div>
@@ -48,11 +48,15 @@ export default {
         this.$message.info('敬请期待')
         return
       }
+      if (index == 2) {
+        window.open('https://keepwork.com/official/docs/index')
+        return
+      }
       if (index == 4) {
         window.open('https://biz.keepwork.com')
         return
       }
-      if (index == 5) {
+      if (index == 5 || index == 6) {
         if (!this.isLogined) {
           return this.toggleLoginDialog(true)
         }
@@ -71,6 +75,15 @@ export default {
         'CreatePackage'
       ]
       this.activeIndex = tabArr.indexOf(name) + 1
+      const LSSON_ROUTER_NAME = [
+        'Lesson',
+        'LessonPackage',
+        'OrganizationCooperation',
+        'PackageDetail'
+      ]
+      if (LSSON_ROUTER_NAME.includes(name)) {
+        this.activeIndex = 3
+      }
     }
   }
 }

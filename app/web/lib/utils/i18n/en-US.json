@@ -143,7 +143,9 @@
     "deleteWebsiteNotice": "After the website is deleted, all the relevant data will be cleared and the URL that connects to the site will be invalid. And the project cannot be accessed if the website is part of it.",
     "deleteWebsite": "Delete Website",
 
-    "support": "Support"
+    "support": "Support",
+
+    "myOrganization": "My Organization"
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
