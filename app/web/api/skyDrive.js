@@ -37,10 +37,10 @@ export const getFileExtension = (filename = '') =>
   filename.split('.').pop().toLowerCase()
 
 export const getFileKey = file => {
-  const { username } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+  const { userId } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
     jsrsasign.b64utoutf8(Cookies.get('token').split('.')[1])
   )
-  let fileID = `${username}-${uuid()}`
+  let fileID = `${userId}-${uuid()}`
   let fileExt = getFileExtension(file.name)
   return `${fileID}.${fileExt}`
 }
