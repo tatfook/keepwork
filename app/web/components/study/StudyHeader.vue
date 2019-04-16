@@ -56,7 +56,7 @@ export default {
         window.open('https://biz.keepwork.com')
         return
       }
-      if (index == 5) {
+      if (index == 5 || index == 6) {
         if (!this.isLogined) {
           return this.toggleLoginDialog(true)
         }
