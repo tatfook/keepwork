@@ -1,7 +1,13 @@
 <template>
   <div class="study-home-region">
     <div class="study-home-region-banner">
-      <div class="study-home-region-banner-center"></div>
+      <div class="study-home-region-banner-center">
+        <div class="study-home-region-banner-center-img"><img src="@/assets/study/title.png" alt=""></div>
+        <div class="study-home-region-banner-center-desc">
+          <p class="study-home-region-banner-center-desc-text">你是初学者？还是希望提升编程技能？<br>Keepwork为各个阶段、水平的学习者提供了多种多样的学习资源，从免费的教程到现场培训。</p>
+        </div>
+        <div class="study-home-region-banner-center-go"><span class="study-home-region-banner-center-go-text">从中选择适合你的学习内容吧！</span></div>
+      </div>
     </div>
     <div class="study-home-region-module">
       <div class="study-home-region-module-box" v-for="(i,index) in centerIntroData" :key="index">
@@ -45,7 +51,7 @@ export default {
           title: '免费文档',
           text_1: '免费在线资料',
           text_2: '通过免费的在线资料进行学习，涵盖动画、编程、CAD',
-          moreLink: `${window.location.origin}/s/document`
+          moreLink: `https://keepwork.com/official/docs/index`
         },
         {
           imgUrl: require('@/assets/study/lesson.png'),
@@ -87,6 +93,39 @@ export default {
       max-width: 1200px;
       margin: 0 auto;
       min-height: 461px;
+      border: 1px solid transparent;
+      &-img {
+        width: 396px;
+        height: 120px;
+        margin: 160px auto 0;
+        img {
+          width: 100%;
+        }
+      }
+      &-desc {
+        max-width: 670px;
+        text-align: center;
+        margin: 0 auto;
+        &-text {
+          color: #fff;
+          line-height: 30px;
+          font-size: 16px;
+          font-family: 'PingFangSC-Regular';
+        }
+      }
+      &-go {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        &-text {
+          display: inline-block;
+          padding: 9px 18px;
+          color: rgb(34, 106, 236);
+          background: #fff;
+          border-radius: 20px;
+          font-weight: bold;
+        }
+      }
     }
   }
   &-module {
