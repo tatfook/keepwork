@@ -44,7 +44,7 @@ export default {
       this.isEditorMod ? this.$emit('resetCancel') : this.toLessonManagerPage()
     },
     toLessonManagerPage() {
-      this.$router.push('/teacher/lessonManager')
+      this.$router.push('/createPackage/lessonManager')
     }
   }
 }
