@@ -55,6 +55,7 @@ export default {
         font-family: 'PingFangSC-Medium';
         font-size: 16px;
         cursor: pointer;
+        min-height: 21px;
       }
       &-contact,
       &-address {
@@ -63,6 +64,7 @@ export default {
         margin: 8px 0;
         padding-left: 20px;
         position: relative;
+        min-height: 16px;
         .icon-phone-fill,
         .icon-location-fill {
           position: absolute;
