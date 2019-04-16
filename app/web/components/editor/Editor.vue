@@ -12,6 +12,9 @@
           <el-tooltip v-if="activePage && hasOpenedFiles" :content="$t('common.myWebDisk')">
             <el-button class="iconfont icon-upload" @click="openSkyDriveManagerDialog"></el-button>
           </el-tooltip>
+          <el-tooltip v-if="activePage && hasOpenedFiles" :content="$t('common.oldVersions')">
+            <el-button class="iconfont icon-historyrecord" @click="showFileHistory"></el-button>
+          </el-tooltip>
         </el-button-group>
         <sky-drive-manager-dialog :show="showSkyDrive" @close="closeSkyDriveManagerDialog"></sky-drive-manager-dialog>
       </el-row>
@@ -269,6 +272,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleFileHistoryVisibility: 'toggleFileHistoryVisibility',
       resetShowingCol: 'resetShowingCol',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow',
       setActivePropertyData: 'setActivePropertyData',
@@ -335,6 +339,9 @@ export default {
       this.toggleSkyDrive({
         showSkyDrive: true
       })
+    },
+    showFileHistory() {
+      this.toggleFileHistoryVisibility({ isVisible: true })
     },
     async insertBigfile({ file, url }) {
       if (!url) return

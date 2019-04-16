@@ -56,6 +56,7 @@ export default {
       isPreviewShow: true,
       isCodeShow: true,
       options: {
+        readOnly: 'nocursor',
         mode: 'markdown',
         theme: 'default',
         lineNumbers: true,
@@ -167,6 +168,8 @@ export default {
     &-raw {
       flex: 1;
       background-color: #fff;
+      min-width: 0;
+      overflow: auto;
     }
     .iconfont {
       cursor: pointer;
