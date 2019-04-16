@@ -54,6 +54,7 @@ export default {
       line-height: 40px;
       color: #fff;
       cursor: pointer;
+      font-size: 14px;
       bottom: 0;
       left: 0;
       right: 0;
