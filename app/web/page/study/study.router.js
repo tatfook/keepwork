@@ -50,6 +50,7 @@ export default new Router({
       path: '/lesson',
       name: 'Lesson',
       component: Lesson,
+      redirect: { name: 'LessonPackage' },
       children: [
         {
           path: '/',
@@ -92,7 +93,7 @@ export default new Router({
         },
         {
           path: 'lesson/new',
-          name: 'TeacherColumnNewLesson',
+          name: 'NewLesson',
           component: NewLesson,
           meta: { requireAuth: true }
         },
@@ -103,7 +104,7 @@ export default new Router({
         },
         {
           path: 'newPackage',
-          name: 'TeacherColumnNewPackage',
+          name: 'NewPackage',
           component: NewPackage,
           meta: { requireAuth: true }
         },

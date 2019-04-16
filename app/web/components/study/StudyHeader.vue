@@ -9,7 +9,7 @@
       </div>
       <div class="study-homepage-header-menu-right">
         <span :class="['tab-cell', {'active':activeIndex == 5}]" @click="switchTab('myOrganization',5)">我的机构</span>
-        <span :class="['tab-cell', {'active':activeIndex == 6}]" @click="switchTab('createPackage',6)">创建课程</span>
+        <span :class="['tab-cell', {'active':activeIndex == 6}]" @click="switchTab('createPackage',6)">我创建的课程</span>
       </div>
     </div>
   </div>

@@ -17,28 +17,8 @@
         </div>
         <div class="activated-teacher-role-content-left-options">
           <el-menu ref='teacherColumnMenu' :mode='menuMode' :key="'mode-'+menuMode" :default-active="itmeActive" menu-trigger='click' text-color='' active-text-color='#fff'>
-            <el-menu-item v-show="false" index="-1"></el-menu-item>
-            <!-- <el-menu-item v-if="!isTeacher" index="0" @click="showItem('APPLY')" class="activated-teacher-role-apply">
-              <span class="activated-teacher-role-apply-content" slot="title">{{$t('lesson.applyAtivated')}}</span>
-              <span class="activated-teacher-role-apply-fake">{{$t('lesson.teach')}}</span>
-              <span class="activated-teacher-role-apply-fake">{{$t('lesson.review')}}</span>
-            </el-menu-item> -->
-            <!-- <el-menu-item v-if="isTeacher" index="1" @click="showItem('TEACH')">
-              <span class="item-title" slot="title">{{$t('lesson.teach')}}</span>
-            </el-menu-item>
-            <el-menu-item v-if="isTeacher" index="2" @click="showItem('REVIEW')">
-              <span class="item-title" slot="title">{{$t('lesson.review')}}</span>
-            </el-menu-item> -->
-            <!-- <el-submenu index="3" class='lesson-manager-popver-menu' popper-class="manage-menu">
-              <template slot="title">
-                <span class="item-title">{{$t('lesson.lessonManagement')}}</span>
-              </template> -->
-              <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
-              <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
-            <!-- </el-submenu> -->
-            <!-- <el-menu-item index="4" @click="showItem('MENTOR_INVITE')">
-              <span class="item-title" slot="title">{{$t('lesson.becomeAMentor')}}</span>
-            </el-menu-item> -->
+            <el-menu-item index="3-1" @click="showItem('LESSON_MANAGER')">{{$t('lesson.lessonManage.lessonTitle')}}</el-menu-item>
+            <el-menu-item index="3-2" @click="showItem('PACKAGE_MANAGER')">{{$t('lesson.packageManage.package')}}</el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -94,30 +74,17 @@ export default {
     },
     setActiveItem() {
       switch (this.$route.name) {
-        case 'TeacherColumnReview':
-          this.itmeActive = '2'
-          break
-        case 'TeacherColumnNewLesson':
-        case 'TeacherColumnLessonManager':
-        case 'TeacherColumnEditLesson':
+        case 'LessonManager':
+        case 'NewLesson':
           this.itmeActive = '3-1'
           break
-        case 'TeacherColumnNewPackage':
-        case 'TeacherColumnEditPackage':
-        case 'TeacherColumnPackageManager':
+        case 'PackageManager':
+        case 'NewPackage':
           this.itmeActive = '3-2'
           break
-        case 'TeacherColumn':
-          this.itmeActive = '1'
-          break
-        case 'TeacherColumnApply':
-          this.itmeActive = this.isTeacher ? '-1' : '0'
-          break
-        case 'TeacherColumnMentorInvite':
-          this.itmeActive = '4'
-          break
         default:
-          this.itmeActive = this.isTeacher ? '0' : '1'
+          this.itmeActive = '3-1'
+          break
       }
     },
     showItem(itemName) {
