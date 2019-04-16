@@ -314,10 +314,10 @@ export default {
       return true
     },
     async toSubmit(packageDetail) {
-      if (this.isLearner) {
-        this.isApplyInfoDialogVisible = true
-        return
-      }
+      // if (this.isLearner) {
+      //   this.isApplyInfoDialogVisible = true
+      //   return
+      // }
       this.isTableLoading = true
       this.editingPackageId = packageDetail.id
       let isComplete = await this.isPackageInfoComplete()
@@ -368,10 +368,10 @@ export default {
         })
     },
     toEdit(packageDetail) {
-      this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
+      this.$router.push(`/createPackage/package/${packageDetail.id}/edit`)
     },
     toPackgeDetail(packageDetail) {
-      this.$router.push(`/teacher/package/${packageDetail.id}`)
+      this.$router.push(`/lesson/package/${packageDetail.id}`)
     },
     async confirmDelete(packageDetail) {
       this.editingPackageId = packageDetail.id

@@ -133,7 +133,7 @@ export default {
     margin: 12px auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
     &-box {
       width: 588px;
       box-sizing: border-box;
@@ -151,7 +151,7 @@ export default {
         font-size: 24px;
         padding-left: 15px;
         color: #303133;
-        margin: 24px 0 21px;
+        margin: 20px 0 16px;
       }
       &-intro {
         display: flex;

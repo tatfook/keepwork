@@ -19,6 +19,8 @@ const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 const LessonManager = () => import('@/components/lesson/teacher/LessonManager')
 const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
 
+const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
+const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
 
 Vue.use(Router)
 
@@ -106,6 +108,18 @@ export default new Router({
           path: 'newPackage',
           name: 'NewPackage',
           component: NewPackage,
+          meta: { requireAuth: true }
+        },
+        {
+          path: 'package/:id/edit',
+          name: 'EditPackage',
+          component: EditPackage,
+          meta: { requireAuth: true }
+        },
+        {
+          path: 'lesson/:id/edit',
+          name: 'EditLesson',
+          component: EditLesson,
           meta: { requireAuth: true }
         },
       ]

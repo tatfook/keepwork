@@ -130,7 +130,7 @@ export default {
       return packageIds
     },
     toLessonManagerPage() {
-      this.$router.push('/teacher/lessonManager')
+      this.$router.push('/createPackage/lessonManager')
     },
     async addLessonToPackages() {
       let lessonId = this.editingLessonId
