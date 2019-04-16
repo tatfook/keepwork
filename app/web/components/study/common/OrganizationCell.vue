@@ -1,13 +1,14 @@
 <template>
-  <div class="my-organization-cabinet-box">
-    <div class="my-organization-cabinet-box-left" @click="goOrg(organization.loginUrl)">
-      <img class="my-organization-cabinet-box-left-img" :src="organization.logo" alt="" @click="goOrg(organization.loginUrl)">
+  <div class="my-organization-cabinet-box" @click="goOrg(organization.loginUrl)">
+    <div class="my-organization-cabinet-box-left">
+      <img class="my-organization-cabinet-box-left-img" :src="organization.logo" alt="">
     </div>
     <div class="my-organization-cabinet-box-right">
-      <h3 class="my-organization-cabinet-box-right-name" @click="goOrg(organization.loginUrl)">{{organization.name}}</h3>
+      <h3 class="my-organization-cabinet-box-right-name">{{organization.name}}</h3>
       <p class="my-organization-cabinet-box-right-contact"><i class="iconfont icon-phone-fill"></i>{{organization.cellphone}}</p>
       <p class="my-organization-cabinet-box-right-address"><i class="iconfont icon-location-fill"></i>{{organization.location || '未知'}}</p>
     </div>
+    <div class="my-organization-cabinet-box-enter">进入机构</div>
   </div>
 </template>
 <script>
@@ -37,6 +38,31 @@ export default {
     padding: 12px;
     display: flex;
     margin: 0 0 24px 0;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    &:hover {
+      .my-organization-cabinet-box-enter {
+        opacity: 1;
+      }
+    }
+    &-enter {
+      position: absolute;
+      text-align: center;
+      position: absolute;
+      height: 40px;
+      line-height: 40px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background: #2397f3;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
     &-left {
       width: 170px;
       cursor: pointer;
