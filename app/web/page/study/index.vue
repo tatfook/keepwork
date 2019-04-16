@@ -1,5 +1,5 @@
 <template>
-  <div class="study-page">
+  <div class="study-page" v-loading="loading">
     <div class="study-page-header">
       <common-header class="container"></common-header>
     </div>
@@ -82,12 +82,14 @@ export default {
       loading: true
     }
   },
+  async created() {
+    await this.loadPblPresets()
+  },
   computed: {
     ...mapGetters({
       isShowLoginDialog: 'pbl/isShowLoginDialog'
     })
   },
-  async created() {},
   components: {
     CommonHeader,
     StudyHeader,
@@ -96,8 +98,15 @@ export default {
   },
   methods: {
     ...mapActions({
-      pblToggleLoginDialog: 'pbl/toggleLoginDialog'
+      pblToggleLoginDialog: 'pbl/toggleLoginDialog',
+      getUserProfile: 'user/getProfile'
     }),
+    async loadPblPresets() {
+      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
+        console.error(err)
+      )
+      this.loading = false
+    },
     handleLoginDialogClose() {
       this.pblToggleLoginDialog(false)
     }
