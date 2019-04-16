@@ -4,7 +4,7 @@
       <organization-cell :organization="i" v-for="i in userOrg" :key="i.id"></organization-cell>
     </div>
     <div v-else class="my-organization-empty">
-      <div class="my-organization-empty-tips">成为机学员，学习keepwork在线课程</div>
+      <div class="my-organization-empty-tips">成为机构学员，学习keepwork在线课程</div>
       <div class="my-organization-empty-button" @click="toOrganizationCooperation">了解更多机构信息</div>
     </div>
   </div>
