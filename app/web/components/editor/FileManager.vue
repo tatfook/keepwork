@@ -568,10 +568,6 @@ export default {
       vertical-align: middle;
     }
   }
-  .node-icon {
-    position: absolute;
-    left: 0;
-  }
   .file-manager-buttons-container {
     position: absolute;
     right: 20px;

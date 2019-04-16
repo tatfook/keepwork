@@ -30,10 +30,11 @@ module.exports = {
       name: 'charts',
       lib: ['echarts', 'v-charts']
     },
-    {
-      name: 'elementUI',
-      lib: ['element-ui']
-    },
+    // fix el-tooltip not visible
+    // {
+    //   name: 'elementUI',
+    //   lib: ['element-ui']
+    // },
     {
       name: 'markdown',
       lib: ['vue-markdown']

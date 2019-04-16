@@ -495,6 +495,10 @@ export default {
 <style lang="scss">
 .el-tree-node__label {
   padding-left: 20px;
+  .node-icon {
+    position: absolute;
+    left: 0;
+  }
 }
 .website-node-label{
   margin-left: -24px;
