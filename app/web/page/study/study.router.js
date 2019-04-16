@@ -107,5 +107,6 @@ export default new Router({
       name: TeachingGroup,
       component: TeachingGroup
     }
+  
   ]
 })
