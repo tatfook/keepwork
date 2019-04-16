@@ -25,7 +25,9 @@ export default {
   },
   methods: {
     goLessonPackage(lessonPackage) {
-      window.open(`/l/student/package/${lessonPackage.id}`)
+      this.$router.push({name: 'PackageDetail',params: {
+        packageId: lessonPackage.id
+      }})
     },
     getPackageSuitableAge(lessonPackage) {
       let { age_min, age_max } = lessonPackage
