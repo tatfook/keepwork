@@ -48,7 +48,7 @@ export default {
         this.$message.info('敬请期待')
         return
       }
-      if(index == 2) {
+      if (index == 2) {
         window.open('https://keepwork.com/official/docs/index')
         return
       }
@@ -75,6 +75,15 @@ export default {
         'CreatePackage'
       ]
       this.activeIndex = tabArr.indexOf(name) + 1
+      const LSSON_ROUTER_NAME = [
+        'Lesson',
+        'LessonPackage',
+        'OrganizationCooperation',
+        'PackageDetail'
+      ]
+      if (LSSON_ROUTER_NAME.includes(name)) {
+        this.activeIndex = 3
+      }
     }
   }
 }
