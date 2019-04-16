@@ -11,6 +11,8 @@ import MyOrganization from '@/components/study/MyOrganization'
 import CreatePackage from '@/components/study/CreatePackage'
 import TeachingGroup from '@/components/study/TeachingGroup'
 import OrganizationCooperation from '@/components/study/OrganizationCooperation'
+import PackageDetail from '@/components/study/PackageDetail'
+
 const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
 
@@ -58,6 +60,11 @@ export default new Router({
           path: 'organizationCooperation',
           name: 'OrganizationCooperation',
           component: OrganizationCooperation
+        },
+        {
+          path: 'package/:packageId',
+          name: 'PackageDetail',
+          component: PackageDetail
         }
       ]
     },
