@@ -14,7 +14,7 @@ import protypesBaseMixin from './protypes.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'LinkType',
+  name: 'IframeLink',
   mixins: [protypesBaseMixin],
   data() {
     return {
@@ -101,6 +101,11 @@ export default {
       }).then(() => {
         callback()
       })
+    }
+  },
+  watch: {
+    originValue(val) {
+      this.iframeLinkValue = val || ''
     }
   }
 }
