@@ -64,7 +64,8 @@ export default {
           total_lessons: i.lessonCount,
           age_min: i.minAge,
           age_max: i.maxAge,
-          description: i.intro
+          description: i.intro,
+          id: i.id
         }
       })
     }

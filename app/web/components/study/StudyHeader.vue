@@ -48,6 +48,10 @@ export default {
         this.$message.info('敬请期待')
         return
       }
+      if(index == 2) {
+        window.open('https://keepwork.com/official/docs/index')
+        return
+      }
       if (index == 4) {
         window.open('https://biz.keepwork.com')
         return

@@ -13,6 +13,13 @@ import TeachingGroup from '@/components/study/TeachingGroup'
 import OrganizationCooperation from '@/components/study/OrganizationCooperation'
 import PackageDetail from '@/components/study/PackageDetail'
 
+const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
+const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
+
+const LessonManager = () => import('@/components/lesson/teacher/LessonManager')
+const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -75,12 +82,38 @@ export default new Router({
     {
       path: '/createPackage',
       name: 'CreatePackage',
-      component: CreatePackage
+      component: CreatePackage,
+      redirect: { name: 'LessonManager' },
+      children: [
+        {
+          path: 'lessonManager',
+          name: 'LessonManager',
+          component: LessonManager
+        },
+        {
+          path: 'lesson/new',
+          name: 'TeacherColumnNewLesson',
+          component: NewLesson,
+          meta: { requireAuth: true }
+        },
+        {
+          path: 'packageManager',
+          name: 'PackageManager',
+          component: PackageManager
+        },
+        {
+          path: 'newPackage',
+          name: 'TeacherColumnNewPackage',
+          component: NewPackage,
+          meta: { requireAuth: true }
+        },
+      ]
     },
     {
       path: '/teachingGroup',
       name: TeachingGroup,
       component: TeachingGroup
     }
+  
   ]
 })
