@@ -1,5 +1,11 @@
 <template>
   <div class="organization-cooperation" v-loading="isLoading">
+    <div class="organization-cooperation-breadcrumb">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ name: 'Lesson' }">课程</el-breadcrumb-item>
+        <el-breadcrumb-item>合作机构</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div class="area-select">
       <span class="area-select-tips">请选择:</span>
       <el-select class="area-select-options" v-model="selectedProvince" @change="searchOrganizations" placeholder="选择省" clearable>
@@ -112,6 +118,12 @@ export default {
   min-height: 500px;
   max-width: 1200px;
   margin: 0 auto;
+  &-breadcrumb {
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    margin-bottom: 32px;
+  }
   .area-select {
     line-height: 48px;
     padding: 0 15px;
