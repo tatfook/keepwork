@@ -41,7 +41,6 @@ export const getFileKey = file => {
     jsrsasign.b64utoutf8(Cookies.get('token').split('.')[1])
   )
   let fileID = `${userId}-${uuid()}`
-  console.log(fileID)
   let fileExt = getFileExtension(file.name)
   return `${fileID}.${fileExt}`
 }
