@@ -273,7 +273,7 @@ export default {
       this.$router.push({ path: '/createPackage/lesson/new' })
     },
     toEdit(lessonDetail) {
-      this.$router.push(`/teacher/lesson/${lessonDetail.id}/edit`)
+      this.$router.push(`/createPackage/lesson/${lessonDetail.id}/edit`)
     },
     async toRelease(lessonDetail) {
       console.log(lessonDetail)

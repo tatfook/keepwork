@@ -76,10 +76,12 @@ export default {
       switch (this.$route.name) {
         case 'LessonManager':
         case 'NewLesson':
+        case 'EditLesson':
           this.itmeActive = '3-1'
           break
         case 'PackageManager':
         case 'NewPackage':
+        case 'EditPackage':
           this.itmeActive = '3-2'
           break
         default:

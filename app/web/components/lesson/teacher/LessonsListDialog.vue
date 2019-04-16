@@ -20,7 +20,7 @@
     </div>
     <div class="lessons-list-dialog-operations">
       <el-button type="info" @click="handleClose">{{$t('common.Cancel')}}</el-button>
-      <el-button type="primary" @click="toAdd" :disabled="searchName.length <= 0">{{$t('common.add')}}</el-button>
+      <el-button type="primary" @click="toAdd" :disabled="selectedLessons.length <= 0">{{$t('common.add')}}</el-button>
     </div>
   </el-dialog>
 </template>

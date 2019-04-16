@@ -84,6 +84,18 @@ export default {
       if (LSSON_ROUTER_NAME.includes(name)) {
         this.activeIndex = 3
       }
+      const CREATE_PACKAGE_ROUTER_NAME = [
+        'CreatePackage',
+        'LessonManager',
+        'NewLesson',
+        'PackageManager',
+        'NewPackage',
+        'EditPackage',
+        'EditLesson'
+      ]
+      if(CREATE_PACKAGE_ROUTER_NAME.includes(name)) {
+        this.activeIndex = 6
+      }
     }
   }
 }
