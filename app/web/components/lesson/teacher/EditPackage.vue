@@ -136,7 +136,7 @@ export default {
       getPackageDetail: 'lesson/getPackageDetail'
     }),
     toPackageManagerPage() {
-      this.$router.push('/teacher/packageManager')
+      this.$router.push('/createPackage/packageManager')
     },
     setActiveTab(type) {
       this.activeTab = type

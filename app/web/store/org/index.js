@@ -16,7 +16,8 @@ const state = {
   orgLessonDetail: {},
   orgClasses: {},
   orgTeachers: {},
-  orgStudents: {}
+  orgStudents: {},
+  userOrg: []
 }
 export default {
   namespaced: true,

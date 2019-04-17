@@ -1,4 +1,4 @@
-import { lesson } from '@/api'
+import { lesson, keepwork } from '@/api'
 import { props } from './mutations'
 
 let {
@@ -10,8 +10,8 @@ let {
   GET_ALL_SUBJECTS_SUCCESS,
   LOGOUT,
   TOGGLE_LOGIN_DIALOG,
-  SET_PREVIEW_FLAG
-  // TO_BE_TEACHER
+  SET_PREVIEW_FLAG,
+  GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS
 } = props
 
 const actions = {
@@ -87,6 +87,19 @@ const actions = {
   },
   async setPreviewFlag({ commit }, payload) {
     commit(SET_PREVIEW_FLAG, payload)
+  },
+  async getPackageSystemTags({ commit }, type) {
+    const res = await keepwork.systemTags.getSystemTags(type)
+    return res
+  },
+  async getPackageBySystemTags({ commit }, { typeId }) {
+    const res = await keepwork.graphql.getQueryResult({
+      query: 'query($id: Int){tag(id: $id) {id, tagname, packages{id, packageName, intro,  maxAge, minAge, extra, lessonCount} }}',
+      variables: {
+        id: Number(typeId)
+      }
+    })
+    commit(GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS, res)
   }
 }
 

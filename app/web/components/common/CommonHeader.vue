@@ -57,7 +57,7 @@
               <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
@@ -79,7 +79,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item> -->
             <!-- <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
@@ -169,7 +169,7 @@
               <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
@@ -191,7 +191,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item> -->
             <!-- <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
@@ -261,7 +261,7 @@ const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
 const EXPLORATION_REG = /^\/exploration/
 const RANKING_REG = /^\/ranking/
-const STUDY_REG = /^\/l/
+const STUDY_REG = /^\/s/
 
 export default {
   name: 'CommonHeader',
@@ -292,8 +292,8 @@ export default {
     hostname() {
       return window.location.hostname
     },
-    lessonCenterUrl() {
-      return '/l/student'
+    myOrgUrl() {
+      return '/s/myOrganization'
     }
   },
   mounted() {
@@ -357,12 +357,7 @@ export default {
       }
     },
     goStudyPage() {
-      if (this.userIsLogined) {
-        return (window.location.href = `${this.locationOrigin}/l/student`)
-      }
-      window.location.href = `${
-        this.locationOrigin
-      }/l/student/solution/teachingIdea`
+      return (window.location.href = `${this.locationOrigin}/s`)
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {

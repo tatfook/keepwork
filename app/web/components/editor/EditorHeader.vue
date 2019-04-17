@@ -109,6 +109,10 @@
                   <i class="iconfont icon-qiehuan"></i>
                   {{$t('common.left-rightAngles')}}
                 </button>
+                <button :disabled='currentDisabled' :class=" isEnglish ? 'btn-angles' : '' " @click="showFileHistory">
+                  <i class="iconfont icon-historyrecord"></i>
+                  {{$t('common.oldVersions')}}
+                </button>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided>
@@ -325,6 +329,7 @@ export default {
       gitlabRemoveFile: 'gitlab/removeFile',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
+      toggleFileHistoryVisibility: 'toggleFileHistoryVisibility',
       toggleAngles: 'toggleAngles',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
@@ -342,12 +347,12 @@ export default {
       this.$fullscreen.toggle(dom, {
         wrap: false,
         fullscreenClass: 'zenmode',
-        callback: (state) => {
+        callback: state => {
           if (!state) {
             this.resetShowingCol({
               isZenMode: false
             })
-            const vscroolbar = dom.querySelector(".CodeMirror-vscrollbar")
+            const vscroolbar = dom.querySelector('.CodeMirror-vscrollbar')
             // Is very strange. when I set display none, scroolbar is normally
             vscroolbar.style.display = 'none'
           }
@@ -382,11 +387,14 @@ export default {
       //   })
     },
     toggleLeftAndRightAngles() {
-      if(!this.showAngle) {
+      if (!this.showAngle) {
         this.toggleAngles({ showAngle: true })
       } else {
         this.toggleAngles({ showAngle: false })
       }
+    },
+    showFileHistory() {
+      this.toggleFileHistoryVisibility({ isVisible: true })
     },
     async save() {
       let self = this
@@ -777,7 +785,7 @@ export default {
   line-height: 40px;
   border-radius: 20px;
   border-bottom: none;
-  background-color: #EFEFEF !important;
+  background-color: #efefef !important;
   .iconfont {
     width: 60px;
     height: 32px;
@@ -785,7 +793,7 @@ export default {
     border: none;
   }
   &-active {
-    background-color: #1278E1;
+    background-color: #1278e1;
     color: #fff;
     border-radius: 16px;
   }
@@ -939,7 +947,7 @@ export default {
   }
 }
 .kp-menu {
-  .btn-language, 
+  .btn-language,
   .btn-angles {
     height: 48px;
     .iconfont {

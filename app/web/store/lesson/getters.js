@@ -48,7 +48,9 @@ const getters = {
   skills: state => state.skills,
   subjects: state => state.subjects,
   isShowLoginDialog: state => state.isShowLoginDialog,
-  previewFlag: state => state.previewFlag
+  previewFlag: state => state.previewFlag,
+  TagsPackages: state => state.TagsPackages,
+  PackagesByTag: state => ({ typeId }) => _.get(state.TagsPackages, typeId)
 }
 
 export default getters

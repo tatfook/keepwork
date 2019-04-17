@@ -78,7 +78,7 @@ export default {
       this.$emit('releasePackage')
     },
     toPackageManagerPage() {
-      this.$router.push('/teacher/packageManager')
+      this.$router.push('/createPackage/packageManager')
     },
     closeInfoDialog() {
       this.isInfoDialogVisible = false

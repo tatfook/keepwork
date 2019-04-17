@@ -18,12 +18,14 @@ export default {
   mounted() {
     this.inputValue = this.inputTypeValue
   },
+  watch: {
+    inputTypeValue(value) {
+      this.inputValue = value
+    }
+  },
   computed: {
-    inputTypeValue: {
-      get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData.emptyInput) || '')
-      },
-      set() {}
+    inputTypeValue() {
+      return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData.emptyInput) || '')
     }
   },
   methods: {
