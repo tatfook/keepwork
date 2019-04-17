@@ -36,7 +36,7 @@ export default function createLayout(name, components, tpl) {
                       <meta name="apple-mobile-web-app-title" content="Weather PWA">
                       <link rel="apple-touch-icon" href="/logo.png">
                       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-                      <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_2m6yvn4xrm6.css">
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_rk567gj71k.css">
                     </head>
                     <body :class="baseClass">
                       ${tpl}
