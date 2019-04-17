@@ -22,6 +22,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './study.router'
 import appModule from '@/store/app'
 import userModule from '@/store/user'
+import gitlabModule from '@/store/gitlab'
 import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
 import pblModule from '@/store/pbl'
@@ -50,6 +51,7 @@ const store = new Vuex.Store({
   modules: {
     app: appModule,
     user: userModule,
+    gitlab: gitlabModule,
     lesson: lessonModule,
     org: orgModule,
     pbl: pblModule
