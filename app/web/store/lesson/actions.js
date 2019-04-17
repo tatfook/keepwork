@@ -99,7 +99,6 @@ const actions = {
         id: Number(typeId)
       }
     })
-    console.log('res', res)
     commit(GET_PACKAGE_BY_SYSTEM_TAGS_SUCCESS, res)
   }
 }
