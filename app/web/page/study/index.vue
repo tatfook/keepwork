@@ -34,6 +34,10 @@ import '@/components/common/thirdAuth'
 import StudyHeader from '@/components/study/StudyHeader'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import { lesson } from '@/api'
+import axios from 'axios'
+import jsrsasign from 'jsrsasign'
+import { MessageBox } from 'element-ui'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -57,7 +61,150 @@ const store = new Vuex.Store({
     pbl: pblModule
   }
 })
+
+const keepworkInstance = axios.create({
+  baseURL: process.env.KEEPWORK_API_PREFIX
+})
+keepworkInstance.interceptors.response.use(res =>
+  res ? res.data.data || res.data : res.data
+)
+const lessonInstance = axios.create({
+  baseURL: process.env.LESSON_API_PREFIX
+})
+lessonInstance.interceptors.response.use(res =>
+  res ? res.data.data || res.data : res.data
+)
+
+const getIncludeTheLessonOrgs = async ({
+  token,
+  packageId,
+  lessonId,
+  resetUrl = false
+}) => {
+  const { userId } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+    jsrsasign.b64utoutf8(token.split('.')[1])
+  )
+  const userOrgs = await keepworkInstance.post('graphql', {
+    query:
+      'query($userId: Int){organizationClasses(userId: $userId) {id, organizationId,organization{name}, name, organizationPackages{packageId,lessonNos} }}',
+    variables: {
+      userId: userId
+    }
+  })
+  const userOrgClasses = _.get(userOrgs, 'organizationClasses', [])
+  const includeTheLessonOrgs = _.filter(userOrgClasses, item => {
+    if (item.organizationPackages.length === 0) {
+      return false
+    }
+    const org = _.find(
+      item.organizationPackages,
+      i => i.packageId === _.toNumber(packageId)
+    )
+    const lessons = _.get(org, 'lessonNos', [])
+    if (lessons.length === 0) {
+      return false
+    }
+    const theLesson = _.find(
+      lessons,
+      item => item.lessonId === _.toNumber(lessonId)
+    )
+    if (!theLesson) {
+      return false
+    }
+    return true
+  })
+  const orgName = _.get(includeTheLessonOrgs, '[0].organization.name', '')
+  if (orgName) {
+    window.location.href = `${
+      window.location.origin
+    }/org/${orgName}/student/package/${packageId}/lesson/${lessonId}`
+  } else if (resetUrl) {
+    if (window.history && history.replaceState) {
+      setTimeout(
+        () => window.history.replaceState({}, '', `?fromParacraft=1`),
+        0
+      )
+    }
+  }
+  return includeTheLessonOrgs
+}
+
+const redirectToStudyPage = message =>
+  MessageBox({
+    message: message,
+    confirmButtonText: '确定'
+  })
+
 router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.paracraft)) {
+    const params = { ...to.params, ...to.query }
+    const { token, key = '' } = params
+    const lessonId = _.toNumber(params.lessonId)
+    const packageId = _.toNumber(params.packageId)
+    const localeToken = Cookies.get('token')
+    if (token) {
+      const userInfo = await lesson.users.verifyToken({ token })
+      if (userInfo) {
+        Cookies.remove('token')
+        Cookies.remove('token', { path: '/' })
+        window.localStorage.removeItem('satellizer_token')
+      } else {
+        return redirectToStudyPage('Token无效')
+      }
+    } else if (localeToken) {
+    }
+    keepworkInstance.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${token}`
+    lessonInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    if (key) {
+      try {
+        await lessonInstance.post('classrooms/join', { key })
+        const classroom = await lessonInstance.get('classrooms/current')
+        const { organizationId, packageId, lessonId } = classroom
+        const [token, orgs] = await Promise.all([
+          keepworkInstance.get('lessonOrganizations/token', {
+            params: { organizationId }
+          }),
+          keepworkInstance.get('lessonOrganizations')
+        ])
+        const orgName = _.get(
+          _.find(orgs, item => item.id === organizationId),
+          'name',
+          ''
+        )
+        Cookies.set('token', token)
+        window.location.href = `${
+          window.location.origin
+        }/org/${orgName}/student/package/${packageId}/lesson/${lessonId}`
+      } catch (error) {
+        const errMsg = _.get(error, 'response.data', '')
+        if (_.includes(errMsg, '不是该班级学生')) {
+          redirectToStudyPage('不是该班级学生')
+        } else if (_.get(errMsg, 'code', '') === 1) {
+          redirectToStudyPage('课堂不存在')
+        }
+        next()
+      }
+    } else if (token) {
+      Cookies.set('token', token)
+      await getIncludeTheLessonOrgs({
+        token,
+        packageId,
+        lessonId,
+        resetUrl: true
+      })
+      return next(true)
+    } else if (localeToken) {
+      await getIncludeTheLessonOrgs({
+        token: localeToken,
+        packageId,
+        lessonId
+      })
+    }
+    next()
+  }
+
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!Cookies.get('token')) {
       store.dispatch(
