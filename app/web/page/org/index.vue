@@ -21,6 +21,7 @@ import appModule from '@/store/app'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
+import pblModule from '@/store/pbl'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
@@ -53,7 +54,8 @@ const store = new Vuex.Store({
     app: appModule,
     user: userModule,
     lesson: lessonModule,
-    org: orgModule
+    org: orgModule,
+    pbl: pblModule
   },
   plugins: [
     createPersistedState({

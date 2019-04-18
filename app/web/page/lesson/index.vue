@@ -38,7 +38,6 @@ import CommonFooter from '@/components/common/CommonFooter'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
-import { lesson } from '@/api'
 import { broadcast } from 'vuex-iframe-sync'
 
 Vue.use(Vuex)
@@ -83,94 +82,27 @@ const store = new Vuex.Store({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.auto)) {
-    const { query, params } = to
-    const { token, key, id } = query
-    if (token !== undefined) {
-      Cookies.remove('token')
-      Cookies.remove('token', { path: '/' })
-      window.localStorage.removeItem('satellizer_token')
-      store.dispatch('lesson/logout')
-      store.dispatch('lesson/student/saveVisitorInfo', {
-        id,
-        token,
-        classId: id,
-        key
-      })
-      // localStorage.setItem('refresh', true)
+    const params = { ...to.params, ...to.query }
+    const { packageId, lessonId, key = '', token = '' } = params
+    if (Number(key)) {
+      window.location.href = `${
+        window.location.origin
+      }/s/lesson/package/${packageId}/lesson/${lessonId}?key=${key}&token=${token}`
+    } else {
+      window.location.href = `${
+        window.location.origin
+      }/s/lesson/package/${packageId}/lesson/${lessonId}?token=${token}`
     }
-    if (token && token !== 0) {
-      let userInfo = await lesson.users
-        .verifyToken({ token })
-        .catch(e => console.error('verify token failure'))
-      if (userInfo) {
-        Cookies.set('token', token)
-        if (key !== undefined && key !== 0) {
-          await store
-            .dispatch('lesson/student/enterClassRoom', {
-              key
-            })
-            .catch(e => console.error(e))
-          return next({
-            name: 'LessonStudent',
-            params,
-            query: { reload: true, dialog: true, device: 'paracraft' }
-          })
-        }
-        return next({ name: 'LessonStudent', params, query: { reload: true } })
-      }
-    }
-
-    if (id && token) {
-      if (Number(id) === 0 && Number(token) === 0) {
-        return next({ name: 'Anonymous', params })
-      }
-      return next({ name: 'Anonymous', params, query })
-    }
-
-    if (query.key && query.key !== 0 && Cookies.get('token')) {
-      let res = await store
-        .dispatch('lesson/student/enterClassRoom', {
-          key: query.key
-        })
-        .catch(e => console.error('join failure'))
-      if (res) {
-        return next({
-          name: 'LessonStudent',
-          params: { packageId: res.packageId, lessonId: res.lessonId },
-          query: { dialog: true, device: 'paracraft' }
-        })
-      }
-      return next({ name: 'StudentCenter' })
-    }
-    return next({ name: 'Anonymous', params })
+    next(false)
   }
-  if (to.matched.some(record => record.meta.admin)) {
-    const { query: { token = '' }} = to
-    if (token) {
-      Cookies.set('token', token)
-      const { query, ...reset} = to
-      return next(reset)
-    }
-  }
-
-  if (to.matched.some(record => record.meta.requireAuth)) {
-    if (!Cookies.get('token')) {
-      store.dispatch(
-        'lesson/toggleLoginDialog',
-        { show: true, to },
-        { root: true }
-      )
-      if (!from.name) {
-        return next({ name: 'StudentCenter' })
-      }
-      return next(false)
-    }
-  }
-  next()
 })
 
 const TeacherColumnActivePageNameReg = /^TeacherColumn+/
-const HIDE_ROUTE_NAMES = ['SingleLessonPreview', 'PackagePreview', 'LessonPreview']
+const HIDE_ROUTE_NAMES = [
+  'SingleLessonPreview',
+  'PackagePreview',
+  'LessonPreview'
+]
 export default {
   name: 'LessonPage',
   router,

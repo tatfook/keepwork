@@ -12,6 +12,7 @@ import CreatePackage from '@/components/study/CreatePackage'
 import TeachingGroup from '@/components/study/TeachingGroup'
 import OrganizationCooperation from '@/components/study/OrganizationCooperation'
 import PackageDetail from '@/components/study/PackageDetail'
+import LessonDetail from '@/components/study/LessonDetail'
 
 const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
 const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
@@ -68,6 +69,11 @@ export default new Router({
           path: 'package/:packageId',
           name: 'PackageDetail',
           component: PackageDetail
+        }, {
+          path: 'package/:packageId/lesson/:lessonId',
+          name: 'LessonDetail',
+          component: LessonDetail,
+          meta: { paracraft: true }
         }
       ]
     },
