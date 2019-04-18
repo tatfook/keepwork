@@ -86,7 +86,7 @@ const getIncludeTheLessonOrgs = async ({
   )
   const userOrgs = await keepworkInstance.post('graphql', {
     query:
-      'query($userId: Int){organizationClasses(userId: $userId) {id, roleId, organizationId,organization{name, loginUrl}, name, organizationPackages{packageId,lessonNos} }}',
+      'query($userId: Int){organizationClasses(userId: $userId) {id, organizationId,organization{name, loginUrl}, name, organizationPackages{packageId,lessonNos} }}',
     variables: {
       userId: userId
     }
