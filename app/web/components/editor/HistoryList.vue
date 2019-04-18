@@ -9,7 +9,7 @@
       <div class="history-list-item-version">{{history.version}}
         <span class="history-list-item-version-sub">{{history.message | sourceVersionFilter}}</span>
       </div>
-      <div class="history-list-item-username" :title="history.author_name">{{history.author_name}}</div>
+      <div class="history-list-item-username" :title="history.author_name | oldNameFilter">{{history.author_name | oldNameFilter}}</div>
       <div class="history-list-item-date">{{history.authored_date | formatTime }}</div>
     </div>
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="isBusy" infinite-scroll-distance="0"></div>
@@ -93,6 +93,9 @@ export default {
       return index != -1
         ? '(' + commitMessage.substring(index + SourceVersionStr.length) + ')'
         : ''
+    },
+    oldNameFilter(name) {
+      return _.replace(name, /^(gitlab_rls_|gitlab_www_|gitlab_test_)/, '')
     }
   }
 }
