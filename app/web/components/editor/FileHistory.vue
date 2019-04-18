@@ -155,6 +155,7 @@ export default {
     }
   }
   &-main {
+    min-width: 0;
     flex: 1;
     display: flex;
     position: relative;

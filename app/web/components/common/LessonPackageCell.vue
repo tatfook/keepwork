@@ -25,9 +25,15 @@ export default {
   },
   methods: {
     goLessonPackage(lessonPackage) {
-      this.$router.push({name: 'PackageDetail',params: {
-        packageId: lessonPackage.id
-      }})
+      if (this.$route.name === 'LessonPackage') {
+        return this.$router.push({
+          name: 'PackageDetail',
+          params: {
+            packageId: lessonPackage.id
+          }
+        })
+      }
+      window.location.href = `${window.location.origin}/s/lesson/package/${lessonPackage.id}`
     },
     getPackageSuitableAge(lessonPackage) {
       let { age_min, age_max } = lessonPackage
