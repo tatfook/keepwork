@@ -16,7 +16,8 @@ const {
   SAVE_LESSON_DETAIL,
   GET_ORG_CLASSES_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
-  GET_ORG_STUDENTS_SUCCESS
+  GET_ORG_STUDENTS_SUCCESS,
+  GET_USER_ORG_SUCCESS
 } = props
 
 const actions = {
@@ -255,6 +256,13 @@ const actions = {
     await keepwork.lessonOrganizations.updateOrg({ orgId, orgData })
     let orgDetail = await dispatch('getOrgDetailByLoginUrl', { orgLoginUrl })
     await dispatch('setCurrentOrg', { orgDetail })
+  },
+  async getUserOrg({ commit }) {
+    await keepwork.lessonOrganizations.getUserOrganizations().then(org => {
+      commit(GET_USER_ORG_SUCCESS, org)
+    }).catch(err => {
+      console.error('err', err)
+    })
   }
 }
 

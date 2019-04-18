@@ -26,7 +26,7 @@ const {
 const actions = {
   async getOrgClasses({ commit, getters: { orgClasses } }, { cache = false } = {}) {
     if (!(cache && !_.isEmpty(orgClasses))) {
-      const classes = await lessonOrganizations.getOrgClasses()
+      const classes = await lessonOrganizations.getOrgClasses({ roleId: 1 })
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
@@ -43,7 +43,7 @@ const actions = {
         username
       }
     })
-    const realName = _.get(res, 'organizationUser.organizationClassMembers[0].realname', '')
+    const realName = _.get(_.filter(_.get(res, 'organizationUser.organizationClassMembers', []), item => item.roleId === 1 && item.realname), '[0].realname', '')
     commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
   async getOrgPackages({ commit }) {

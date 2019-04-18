@@ -18,7 +18,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
     response => response,
     async error => {
       const CODES = [401]
-      if (CODES.some(code => code === _get(error, 'response.status', '')) && Cookies.get('token')) {
+      if (
+        CODES.some(code => code === _get(error, 'response.status', '')) &&
+        Cookies.get('token')
+      ) {
         Cookies.remove('token')
         Cookies.remove('token', { path: '/' })
         window.localStorage.removeItem('satellizer_token')
@@ -50,6 +53,19 @@ const gitLabAPIGenerator = ({ url, token }) => {
           return total
         },
         files: {
+          getFileCommitList: async ({
+            projectPath,
+            filePath,
+            page,
+            perPage
+          }) => {
+            projectPath = encodeURIComponent(projectPath)
+            filePath = encodeURIComponent(filePath)
+            let res = await instance.get(
+              `projects/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
+            )
+            return res
+          },
           remove: async (projectName, filePath) => {
             const [projectPath, path] = [projectName, filePath].map(
               encodeURIComponent
@@ -62,6 +78,19 @@ const gitLabAPIGenerator = ({ url, token }) => {
             fullPath = encodeURIComponent(fullPath)
             let res = await instance.get(
               `projects/${projectPath}/files/${fullPath}`
+            )
+            return res.data
+          },
+          async showWithCommitId({
+            projectPath,
+            fullPath,
+            useCache,
+            commitId
+          }) {
+            projectPath = encodeURIComponent(projectPath)
+            fullPath = encodeURIComponent(fullPath)
+            let res = await instance.get(
+              `projects/${projectPath}/files/${fullPath}?ref=${commitId}`
             )
             return res.data
           },
@@ -91,14 +120,15 @@ const gitLabAPIGenerator = ({ url, token }) => {
             })
             return res.data
           },
-          async edit(_projectName, filePath, content) {
+          async edit(_projectName, filePath, content, source_version) {
             const [projectName, path] = [_projectName, filePath].map(
               encodeURIComponent
             )
             let res = await instance.put(
               `projects/${projectName}/files/${path}`,
               {
-                content
+                content,
+                source_version
               }
             )
             return res.data
@@ -185,6 +215,17 @@ export class GitAPI {
       .then(file => file)
   }
 
+  async getFileWithCommitId({
+    projectPath,
+    fullPath,
+    useCache = false,
+    commitId
+  }) {
+    return this.client.projects.repository.files
+      .showWithCommitId({ projectPath, fullPath, useCache, commitId })
+      .then(file => file)
+  }
+
   async getContent(path, options) {
     const projectName = path
       .split('/')
@@ -210,6 +251,12 @@ export class GitAPI {
       })
   }
 
+  async getFileCommitList({ projectPath, filePath, page, perPage }) {
+    return this.client.projects.repository.files
+      .getFileCommitList({ projectPath, filePath, page, perPage })
+      .then(data => data)
+  }
+
   async createMultipleFile({ projectName, files }) {
     return this.client.projects.repository.files
       .createMultiple(projectName, files)
@@ -224,8 +271,9 @@ export class GitAPI {
       .splice(0, 2)
       .join('/')
     const content = options.content || ''
+    const source_version = options.source_version
     return this.client.projects.repository.files
-      .edit(projectName, path, content)
+      .edit(projectName, path, content, source_version)
       .then(data => {
         return data
       })
@@ -318,7 +366,6 @@ export class GitAPI {
       this.config.projectName
     }/blob/master/${path}`
   }
-
 }
 
 export default GitAPI

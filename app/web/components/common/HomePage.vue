@@ -210,6 +210,7 @@ export default {
     videoPlayer
   },
   async mounted() {
+    console.log('here i am')
     this.textAnimation()
     let [hotPackage, handpick, likes, news] = await Promise.all([
       this.getHotPackage(),
@@ -489,6 +490,7 @@ export default {
             background: linear-gradient(0deg, #2497f4 0%, #3ec8f8 100%);
             box-shadow: 0px 7px 9px 0px rgba(192, 228, 255, 0.88);
             text-decoration: none;
+            text-shadow: 0 1px 6px rgb(23, 137, 208);
           }
           .remainder {
             a {

@@ -1,26 +1,10 @@
 <template>
-  <el-input
-    :placeholder="$t('adi.iframe.pleaseInput')"
-    v-model="linkTypeValue"
-    @focus="updateFocus"
-    @blur="updateFocus"
-    class="input-with-select"
-  >
-    <el-button v-if="linkTypeValue" slot="prepend" icon="iconfont icon-link_"></el-button>
+  <el-input :placeholder="$t('adi.iframe.pleaseInput')" v-model="iframeLinkValue" @focus="updateFocus" @blur="updateFocus" class="input-with-select">
+    <el-button v-if="iframeLinkValue" slot="prepend" icon="iconfont icon-link_"></el-button>
     <el-button v-else slot="prepend">{{$t('common.link')}}</el-button>
     <el-button v-if="isFocus" slot="append" :style="getSureStyle">{{$t('common.Sure')}}</el-button>
-    <el-select
-      v-if="!isFocus"
-      v-model="linkTypeValue"
-      @change="updateValue"
-      slot="append"
-      placeholder="Select"
-    >
-      <el-option
-        v-for="(path, pathIndex) in personalAllPagePathList"
-        :key="pathIndex"
-        :value="getLocationUrl(path)"
-      >{{ path }}</el-option>
+    <el-select v-if="!isFocus" v-model="iframeLinkValue" @change="updateValue" slot="append" placeholder="Select">
+      <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">{{ path }}</el-option>
     </el-select>
   </el-input>
 </template>
@@ -30,7 +14,7 @@ import protypesBaseMixin from './protypes.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'LinkType',
+  name: 'IframeLink',
   mixins: [protypesBaseMixin],
   data() {
     return {
@@ -42,30 +26,21 @@ export default {
     originValue: String
   },
   async mounted() {
+    this.iframeLinkValue = this.originValue ? this.originValue : ''
     await this.getAllPersonalPageList()
   },
   computed: {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
     }),
-    linkTypeValue: {
-      get() {
-        return this.originValue
-          ? this.originValue
-          : (this.optionsData && this.optionsData.emptyIfameLink) || ''
-      },
-      set(data) {
-        this.iframeLinkValue = data
-      }
-    },
     getSureStyle() {
       if (
         this.iframeLinkValue.match(/(http|https):\/\/.+/) ||
         this.iframeLinkValue === ''
       ) {
-        return {color: '#3ba4ff'}
+        return { color: '#3ba4ff' }
       } else {
-        return {color: 'unset'}
+        return { color: 'unset' }
       }
     }
   },
@@ -113,8 +88,7 @@ export default {
       if (
         this.iframeLinkValue.match(
           /(http|https):\/\/(stage\.keepwork|release\.keepwork|keepwork|)(.com$|.com\/.+|localhost:7001$|localhost:7001\/.+)/
-        ) ||
-        this.iframeLinkValue === ''
+        )
       ) {
         callback()
         return true
@@ -126,8 +100,12 @@ export default {
         type: 'warning'
       }).then(() => {
         callback()
-        this.iframeLinkValue = ''
       })
+    }
+  },
+  watch: {
+    originValue(val) {
+      this.iframeLinkValue = val || ''
     }
   }
 }

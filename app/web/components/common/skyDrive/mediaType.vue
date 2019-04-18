@@ -279,6 +279,7 @@ export default {
     display: inline-block;
     background-color: #d1d1d1;
     position: relative;
+    vertical-align: middle;
     [class*="icon"] {
       cursor: pointer;
     }

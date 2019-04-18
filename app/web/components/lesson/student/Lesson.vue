@@ -68,7 +68,7 @@ export default {
     packageId = Number(packageId)
     lessonId = Number(lessonId)
 
-    let [ res ] = await Promise.all([
+    let [res] = await Promise.all([
       this.getPrivilege(lessonId),
       this.getLessonContent({ lessonId, packageId })
     ])
@@ -76,7 +76,7 @@ export default {
     if (authUserPrivilege === 0) {
       this.authUserPrivilege = authUserPrivilege
       this.organizations = organizations
-      return this.isLoading = false
+      return (this.isLoading = false)
     }
     await this.resumeTheClass()
     // 不在课堂中直接返
@@ -289,12 +289,22 @@ export default {
     async getPrivilege(lessonId) {
       const res = await keepwork.graphql.getQueryResult({
         query:
-          'query($id: Int){lesson(id: $id) {id, authUserPrivilege, organizations{name,cellphone}}}',
+          'query($id: Int, $packageId: Int){lesson(id: $id, packageId: $packageId) {id, authUserPrivilege, organizations{name,cellphone}}}',
         variables: {
-          id: lessonId
+          id: lessonId,
+          packageId: 0
         }
       })
       return res
+    },
+    async getUserAllLessons(userId) {
+      const res = await keepwork.graphql.getQueryResult({
+        query:
+          'query($id: Int){tag(id: $id) {id, tagname, packages{id, packageName, intro,  maxAge, minAge, extra, lessonCount} }}',
+        variables: {
+          id: 13
+        }
+      })
     }
   },
   computed: {

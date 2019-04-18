@@ -2,37 +2,24 @@
 
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const dotenv = new Dotenv()
-const copyWebpack = new CopyWebpackPlugin([
-  {
-    from: path.resolve(__dirname, 'app/static'),
-    to: path.resolve(__dirname, 'public')
-  }
-])
 
 module.exports = {
   egg: true,
   framework: 'vue',
-  entry: {
-    include: ['app/web/pages'],
-    loader: {
-      client: 'app/web/framework/vue/entry/client-loader.js',
-      server: 'app/web/framework/vue/entry/server-loader.js',
-    }
-  },
   alias: {
     '@': 'app/web',
-    server: 'app/web/framework/vue/entry/server.js',
-    client: 'app/web/framework/vue/entry/client.js',
-    app: 'app/web/framework/vue/app.js',
     asset: 'app/web/assets',
     component: 'app/web/components',
     framework: 'app/web/framework'
   },
+  compile: {
+    thread: false,
+    cache: true,
+  },
   dll: [
     {
-      name: 'common',
+      name: 'base', // easywebpack will automatically create a common chunk for all pages, and will crush if we create common lib here.
       lib: [
         'vue', 'axios', 'vue-router', 'vuex', 'vuex-router-sync',
         'vue-i18n', 'lodash', 'js-cookie', 'babel-polyfill',
@@ -43,10 +30,11 @@ module.exports = {
       name: 'charts',
       lib: ['echarts', 'v-charts']
     },
-    {
-      name: 'elementUI',
-      lib: ['element-ui']
-    },
+    // fix el-tooltip not visible
+    // {
+    //   name: 'elementUI',
+    //   lib: ['element-ui']
+    // },
     {
       name: 'markdown',
       lib: ['vue-markdown']
@@ -60,23 +48,26 @@ module.exports = {
       loader: 'raw-loader'
     },
     babel: {
-      exclude: [/node_modules/, /app\/web\/lib\/mod\/parser/, /app\/web\/lib\/global/]
+      exclude: [/node_modules/]
     }
   },
   plugins: {
     imagemini: false,
-    serviceworker: true,
+    clean: false,
+    // serviceworker: true,
     // analyzer: true,
     dotenv,
-    copyWebpack: {
-      name: copyWebpack
-    }
+    uglifyJs: {
+      cache: true,
+      parallel: false,
+    },
+    copy: [{
+      from: path.resolve(__dirname, 'app/static'),
+      to: path.resolve(__dirname, 'public')
+    }]
   },
   node: {
     console: true
   },
-  optimization: {},
-  done() {
-    console.log('如果启动成功后, Chrome控制台浏览器脚本报错, 可以尝试执行 npm run clean 清除缓存解决')
-  }
+  optimization: {}
 }

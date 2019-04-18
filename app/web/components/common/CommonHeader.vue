@@ -50,14 +50,13 @@
               <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="/a/account"
-              ><i class="iconfont icon-account1"></i>{{$t("account.myAccount")}}</a>
+              <a href="/a/account"><i class="iconfont icon-account1"></i>{{$t("account.myAccount")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
@@ -79,7 +78,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item> -->
             <!-- <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
@@ -133,6 +132,10 @@
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
 
+      <el-menu-item index='14' class="pull-right common-header-menu-download" @click="downloadParacraft()">
+        <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
+      </el-menu-item>
+
       <el-menu-item index='12' class="pull-right common-header-menu-ranking" @click="goRanking">
         <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
       </el-menu-item>
@@ -169,7 +172,7 @@
               <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
             </el-dropdown-item>
             <!-- <el-dropdown-item>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
@@ -191,7 +194,7 @@
               <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
             </el-dropdown-item> -->
             <!-- <el-dropdown-item>
-              <a :href='lessonCenterUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
             </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
@@ -223,7 +226,8 @@
             <el-dropdown-item><a href="" @click.stop.prevent="goCreativityPage">{{$t('common.creativity')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="" @click.stop.prevent="goExplorationPage">{{$t('common.explore')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="" @click.stop.prevent="goStudyPage">{{$t('common.study')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="/ranking" >{{$t('common.ranking')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="/ranking">{{$t('common.ranking')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh">{{$t('project.downloadParacraft')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="/wiki/apps">{{$t('common.applicationCenter')}}</a></el-dropdown-item>
             <el-dropdown-item><a href='/official/help/index'>{{$t('common.help')}}</a></el-dropdown-item>
             <el-dropdown-item v-if="!IS_GLOBAL_VERSION"><a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a></el-dropdown-item>
@@ -261,7 +265,7 @@ const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/creativity/
 const EXPLORATION_REG = /^\/exploration/
 const RANKING_REG = /^\/ranking/
-const STUDY_REG = /^\/l/
+const STUDY_REG = /^\/s/
 
 export default {
   name: 'CommonHeader',
@@ -292,8 +296,11 @@ export default {
     hostname() {
       return window.location.hostname
     },
-    lessonCenterUrl() {
-      return '/l/student'
+    myOrgUrl() {
+      return '/s/myOrganization'
+    },
+    currentRouteName() {
+      return this.$route.name
     }
   },
   mounted() {
@@ -331,7 +338,7 @@ export default {
       if (STUDY_REG.test(pathname)) {
         return (this.activeIndex = '4')
       }
-      if(RANKING_REG.test(pathname)){
+      if (RANKING_REG.test(pathname)) {
         return (this.activeIndex = '12')
       }
       this.activeIndex = '0'
@@ -348,7 +355,9 @@ export default {
     },
     goExplorationPage() {
       if (this.$route.name !== 'ExplorationPage') {
-        window.location.href = `${this.locationOrigin}/exploration?tab=allProjects`
+        window.location.href = `${
+          this.locationOrigin
+        }/exploration?tab=allProjects`
       }
     },
     goRanking() {
@@ -356,13 +365,11 @@ export default {
         window.location.href = `${this.locationOrigin}/ranking`
       }
     },
+    downloadParacraft() {
+      window.open('http://paracraft.keepwork.com/download?lang=zh')
+    },
     goStudyPage() {
-      if (this.userIsLogined) {
-        return (window.location.href = `${this.locationOrigin}/l/student`)
-      }
-      window.location.href = `${
-        this.locationOrigin
-      }/l/student/solution/teachingIdea`
+      return (window.location.href = `${this.locationOrigin}/s`)
     },
     goHomePage() {
       if (this.$route.name !== 'HomePage') {
@@ -542,12 +549,23 @@ export default {
 }
 .common-header {
   &-menu-ranking {
+    padding-right: 4px !important;
     &-img {
       margin-right: 10px;
     }
     &-text {
-      text-shadow: 1px 1px 1px #303133;
       color: #ffa405;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding-right: 18px;
+    }
+  }
+  &-menu-download {
+    padding-right: 4px !important;
+    .icon-xiazai {
+      color: #2397f3;
+    }
+    &-text {
+      color: #2397f3;
       border-right: 1px solid rgba(0, 0, 0, 0.1);
       padding-right: 18px;
     }
