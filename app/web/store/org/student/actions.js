@@ -43,7 +43,7 @@ const actions = {
         username
       }
     })
-    const realName = _.get(res, 'organizationUser.organizationClassMembers[0].realname', '')
+    const realName = _.get(_.filter(_.get(res, 'organizationUser.organizationClassMembers', []), item => item.roleId === 1 && item.realname), '[0].realname', '')
     commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
   async getOrgPackages({ commit }) {
