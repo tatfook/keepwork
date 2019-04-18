@@ -374,6 +374,7 @@ $red: #f53838;
           height: $size;
           width: $size;
           border-radius: 50%;
+          object-fit: cover;
         }
         &.keepwork::after {
           content: 'K';
