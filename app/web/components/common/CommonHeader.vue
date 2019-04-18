@@ -132,7 +132,7 @@
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
 
-      <el-menu-item index='14' class="pull-right common-header-menu-download" @click="downloadParacraft()" v-show="currentRouteName != 'CreativityPage'">
+      <el-menu-item index='14' class="pull-right common-header-menu-download" @click="downloadParacraft()">
         <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
       </el-menu-item>
 
