@@ -11,8 +11,8 @@
     </div>
     <div class="study-home-region-module">
       <div class="study-home-region-module-box" v-for="(i,index) in centerIntroData" :key="index">
-        <img class="study-home-region-module-box-img" :src="i.imgUrl" alt="">
-        <h4 class="study-home-region-module-box-title">{{i.title}}</h4>
+        <img class="study-home-region-module-box-img" :src="i.imgUrl" alt="" @click="learnMore(i.moreLink)">
+        <h4 class="study-home-region-module-box-title" @click="learnMore(i.moreLink)">{{i.title}}</h4>
         <div class="study-home-region-module-box-intro">
           <div class="study-home-region-module-box-intro-text">
             <p class="study-home-region-module-box-intro-text-word">{{i.text_1}}</p>
@@ -145,6 +145,7 @@ export default {
         width: 100%;
         height: 299px;
         object-fit: cover;
+        cursor: pointer;
       }
       &-title {
         font-family: 'PingFangSC-Semibold';
@@ -152,6 +153,7 @@ export default {
         padding-left: 15px;
         color: #303133;
         margin: 20px 0 16px;
+        cursor: pointer;
       }
       &-intro {
         display: flex;
