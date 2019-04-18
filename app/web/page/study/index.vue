@@ -86,7 +86,7 @@ const getIncludeTheLessonOrgs = async ({
   )
   const userOrgs = await keepworkInstance.post('graphql', {
     query:
-      'query($userId: Int){organizationClasses(userId: $userId) {id, organizationId,organization{name}, name, organizationPackages{packageId,lessonNos} }}',
+      'query($userId: Int){organizationClasses(userId: $userId) {id, organizationId,organization{name, loginUrl}, name, organizationPackages{packageId,lessonNos} }}',
     variables: {
       userId: userId
     }
@@ -113,7 +113,7 @@ const getIncludeTheLessonOrgs = async ({
     }
     return true
   })
-  const orgName = _.get(includeTheLessonOrgs, '[0].organization.name', '')
+  const orgName = _.get(includeTheLessonOrgs, '[0].organization.loginUrl', '')
   if (orgName) {
     window.location.href = `${
       window.location.origin
@@ -170,7 +170,7 @@ router.beforeEach(async (to, from, next) => {
         ])
         const orgName = _.get(
           _.find(orgs, item => item.id === organizationId),
-          'name',
+          'loginUrl',
           ''
         )
         Cookies.set('token', token)
