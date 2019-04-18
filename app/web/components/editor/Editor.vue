@@ -430,7 +430,7 @@ bigFile:
     right: 0;
     bottom: 0;
     background-color: #fff;
-    z-index: 4;
+    z-index: 99999;
   }
 }
 .full-height {
