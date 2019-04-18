@@ -259,7 +259,6 @@ const actions = {
   },
   async getUserOrg({ commit }) {
     await keepwork.lessonOrganizations.getUserOrganizations().then(org => {
-      console.log('myOrg', org)
       commit(GET_USER_ORG_SUCCESS, org)
     }).catch(err => {
       console.error('err', err)
