@@ -193,6 +193,9 @@ export default {
       return this.$t('project.visitWorld')
     },
     visitButtonVisiable() {
+      if (!this.isWebType) {
+        return true
+      }
       return this.siteDetailInfo ? true : false
     },
     isCreating() {
