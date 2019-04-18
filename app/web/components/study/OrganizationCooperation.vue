@@ -50,7 +50,6 @@ export default {
   },
   async created() {
     await this.searchOrganizations()
-    console.log(this.organizationList)
     this.isLoading = false
   },
   methods: {
