@@ -561,7 +561,7 @@ export default {
   }
   &-menu-download {
     padding-right: 4px !important;
-    .icon-xiazai {
+    .iconfont.icon-xiazai {
       color: #2397f3;
     }
     &-text {
