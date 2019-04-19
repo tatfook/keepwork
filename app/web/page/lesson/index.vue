@@ -95,6 +95,7 @@ router.beforeEach(async (to, from, next) => {
     }
     next(false)
   }
+  next()
 })
 
 const TeacherColumnActivePageNameReg = /^TeacherColumn+/
