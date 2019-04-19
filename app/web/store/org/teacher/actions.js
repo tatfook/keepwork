@@ -144,11 +144,11 @@ const actions = {
     })
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
   },
-  async getCurrentClass({ commit, rootGetters: { 'org/currentOrgId': organizationId } }) {
+  async getCurrentClass({ commit, rootGetters: { 'org/currentOrgId': organizationId, 'org/userinfo': userInfo } }) {
     await lesson.classrooms
       .currentClass()
       .then(classroom => {
-        if (classroom.organizationId === organizationId) {
+        if (classroom.organizationId === organizationId && userInfo.id === classroom.userId) {
           commit(GET_CURRENT_CLASSROOM_SUCCESS, classroom)
         }
       })
