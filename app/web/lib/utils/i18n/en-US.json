@@ -1528,6 +1528,7 @@
     "MembersLabel": "Members",
     "WhiteBoardLabel": "Whiteboard",
     "CommentsLabel": "Comments",
+    "commentAfterLogin": "Sign in to comment",
     "deleteProject": "Delete Project"
   },
   "footer": {
