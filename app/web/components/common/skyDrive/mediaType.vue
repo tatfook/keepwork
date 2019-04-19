@@ -37,7 +37,7 @@
       <div v-for="(file, index) in uploadingFiles" :key="index" class="media-type-media-uploading media-type-media-item" v-show="file.state !== 'success' && file.state != 'error'">
         <img v-if="file.type === 'images'" :src="file.cover" class="media-type-media-item-img" />
         <div class="media-type-media-uploading-cover"></div>
-        <span :title="$t('common.remove')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
+        <span :title="$t('common.Cancel')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
         <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
       </div>
       <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' :class='{selected: selectedMediaItem === mediaItem}' @click='handleSelectMediaItem(mediaItem)'>
@@ -178,6 +178,9 @@ export default {
           }
         }
       )
+    },
+    removeFromUploadQue(file) {
+      this.$emit('removeFromUploadQue', file)
     }
   },
   filters: {
@@ -355,6 +358,7 @@ export default {
       position: absolute;
       right: 7px;
       bottom: 10px;
+      z-index: 1;
     }
     .el-icon-delete:hover {
       color: #3ba4ff;
