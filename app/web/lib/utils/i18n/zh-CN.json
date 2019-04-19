@@ -1518,6 +1518,7 @@
     "MembersLabel": "成员",
     "WhiteBoardLabel": "白板",
     "CommentsLabel": "评论",
+    "commentAfterLogin": "登录后才能评论",
     "deleteProject": "删除项目"
   },
   "footer": {
