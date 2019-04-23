@@ -23,7 +23,7 @@ module.exports = {
       lib: [
         'vue', 'axios', 'vue-router', 'vuex', 'vuex-router-sync',
         'vue-i18n', 'lodash', 'js-cookie', 'babel-polyfill',
-        'moment', 'dayjs', 'qiniu-js', 'blueimp-md5', 'filesize', 'html2canvas', 'js-base64'
+        'moment', 'qiniu-js', 'blueimp-md5', 'filesize', 'html2canvas', 'js-base64'
       ]
     },
     {

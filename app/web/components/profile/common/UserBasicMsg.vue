@@ -42,7 +42,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { locale } from '@/lib/utils/i18n'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 export default {
   name: 'UserBasicMsg',
@@ -143,7 +143,7 @@ export default {
   },
   filters: {
     formatDate(date, formatType) {
-      return dayjs(date).format(formatType)
+      return moment(date).format(formatType)
     }
   }
 }

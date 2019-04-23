@@ -25,7 +25,7 @@
               <span class="iconfont icon-code1" :class='{"file-history-header-switch-active": !isPreviewShow && isCodeShow}' @click="switchViewShow(false, true)"></span>
             </el-tooltip>
           </div>
-          <el-tooltip :content="$t('common.close')">
+          <el-tooltip :content="$t('editor.close')">
             <i class="iconfont icon-ziyuan3" @click="closeHistory"></i>
           </el-tooltip>
         </div>
@@ -155,6 +155,7 @@ export default {
     }
   }
   &-main {
+    min-width: 0;
     flex: 1;
     display: flex;
     position: relative;

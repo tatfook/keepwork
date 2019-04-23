@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     organizationList() {
-      return _.get(this.res, 'rows', [])
+      return _.filter(_.get(this.res, 'rows', []), item => item.visibility !== 1)
     },
     mapToOptions(item) {
       return { value: item[0], label: item[1] }

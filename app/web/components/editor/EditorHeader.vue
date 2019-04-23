@@ -884,7 +884,7 @@ export default {
 .kp-dropdown-menu-content {
   &.el-popper[x-placement^='bottom'] {
     min-width: 164px;
-    max-width: 200px;
+    max-width: 216px;
     left: 40px !important;
   }
   .el-dropdown-menu__item {

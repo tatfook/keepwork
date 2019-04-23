@@ -50,8 +50,7 @@
               <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="/a/account"
-              ><i class="iconfont icon-account1"></i>{{$t("account.myAccount")}}</a>
+              <a href="/a/account"><i class="iconfont icon-account1"></i>{{$t("account.myAccount")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
@@ -131,6 +130,10 @@
       </el-menu-item>
       <el-menu-item index='9' class="pull-right login-button" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
+      </el-menu-item>
+
+      <el-menu-item index='14' class="pull-right common-header-menu-download" @click="downloadParacraft()">
+        <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
       </el-menu-item>
 
       <el-menu-item index='12' class="pull-right common-header-menu-ranking" @click="goRanking">
@@ -223,7 +226,8 @@
             <el-dropdown-item><a href="" @click.stop.prevent="goCreativityPage">{{$t('common.creativity')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="" @click.stop.prevent="goExplorationPage">{{$t('common.explore')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="" @click.stop.prevent="goStudyPage">{{$t('common.study')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="/ranking" >{{$t('common.ranking')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="/ranking">{{$t('common.ranking')}}</a></el-dropdown-item>
+            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh">{{$t('project.downloadParacraft')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="/wiki/apps">{{$t('common.applicationCenter')}}</a></el-dropdown-item>
             <el-dropdown-item><a href='/official/help/index'>{{$t('common.help')}}</a></el-dropdown-item>
             <el-dropdown-item v-if="!IS_GLOBAL_VERSION"><a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a></el-dropdown-item>
@@ -294,6 +298,9 @@ export default {
     },
     myOrgUrl() {
       return '/s/myOrganization'
+    },
+    currentRouteName() {
+      return this.$route.name
     }
   },
   mounted() {
@@ -331,7 +338,7 @@ export default {
       if (STUDY_REG.test(pathname)) {
         return (this.activeIndex = '4')
       }
-      if(RANKING_REG.test(pathname)){
+      if (RANKING_REG.test(pathname)) {
         return (this.activeIndex = '12')
       }
       this.activeIndex = '0'
@@ -348,13 +355,18 @@ export default {
     },
     goExplorationPage() {
       if (this.$route.name !== 'ExplorationPage') {
-        window.location.href = `${this.locationOrigin}/exploration?tab=allProjects`
+        window.location.href = `${
+          this.locationOrigin
+        }/exploration?tab=allProjects`
       }
     },
     goRanking() {
       if (this.$route.name !== 'Ranking') {
         window.location.href = `${this.locationOrigin}/ranking`
       }
+    },
+    downloadParacraft() {
+      window.open('http://paracraft.keepwork.com/download?lang=zh')
     },
     goStudyPage() {
       return (window.location.href = `${this.locationOrigin}/s`)
@@ -537,12 +549,23 @@ export default {
 }
 .common-header {
   &-menu-ranking {
+    padding-right: 4px !important;
     &-img {
       margin-right: 10px;
     }
     &-text {
-      text-shadow: 1px 1px 1px #303133;
       color: #ffa405;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding-right: 18px;
+    }
+  }
+  &-menu-download {
+    padding-right: 4px !important;
+    .iconfont.icon-xiazai {
+      color: #2397f3;
+    }
+    &-text {
+      color: #2397f3;
       border-right: 1px solid rgba(0, 0, 0, 0.1);
       padding-right: 18px;
     }

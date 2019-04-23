@@ -86,12 +86,12 @@ const getIncludeTheLessonOrgs = async ({
   )
   const userOrgs = await keepworkInstance.post('graphql', {
     query:
-      'query($userId: Int){organizationClasses(userId: $userId) {id, organizationId,organization{name}, name, organizationPackages{packageId,lessonNos} }}',
+      'query($userId: Int){organizationClasses(userId: $userId) {id,roleId, organizationId,organization{name, loginUrl}, name, organizationPackages{packageId,lessonNos} }}',
     variables: {
       userId: userId
     }
   })
-  const userOrgClasses = _.get(userOrgs, 'organizationClasses', [])
+  const userOrgClasses = _.filter(_.get(userOrgs, 'organizationClasses', []), item => (item.roleId & 1) > 0)
   const includeTheLessonOrgs = _.filter(userOrgClasses, item => {
     if (item.organizationPackages.length === 0) {
       return false
@@ -113,7 +113,7 @@ const getIncludeTheLessonOrgs = async ({
     }
     return true
   })
-  const orgName = _.get(includeTheLessonOrgs, '[0].organization.name', '')
+  const orgName = _.get(includeTheLessonOrgs, '[0].organization.loginUrl', '')
   if (orgName) {
     window.location.href = `${
       window.location.origin
@@ -170,7 +170,7 @@ router.beforeEach(async (to, from, next) => {
         ])
         const orgName = _.get(
           _.find(orgs, item => item.id === organizationId),
-          'name',
+          'loginUrl',
           ''
         )
         Cookies.set('token', token)

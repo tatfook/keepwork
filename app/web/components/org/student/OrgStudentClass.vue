@@ -12,7 +12,7 @@
     <div class="org-student-class-main">
     </div>
     <el-row>
-      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in orgPackageList" :key="index">
+      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in orgStudentPackageList" :key="index">
         <org-package-cell-for-student :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell-for-student>
       </el-col>
     </el-row>
@@ -217,12 +217,15 @@ export default {
     orgPackageList() {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))
     },
+    orgStudentPackageList() {
+      return _.filter(this.orgPackageList, item => _.get(item, 'lessonOrganizationClassMembers.roleId', 0) & 1 > 0)
+    },
     orgPackageCount() {
-      return this.orgPackages.length
+      return this.orgStudentPackageList.length
     },
     orgPackagesDict() {
       return _.reduce(
-        this.orgPackageList,
+        this.orgStudentPackageList,
         (obj, cur) => {
           const { packageId, lessons = [] } = cur
           obj[packageId] = _.map(lessons, item => item.lessonId)

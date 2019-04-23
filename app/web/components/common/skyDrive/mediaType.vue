@@ -185,7 +185,7 @@ export default {
   },
   filters: {
     formatDate(date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     biteToG: (bite = 0) =>
       (bite / (1024 * 1024 * 1024))

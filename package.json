@@ -28,7 +28,6 @@
     "babel-polyfill": "^6.26.0",
     "blueimp-md5": "^2.10.0",
     "cross-env": "^5.0.0",
-    "dayjs": "^1.7.5",
     "echarts": "^4.1.0",
     "egg": "^2.1.0",
     "egg-alinode": "^2.0.1",

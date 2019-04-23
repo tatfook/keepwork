@@ -6,9 +6,6 @@
           <el-tooltip :content="$t('editor.files')">
             <el-button id="file-manager-button" class="iconfont icon-list_directory" :class="{'el-button--primary': activeManagePaneComponentName=='FileManager'}" @click="changeView('FileManager')"></el-button>
           </el-tooltip>
-          <el-tooltip v-if="activePage && hasOpenedFiles" :content="$t('tips.mod')">
-            <el-button class="iconfont icon-module" :class="{'el-button--primary': activeManagePaneComponentName == 'ModsList' || activeManagePaneComponentName == 'ModPropertyManager'}" @click="changeView('ModsList')"></el-button>
-          </el-tooltip>
           <el-tooltip v-if="activePage && hasOpenedFiles" :content="$t('common.myWebDisk')">
             <el-button class="iconfont icon-upload" @click="openSkyDriveManagerDialog"></el-button>
           </el-tooltip>
@@ -433,7 +430,7 @@ bigFile:
     right: 0;
     bottom: 0;
     background-color: #fff;
-    z-index: 4;
+    z-index: 99999;
   }
 }
 .full-height {

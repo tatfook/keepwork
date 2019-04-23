@@ -37,7 +37,7 @@
 import OrgClassesTabbar from '@/components/org/common/OrgClassesTabbar'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
-import dayjs from 'dayjs'
+import moment from 'moment'
 
 export default {
   name: 'OrgTeacherStatistics',
@@ -134,7 +134,7 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+      return moment(time).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   components: {

@@ -112,7 +112,7 @@ import NumberOfStudentsChart from '@/components/lesson/teacher/NumberOfStudentsC
 import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import html2canvas from 'html2canvas'
 import { lesson } from '@/api'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -201,14 +201,14 @@ export default {
       currentOrg: 'org/currentOrg'
     }),
     getWeekDay() {
-      let time = dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
+      let time = moment(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
       let day = time.split('-')
       let Day = new Date(day[0], parseInt(day[1] - 1), day[2])
       return String(Day.getDay())
     },
     creationDate() {
-      let year = dayjs(this.currenClassInfo.createdAt).year()
-      let monthNum = dayjs(this.currenClassInfo.createdAt).month()
+      let year = moment(this.currenClassInfo.createdAt).year()
+      let monthNum = moment(this.currenClassInfo.createdAt).month()
       let monthArr = [
         'Jan',
         'Feb',
@@ -225,8 +225,8 @@ export default {
         'Dec'
       ]
       let month = monthArr[monthNum]
-      let todayDate = dayjs(this.currenClassInfo.createdAt).date()
-      let hours = dayjs(this.currenClassInfo.createdAt)
+      let todayDate = moment(this.currenClassInfo.createdAt).date()
+      let hours = moment(this.currenClassInfo.createdAt)
         .format('YYYY-MM-DD HH:mm:ss')
         .split(' ')[1]
       let suffix = ['st', 'nd', 'rd', 'th']
@@ -241,7 +241,7 @@ export default {
       }
       return this.isEn
         ? todayDate + ' ' + month + ' ' + year
-        : dayjs(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
+        : moment(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
     },
     newCurrentRecord() {
       let currentRecord = _.map(
@@ -534,7 +534,7 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+      return moment(time).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   components: {

@@ -6,7 +6,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import tableType from './skyDrive/tableType'
@@ -153,7 +153,7 @@ export default {
             file: {
               downloadUrl: ''
             },
-            updatedAt: dayjs(
+            updatedAt: moment(
               new Date(Date.now() + 7 * 24 * 3600 * 1000)
             ).format('YYYY-MM-DD HH:mm:ss'), // add extra time for sort
             state: 'doing' // success, error, cancel, doing
