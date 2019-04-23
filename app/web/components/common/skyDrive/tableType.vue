@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import { getBareFilename } from '@/lib/utils/filename'
@@ -248,7 +248,7 @@ export default {
   },
   filters: {
     formatDate(date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     biteToG: (bite = 0) =>
       (bite / (1024 * 1024 * 1024))

@@ -32,7 +32,7 @@
 
 <script>
 import _ from 'lodash'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -90,7 +90,7 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+      return moment(time).format('YYYY-MM-DD HH:mm:ss')
     },
     formatQuiz(value) {
       return value ? value.toString() : ''

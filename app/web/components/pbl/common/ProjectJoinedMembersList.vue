@@ -30,7 +30,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import dayjs from 'dayjs'
+import moment from 'moment'
 export default {
   name: 'ProjectJoinedMembersList',
   props: {
@@ -117,7 +117,7 @@ export default {
   },
   filters: {
     formatDate(date, formatType) {
-      return dayjs(date).format(formatType)
+      return moment(date).format(formatType)
     }
   }
 }

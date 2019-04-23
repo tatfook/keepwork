@@ -93,8 +93,8 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
-import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
-import SubmitableInfo from './SubmitableInfo'
+import OperateResultDialog from '@/components/study/OperateResultDialog'
+import SubmitableInfo from '@/components/study/SubmitableInfo'
 import colI18n from '@/lib/utils/i18n/column'
 
 export default {
