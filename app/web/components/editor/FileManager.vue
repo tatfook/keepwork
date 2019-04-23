@@ -14,15 +14,15 @@
           </el-tooltip>
         </span>
       </div>
-    <div @click.stop class="close-dialog">
-      <el-dialog center :visible.sync="dialogCloseAllVisible" width="360px" closed="handleCloseAllDialog">
-        <div class="dialog-content">{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</div>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
-          <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
-        </div>
-      </el-dialog>
-    </div>
+      <div @click.stop class="close-dialog">
+        <el-dialog center :visible.sync="dialogCloseAllVisible" width="360px" closed="handleCloseAllDialog">
+          <div class="dialog-content">{{`"${toBeCloseFileName}" ${this.$t("editor.fileUnSaved")}`}}</div>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="warning" @click.stop="handleCloseOpenedFileAndNext" :disabled="savePending">{{this.$t("editor.unSaveClose")}}</el-button>
+            <el-button type="primary" @click.stop="saveAndCloseOpenedFileAndNext" :loading="savePending">{{this.$t("editor.saveClose")}}</el-button>
+          </div>
+        </el-dialog>
+      </div>
       <el-collapse-transition>
         <el-tree v-show="trees.isOpenedShow && openedTreeData.length > 0" ref='openedTree' node-key='path' :data="openedTreeData" :props="openedTreesProps" :render-content="renderOpenedFile" highlight-current @node-click="handleOpenedClick">
         </el-tree>
@@ -38,7 +38,6 @@
           <el-tooltip :content="$t('editor.newWebsite')">
             <el-button class="iconfont icon-add2" type="text" @click='openNewWebsiteDialog()'></el-button>
           </el-tooltip>
-          <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
         </span>
       </div>
       <el-collapse-transition>
@@ -49,7 +48,6 @@
         <div class="empty" v-if="personalSiteList.length <= 0">
           <p class="info">{{ $t('editor.noPersonalWebsite') }}</p>
           <el-button type="text" @click="openNewWebsiteDialog">{{ $t('editor.createWebsiteNow') }}</el-button>
-          <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
         </div>
       </el-collapse-transition>
     </div>
@@ -59,7 +57,7 @@
         <i class="el-icon-arrow-right"></i> {{ $t('editor.myContributedWebsites') }}
       </h1>
       <el-collapse-transition>
-        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow" ref='fileManagerTree' node-key="path" :data="contributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick" @node-collapse="handleNodeCollapse"  @node-expand="handleNodeExpand">
+        <el-tree v-show="contributedSiteList.length > 0 && trees.isContributedShow" ref='fileManagerTree' node-key="path" :data="contributedSiteList | sortBy('username')" :props="filesTreeProps" :render-content="renderContent" highlight-current @node-click="handleNodeClick" @node-collapse="handleNodeCollapse" @node-expand="handleNodeExpand">
         </el-tree>
       </el-collapse-transition>
       <el-collapse-transition>
@@ -68,7 +66,7 @@
         </div>
       </el-collapse-transition>
     </div>
-
+    <new-website-dialog :show='isNewWebsiteDialogShow' @close='closeNewWebsiteDialog'></new-website-dialog>
   </div>
 </template>
 <script>
@@ -101,11 +99,11 @@ export default {
         children: 'children',
         label: 'label'
       },
-      isNewWebsiteDialogShow: false,
+      isNewWebsiteDialogShow: false
     }
   },
   async mounted() {
-    this.$route.path !== '/' && await this.checkSitePath()
+    this.$route.path !== '/' && (await this.checkSitePath())
     await this.initUrlExpandSelect()
     this.$nextTick(() => {
       let ele = document.querySelector('.is-current:last-child')
@@ -160,15 +158,23 @@ export default {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
     },
     openedFilesPathAndTime() {
-      return _.map(this.showOpenedFiles, ({ path, timestamp }) => ({ path, timestamp }))
+      return _.map(this.showOpenedFiles, ({ path, timestamp }) => ({
+        path,
+        timestamp
+      }))
     }
   },
-  watch:{
-    openedFilesPathAndTime(newVal,oldVal){
+  watch: {
+    openedFilesPathAndTime(newVal, oldVal) {
       if (JSON.stringify(newVal) === JSON.stringify(oldVal)) return
       let updateRecentUrlList = this.updateRecentUrlList.concat(newVal)
-      updateRecentUrlList = updateRecentUrlList.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
-      updateRecentUrlList = _.uniqBy(updateRecentUrlList, obj => obj.path).slice(0,5)
+      updateRecentUrlList = updateRecentUrlList.sort(
+        (obj1, obj2) => obj1.timestamp < obj2.timestamp
+      )
+      updateRecentUrlList = _.uniqBy(
+        updateRecentUrlList,
+        obj => obj.path
+      ).slice(0, 5)
       let payload = { updateRecentUrlList }
       this.addRecentOpenedSiteUrl(payload)
     }
@@ -211,7 +217,13 @@ export default {
       return !this.allSiteNameList.includes(siteName)
     },
     async initUrlExpandSelect() {
-      let { username, isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
+      let {
+        username,
+        isLegal,
+        sitepath,
+        fullPath,
+        paths = []
+      } = this.activePageInfo
       if (this.username !== username && sitepath) {
         this.$set(this.trees, 'isMyShow', false)
         this.$set(this.trees, 'isContributedShow', true)
@@ -330,16 +342,16 @@ export default {
       let path = this.toBeCloseFilePath
       this.savePending = true
       await this.savePageByPath(path)
-      .then(() => {
-        this.closeAndResetFile(path)
-        this.handleCloseDialog()
-        this.savePending = false
-      })
-      .catch(e => {
-        this.$message.error(this.$t("editor.saveFail"));
-        this.handleCloseDialog()
-        this.savePending = false
-      })
+        .then(() => {
+          this.closeAndResetFile(path)
+          this.handleCloseDialog()
+          this.savePending = false
+        })
+        .catch(e => {
+          this.$message.error(this.$t('editor.saveFail'))
+          this.handleCloseDialog()
+          this.savePending = false
+        })
     },
     handleOpenedClick({ path }, node) {
       this.$router.push('/' + path.replace(/\.md$/, ''))
@@ -373,8 +385,15 @@ export default {
       if (this.unSavedOpenedFilesPaths.length > 0) {
         this.dialogCloseAllVisible = true
         let path = this.unSavedOpenedFilesPaths[0]
-        let siteName = path.split('/').slice(1, 2).join()
-        let fileName = path.split('/').slice(-1).join().replace(/\.md$/, '')
+        let siteName = path
+          .split('/')
+          .slice(1, 2)
+          .join()
+        let fileName = path
+          .split('/')
+          .slice(-1)
+          .join()
+          .replace(/\.md$/, '')
         this.toBeCloseFileName = `${siteName}/${fileName}`
         this.toBeCloseFilePath = path
       } else {
@@ -400,16 +419,16 @@ export default {
       this.savePending = true
       let path = this.toBeCloseFilePath
       await this.savePageByPath(path)
-      .then(() => {
-        this.closeAndResetFile(path)
-        this.savePending = false
-        this.checkHasNext()
-      })
-      .catch(e => {
-        this.$message.error(this.$t("editor.saveFail"));
-        this.handleCloseAllDialog()
-        this.savePending = false
-      })
+        .then(() => {
+          this.closeAndResetFile(path)
+          this.savePending = false
+          this.checkHasNext()
+        })
+        .catch(e => {
+          this.$message.error(this.$t('editor.saveFail'))
+          this.handleCloseAllDialog()
+          this.savePending = false
+        })
     },
     async saveAllOpenedFiles() {
       if (!this.hasUnSaveOpenedFiles) return
@@ -417,16 +436,17 @@ export default {
       let paths = this.unSavedOpenedFilesPaths
       let isSuccess = true
       this.savePending = true
-      while(num--) {
+      while (num--) {
         await this.savePageByPath(paths[num]).catch(e => {
-          this.$message.error(this.$t("editor.saveFail"));
+          this.$message.error(this.$t('editor.saveFail'))
           isSuccess = false
         })
       }
-      isSuccess && this.$message({
-          message: this.$t("editor.saveSuccess"),
+      isSuccess &&
+        this.$message({
+          message: this.$t('editor.saveSuccess'),
           type: 'success'
-        });
+        })
       this.savePending = false
     }
   },
@@ -434,17 +454,18 @@ export default {
     NewWebsiteDialog
   },
   filters: {
-    sortBy: (list, key) => list.sort((obj1,obj2) =>{
-      let val1 = obj1[key]
-      let val2 = obj2[key]
-      if(val1 < val2){
-        return -1
-      }else if(val1 > val2){
-        return 1
-      }else{
-        return 0
-      }
-    })
+    sortBy: (list, key) =>
+      list.sort((obj1, obj2) => {
+        let val1 = obj1[key]
+        let val2 = obj2[key]
+        if (val1 < val2) {
+          return -1
+        } else if (val1 > val2) {
+          return 1
+        } else {
+          return 0
+        }
+      })
   }
 }
 </script>
@@ -532,10 +553,10 @@ export default {
       line-height: 38px !important;
     }
   }
-  .opened-tree{
+  .opened-tree {
     .el-tree-node__content:hover {
       background-color: #ccfffc;
-      .el-tree-node__label{
+      .el-tree-node__label {
         padding-right: 135px;
       }
     }
@@ -616,7 +637,7 @@ export default {
   .el-loading-spinner .circular {
     width: 22px;
   }
- .el-dialog__body .dialog-content{
+  .el-dialog__body .dialog-content {
     text-align: center;
     word-wrap: break-word;
     white-space: normal;

@@ -1,6 +1,7 @@
 
 module.exports = app => {
   const { router, controller } = app
+  app.middleware.browserCheck()
   router.get('/', controller.home.index)
   router.get('/creativity', controller.home.index)
   router.get('/exploration', controller.home.index)

@@ -4,7 +4,7 @@
       <el-row class="full-height">
         <el-col :span="3" class="full-height">
           <el-menu class="full-height" :default-active="''+selectedCategoryIndex" @select='setSelectedCategoryIndex'>
-            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index' v-if="(category.classify !== 'course')">
+            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index'>
               {{ $t(`templates.pageMenu${category.name}`) }}
             </el-menu-item>
           </el-menu>
@@ -216,6 +216,8 @@ export default {
     },
     handleEdit() {
       this.$router.push('/' + this.newPageUrl)
+      let url = this.$router.resolve({ path: this.$route.path }).href
+      history.replaceState('', '', url)
       this.resetAndClose()
     },
     resetAndClose() {
@@ -231,7 +233,11 @@ export default {
         checkedWords: this.webpageNameForm.value
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
-        this.webpageNameForm.value = _.get(sensitiveResult, '[0].word', this.webpageNameForm.value)
+        this.webpageNameForm.value = _.get(
+          sensitiveResult,
+          '[0].word',
+          this.webpageNameForm.value
+        )
         return
       }
       await this.createNewPage()
@@ -265,6 +271,9 @@ export default {
 }
 
 .new-webpage-dialog {
+  .new-webpage-template{
+    padding-left: 20px;
+  }
   .full-height {
     height: 100%;
   }
