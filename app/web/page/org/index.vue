@@ -143,7 +143,8 @@ const checkIsOrgMember = async function(
 const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
   let isAdmin = (roleId & 64) > 0
   let isTeacher = (roleId & 2) > 0
-  let isStudent = (roleId & 1) > 0
+  // let isStudent = (roleId & 1) > 0
+  let isStudent = true
   if (nowPageRole == 'student' && !isStudent) {
     return next({
       name: isAdmin ? OrgAdminPageName : OrgTeacherPageName,

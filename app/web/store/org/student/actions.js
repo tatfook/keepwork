@@ -30,6 +30,13 @@ const actions = {
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
+  async joinOrg({ dispatch }, payload) {
+    const res = await lessonOrganizations.joinOrganization(payload)
+    if (res.statusCode === 400) {
+      await dispatch('org/student/getOrgClasses')
+    }
+    return res
+  },
   async getUserInfo({ commit }) {
     const userInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userInfo)
