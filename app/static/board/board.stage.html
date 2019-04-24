@@ -46,6 +46,9 @@
       return result;
     })();
 
+    urlParams['dev'] = undefined;
+    urlParams['math'] = 0;
+
     // Forces CDN caches by passing URL parameters via URL hash
     if (window.location.hash != null && window.location.hash.substring(0, 2) == '#P') {
       try {
@@ -381,7 +384,7 @@
     (function() {
       var showMsg = document.querySelector(".geBlock")
       var englishMsg =
-      `      
+      `
       <h1>Flowchart Maker and Online Diagram Software</h1>
       <p>
         You can use it as a flowchart maker, network diagram software,
@@ -403,7 +406,7 @@
         请确保启用JavaScript.
       </p>
       `
-      
+
       if(urlParams['lang'] === "zh") {
         showMsg.innerHTML=chineseMsg
       }else {
@@ -415,7 +418,14 @@
     /**
      * Main
      */
-    App.DROPBOX_URL = boardRoot + '/' + App.DROPBOX_URL
+    window.DriveClient = undefined
+    window.DropboxClient = undefined
+    window.OneDriveClient = undefined
+    window.TrelloClient = undefined
+
+    window.Dropbox = undefined
+    window.OneDrive = undefined
+    window.Trello = undefined
 
     App.main(function(ui) {
       window.board = ui;
