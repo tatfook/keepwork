@@ -1,12 +1,8 @@
 <template>
-  <div class="join-org-container">
-    <div class="join-org-title">
-      欢迎来到 {{orgName}} ，学习优质课程，请输入邀请码：
-    </div>
-    <div class="join-org-tips">
-      如需购买邀请码，请联系管理员：{{orgCellphone}}
-    </div>
-    <div class="join-org-form">
+  <div class="join-class-container">
+    <div class="join-class-title">加入班级，请输入邀请码:</div>
+    <div class="join-class-tips">如需购买邀请码，请联系管理员：{{orgCellphone}}</div>
+    <div class="join-class-form">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="邀请码" prop="key">
           <el-input placeholder="请输入邀请码" v-model="form.key"></el-input>
@@ -15,6 +11,7 @@
           <el-input placeholder="请输入姓名" v-model="form.realname"></el-input>
         </el-form-item>
         <el-form-item>
+          <el-button type="" @click="onCancel">取消</el-button>
           <el-button type="primary" @click="onSubmit">确定</el-button>
         </el-form-item>
       </el-form>
@@ -25,7 +22,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'JoinOrg',
+  name: 'JoinClass',
   data() {
     return {
       form: {
@@ -61,11 +58,15 @@ export default {
             ...this.form,
             organizationId: this.organizationId
           })
+          flag && this.onCancel()
           return flag
         } else {
           return false
         }
       })
+    },
+    onCancel() {
+      this.$emit('cancel')
     }
   },
   computed: {
@@ -85,23 +86,20 @@ export default {
 }
 </script>
 
+
 <style lang="scss" scoped>
-.join-org-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 500px;
-  background: #fff;
-  .join-org {
+.join-class-container {
+  width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  .join-class {
     &-title {
       color: #333;
-      font-size: 18px;
+      font-size: 24px;
     }
     &-tips {
-      margin-top: 22px;
-      font-size: 14px;
       color: #2397f3;
+      margin-top: 24px;
     }
     &-form {
       width: 330px;
@@ -113,4 +111,3 @@ export default {
   }
 }
 </style>
-

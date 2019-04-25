@@ -54,9 +54,9 @@ export default {
       isOrgExist: true,
       defaultLogo: require('@/assets/img/logo_old.svg'),
       loginData: {
-        username: undefined,
-        password: undefined,
-        organizationName: undefined
+        username: '',
+        password: '',
+        organizationName: ''
       },
       loginDataRules: {
         username: {
@@ -94,6 +94,7 @@ export default {
     ...mapActions({
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgLogin: 'org/login',
+      userLogin: 'user/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),
     handleClose() {
@@ -111,35 +112,37 @@ export default {
           name: 'OrgTeacherTeach'
         })
       }
-      if ((roleId & 1) > 0) {
-        roleName = 'student'
-        this.$router.push({
-          name: 'OrgStudent'
-        })
-      }
+      roleName = 'student'
+      this.$router.push({
+        name: 'OrgStudent'
+      })
     },
     async toLogin() {
       this.isLoading = true
-      let userinfo = await this.orgLogin(this.loginData).catch(error => {
-        let errorMsg = ''
+      try {
+        const userinfo = await this.orgLogin(this.loginData)
+        await this.setCurrentOrg({ orgDetail: this.orgDetail })
+        this.isLoading = false
+        const { roleId } = userinfo
+        return this.toRolePage({ roleId })
+      } catch (error) {
         switch (error.status) {
           case 400:
-            errorMsg = this.$t('org.accountNotFound')
-            break
+            await this.userLogin(this.loginData)
+            await this.setCurrentOrg({ orgDetail: this.orgDetail })
+            this.$router.push({
+              name: 'OrgStudent'
+            })
+            this.isLoading = false
+            return
           default:
-            errorMsg = this.$t('common.logonFailed')
-            break
+            this.$message({
+              message: this.$t('common.logonFailed'),
+              type: 'error'
+            })
         }
-        this.$message({
-          message: errorMsg,
-          type: 'error'
-        })
-        this.isLoading = false
-      })
-      await this.setCurrentOrg({ orgDetail: this.orgDetail })
+      }
       this.isLoading = false
-      let { roleId } = userinfo
-      this.toRolePage({ roleId })
     },
     loginToOrg() {
       this.$refs['loginForm'].validate(valid => {

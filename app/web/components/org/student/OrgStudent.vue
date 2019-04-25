@@ -29,7 +29,7 @@
         <div class="org-student-sidebar-bottom" v-if="hasOrgClasses">
           <div class="org-student-operation">
             <span>我的班级</span>
-            <span class="org-student-operation-add"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
+            <span class="org-student-operation-add" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
           </div>
           <div class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
@@ -38,10 +38,12 @@
           </div>
         </div>
       </div>
-      <router-view v-if="hasOrgClasses" class="org-student-main"></router-view>
-      <div v-else class="org-student-main">
+      <template v-if="!isLoading">
+        <router-view v-if="hasOrgClasses" class="org-student-main"></router-view>
+        <div v-else class="org-student-main">
           <join-org></join-org>
-      </div>
+        </div>
+      </template>
     </div>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
       <div class="hint">
@@ -59,11 +61,15 @@
         </li>
       </ul>
     </el-dialog>
+    <el-dialog class="org-student-join-class-dialog" width="500px"  :visible.sync="isShowJoinClassDialog">
+      <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
+    </el-dialog>
   </div>
 </template>
 <script>
 import OrgHeader from '@/components/org/common/OrgHeader'
 import JoinOrg from './JoinOrg'
+import JoinClass from './JoinClass'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork, lesson } from '@/api'
 const { graphql } = keepwork
@@ -80,7 +86,9 @@ export default {
       beInClassDialog: false,
       joinKey: '',
       skillsList: [],
-      isSkillDetailShow: false
+      isSkillDetailShow: false,
+      isLoading: true,
+      isShowJoinClassDialog: false
     }
   },
   computed: {
@@ -92,13 +100,6 @@ export default {
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson'
     }),
-    // orgClasses() {
-    //   return [
-    //     { name: 'class1', id: 1 },
-    //     { name: 'class2', id: 2 },
-    //     { name: 'class3', id: 3 }
-    //   ]
-    // },
     hasOrgClasses() {
       return _.get(this.orgClasses, 'length', 0) > 0
     },
@@ -140,12 +141,17 @@ export default {
     }
   },
   async created() {
-    await Promise.all([
-      this.getOrgClasses(),
-      this.getTeachingLesson(),
-      this.getUserInfo(),
-      this.getSkills()
-    ])
+    try {
+      await Promise.all([
+        this.getOrgClasses(),
+        this.getTeachingLesson(),
+        this.getUserInfo(),
+        this.getSkills()
+      ])
+    } catch (error) {
+      console.error(error)
+    }
+    this.isLoading = false
   },
   methods: {
     ...mapActions({
@@ -213,11 +219,15 @@ export default {
         })
       }
       this.beInClassDialog = false
+    },
+    onHideJoinClassDialog() {
+      this.isShowJoinClassDialog = false
     }
   },
   components: {
     OrgHeader,
-    JoinOrg
+    JoinOrg,
+    JoinClass
   }
 }
 </script>
