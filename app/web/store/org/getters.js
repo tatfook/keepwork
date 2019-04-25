@@ -41,7 +41,8 @@ const getters = {
     _.get(state.orgStudents, `${orgId}.${classId}`),
   orgLessonDetail: state => state.orgLessonDetail,
   orgPackagesDetail: state => state.orgPackagesDetail,
-  userOrg: state => state.userOrg
+  userOrg: state => state.userOrg,
+  orgActiveCodeList: state => state.orgActiveCodeList
 }
 
 export default getters

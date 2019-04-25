@@ -36,6 +36,8 @@ const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
 const NewStudent = () => import('@/components/org/admin/NewStudent')
 const EditMember = () => import('@/components/org/admin/EditMember')
+const InvitationCode = () => import('@/components/org/admin/InvitationCode')
+const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
 
 Vue.use(Router)
 
@@ -248,6 +250,16 @@ export default new Router({
               component: EditMember
             }
           ]
+        },
+        {
+          path: 'invitationCode',
+          name: 'InvitationCode',
+          component: InvitationCode
+        },
+        {
+          path: 'newInvitationCode',
+          name: 'NewInvitationCode',
+          component: NewInvitationCode
         },
         {
           path: 'setting',
