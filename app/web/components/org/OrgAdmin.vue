@@ -59,6 +59,14 @@ export default {
           text: this.$t('org.classInfoManage')
         },
         {
+          pageNames: [
+            'InvitationCode',
+            'NewInvitationCode'
+          ],
+          indexPageName: 'InvitationCode',
+          text: '学生邀请码管理'
+        },
+        {
           pageNames: ['OrgSetting'],
           indexPageName: 'OrgSetting',
           text: this.$t('org.settings')

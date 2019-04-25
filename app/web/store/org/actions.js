@@ -17,7 +17,8 @@ const {
   GET_ORG_CLASSES_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
   GET_ORG_STUDENTS_SUCCESS,
-  GET_USER_ORG_SUCCESS
+  GET_USER_ORG_SUCCESS,
+  GET_ORG_ACTIVATE_CODE_SUCCESS
 } = props
 
 const actions = {
@@ -262,6 +263,18 @@ const actions = {
       commit(GET_USER_ORG_SUCCESS, org)
     }).catch(err => {
       console.error('err', err)
+    })
+  },
+  async createBatchCode({ dispatch }, params) {
+    let codeList = await keepwork.lessonOrganizations.createBatchCode(params)
+    await dispatch('getOrgActivateCodes')
+    return codeList
+  },
+  async getOrgActivateCodes({ commit }, params) {
+    await keepwork.lessonOrganizations.getOrgActivateCodes(params).then(codeList => {
+      commit('GET_ORG_ACTIVATE_CODE_SUCCESS', codeList)
+    }).catch(err => {
+      console.error(err)
     })
   }
 }
