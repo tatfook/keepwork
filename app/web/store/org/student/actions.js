@@ -42,9 +42,13 @@ const actions = {
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
-  async joinOrg({ dispatch }, payload) {
+  async joinOrgClass({ dispatch }, payload) {
     try {
-      await lessonOrganizations.joinOrganization(payload)
+      const { refreshToken = true, ...rest } = payload
+      await lessonOrganizations.joinOrganization(rest)
+      if (refreshToken) {
+        await dispatch('org/refreshToken', {}, { root: true })
+      }
       await Promise.all([
         dispatch('getOrgPackages'),
         dispatch('getOrgClasses')
@@ -52,6 +56,7 @@ const actions = {
       Message({ type: 'success', message: '加入成功！' })
       return true
     } catch (err) {
+      console.log(err)
       const code = _.get(err, 'response.data.code', 0)
       const message = _.get(errMsg, code, '')
       Message({ type: 'error', message })

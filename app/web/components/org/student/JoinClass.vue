@@ -49,14 +49,15 @@ export default {
   },
   methods: {
     ...mapActions({
-      joinOrg: 'org/student/joinOrg'
+      joinOrgClass: 'org/student/joinOrgClass'
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
         if (valid) {
-          const flag = await this.joinOrg({
+          const flag = await this.joinOrgClass({
             ...this.form,
-            organizationId: this.organizationId
+            organizationId: this.organizationId,
+            refreshToken: false
           })
           flag && this.onCancel()
           return flag
