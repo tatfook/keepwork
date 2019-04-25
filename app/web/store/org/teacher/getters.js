@@ -8,8 +8,8 @@ const getters = {
     const { 'org/getOrgUserCountById': getOrgUserCountById, 'org/currentOrg': currentOrg } = rootGetters
     return getOrgUserCountById(currentOrg)
   },
-  orgRestCount: (state, { orgUserCounts }) => {
-    const { count, studentCount } = orgUserCounts
+  orgRestCount: (state, { orgUserCounts = {} }) => {
+    const { count = 0, studentCount = 0 } = orgUserCounts
     const residue = count - studentCount
     return residue > -1 ? residue : 0
   },

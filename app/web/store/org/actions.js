@@ -55,6 +55,11 @@ const actions = {
       .catch()
     return token
   },
+  async refreshToken({ dispatch, commit, getters: { currentOrgId } }) {
+    const token = await dispatch('getOrgToken', { orgId: currentOrgId })
+    Cookies.set('token', token)
+    commit(SET_TOKEN_UPDATE_AT)
+  },
   async getCurrentOrgUserCounts({ dispatch, getters: { currentOrg } }) {
     await dispatch('getOrgUserCountsByGraphql', { orgId: currentOrg.id })
   },
