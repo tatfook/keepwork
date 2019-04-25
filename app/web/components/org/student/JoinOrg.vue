@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      joinOrg: 'org/student/joinOrg'
+      joinOrg: 'org/student/joinOrgClass'
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
