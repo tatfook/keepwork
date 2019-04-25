@@ -128,6 +128,9 @@ const checkIsOrgMember = async function(
     store.dispatch('org/setTokenUpdateAt', { orgId })
     return { isContinue: true, orgToken }
   }
+  if (checkIsIgnore(name, next, params)) {
+    return { isContinue: false }
+  }
   if (nowPageRole != 'contact') {
     next({
       name: OrgContactPageName,
@@ -143,7 +146,8 @@ const checkIsOrgMember = async function(
 const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
   let isAdmin = (roleId & 64) > 0
   let isTeacher = (roleId & 2) > 0
-  let isStudent = (roleId & 1) > 0
+  // let isStudent = (roleId & 1) > 0
+  let isStudent = true
   if (nowPageRole == 'student' && !isStudent) {
     return next({
       name: isAdmin ? OrgAdminPageName : OrgTeacherPageName,
@@ -181,9 +185,22 @@ const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
   next()
 }
 
+const checkIsIgnore = (name, next, params) => {
+  const ignoreName = ['OrgLogin', 'OrgStudent', 'OrgStudentClass']
+  if (ignoreName.includes(name)) {
+    if (name != 'OrgStudentClass') {
+      next({ name: 'OrgStudent', params})
+    } else {
+      next()
+    }
+    return true
+  }
+  return false
+}
+
 router.beforeEach(async (to, from, next) => {
   let { query, params, name, path } = to
-  let isContinue, result
+  let isContinue = null, result = {}
   let pathArr = path.split('/')
   let nowPageRole = pathArr && pathArr.length >= 3 && pathArr[2]
 
@@ -202,7 +219,7 @@ router.beforeEach(async (to, from, next) => {
   let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
     jsrsasign.b64utoutf8(orgToken.split('.')[1])
   )
-  let { roleId } = tokenParams
+  let { roleId = 1 } = tokenParams
   handleDifferentRole(name, next, params, roleId, nowPageRole)
 
   next()

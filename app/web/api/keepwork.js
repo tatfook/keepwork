@@ -351,7 +351,8 @@ export const lessonOrganizations = {
   getOrgStudentPackages: async () => get('lessonOrganizations/packages'),
   getOrgStudentPackageDetail: async ({ packageId }) => get('lessonOrganizations/packageDetail', { params: { packageId } }),
   getUserOrganizations: async () => get('lessonOrganizations'),
-  searchOrganizations: async params => post('lessonOrganizations/search', params)
+  searchOrganizations: async params => post('lessonOrganizations/search', params),
+  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params)
 }
 
 export const lessonOrganizationClasses = {
