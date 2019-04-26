@@ -1,9 +1,10 @@
 <template>
   <div class="org-login">
-    <div class="org-login-container" v-if="isOrgExist">
-      <img v-loading='isLoading' :src="orgLogo" alt="" class="org-login-logo">
+    <div class="org-login-container" v-if="isOrgExist" v-loading='isLoading'>
+      <img v-if="orgLogo" :src="orgLogo" alt="" class="org-login-logo">
+      <div class="org-login-name">{{orgName}}</div>
       <el-form ref='loginForm' :model='loginData' class="org-login-form" :rules='loginDataRules'>
-        <div class="org-login-form-label">{{$t('org.loginToOrg')}}</div>
+        <div class="org-login-form-label">欢迎登录</div>
         <el-form-item class="org-login-form-item" prop='username'>
           <el-input v-model="loginData.username" :placeholder="$t('org.kpUsername')" @keyup.enter.native='loginToOrg'></el-input>
         </el-form-item>
@@ -52,7 +53,6 @@ export default {
       isShowPasswordResetForm: false,
       isLoading: false,
       isOrgExist: true,
-      defaultLogo: require('@/assets/img/logo_old.svg'),
       loginData: {
         username: '',
         password: '',
@@ -86,8 +86,8 @@ export default {
       return _.get(this.orgDetail, 'name')
     },
     orgLogo() {
-      let logo = _.get(this.orgDetail, 'logo', this.defaultLogo)
-      return _.isNull(logo) ? this.defaultLogo : logo
+      let logo = _.get(this.orgDetail, 'logo')
+      return logo
     }
   },
   methods: {
@@ -183,7 +183,12 @@ export default {
   &-logo {
     width: auto;
     max-width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
+  }
+  &-name {
+    margin: 0 0 40px 0;
+    font-size: 24px;
+    color: #333;
   }
   &-form {
     background-color: #fff;
