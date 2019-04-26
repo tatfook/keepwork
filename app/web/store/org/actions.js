@@ -173,12 +173,14 @@ const actions = {
     await dispatch('getOrgClassList', { organizationId })
     return Promise.resolve(result)
   },
-  async updateClass(context, { organizationId, classId, name, packages }) {
+  async updateClass(context, { organizationId, classId, name, packages, begin, end }) {
+    let { dispatch } = context
     await keepwork.lessonOrganizationClasses
-      .updateClass({ organizationId, classId, name, packages })
+      .updateClass({ organizationId, classId, name, packages, begin, end })
       .catch(error => {
         return Promise.reject(error.response)
       })
+    await dispatch('getOrgClassList', { organizationId })
   },
   async getOrgTeacherList(context, { organizationId }) {
     let { commit } = context

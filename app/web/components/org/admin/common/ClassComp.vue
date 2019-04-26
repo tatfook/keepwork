@@ -16,8 +16,12 @@
     <div class="class-comp-form">
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.ClassNameLabel')}}</div>
-        <el-input :disabled='!isNewPage' :placeholder="$t('org.pleaseInput')" v-model="classData.name"></el-input>
-        <div class="class-comp-form-danger">{{$t('org.classNameCannotBeModifiedAfterSaved')}}</div>
+        <el-input :disabled='isDetailPage' :placeholder="$t('org.pleaseInput')" v-model="classData.name"></el-input>
+      </div>
+      <div class="class-comp-form-item">
+        <div class="class-comp-form-label">{{$t('org.beginClassTime')}}</div>
+        <el-date-picker :disabled='isDetailPage' v-model="classData.beginAndEnd" type="datetimerange" :range-separator="$t('org.toTime')" start-placeholder="开始日期" end-placeholder="结束日期">
+        </el-date-picker>
       </div>
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.LessonPackagesAvailable')}}:</div>
@@ -34,15 +38,17 @@ export default {
   props: {
     classDetail: Object
   },
-  mounted() {
-    this.initClassData()
+  async mounted() {
+    await this.initClassData()
+    console.log('this.classData',this.classData)
   },
   data() {
     return {
       isTreeLoading: false,
       classData: {
         name: '',
-        packages: []
+        packages: [],
+        beginAndEnd: ''
       }
     }
   },
@@ -119,7 +125,7 @@ export default {
       this.initTreeData()
       if (this.isDetailPage || this.isEditPage) {
         this.initSelectedLessons()
-        this.classData = this.classDetail
+        this.classData = {...this.classDetail, beginAndEnd: [this.classDetail.begin, this.classDetail.end]}
       } else {
         this.classData = {
           name: '',
@@ -174,6 +180,8 @@ export default {
     },
     save() {
       this.setSelectedPackages()
+      this.classData.begin = this.classData.beginAndEnd[0],
+      this.classData.end = this.classData.beginAndEnd[1]
       this.$emit('save', this.classData)
     }
   },
