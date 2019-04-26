@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       codeAssociateInfo: {
-        quantity: 10,
+        quantity: 1,
         classId: ''
       },
       codeAssociateInfoRules: {

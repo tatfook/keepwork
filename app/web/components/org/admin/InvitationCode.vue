@@ -34,7 +34,7 @@
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column :label="$t('org.serialNum')" width="55" type="index"></el-table-column>
         <el-table-column :label="$t('org.InvitationCode')" width="125" prop="key"></el-table-column>
-        <el-table-column :label="$t('org.allState')" width="65"><template slot-scope="scope">{{scope.row.state | stateFilter}}</template></el-table-column>
+        <el-table-column :label="$t('org.allState')" width="75"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
         <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{scope.row.createdAt | formatTime}}</template></el-table-column>
         <el-table-column :label="$t('org.serviceTime')" width="105"><template slot-scope="scope">{{scope.row.activateTime | formatTime}}</template></el-table-column>
         <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
@@ -131,14 +131,14 @@ export default {
     createActiveCode() {
       this.$router.push({ name: 'NewInvitationCode' })
     },
+    stateFilter(state) {
+      return state === 0 ? this.$t('org.unused') : this.$t('org.used')
+    },
     exportData() {}
   },
   filters: {
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD') : ''
-    },
-    stateFilter(state) {
-      return state === 0 ? '未使用' : '已使用'
     }
   }
 }

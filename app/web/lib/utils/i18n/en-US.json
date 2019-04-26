@@ -1839,6 +1839,7 @@
     "serviceTime": "Service Time",
     "unused": "Unused",
     "used": "Used",
-    "codeCount": "Count"
+    "codeCount": "Count",
+    "beginClassTime": "Begin class time"
   }
 }
