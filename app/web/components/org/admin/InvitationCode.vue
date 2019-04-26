@@ -1,29 +1,29 @@
 <template>
   <div class="invitation-code" v-loading="loading">
     <div class="invitation-code-top clearfix">
-      <span class="invitation-code-top-total">邀请码：{{codesCount}}</span>
+      <span class="invitation-code-top-total">{{$t('org.InvitationCode')}}：{{codesCount}}</span>
       <div class="invitation-code-top-operation">
-        <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="exportData">导出</el-button>
-        <el-button type="primary" class="invitation-code-top-operation-button" @click="createActiveCode()">生成激活码</el-button>
+        <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="exportData">{{$t('org.export')}}</el-button>
+        <el-button type="primary" class="invitation-code-top-operation-button" @click="createActiveCode()">{{$t('org.generateInvitationCode')}}</el-button>
       </div>
     </div>
     <div class="invitation-code-filter">
       <el-form ref="codeFilter" :model="codeFilterData" label-width="80px">
-        <el-form-item label="状态：">
+        <el-form-item :label="$t('org.state')">
           <el-select v-model="codeFilterData.state" size="medium">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="已使用" value="1"></el-option>
-            <el-option label="未使用" value="0"></el-option>
+            <el-option :label="$t('org.allState')" value=""></el-option>
+            <el-option :label="$t('org.used')" value="1"></el-option>
+            <el-option :label="$t('org.unused')" value="0"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="班级：">
+        <el-form-item :label="$t('org.class')">
           <el-select v-model="codeFilterData.classId" size="medium">
-            <el-option label="全部" value=""></el-option>
+            <el-option :label="$t('org.allState')" value=""></el-option>
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="invitation-code-filter-search-box">
-          <el-input size="medium" class="invitation-code-filter-search" placeholder="按邀请码、用户名、姓名搜索" v-model="codeFilterData.searchBy">
+          <el-input size="medium" class="invitation-code-filter-search" :placeholder="$t('org.codeSearchPlaceholder')" v-model="codeFilterData.searchBy">
             <i slot="suffix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </el-form-item>
@@ -32,14 +32,14 @@
     <div class="invitation-code-table">
       <el-table ref="codeTable" border :data="codeTableData" @selection-change="handleSelectionChange" tooltip-effect="dark" style="width: 100%">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="序号" width="55" type="index"></el-table-column>
-        <el-table-column label="邀请码" width="125" prop="key"></el-table-column>
-        <el-table-column label="状态" width="55" prop="state"></el-table-column>
-        <el-table-column label="创建时间" width="125"><template slot-scope="scope">{{scope.row.createdAt | formatTime}}</template></el-table-column>
-        <el-table-column label="使用时间" width="125"><template slot-scope="scope">{{scope.row.activateTime | formatTime}}</template></el-table-column>
-        <el-table-column label="用户名" width="125" prop="username"></el-table-column>
-        <el-table-column label="姓名" width="125" prop="realname"></el-table-column>
-        <el-table-column label="班级" width="" prop="lessonOrganizationClasses.name"></el-table-column>
+        <el-table-column :label="$t('org.serialNum')" width="55" type="index"></el-table-column>
+        <el-table-column :label="$t('org.InvitationCode')" width="125" prop="key"></el-table-column>
+        <el-table-column :label="$t('org.allState')" width="65"><template slot-scope="scope">{{scope.row.state | stateFilter}}</template></el-table-column>
+        <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{scope.row.createdAt | formatTime}}</template></el-table-column>
+        <el-table-column :label="$t('org.serviceTime')" width="105"><template slot-scope="scope">{{scope.row.activateTime | formatTime}}</template></el-table-column>
+        <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
+        <el-table-column :label="$t('org.nameLabel')" width="125" prop="realname"></el-table-column>
+        <el-table-column :label="$t('org.classLabel')" width="" prop="lessonOrganizationClasses.name"></el-table-column>
       </el-table>
     </div>
     <div class="invitation-code-pages" v-if="codesCount > perPage">
@@ -135,7 +135,10 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return moment(time).format('YYYY/MM/DD')
+      return time ? moment(time).format('YYYY/MM/DD') : ''
+    },
+    stateFilter(state) {
+      return state === 0 ? '未使用' : '已使用'
     }
   }
 }
