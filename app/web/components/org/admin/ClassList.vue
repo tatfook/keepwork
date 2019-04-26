@@ -12,6 +12,7 @@
       <el-table-column :label="$t('org.LessonPackagesAvailable')">
         <template slot-scope="scope">
           <router-link class='class-list-table-link' :to='{name: "OrgClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
+          <router-link class='class-list-table-link' :to='{name: "OrgEditClass", query: scope.row}'>{{$t('org.Edit')}}</router-link>
         </template>
       </el-table-column>
     </el-table>

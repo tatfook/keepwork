@@ -163,22 +163,28 @@ const actions = {
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
-  async createNewClass(context, { organizationId, name, packages }) {
-    let { dispatch } = context
+  async createNewClass(
+    { dispatch },
+    { organizationId, name, begin, end, packages }
+  ) {
     let result = await keepwork.lessonOrganizationClasses
-      .createClasses({ organizationId, name, packages })
+      .createClasses({ organizationId, name, begin, end, packages })
       .catch(error => {
         return Promise.reject(error.response)
       })
     await dispatch('getOrgClassList', { organizationId })
     return Promise.resolve(result)
   },
-  async updateClass(context, { organizationId, classId, name, packages }) {
+  async updateClass(
+    { dispatch },
+    { organizationId, classId, name, begin, end, packages }
+  ) {
     await keepwork.lessonOrganizationClasses
-      .updateClass({ organizationId, classId, name, packages })
+      .updateClass({ organizationId, classId, name, begin, end, packages })
       .catch(error => {
         return Promise.reject(error.response)
       })
+    await dispatch('getOrgClassList', { organizationId })
   },
   async getOrgTeacherList(context, { organizationId }) {
     let { commit } = context
@@ -264,11 +270,14 @@ const actions = {
     await dispatch('setCurrentOrg', { orgDetail })
   },
   async getUserOrg({ commit }) {
-    await keepwork.lessonOrganizations.getUserOrganizations().then(org => {
-      commit(GET_USER_ORG_SUCCESS, org)
-    }).catch(err => {
-      console.error('err', err)
-    })
+    await keepwork.lessonOrganizations
+      .getUserOrganizations()
+      .then(org => {
+        commit(GET_USER_ORG_SUCCESS, org)
+      })
+      .catch(err => {
+        console.error('err', err)
+      })
   },
   async createBatchCode({ dispatch }, params) {
     let codeList = await keepwork.lessonOrganizations.createBatchCode(params)
@@ -276,11 +285,14 @@ const actions = {
     return codeList
   },
   async getOrgActivateCodes({ commit }, params) {
-    await keepwork.lessonOrganizations.getOrgActivateCodes(params).then(codeList => {
-      commit('GET_ORG_ACTIVATE_CODE_SUCCESS', codeList)
-    }).catch(err => {
-      console.error(err)
-    })
+    await keepwork.lessonOrganizations
+      .getOrgActivateCodes(params)
+      .then(codeList => {
+        commit('GET_ORG_ACTIVATE_CODE_SUCCESS', codeList)
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
 }
 
