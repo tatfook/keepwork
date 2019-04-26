@@ -1829,6 +1829,7 @@
     "serviceTime": "使用时间",
     "unused": "未使用",
     "used": "已使用",
-    "codeCount": "数量"
+    "codeCount": "数量",
+    "beginClassTime": "开班时间"
   }
 }

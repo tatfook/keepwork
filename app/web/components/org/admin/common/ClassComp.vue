@@ -14,10 +14,9 @@
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.ClassNameLabel')}}</div>
         <el-input :disabled='isDetailPage' placeholder="例如：2019级1班" v-model="classData.name"></el-input>
-        <div class="class-comp-form-danger">{{$t('org.classNameCannotBeModifiedAfterSaved')}}</div>
       </div>
       <div class="class-comp-form-item">
-        <div class="class-comp-form-label">开班时间</div>
+        <div class="class-comp-form-label">{{$t('org.beginClassTime')}}</div>
         <el-date-picker :disabled="isDetailPage" v-model="classTime" type="daterange" range-separator="至" start-placeholder="开班时间" end-placeholder="结束时间" unlink-panels>
         </el-date-picker>
       </div>
