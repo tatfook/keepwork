@@ -64,7 +64,7 @@ export default {
             'NewInvitationCode'
           ],
           indexPageName: 'InvitationCode',
-          text: '学生邀请码管理'
+          text: this.$t('org.studentInvitationCodeManagement')
         },
         {
           pageNames: ['OrgSetting'],

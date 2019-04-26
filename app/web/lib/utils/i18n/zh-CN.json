@@ -1814,6 +1814,21 @@
     "tel": "联系电话",
     "warningTitle": "提示",
     "pleaseInputClassIdOrLessonId": "请输入课堂ID或课程ID",
-    "toNextLesson": "进入下一课"
+    "toNextLesson": "进入下一课",
+    "studentInvitationCodeManagement": "学生邀请码管理",
+    "InvitationCode": "邀请码",
+    "export": "导出",
+    "generateInvitationCode": "生成邀请码",
+    "state": "状态:",
+    "stateLabel": "状态",
+    "allState": "全部",
+    "class": "班级:",
+    "codeSearchPlaceholder": "按邀请码、用户名、姓名搜索",
+    "serialNum": "序号",
+    "createdTime": "创建时间",
+    "serviceTime": "使用时间",
+    "unused": "未使用",
+    "used": "已使用",
+    "codeCount": "数量"
   }
 }

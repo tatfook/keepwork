@@ -3,8 +3,8 @@
     <div class="new-invitation-code-top clearfix">
       <div class="new-invitation-code-top-total">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'InvitationCode' }">邀请码管理</el-breadcrumb-item>
-          <el-breadcrumb-item>生成邀请码</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'InvitationCode' }">{{$t('org.studentInvitationCodeManagement')}}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{$t('org.generateInvitationCode')}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div class="new-invitation-code-top-operation">
@@ -14,10 +14,10 @@
     </div>
     <div class="new-invitation-code-content">
       <el-form ref="form" :model="codeAssociateInfo" :rules="codeAssociateInfoRules" label-width="80px" :hide-required-asterisk="true">
-        <el-form-item label="数量" prop="quantity">
+        <el-form-item :label="$t('org.codeCount')" prop="quantity">
           <el-input v-model="codeAssociateInfo.quantity" size="medium"></el-input>
         </el-form-item>
-        <el-form-item label="班级" prop="classId">
+        <el-form-item :label="$t('org.classLabel')" prop="classId">
           <el-select v-model="codeAssociateInfo.classId" :placeholder="$t('org.pleaseSelect')" size="medium">
             <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
