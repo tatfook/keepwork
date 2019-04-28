@@ -16,6 +16,7 @@ const GET_ORG_TEACHERS_SUCCESS = 'GET_ORG_TEACHERS_SUCCESS'
 const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
 const GET_USER_ORG_SUCCESS = 'GET_USER_ORG_SUCCESS'
 const GET_ORG_ACTIVATE_CODE_SUCCESS = 'GET_ORG_ACTIVATE_CODE_SUCCESS'
+const SET_PRINT_CODE_LIST = 'SET_PRINT_CODE_LIST'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -31,7 +32,8 @@ export const props = {
   GET_ORG_TEACHERS_SUCCESS,
   GET_ORG_STUDENTS_SUCCESS,
   GET_USER_ORG_SUCCESS,
-  GET_ORG_ACTIVATE_CODE_SUCCESS
+  GET_ORG_ACTIVATE_CODE_SUCCESS,
+  SET_PRINT_CODE_LIST
 }
 
 const mutations = {
@@ -111,6 +113,9 @@ const mutations = {
   },
   [GET_ORG_ACTIVATE_CODE_SUCCESS](state, codeList) {
     Vue.set(state, 'orgActiveCodeList', codeList)
+  },
+  [SET_PRINT_CODE_LIST](state, codeList) {
+    Vue.set(state, 'printCodeList', codeList)
   }
 }
 
