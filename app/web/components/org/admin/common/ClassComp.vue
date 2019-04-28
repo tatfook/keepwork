@@ -8,16 +8,17 @@
       <div class="class-comp-header-operate">
         <el-button v-if="!isDetailPage" size="medium" @click="toClassListPage">{{$t('common.Cancel')}}</el-button>
         <el-button v-if="!isDetailPage" size="medium" type="primary" @click="save" :disabled="!isClassDataValid">{{$t('common.Save')}}</el-button>
-        <router-link class="class-comp-header-edit" v-if="isDetailPage" :to="{name: 'OrgEditClass', query: classDetail}">
-          <i class="el-icon-edit-outline"></i>
-        </router-link>
       </div>
     </div>
     <div class="class-comp-form">
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.ClassNameLabel')}}</div>
-        <el-input :disabled='!isNewPage' :placeholder="$t('org.pleaseInput')" v-model="classData.name"></el-input>
-        <div class="class-comp-form-danger">{{$t('org.classNameCannotBeModifiedAfterSaved')}}</div>
+        <el-input :disabled='isDetailPage' placeholder="例如：2019级1班" v-model="classData.name"></el-input>
+      </div>
+      <div class="class-comp-form-item">
+        <div class="class-comp-form-label">{{$t('org.beginClassTime')}}</div>
+        <el-date-picker :disabled="isDetailPage" v-model="classTime" type="daterange" range-separator="至" start-placeholder="开班时间" end-placeholder="结束时间" unlink-panels>
+        </el-date-picker>
       </div>
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.LessonPackagesAvailable')}}:</div>
@@ -39,9 +40,12 @@ export default {
   },
   data() {
     return {
+      classTime: null,
       isTreeLoading: false,
       classData: {
         name: '',
+        begin: null,
+        end: null,
         packages: []
       }
     }
@@ -119,10 +123,16 @@ export default {
       this.initTreeData()
       if (this.isDetailPage || this.isEditPage) {
         this.initSelectedLessons()
-        this.classData = this.classDetail
+        let classDetail = this.classDetail
+        this.classData = classDetail
+        this.classTime = _.isNull(classDetail.begin)
+          ? null
+          : [classDetail.begin, classDetail.end]
       } else {
         this.classData = {
           name: '',
+          begin: null,
+          end: null,
           packages: []
         }
       }
@@ -172,8 +182,18 @@ export default {
       })
       this.classData.packages = packages
     },
+    setSelectedTime() {
+      if (_.isNull(this.classTime)) {
+        this.classData.begin = null
+        this.classData.end = null
+        return
+      }
+      this.classData.begin = this.classTime[0]
+      this.classData.end = this.classTime[1]
+    },
     save() {
       this.setSelectedPackages()
+      this.setSelectedTime()
       this.$emit('save', this.classData)
     }
   },

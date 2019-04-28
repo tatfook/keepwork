@@ -34,9 +34,7 @@ import LessonSummaryShareStyleSelect from './LessonSummaryShareStyleSelect'
 import StudentSummary from './StudentSummary'
 import { lesson } from '@/api'
 import _ from 'lodash'
-import dayjs from 'dayjs'
 import { locale } from '@/lib/utils/i18n'
-import moment from 'moment'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 
 export default {

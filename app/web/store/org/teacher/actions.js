@@ -78,7 +78,7 @@ const actions = {
       return Promise.reject(error.response)
     }
   },
-  async removeStudentFromClass({ dispatch, rootDispatch }, { classId, studentId }) {
+  async removeStudentFromClass({ dispatch }, { classId, studentId }) {
     try {
       await lessonOrganizationClassMembers.removeMemberFromClass(studentId)
       await dispatch('getOrgClassStudentsById', { classId })

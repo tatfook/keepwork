@@ -14,14 +14,14 @@ import OrganizationCooperation from '@/components/study/OrganizationCooperation'
 import PackageDetail from '@/components/study/PackageDetail'
 import LessonDetail from '@/components/study/LessonDetail'
 
-const PackageManager = () => import('@/components/lesson/teacher/PackageManager')
-const NewPackage = () => import('@/components/lesson/teacher/NewPackage')
+const PackageManager = () => import('@/components/study/PackageManager')
+const NewPackage = () => import('@/components/study/NewPackage')
 
-const LessonManager = () => import('@/components/lesson/teacher/LessonManager')
-const NewLesson = () => import('@/components/lesson/teacher/NewLesson')
+const LessonManager = () => import('@/components/study/LessonManager')
+const NewLesson = () => import('@/components/study/NewLesson')
 
-const EditPackage = () => import('@/components/lesson/teacher/EditPackage')
-const EditLesson = () => import('@/components/lesson/teacher/EditLesson')
+const EditPackage = () => import('@/components/study/EditPackage')
+const EditLesson = () => import('@/components/study/EditLesson')
 
 Vue.use(Router)
 

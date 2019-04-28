@@ -11,7 +11,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item class="org-admin-role-label-active">{{$t("org.admin")}}</el-dropdown-item>
               <el-dropdown-item v-if="orgIsTeacher" command="OrgTeacher">{{$t("org.teacherRole")}}</el-dropdown-item>
-              <el-dropdown-item v-if="orgIsStudent" command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
+              <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
@@ -57,6 +57,14 @@ export default {
           ],
           indexPageName: 'OrgClassList',
           text: this.$t('org.classInfoManage')
+        },
+        {
+          pageNames: [
+            'InvitationCode',
+            'NewInvitationCode'
+          ],
+          indexPageName: 'InvitationCode',
+          text: this.$t('org.studentInvitationCodeManagement')
         },
         {
           pageNames: ['OrgSetting'],

@@ -10,7 +10,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="orgIsAdmin" command="OrgPackages">{{$t("org.admin")}}</el-dropdown-item>
               <el-dropdown-item class="org-teacher-role-label-active">{{$t("org.teacherRole")}}</el-dropdown-item>
-              <el-dropdown-item v-if="orgIsStudent" command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
+              <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <img :src="userPortrait" class="org-teacher-profile" />

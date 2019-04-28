@@ -19,8 +19,8 @@
       </el-form-item>
       <el-form-item :label="$t('org.classLabel')" :rules="memberRules.classIds" prop="classIds">
         <el-select v-model="memberData.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
-          <span :title="memberData.classIds | idToTextFilter(orgClasses)" class="edit-member-form-selected" slot="prefix">{{memberData.classIds | idToTextFilter(orgClasses)}}</span>
-          <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
+          <span :title="memberData.classIds | idToTextFilter(orgClasses)" class="edit-member-form-selected" :class="{'edit-member-form-selected-empty': memberData.classIds.length == 0}" slot="prefix">{{memberData.classIds | idToTextFilter(orgClasses, $t('org.pleaseSelect'))}}</span>
+          <el-option v-for="(classItem, index) in filterOverDueClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -38,7 +38,7 @@ export default {
   data() {
     let memberRoleId = _.get(this.$route, 'query.roleId')
     let classIdsValidate = (rule, value, callback) => {
-      if (value.length == 0) {
+      if (this.memberRoleId === 1 && value.length == 0) {
         callback(new Error(this.$t('org.pleaseSelectClasses')))
       } else {
         callback()
@@ -84,6 +84,14 @@ export default {
     },
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    filterOverDueClasses() {
+      let nowDate = new Date().valueOf()
+      return _.filter(this.orgClasses, classDetail => {
+        let classBegin = new Date(classDetail.begin).valueOf()
+        let classEnd = new Date(classDetail.end).valueOf()
+        return classBegin <= nowDate && classEnd >= nowDate
+      })
     },
     queryData() {
       return _.get(this.$route, 'query')
@@ -165,10 +173,12 @@ export default {
     }
   },
   filters: {
-    idToTextFilter(ids, classes) {
-      return _.map(ids, id => {
-        return _.get(_.find(classes, { id }), 'name')
-      }).join('、')
+    idToTextFilter(ids, classes, emptyText) {
+      return (
+        _.map(ids, id => {
+          return _.get(_.find(classes, { id }), 'name')
+        }).join('、') || emptyText
+      )
     }
   }
 }
@@ -200,6 +210,9 @@ $borderColor: #e8e8e8;
       max-width: 100%;
       display: inline-block;
       color: #606266;
+      &-empty {
+        color: #c0c4cc;
+      }
     }
   }
   .el-select {

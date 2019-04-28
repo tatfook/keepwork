@@ -9,9 +9,11 @@
     <el-table v-if="orgClassesLength > 0" class="class-list-table" border :data="orgClasses" header-row-class-name="class-list-table-header">
       <el-table-column prop="name" :label="$t('org.ClassNameLabel')" width="240">
       </el-table-column>
+      <el-table-column :label="$t('org.beginClassTime')" width="240"><template slot-scope="scope">{{scope.row.begin | formatTime}}</template></el-table-column>
       <el-table-column :label="$t('org.LessonPackagesAvailable')">
         <template slot-scope="scope">
           <router-link class='class-list-table-link' :to='{name: "OrgClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
+          <router-link class='class-list-table-link' :to='{name: "OrgEditClass", query: scope.row}'>{{$t('org.Edit')}}</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -24,6 +26,8 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment'
+
 export default {
   name: 'ClassList',
   computed: {
@@ -39,6 +43,11 @@ export default {
     },
     orgClassesLength() {
       return this.orgClasses.length
+    }
+  },
+  filters: {
+    formatTime(time) {
+      return time ? moment(time).format('YYYY/MM/DD') : ''
     }
   }
 }
@@ -59,13 +68,20 @@ export default {
     }
   }
   &-table {
-    width: 560px;
+    width: 660px;
     &-header {
       font-size: 14px;
       color: #909399;
     }
     &-link {
       color: #2397f3;
+      border-radius: 4px;
+      border: solid 1px #2397f3;
+      padding: 1px 14px;
+      text-decoration: none;
+      &:nth-child(1) {
+        margin-right: 20px;
+      }
     }
   }
   .el-icon-circle-plus-outline {

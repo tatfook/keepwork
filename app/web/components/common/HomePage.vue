@@ -210,7 +210,6 @@ export default {
     videoPlayer
   },
   async mounted() {
-    console.log('here i am')
     this.textAnimation()
     let [hotPackage, handpick, likes, news] = await Promise.all([
       this.getHotPackage(),

@@ -1,9 +1,10 @@
 <template>
   <div class="org-login">
-    <div class="org-login-container" v-if="isOrgExist">
-      <img v-loading='isLoading' :src="orgLogo" alt="" class="org-login-logo">
+    <div class="org-login-container" v-if="isOrgExist" v-loading='isLoading'>
+      <img v-if="orgLogo" :src="orgLogo" alt="" class="org-login-logo">
+      <div class="org-login-name">{{orgName}}</div>
       <el-form ref='loginForm' :model='loginData' class="org-login-form" :rules='loginDataRules'>
-        <div class="org-login-form-label">{{$t('org.loginToOrg')}}</div>
+        <div class="org-login-form-label">欢迎登录</div>
         <el-form-item class="org-login-form-item" prop='username'>
           <el-input v-model="loginData.username" :placeholder="$t('org.kpUsername')" @keyup.enter.native='loginToOrg'></el-input>
         </el-form-item>
@@ -52,11 +53,10 @@ export default {
       isShowPasswordResetForm: false,
       isLoading: false,
       isOrgExist: true,
-      defaultLogo: require('@/assets/img/logo_old.svg'),
       loginData: {
-        username: undefined,
-        password: undefined,
-        organizationName: undefined
+        username: '',
+        password: '',
+        organizationName: ''
       },
       loginDataRules: {
         username: {
@@ -86,14 +86,15 @@ export default {
       return _.get(this.orgDetail, 'name')
     },
     orgLogo() {
-      let logo = _.get(this.orgDetail, 'logo', this.defaultLogo)
-      return _.isNull(logo) ? this.defaultLogo : logo
+      let logo = _.get(this.orgDetail, 'logo')
+      return logo
     }
   },
   methods: {
     ...mapActions({
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgLogin: 'org/login',
+      userLogin: 'user/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),
     handleClose() {
@@ -111,35 +112,37 @@ export default {
           name: 'OrgTeacherTeach'
         })
       }
-      if ((roleId & 1) > 0) {
-        roleName = 'student'
-        this.$router.push({
-          name: 'OrgStudent'
-        })
-      }
+      roleName = 'student'
+      this.$router.push({
+        name: 'OrgStudent'
+      })
     },
     async toLogin() {
       this.isLoading = true
-      let userinfo = await this.orgLogin(this.loginData).catch(error => {
-        let errorMsg = ''
+      try {
+        const userinfo = await this.orgLogin(this.loginData)
+        await this.setCurrentOrg({ orgDetail: this.orgDetail })
+        this.isLoading = false
+        const { roleId } = userinfo
+        return this.toRolePage({ roleId })
+      } catch (error) {
         switch (error.status) {
           case 400:
-            errorMsg = this.$t('org.accountNotFound')
-            break
+            await this.userLogin(this.loginData)
+            await this.setCurrentOrg({ orgDetail: this.orgDetail })
+            this.$router.push({
+              name: 'OrgStudent'
+            })
+            this.isLoading = false
+            return
           default:
-            errorMsg = this.$t('common.logonFailed')
-            break
+            this.$message({
+              message: this.$t('common.logonFailed'),
+              type: 'error'
+            })
         }
-        this.$message({
-          message: errorMsg,
-          type: 'error'
-        })
-        this.isLoading = false
-      })
-      await this.setCurrentOrg({ orgDetail: this.orgDetail })
+      }
       this.isLoading = false
-      let { roleId } = userinfo
-      this.toRolePage({ roleId })
     },
     loginToOrg() {
       this.$refs['loginForm'].validate(valid => {
@@ -180,7 +183,12 @@ export default {
   &-logo {
     width: auto;
     max-width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
+  }
+  &-name {
+    margin: 0 0 40px 0;
+    font-size: 24px;
+    color: #333;
   }
   &-form {
     background-color: #fff;
