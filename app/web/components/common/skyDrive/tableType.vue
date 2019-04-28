@@ -19,14 +19,14 @@
     <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
-      <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" sortable width="300">
+      <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
       </el-table-column>
       <el-table-column prop="ext" sortable :label="$t('skydrive.filetype')" width="80">
       </el-table-column>
       <el-table-column prop="size" sortable :label="$t('skydrive.filesize')" width="85" show-overflow-tooltip>
         <template slot-scope="scope">{{ scope.row.displaySize }}</template>
       </el-table-column>
-      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="155">
+      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="158">
         <template slot-scope="scope">
           <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
             <el-progress :stroke-width="10" :color="scope.row.state === 'doing' ? '#13ce67' : '#f56c6c'" :show-text=false :percentage="scope.row.percent"></el-progress>
