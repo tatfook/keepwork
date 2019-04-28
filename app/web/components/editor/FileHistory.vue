@@ -4,6 +4,9 @@
       <div class="file-history-sidebar-header">
         <i class="iconfont icon-historyrecord"></i>
         <span class="file-history-sidebar-header-title">{{$t('common.oldVersions')}}</span>
+        <el-tooltip :content="$t('editor.recoverThisVersion')">
+          <i class="iconfont icon-ziyuan1" @click="recoverVersion"></i>
+        </el-tooltip>
       </div>
       <history-list @selectHistory="getFileContentByCommitId"></history-list>
     </div>
@@ -11,9 +14,6 @@
       <div class="file-history-header">
         <span class="file-history-header-version">{{activeVersion}}</span>
         <div class="file-history-main-operations">
-          <el-tooltip :content="$t('editor.recoverThisVersion')">
-            <i class="iconfont icon-ziyuan1" @click="recoverVersion"></i>
-          </el-tooltip>
           <div class='file-history-header-switch'>
             <el-tooltip :content="$t('tips.ShowPreviewOnly')">
               <span class="iconfont icon-preview1" :class='{"file-history-header-switch-active": isPreviewShow && !isCodeShow}' @click="switchViewShow(true, false)"></span>
@@ -152,6 +152,18 @@ export default {
       top: 0;
       left: 0;
       right: 0;
+      display: flex;
+      &-title {
+        flex: 1;
+      }
+      .icon-ziyuan1 {
+        font-size: 20px;
+        vertical-align: middle;
+        cursor: pointer;
+        &:hover {
+          color: #288ce9;
+        }
+      }
     }
   }
   &-main {
@@ -214,11 +226,6 @@ export default {
         border-radius: 16px;
       }
     }
-    .icon-ziyuan1 {
-      font-size: 20px;
-      vertical-align: middle;
-    }
-    .icon-ziyuan1,
     .icon-ziyuan3 {
       &:hover {
         color: #288ce9;
