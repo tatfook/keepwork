@@ -125,18 +125,28 @@ body {
   padding: 0;
 }
 .pbl-page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  min-height: 100%;
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
   &-header {
+    display: table-row;
     height: 60px;
     border-bottom: 1px solid #e6e6e6;
+    .el-menu.el-menu--horizontal {
+      border: none;
+    }
+    .el-menu-item {
+      overflow: hidden;
+    }
   }
   &-main-content {
-    flex: 1;
+    display: table-row;
+    height: 100%;
   }
   &-footer {
     background-color: #f5f5f5;
+    display: table-row;
   }
   .container {
     max-width: 1200px;
