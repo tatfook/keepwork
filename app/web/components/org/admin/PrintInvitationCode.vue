@@ -86,15 +86,7 @@ export default {
       const bodyHtml = this.$refs.printContent.innerHTML
       let headHtml = document.head.innerHTML
       headHtml = headHtml.replace('screen', 'screen,print')
-      newWindow.document.write('<html>')
-      newWindow.document.write(headHtml)
-      newWindow.document.write('<body>')
-      newWindow.document.write(bodyHtml)
-      newWindow.document.write(
-        '<script>setTimeout(function() {window.print(); window.close();}, 500)</'
-      )
-      newWindow.document.write('script>')
-      newWindow.document.write('</body></html>')
+      newWindow.document.write(`<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`)
     },
     stateFilter(state) {
       return state === 0 ? this.$t('org.unused') : this.$t('org.used')
