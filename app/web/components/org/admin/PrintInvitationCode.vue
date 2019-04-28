@@ -19,11 +19,10 @@
         <el-table-column :label="$t('org.classLabel')" width="" prop="className"></el-table-column>
       </el-table>
     </div>
-    <div ref="printContent" class="print-invitation-code-print">
+    <div ref="printContent" :class="['print-invitation-code-print', {'print-invitation-code-print-hidden': currentRouteName === 'PrintInvitationCode'}]">
       <div class="print-invitation-code-print-header">
         <div class="print-invitation-code-print-header-left">
           <img class="print-invitation-code-print-header-left-brand" :src="orgLogo" alt="KeepWork">
-          <!-- <img class="print-invitation-code-print-header-left-brand" src="@/assets/pblImg/no_result.png" alt="KeepWork"> -->
           <span class="print-invitation-code-print-header-left-name">{{currentOrg.name}}</span>
         </div>
         <div class="print-invitation-code-print-header-right">
@@ -60,7 +59,8 @@ export default {
     return {
       className: this.$route.query.className,
       beginClassTime: this.$route.query.begin,
-      endClassTime: this.$route.query.end
+      endClassTime: this.$route.query.end,
+      currentRouteName: this.$route.name
     }
   },
   computed: {
@@ -149,7 +149,9 @@ export default {
     padding: 30px;
   }
   &-print {
-    // display: none;
+    &-hidden {
+      display: none;
+    }
   }
 }
 .clearfix::after {
