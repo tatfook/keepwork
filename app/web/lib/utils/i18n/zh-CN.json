@@ -1826,7 +1826,7 @@
     "codeSearchPlaceholder": "按邀请码、用户名、姓名搜索",
     "serialNum": "序号",
     "createdTime": "创建时间",
-    "serviceTime": "使用时间",
+    "activateTime": "使用时间",
     "unused": "未使用",
     "used": "已使用",
     "codeCount": "数量",

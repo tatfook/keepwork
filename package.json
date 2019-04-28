@@ -39,6 +39,7 @@
     "egg-view-vue-ssr": "^3.0.5",
     "element-ui": "^2.4.1",
     "extend": "~3.0.0",
+    "file-saver": "^2.0.1",
     "filesize": "^3.6.1",
     "github-markdown-css": "^2.10.0",
     "html2canvas": "^1.0.0-alpha.12",
@@ -56,6 +57,7 @@
     "raw-loader": "^0.5.1",
     "remove-markdown": "^0.3.0",
     "reveal.js": "github:NPLFoshan/reveal.js#master",
+    "script-loader": "^0.7.2",
     "scroll-into-view-if-needed": "^2.2.16",
     "smooth-scroll-into-view-if-needed": "^1.1.10",
     "social-share.js": "^1.0.16",
@@ -81,7 +83,8 @@
     "vuex-iframe-sync": "^1.4.1",
     "vuex-persistedstate": "^2.5.1",
     "vuex-router-sync": "^5.0.0",
-    "wangeditor": "^3.1.1"
+    "wangeditor": "^3.1.1",
+    "xlsx": "^0.14.2"
   },
   "devDependencies": {
     "@babel/traverse": "^7.1.4",

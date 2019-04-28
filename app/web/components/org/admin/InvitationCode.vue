@@ -34,9 +34,9 @@
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column :label="$t('org.serialNum')" width="55" type="index"></el-table-column>
         <el-table-column :label="$t('org.InvitationCode')" width="125" prop="key"></el-table-column>
-        <el-table-column :label="$t('org.allState')" width="75"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
-        <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{scope.row.createdAt | formatTime}}</template></el-table-column>
-        <el-table-column :label="$t('org.serviceTime')" width="105"><template slot-scope="scope">{{scope.row.activateTime | formatTime}}</template></el-table-column>
+        <el-table-column :label="$t('org.stateLabel')" width="75"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
+        <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
+        <el-table-column :label="$t('org.activateTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
         <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
         <el-table-column :label="$t('org.nameLabel')" width="125" prop="realname"></el-table-column>
         <el-table-column :label="$t('org.classLabel')" width="" prop="lessonOrganizationClasses.name"></el-table-column>
@@ -100,14 +100,20 @@ export default {
         params = { ...params, 'state-eq': Number(this.codeFilterData.state) }
       }
       if (this.codeFilterData.classId) {
-        params = { ...params, 'classId-eq': Number(this.codeFilterData.classId) }
+        params = {
+          ...params,
+          'classId-eq': Number(this.codeFilterData.classId)
+        }
       }
-      if(this.codeFilterData.searchBy) {
-        params = { ...params, '$or': [
-          {"key": {"$like": `%${this.codeFilterData.searchBy}%`}},
-          {"username": {"$like": `%${this.codeFilterData.searchBy}%`}},
-          {"realname": {"$like": `%${this.codeFilterData.searchBy}%`}}
-        ]}
+      if (this.codeFilterData.searchBy) {
+        params = {
+          ...params,
+          $or: [
+            { key: { $like: `%${this.codeFilterData.searchBy}%` } },
+            { username: { $like: `%${this.codeFilterData.searchBy}%` } },
+            { realname: { $like: `%${this.codeFilterData.searchBy}%` } }
+          ]
+        }
       }
       return params
     }
@@ -134,11 +140,40 @@ export default {
     stateFilter(state) {
       return state === 0 ? this.$t('org.unused') : this.$t('org.used')
     },
-    exportData() {}
-  },
-  filters: {
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD') : ''
+    },
+    exportData() {
+      import('@/components/common/Export2Excel').then(excel => {
+        const tHeader = [
+          this.$t('org.serialNum'),
+          this.$t('org.InvitationCode'),
+          this.$t('org.stateLabel'),
+          this.$t('org.createdTime'),
+          this.$t('org.activateTime'),
+          this.$t('org.usernameLabel'),
+          this.$t('org.nameLabel'),
+          this.$t('org.classLabel')
+        ]
+        const dataList = []
+        _.map(this.codeTableData, (data, index) => {
+          let tempArr = []
+          tempArr.push(index)
+          tempArr.push(data.key)
+          tempArr.push(this.stateFilter(data.state))
+          tempArr.push(this.formatTime(data.createdAt))
+          tempArr.push(this.formatTime(data.activateTime))
+          tempArr.push(data.username)
+          tempArr.push(data.realname)
+          tempArr.push(data.lessonOrganizationClasses.name)
+          dataList.push(tempArr)
+        })
+        excel.export_json_to_excel({
+          header: tHeader,
+          data: dataList,
+          filename: '邀请码'
+        })
+      })
     }
   }
 }
