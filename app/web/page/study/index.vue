@@ -91,7 +91,10 @@ const getIncludeTheLessonOrgs = async ({
       userId: userId
     }
   })
-  const userOrgClasses = _.filter(_.get(userOrgs, 'organizationClasses', []), item => (item.roleId & 1) > 0)
+  const userOrgClasses = _.filter(
+    _.get(userOrgs, 'organizationClasses', []),
+    item => (item.roleId & 1) > 0
+  )
   const includeTheLessonOrgs = _.filter(userOrgClasses, item => {
     if (item.organizationPackages.length === 0) {
       return false
@@ -132,7 +135,10 @@ const getIncludeTheLessonOrgs = async ({
 const redirectToStudyPage = message =>
   MessageBox({
     message: message,
-    confirmButtonText: '确定'
+    title: '错误',
+    confirmButtonText: '确定',
+    type: 'error',
+    center: true
   })
 
 router.beforeEach(async (to, from, next) => {
@@ -166,6 +172,12 @@ router.beforeEach(async (to, from, next) => {
           redirectToStudyPage('不是该班级学生')
         } else if (_.get(errMsg, 'code', '') === 1) {
           redirectToStudyPage('课堂不存在')
+        }
+        if (window.history && history.replaceState) {
+          setTimeout(
+            () => window.history.replaceState({}, '', `?fromParacraft=1`),
+            0
+          )
         }
         next()
       }
