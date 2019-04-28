@@ -38,6 +38,7 @@ const NewStudent = () => import('@/components/org/admin/NewStudent')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
 const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
+const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitationCode')
 
 Vue.use(Router)
 
@@ -260,6 +261,11 @@ export default new Router({
           path: 'newInvitationCode',
           name: 'NewInvitationCode',
           component: NewInvitationCode
+        },
+        {
+          path: 'printInvitationCode',
+          name: 'PrintInvitationCode',
+          component: PrintInvitationCode
         },
         {
           path: 'setting',

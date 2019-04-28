@@ -8,8 +8,8 @@
         </el-breadcrumb>
       </div>
       <div class="new-invitation-code-top-operation">
-        <el-button class="new-invitation-code-top-operation-button new-invitation-code-top-operation-button-export" @click="cancelCreateActiveCode()">取消</el-button>
-        <el-button :disabled="!codeAssociateInfo.quantity || !codeAssociateInfo.classId" type="primary" class="new-invitation-code-top-operation-button" @click="createActiveCode()">确定</el-button>
+        <el-button class="new-invitation-code-top-operation-button new-invitation-code-top-operation-button-export" @click="cancelCreateActiveCode()">{{$t('common.Cancel')}}</el-button>
+        <el-button :disabled="!codeAssociateInfo.quantity || !codeAssociateInfo.classId" type="primary" class="new-invitation-code-top-operation-button" @click="createActiveCode()">{{$t('common.Sure')}}</el-button>
       </div>
     </div>
     <div class="new-invitation-code-content">
@@ -60,13 +60,27 @@ export default {
     ...mapActions({
       createBatchCode: 'org/createBatchCode'
     }),
-    cancelCreateActiveCode(){
-      this.$router.push({name: 'InvitationCode'})
+    cancelCreateActiveCode() {
+      this.$router.push({ name: 'InvitationCode' })
     },
-    async createActiveCode(){
-      let codeList = await this.createBatchCode({count: this.codeAssociateInfo.quantity, classId: this.codeAssociateInfo.classId})
-      this.$router.push({name: 'InvitationCode'})
-    },
+    async createActiveCode() {
+      let codeList = await this.createBatchCode({
+        count: this.codeAssociateInfo.quantity,
+        classId: this.codeAssociateInfo.classId
+      })
+      let currentClass = this.orgClasses.find(i => {
+        return i.id === this.codeAssociateInfo.classId
+      })
+      this.$router.push({
+        name: 'PrintInvitationCode',
+        query: {
+          classId: currentClass.id,
+          className: currentClass.name,
+          begin: currentClass.begin,
+          end: currentClass.end
+        }
+      })
+    }
   }
 }
 </script>
