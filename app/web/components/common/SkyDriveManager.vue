@@ -82,7 +82,7 @@ export default {
           return {
             ...item,
             file: { size, filename, type, downloadUrl: '' },
-            displaySize: this.biteToM(size) + 'MB',
+            displaySize: this.getSizeText(size),
             ext: getFileExt(item),
             checkPassed: checked === 1,
             checkedState:
@@ -148,7 +148,7 @@ export default {
             percent: 0,
             filename: file.name,
             ext: getFileExt(file),
-            displaySize: this.biteToM(file.size) + 'MB',
+            displaySize: this.getSizeText(file.size),
             type: file.type.split('/')[0] + 's',
             file: {
               downloadUrl: ''
@@ -162,11 +162,24 @@ export default {
         })
       )
     },
-    biteToM(bite = 0) {
-      return (bite / (1024 * 1024))
+    getSizeText(bite = 0) {
+      let KBVal = (bite / 1024)
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')
+      let MBVal = (bite / 1024 / 1024)
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+      let GBVal = (bite / 1024 / 1024)
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+      return KBVal < 100
+        ? `${KBVal}KB`
+        : MBVal < 100
+        ? `${MBVal}MB`
+        : `${GBVal}GB`
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
