@@ -74,15 +74,8 @@ const actions = {
       Cookies.set('token', info.token)
       window.localStorage.setItem('satellizer_token', info.token)
       commit(LOGIN_SUCCESS, info)
-      // await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
-  },
-  async loginByInfo({ commit, dispatch }, payload) {
-    Cookies.set('token', payload)
-    window.localStorage.setItem('satellizer_token', payload)
-    commit(LOGIN_SUCCESS, payload)
-    // await dispatch('lesson/getUserDetail', null, { root: true })
   },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)

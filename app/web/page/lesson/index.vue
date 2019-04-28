@@ -39,6 +39,8 @@ import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
 import { broadcast } from 'vuex-iframe-sync'
+import { MessageBox } from 'element-ui'
+import { lesson } from '@/api'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -84,6 +86,24 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.auto)) {
     const params = { ...to.params, ...to.query }
     const { packageId, lessonId, key = '', token = '' } = params
+    if (token) {
+      const res = await lesson.users.verifyToken({ token }).catch(e => console.error(e))
+      if (res) {
+        Cookies.remove('token')
+        Cookies.remove('token', { path: '/' })
+        window.localStorage.removeItem('satellizer_token')
+        Cookies.set('token', token)
+      } else {
+        MessageBox({
+          message: '无效的token',
+          showClose: false,
+          confirmButtonText: '前往学习页',
+          beforeClose: () => window.location.href = `${window.location.origin}/s`
+        })
+        next(false)
+        return
+      }
+    }
     if (Number(key)) {
       window.location.href = `${
         window.location.origin
