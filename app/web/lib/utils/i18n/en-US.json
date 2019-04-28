@@ -1836,7 +1836,7 @@
     "codeSearchPlaceholder": "code, username, or name",
     "serialNum": "Num",
     "createdTime": "Creation Time",
-    "serviceTime": "Service Time",
+    "activateTime": "Service Time",
     "unused": "Unused",
     "used": "Used",
     "codeCount": "Count",
