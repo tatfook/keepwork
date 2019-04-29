@@ -101,7 +101,10 @@ export default {
     }
   },
   async created() {
-    await Promise.all([this.getOrgStudents(), this.getOrgClasses()])
+    await Promise.all([
+      this.getOrgStudents(),
+      this.getOrgClasses({ cache: true })
+    ])
     await this.getOrgClassStudentsById({ classId: this.firstOrgClassId })
     this.selectedClassId = this.firstOrgClassId
     this.isLoading = false
@@ -279,10 +282,6 @@ export default {
       orgStudents: 'org/teacher/orgStudents',
       orgStudentLimit: 'org/teacher/orgStudentLimit'
     }),
-    orgClassesFilter() {
-      const timeStamp = Date.now()
-      return _.filter(this.orgClasses, cls => +new Date(cls.end) > timeStamp)
-    },
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')
     },
