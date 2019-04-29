@@ -27,7 +27,7 @@
         </div>
         <div class="print-invitation-code-print-header-right">
           <p class="print-invitation-code-print-header-right-classname">{{className}}</p>
-          <p class="print-invitation-code-print-header-right-time">开班时间：{{formatTime(beginClassTime)}}-{{formatTime(endClassTime)}}</p>
+          <p class="print-invitation-code-print-header-right-time">{{$t('org.beginClassTime')}}:{{formatTime(beginClassTime)}}-{{formatTime(endClassTime)}}</p>
         </div>
       </div>
       <div class="print-invitation-code-print-content">
@@ -252,7 +252,7 @@ export default {
           position: relative;
           &-img {
             position: absolute;
-            bottom: 0;
+            bottom: 1px;
             right: 0;
             z-index: 0;
           }

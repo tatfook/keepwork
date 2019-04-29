@@ -144,6 +144,10 @@ export default {
       return time ? moment(time).format('YYYY/MM/DD') : ''
     },
     exportData() {
+      if(this.multipleSelection.length === 0) {
+        this.$message(this.$t('org.exportData'))
+        return
+      }
       import('@/components/common/Export2Excel').then(excel => {
         const tHeader = [
           this.$t('org.serialNum'),
@@ -156,9 +160,9 @@ export default {
           this.$t('org.classLabel')
         ]
         const dataList = []
-        _.map(this.codeTableData, (data, index) => {
+        _.map(this.multipleSelection, (data, index) => {
           let tempArr = []
-          tempArr.push(index)
+          tempArr.push(index + 1)
           tempArr.push(data.key)
           tempArr.push(this.stateFilter(data.state))
           tempArr.push(this.formatTime(data.createdAt))
