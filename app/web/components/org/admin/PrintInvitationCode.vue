@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </div>
       <div class="print-invitation-code-top-operation">
-        <el-button type="primary" class="print-invitation-code-top-operation-button" @click="toPrintCode()">打印</el-button>
+        <el-button type="primary" class="print-invitation-code-top-operation-button" @click="toPrintCode()">{{$t('org.print')}}</el-button>
       </div>
     </div>
     <div class="print-invitation-code-table">
