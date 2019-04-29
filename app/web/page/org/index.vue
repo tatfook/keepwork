@@ -1,6 +1,8 @@
 <template>
   <div class="org-page" v-loading="loading">
-    <router-view class="org-page-main-content" id="org-page" />
+    <div class="org-page-main-content" id="org-page">
+      <router-view />
+    </div>
     <el-footer class="org-page-footer" height="auto">
       <perfect-common-footer></perfect-common-footer>
     </el-footer>
@@ -189,7 +191,7 @@ const checkIsIgnore = (name, next, params) => {
   const ignoreName = ['OrgLogin', 'OrgStudent', 'OrgStudentClass']
   if (ignoreName.includes(name)) {
     if (name != 'OrgStudentClass') {
-      next({ name: 'OrgStudent', params})
+      next({ name: 'OrgStudent', params })
     } else {
       next()
     }
@@ -200,7 +202,8 @@ const checkIsIgnore = (name, next, params) => {
 
 router.beforeEach(async (to, from, next) => {
   let { query, params, name, path } = to
-  let isContinue = null, result = {}
+  let isContinue = null,
+    result = {}
   let pathArr = path.split('/')
   let nowPageRole = pathArr && pathArr.length >= 3 && pathArr[2]
 
@@ -298,17 +301,19 @@ body {
 }
 .org-page {
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height: 100%;
   background: #f5f5f5;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
+  display: table;
   &-main-content {
-    flex: 1;
+    display: table-row;
+    height: 100%;
   }
   & &-footer {
     padding: 0;
     margin-top: 40px;
+    display: table-row;
   }
 }
 </style>
