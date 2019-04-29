@@ -1832,6 +1832,8 @@
     "codeCount": "数量",
     "beginClassTime": "开班时间",
     "exportData": "请选择需要导出的数据",
-    "print": "打印"
+    "print": "打印",
+    "selectPrintData": "请选择需要打印的数据",
+    "sameClassCode": "请选择同一个班级的邀请码"
   }
 }
