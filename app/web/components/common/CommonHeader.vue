@@ -404,7 +404,7 @@ export default {
   margin-right: 14px;
   font-size: 20px;
 }
-@media (min-width: 768px) and (max-width: 1040px) {
+@media (min-width: 768px) and (max-width: 1180px) {
   .menu-searchbar {
     display: none;
   }
