@@ -86,7 +86,9 @@ export default {
       const bodyHtml = this.$refs.printContent.innerHTML
       let headHtml = document.head.innerHTML
       headHtml = headHtml.replace('screen', 'screen,print')
-      newWindow.document.write(`<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`)
+      newWindow.document.write(
+        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`
+      )
     },
     stateFilter(state) {
       return state === 0 ? this.$t('org.unused') : this.$t('org.used')
@@ -157,7 +159,6 @@ export default {
 .clearfix {
   zoom: 1;
 }
-// @media print {
 .print-invitation-code {
   &-print {
     max-width: 660px;
@@ -288,6 +289,18 @@ export default {
     }
   }
 }
-// }
+@media print {
+  .print-invitation-code {
+    &-print {
+      &-content {
+        &-box {
+          border-bottom: 3px solid red;
+          page-break-after: always;
+          page-break-inside: avoid;
+        }
+      }
+    }
+  }
+}
 </style>
 
