@@ -31,18 +31,20 @@
         </div>
       </div>
       <div class="print-invitation-code-print-content">
-        <div class="print-invitation-code-print-content-box" v-for="(i,index) in printCodeListData" :key="index">
-          <div class="print-invitation-code-print-content-box-top">
-            <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
-            <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
-            <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
-            <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
-          </div>
-          <div class="print-invitation-code-print-content-box-guide">
-            <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>进入 keepwork.com/org/visit</p>
-            <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册keepwork账号，并登录</p>
-            <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>输入上方邀请码</p>
-            <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
+        <div class="print-invitation-code-print-row" v-for="(item,index) in printCodeListDataRow" :key="index">
+          <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key" >
+            <div class="print-invitation-code-print-content-box-top">
+              <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
+              <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
+              <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
+              <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
+            </div>
+            <div class="print-invitation-code-print-content-box-guide">
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>进入 keepwork.com/org/{{orgLoginUrl}}</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册keepwork账号，并登录</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>输入上方邀请码</p>
+              <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
+            </div>
           </div>
         </div>
       </div>
@@ -71,6 +73,9 @@ export default {
     orgLogo() {
       return _.get(this.currentOrg, 'logo')
     },
+    orgLoginUrl() {
+      return _.get(this.currentOrg, 'loginUrl')
+    },
     printCodeListData() {
       return _.map(this.printCodeList, i => {
         return {
@@ -78,6 +83,9 @@ export default {
           className: this.className
         }
       })
+    },
+    printCodeListDataRow() {
+      return _.chunk(this.printCodeListData, 2)
     }
   },
   methods: {
@@ -86,7 +94,9 @@ export default {
       const bodyHtml = this.$refs.printContent.innerHTML
       let headHtml = document.head.innerHTML
       headHtml = headHtml.replace('screen', 'screen,print')
-      newWindow.document.write(`<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`)
+      newWindow.document.write(
+        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`
+      )
     },
     stateFilter(state) {
       return state === 0 ? this.$t('org.unused') : this.$t('org.used')
@@ -157,7 +167,6 @@ export default {
 .clearfix {
   zoom: 1;
 }
-// @media print {
 .print-invitation-code {
   &-print {
     max-width: 660px;
@@ -203,13 +212,15 @@ export default {
       }
     }
     &-content {
-      display: flex;
-      flex-wrap: wrap;
       max-width: 660px;
       margin: 12px auto 0;
+      &-row {
+        page-break-inside: avoid;
+      }
       &-box {
         border: 1px dashed #999;
         box-sizing: border-box;
+        display: inline-block;
         width: 50%;
         padding: 12px 12px 0;
         &-top {
@@ -288,6 +299,5 @@ export default {
     }
   }
 }
-// }
 </style>
 
