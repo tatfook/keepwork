@@ -23,7 +23,10 @@ export default {
   },
   async created() {
     try {
-      await this.getCurrentClass()
+      await Promise.all([
+        this.getCurrentClass(),
+        this.getOrgClasses()
+      ])
       this.checkIsInClassroom(this.$route)
     } catch (error) {
       console.error(error)
@@ -33,7 +36,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getCurrentClass: 'org/teacher/getCurrentClass'
+      getCurrentClass: 'org/teacher/getCurrentClass',
+      getOrgClasses: 'org/teacher/getOrgClasses'
     }),
     backToClassroom() {
       const { classId, packageId, lessonId } = this.classroom
