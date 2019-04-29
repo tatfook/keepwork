@@ -1842,6 +1842,8 @@
     "codeCount": "Count",
     "beginClassTime": "Begin class time",
     "exportData": "Please select the data you want to export",
-    "print": "Print"
+    "print": "Print",
+    "selectPrintData": "Please select the data you want to print",
+    "sameClassCode": "Please select the invitation code for the same class"
   }
 }
