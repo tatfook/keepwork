@@ -22,7 +22,7 @@
     <div ref="printContent" :class="['print-invitation-code-print', {'print-invitation-code-print-hidden': currentRouteName === 'PrintInvitationCode'}]">
       <div class="print-invitation-code-print-header">
         <div class="print-invitation-code-print-header-left">
-          <img class="print-invitation-code-print-header-left-brand" :src="orgLogo" alt="KeepWork">
+          <img v-if="orgLogo" class="print-invitation-code-print-header-left-brand" :src="orgLogo" alt="KeepWork">
           <span class="print-invitation-code-print-header-left-name">{{currentOrg.name}}</span>
         </div>
         <div class="print-invitation-code-print-header-right">
