@@ -171,13 +171,16 @@ export default {
 <style lang="scss">
 .org-login {
   width: 100%;
-  height: 100%;
   background-color: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 40px 0;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 100%;
   &-container {
     width: 352px;
+    margin: 0 auto;
     text-align: center;
   }
   &-logo {
