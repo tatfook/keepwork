@@ -1841,6 +1841,7 @@
     "used": "Used",
     "codeCount": "Count",
     "beginClassTime": "Begin class time",
-    "exportData": "Please select the data you want to export"
+    "exportData": "Please select the data you want to export",
+    "print": "Print"
   }
 }

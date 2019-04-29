@@ -1831,6 +1831,7 @@
     "used": "已使用",
     "codeCount": "数量",
     "beginClassTime": "开班时间",
-    "exportData": "请选择需要导出的数据"
+    "exportData": "请选择需要导出的数据",
+    "print": "打印"
   }
 }
