@@ -1726,6 +1726,7 @@
     "forMoreInformation": "For more information, please contact QQ: {qq}"
   },
   "org": {
+    "moreStudy": "More",
     "loginToOrg": "Login To Organization",
     "kpUsername": "Keepwork Account",
     "kpPassword": "Keepwork Password",

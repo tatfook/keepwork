@@ -4,7 +4,7 @@
       <span class="invitation-code-top-total">{{$t('org.InvitationCode')}}：{{codesCount}}</span>
       <div class="invitation-code-top-operation">
         <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="exportData">{{$t('org.export')}}</el-button>
-        <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="toPrintCode">打印</el-button>
+        <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="toPrintCode">{{$t('org.print')}}</el-button>
         <el-button type="primary" class="invitation-code-top-operation-button" @click="createActiveCode()">{{$t('org.generateInvitationCode')}}</el-button>
       </div>
     </div>

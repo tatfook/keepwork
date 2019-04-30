@@ -11,7 +11,7 @@
         {{$t('org.logout')}}
       </el-menu-item>
       <el-menu-item index='4' class="pull-right">
-        <a class="org-header-more-learn" href="/s" target="_blank">更多学习内容</a>
+        <a class="org-header-more-learn" href="/s" target="_blank">{{$t('org.moreStudy')}}</a>
       </el-menu-item>
     </el-menu>
   </div>

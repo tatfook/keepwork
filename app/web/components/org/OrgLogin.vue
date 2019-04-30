@@ -128,13 +128,20 @@ export default {
       } catch (error) {
         switch (error.status) {
           case 400:
-            await this.userLogin(this.loginData)
-            await this.setCurrentOrg({ orgDetail: this.orgDetail })
-            this.$router.push({
-              name: 'OrgStudent'
+            if (_.includes(error.data, '成员不存在')) {
+              await this.userLogin(this.loginData)
+              await this.setCurrentOrg({ orgDetail: this.orgDetail })
+              this.$router.push({
+                name: 'OrgStudent'
+              })
+              this.isLoading = false
+              return
+            }
+            this.$message({
+              message: this.$t('org.accountNotFound'),
+              type: 'error'
             })
-            this.isLoading = false
-            return
+            break
           default:
             this.$message({
               message: this.$t('common.logonFailed'),
