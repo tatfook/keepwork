@@ -50,6 +50,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.form.realname = this.orgRealName
+  },
   methods: {
     ...mapActions({
       joinOrg: 'org/student/joinOrgClass'
@@ -70,7 +73,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentOrg: 'org/currentOrg'
+      currentOrg: 'org/currentOrg',
+      orgRealName: 'org/student/orgRealName'
     }),
     orgName() {
       return _.get(this.currentOrg, 'name')
