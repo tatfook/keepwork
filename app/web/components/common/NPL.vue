@@ -230,11 +230,7 @@ export default {
     },
     rankingList() {
       let list = _.get(this.gameWorks, 'rows', [])
-      let works = []
-      _.forEach(list, i => {
-        works.push(i.projects)
-      })
-      return works
+      return _.filter(_.map(list, item => item.projects), v => v)
     }
   },
   methods: {

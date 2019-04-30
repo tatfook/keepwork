@@ -91,7 +91,10 @@ const getIncludeTheLessonOrgs = async ({
       userId: userId
     }
   })
-  const userOrgClasses = _.filter(_.get(userOrgs, 'organizationClasses', []), item => (item.roleId & 1) > 0)
+  const userOrgClasses = _.filter(
+    _.get(userOrgs, 'organizationClasses', []),
+    item => (item.roleId & 1) > 0
+  )
   const includeTheLessonOrgs = _.filter(userOrgClasses, item => {
     if (item.organizationPackages.length === 0) {
       return false
@@ -132,7 +135,10 @@ const getIncludeTheLessonOrgs = async ({
 const redirectToStudyPage = message =>
   MessageBox({
     message: message,
-    confirmButtonText: '确定'
+    title: '错误',
+    confirmButtonText: '确定',
+    type: 'error',
+    center: true
   })
 
 router.beforeEach(async (to, from, next) => {
@@ -142,17 +148,6 @@ router.beforeEach(async (to, from, next) => {
     const lessonId = _.toNumber(params.lessonId)
     const packageId = _.toNumber(params.packageId)
     const localeToken = Cookies.get('token')
-    if (token) {
-      const userInfo = await lesson.users.verifyToken({ token })
-      if (userInfo) {
-        Cookies.remove('token')
-        Cookies.remove('token', { path: '/' })
-        window.localStorage.removeItem('satellizer_token')
-      } else {
-        return redirectToStudyPage('Token无效')
-      }
-    } else if (localeToken) {
-    }
     keepworkInstance.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${token}`
@@ -162,18 +157,12 @@ router.beforeEach(async (to, from, next) => {
         await lessonInstance.post('classrooms/join', { key })
         const classroom = await lessonInstance.get('classrooms/current')
         const { organizationId, packageId, lessonId } = classroom
-        const [token, orgs] = await Promise.all([
-          keepworkInstance.get('lessonOrganizations/token', {
-            params: { organizationId }
-          }),
-          keepworkInstance.get('lessonOrganizations')
-        ])
+        const orgs = await keepworkInstance.get('lessonOrganizations')
         const orgName = _.get(
           _.find(orgs, item => item.id === organizationId),
           'loginUrl',
           ''
         )
-        Cookies.set('token', token)
         window.location.href = `${
           window.location.origin
         }/org/${orgName}/student/package/${packageId}/lesson/${lessonId}`
@@ -184,10 +173,15 @@ router.beforeEach(async (to, from, next) => {
         } else if (_.get(errMsg, 'code', '') === 1) {
           redirectToStudyPage('课堂不存在')
         }
+        if (window.history && history.replaceState) {
+          setTimeout(
+            () => window.history.replaceState({}, '', `?fromParacraft=1`),
+            0
+          )
+        }
         next()
       }
     } else if (token) {
-      Cookies.set('token', token)
       await getIncludeTheLessonOrgs({
         token,
         packageId,

@@ -285,36 +285,7 @@ export default {
       this.isOldData = true
       this.initOldData()
     } else {
-      let src = this.properties.src
-
-      if (!src) return
-
-      let result
-
-      await axios
-        .get(src.replace('/raw#', '/rawurl#'))
-        .then(response => {
-          result = response
-        })
-        .catch(error => {
-          this.actualUrl = src
-        })
-
-      if (result && result.data && result.data.data) {
-        this.actualUrl = result.data.data
-      } else {
-        this.actualUrl = src
-      }
-
-      // if(this.getType === this.handleExt['mp4']) {
-      //   let video = this.$el.querySelector('video')
-
-      //   if (video) {
-      //     video.oncanplaythrough = () => {
-      //         video.style.opacity = 1
-      //     }
-      //   }
-      // }
+      this.actualUrl = this.properties.src
     }
   }
 }

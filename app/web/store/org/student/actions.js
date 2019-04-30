@@ -4,6 +4,7 @@ const { graphql } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 const { lessonOrganizations } = keepwork
+import { Message } from 'element-ui'
 
 const {
   GET_ORG_CLASSES_SUCCESS,
@@ -23,11 +24,42 @@ const {
   GET_ORG_REAL_NAME_SUCCESS
 } = props
 
+const errMsg = {
+  0: '失败,未知错误',
+  1: '邀请码已失效',
+  2: '无效的邀请码',
+  3: '班级已结束',
+  4: '班级未开始',
+  5: '人数已达上限',
+  6: '已经是该班级的学生',
+  7: '不是该机构的邀请码'
+}
+
 const actions = {
   async getOrgClasses({ commit, getters: { orgClasses } }, { cache = false } = {}) {
     if (!(cache && !_.isEmpty(orgClasses))) {
       const classes = await lessonOrganizations.getOrgClasses({ roleId: 1 })
       commit(GET_ORG_CLASSES_SUCCESS, classes)
+    }
+  },
+  async joinOrgClass({ dispatch }, payload) {
+    try {
+      const { refreshToken = true, ...rest } = payload
+      await lessonOrganizations.joinOrganization(rest)
+      if (refreshToken) {
+        await dispatch('org/refreshToken', {}, { root: true })
+      }
+      await Promise.all([
+        dispatch('getOrgPackages'),
+        dispatch('getOrgClasses')
+      ])
+      Message({ type: 'success', message: '加入成功！' })
+      return true
+    } catch (err) {
+      const code = _.get(err, 'response.data.code', 0)
+      const message = _.get(errMsg, code, '')
+      Message({ type: 'error', message })
+      return false
     }
   },
   async getUserInfo({ commit }) {

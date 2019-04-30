@@ -1501,8 +1501,25 @@
     "noGames": "当前没有可供参加的比赛",
     "deleteProjectHint": "您确定要删除项目吗？",
     "deleteProjectNotice": "我知道项目删除后将清除相关的全部数据，且将无法恢复。",
+    "whatAreProjects": "项目是什么？",
+    "projectsAreWorksStart": "项目，是一个作品的开始。",
+    "youCanLearnKnowledge": "它将让你在学习中成长，",
+    "youCanLearnTeamworkAndLeaderShip": "让你体会到团结协作的快乐，让你成为优秀的管理者！",
+    "Next": "继续",
+    "firstStepContent": "第一步：设置项目名称、项目类型",
+    "Prev": "上一步",
+    "secontStepContent": "第二步：创建项目相关的资源内容",
+    "projectTypeWarning": "如果你选择的项目类型是{projectTypeZhHtml}：请在{projectAppZhHmlt}中完成创建；",
+    "thirdStepContent": "第三步：创建成功，编辑项目详情元素",
+    "Finish": "完成",
+    "ProjectLabel": "项目",
+    "ResourceSiteLabel": "资源网站",
+    "TagsLabel": "标签",
+    "MembersLabel": "成员",
+    "WhiteBoardLabel": "白板",
+    "CommentsLabel": "评论",
+    "commentAfterLogin": "登录后才能评论",
     "deleteProject": "删除项目"
-
   },
   "footer": {
     "lettersTo": "致社区",
@@ -1699,6 +1716,7 @@
     "forMoreInformation": "如有疑问，请联系客服QQ: {qq}"
   },
   "org": {
+    "moreStudy": "更多学习内容",
     "loginToOrg": "机构登录",
     "kpUsername": "keepwork账号",
     "kpPassword": "keepwork密码",
@@ -1797,6 +1815,26 @@
     "tel": "联系电话",
     "warningTitle": "提示",
     "pleaseInputClassIdOrLessonId": "请输入课堂ID或课程ID",
-    "toNextLesson": "进入下一课"
+    "toNextLesson": "进入下一课",
+    "studentInvitationCodeManagement": "学生邀请码管理",
+    "InvitationCode": "邀请码",
+    "export": "导出",
+    "generateInvitationCode": "生成邀请码",
+    "state": "状态:",
+    "stateLabel": "状态",
+    "allState": "全部",
+    "class": "班级:",
+    "codeSearchPlaceholder": "按邀请码、用户名、姓名搜索",
+    "serialNum": "序号",
+    "createdTime": "创建时间",
+    "activateTime": "使用时间",
+    "unused": "未使用",
+    "used": "已使用",
+    "codeCount": "数量",
+    "beginClassTime": "开班时间",
+    "exportData": "请选择需要导出的数据",
+    "print": "打印",
+    "selectPrintData": "请选择需要打印的数据",
+    "sameClassCode": "请选择同一个班级的邀请码"
   }
 }

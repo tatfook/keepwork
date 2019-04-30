@@ -348,17 +348,20 @@ export const lessonOrganizations = {
   getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
-  getOrgStudentPackages: async () => get('lessonOrganizations/packages'),
+  getOrgStudentPackages: async () => get('lessonOrganizations/packages?roleId=1'),
   getOrgStudentPackageDetail: async ({ packageId }) => get('lessonOrganizations/packageDetail', { params: { packageId } }),
   getUserOrganizations: async () => get('lessonOrganizations'),
-  searchOrganizations: async params => post('lessonOrganizations/search', params)
+  searchOrganizations: async params => post('lessonOrganizations/search', params),
+  createBatchCode: async params => post('lessonOrganizationActivateCodes', params),
+  getOrgActivateCodes: async params => post('lessonOrganizationActivateCodes/search', params),
+  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params)
 }
 
 export const lessonOrganizationClasses = {
   getClasses: async ({ organizationId }) => get(`lessonOrganizationClasses?organizationId=${organizationId}`),
-  createClasses: async ({ organizationId, name, packages }) => post('lessonOrganizationClasses', { organizationId, name, packages }),
+  createClasses: async ({ organizationId, name, begin, end, packages }) => post('lessonOrganizationClasses', { organizationId, name, begin, end, packages }),
   getClassPackageDetail: async ({ classId, packageId }) => get('lessonOrganizations/packageDetail', { params: { classId, packageId } }),
-  updateClass: async ({ organizationId, classId, name, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, packages }),
+  updateClass: async ({ organizationId, classId, name, begin, end, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, begin, end, packages }),
 }
 
 export const lessonOrganizationClassMembers = {

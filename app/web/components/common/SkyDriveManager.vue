@@ -1,12 +1,12 @@
 <template>
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
     <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
-    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import tableType from './skyDrive/tableType'
@@ -153,7 +153,7 @@ export default {
             file: {
               downloadUrl: ''
             },
-            updatedAt: dayjs(
+            updatedAt: moment(
               new Date(Date.now() + 7 * 24 * 3600 * 1000)
             ).format('YYYY-MM-DD HH:mm:ss'), // add extra time for sort
             state: 'doing' // success, error, cancel, doing

@@ -7,30 +7,43 @@
     </div>
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
-        <div class="org-student-message">
-          <el-dropdown class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
-            <span class="el-dropdown-link">
-              {{$t("org.studentRole")}}<i class="el-icon-arrow-down el-icon--right"></i>
+        <div class="org-student-sidebar-top">
+          <div class="org-student-message">
+            <el-dropdown class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
+              <span class="el-dropdown-link">
+                {{$t("org.studentRole")}}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-if="orgIsAdmin" command="OrgPackages">{{$t("org.admin")}}</el-dropdown-item>
+                <el-dropdown-item v-if="orgIsTeacher" command="OrgTeacher">{{$t("org.teacherRole")}}</el-dropdown-item>
+                <el-dropdown-item class="org-student-role-label-active">{{$t("org.studentRole")}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <img :src="userPortrait" class="org-student-profile" />
+            <div class="org-student-username">{{username}}</div>
+          </div>
+          <div class="org-student-skill">
+            <div>{{skillpointsCount}} {{$t('lesson.skillPoints')}}<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></div>
+          </div>
+        </div>
+        <div class="org-student-sidebar-bottom" v-if="hasOrgClasses">
+          <div class="org-student-operation">
+            <span>我的班级</span>
+            <span class="org-student-operation-add" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
+          </div>
+          <div class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
+              <i class="iconfont icon-team"></i> {{item.name}}
             </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="orgIsAdmin" command="OrgPackages">{{$t("org.admin")}}</el-dropdown-item>
-              <el-dropdown-item v-if="orgIsTeacher" command="OrgTeacher">{{$t("org.teacherRole")}}</el-dropdown-item>
-              <el-dropdown-item class="org-student-role-label-active">{{$t("org.studentRole")}}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <img :src="userPortrait" class="org-student-profile" />
-          <div class="org-student-username">{{username}}</div>
-        </div>
-        <div class="org-student-skill">
-          <p>{{skillpointsCount}} {{$t('lesson.skillPoints')}}<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></p>
-        </div>
-        <div class="org-student-menu">
-          <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
-            <i class="iconfont icon-team"></i> {{item.name}}
-          </span>
+          </div>
         </div>
       </div>
-      <router-view class="org-student-main"></router-view>
+      <template v-if="!isLoading">
+        <router-view v-if="hasOrgClasses" class="org-student-main"></router-view>
+        <div v-else class="org-student-main">
+          <join-org></join-org>
+        </div>
+      </template>
     </div>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
       <div class="hint">
@@ -48,10 +61,15 @@
         </li>
       </ul>
     </el-dialog>
+    <el-dialog class="org-student-join-class-dialog" width="500px"  :visible.sync="isShowJoinClassDialog">
+      <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
+    </el-dialog>
   </div>
 </template>
 <script>
 import OrgHeader from '@/components/org/common/OrgHeader'
+import JoinOrg from './JoinOrg'
+import JoinClass from './JoinClass'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork, lesson } from '@/api'
 const { graphql } = keepwork
@@ -68,7 +86,9 @@ export default {
       beInClassDialog: false,
       joinKey: '',
       skillsList: [],
-      isSkillDetailShow: false
+      isSkillDetailShow: false,
+      isLoading: true,
+      isShowJoinClassDialog: false
     }
   },
   computed: {
@@ -80,6 +100,9 @@ export default {
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson'
     }),
+    hasOrgClasses() {
+      return _.get(this.orgClasses, 'length', 0) > 0
+    },
     isEn() {
       return locale === 'en-US' ? true : false
     },
@@ -118,12 +141,17 @@ export default {
     }
   },
   async created() {
-    await Promise.all([
-      this.getOrgClasses(),
-      this.getTeachingLesson(),
-      this.getUserInfo(),
-      this.getSkills()
-    ])
+    try {
+      await Promise.all([
+        this.getOrgClasses(),
+        this.getTeachingLesson(),
+        this.getUserInfo(),
+        this.getSkills()
+      ])
+    } catch (error) {
+      console.error(error)
+    }
+    this.isLoading = false
   },
   methods: {
     ...mapActions({
@@ -191,10 +219,15 @@ export default {
         })
       }
       this.beInClassDialog = false
+    },
+    onHideJoinClassDialog() {
+      this.isShowJoinClassDialog = false
     }
   },
   components: {
-    OrgHeader
+    OrgHeader,
+    JoinOrg,
+    JoinClass
   }
 }
 </script>
@@ -247,10 +280,18 @@ $borderColor: #e8e8e8;
   }
   &-sidebar {
     width: 270px;
-    border: 1px solid $borderColor;
     border-radius: 4px;
     margin-right: 24px;
-    background-color: #fff;
+    &-top {
+      border: 1px solid $borderColor;
+      background: #fff;
+      padding-bottom: 22px;
+    }
+    &-bottom {
+      margin-top: 22px;
+      background: #fff;
+      border: 1px solid $borderColor;
+    }
   }
   &-main {
     flex: 1;
@@ -308,8 +349,20 @@ $borderColor: #e8e8e8;
     color: #606266;
     cursor: pointer;
   }
+
+  &-operation {
+    height: 52px;
+    border-bottom: 1px solid $borderColor;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    &-add {
+      color: #409efe;
+      cursor: pointer;
+    }
+  }
   &-menu {
-    margin: 0;
     padding-bottom: 10px;
     display: flex;
     flex-wrap: wrap;

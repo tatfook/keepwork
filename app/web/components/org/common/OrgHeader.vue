@@ -1,7 +1,7 @@
 <template>
   <div class="org-header">
     <el-menu class="org-header-menu" mode="horizontal">
-      <el-menu-item index='1'>
+      <el-menu-item index='1' v-if="orgLogo">
         <img class="org-header-brand" :src="orgLogo" alt="KeepWork">
       </el-menu-item>
       <el-menu-item index='2'>
@@ -10,6 +10,9 @@
       <el-menu-item index='3' class="pull-right" @click="logout">
         {{$t('org.logout')}}
       </el-menu-item>
+      <el-menu-item index='4' class="pull-right">
+        <a class="org-header-more-learn" href="/s" target="_blank">{{$t('org.moreStudy')}}</a>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -17,18 +20,12 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgHeader',
-  data() {
-    return {
-      defaultLogo: require('@/assets/img/logo_old.svg')
-    }
-  },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg'
     }),
     orgLogo() {
-      let logo = _.get(this.currentOrg, 'logo', this.defaultLogo)
-      return _.isNull(logo) ? this.defaultLogo : logo
+      return _.get(this.currentOrg, 'logo')
     }
   },
   methods: {
@@ -60,6 +57,13 @@ export default {
       &.pull-right {
         float: right;
         font-size: 14px;
+      }
+      & a {
+        text-decoration: none;
+        color: #409efe;
+        &:hover {
+          color: #409efe;
+        }
       }
     }
   }

@@ -20,8 +20,8 @@
         </el-form-item>
         <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')" :rules="newMemberRules.classIds" prop="classIds">
           <el-select v-model="newMemberItem.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
-            <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses)}}</span>
-            <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
+            <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" :class="{'new-member-item-form-item-selected-empty': newMemberItem.classIds.length == 0}" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses, $t('org.pleaseSelect'))}}</span>
+            <el-option v-for="(classItem, index) in filterOverDueClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="new-member-item-form-item new-member-item-remove">
@@ -53,14 +53,10 @@ export default {
   },
   data() {
     const checkMemberName = (rule, username, callback) => {
-      if (!username) {
-        return callback(new Error(`${this.$t('org.usernameIsRequired')}`))
-      } else {
-        this.testUsername({ username, callback })
-      }
+      this.testUsername({ username, callback })
     }
     let classIdsValidate = (rule, value, callback) => {
-      if (value.length == 0) {
+      if (this.memberType == 'student' && value.length == 0) {
         callback(new Error(this.$t('org.pleaseSelectClasses')))
       } else {
         callback()
@@ -80,6 +76,7 @@ export default {
           }
         ],
         memberName: [
+          { required: true, message: this.$t('org.usernameIsRequired') },
           {
             validator: checkMemberName,
             trigger: 'blur'
@@ -103,6 +100,14 @@ export default {
     },
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    filterOverDueClasses() {
+      let nowDate = new Date().valueOf()
+      return _.filter(this.orgClasses, classDetail => {
+        let classBegin = new Date(classDetail.begin).valueOf()
+        let classEnd = new Date(classDetail.end).valueOf()
+        return classBegin <= nowDate && classEnd >= nowDate
+      })
     },
     orgRestUserCount() {
       return this.getOrgRestCount({ id: this.orgId })
@@ -147,7 +152,7 @@ export default {
       this.newMembers.push({
         realname: '',
         memberName: '',
-        classIds: [this.orgClasses[0].id]
+        classIds: this.memberType == 'student' ? [this.filterOverDueClasses[0].id] : []
       })
     },
     removeNewMember(index) {
@@ -203,10 +208,13 @@ export default {
       await new Promise(async (resolve, reject) => {
         const form = this.$refs[`form-${index}`][0]
         const newMemberData = this.newMembers[index]
-        const { realname, memberName, classIds } = newMemberData
+        let { realname, memberName, classIds } = newMemberData
         form.validate(async valid => {
           if (valid) {
             this.newMembers[index].error = ''
+            if (this.memberTypeRoleId == 2 && classIds.length == 0) {
+              classIds = [0]
+            }
             await this.orgCreateNewMember({
               organizationId: this.orgId,
               classIds,
@@ -267,10 +275,12 @@ export default {
     }
   },
   filters: {
-    idToTextFilter(ids, classes) {
-      return _.map(ids, id => {
-        return _.find(classes, { id }).name
-      }).join('、')
+    idToTextFilter(ids, classes, emptyText) {
+      return (
+        _.map(ids, id => {
+          return _.find(classes, { id }).name
+        }).join('、') || emptyText
+      )
     }
   }
 }
@@ -313,6 +323,9 @@ $borderColor: #e8e8e8;
         max-width: 100%;
         display: inline-block;
         color: #606266;
+        &-empty {
+          color: #c0c4cc;
+        }
       }
       .el-form-item__content {
         width: 215px;

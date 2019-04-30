@@ -32,7 +32,8 @@ module.exports = app => {
   exports.keys = '9e093085-6cd8-4075-97e2-6cadb06df683'
 
   exports.middleware = [
-    'access'
+    'access',
+    'browserCheck'
   ]
 
   exports.security = {

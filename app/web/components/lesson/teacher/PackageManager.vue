@@ -91,7 +91,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 import SubmitableInfo from './SubmitableInfo'
