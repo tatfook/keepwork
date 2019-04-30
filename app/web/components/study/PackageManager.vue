@@ -86,7 +86,6 @@
       </el-table>
     </div>
     <operate-result-dialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></operate-result-dialog>
-    <submitable-info :isInfoDialogVisible='isApplyInfoDialogVisible' @close='closeInfoDialog'></submitable-info>
   </div>
 </template>
 <script>
@@ -94,7 +93,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/study/OperateResultDialog'
-import SubmitableInfo from '@/components/study/SubmitableInfo'
 import colI18n from '@/lib/utils/i18n/column'
 
 export default {
@@ -140,7 +138,6 @@ export default {
         iconType: '', // submit or delete or release or revoca
         continueFnNameAfterEnsure: ''
       },
-      isApplyInfoDialogVisible: false,
       editingPackageId: null
     }
   },
@@ -157,9 +154,6 @@ export default {
     },
     isAlliance() {
       return this.userIsAlliance
-    },
-    isLearner() {
-      return !this.isTeacher && !this.isAlliance
     },
     filteredPackageList() {
       let subjectFilteredPackageList = this.getSubjectFilteredPackageList(
@@ -314,10 +308,6 @@ export default {
       return true
     },
     async toSubmit(packageDetail) {
-      // if (this.isLearner) {
-      //   this.isApplyInfoDialogVisible = true
-      //   return
-      // }
       this.isTableLoading = true
       this.editingPackageId = packageDetail.id
       let isComplete = await this.isPackageInfoComplete()
@@ -454,13 +444,9 @@ export default {
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
     },
-    closeInfoDialog() {
-      this.isApplyInfoDialogVisible = false
-    }
   },
   components: {
-    OperateResultDialog,
-    SubmitableInfo
+    OperateResultDialog
   }
 }
 </script>

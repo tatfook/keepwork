@@ -8,7 +8,7 @@
       <div class="package-editor-header-header-operations">
         <el-button round @click="toPackageManagerPage" v-if="isEditable" class="package-editor-header-header-cancel-button">{{$t('common.Cancel')}}</el-button>
         <el-button round @click="savePackage" v-if="isEditable" class="package-editor-header-header-save-button" :class="{'is-disabled': isPackageNameEmpty}">{{$t('common.Save')}}</el-button>
-        <el-button round type="primary" v-if="isSubmitable" class="package-editor-header-header-submit-button" :class="{'is-disabled': isLearner || !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
+        <el-button round type="primary" v-if="isSubmitable" class="package-editor-header-header-submit-button" :class="{'is-disabled': !isPackageInfoComplete}" @click="submitPackage">{{$t('lesson.packageManage.Submit')}}</el-button>
         <el-button round type="primary" v-if="isReleasable" class="package-editor-header-header-release-button" :class="{'is-disabled': !isPackageInfoComplete}" @click="releasePackage">{{$t('lesson.packageManage.Release')}}</el-button>
       </div>
     </div>
@@ -16,11 +16,9 @@
       <el-button @click="setActiveTab('basic')" class="package-editor-header-tabs-item" :class="{'active': activeTab === 'basic'}">{{$t('lesson.packageManage.basicInfo')}}</el-button>
       <el-button @click="setActiveTab('catalogue')" class="package-editor-header-tabs-item" :class="{'active': activeTab === 'catalogue'}">{{$t('lesson.catalogue')}}</el-button>
     </div>
-    <submitable-info :isInfoDialogVisible='isInfoDialogVisible' @close='closeInfoDialog'></submitable-info>
   </div>
 </template>
 <script>
-import SubmitableInfo from './SubmitableInfo'
 export default {
   name: 'PackageEditorHeader',
   props: {
@@ -35,18 +33,12 @@ export default {
       type: Boolean,
       default: true
     },
-    isLearner: Boolean,
     isReleasable: {
       type: Boolean,
       default: false
     },
     isPackageNameEmpty: Boolean,
     isPackageInfoComplete: Boolean
-  },
-  data() {
-    return {
-      isInfoDialogVisible: false
-    }
   },
   computed: {
     packageName() {
@@ -68,10 +60,6 @@ export default {
       this.$emit('savePackage', {})
     },
     submitPackage() {
-      if (this.isLearner) {
-        this.isInfoDialogVisible = true
-        return
-      }
       this.$emit('submitPackage')
     },
     releasePackage() {
@@ -79,13 +67,7 @@ export default {
     },
     toPackageManagerPage() {
       this.$router.push('/createPackage/packageManager')
-    },
-    closeInfoDialog() {
-      this.isInfoDialogVisible = false
     }
-  },
-  components: {
-    SubmitableInfo
   }
 }
 </script>
