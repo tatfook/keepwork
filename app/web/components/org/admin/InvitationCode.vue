@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    <div class="invitation-code-pages">
+    <div class="invitation-code-pages" v-if="codesCount > 0">
       <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="codesCount" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
     </div>
