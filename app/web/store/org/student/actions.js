@@ -56,7 +56,6 @@ const actions = {
       Message({ type: 'success', message: '加入成功！' })
       return true
     } catch (err) {
-      console.log(err)
       const code = _.get(err, 'response.data.code', 0)
       const message = _.get(errMsg, code, '')
       Message({ type: 'error', message })
