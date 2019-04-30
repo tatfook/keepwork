@@ -5,9 +5,9 @@
         <div>
           {{ $t('skydrive.usage') }}
           <span class="table-type-total">
-            <span class="table-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercent + '%' }"></span>
+            <span class="table-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercentWithUpload + '%' }"></span>
           </span>
-          {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
+          {{ info.usedWithUpload | biteToG }}GB / {{ info.total | biteToG }}GB
         </div>
       </el-col>
       <el-col :span="6">
