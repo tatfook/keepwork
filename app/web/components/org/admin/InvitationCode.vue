@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    <div class="invitation-code-pages">
+    <div class="invitation-code-pages" v-if="codesCount > 0">
       <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="codesCount" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
     </div>
@@ -96,7 +96,9 @@ export default {
       perPage: 10,
       page: 1,
       loading: true,
-      currentRouteName: this.$route.name
+      currentRouteName: this.$route.name,
+      beginClassTime: '',
+      endClassTime: ''
     }
   },
   async mounted() {
@@ -118,17 +120,6 @@ export default {
       return _.get(
         this.multipleSelection[0],
         'lessonOrganizationClasses.name',
-        ''
-      )
-    },
-    beginClassTime() {
-      return
-      _.get(this.multipleSelection[0], 'lessonOrganizationClasses.begin', '')
-    },
-    endClassTime() {
-      return _.get(
-        this.multipleSelection[0],
-        'lessonOrganizationClasses.end',
         ''
       )
     },
@@ -194,6 +185,8 @@ export default {
       this.page = targetPage
     },
     handleSelectionChange(val) {
+      this.beginClassTime = _.get(val[0], 'lessonOrganizationClasses.begin', '')
+      this.endClassTime = _.get(val[0], 'lessonOrganizationClasses.end', '')
       this.multipleSelection = val
     },
     createActiveCode() {

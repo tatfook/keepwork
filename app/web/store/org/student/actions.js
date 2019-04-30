@@ -75,7 +75,12 @@ const actions = {
         username
       }
     })
-    const realName = _.get(_.filter(_.get(res, 'organizationUser.organizationClassMembers', []), item => item.roleId === 1 && item.realname), '[0].realname', '')
+    const orgs = _.filter(_.get(res, 'organizationUser.organizationClassMembers', []), item => {
+      const roleId = item.roleId
+      const isStudent = (roleId & 1) > 0 // eslint-disable-line no-bitwise
+      return (isStudent && item.realname)
+    })
+    const realName = _.get(orgs, '[0].realname', '')
     commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
   async getOrgPackages({ commit }) {
@@ -175,13 +180,14 @@ const actions = {
   },
   async enterClassroom({ commit }, { key }) {
     const classInfo = await lesson.classrooms.join({ key })
-    commit(ENTER_CLASSROOM, { ...classInfo, key })
+    commit(ENTER_CLASSROOM, { ...classInfo, state: 1, key })
     return classInfo
   },
-  async resumeClassroom({ dispatch, rootGetters: { 'org/currentOrgId': organizationId } }) {
+  async resumeClassroom({ dispatch, getters: { orgClasses }, rootGetters: { 'org/currentOrgId': organizationId } }) {
     try {
       const classroom = await lesson.classrooms.currentClass()
-      if (classroom.organizationId === organizationId) {
+      const orgClassIds = _.map(orgClasses, cls => cls.id)
+      if (classroom.organizationId === organizationId && _.includes(orgClassIds, classroom.classId)) {
         dispatch('resumeClassData', classroom)
       }
     } catch (error) {

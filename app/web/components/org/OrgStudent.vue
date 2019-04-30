@@ -28,9 +28,10 @@ export default {
     try {
       await Promise.all([
         this.getUserOrgRealName(),
-        this.resumeClassroom(),
+        this.getOrgClasses(),
         this.getUserInfo()
       ])
+      await this.resumeClassroom()
       this.checkIsInClassroom(this.$route)
       this.intervalCheckClass()
     } catch (error) {
@@ -44,7 +45,8 @@ export default {
       resumeClassroom: 'org/student/resumeClassroom',
       checkClassroom: 'org/student/checkClassroom',
       getUserInfo: 'org/student/getUserInfo',
-      getUserOrgRealName: 'org/student/getUserOrgRealName'
+      getUserOrgRealName: 'org/student/getUserOrgRealName',
+      getOrgClasses: 'org/student/getOrgClasses'
     }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom

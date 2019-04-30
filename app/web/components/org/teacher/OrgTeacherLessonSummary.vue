@@ -12,7 +12,7 @@
         <div class="profile">
           <img :src='userProfile.portrait' alt="portrait">
         </div>
-        <div class="nickname">{{username}}</div>
+        <div class="nickname">{{userProfile.username}}</div>
       </div>
       <div class="teacher-summary-brief" ref="lessonIntro">
         <p class="date">
