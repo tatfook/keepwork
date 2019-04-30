@@ -32,7 +32,7 @@ import QuickToTop from '@/components/common/QuickToTop'
 import LoginDialog from '@/components/common/LoginDialog'
 
 export default {
-  props:{
+  props: {
     showPreviewClose: {
       type: Boolean,
       default: false
@@ -41,8 +41,8 @@ export default {
   },
   data() {
     return {
-      showSidebarOrMain: 'main',
-      isLoginDialogShow: false
+      isDialogClosed: false,
+      showSidebarOrMain: 'main'
     }
   },
   async mounted() {
@@ -62,14 +62,16 @@ export default {
       headerModList: 'headerModList',
       footerModList: 'footerModList',
       sidebarModList: 'sidebarModList',
-      mainModList: "mainModList",
+      mainModList: 'mainModList',
       themeConf: 'themeConf',
-      userIsLogined:'user/isLogined',
+      userIsLogined: 'user/isLogined',
       userGetSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath'
     }),
     siteDetailInfo() {
       if (!this.activePageInfo) return {}
-      return this.userGetSiteDetailInfoByPath(this.activePageInfo.fullPath) || {}
+      return (
+        this.userGetSiteDetailInfoByPath(this.activePageInfo.fullPath) || {}
+      )
     },
     siteVisibility() {
       return _.get(this.siteDetailInfo, ['siteinfo', 'visibility'], 0)
@@ -77,8 +79,18 @@ export default {
     isSitePrivate() {
       return this.siteVisibility === 1
     },
+    isLoginDialogShow() {
+      return !this.isDialogClosed && !this.userIsLogined && this.isSitePrivate
+    },
     show404() {
-      return !this.pageLoading && !this.isLoginDialogShow && !this.headerModList && !this.footerModList && !this.sidebarModList && this.code === undefined
+      return (
+        !this.pageLoading &&
+        !this.isLoginDialogShow &&
+        !this.headerModList &&
+        !this.footerModList &&
+        !this.sidebarModList &&
+        this.code === undefined
+      )
     },
     theme() {
       let newTheme = themeFactory.generate(this.themeConf)
@@ -97,8 +109,8 @@ export default {
     ...mapActions({
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath'
     }),
-    closeLoginDialog(){
-      this.isLoginDialogShow = false
+    closeLoginDialog() {
+      this.isDialogClosed = true
     },
     toggleSidebarMainShow() {
       switch (this.showSidebarOrMain) {
@@ -110,8 +122,8 @@ export default {
           break
       }
     },
-    toLogin(){
-      this.isLoginDialogShow = true
+    toLogin() {
+      this.isDialogClosed = false
     }
   },
   components: {
