@@ -6,9 +6,9 @@
           <div>
             {{ $t('skydrive.usage') }}
             <span class="media-type-total">
-              <span class="media-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercent + '%' }"></span>
+              <span class="media-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercentWithUpload + '%' }"></span>
             </span>
-            {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
+            {{ info.usedWithUpload | biteToG }}GB / {{ info.total | biteToG }}GB
           </div>
         </el-col>
         <el-col :span="10" class="media-type-upload">
@@ -102,9 +102,9 @@ export default {
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90
-        ? 'table-type-total-used-danger'
+        ? 'media-type-total-used-danger'
         : usedPercent >= 70
-          ? 'table-type-total-used-warning'
+          ? 'media-type-total-used-warning'
           : ''
     },
     isVideoAvailable() {
