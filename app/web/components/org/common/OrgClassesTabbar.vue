@@ -58,4 +58,9 @@ export default {
     }
   }
 }
+@media print {
+  .classes-tabbar {
+    display: none;
+  }
+}
 </style>

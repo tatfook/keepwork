@@ -211,4 +211,9 @@ export default {
     }
   }
 }
+@media print {
+  .perfect-common-footer {
+    display: none;
+  }
+}
 </style>

@@ -193,6 +193,11 @@ export default {
   .lesson-header {
     display: none;
   }
+  .org-teacher-class-package-lesson {
+    .org-breadcrumb {
+      display: none;
+    }
+  }
 }
 </style>
 
