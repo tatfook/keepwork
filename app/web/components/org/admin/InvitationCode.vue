@@ -55,24 +55,26 @@
         </div>
       </div>
       <div class="print-invitation-code-print-content">
-        <div class="print-invitation-code-print-content-box" v-for="(i,index) in multipleSelection" :key="index">
-          <div class="print-invitation-code-print-content-box-top">
-            <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
-            <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
-            <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
-            <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
-          </div>
-          <div class="print-invitation-code-print-content-box-guide">
-            <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>进入 keepwork.com/org/{{orgLoginUrl}}</p>
-            <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册keepwork账号，并登录</p>
-            <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>输入上方邀请码</p>
-            <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
+        <div class="print-invitation-code-print-row" v-for="(item,index) in printCodeListDataRow" :key="index">
+          <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key">
+            <div class="print-invitation-code-print-content-box-top">
+              <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
+              <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
+              <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
+              <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
+            </div>
+            <div class="print-invitation-code-print-content-box-guide">
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>进入 keepwork.com/org/{{orgLoginUrl}}</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册keepwork账号，并登录</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>输入上方邀请码</p>
+              <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="invitation-code-pages" v-if="codesCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="codesCount">
+    <div class="invitation-code-pages">
+      <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="codesCount" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
     </div>
   </div>
@@ -148,6 +150,9 @@ export default {
     codeTableData() {
       return _.get(this.orgActiveCodeList, 'rows', [])
     },
+    printCodeListDataRow() {
+      return _.chunk(this.multipleSelection, 2)
+    },
     filterData() {
       let params = { 'x-page': this.page, 'x-per-page': this.perPage }
       if (this.codeFilterData.state) {
@@ -182,6 +187,9 @@ export default {
       getOrgActivateCodes: 'org/getOrgActivateCodes',
       getOrgClassList: 'org/getOrgClassList'
     }),
+    handleSizeChange(val) {
+      this.perPage = val
+    },
     targetPage(targetPage) {
       this.page = targetPage
     },
