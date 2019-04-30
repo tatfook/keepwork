@@ -180,7 +180,7 @@ const actions = {
   },
   async enterClassroom({ commit }, { key }) {
     const classInfo = await lesson.classrooms.join({ key })
-    commit(ENTER_CLASSROOM, { ...classInfo, key })
+    commit(ENTER_CLASSROOM, { ...classInfo, state: 1, key })
     return classInfo
   },
   async resumeClassroom({ dispatch, getters: { orgClasses }, rootGetters: { 'org/currentOrgId': organizationId } }) {
