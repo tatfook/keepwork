@@ -348,7 +348,7 @@ export const lessonOrganizations = {
   getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
-  getOrgStudentPackages: async () => get('lessonOrganizations/packages'),
+  getOrgStudentPackages: async () => get('lessonOrganizations/packages?roleId=1'),
   getOrgStudentPackageDetail: async ({ packageId }) => get('lessonOrganizations/packageDetail', { params: { packageId } }),
   getUserOrganizations: async () => get('lessonOrganizations'),
   searchOrganizations: async params => post('lessonOrganizations/search', params),
