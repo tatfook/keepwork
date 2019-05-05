@@ -24,7 +24,7 @@
     <div v-if="stepIndex===1">
       <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm" @submit.native.prevent>
         <el-form-item prop="value">
-          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value" @keyup.enter.native="handleSubmit">
+          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model.trim="webpageNameForm.value" @keyup.enter.native="handleSubmit">
           </el-input>
         </el-form-item>
       </el-form>
