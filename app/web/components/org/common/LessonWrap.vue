@@ -1,6 +1,6 @@
 <template>
   <div class="lesson-wrap-container">
-    <hint v-if="isTeacher && mod.cmd === 'Hint' && isShowLessonHint" :data="mod" :key="mod.key"></hint>
+    <hint v-if="mod.cmd === 'Hint'" :data="mod" :key="mod.key"></hint>
     <quiz v-else-if="mod.cmd === 'Quiz'" :data="mod" :isPreview="isPreview" :isPrint="isPrint" :isVisitor="isVisitor" :key="mod.key"></quiz>
     <div v-else class="mod-item-container">
       <mod-loader :mod="mod" :theme="theme" :key="mod.key"></mod-loader>
@@ -14,7 +14,6 @@ import themeFactory from '@/lib/theme/theme.factory'
 import ThemeHelper from '@/lib/theme'
 import Quiz from './Quiz'
 import Hint from './Hint'
-import { mapGetters } from 'vuex'
 export default {
   name: 'LessonWrap',
   components: {
@@ -44,9 +43,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      isShowLessonHint: 'org/teacher/isShowLessonHint'
-    }),
     theme() {
       let newTheme = themeFactory.generate(ThemeHelper.defaultTheme)
       if (this.storedTheme === newTheme) return this.storedTheme
