@@ -136,8 +136,8 @@ const checkIsOrgMember = async function(
     if (token) {
       Cookies.set('token', token)
       store.dispatch('org/setTokenUpdateAt', { orgId })
+      return { isContinue: false }
     }
-    return { isContinue: false }
   }
   if (nowPageRole != 'contact') {
     next({
