@@ -38,6 +38,7 @@ export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
   getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
+  getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
   getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
