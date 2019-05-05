@@ -28,7 +28,6 @@ export default {
     try {
       await Promise.all([
         this.getUserOrgRealName(),
-        this.getOrgClasses(),
         this.getUserInfo()
       ])
       await this.resumeClassroom()
@@ -45,8 +44,7 @@ export default {
       resumeClassroom: 'org/student/resumeClassroom',
       checkClassroom: 'org/student/checkClassroom',
       getUserInfo: 'org/student/getUserInfo',
-      getUserOrgRealName: 'org/student/getUserOrgRealName',
-      getOrgClasses: 'org/student/getOrgClasses'
+      getUserOrgRealName: 'org/student/getUserOrgRealName'
     }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom

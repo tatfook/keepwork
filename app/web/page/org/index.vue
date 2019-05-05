@@ -28,6 +28,7 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
+import { keepwork } from '@/api'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -130,8 +131,13 @@ const checkIsOrgMember = async function(
     store.dispatch('org/setTokenUpdateAt', { orgId })
     return { isContinue: true, orgToken }
   }
-  if (checkIsIgnore(name, next, params)) {
-    return { isContinue: false }
+  if (!orgToken && checkIsIgnore(name, next, params)) {
+    const token = await keepwork.user.getToken().catch(e => console.error(e))
+    if (token) {
+      Cookies.set('token', token)
+      store.dispatch('org/setTokenUpdateAt', { orgId })
+      return { isContinue: false }
+    }
   }
   if (nowPageRole != 'contact') {
     next({
