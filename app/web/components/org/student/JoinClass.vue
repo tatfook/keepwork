@@ -47,9 +47,14 @@ export default {
       }
     }
   },
+  async mounted() {
+    await this.getUserOrgRealName()
+    this.form.realname = this.orgRealName
+  },
   methods: {
     ...mapActions({
-      joinOrgClass: 'org/student/joinOrgClass'
+      joinOrgClass: 'org/student/joinOrgClass',
+      getUserOrgRealName: 'org/student/getUserOrgRealName'
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
@@ -72,7 +77,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentOrg: 'org/currentOrg'
+      currentOrg: 'org/currentOrg',
+      orgRealName: 'org/student/orgRealName'
     }),
     orgName() {
       return _.get(this.currentOrg, 'name')

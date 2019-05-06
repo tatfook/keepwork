@@ -1,8 +1,8 @@
 <template>
   <div class="lesson-package-cell">
-    <div class="lesson">
-      <div class="lesson-cover" @click="goLessonPackage(lessonPackage)"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
-      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.title || lessonPackage.packageName"></h4>
+    <div class="lesson" @click="goLessonPackage(lessonPackage)">
+      <div class="lesson-cover"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
+      <h4 class="lesson-title" :title="lessonPackage.title" v-html="lessonPackage.title || lessonPackage.packageName"></h4>
       <div class="lesson-desc">
         <p>{{$t('lesson.include')}}：
           <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.lessonsCount')}}</p>
@@ -56,6 +56,7 @@ export default {
     margin: 0 auto 10px;
     border-radius: 4px;
     transition: all 200ms ease-in;
+    cursor: pointer;
     .red {
       color: red;
     }
@@ -66,20 +67,17 @@ export default {
     &-cover {
       width: 100%;
       height: 143px;
-      cursor: pointer;
       &-img {
         width: 100%;
         height: 143px;
         object-fit: cover;
         border-radius: 4px;
-        cursor: pointer;
       }
     }
     &-title {
       font-size: 14px;
       margin: 10px 0;
       height: 20px;
-      cursor: pointer;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

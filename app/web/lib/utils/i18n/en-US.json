@@ -1726,6 +1726,7 @@
     "forMoreInformation": "For more information, please contact QQ: {qq}"
   },
   "org": {
+    "moreStudy": "More",
     "loginToOrg": "Login To Organization",
     "kpUsername": "Keepwork Account",
     "kpPassword": "Keepwork Password",
@@ -1836,10 +1837,14 @@
     "codeSearchPlaceholder": "code, username, or name",
     "serialNum": "Num",
     "createdTime": "Creation Time",
-    "serviceTime": "Service Time",
+    "activateTime": "Service Time",
     "unused": "Unused",
     "used": "Used",
     "codeCount": "Count",
-    "beginClassTime": "Begin class time"
+    "beginClassTime": "Begin class time",
+    "exportData": "Please select the data you want to export",
+    "print": "Print",
+    "selectPrintData": "Please select the data you want to print",
+    "sameClassCode": "Please select the invitation code for the same class"
   }
 }

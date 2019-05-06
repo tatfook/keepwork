@@ -28,9 +28,9 @@ export default {
     try {
       await Promise.all([
         this.getUserOrgRealName(),
-        this.resumeClassroom(),
         this.getUserInfo()
       ])
+      await this.resumeClassroom()
       this.checkIsInClassroom(this.$route)
       this.intervalCheckClass()
     } catch (error) {

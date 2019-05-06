@@ -4,7 +4,7 @@
       <div class="lesson-package-page-teachers-desc">
         <h4 class="lesson-package-page-teachers-desc-title">在线课程</h4>
         <span class="lesson-package-page-teachers-desc-rectangle"></span>
-        <p class="lesson-package-page-teachers-desc-text">每个在线课程附带详细的分布指导和实践项目。<br>我们的在线课程已授权给学校和培训机构，请与我们的合作机构联系，选择适合你的课程，开始学习之旅吧。</p>
+        <p class="lesson-package-page-teachers-desc-text">每个在线课程附带详细的分步指导和实践项目。<br>我们的在线课程已授权给学校和培训机构，请与我们的合作机构联系，选择适合你的课程，开始学习之旅吧。</p>
         <span class="lesson-package-page-teachers-desc-more" @click="toOrganizationCooperationPage">与合作机构联系</span>
       </div>
     </div>

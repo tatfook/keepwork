@@ -1,13 +1,12 @@
 <template>
   <div class="org-classes">
     <div class="org-classes-header">
-      <div class="org-classes-menu" v-if="orgClassesLength > 0">
+      <div class="org-classes-menu">
         <div class="org-classes-menu-item" :class="{'org-classes-menu-item-active': isMenuItemActive(menu)}" v-for="(menu, index) in menuData" :key="index">
           <router-link class="org-classes-menu-link" :to='{name: menu.indexPageName}'>{{menu.text}}</router-link>
         </div>
       </div>
-      <div class="org-classes-available" v-if="orgClassesLength > 0">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
-      <span class="org-classes-header-empty-title" v-if="orgClassesLength == 0">{{$t('org.classInformationLabel')}}</span>
+      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
     </div>
     <router-view v-if="!isLoadPreset"></router-view>
   </div>

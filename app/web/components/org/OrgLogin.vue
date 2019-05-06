@@ -128,13 +128,20 @@ export default {
       } catch (error) {
         switch (error.status) {
           case 400:
-            await this.userLogin(this.loginData)
-            await this.setCurrentOrg({ orgDetail: this.orgDetail })
-            this.$router.push({
-              name: 'OrgStudent'
+            if (_.includes(error.data, '成员不存在')) {
+              await this.userLogin(this.loginData)
+              await this.setCurrentOrg({ orgDetail: this.orgDetail })
+              this.$router.push({
+                name: 'OrgStudent'
+              })
+              this.isLoading = false
+              return
+            }
+            this.$message({
+              message: this.$t('org.accountNotFound'),
+              type: 'error'
             })
-            this.isLoading = false
-            return
+            break
           default:
             this.$message({
               message: this.$t('common.logonFailed'),
@@ -171,13 +178,16 @@ export default {
 <style lang="scss">
 .org-login {
   width: 100%;
-  height: 100%;
   background-color: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 40px 0;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 100%;
   &-container {
     width: 352px;
+    margin: 0 auto;
     text-align: center;
   }
   &-logo {

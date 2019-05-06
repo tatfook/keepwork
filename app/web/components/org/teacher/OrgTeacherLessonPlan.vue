@@ -18,7 +18,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orLessonDetail: 'org/teacher/orgLessonDetail'
+      orLessonDetail: 'org/teacher/orgLessonDetail',
+      isShowLessonHint: 'org/teacher/isShowLessonHint'
     }),
     modList() {
       return _.get(this.orLessonDetail, 'modList', [])
@@ -30,7 +31,8 @@ export default {
       return _.find(this.modList, item => item.cmd === 'Lesson')
     },
     lessonMain() {
-      return _.filter(this.modList, item => item.cmd !== 'Lesson')
+      const _lessonMain = _.filter(this.modList, item => item.cmd !== 'Lesson')
+      return this.isShowLessonHint ? _lessonMain : _.filter(_lessonMain, item => item.cmd !== 'Hint')
     }
   }
 }

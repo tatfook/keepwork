@@ -1716,6 +1716,7 @@
     "forMoreInformation": "如有疑问，请联系客服QQ: {qq}"
   },
   "org": {
+    "moreStudy": "更多学习内容",
     "loginToOrg": "机构登录",
     "kpUsername": "keepwork账号",
     "kpPassword": "keepwork密码",
@@ -1826,10 +1827,14 @@
     "codeSearchPlaceholder": "按邀请码、用户名、姓名搜索",
     "serialNum": "序号",
     "createdTime": "创建时间",
-    "serviceTime": "使用时间",
+    "activateTime": "使用时间",
     "unused": "未使用",
     "used": "已使用",
     "codeCount": "数量",
-    "beginClassTime": "开班时间"
+    "beginClassTime": "开班时间",
+    "exportData": "请选择需要导出的数据",
+    "print": "打印",
+    "selectPrintData": "请选择需要打印的数据",
+    "sameClassCode": "请选择同一个班级的邀请码"
   }
 }

@@ -42,7 +42,8 @@ const getters = {
   orgLessonDetail: state => state.orgLessonDetail,
   orgPackagesDetail: state => state.orgPackagesDetail,
   userOrg: state => state.userOrg,
-  orgActiveCodeList: state => state.orgActiveCodeList
+  orgActiveCodeList: state => state.orgActiveCodeList,
+  printCodeList: state => state.printCodeList
 }
 
 export default getters

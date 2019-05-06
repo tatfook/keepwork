@@ -208,10 +208,13 @@ export default {
       await new Promise(async (resolve, reject) => {
         const form = this.$refs[`form-${index}`][0]
         const newMemberData = this.newMembers[index]
-        const { realname, memberName, classIds } = newMemberData
+        let { realname, memberName, classIds } = newMemberData
         form.validate(async valid => {
           if (valid) {
             this.newMembers[index].error = ''
+            if (this.memberTypeRoleId == 2 && classIds.length == 0) {
+              classIds = [0]
+            }
             await this.orgCreateNewMember({
               organizationId: this.orgId,
               classIds,

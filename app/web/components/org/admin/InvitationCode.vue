@@ -4,6 +4,7 @@
       <span class="invitation-code-top-total">{{$t('org.InvitationCode')}}：{{codesCount}}</span>
       <div class="invitation-code-top-operation">
         <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="exportData">{{$t('org.export')}}</el-button>
+        <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="toPrintCode">{{$t('org.print')}}</el-button>
         <el-button type="primary" class="invitation-code-top-operation-button" @click="createActiveCode()">{{$t('org.generateInvitationCode')}}</el-button>
       </div>
     </div>
@@ -34,16 +35,46 @@
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column :label="$t('org.serialNum')" width="55" type="index"></el-table-column>
         <el-table-column :label="$t('org.InvitationCode')" width="125" prop="key"></el-table-column>
-        <el-table-column :label="$t('org.allState')" width="75"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
-        <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{scope.row.createdAt | formatTime}}</template></el-table-column>
-        <el-table-column :label="$t('org.serviceTime')" width="105"><template slot-scope="scope">{{scope.row.activateTime | formatTime}}</template></el-table-column>
+        <el-table-column :label="$t('org.stateLabel')" width="75"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
+        <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
+        <el-table-column :label="$t('org.activateTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
         <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
         <el-table-column :label="$t('org.nameLabel')" width="125" prop="realname"></el-table-column>
         <el-table-column :label="$t('org.classLabel')" width="" prop="lessonOrganizationClasses.name"></el-table-column>
       </el-table>
     </div>
-    <div class="invitation-code-pages" v-if="codesCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="codesCount">
+    <div ref="printInvitationCode" :class="['print-invitation-code-print', {'print-invitation-code-print-hidden': currentRouteName === 'InvitationCode'}]">
+      <div class="print-invitation-code-print-header">
+        <div class="print-invitation-code-print-header-left">
+          <img v-if="orgLogo" class="print-invitation-code-print-header-left-brand" :src="orgLogo" alt="KeepWork">
+          <span class="print-invitation-code-print-header-left-name">{{currentOrg.name}}</span>
+        </div>
+        <div class="print-invitation-code-print-header-right">
+          <p class="print-invitation-code-print-header-right-classname">{{className}}</p>
+          <p class="print-invitation-code-print-header-right-time">{{$t('org.beginClassTime')}}:{{formatTime(beginClassTime)}}-{{formatTime(endClassTime)}}</p>
+        </div>
+      </div>
+      <div class="print-invitation-code-print-content">
+        <div class="print-invitation-code-print-row" v-for="(item,index) in printCodeListDataRow" :key="index">
+          <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key">
+            <div class="print-invitation-code-print-content-box-top">
+              <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
+              <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
+              <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
+              <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
+            </div>
+            <div class="print-invitation-code-print-content-box-guide">
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>进入 keepwork.com/org/{{orgLoginUrl}}</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册keepwork账号，并登录</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>输入上方邀请码</p>
+              <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="invitation-code-pages" v-if="codesCount > 0">
+      <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="codesCount" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
     </div>
   </div>
@@ -64,7 +95,10 @@ export default {
       multipleSelection: [],
       perPage: 10,
       page: 1,
-      loading: true
+      loading: true,
+      currentRouteName: this.$route.name,
+      beginClassTime: '',
+      endClassTime: ''
     }
   },
   async mounted() {
@@ -82,8 +116,21 @@ export default {
       getOrgClassesById: 'org/getOrgClassesById',
       orgActiveCodeList: 'org/orgActiveCodeList'
     }),
+    className() {
+      return _.get(
+        this.multipleSelection[0],
+        'lessonOrganizationClasses.name',
+        ''
+      )
+    },
     orgId() {
       return _.get(this.currentOrg, 'id')
+    },
+    orgLogo() {
+      return _.get(this.currentOrg, 'logo')
+    },
+    orgLoginUrl() {
+      return _.get(this.currentOrg, 'loginUrl')
     },
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
@@ -94,20 +141,29 @@ export default {
     codeTableData() {
       return _.get(this.orgActiveCodeList, 'rows', [])
     },
+    printCodeListDataRow() {
+      return _.chunk(this.multipleSelection, 2)
+    },
     filterData() {
       let params = { 'x-page': this.page, 'x-per-page': this.perPage }
       if (this.codeFilterData.state) {
         params = { ...params, 'state-eq': Number(this.codeFilterData.state) }
       }
       if (this.codeFilterData.classId) {
-        params = { ...params, 'classId-eq': Number(this.codeFilterData.classId) }
+        params = {
+          ...params,
+          'classId-eq': Number(this.codeFilterData.classId)
+        }
       }
-      if(this.codeFilterData.searchBy) {
-        params = { ...params, '$or': [
-          {"key": {"$like": `%${this.codeFilterData.searchBy}%`}},
-          {"username": {"$like": `%${this.codeFilterData.searchBy}%`}},
-          {"realname": {"$like": `%${this.codeFilterData.searchBy}%`}}
-        ]}
+      if (this.codeFilterData.searchBy) {
+        params = {
+          ...params,
+          $or: [
+            { key: { $like: `%${this.codeFilterData.searchBy}%` } },
+            { username: { $like: `%${this.codeFilterData.searchBy}%` } },
+            { realname: { $like: `%${this.codeFilterData.searchBy}%` } }
+          ]
+        }
       }
       return params
     }
@@ -122,10 +178,15 @@ export default {
       getOrgActivateCodes: 'org/getOrgActivateCodes',
       getOrgClassList: 'org/getOrgClassList'
     }),
+    handleSizeChange(val) {
+      this.perPage = val
+    },
     targetPage(targetPage) {
       this.page = targetPage
     },
     handleSelectionChange(val) {
+      this.beginClassTime = _.get(val[0], 'lessonOrganizationClasses.begin', '')
+      this.endClassTime = _.get(val[0], 'lessonOrganizationClasses.end', '')
       this.multipleSelection = val
     },
     createActiveCode() {
@@ -134,11 +195,67 @@ export default {
     stateFilter(state) {
       return state === 0 ? this.$t('org.unused') : this.$t('org.used')
     },
-    exportData() {}
-  },
-  filters: {
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD') : ''
+    },
+    exportData() {
+      if (this.multipleSelection.length === 0) {
+        this.$message(this.$t('org.exportData'))
+        return
+      }
+      import('@/components/common/Export2Excel').then(excel => {
+        const tHeader = [
+          this.$t('org.serialNum'),
+          this.$t('org.InvitationCode'),
+          this.$t('org.stateLabel'),
+          this.$t('org.createdTime'),
+          this.$t('org.activateTime'),
+          this.$t('org.usernameLabel'),
+          this.$t('org.nameLabel'),
+          this.$t('org.classLabel')
+        ]
+        const dataList = []
+        _.map(this.multipleSelection, (data, index) => {
+          let tempArr = []
+          tempArr.push(index + 1)
+          tempArr.push(data.key)
+          tempArr.push(this.stateFilter(data.state))
+          tempArr.push(this.formatTime(data.createdAt))
+          tempArr.push(this.formatTime(data.activateTime))
+          tempArr.push(data.username)
+          tempArr.push(data.realname)
+          tempArr.push(data.lessonOrganizationClasses.name)
+          dataList.push(tempArr)
+        })
+        excel.export_json_to_excel({
+          header: tHeader,
+          data: dataList,
+          filename: '邀请码'
+        })
+      })
+    },
+    toPrintCode() {
+      if (this.multipleSelection.length === 0) {
+        this.$message(this.$t('org.selectPrintData'))
+        return
+      }
+      if (this.multipleSelection.length > 0) {
+        let firstEleClassId = this.multipleSelection[0].classId
+        let result = this.multipleSelection.every(i => {
+          return i.classId === firstEleClassId
+        })
+        if (!result) {
+          this.$message(this.$t('org.sameClassCode'))
+          return
+        }
+      }
+      const newWindow = window.open('', '标题')
+      const bodyHtml = this.$refs.printInvitationCode.innerHTML
+      let headHtml = document.head.innerHTML
+      headHtml = headHtml.replace('screen', 'screen,print')
+      newWindow.document.write(
+        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`
+      )
     }
   }
 }
@@ -215,5 +332,140 @@ export default {
 }
 .clearfix {
   zoom: 1;
+}
+.print-invitation-code {
+  &-print {
+    max-width: 660px;
+    margin: 0 auto;
+    &-hidden {
+      display: none;
+    }
+    &-header {
+      max-width: 660px;
+      margin: 0 auto;
+      display: flex;
+      &-left {
+        flex: 1;
+        display: flex;
+        &-brand {
+          width: 128px;
+          height: 46px;
+          border: solid 1px #c5c5c5;
+          object-fit: cover;
+        }
+        &-name {
+          display: inline-block;
+          line-height: 46px;
+          font-size: 14px;
+          font-weight: bold;
+          padding-left: 16px;
+          color: #333;
+        }
+      }
+      &-right {
+        flex: 1;
+        text-align: right;
+        &-classname,
+        &-time {
+          margin: 2px 14px;
+        }
+        &-classname {
+          font-weight: bold;
+          color: #333;
+          font-size: 13px;
+        }
+        &-time {
+          color: #999;
+          font-size: 11px;
+        }
+      }
+    }
+    &-content {
+      max-width: 660px;
+      margin: 12px auto 0;
+      &-row {
+        page-break-inside: avoid;
+      }
+      &-box {
+        border: 1px dashed #999;
+        box-sizing: border-box;
+        display: inline-block;
+        width: 50%;
+        padding: 12px 12px 0;
+        &-top {
+          min-height: 56px;
+          position: relative;
+          &-key {
+            line-height: 52px;
+            margin: 0;
+            text-align: center;
+            font-size: 13px;
+            // color: #fff;
+            padding-top: 6px;
+            font-weight: bold;
+            z-index: 999;
+            position: relative;
+          }
+          &-left {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            z-index: 10;
+          }
+          &-center {
+            position: absolute;
+            top: 15px;
+            left: 30px;
+            z-index: 0;
+            height: 30px;
+            widows: 90%;
+          }
+          &-right {
+            position: absolute;
+            right: 0;
+            top: 2px;
+            z-index: 10;
+          }
+        }
+        &-guide {
+          padding: 2px 0 18px 34px;
+          position: relative;
+          &-img {
+            position: absolute;
+            bottom: 1px;
+            right: 0;
+            z-index: 0;
+          }
+          &-step {
+            z-index: 99;
+            position: relative;
+            border-left: solid 3px #54a9ff;
+            padding: 0 0 12px 20px;
+            font-size: 12px;
+            color: #000;
+            margin: 0;
+            font-weight: bold;
+            &:nth-last-of-type(1) {
+              padding-bottom: 0;
+            }
+            &-num {
+              width: 16px;
+              height: 16px;
+              background-color: #54a8ff;
+              border: solid 2px #3677b9;
+              color: #fff;
+              border-radius: 50%;
+              display: inline-block;
+              text-align: center;
+              line-height: 16px;
+              position: absolute;
+              left: -10px;
+              top: 0px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 </style>
