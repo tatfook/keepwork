@@ -42,13 +42,11 @@ const actions = {
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
-  async joinOrgClass({ dispatch }, payload) {
+  async joinOrgClass({ dispatch, rootGetters: { 'org/currentOrg': currentOrg } }, payload) {
     try {
       const { refreshToken = true, ...rest } = payload
       await lessonOrganizations.joinOrganization(rest)
-      if (refreshToken) {
-        await dispatch('org/refreshToken', {}, { root: true })
-      }
+      await dispatch('org/refreshToken', {}, { root: true })
       await Promise.all([
         dispatch('getOrgPackages'),
         dispatch('getOrgClasses')

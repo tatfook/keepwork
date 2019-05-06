@@ -36,7 +36,7 @@
               <i class="iconfont icon-team"></i> {{item.name}}
             </span>
           </div>
-          <div class="org-student-class-empty">
+          <div v-else class="org-student-class-empty">
             暂无班级信息
           </div>
         </div>
@@ -392,9 +392,10 @@ $borderColor: #e8e8e8;
   }
   &-class-empty {
     text-align: center;
-    height: 50px;
-    line-height: 50px;
-    color: #303133;
+    height: 90px;
+    line-height: 60px;
+    font-size: 14px;
+    color: #999;
   }
   &-skill-dialog {
     /deep/ .el-dialog {

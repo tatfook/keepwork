@@ -9,7 +9,7 @@
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
-      <div :class="['package-catalogue-item', { 'package-is-teached': isTeacher && lesson.isTeached }]" v-for="(lesson, index) in lessonsList" :key='index'>
+      <div :class="['package-catalogue-item', { 'package-is-teached': isTeacher && lesson.isTeached }]" v-for="(lesson, index) in lessonsListSorted" :key='index'>
         <div class="package-catalogue-item-cover-box">
           <div class="package-catalogue-item-mark" v-show="lesson.isLearned && !isAdmin">
             <i class="el-icon-check"></i>
@@ -70,6 +70,9 @@ export default {
         ...item,
         ...item.lesson
       }))
+    },
+    lessonsListSorted() {
+      return _.sortBy(this.lessonsList, item => item.lessonNo)
     },
     continueLearnedLesson() {
       let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
