@@ -33,7 +33,7 @@ export default {
   },
   async created() {
     try {
-      await this.getOrgClasses()
+      await this.getOrgClasses({ cache: true })
       await this.getOrgClassPackagesById({ classId: this.firstOrgClassId })
       this.selectedClassId = this.firstOrgClassId
     } catch (error) {
@@ -82,8 +82,12 @@ export default {
       })
     },
     selectedClassPackgesSort() {
-      const hasTime = this.selectedClassPackges.filter(item => item.lastTeachTime).sort((a, b) =>  a.lastTeachTime < b.lastTeachTime ? 1 : -1)
-      const noTime = this.selectedClassPackges.filter(item => !item.lastTeachTime)
+      const hasTime = this.selectedClassPackges
+        .filter(item => item.lastTeachTime)
+        .sort((a, b) => (a.lastTeachTime < b.lastTeachTime ? 1 : -1))
+      const noTime = this.selectedClassPackges.filter(
+        item => !item.lastTeachTime
+      )
       return [...hasTime, ...noTime]
     }
   }

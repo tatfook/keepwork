@@ -195,7 +195,7 @@ export default {
       }
     },
     pushNewUrl(site) {
-      this.$router.push(`/${site.username}/${site.name}`)
+      window.location.href = `/${site.username}/${site.name}`
     },
     showSocialShare() {
       let { username: siteUsername, sitename } = this.activePageInfo

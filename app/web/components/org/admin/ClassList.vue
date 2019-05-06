@@ -38,8 +38,16 @@ export default {
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
-    orgClasses() {
+    orgClassesWithOvertime() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    orgClasses() {
+      let nowDate = new Date().valueOf()
+      return _.filter(this.orgClassesWithOvertime, classDetail => {
+        let classBegin = new Date(classDetail.begin).valueOf()
+        let classEnd = new Date(classDetail.end).valueOf()
+        return classBegin <= nowDate && classEnd >= nowDate
+      })
     },
     orgClassesLength() {
       return this.orgClasses.length

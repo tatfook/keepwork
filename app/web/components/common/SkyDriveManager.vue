@@ -69,9 +69,24 @@ export default {
     },
     info() {
       let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
+      let uploadingFileSize = this.uploadingFileSize
+      let usedWithUpload = used + uploadingFileSize
       let unused = total - used
+      let unusedWithUpload = unused - uploadingFileSize
       let usedPercent = Math.max(0, ((100 * used) / total).toFixed(2))
-      return { total, used, unused, usedPercent }
+      let usedPercentWithUpload = Math.max(
+        0,
+        ((100 * usedWithUpload) / total).toFixed(2)
+      )
+      return {
+        total,
+        used,
+        usedWithUpload,
+        unused,
+        unusedWithUpload,
+        usedPercent,
+        usedPercentWithUpload
+      }
     },
     skyDriveTableData() {
       return this.userSkyDriveFileList
@@ -82,7 +97,7 @@ export default {
           return {
             ...item,
             file: { size, filename, type, downloadUrl: '' },
-            displaySize: this.biteToM(size) + 'MB',
+            displaySize: this.getSizeText(size),
             ext: getFileExt(item),
             checkPassed: checked === 1,
             checkedState:
@@ -99,6 +114,15 @@ export default {
       return _.filter(this.uploadingFiles, file => {
         return file.state !== 'success'
       })
+    },
+    uploadingFileSize() {
+      return _.reduce(
+        this.filterFinishedUploadingFile,
+        (sum, file) => {
+          return sum + file.size
+        },
+        0
+      )
     },
     skyDriveTableDataWithUploading() {
       return _.sortBy(
@@ -143,12 +167,13 @@ export default {
       await Promise.all(
         _.map(files, async file => {
           let fileIndex = this.uploadingFiles.length
-          this.uploadingFiles.push({
+          let waitingUploadFile = {
             cover: URL.createObjectURL(file),
             percent: 0,
             filename: file.name,
             ext: getFileExt(file),
-            displaySize: this.biteToM(file.size) + 'MB',
+            size: file.size,
+            displaySize: this.getSizeText(file.size),
             type: file.type.split('/')[0] + 's',
             file: {
               downloadUrl: ''
@@ -157,16 +182,39 @@ export default {
               new Date(Date.now() + 7 * 24 * 3600 * 1000)
             ).format('YYYY-MM-DD HH:mm:ss'), // add extra time for sort
             state: 'doing' // success, error, cancel, doing
-          })
+          }
+          this.uploadingFiles.push(waitingUploadFile)
+          if (this.info.unusedWithUpload < 0) {
+            this.removeFromUploadQue(waitingUploadFile)
+            this.$notify({
+              title: this.$t('common.failure'),
+              message: `网盘空间不足， ${file.name}无法上传`,
+              type: 'error'
+            })
+            return
+          }
           await this.uploadFile(file, fileIndex)
         })
       )
     },
-    biteToM(bite = 0) {
-      return (bite / (1024 * 1024))
+    getSizeText(bite = 0) {
+      let KBVal = (bite / 1024)
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')
+      let MBVal = (bite / 1024 / 1024)
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+      let GBVal = (bite / 1024 / 1024)
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+      return KBVal < 100
+        ? `${KBVal}KB`
+        : MBVal < 100
+        ? `${MBVal}MB`
+        : `${GBVal}GB`
     },
     async uploadFile(file, fileIndex) {
       if (!file) return

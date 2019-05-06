@@ -1,16 +1,20 @@
 <template>
   <el-container class="maxwidth-template">
-    <el-aside width="400px">
+    <el-aside width="400px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
       <slot name="sidebar"></slot>
     </el-aside>
-    <el-main>
+    <el-main :class="{'hide': showSidebarOrMain === 'sidebar'}">
       <slot> </slot>
     </el-main>
   </el-container>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    showSidebarOrMain: String
+  }
+}
 </script>
 
 <style lang="scss">

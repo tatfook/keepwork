@@ -31,6 +31,7 @@
     </div>
     <div v-else class="org-teacher-classes-students">
       <div class="students-table-header">
+        开班时间: <span class="students-table-header-date"> {{orgClassesDate}} </span>
         {{$t("org.IncludeStudents") + selectedClassStudentsCount + $t("org.studentCountUnit")}}
         <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> {{$t("org.addStudents")}}</span>
       </div>
@@ -100,7 +101,10 @@ export default {
     }
   },
   async created() {
-    await Promise.all([this.getOrgStudents(), this.getOrgClasses()])
+    await Promise.all([
+      this.getOrgStudents(),
+      this.getOrgClasses({ cache: true })
+    ])
     await this.getOrgClassStudentsById({ classId: this.firstOrgClassId })
     this.selectedClassId = this.firstOrgClassId
     this.isLoading = false
@@ -287,6 +291,15 @@ export default {
     selectedClassStudents() {
       return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], [])
     },
+    orgClassesDate() {
+      const { begin = '', end = '' } = _.find(
+        this.orgClasses,
+        cls => cls.id === this.selectedClassId
+      )
+      return `${moment(begin).format('YYYY-MM-DD')} 至 ${moment(end).format(
+        'YYYY-MM-DD'
+      )}`
+    },
     selectedClassStudentsCount() {
       return this.selectedClassStudents.length
     },
@@ -336,6 +349,10 @@ export default {
       .add-student-button {
         color: #2397f3;
         cursor: pointer;
+      }
+      &-date {
+        display: inline-block;
+        margin-right: 40px;
       }
     }
   }
