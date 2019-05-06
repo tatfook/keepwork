@@ -147,7 +147,6 @@ export default {
   async created() {
     try {
       await Promise.all([
-        this.getOrgClasses(),
         this.getTeachingLesson(),
         this.getUserInfo(),
         this.getSkills()
@@ -159,7 +158,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      getOrgClasses: 'org/student/getOrgClasses',
       getTeachingLesson: 'org/student/getTeachingLesson',
       enterClassroom: 'org/student/enterClassroom',
       getUserInfo: 'org/student/getUserInfo'

@@ -83,9 +83,11 @@ const actions = {
     const realName = _.get(orgs, '[0].realname', '')
     commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
-  async getOrgPackages({ commit }) {
-    const orgPackages = await lessonOrganizations.getOrgStudentPackages()
-    commit(GET_ORG_PACKAGES_SUCCESS, orgPackages)
+  async getOrgPackages({ commit, getters: { orgPackages } }, { cache = false } = {}) {
+    if (!(cache && !_.isEmpty(orgPackages))) {
+      const packages = await lessonOrganizations.getOrgStudentPackages()
+      commit(GET_ORG_PACKAGES_SUCCESS, packages)
+    }
   },
   async getOrgPackageDetail({ commit }, { packageId }) {
     const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })

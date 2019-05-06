@@ -28,7 +28,8 @@ export default {
     try {
       await Promise.all([
         this.getUserOrgRealName(),
-        this.getUserInfo()
+        this.getUserInfo(),
+        this.getOrgClasses()
       ])
       await this.resumeClassroom()
       this.checkIsInClassroom(this.$route)
@@ -44,7 +45,8 @@ export default {
       resumeClassroom: 'org/student/resumeClassroom',
       checkClassroom: 'org/student/checkClassroom',
       getUserInfo: 'org/student/getUserInfo',
-      getUserOrgRealName: 'org/student/getUserOrgRealName'
+      getUserOrgRealName: 'org/student/getUserOrgRealName',
+      getOrgClasses: 'org/student/getOrgClasses'
     }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom
