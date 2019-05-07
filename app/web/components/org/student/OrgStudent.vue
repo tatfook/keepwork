@@ -32,7 +32,7 @@
             <span class="org-student-operation-add" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
           </div>
           <div v-if="hasOrgClasses" class="org-student-menu">
-            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
+            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
               <i class="iconfont icon-team"></i> {{item.name}}
             </span>
           </div>
