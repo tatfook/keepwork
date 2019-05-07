@@ -19,7 +19,8 @@ const {
   GET_ORG_STUDENTS_SUCCESS,
   GET_USER_ORG_SUCCESS,
   GET_ORG_ACTIVATE_CODE_SUCCESS,
-  SET_PRINT_CODE_LIST
+  SET_PRINT_CODE_LIST,
+  GET_HISTORY_CLASSES_SUCCESS
 } = props
 
 const actions = {
@@ -310,6 +311,13 @@ const actions = {
       .catch(err => {
         console.error(err)
       })
+  },
+  async getHistoryClasses({ commit }) {
+    await keepwork.lessonOrganizationClasses.getHistoryClasses().then(res => {
+      commit(GET_HISTORY_CLASSES_SUCCESS, res)
+    }).catch(err => {
+      console.error(err)
+    })
   }
 }
 
