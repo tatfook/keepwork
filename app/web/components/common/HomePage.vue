@@ -111,7 +111,7 @@
           </el-col>
         </el-row>
       </div>
-      <div class="home-page-cabinet-excellent hot">
+      <!-- <div class="home-page-cabinet-excellent hot">
         <div class="title">
           <div class="title-text">
             <span class="star">
@@ -124,7 +124,7 @@
             <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
           </el-col>
         </el-row>
-      </div>
+      </div> -->
       <div class="home-page-cabinet-excellent like">
         <div class="title">
           <div class="title-text">
@@ -259,7 +259,7 @@ export default {
     async getLikes() {
       return keepwork.projects.getProjects({
         'x-order': 'lastStar-desc-updatedAt-desc',
-        'x-per-page': 4,
+        'x-per-page': 8,
         'x-page': 1
       })
     },
