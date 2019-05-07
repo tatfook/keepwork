@@ -9,7 +9,7 @@
     <el-table v-if="orgClassesLength > 0" class="class-list-table" border :data="orgClasses" header-row-class-name="class-list-table-header">
       <el-table-column prop="name" :label="$t('org.ClassNameLabel')" width="240">
       </el-table-column>
-      <el-table-column :label="$t('org.beginClassTime')" width="240"><template slot-scope="scope">{{scope.row.begin | formatTime}} - {{scope.row.end | formatTime}}</template></el-table-column>
+      <el-table-column :label="$t('org.beginClassTime')" width="240"><template slot-scope="scope">{{scope.row.begin | formatTime}} <span v-if="scope.row.begin">-</span> {{scope.row.end | formatTime}}</template></el-table-column>
       <el-table-column :label="$t('common.action')">
         <template slot-scope="scope">
           <router-link class='class-list-table-link' :to='{name: "OrgClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
@@ -46,7 +46,7 @@ export default {
       return _.filter(this.orgClassesWithOvertime, classDetail => {
         let classBegin = new Date(classDetail.begin).valueOf()
         let classEnd = new Date(classDetail.end).valueOf()
-        return classEnd >= nowDate
+        return !classEnd || classEnd >= nowDate
       })
     },
     orgClassesLength() {
