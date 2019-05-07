@@ -4,7 +4,8 @@
     <div class="org-package-status">
       <el-progress :percentage="learnedLessonPercent" color="#64f78a" :show-text="false"></el-progress>
       <div class="org-package-status-text">{{packageStatusText}}</div>
-      <el-button v-if="isStartStatus" @click="handleStartLearn" class="org-package-status-button start-button">{{$t('org.startToLearn')}}</el-button>
+      <el-button v-if="isCompleteStatus" :disabled="true" type="info" class="org-package-status-button" >已结业</el-button>
+      <el-button v-else-if="isStartStatus" @click="handleStartLearn" class="org-package-status-button start-button">{{$t('org.startToLearn')}}</el-button>
       <el-button v-else-if="isContinueStatus" @click="handleContinueLearn" class="org-package-status-button continue-button">{{$t('org.continue')}}</el-button>
       <div v-else-if="isFinishStatus" class="finish-status"> <i class="el-icon-circle-check finish-status-icon"></i> {{$t('org.finished')}}</div>
     </div>
@@ -61,6 +62,9 @@ export default {
     packageLessons() {
       return _.get(this.packageData, 'lessons', [])
     },
+    packageClassInfo() {
+      return _.get(this.packageData, 'lessonOrganizationClasses', {})
+    },
     packageLessonCount() {
       return this.packageLessons.length
     },
@@ -84,6 +88,9 @@ export default {
     },
     isFinishStatus() {
       return this.learnedLessonPercent === 100
+    },
+    isCompleteStatus() {
+      return +new Date(this.packageClassInfo.end) < Date.now()
     },
     packageStatusText() {
       if (this.isStartStatus) {

@@ -42,13 +42,11 @@ const actions = {
       commit(GET_ORG_CLASSES_SUCCESS, classes)
     }
   },
-  async joinOrgClass({ dispatch }, payload) {
+  async joinOrgClass({ dispatch, rootGetters: { 'org/currentOrg': currentOrg } }, payload) {
     try {
       const { refreshToken = true, ...rest } = payload
       await lessonOrganizations.joinOrganization(rest)
-      if (refreshToken) {
-        await dispatch('org/refreshToken', {}, { root: true })
-      }
+      await dispatch('org/refreshToken', {}, { root: true })
       await Promise.all([
         dispatch('getOrgPackages'),
         dispatch('getOrgClasses')
@@ -83,9 +81,11 @@ const actions = {
     const realName = _.get(orgs, '[0].realname', '')
     commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
-  async getOrgPackages({ commit }) {
-    const orgPackages = await lessonOrganizations.getOrgStudentPackages()
-    commit(GET_ORG_PACKAGES_SUCCESS, orgPackages)
+  async getOrgPackages({ commit, getters: { orgPackages } }, { cache = false } = {}) {
+    if (!(cache && !_.isEmpty(orgPackages))) {
+      const packages = await lessonOrganizations.getOrgStudentPackages()
+      commit(GET_ORG_PACKAGES_SUCCESS, packages)
+    }
   },
   async getOrgPackageDetail({ commit }, { packageId }) {
     const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })

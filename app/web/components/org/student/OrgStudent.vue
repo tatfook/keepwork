@@ -26,20 +26,23 @@
             <div>{{skillpointsCount}} {{$t('lesson.skillPoints')}}<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></div>
           </div>
         </div>
-        <div class="org-student-sidebar-bottom" v-if="hasOrgClasses">
+        <div class="org-student-sidebar-bottom">
           <div class="org-student-operation">
             <span>我的班级</span>
             <span class="org-student-operation-add" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
           </div>
-          <div class="org-student-menu">
+          <div v-if="hasOrgClasses" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id">
               <i class="iconfont icon-team"></i> {{item.name}}
             </span>
           </div>
+          <div v-else class="org-student-class-empty">
+            暂无班级信息
+          </div>
         </div>
       </div>
       <template v-if="!isLoading">
-        <router-view v-if="hasOrgClasses" class="org-student-main"></router-view>
+        <router-view v-if="OrgIsStudent" class="org-student-main"></router-view>
         <div v-else class="org-student-main">
           <join-org></join-org>
         </div>
@@ -98,7 +101,8 @@ export default {
       orgIsTeacher: 'org/isTeacher',
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
-      teachingLesson: 'org/student/teachingLesson'
+      teachingLesson: 'org/student/teachingLesson',
+      OrgIsStudent: 'org/isStudent'
     }),
     hasOrgClasses() {
       return _.get(this.orgClasses, 'length', 0) > 0
@@ -143,7 +147,6 @@ export default {
   async created() {
     try {
       await Promise.all([
-        this.getOrgClasses(),
         this.getTeachingLesson(),
         this.getUserInfo(),
         this.getSkills()
@@ -155,7 +158,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      getOrgClasses: 'org/student/getOrgClasses',
       getTeachingLesson: 'org/student/getTeachingLesson',
       enterClassroom: 'org/student/enterClassroom',
       getUserInfo: 'org/student/getUserInfo'
@@ -291,10 +293,12 @@ $borderColor: #e8e8e8;
       margin-top: 22px;
       background: #fff;
       border: 1px solid $borderColor;
+      margin-bottom: 40px;
     }
   }
   &-main {
     flex: 1;
+    margin-bottom: 30px;
   }
   &-message {
     padding: 32px 16px 0;
@@ -385,6 +389,13 @@ $borderColor: #e8e8e8;
       color: #030313;
       font-size: 14px;
     }
+  }
+  &-class-empty {
+    text-align: center;
+    height: 90px;
+    line-height: 60px;
+    font-size: 14px;
+    color: #999;
   }
   &-skill-dialog {
     /deep/ .el-dialog {

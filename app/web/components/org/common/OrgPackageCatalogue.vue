@@ -3,13 +3,13 @@
     <div class="package-catalogue-progress" v-show="isStudent">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
-        <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
+        <el-button type="primary" :disabled="lessonProgressPercent === 100 || isClassCompleted" class="package-catalogue-progress-button" @click="continueToLearn">{{buttonText}}</el-button>
       </div>
       <p>{{lessonProgressInfo}}</p>
     </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
-      <div :class="['package-catalogue-item', { 'package-is-teached': isTeacher && lesson.isTeached }]" v-for="(lesson, index) in lessonsList" :key='index'>
+      <div :class="['package-catalogue-item', { 'package-is-teached': isTeacher && lesson.isTeached }]" v-for="(lesson, index) in lessonsListSorted" :key='index'>
         <div class="package-catalogue-item-cover-box">
           <div class="package-catalogue-item-mark" v-show="lesson.isLearned && !isAdmin">
             <i class="el-icon-check"></i>
@@ -32,8 +32,8 @@
             <span>45{{$t('lesson.minUnit')}}</span>
           </div>
           <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
-          <el-button v-show="lesson.isLearned && isStudent" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
-          <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
+          <el-button v-show="lesson.isLearned && isStudent" :disabled="isClassCompleted" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
+          <el-button v-show="!lesson.isLearned && isStudent" :disabled="isClassCompleted" type="primary" size="small" class="package-catalogue-item-button start-button" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
           <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> {{$t('org.chapterIsFinished')}}</span>
         </div>
       </div>
@@ -58,7 +58,8 @@ export default {
   computed: {
     ...mapGetters({
       classroom: 'org/student/classroom',
-      isBeInClassroom: 'org/student/isBeInClassroom'
+      isBeInClassroom: 'org/student/isBeInClassroom',
+      orgPackageStatus: 'org/student/orgPackageStatus'
     }),
     isInClassroom() {
       const state = this.enterClassInfo.state
@@ -69,6 +70,9 @@ export default {
         ...item,
         ...item.lesson
       }))
+    },
+    lessonsListSorted() {
+      return _.sortBy(this.lessonsList, item => item.lessonNo)
     },
     continueLearnedLesson() {
       let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
@@ -131,10 +135,17 @@ export default {
     },
     packageId() {
       return _.get(this.packageDetail, 'packageId', '')
+    },
+    isClassCompleted() {
+      const isClassCompleted = +new Date(_.get(this.orgPackageStatus(this.packageId), 'lessonOrganizationClasses.end', '')) < Date.now()
+      return this.isStudent && isClassCompleted
     }
   },
   methods: {
     toLessonDetail(lesson) {
+      if (this.isClassCompleted) {
+        return
+      }
       if (this.isAdmin) {
         return this.$router.push({
           name: 'OrgAdminPackageLesson',
@@ -193,6 +204,9 @@ export default {
       )
     },
     toLearnAgain(lesson) {
+      if (this.isClassCompleted) {
+        return
+      }
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
