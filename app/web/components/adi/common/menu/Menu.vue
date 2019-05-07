@@ -239,7 +239,7 @@ export default {
       let findedIndexLink = _.find(this.indexLinks, indexLinkObj => {
         return indexLinkObj.link == nowPageLink
       })
-      let key = findedIndexLink.parentIndex
+      let key = findedIndexLink && findedIndexLink.parentIndex
       key && this.$refs[this.menuRef].open(key)
     },
     setIndexLinks(key, link, parentIndex) {
