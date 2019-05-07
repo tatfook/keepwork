@@ -211,22 +211,21 @@ export default {
   },
   async mounted() {
     this.textAnimation()
-    let [hotPackage, handpick, likes, news] = await Promise.all([
-      this.getHotPackage(),
+    let [ handpick, likes, news] = await Promise.all([
       this.getHandpick(),
       this.getLikes(),
       this.getNews()
     ]).catch(e => console.error(e))
 
-    this.hotsPackages = _.map(hotPackage, i => ({
-      ...i,
-      cover: i.extra.coverUrl,
-      name_title: i.packageName,
-      total_lessons: i.lessons.length,
-      age_min: i.minAge,
-      age_max: i.maxAge,
-      description: i.intro
-    }))
+    // this.hotsPackages = _.map(hotPackage, i => ({
+    //   ...i,
+    //   cover: i.extra.coverUrl,
+    //   name_title: i.packageName,
+    //   total_lessons: i.lessons.length,
+    //   age_min: i.minAge,
+    //   age_max: i.maxAge,
+    //   description: i.intro
+    // }))
     this.newsHtml = news
     this.originHandpickProjects = handpick
     this.originLikesProjects = likes
