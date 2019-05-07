@@ -98,12 +98,14 @@ export default {
           disabled: this.isDetailPage,
           children: _.map(packageData.lessons, lesson => {
             let lessonId = _.toNumber(lesson.id)
+            let lessonNo = _.toNumber(lesson.lessonNo)
             return {
               id: `${packageId}-${lessonId}`,
               packageId: packageId,
               disabled: this.isDetailPage,
               label: lesson.lessonName,
-              lessonId: lessonId
+              lessonId: lessonId,
+              lessonNo: lessonNo
             }
           })
         }
@@ -175,7 +177,8 @@ export default {
           packageId: _.toNumber(packageId),
           lessons: _.map(lessons, lesson => {
             return {
-              lessonId: lesson.lessonId
+              lessonId: lesson.lessonId,
+              lessonNo: lesson.lessonNo
             }
           })
         })
