@@ -274,6 +274,7 @@ export default {
       padding-right: 96px;
       line-height: 1.5;
       word-break: break-word;
+      word-wrap: break-word;
     }
     &-detail {
       flex: 1;
