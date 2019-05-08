@@ -6,14 +6,14 @@
 <script>
 import HistoryClassComp from './common/HistoryClassComp'
 export default {
-  name: 'OrgHistoryClassDetail',
-  computed: {
-    classDetail() {
-      return _.get(this.$route, 'query')
-    }
-  },
-  components: {
-    HistoryClassComp
-  }
+	name: 'OrgHistoryClassDetail',
+	computed: {
+		classDetail() {
+			return _.get(this.$route, 'query')
+		}
+	},
+	components: {
+		HistoryClassComp
+	}
 }
 </script>

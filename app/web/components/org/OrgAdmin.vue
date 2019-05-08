@@ -1,33 +1,33 @@
 <template>
-  <div class="org-admin">
-    <org-header></org-header>
-    <div class="org-admin-container" v-if="isSidebarShow">
-      <div class="org-admin-sidebar">
-        <div class="org-admin-message">
-          <el-dropdown class="org-admin-role-label" @command="toRolePage" trigger="click" placement="bottom">
-            <span class="el-dropdown-link">
-              {{$t("org.admin")}}
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="org-admin-role-label-active">{{$t("org.admin")}}</el-dropdown-item>
-              <el-dropdown-item v-if="orgIsTeacher" command="OrgTeacher">{{$t("org.teacherRole")}}</el-dropdown-item>
-              <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
-          <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
-        </div>
-        <ul class="org-admin-menu">
-          <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': isMenuItemActive(menuItem)}" :key="index">
-            <router-link class="org-admin-menu-link" :to="{name: menuItem.indexPageName}">{{menuItem.text}}</router-link>
-          </li>
-        </ul>
-      </div>
-      <router-view class="org-admin-main"></router-view>
-    </div>
-    <router-view v-if="!isSidebarShow"></router-view>
-  </div>
+	<div class="org-admin">
+		<org-header></org-header>
+		<div class="org-admin-container" v-if="isSidebarShow">
+			<div class="org-admin-sidebar">
+				<div class="org-admin-message">
+					<el-dropdown class="org-admin-role-label" @command="toRolePage" trigger="click" placement="bottom">
+						<span class="el-dropdown-link">
+							{{$t("org.admin")}}
+							<i class="el-icon-arrow-down el-icon--right"></i>
+						</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item class="org-admin-role-label-active">{{$t("org.admin")}}</el-dropdown-item>
+							<el-dropdown-item v-if="orgIsTeacher" command="OrgTeacher">{{$t("org.teacherRole")}}</el-dropdown-item>
+							<el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
+					<img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
+					<div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
+				</div>
+				<ul class="org-admin-menu">
+					<li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': isMenuItemActive(menuItem)}" :key="index">
+						<router-link class="org-admin-menu-link" :to="{name: menuItem.indexPageName}">{{menuItem.text}}</router-link>
+					</li>
+				</ul>
+			</div>
+			<router-view class="org-admin-main"></router-view>
+		</div>
+		<router-view v-if="!isSidebarShow"></router-view>
+	</div>
 </template>
 <script>
 import OrgHeader from './common/OrgHeader'

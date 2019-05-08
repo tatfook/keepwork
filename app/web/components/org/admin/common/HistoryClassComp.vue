@@ -52,10 +52,7 @@ export default {
 		classDetail: Object
 	},
 	async created() {
-		await Promise.all([
-			this.initClassData(),
-			this.getHistoryClasses({ cache: true })
-		])
+		await Promise.all([this.initClassData(), this.getHistoryClasses({ cache: true })])
 	},
 	data() {
 		return {
