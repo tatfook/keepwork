@@ -226,10 +226,9 @@ const actions = {
       }
     })
     const today = Date.now()
-    const offset = new Date().getTimezoneOffset() * 60 * 1000
     const organizationClasses = _.filter(
       _.get(res, 'organizationUser.organizationClasses', []),
-      item => item.classroom && +new Date(item.end) > today + offset
+      item => item.classroom && +new Date(item.end) > today
     )
     const teachingLesson = _.map(organizationClasses, item => {
       const { extra = {}, ...reset } = item.classroom
