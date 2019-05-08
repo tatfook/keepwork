@@ -67,7 +67,7 @@ export default {
 				{
 					pageNames: ['HistoricalData', 'OrgHistoryClassDetail', 'OrgHistoryEditClass'],
 					indexPageName: 'HistoricalData',
-					text: '历史数据'
+					text: this.$t('org.historicalData')
 				},
 				{
 					pageNames: ['OrgSetting'],
@@ -123,6 +123,7 @@ $borderColor: #e8e8e8;
 	&-main {
 		flex: 1;
 		min-width: 0;
+		margin-bottom: 24px;
 	}
 	&-message {
 		padding: 32px 16px 48px;

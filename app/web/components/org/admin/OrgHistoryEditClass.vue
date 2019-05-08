@@ -24,18 +24,13 @@ export default {
       return _.get(this.$route, 'query')
     }
   },
-  toClassListPage() {
-    this.$router.push({
-      name: 'OrgClassList'
-    })
-  },
   methods: {
     ...mapActions({
       orgUpdateClass: 'org/updateClass'
     }),
-    toClassListPage() {
+    toHistoryClassListPage() {
       this.$router.push({
-        name: 'OrgClassList'
+        name: 'HistoricalData'
       })
     },
     async updateClass(updatedClassData) {
@@ -51,7 +46,7 @@ export default {
             type: 'success'
           })
           this.isLoading = false
-          this.toClassListPage()
+          this.toHistoryClassListPage()
         })
         .catch(error => {
           console.log(error)

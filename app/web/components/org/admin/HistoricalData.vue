@@ -1,14 +1,14 @@
 <template>
-  <div class="historical-data">
-    <h4 class="historical-data-title">班级数：{{orgHistoricalClassesLength}}</h4>
+  <div class="historical-data" v-loading="loading">
+    <h4 class="historical-data-title">{{$t('org.IncludeClasses')}}{{orgHistoricalClassesLength}}</h4>
     <el-table v-if="orgHistoricalClassesLength > 0" class="historical-data-table" border :data="orgHistoricalClassesData" header-row-class-name="historical-data-table-header">
       <el-table-column prop="name" :label="$t('org.ClassNameLabel')" width="150">
       </el-table-column>
       <el-table-column :label="$t('org.beginClassTime')" width="180">
         <template slot-scope="scope">{{scope.row.begin | formatTime}} - {{scope.row.end | formatTime}}</template>
       </el-table-column>
-      <el-table-column prop="teacherCount" label="教师姓名" width='130'></el-table-column>
-      <el-table-column prop="studentCount" label="学生数" width='130'></el-table-column>
+      <el-table-column prop="teachersName" :label="$t('org.teachersName')" width='130'></el-table-column>
+      <el-table-column prop="studentCount" :label="$t('org.studentCunt')" width='130'></el-table-column>
       <el-table-column :label="$t('common.action')">
         <template slot-scope="scope">
           <router-link class='historical-data-table-link' :to='{name: "OrgHistoryClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
@@ -31,7 +31,7 @@ export default {
 	name: 'HistoricalData',
 	data() {
 		return {
-	
+			loading: true
 		}
 	},
 	computed: {
@@ -39,7 +39,6 @@ export default {
       orgHistoricalClasses: 'org/orgHistoricalClasses'
     }),
     orgHistoricalClassesData() {
-      console.log('clsshistory', _.get(this.orgHistoricalClasses, 'rows', []))
       let classData = _.get(this.orgHistoricalClasses, 'rows', [])
       return _.map(classData, i => {
         return {
@@ -51,7 +50,7 @@ export default {
           begin: i.begin,
           end: i.end,
           studentCount: this.getStudentCount(i.lessonOrganizationClassMembers),
-          teacherCount: this.getTeacherCount(i.lessonOrganizationClassMembers)
+          teachersName: this.getTeacherCount(i.lessonOrganizationClassMembers)
         }
       })
     },
@@ -61,6 +60,7 @@ export default {
 	},
 	async mounted() {
 		await this.getHistoryClasses()
+		this.loading = false
 	},
 	methods: {
 		...mapActions({

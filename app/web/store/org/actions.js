@@ -312,12 +312,14 @@ const actions = {
         console.error(err)
       })
   },
-  async getHistoryClasses({ commit }) {
-    await keepwork.lessonOrganizationClasses.getHistoryClasses().then(res => {
-      commit(GET_HISTORY_CLASSES_SUCCESS, res)
-    }).catch(err => {
-      console.error(err)
-    })
+  async getHistoryClasses({ commit, getters: { orgHistoricalClasses } }, { cache = false } = {}) {
+    if (!(cache && !_.isEmpty(orgHistoricalClasses))) {
+      await keepwork.lessonOrganizationClasses.getHistoryClasses().then(res => {
+        commit(GET_HISTORY_CLASSES_SUCCESS, res)
+      }).catch(err => {
+        console.error(err)
+      })
+    }
   }
 }
 
