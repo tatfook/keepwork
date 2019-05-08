@@ -17,7 +17,7 @@
       </div>
       <div class="historical-class-comp-form-item">
         <div class="historical-class-comp-form-label">{{$t('org.beginClassTime')}}</div>
-        <el-date-picker :disabled="isDetailPage" v-model="classTime" type="daterange" range-separator="至" start-placeholder="开班时间" end-placeholder="结束时间" unlink-panels>
+        <el-date-picker :disabled="isDetailPage" v-model="classTime" type="daterange" :range-separator="$t('org.timeTo')" :start-placeholder="$t('org.beginClassTime')" :end-placeholder="$t('org.endClassTime')" unlink-panels>
         </el-date-picker>
       </div>
       <div class="historical-class-comp-form-item">

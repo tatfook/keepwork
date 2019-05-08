@@ -11,121 +11,112 @@ import OrgHeader from './common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
 import { lesson } from '@/api'
 export default {
-  name: 'OrgTeacherContainer',
-  components: {
-    OrgHeader
-  },
-  data() {
-    return {
-      isLoading: true,
-      _notify: null
-    }
-  },
-  async created() {
-    try {
-      await Promise.all([
-        this.getCurrentClass(),
-        this.getOrgClasses()
-      ])
-      this.checkIsInClassroom(this.$route)
-    } catch (error) {
-      console.error(error)
-    }
-    this.isLoading = false
-    lesson.users.getUserDetail()
-  },
-  methods: {
-    ...mapActions({
-      getCurrentClass: 'org/teacher/getCurrentClass',
-      getOrgClasses: 'org/teacher/getOrgClasses'
-    }),
-    backToClassroom() {
-      const { classId, packageId, lessonId } = this.classroom
-      if (packageId && lessonId) {
-        this.$router.push({
-          name: 'OrgTeacherClassPackageLesson',
-          params: { classId, packageId, lessonId }
-        })
-      }
-    },
-    checkIsInClassroom(route) {
-      const {
-        params: { classId, packageId, lessonId }
-      } = route
-      const { classId: cid, packageId: pid, lessonId: lid } = this.classroom
-      if (
-        this.isBeInClassroom &&
-        this.isTeaching &&
-        !(classId == cid && packageId == pid && lessonId == lid)
-      ) {
-        if (!this._notify) {
-          this._notify = this.$notify({
-            customClass: 'back-to-classroom-notify',
-            iconClass: 'el-icon-warning',
-            dangerouslyUseHTMLString: true,
-            message: this.$t('lesson.notifyTipsStudent', {
-              spanStart: '<span class="back-to-classroom">',
-              spanEnd: '</span>'
-            }),
-            duration: 0,
-            position: 'top-left',
-            onClick: this.backToClassroom,
-            onClose: () => (this._notify = null)
-          })
-        }
-      } else {
-        this._notify && this._notify.close()
-        this._notify = null
-      }
-    }
-  },
-  computed: {
-    ...mapGetters({
-      classroom: 'org/teacher/classroom',
-      isBeInClassroom: 'org/teacher/isBeInClassroom',
-      isTeaching: 'org/teacher/isTeaching'
-    })
-  },
-  destroyed() {
-    this._notify && this._notify.close()
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.checkIsInClassroom(to)
-    next()
-  }
+	name: 'OrgTeacherContainer',
+	components: {
+		OrgHeader
+	},
+	data() {
+		return {
+			isLoading: true,
+			_notify: null
+		}
+	},
+	async created() {
+		try {
+			await Promise.all([this.getCurrentClass(), this.getOrgClasses()])
+			this.checkIsInClassroom(this.$route)
+		} catch (error) {
+			console.error(error)
+		}
+		this.isLoading = false
+		lesson.users.getUserDetail()
+	},
+	methods: {
+		...mapActions({
+			getCurrentClass: 'org/teacher/getCurrentClass',
+			getOrgClasses: 'org/teacher/getOrgClasses'
+		}),
+		backToClassroom() {
+			const { classId, packageId, lessonId } = this.classroom
+			if (packageId && lessonId) {
+				this.$router.push({
+					name: 'OrgTeacherClassPackageLesson',
+					params: { classId, packageId, lessonId }
+				})
+			}
+		},
+		checkIsInClassroom(route) {
+			const { params: { classId, packageId, lessonId } } = route
+			const { classId: cid, packageId: pid, lessonId: lid } = this.classroom
+			if (this.isBeInClassroom && this.isTeaching && !(classId == cid && packageId == pid && lessonId == lid)) {
+				if (!this._notify) {
+					this._notify = this.$notify({
+						customClass: 'back-to-classroom-notify',
+						iconClass: 'el-icon-warning',
+						dangerouslyUseHTMLString: true,
+						message: this.$t('lesson.notifyTipsStudent', {
+							spanStart: '<span class="back-to-classroom">',
+							spanEnd: '</span>'
+						}),
+						duration: 0,
+						position: 'top-left',
+						onClick: this.backToClassroom,
+						onClose: () => (this._notify = null)
+					})
+				}
+			} else {
+				this._notify && this._notify.close()
+				this._notify = null
+			}
+		}
+	},
+	computed: {
+		...mapGetters({
+			classroom: 'org/teacher/classroom',
+			isBeInClassroom: 'org/teacher/isBeInClassroom',
+			isTeaching: 'org/teacher/isTeaching'
+		})
+	},
+	destroyed() {
+		this._notify && this._notify.close()
+	},
+	beforeRouteUpdate(to, from, next) {
+		this.checkIsInClassroom(to)
+		next()
+	}
 }
 </script>
 
 <style lang="scss">
 .org-teacher-router {
-  width: 100%;
-  background-color: #f5f5f5;
+	width: 100%;
+	background-color: #f5f5f5;
 }
 
 .back-to-classroom-notify {
-  background: #ed9f21;
-  /deep/.el-notification__icon {
-    color: #e54104;
-    background: white;
-    border-radius: 50%;
-  }
-  /deep/.el-notification__content {
-    color: white;
-    line-height: 14px;
-  }
-  .back-to-classroom {
-    color: #5353ff;
-    cursor: pointer;
-  }
-  /deep/.el-notification__closeBtn {
-    color: white;
-  }
+	background: #ed9f21;
+	/deep/.el-notification__icon {
+		color: #e54104;
+		background: white;
+		border-radius: 50%;
+	}
+	/deep/.el-notification__content {
+		color: white;
+		line-height: 14px;
+	}
+	.back-to-classroom {
+		color: #5353ff;
+		cursor: pointer;
+	}
+	/deep/.el-notification__closeBtn {
+		color: white;
+	}
 }
 </style>
 <style lang="scss">
 @media print {
-  .back-to-classroom-notify {
-    display: none;
-  }
+	.back-to-classroom-notify {
+		display: none;
+	}
 }
 </style>
