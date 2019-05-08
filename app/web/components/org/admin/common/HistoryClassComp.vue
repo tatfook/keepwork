@@ -134,7 +134,7 @@ export default {
       let orgClassMembers = _.get(this.orgHistoricalClasses, 'rows', [])
       let orgClassMembersByClassId = _.find(orgClassMembers, i => i.id === +this.classDetail.id)
       let studentList = _.get(orgClassMembersByClassId, 'lessonOrganizationClassMembers', [])
-      return studentList
+      return _.filter(studentList, student => student.roleId & 1 > 0)
     },
     currentClassStudentsCount() {
       return this.currentClassStudents.length
@@ -214,8 +214,9 @@ export default {
         this.classData.end = null
         return
       }
+      let endTime = +new Date(this.classTime[1]) + 24 * 60 * 60 * 1000 - 1000
       this.classData.begin = this.classTime[0]
-      this.classData.end = this.classTime[1]
+      this.classData.end = endTime
     },
     save() {
       this.setSelectedPackages()
