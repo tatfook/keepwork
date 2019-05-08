@@ -219,15 +219,17 @@ const actions = {
   },
   async getTeachingLesson({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
     const res = await graphql.getQueryResult({
-      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id, classroom{id, key, state, extra}} } }',
+      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end, classroom{id, key, state, extra}} } }',
       variables: {
         organizationId,
         username
       }
     })
+    const today = Date.now()
+    const offset = new Date().getTimezoneOffset() * 60 * 1000
     const organizationClasses = _.filter(
       _.get(res, 'organizationUser.organizationClasses', []),
-      item => item.classroom
+      item => item.classroom && +new Date(item.end) > today + offset
     )
     const teachingLesson = _.map(organizationClasses, item => {
       const { extra = {}, ...reset } = item.classroom
