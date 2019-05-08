@@ -91,9 +91,6 @@ export default {
 		nowPageText() {
 			let pageText = ''
 			switch (this.$route.name) {
-				case 'OrgNewClass':
-					pageText = this.$t('org.NewClass')
-					break
 				case 'OrgHistoryEditClass':
 				case 'OrgHistoryClassDetail':
 					pageText = this.nowClassName
