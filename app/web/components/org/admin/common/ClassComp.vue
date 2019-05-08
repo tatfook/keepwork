@@ -191,8 +191,9 @@ export default {
         this.classData.end = null
         return
       }
+      let endTime = +new Date(this.classTime[1]) + 24 * 60 * 60 * 1000 - 1000
       this.classData.begin = this.classTime[0]
-      this.classData.end = this.classTime[1]
+      this.classData.end = endTime
     },
     save() {
       this.setSelectedPackages()
