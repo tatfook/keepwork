@@ -134,7 +134,8 @@ export default {
       let orgClassMembers = _.get(this.orgHistoricalClasses, 'rows', [])
       let orgClassMembersByClassId = _.find(orgClassMembers, i => i.id === +this.classDetail.id)
       let studentList = _.get(orgClassMembersByClassId, 'lessonOrganizationClassMembers', [])
-      return studentList
+      let studentListFilter = _.filter(studentList, student => student.roleId == 1)
+      return studentListFilter
     },
     currentClassStudentsCount() {
       return this.currentClassStudents.length
