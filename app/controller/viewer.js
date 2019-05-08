@@ -21,16 +21,13 @@ module.exports = app => {
       let spiderIndex = _.findIndex(SPIDERS, spider => {
         return new RegExp('^' + spider, 'i').test(userAgent)
       })
-      console.log('----------')
-      console.log('USER-AGENT: ', userAgent, ctx.request.url)
       if (spiderIndex !== -1) {
-        console.log('SPIDER: ', SPIDERS[spiderIndex])
         let filePath = _.get(ctx, 'request.url')
-        // ctx.body = getSearchableContent(filePath)
-        ctx.body = getSearchableContentByPath(filePath)
+        ctx.body = {
+          content: await getSearchableContentByPath(filePath)
+        }
         return
       }
-      console.log('----------')
       await ctx.renderClient('viewer/index.js')
     }
   }
