@@ -19,7 +19,8 @@ const state = {
   orgStudents: {},
   userOrg: [],
   orgActiveCodeList: {},
-  printCodeList: {}
+  printCodeList: {},
+  orgHistoricalClasses: {}
 }
 export default {
   namespaced: true,

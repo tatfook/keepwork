@@ -1842,9 +1842,14 @@
     "used": "Used",
     "codeCount": "Count",
     "beginClassTime": "Begin class time",
+    "endClassTime": "End class time",
     "exportData": "Please select the data you want to export",
     "print": "Print",
     "selectPrintData": "Please select the data you want to print",
-    "sameClassCode": "Please select the invitation code for the same class"
+    "sameClassCode": "Please select the invitation code for the same class",
+    "historicalData": "Historical Data",
+    "teachersName": "Teacher Name",
+    "studentCunt": "Student Count",
+    "timeTo": "to"
   }
 }

@@ -1832,9 +1832,14 @@
     "used": "已使用",
     "codeCount": "数量",
     "beginClassTime": "开班时间",
+    "endClassTime": "结束时间",
     "exportData": "请选择需要导出的数据",
     "print": "打印",
     "selectPrintData": "请选择需要打印的数据",
-    "sameClassCode": "请选择同一个班级的邀请码"
+    "sameClassCode": "请选择同一个班级的邀请码",
+    "historicalData": "历史数据",
+    "teachersName": "教师姓名",
+    "studentCunt": "学生数",
+    "timeTo": "至"
   }
 }

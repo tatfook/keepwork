@@ -39,6 +39,9 @@ const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
 const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
 const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitationCode')
+const HistoricalData = () => import('@/components/org/admin/HistoricalData')
+const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
+const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
 
 Vue.use(Router)
 
@@ -266,6 +269,21 @@ export default new Router({
           path: 'printInvitationCode',
           name: 'PrintInvitationCode',
           component: PrintInvitationCode
+        },
+        {
+          path: 'historicalData',
+          name: 'HistoricalData',
+          component: HistoricalData
+        },
+        {
+          path: 'orgHistoryClassDetail',
+          name: 'OrgHistoryClassDetail',
+          component: OrgHistoryClassDetail
+        },
+        {
+          path: 'orgHistoryEditClass',
+          name: 'OrgHistoryEditClass',
+          component: OrgHistoryEditClass
         },
         {
           path: 'setting',
