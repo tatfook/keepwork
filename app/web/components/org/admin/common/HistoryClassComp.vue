@@ -52,7 +52,10 @@ export default {
     classDetail: Object
   },
   async created() {
-    await Promise.all([this.initClassData(), this.getHistoryClasses({ cache: true })])
+    await Promise.all([
+      this.initClassData(),
+      this.getHistoryClasses({ cache: true })
+    ])
   },
   data() {
     return {
@@ -132,9 +135,16 @@ export default {
     },
     currentClassStudents() {
       let orgClassMembers = _.get(this.orgHistoricalClasses, 'rows', [])
-      let orgClassMembersByClassId = _.find(orgClassMembers, i => i.id === +this.classDetail.id)
-      let studentList = _.get(orgClassMembersByClassId, 'lessonOrganizationClassMembers', [])
-      return _.filter(studentList, student => student.roleId & 1 > 0)
+      let orgClassMembersByClassId = _.find(
+        orgClassMembers,
+        i => i.id === +this.classDetail.id
+      )
+      let studentList = _.get(
+        orgClassMembersByClassId,
+        'lessonOrganizationClassMembers',
+        []
+      )
+      return _.filter(studentList, student => (student.roleId & 1) > 0)
     },
     currentClassStudentsCount() {
       return this.currentClassStudents.length
@@ -152,7 +162,9 @@ export default {
         this.initSelectedLessons()
         let classDetail = this.classDetail
         this.classData = classDetail
-        this.classTime = _.isNull(classDetail.begin) ? null : [classDetail.begin, classDetail.end]
+        this.classTime = _.isNull(classDetail.begin)
+          ? null
+          : [classDetail.begin, classDetail.end]
       } else {
         this.classData = {
           name: '',
