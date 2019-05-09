@@ -1,7 +1,7 @@
 <template>
   <div class="historical-data" v-loading="loading">
     <h4 class="historical-data-title">{{$t('org.IncludeClasses')}}{{orgHistoricalClassesLength}}</h4>
-    <el-table v-if="orgHistoricalClassesLength > 0" class="historical-data-table" border :data="orgHistoricalClassesData" header-row-class-name="historical-data-table-header">
+    <el-table class="historical-data-table" border :data="orgHistoricalClassesData" header-row-class-name="historical-data-table-header">
       <el-table-column prop="name" :label="$t('org.ClassNameLabel')" width="150">
       </el-table-column>
       <el-table-column :label="$t('org.beginClassTime')" width="180">
@@ -16,12 +16,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="historical-data-empty" v-if="orgHistoricalClassesLength == 0">
-      <img class="historical-data-empty-img" src="@/assets/org/list_empty.png" alt="">
-      <p class="historical-data-empty-info">{{$t('org.getStarted')}}
-        <router-link :to="{name: 'OrgNewClass'}" class="historical-data-empty-cursor">{{$t('org.addFirstClass')}}</router-link>
-      </p>
-    </div>
       <div class="historical-data-pages" v-if="orgHistoricalClassesLength > 0">
       <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="orgHistoricalClassesLength" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
@@ -62,7 +56,6 @@ export default {
     },
     orgHistoricalClassesLength() {
       return this.orgHistoricalClasses.count
-      return this.orgHistoricalClassesData.length
     }
   },
   async mounted() {
