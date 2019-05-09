@@ -363,7 +363,7 @@ export const lessonOrganizationClasses = {
   createClasses: async ({ organizationId, name, begin, end, packages }) => post('lessonOrganizationClasses', { organizationId, name, begin, end, packages }),
   getClassPackageDetail: async ({ classId, packageId }) => get('lessonOrganizations/packageDetail', { params: { classId, packageId } }),
   updateClass: async ({ organizationId, classId, name, begin, end, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, begin, end, packages }),
-  getHistoryClasses: async () => get('lessonOrganizationClasses/history')
+  getHistoryClasses: async (params) => get('lessonOrganizationClasses/history', { params })
 }
 
 export const lessonOrganizationClassMembers = {
