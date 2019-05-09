@@ -3,7 +3,6 @@ const _ = require('lodash')
 const {
   getSearchableContentByPath
 } = require('../web/lib/mod/parser/mdSearchedParser/searchByUrl')
-// const { getSearchableContent } = require('../web/lib/mod/parser/mdSearchedParser/index')
 const SPIDERS = [
   'PostmanRuntime',
   'Baiduspider',
