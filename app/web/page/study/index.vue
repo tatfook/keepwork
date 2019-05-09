@@ -5,7 +5,9 @@
     </div>
     <study-header></study-header>
     <router-view class="study-page-main-content"></router-view>
-    <perfect-common-footer></perfect-common-footer>
+    <div class="study-page-footer">
+      <perfect-common-footer></perfect-common-footer>
+    </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -267,11 +269,12 @@ body {
 }
 .study-page {
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: table;
+  width: 100%;
   background: #f8f8f8;
   &-header {
     height: 60px;
+    display: table-row;
     border-bottom: 1px solid #e6e6e6;
     background: #fff;
     .container {
@@ -280,9 +283,12 @@ body {
     }
   }
   &-main-content {
-    flex: 1;
     background: #f8f8f8;
-    min-height: auto;
+    display: table-row;
+    height: 100%;
+  }
+  &-footer {
+    display: table-row;
   }
 }
 </style>

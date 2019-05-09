@@ -60,7 +60,7 @@ export default {
 					text: this.$t('org.classInfoManage')
 				},
 				{
-					pageNames: ['InvitationCode', 'NewInvitationCode'],
+					pageNames: ['InvitationCode', 'NewInvitationCode', 'PrintInvitationCode'],
 					indexPageName: 'InvitationCode',
 					text: this.$t('org.studentInvitationCodeManagement')
 				},
