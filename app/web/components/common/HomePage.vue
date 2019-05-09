@@ -294,12 +294,9 @@ export default {
       this.$router.push(`/exploration`)
     },
     goStudyPage() {
-      if (this.isLogined) {
-        return (window.location.href = `${this.locationOrigin}/l/student`)
-      }
       window.location.href = `${
         this.locationOrigin
-      }/l/student/solution/teachingIdea`
+      }/s`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
