@@ -42,7 +42,7 @@
       </div>
       <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' :class='{selected: selectedMediaItem === mediaItem}' @click='handleSelectMediaItem(mediaItem)'>
         <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
-        <img v-if="mediaItem.type==='images'" :src="mediaItem.downloadUrl" class="media-type-media-item-img" />
+        <img v-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl" class="media-type-media-item-img" />
         <div class='media-type-media-item-cover'>
           <!-- <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span> -->
           <i v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
