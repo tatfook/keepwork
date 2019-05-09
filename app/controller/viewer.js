@@ -22,9 +22,7 @@ module.exports = app => {
       })
       if (spiderIndex !== -1) {
         let filePath = _.get(ctx, 'request.url')
-        ctx.body = {
-          content: await getSearchableContentByPath(filePath)
-        }
+        ctx.body = await getSearchableContentByPath(filePath)
         return
       }
       await ctx.renderClient('viewer/index.js')
