@@ -243,7 +243,7 @@ export default {
   },
   filters: {
     formatTime(time) {
-      return time ? moment(time).format('YYYY/MM/DD') : ''
+      return time ? moment(time).format('YYYY/MM/DD HH:mm:ss') : ''
     }
   }
 }

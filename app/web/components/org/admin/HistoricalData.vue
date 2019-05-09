@@ -22,6 +22,10 @@
         <router-link :to="{name: 'OrgNewClass'}" class="historical-data-empty-cursor">{{$t('org.addFirstClass')}}</router-link>
       </p>
     </div>
+      <div class="historical-data-pages" v-if="orgHistoricalClassesLength > 0">
+      <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="orgHistoricalClassesLength" layout="total,sizes,prev,pager,next,jumper">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -31,7 +35,9 @@ export default {
   name: 'HistoricalData',
   data() {
     return {
-      loading: true
+      loading: true,
+      perPage: 10,
+      page: 1
     }
   },
   computed: {
@@ -55,23 +61,31 @@ export default {
       })
     },
     orgHistoricalClassesLength() {
-      return 1
+      return this.orgHistoricalClasses.count
+      return this.orgHistoricalClassesData.length
     }
   },
   async mounted() {
-    await this.getHistoryClasses()
+    this.targetPage(1)
     this.loading = false
   },
   methods: {
     ...mapActions({
       getHistoryClasses: 'org/getHistoryClasses'
     }),
+    handleSizeChange(val) {
+      this.perPage = val
+    },
+    targetPage(targetPage) {
+      this.page = targetPage
+      this.getHistoryClasses({params: { 'x-page': this.page, 'x-per-page': this.perPage }})
+    },
     getStudentCount(member) {
-      let students = _.filter(member, i => i.roleId === 1)
+      let students = _.filter(member, i => (i.roleId & 1) > 0)
       return students.length
     },
     getTeacherCount(member) {
-      let teachers = _.filter(member, i => i.roleId === 2)
+      let teachers = _.filter(member, i => (i.roleId & 2) > 0)
       let teachersName = _.map(teachers, teacher => teacher.realname)
       return teachersName.join(', ')
     }
@@ -126,6 +140,10 @@ export default {
       cursor: pointer;
       text-decoration: none;
     }
+  }
+  &-pages {
+    text-align: center;
+    margin: 40px;
   }
 }
 </style>
