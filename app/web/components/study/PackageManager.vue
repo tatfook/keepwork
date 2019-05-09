@@ -35,7 +35,7 @@
         <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
           <template slot-scope="scope">
             <el-tooltip effect="dark" :content="$t('lesson.packageManage.clickToPreview')" placement="top-start">
-              <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
+              <div @click="toPackgePreview(scope.row)">{{scope.row.packageName}}</div>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -147,7 +147,8 @@ export default {
       lessonPackageLessons: 'lesson/teacher/packageLessons',
       lessonSubjects: 'lesson/subjects',
       userIsTeacher: 'lesson/isTeacher',
-      userIsAlliance: 'lesson/isAlliance'
+      userIsAlliance: 'lesson/isAlliance',
+      userToken: 'user/token'
     }),
     isTeacher() {
       return this.userIsTeacher
@@ -362,6 +363,9 @@ export default {
     },
     toPackgeDetail(packageDetail) {
       this.$router.push(`/lesson/package/${packageDetail.id}`)
+    },
+    toPackgePreview(packageDetail) {
+      window.location.href = `${window.location.origin}/l/preview/package/${packageDetail.id}?token=${this.userToken}`
     },
     async confirmDelete(packageDetail) {
       this.editingPackageId = packageDetail.id

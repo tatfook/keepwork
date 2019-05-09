@@ -38,6 +38,7 @@ export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
   getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
+  getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${userId}`),
   getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
   getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
@@ -362,6 +363,7 @@ export const lessonOrganizationClasses = {
   createClasses: async ({ organizationId, name, begin, end, packages }) => post('lessonOrganizationClasses', { organizationId, name, begin, end, packages }),
   getClassPackageDetail: async ({ classId, packageId }) => get('lessonOrganizations/packageDetail', { params: { classId, packageId } }),
   updateClass: async ({ organizationId, classId, name, begin, end, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, begin, end, packages }),
+  getHistoryClasses: async (params) => get('lessonOrganizationClasses/history', { params })
 }
 
 export const lessonOrganizationClassMembers = {

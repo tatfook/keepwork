@@ -13,31 +13,6 @@
       <el-menu-item index='4' @click="goStudyPage">
         {{$t('common.study')}}
       </el-menu-item>
-      <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
-        <a href='//iicc.keepwork.com' target="_blank">
-          <img class="iicc-logo" src="@/assets/img/iicc_logo.png" alt="">{{$t('common.iicc')}}
-        </a>
-      </el-menu-item> -->
-      <!-- <el-menu-item v-if="!IS_GLOBAL_VERSION" index='6'>
-        <a href='//keepwork.com/official/creativeTimes/latest' target="_blank">
-          <img class="iicc-logo" src="@/assets/img/times_logo.png" alt="">{{$t('common.creatTimes')}}
-        </a>
-      </el-menu-item>
-      <el-menu-item v-if="!IS_GLOBAL_VERSION" index='7'>
-        <a href='https://keepwork.com/official/paracraft/index' target="_blank">
-          <img class="iicc-logo" src="@/assets/img/paracraft_logo.png" alt="">{{$t('common.paracratLearning')}}
-        </a>
-      </el-menu-item> -->
-
-      <!-- <el-menu-item index="10" class="pull-right" v-if="isLogin">
-        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myHistory">{{$t('common.history')}}</a>
-      </el-menu-item> -->
-      <!-- <el-menu-item index="11" class="pull-right" v-if="isLogin">
-        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myCollection">{{$t('common.attention')}}</a>
-      </el-menu-item> -->
-      <!-- <el-menu-item index="12" class="pull-right" v-if="isLogin">
-        <a href="/wiki/user_center?userCenterContentType=userProfile&userCenterSubContentType=myTrends">{{$t('common.dynamic')}}(0)</a>
-      </el-menu-item> -->
       <el-menu-item index="13" class="pull-right user-menu" v-if="isLogin">
         <el-dropdown placement="bottom-end" trigger="click">
           <span class="el-dropdown-link">
@@ -58,66 +33,21 @@
             <el-dropdown-item>
               <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
             </el-dropdown-item>
-            <!-- <el-dropdown-item>
-              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
-            <!-- <el-dropdown-item>
-              <a href="/ed" target="_blank"><i class="iconfont icon-bulb"></i>{{$t('common.pageEditor')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item>
-              <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
-            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a href="/u/p/userData"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
             </el-dropdown-item>
-            <!-- <el-dropdown-item>
-              <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item>
-              <a :href='myOrgUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
-            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <!-- <el-menu-item index="12" class="pull-right message-dropdown" v-if="isLogin">
-        <el-dropdown placement="bottom" trigger="click">
-          <span class="el-dropdown-link message">
-            <i class="iconfont icon-bell-fill "></i>消息
-            <i class="news"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown" class="message-dropdown-list">
-            <el-dropdown-item>
-              <div class="message-desc">[通知] <span>《一个新项目》</span>审核通过</div>
-              <div class="detail-time">17:50</div>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <div class="message-desc">[个人] <span>一只小可爱</span>关注了你</div>
-              <div class="detail-time">12:50</div>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <div class="message-desc">[项目] <span>一只大可爱</span>在项目中提到了你</div><span class="detail-time">17:50</span>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <div class="message-desc">[课程] 你获得了<span>200</span>知识币</div>
-              <div class="detail-time">17:50</div>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-menu-item> -->
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>{{$t('common.tools')}}<i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
@@ -140,7 +70,7 @@
         <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
       </el-menu-item>
 
-      <el-menu-item index='10'>
+      <el-menu-item class="menu-searchbar" index='10'>
         <search-bar></search-bar>
       </el-menu-item>
     </el-menu>
@@ -174,28 +104,9 @@
             <el-dropdown-item>
               <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
             </el-dropdown-item>
-            <!-- <el-dropdown-item>
-              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-bulb"></i>{{$t('common.personalCenter')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item><a href="#">{{$t('common.serviceMall')}}</a></el-dropdown-item> -->
-            <!-- <el-dropdown-item>
-              <a href="/ed" target="_blank"><i class="iconfont icon-bulb"></i>{{$t('common.pageEditor')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item>
-              <a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent=""><i class="iconfont icon-bell"></i>消息中心</a>
-            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
             </el-dropdown-item>
-            <!-- <el-dropdown-item>
-              <a href="/wiki/user_center?userCenterContentType=invite&userCenterSubContentType=addFriend"><i class="iconfont icon-adduser"></i>{{$t('common.invitationToRegister')}}</a>
-            </el-dropdown-item> -->
-            <!-- <el-dropdown-item>
-              <a :href='myOrgUrl'><i class="iconfont icon-bulb"></i>{{$t('lesson.lessonsCenter')}}</a>
-            </el-dropdown-item> -->
             <el-dropdown-item divided>
               <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
             </el-dropdown-item>
@@ -209,7 +120,6 @@
             <i class="iconfont icon-wrench-fill"></i><i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <!-- <el-dropdown-item><a href="#" @click.stop.prevent="goKnowledgeManagement "><i class="iconfont icon-bulb"></i>知识管理</a></el-dropdown-item> -->
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
@@ -493,6 +403,11 @@ export default {
 .el-dropdown-menu .iconfont {
   margin-right: 14px;
   font-size: 20px;
+}
+@media (min-width: 768px) and (max-width: 1180px) {
+  .menu-searchbar {
+    display: none;
+  }
 }
 @media (max-width: 768px) {
   .hidden-sm-and-up .user-profile {

@@ -23,7 +23,7 @@ export default {
   },
   async created() {
     try {
-      await this.getCurrentClass()
+      await Promise.all([this.getCurrentClass(), this.getOrgClasses()])
       this.checkIsInClassroom(this.$route)
     } catch (error) {
       console.error(error)
@@ -33,7 +33,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getCurrentClass: 'org/teacher/getCurrentClass'
+      getCurrentClass: 'org/teacher/getCurrentClass',
+      getOrgClasses: 'org/teacher/getOrgClasses'
     }),
     backToClassroom() {
       const { classId, packageId, lessonId } = this.classroom
@@ -45,15 +46,9 @@ export default {
       }
     },
     checkIsInClassroom(route) {
-      const {
-        params: { classId, packageId, lessonId }
-      } = route
+      const { params: { classId, packageId, lessonId } } = route
       const { classId: cid, packageId: pid, lessonId: lid } = this.classroom
-      if (
-        this.isBeInClassroom &&
-        this.isTeaching &&
-        !(classId == cid && packageId == pid && lessonId == lid)
-      ) {
+      if (this.isBeInClassroom && this.isTeaching && !(classId == cid && packageId == pid && lessonId == lid)) {
         if (!this._notify) {
           this._notify = this.$notify({
             customClass: 'back-to-classroom-notify',

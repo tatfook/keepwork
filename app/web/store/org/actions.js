@@ -19,7 +19,8 @@ const {
   GET_ORG_STUDENTS_SUCCESS,
   GET_USER_ORG_SUCCESS,
   GET_ORG_ACTIVATE_CODE_SUCCESS,
-  SET_PRINT_CODE_LIST
+  SET_PRINT_CODE_LIST,
+  GET_HISTORY_CLASSES_SUCCESS
 } = props
 
 const actions = {
@@ -99,12 +100,27 @@ const actions = {
     let { commit } = context
     let result = await keepwork.graphql.getQueryResult({
       query:
-        'query($id: Int, $name: String) {organization(id: $id, name: $name) {id, organizationPackages {organizationId, package{id,packageName}, lessons{id,lessonName} } } } ',
+        'query($id: Int, $name: String) {organization(id: $id, name: $name) {id, organizationPackages {organizationId, package{id,packageName}, lessons{id,lessonName}, lessonNos } } } ',
       variables: {
         id: organizationId
       }
     })
     let orgPackages = _.get(result, 'organization.organizationPackages')
+    // add lessonNo property
+    orgPackages = _.map(orgPackages, item => {
+      let { lessonNos, lessons, ...rest } = item
+      lessons = _.map(lessons, l => {
+        let lessonNo = _.find(lessonNos, ln => ln.lessonId === l.id)
+        return {
+          ...l,
+          ...lessonNo
+        }
+      })
+      return {
+        ...rest,
+        lessons
+      }
+    })
     commit(GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS, { organizationId, orgPackages })
   },
   async getOrgClassPackages(context, { organizationId, classId }) {
@@ -295,6 +311,15 @@ const actions = {
       .catch(err => {
         console.error(err)
       })
+  },
+  async getHistoryClasses({ commit, getters: { orgHistoricalClasses } }, { cache = false, params } = {}) {
+    if (!(cache && !_.isEmpty(orgHistoricalClasses))) {
+      await keepwork.lessonOrganizationClasses.getHistoryClasses(params).then(res => {
+        commit(GET_HISTORY_CLASSES_SUCCESS, res)
+      }).catch(err => {
+        console.error(err)
+      })
+    }
   }
 }
 

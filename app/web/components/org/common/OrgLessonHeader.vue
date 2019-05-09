@@ -76,7 +76,10 @@
             <span class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
           </template>
           <template v-else>
-            <el-button @click="handleBeginTheClass" :disabled="!isInCurrentClass" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+            <el-tooltip v-if="isNotStated" placement="top" content="本学期还未开始">
+              <el-button type="primary" @click="handleNoStatedTips" class="lesson-button no-started">{{$t('lesson.begin')}}</el-button>
+            </el-tooltip>
+            <el-button v-else  @click="handleBeginTheClass" :disabled="!isInCurrentClass || isNotStated" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
             <span class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
           </template>
         </div>
@@ -245,6 +248,12 @@ export default {
     handleExplanHaqiCode() {
       let helpUrl = 'https://keepwork.com/lesson9527/lessons/help_lessonID '
       window.open(helpUrl)
+    },
+    handleNoStatedTips() {
+      this.$message({
+        type: 'warning',
+        message: '本学期还未开始'
+      })
     }
   },
   computed: {
@@ -302,7 +311,29 @@ export default {
       return `${packageId}x${lessonId}`
     },
     className() {
-      return _.get(_.find(this.orgClasses, item => item.id === _.toNumber(_.get(this.$route, 'params.classId'))), 'name', '')
+      return _.get(
+        _.find(
+          this.orgClasses,
+          item => item.id === _.toNumber(_.get(this.$route, 'params.classId'))
+        ),
+        'name',
+        ''
+      )
+    },
+    isNotStated() {
+      const { classId = '' } = this.$route.params
+      const timeStamp = Date.now()
+      const classBeginTimeStamp = +new Date(
+        _.get(
+          _.find(
+            this.orgClasses,
+            item => item.id === _.toNumber(_.get(this.$route, 'params.classId'))
+          ),
+          'begin',
+          ''
+        )
+      )
+      return timeStamp < classBeginTimeStamp
     }
   }
 }
@@ -444,6 +475,11 @@ export default {
       height: 36px;
       width: 190px;
       position: static;
+      &.no-started {
+        color: #fff;
+        background-color: #a0cfff;
+        border-color: #a0cfff;
+      }
       &.class-is-over {
         background: #d2d2d2;
         border-color: #d2d2d2;

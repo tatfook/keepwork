@@ -90,7 +90,7 @@ export default {
       return _.filter(this.orgClasses, classDetail => {
         let classBegin = new Date(classDetail.begin).valueOf()
         let classEnd = new Date(classDetail.end).valueOf()
-        return classBegin <= nowDate && classEnd >= nowDate
+        return classEnd >= nowDate
       })
     },
     queryData() {

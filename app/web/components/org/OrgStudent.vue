@@ -28,8 +28,8 @@ export default {
     try {
       await Promise.all([
         this.getUserOrgRealName(),
-        this.getOrgClasses(),
-        this.getUserInfo()
+        this.getUserInfo(),
+        this.getOrgClasses()
       ])
       await this.resumeClassroom()
       this.checkIsInClassroom(this.$route)

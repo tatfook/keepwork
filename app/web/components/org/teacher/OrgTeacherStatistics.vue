@@ -50,9 +50,11 @@ export default {
     }
   },
   async created() {
-    await this.getOrgClasses()
+    await this.getOrgClasses({ cache: true })
     this.selectedClassId = this.firstOrgClassId
-    await this.getTaughtClassroomCourses({ classId: this.selectedClassId })
+    if(this.selectedClassId){
+      await this.getTaughtClassroomCourses({ classId: this.selectedClassId })
+    }
     this.isLoading = false
   },
   computed: {
@@ -88,7 +90,11 @@ export default {
       return (longTime / 60 - parseInt(longTime / 60)) * 60
     },
     selectedClassName() {
-      return _.get(_.find(this.orgClasses, item => item.id === this.selectedClassId), 'name', '')
+      return _.get(
+        _.find(this.orgClasses, item => item.id === this.selectedClassId),
+        'name',
+        ''
+      )
     }
   },
   methods: {
