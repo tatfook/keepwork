@@ -66,7 +66,7 @@ export default {
     }
   },
   async mounted() {
-    this.targetPage(1)
+    await this.targetPage(1)
     this.loading = false
   },
   methods: {
