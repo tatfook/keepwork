@@ -19,6 +19,7 @@
 <script>
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueLazyload from 'vue-lazyload'
 import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -34,6 +35,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import CommonFooter from '@/components/common/CommonFooter'
 
 Vue.use(Vuex)
+Vue.use(VueLazyload)
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({

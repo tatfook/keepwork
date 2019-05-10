@@ -16,6 +16,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueLazyload from 'vue-lazyload'
 import VueAnalytics from 'vue-analytics'
 import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -44,6 +45,7 @@ import { lesson } from '@/api'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueLazyload)
 Vue.use(VueClipboard)
 Vue.component(Vhistogram.name, Vhistogram)
 Vue.use(VueAnalytics, {
