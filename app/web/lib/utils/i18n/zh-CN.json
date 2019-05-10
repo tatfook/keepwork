@@ -1786,7 +1786,7 @@
     "DataStaticsLabel": "数据统计",
     "MyClassLabel": "我的班级",
     "delConfirm": "确定删除",
-    "cannotAddMoreMember": "已到达添加上限，如需添加更多用户信息，请联系Keepwork客服购买。程老师 13267059950（电话/微信）、846704851（QQ）",
+    "cannotAddMoreMember": "已到达添加上限，如需添加更多学生信息，请联系keepwork客服（support@paraengine.com）。",
     "theUsername": "用户名:",
     "alreadyInList": "已在{zhRole}列表中",
     "wasNotFound": "不存在",
@@ -1798,7 +1798,7 @@
     "failedUpdatedClass": "班级更新失败",
     "successfullyCreatedANewClass": "班级创建成功",
     "classNameAlreadyExist": "该班级已存在",
-    "noTeachingRecord": "该班级暂无上课记录",
+    "noTeachingRecord": "暂无上课记录",
     "failedToCreateANewClass": "班级创建失败",
     "chapterIsFinished": "本章已经教完",
     "latestTeachingTime": "最近上课: ",
@@ -1832,9 +1832,14 @@
     "used": "已使用",
     "codeCount": "数量",
     "beginClassTime": "开班时间",
+    "endClassTime": "结束时间",
     "exportData": "请选择需要导出的数据",
     "print": "打印",
     "selectPrintData": "请选择需要打印的数据",
-    "sameClassCode": "请选择同一个班级的邀请码"
+    "sameClassCode": "请选择同一个班级的邀请码",
+    "historicalData": "历史数据",
+    "teachersName": "教师姓名",
+    "studentCunt": "学生数",
+    "timeTo": "至"
   }
 }

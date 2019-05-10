@@ -1,6 +1,6 @@
 <template>
   <div class="md-page-viewer" v-loading="pageLoading">
-    <div v-if='sidebarModList' class="toggle-sidebar-main-button" :class="{'position-right': (showSidebarOrMain === 'sidebar')}" @click="toggleSidebarMainShow">
+    <div v-if='isLayoutSidebarShow' class="toggle-sidebar-main-button" :class="{'position-right': (showSidebarOrMain === 'sidebar')}" @click="toggleSidebarMainShow">
       <i class="iconfont icon-arrowsdownline"></i>
     </div>
     <component :is='layoutTemplate' :showSidebarOrMain='showSidebarOrMain' v-if='layout'>
@@ -100,9 +100,14 @@ export default {
       this.storedTheme.sheet.attach()
       return this.storedTheme
     },
+    styleName(){
+      return _.get(this.layout, 'styleName', '')
+    },
     layoutTemplate() {
-      if (!this.layout) return
-      return layoutTemplates[this.layout.styleName]['component']
+      return _.get(layoutTemplates, `${this.styleName}.component`)
+    },
+    isLayoutSidebarShow(){
+      return _.get(layoutTemplates, `${this.styleName}.sidebar`) && this.sidebarModList.length > 0
     }
   },
   methods: {

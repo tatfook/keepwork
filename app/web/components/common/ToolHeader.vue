@@ -1,7 +1,7 @@
 <template>
   <div class="tool-header">
     <div class="breadcrumb" v-loading='breadcrumbsLoading'>
-      <a class="breadcrumb-item iconfont icon-home-keepwork" href="/wiki/home"></a>
+      <a class="breadcrumb-item iconfont icon-home-keepwork" href="/"></a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>

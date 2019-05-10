@@ -52,7 +52,9 @@ export default {
   async created() {
     await this.getOrgClasses({ cache: true })
     this.selectedClassId = this.firstOrgClassId
-    await this.getTaughtClassroomCourses({ classId: this.selectedClassId })
+    if(this.selectedClassId){
+      await this.getTaughtClassroomCourses({ classId: this.selectedClassId })
+    }
     this.isLoading = false
   },
   computed: {

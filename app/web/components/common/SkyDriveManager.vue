@@ -206,7 +206,7 @@ export default {
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')
-      let GBVal = (bite / 1024 / 1024)
+      let GBVal = (bite / 1024 / 1024 / 1024)
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')

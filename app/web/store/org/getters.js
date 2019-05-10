@@ -43,7 +43,8 @@ const getters = {
   orgPackagesDetail: state => state.orgPackagesDetail,
   userOrg: state => state.userOrg,
   orgActiveCodeList: state => state.orgActiveCodeList,
-  printCodeList: state => state.printCodeList
+  printCodeList: state => state.printCodeList,
+  orgHistoricalClasses: state => state.orgHistoricalClasses
 }
 
 export default getters

@@ -35,7 +35,6 @@
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div>
             <div class="video">
-              <!-- <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video> -->
               <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4' />
             </div>
           </div>
@@ -63,8 +62,6 @@
           <div class="box-text">
             <h2>{{$t('common.creativity')}}</h2>
             <p class="box-text-intro">{{$t("home.everyoneShouldHaveOwnWorks")}}</p>
-            <!-- <p class="box-text-own">已创建项目:
-              <span class="total">{{excellentProjectsCount}}</span></p> -->
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
@@ -75,8 +72,6 @@
           <div class="box-text">
             <h2>{{$t('common.explore')}}</h2>
             <p class="box-text-intro">{{$t("home.openDoorsToVariousWorlds")}}</p>
-            <!-- <p class="box-text-own">已共享内容:
-              <span class="total">123456</span></p> -->
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
@@ -87,8 +82,6 @@
           <div class="box-text">
             <h2>{{$t('common.study')}}</h2>
             <p class="box-text-intro">{{$t("home.learningIsFromExploringToCreating")}}</p>
-            <!-- <p class="box-text-own">拥有在线课程：
-              <span class="total">{{allPackagesCount}}</span></p> -->
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
@@ -108,20 +101,6 @@
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in handpickProjects" :key="index">
             <project-cell :project='project'></project-cell>
-          </el-col>
-        </el-row>
-      </div>
-      <div class="home-page-cabinet-excellent hot">
-        <div class="title">
-          <div class="title-text">
-            <span class="star">
-              <img src="@/assets/img/hp_hot_lesson.png" alt="">
-            </span>{{$t("home.hotLessons")}}</div>
-          <div class="more" @click="viewMore('courseField')">{{$t("common.viewMore")}}&gt;</div>
-        </div>
-        <el-row>
-          <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
-            <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
           </el-col>
         </el-row>
       </div>
@@ -211,22 +190,11 @@ export default {
   },
   async mounted() {
     this.textAnimation()
-    let [hotPackage, handpick, likes, news] = await Promise.all([
-      this.getHotPackage(),
+    let [ handpick, likes, news] = await Promise.all([
       this.getHandpick(),
       this.getLikes(),
       this.getNews()
     ]).catch(e => console.error(e))
-
-    this.hotsPackages = _.map(hotPackage, i => ({
-      ...i,
-      cover: i.extra.coverUrl,
-      name_title: i.packageName,
-      total_lessons: i.lessons.length,
-      age_min: i.minAge,
-      age_max: i.maxAge,
-      description: i.intro
-    }))
     this.newsHtml = news
     this.originHandpickProjects = handpick
     this.originLikesProjects = likes
@@ -246,9 +214,6 @@ export default {
     }
   },
   methods: {
-    async getHotPackage() {
-      return lesson.packages.getHotsPackages()
-    },
     async getHandpick() {
       return keepwork.projects.getProjects({
         'x-order': 'choicenessNo-desc',
@@ -259,7 +224,7 @@ export default {
     async getLikes() {
       return keepwork.projects.getProjects({
         'x-order': 'lastStar-desc-updatedAt-desc',
-        'x-per-page': 4,
+        'x-per-page': 8,
         'x-page': 1
       })
     },
@@ -329,12 +294,9 @@ export default {
       this.$router.push(`/exploration`)
     },
     goStudyPage() {
-      if (this.isLogined) {
-        return (window.location.href = `${this.locationOrigin}/l/student`)
-      }
       window.location.href = `${
         this.locationOrigin
-      }/l/student/solution/teachingIdea`
+      }/s`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)

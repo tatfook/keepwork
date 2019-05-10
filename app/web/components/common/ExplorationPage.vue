@@ -101,7 +101,7 @@ export default {
         { command: 'allProjects', tag: this.$t('explore.project') },
         { command: 'paracraftField', tag: this.$t('explore.3DWorlds') },
         { command: 'websiteField', tag: this.$t('explore.websites') },
-        { command: 'courseField', tag: this.$t('explore.lessons') },
+        // { command: 'courseField', tag: this.$t('explore.lessons') },
         { command: 'usersField', tag: this.$t('explore.uses') },
         { command: 'webpageField', tag: this.$t('editor.website') },
         { command: 'recruitingField', tag: this.$t('explore.recruiting') }

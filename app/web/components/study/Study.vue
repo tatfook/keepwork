@@ -4,7 +4,7 @@
       <div class="study-home-region-banner-center">
         <div class="study-home-region-banner-center-img"><img src="@/assets/study/title.png" alt=""></div>
         <div class="study-home-region-banner-center-desc">
-          <p class="study-home-region-banner-center-desc-text">你是初学者？还是希望提升编程技能？<br>Keepwork为各个阶段、水平的学习者提供了多种多样的学习资源，从免费的教程到现场培训。</p>
+          <p class="study-home-region-banner-center-desc-text">你是动画爱好者？还是希望提升编程技能？<br>keepwork为各个阶段、水平的3D动画与编程学习者提供了多种多样的学习资源，从免费的教程到现场培训。</p>
         </div>
         <div class="study-home-region-banner-center-go"><span class="study-home-region-banner-center-go-text">从中选择适合你的学习内容吧！</span></div>
       </div>
@@ -63,7 +63,7 @@ export default {
         },
         {
           imgUrl: require('@/assets/study/teaching.png'),
-          title: '教师和学生',
+          title: '学校和培训机构',
           text_1: '赋予学生创造力',
           text_2: '为学校、培训机构提供优惠的教学资源。',
           moreLink: 'https://biz.keepwork.com/'

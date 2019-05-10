@@ -3,6 +3,9 @@ import _ from 'lodash'
 const getters = {
   orgClasses: state => state.orgClasses,
   orgPackages: state => state.orgPackages,
+  orgPackageStatus: (state, { orgPackages }) => packageId => {
+    return _.find(orgPackages, item => item.package.id === _.toNumber(packageId))
+  },
   orgPackagesDetail: state => state.orgPackagesDetail,
   orgLessonData: state => state.lessonData,
   orgLessonDetail: state => state.orgLessonDetail,

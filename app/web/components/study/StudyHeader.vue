@@ -117,6 +117,7 @@ export default {
 }
 .study-homepage-header {
   z-index: 999;
+  position: relative;
   &-menu {
     width: 1200px;
     min-height: 64px;

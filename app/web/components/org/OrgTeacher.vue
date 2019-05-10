@@ -23,10 +23,7 @@ export default {
   },
   async created() {
     try {
-      await Promise.all([
-        this.getCurrentClass(),
-        this.getOrgClasses()
-      ])
+      await Promise.all([this.getCurrentClass(), this.getOrgClasses()])
       this.checkIsInClassroom(this.$route)
     } catch (error) {
       console.error(error)
@@ -49,15 +46,9 @@ export default {
       }
     },
     checkIsInClassroom(route) {
-      const {
-        params: { classId, packageId, lessonId }
-      } = route
+      const { params: { classId, packageId, lessonId } } = route
       const { classId: cid, packageId: pid, lessonId: lid } = this.classroom
-      if (
-        this.isBeInClassroom &&
-        this.isTeaching &&
-        !(classId == cid && packageId == pid && lessonId == lid)
-      ) {
+      if (this.isBeInClassroom && this.isTeaching && !(classId == cid && packageId == pid && lessonId == lid)) {
         if (!this._notify) {
           this._notify = this.$notify({
             customClass: 'back-to-classroom-notify',
