@@ -3,8 +3,8 @@ module.exports = app => {
   const { router, controller } = app
   app.middleware.browserCheck()
   router.get('/', controller.home.index)
-  router.get('/creativity', controller.home.index)
-  router.get('/exploration', controller.home.index)
+  router.get('/create', controller.home.index)
+  router.get('/explore', controller.home.index)
   router.get('/ranking', controller.home.index)
   router.get('/NPL', controller.home.index)
   router.get('/agreement', controller.home.index)
