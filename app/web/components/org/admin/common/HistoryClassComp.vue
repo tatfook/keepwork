@@ -17,11 +17,11 @@
       </div>
       <div class="historical-class-comp-form-item">
         <div class="historical-class-comp-form-label">{{$t('org.beginClassTime')}}</div>
-        <div class="class-comp-form-item-time">
-          <el-date-picker v-model="beginClassTime" type="date" placeholder="选择日期">
+        <div class="historical-class-comp-form-item-time">
+          <el-date-picker v-model="beginClassTime" type="date" :placeholder="$t('org.selectClassTime')">
           </el-date-picker>
-          <span class="class-comp-form-item-time-to">{{$t('org.timeTo')}}</span>
-          <el-date-picker v-model="endClassTime" type="date" placeholder="选择日期">
+          <span class="historical-class-comp-form-item-time-to">{{$t('org.timeTo')}}</span>
+          <el-date-picker v-model="endClassTime" type="date" :placeholder="$t('org.selectClassTime')">
           </el-date-picker>
         </div>
       </div>
