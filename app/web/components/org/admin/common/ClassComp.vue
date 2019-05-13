@@ -17,8 +17,13 @@
       </div>
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.beginClassTime')}}</div>
-        <el-date-picker :disabled="isDetailPage" v-model="classTime" type="daterange" :range-separator="$t('org.timeTo')" :start-placeholder="$t('org.beginClassTime')" :end-placeholder="$t('org.endClassTime')" unlink-panels>
-        </el-date-picker>
+        <div class="class-comp-form-item-time">
+          <el-date-picker v-model="beginClassTime" type="date" :placeholder="$t('org.selectClassTime')">
+          </el-date-picker>
+          <span class="class-comp-form-item-time-to">{{$t('org.timeTo')}}</span>
+          <el-date-picker v-model="endClassTime" type="date" :placeholder="$t('org.selectClassTime')">
+          </el-date-picker>
+        </div>
       </div>
       <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.LessonPackagesAvailable')}}:</div>
@@ -40,7 +45,8 @@ export default {
   },
   data() {
     return {
-      classTime: null,
+      beginClassTime: null,
+      endClassTime: null,
       isTreeLoading: false,
       classData: {
         name: '',
@@ -127,9 +133,8 @@ export default {
         this.initSelectedLessons()
         let classDetail = this.classDetail
         this.classData = classDetail
-        this.classTime = _.isNull(classDetail.begin)
-          ? null
-          : [classDetail.begin, classDetail.end]
+        this.beginClassTime = classDetail.begin
+        this.endClassTime = classDetail.end
       } else {
         this.classData = {
           name: '',
@@ -186,13 +191,13 @@ export default {
       this.classData.packages = packages
     },
     setSelectedTime() {
-      if (_.isNull(this.classTime)) {
+      if (_.isNull(this.beginClassTime) && _.isNull(this.endClassTime)) {
         this.classData.begin = null
         this.classData.end = null
         return
       }
-      let endTime = +new Date(this.classTime[1]) + 24 * 60 * 60 * 1000 - 1000
-      this.classData.begin = this.classTime[0]
+      let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 1000
+      this.classData.begin = this.beginClassTime
       this.classData.end = endTime
     },
     save() {
@@ -240,6 +245,13 @@ $borderColor: #e8e8e8;
     }
     &-item {
       margin-bottom: 40px;
+      &-time {
+        display: flex;
+        &-to {
+          line-height: 40px;
+          padding:0 12px;
+        }
+      }
     }
   }
   &-tree {

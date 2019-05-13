@@ -1850,6 +1850,7 @@
     "historicalData": "Historical Data",
     "teachersName": "Teacher Name",
     "studentCunt": "Student Count",
-    "timeTo": "to"
+    "timeTo": "to",
+    "selectClassTime": "Please select date"
   }
 }
