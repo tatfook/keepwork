@@ -225,19 +225,20 @@ const actions = {
         username
       }
     })
-    const currentOrgInfo = _.find(_.get(res, 'organizationUser.organizationClasses', []), item => item.id === organizationId)
     const today = Date.now()
-    if ((currentOrgInfo.roleId & 1) > 0 && +new Date(currentOrgInfo.end) > today) { // eslint-disable-line no-bitwise
-      const teachingLesson = _.map(currentOrgInfo.classrooms, item => {
-        const { extra = {}, ...reset } = item
-        return {
-          id: item.id,
-          ...extra,
-          ...reset
-        }
-      })
-      commit(GET_TEACHING_LESSON_SUCCESS, teachingLesson)
-    }
+    const organizationClasses = _.filter(_.get(res, 'organizationUser.organizationClasses', []), item => (item.roleId & 1) > 0 && +new Date(item.end) > today) // eslint-disable-line no-bitwise
+    const teachingLesson = _.reduce(organizationClasses, (arr, cur) => {
+      return [...arr, ...cur.classrooms]
+    }, [])
+    const result = _.map(teachingLesson, item => {
+      const { extra = {}, ...reset } = item
+      return {
+        id: item.id,
+        ...extra,
+        ...reset
+      }
+    })
+    commit(GET_TEACHING_LESSON_SUCCESS, result)
   },
   async checkClassroom({ commit, dispatch }) {
     await lesson.classrooms.currentClass().catch(e => {
