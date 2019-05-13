@@ -99,13 +99,6 @@ export default {
     }),
     async addFile() {
       this.openNewWebPageDialog()
-      // let newFileName = await this.newFileNamePrompt()
-      // newFileName = suffixFileExtension(newFileName, 'md')
-      // let newFilePath = `${this.currentPath}/${newFileName}`
-      // this.addFilePending = true
-      // await this.gitlabCreateFile({ path: newFilePath })
-      // this.expandFolder(newFilePath)
-      // this.addFilePending = false
     },
     async addFolder() {
       let self = this
@@ -155,8 +148,6 @@ export default {
       })
     },
     removeFolder(data) {
-      // let pathArr = data.path.split('/')
-      // let folderName = pathArr[pathArr.length - 1]
       let folder = data.path
       let toRemoveFiles = this.recursion(data)
 
@@ -192,10 +183,6 @@ export default {
     recursion(data) {
       let childrenFiles = []
       const recursionFile = data => {
-        // if (!/.md$/.test(data.path)) {
-        //   childrenFiles.push(`${data.path}/.gitignore.md`)
-        // } else {
-        //   childrenFiles.push(data.path)
         // }
         if (/.md$/.test(data.path)) {
           childrenFiles.push(data.path)
