@@ -51,8 +51,9 @@ export default {
   },
   async created() {
     await this.getOrgClasses({ cache: true })
+    await this.getOrgClassPackagesById({ classId: this.firstOrgClassId })
     this.selectedClassId = this.firstOrgClassId
-    if(this.selectedClassId){
+    if (this.selectedClassId) {
       await this.getTaughtClassroomCourses({ classId: this.selectedClassId })
     }
     this.isLoading = false
@@ -61,7 +62,8 @@ export default {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       orgClasses: 'org/teacher/orgClasses',
-      classroomCoursesData: 'org/teacher/classroomCoursesData'
+      classroomCoursesData: 'org/teacher/classroomCoursesData',
+      orgClassPackages: 'org/teacher/orgClassPackages'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -100,7 +102,8 @@ export default {
   methods: {
     ...mapActions({
       getOrgClasses: 'org/teacher/getOrgClasses',
-      getTaughtClassroomCourses: 'org/teacher/getTaughtClassroomCourses'
+      getTaughtClassroomCourses: 'org/teacher/getTaughtClassroomCourses',
+      getOrgClassPackagesById: 'org/teacher/getOrgClassPackagesById'
     }),
     sortByCreatedAt(obj1, obj2) {
       return this.positiveSequence
@@ -126,11 +129,35 @@ export default {
       this.selectedClassId = classId
     },
     enterPackage(course) {
+      this.currentClassPackages = _.get(
+        this.orgClassPackages,
+        this.selectedClassId,
+        []
+      )
+      let result = this.currentClassPackages.some(item => {
+        return item.packageId === course.packageId
+      })
+      if (!result) {
+        this.$message.warning(this.$t('org.noViewPermissions'))
+        return
+      }
       this.$router.push({
         path: `teach/class/${course.classId}/package/${course.packageId}`
       })
     },
     enterLesson(course) {
+      this.currentClassPackages = _.get(
+        this.orgClassPackages,
+        this.selectedClassId,
+        []
+      )
+      let result = this.currentClassPackages.some(item => {
+        return item.packageId === course.packageId
+      })
+      if (!result) {
+        this.$message.warning(this.$t('org.noViewPermissions'))
+        return
+      }
       this.$router.push({
         path: `teach/class/${course.classId}/package/${
           course.packageId
@@ -196,6 +223,7 @@ export default {
         cursor: pointer;
         &-img {
           width: 100%;
+          height: 160px;
           object-fit: cover;
           border-radius: 6px;
         }
