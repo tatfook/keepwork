@@ -1851,6 +1851,7 @@
     "teachersName": "Teacher Name",
     "studentCunt": "Student Count",
     "timeTo": "to",
-    "selectClassTime": "Please select date"
+    "selectClassTime": "Please select date",
+    "noViewPermissions": "No view permissions"
   }
 }

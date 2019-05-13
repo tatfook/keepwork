@@ -1841,6 +1841,7 @@
     "teachersName": "教师姓名",
     "studentCunt": "学生数",
     "timeTo": "至",
-    "selectClassTime": "请选择日期"
+    "selectClassTime": "请选择日期",
+    "noViewPermissions": "无查看权限"
   }
 }
