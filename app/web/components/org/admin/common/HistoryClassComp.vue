@@ -18,10 +18,10 @@
       <div class="historical-class-comp-form-item">
         <div class="historical-class-comp-form-label">{{$t('org.beginClassTime')}}</div>
         <div class="historical-class-comp-form-item-time">
-          <el-date-picker v-model="beginClassTime" type="date" :placeholder="$t('org.selectClassTime')">
+          <el-date-picker :disabled='isDetailPage' v-model="beginClassTime" type="date" :placeholder="$t('org.selectClassTime')">
           </el-date-picker>
           <span class="historical-class-comp-form-item-time-to">{{$t('org.timeTo')}}</span>
-          <el-date-picker v-model="endClassTime" type="date" :placeholder="$t('org.selectClassTime')">
+          <el-date-picker :disabled='isDetailPage' v-model="endClassTime" type="date" :placeholder="$t('org.selectClassTime')">
           </el-date-picker>
         </div>
       </div>
@@ -226,14 +226,17 @@ export default {
       this.classData.packages = packages
     },
     setSelectedTime() {
-      if (_.isNull(this.beginClassTime) && _.isNull(this.endClassTime)) {
+      if (_.isNull(this.beginClassTime)) {
         this.classData.begin = null
-        this.classData.end = null
-        return
+      } else {
+        this.classData.begin = this.beginClassTime
       }
-      let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 1000
-      this.classData.begin = this.beginClassTime
-      this.classData.end = endTime
+      if (_.isNull(this.endClassTime)) {
+        this.classData.end = null
+      } else {
+        let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 1000
+        this.classData.end = endTime
+      }
     },
     save() {
       this.setSelectedPackages()
