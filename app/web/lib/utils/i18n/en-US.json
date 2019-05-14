@@ -1852,6 +1852,8 @@
     "studentCunt": "Student Count",
     "timeTo": "to",
     "selectClassTime": "Please select date",
-    "noViewPermissions": "No view permissions"
+    "noViewPermissions": "No view permissions",
+    "logoutHint": "Hint",
+    "logoutTips": "Are you sure to quit the course system?"
   }
 }

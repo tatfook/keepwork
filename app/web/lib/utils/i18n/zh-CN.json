@@ -1804,7 +1804,7 @@
     "latestTeachingTime": "最近上课: ",
     "notYetStarted": "尚未开始学习",
     "learnedLessonsCount": "已经学习{packageCount}个课程",
-    "learnedFinished": "学完了!",
+    "learnedFinished": "已学完!",
     "IAmLearningOnKp": "我正在keepwork学习 {lessonName}，点击",
     "here": "这里",
     "joinAndLearn": "加入，并和我一起学习",
@@ -1842,6 +1842,8 @@
     "studentCunt": "学生数",
     "timeTo": "至",
     "selectClassTime": "请选择日期",
-    "noViewPermissions": "无查看权限"
+    "noViewPermissions": "无查看权限",
+    "logoutHint": "提示",
+    "logoutTips": "确定退出课程系统吗？"
   }
 }

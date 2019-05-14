@@ -112,7 +112,7 @@ $borderColor: #e8e8e8;
 	background-color: #f5f5f5;
 	&-container {
 		max-width: 1200px;
-		margin: 0 auto;
+		margin: 0 auto 30px;
 		display: flex;
 		padding-top: 24px;
 	}
