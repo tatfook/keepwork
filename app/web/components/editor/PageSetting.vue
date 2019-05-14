@@ -30,7 +30,7 @@
       <el-button class="layoutManagerBtn" type="primary" size="small">{{$t('editor.layoutManagement')}}</el-button>
     </div>
     <div @click.stop v-if='isWebsiteSettingShow'>
-      <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
+      <website-setting-dialog :activeIndex="1" :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
     </div>
   </div>
 </template>

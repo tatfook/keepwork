@@ -94,13 +94,16 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingPermission',
   props: {
-    siteDetail: {
-      type: Object,
-      required: true
-    },
     sitePath: String
   },
   async mounted() {
+    await this.userGetWebsiteDetailInfoByPath({
+      path: this.sitePath
+    })
+    this.siteDetail = _.cloneDeep(
+      this.getSiteDetailInfoByPath(this.sitePath).siteinfo
+    )
+    this.siteVisibility = this.siteDetail.visibility
     await this.userGetUserGroups()
     let siteId = this.siteId
     await this.userGetSiteGroupsBySiteId({ siteId })
@@ -112,14 +115,16 @@ export default {
         groupId: undefined,
         level: undefined
       },
+      siteDetail: {},
       tempGroups: [],
-      siteVisibility: this.siteDetail.visibility,
+      siteVisibility: undefined,
       isNewGroupDialogShow: false,
       editingGroupData: undefined
     }
   },
   computed: {
     ...mapGetters({
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       getSiteGroupsById: 'user/getSiteGroupsById',
       userGroups: 'user/userGroups'
     }),
@@ -144,6 +149,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
       userSaveSiteBasicSetting: 'user/saveSiteBasicSetting',
       userGetSiteGroupsBySiteId: 'user/getSiteGroupsBySiteId',
       userGetUserGroups: 'user/getUserGroups',
