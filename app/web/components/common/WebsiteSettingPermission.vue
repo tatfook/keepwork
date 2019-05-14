@@ -53,7 +53,6 @@
           </el-form-item>
           <el-form-item label="设定权限">
             <el-select v-model="tempAuth.level">
-              <el-option label="拒绝" :value="128"></el-option>
               <el-option label="浏览" :value="32"></el-option>
               <el-option label="编辑" :value="64"></el-option>
             </el-select>
@@ -137,8 +136,13 @@ export default {
         _.isUndefined(this.tempAuth.level)
       )
     },
-    siteGroups() {
+    siteGroupsWithDenied() {
       return _.cloneDeep(this.getSiteGroupsById({ siteId: this.siteId }))
+    },
+    siteGroups() {
+      return _.filter(this.siteGroupsWithDenied, group => {
+        return group.level != 128
+      })
     },
     filterAuthedGroups() {
       let authedGroupIds = _.map(this.siteGroups, 'groupId')
