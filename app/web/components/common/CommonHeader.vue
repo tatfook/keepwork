@@ -172,8 +172,8 @@ import LoginDialog from '@/components/common/LoginDialog'
 import RegisterDialog from '@/components/common/RegisterComp'
 import SearchBar from './SearchBar'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
-const CREATE_REG = /^\/creativity/
-const EXPLORATION_REG = /^\/exploration/
+const CREATE_REG = /^\/create/
+const EXPLORATION_REG = /^\/explore/
 const RANKING_REG = /^\/ranking/
 const STUDY_REG = /^\/s/
 
@@ -260,14 +260,14 @@ export default {
     },
     goCreativityPage() {
       if (this.$route.name !== 'CreativityPage') {
-        window.location.href = `${this.locationOrigin}/creativity`
+        window.location.href = `${this.locationOrigin}/create`
       }
     },
     goExplorationPage() {
       if (this.$route.name !== 'ExplorationPage') {
         window.location.href = `${
           this.locationOrigin
-        }/exploration?tab=allProjects`
+        }/explore?tab=allProjects`
       }
     },
     goRanking() {

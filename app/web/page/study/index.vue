@@ -18,6 +18,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueLazyload from 'vue-lazyload'
 import Cookies from 'js-cookie'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -43,6 +44,7 @@ import { MessageBox } from 'element-ui'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueLazyload)
 
 const i18n = new VueI18n({
   locale,

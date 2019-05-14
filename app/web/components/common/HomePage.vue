@@ -288,10 +288,10 @@ export default {
       this.isRegisterDialogShow = false
     },
     goCreativityPage() {
-      this.$router.push(`/creativity`)
+      this.$router.push(`/create`)
     },
     goExplorationPage() {
-      this.$router.push(`/exploration`)
+      this.$router.push(`/explore`)
     },
     goStudyPage() {
       window.location.href = `${

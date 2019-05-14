@@ -42,7 +42,7 @@
       </div>
       <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' :class='{selected: selectedMediaItem === mediaItem}' @click='handleSelectMediaItem(mediaItem)'>
         <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
-        <img v-if="mediaItem.type==='images'" :src="mediaItem.downloadUrl" class="media-type-media-item-img" />
+        <img v-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
         <div class='media-type-media-item-cover'>
           <!-- <span v-if='!mediaItem.checkPassed' :title='mediaItem.checkedState'>{{ mediaItem.filename }}</span> -->
           <i v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
@@ -84,28 +84,32 @@ export default {
     isImageTabShow: Boolean,
     isVideoTabShow: Boolean
   },
-  mounted(){
+  mounted() {
     this.keyupSubmit()
   },
   data() {
     return {
-      mediaFilterType: this.isImageTabShow ? 'image':'video',
+      mediaFilterType: this.isImageTabShow ? 'image' : 'video',
       selectedMediaItem: null,
       searchWord: '',
-      loading: false
+      loading: false,
+      qiniuImgThumbnail: '&imageView2/2/w/100'
     }
   },
   computed: {
     sortedSkyDriveMediaLibraryData() {
-      return _.sortBy(this.skyDriveMediaLibraryData, mediaItem => -moment(mediaItem.updatedAt).valueOf())
+      return _.sortBy(
+        this.skyDriveMediaLibraryData,
+        mediaItem => -moment(mediaItem.updatedAt).valueOf()
+      )
     },
     usedProcessBarClass() {
       let { usedPercent } = this.info
       return usedPercent >= 90
         ? 'media-type-total-used-danger'
         : usedPercent >= 70
-          ? 'media-type-total-used-warning'
-          : ''
+        ? 'media-type-total-used-warning'
+        : ''
     },
     isVideoAvailable() {
       return this.isVideoTabShow
@@ -121,10 +125,10 @@ export default {
     }
   },
   methods: {
-    keyupSubmit(){
+    keyupSubmit() {
       document.onkeydown = e => {
         let _key = window.event.keyCode
-        if(_key === 13){
+        if (_key === 13) {
           this.handleInsert(this.availableSelectedMediaItem)
         }
       }
@@ -162,7 +166,7 @@ export default {
         `<div>
           <style>.el-message-box__wrapper{background: black;}</style>
           <video id="${mediaItemVideoPreviewId}" src="${
-        mediaItem.downloadUrl
+          mediaItem.downloadUrl
         }" controls></video>
         </div>`,
         {
@@ -193,7 +197,7 @@ export default {
         .toString()
         .replace(/\.*0*$/, '')
   },
-  destroyed(){
+  destroyed() {
     document.onkeydown = null
   }
 }
@@ -283,7 +287,7 @@ export default {
     background-color: #d1d1d1;
     position: relative;
     vertical-align: middle;
-    [class*="icon"] {
+    [class*='icon'] {
       cursor: pointer;
     }
     &.selected {
@@ -329,7 +333,7 @@ export default {
       position: relative;
       cursor: pointer;
       &:after {
-        content: "";
+        content: '';
         display: block;
         position: relative;
         left: 2px;
@@ -378,7 +382,7 @@ export default {
         top: 31.4px;
         right: 32px;
         &:after {
-          content: "";
+          content: '';
           display: block;
           position: relative;
           left: 1.7px;

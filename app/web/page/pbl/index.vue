@@ -19,6 +19,7 @@ import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import VueAnalytics from 'vue-analytics'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueLazyload from 'vue-lazyload'
 import VueClipboard from 'vue-clipboard2'
 import router from './pbl.router'
 import userModule from '@/store/user'
@@ -35,6 +36,7 @@ import '@/components/common/thirdAuth'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueLazyload)
 Vue.use(VueClipboard)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,

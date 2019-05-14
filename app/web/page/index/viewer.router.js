@@ -19,12 +19,12 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/creativity',
+      path: '/create',
       name: 'CreativityPage',
       component: CreativityPage
     },
     {
-      path: '/exploration',
+      path: '/explore',
       name: 'ExplorationPage',
       component: ExplorationPage
     },

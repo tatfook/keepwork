@@ -33,7 +33,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
 
   function getMenuItemStyle(link) {
     let nowPageLink = window.location.href
-    return link == nowPageLink ? 'color: #409efe;' : ''
+    return encodeURI(link) == nowPageLink ? `color: ${m.options.activeFontColor};` : ''
   }
 
   return _.map(data, menuData => {
@@ -50,7 +50,6 @@ const renderTemplate = (h, m, data, parentIndex) => {
           <a
             target={m.menuTarget}
             href={menuData.link}
-            style={getMenuItemStyle(menuData.link)}
           >
             {m.getNameMenu(menuData)}
           </a>
@@ -154,8 +153,9 @@ export default {
             mode={this.mode}
             background-color={this.options.menuBackground}
             text-color={this.options.fontColor}
-            active-text-color={this.options.fontColor}
+            active-text-color={this.options.activeFontColor}
             style={this.menuStyle}
+            default-active={this.defaultActiveIndex}
             ref={this.menuRef}
           >
             {renderTemplate(h, this)}
@@ -179,7 +179,8 @@ export default {
   data() {
     return {
       indexLinks: {},
-      menuRef: 'memu' + Date.now()
+      menuRef: 'memu' + Date.now(),
+      defaultActiveIndex: undefined
     }
   },
   mounted() {
@@ -237,13 +238,15 @@ export default {
     setMenuOpend() {
       let nowPageLink = window.location.href
       let findedIndexLink = _.find(this.indexLinks, indexLinkObj => {
-        return indexLinkObj.link == nowPageLink
+        return encodeURI(indexLinkObj.link) == nowPageLink
       })
-      let key = findedIndexLink && findedIndexLink.parentIndex
-      key && this.$refs[this.menuRef].open(key)
+      let parentKey = findedIndexLink && findedIndexLink.parentIndex
+      parentKey && _.split(parentKey, '-').length > 1 && this.$refs[this.menuRef].open(parentKey)
+      this.defaultActiveIndex = findedIndexLink && findedIndexLink.index
     },
     setIndexLinks(key, link, parentIndex) {
       this.indexLinks[key] = {
+        index: key,
         parentIndex,
         link
       }
