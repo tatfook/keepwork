@@ -14,9 +14,6 @@
       <el-tooltip :content="$t('editor.close')">
         <el-button class="iconfont icon-delete____ edit-hover" size="mini" type="text" @click.stop='handleCloseConfirm(data)'></el-button>
       </el-tooltip>
-      <el-tooltip :content="$t('editor.delete')">
-        <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeOpenedFile(data)"></el-button>
-      </el-tooltip>
     </span>
     <div @click.stop class="close-dialog">
       <el-dialog center :visible.sync="dialogVisible" width="360px" closed="handleCloseDialog">
@@ -126,37 +123,6 @@ export default {
       data.savePending = true
       await this.savePageByPath(path)
       data.savePending = false
-    },
-    removeOpenedFile(data) {
-      let path = data.path
-      let pathArr = path.split('/')
-      let siteName = pathArr.slice(1, 2)
-      let pageName = pathArr
-        .slice(-1)
-        .join()
-        .replace(/\.md$/, '')
-      const h = this.$createElement
-      this.$msgbox({
-        title: this.$t('editor.modDelMsgTitle'),
-        message: h('p', null, [
-          h('span', null, `${this.$t('editor.delConfirm')}`),
-          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${pageName}" `),
-          h('span', null, `${this.$t('editor.page')}?`)
-        ]),
-        showCancelButton: true,
-        confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel')
-      }).then(async () => {
-        this.deletePending = true
-        await this.gitlabRemoveFile({ path }).catch(e => {
-          this.$message.error(this.$t('editor.deleteFail'))
-          this.deletePending = false
-        })
-        await this.deletePagesFromLayout({ paths: [path] })
-        this.removeRecentOpenFile(path)
-        this.resetPage(path)
-        this.deletePending = false
-      })
     },
     removeRecentOpenFile(path) {
       let delPath = `/${path.replace(/\.md$/, '')}`
