@@ -42,6 +42,28 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
+      <!-- TODO: 消息 -->
+      <el-menu-item v-if="isLogin" index="15" class="pull-right user-message-menu-item">
+        <el-popover popper-class="user-message-popper" placement="bottom" width="320" trigger="click">
+          <div class="user-message-main">
+            <div class="user-message-row">
+              <span class="message-title">[系统]</span>
+              <span class="message-content">Hi XX君你好!Hi 某某君 您好！恭喜您成功注册
+                为keepwork会员，点击视频了</span>
+              <span class="message-date">11:20</span>
+            </div>
+
+            <div class="user-message-row is-read">
+              <span class="message-title">[系统]</span>
+              <span class="message-content">Hi XX君你好!Hi 某某君 您好！恭喜您成功注册
+                为keepwork会员，点击视频了</span>
+              <span class="message-date">10:20</span>
+            </div>
+          </div>
+          <div class="user-message-button">打开消息中心</div>
+          <i slot="reference" class="iconfont icon-message-fill"></i>
+        </el-popover>
+      </el-menu-item>
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
@@ -265,9 +287,7 @@ export default {
     },
     goExplorationPage() {
       if (this.$route.name !== 'ExplorationPage') {
-        window.location.href = `${
-          this.locationOrigin
-        }/explore?tab=allProjects`
+        window.location.href = `${this.locationOrigin}/explore?tab=allProjects`
       }
     },
     goRanking() {
@@ -435,6 +455,39 @@ export default {
 }
 </style>
 <style lang="scss">
+.user-message-popper {
+  padding: 0px;
+  .user-message-main {
+    height: 250px;
+    padding: 12px 0;
+    .user-message-row {
+      display: flex;
+      font-size: 14px;
+      line-height: 21px;
+      padding: 12px;
+      &.is-read {
+        color: #c0c4cc;
+      }
+      &:hover {
+        color: #2397f3;
+        cursor: pointer;
+        background: #ecf5ff;
+      }
+      .message-content {
+        flex: 1;
+        padding: 0 8px;
+      }
+    }
+  }
+  .user-message-button {
+    text-align: center;
+    cursor: pointer;
+    height: 45px;
+    line-height: 45px;
+    font-size: 13px;
+    border-top: 1px solid #e8e8e8;
+  }
+}
 .message-dropdown {
   .message {
     position: relative;
