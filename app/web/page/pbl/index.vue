@@ -127,7 +127,7 @@ body {
   padding: 0;
 }
 .pbl-page {
-  min-height: 100%;
+  height: 100%;
   display: table;
   width: 100%;
   border-collapse: collapse;
