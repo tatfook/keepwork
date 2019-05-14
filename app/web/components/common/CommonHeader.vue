@@ -46,22 +46,21 @@
       <el-menu-item v-if="isLogin" index="15" class="pull-right user-message-menu-item">
         <el-popover popper-class="user-message-popper" placement="bottom" width="320" trigger="click">
           <div class="user-message-main">
-            <div class="user-message-row">
+
+            <div :class="['user-message-row', { 'is-read': item % 2 === 0 }]" v-for="item in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]" :key="item">
               <span class="message-title">[系统]</span>
               <span class="message-content">Hi XX君你好!Hi 某某君 您好！恭喜您成功注册
                 为keepwork会员，点击视频了</span>
               <span class="message-date">11:20</span>
             </div>
 
-            <div class="user-message-row is-read">
-              <span class="message-title">[系统]</span>
-              <span class="message-content">Hi XX君你好!Hi 某某君 您好！恭喜您成功注册
-                为keepwork会员，点击视频了</span>
-              <span class="message-date">10:20</span>
-            </div>
           </div>
-          <div class="user-message-button">打开消息中心</div>
-          <i slot="reference" class="iconfont icon-message-fill"></i>
+          <div class="user-message-button" @click="toMessageCenter">打开消息中心</div>
+          <div slot="reference" class="user-message-icon-container">
+            <el-badge :value="12" class="user-message-badge">
+              <i class="iconfont icon-message-fill user-message-icon"></i>
+            </el-badge>
+          </div>
         </el-popover>
       </el-menu-item>
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
@@ -349,6 +348,9 @@ export default {
     },
     closeRegisterDialog() {
       this.isRegisterDialogShow = false
+    },
+    toMessageCenter() {
+      window.location.href = `${window.location.origin}/msg`
     }
   },
   filters: {
@@ -460,6 +462,7 @@ export default {
   .user-message-main {
     height: 250px;
     padding: 12px 0;
+    overflow-y: auto;
     .user-message-row {
       display: flex;
       font-size: 14px;
@@ -475,7 +478,17 @@ export default {
       }
       .message-content {
         flex: 1;
-        padding: 0 8px;
+        height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp:2;
+        line-height: 20px;
+        -webkit-box-orient: vertical;
+        padding: 0 6px;
+      }
+      .message-date {
+        font-size: 12px;
       }
     }
   }
@@ -516,6 +529,21 @@ export default {
   }
 }
 .common-header {
+  .user-message-icon-container {
+    .user-message-badge {
+      height: 20px;
+      line-height: 20px;
+      .el-badge__content {
+        height: 16px;
+        line-height: 16px;
+        padding: 0 4px;
+        font-size: 12px;
+      }
+    }
+    .user-message-icon {
+      font-size: 30px;
+    }
+  }
   &-menu-ranking {
     padding-right: 4px !important;
     &-img {
