@@ -56,7 +56,13 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index="5" class="pull-right hidden-sm-and-up" v-if="isLogin">
+      <el-menu-item index='8' class="pull-right register-button" v-if="!isLogin">
+        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
+      </el-menu-item>
+      <el-menu-item index='9' class="pull-right login-button" v-if="!isLogin">
+        <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
+      </el-menu-item>
+      <el-menu-item index="5" class="pull-right hidden-sm-and-up">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-menu"></i>
@@ -69,12 +75,6 @@
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh">{{$t('project.downloadParacraft')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-menu-item>
-      <el-menu-item index='8' class="pull-right register-button" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
-      </el-menu-item>
-      <el-menu-item index='9' class="pull-right login-button" v-if="!isLogin">
-        <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
       <el-menu-item index='14' class="hidden-xs-only pull-right common-header-menu-download" @click="downloadParacraft()">
         <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
