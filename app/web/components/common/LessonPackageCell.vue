@@ -85,7 +85,7 @@ export default {
     &-desc {
       font-size: 12px;
       color: #909399;
-      &-text {
+      &-text {     
         height: 60px;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -44,10 +44,10 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     switchTab(tabname, index) {
-      if (index == 1) {
-        this.$message.info('敬请期待')
-        return
-      }
+      // if (index == 1) {
+      //   this.$message.info('敬请期待')
+      //   return
+      // }
       if (index == 2) {
         window.open('https://keepwork.com/official/docs/index')
         return
