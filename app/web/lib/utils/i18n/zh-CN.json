@@ -1730,7 +1730,7 @@
     "includes": "包含:",
     "packagesCount": "个课程包",
     "moreLessons": "更多课程",
-    "logout": "退出",
+    "logout": "退出登录",
     "allowTeacherToManage": "是否允许任课教师管理学生信息",
     "ClassesLabel": "班级",
     "TeachersLabel": "教师",
