@@ -87,8 +87,8 @@ const actions = {
       commit(GET_ORG_PACKAGES_SUCCESS, packages)
     }
   },
-  async getOrgPackageDetail({ commit }, { packageId }) {
-    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })
+  async getOrgPackageDetail({ commit }, { roleId = 1, packageId }) {
+    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId, roleId })
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
