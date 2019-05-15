@@ -116,7 +116,7 @@ export default {
       padding: 0 8px;
     }
     &-date {
-      width: 110px;
+      width: 112px;
       text-align: center;
     }
   }
@@ -147,8 +147,9 @@ export default {
       text-overflow: ellipsis;
     }
     &-date {
-      width: 110px;
+      width: 112px;
       text-align: center;
+      white-space: nowrap;
     }
   }
 }
