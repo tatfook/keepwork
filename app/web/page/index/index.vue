@@ -29,6 +29,7 @@ import VueI18n from 'vue-i18n'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import lessonModule from '@/store/lesson'
+import messageModule from '@/store/message'
 import VueClipboard from 'vue-clipboard2'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -70,7 +71,8 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     pbl: pblModule,
-    lesson: lessonModule
+    lesson: lessonModule,
+    message: messageModule
   }
 })
 

@@ -1,29 +1,18 @@
 <template>
   <div class="message-system">
     <div class="message-system-title">系统</div>
-    <div class="message-system-item" v-for="item in [1,2,3,4,5,6,7,8]" :key="item">
+    <div class="message-system-item" v-for="item in systemMessages" :key="item.id">
       <img class="message-avatar" :src="systemAvatar" alt="系统头像">
       <div class="message-main">
         <span class="message-main-sender">系统</span>
-        <span class="message-main-date">2019年4月16日 15:00</span>
-        <div class="message-main-content">
-          #NPL动画与编程大赛#开始啦！
-          [截止时间]报名截至到2019年5月32日
-          活动详情请戳
-          #NPL动画与编程大赛#开始啦！
-          [截止时间]报名截至到2019年5月32日
-          活动详情请戳
-          #NPL动画与编程大赛#开始啦！
-          [截止时间]报名截至到2019年5月32日
-          活动详情请戳
-          #NPL动画与编程大赛#开始啦！
-          [截止时间]报名截至到2019年5月32日
-          活动详情请戳
-          #NPL动画与编程大赛#开始啦！
-          [截止时间]报名截至到2019年5月32日
-          活动详情请戳
+        <span class="message-main-date">{{item.createdAt | formatDate}}</span>
+        <div class="message-main-content" v-html="item.messages.msg.text">
         </div>
       </div>
+    </div>
+    <div class="message-pagination">
+      <el-pagination :hide-on-single-page="hideOnSinglePage" :page-size="10" :total="5" layout="prev, pager, next">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -31,11 +20,50 @@
 <script>
 import systemAvatar from '@/assets/message/system-avatar.png'
 import moment from 'moment'
+import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'MessageSystem',
   data() {
     return {
-      systemAvatar
+      systemAvatar,
+      hideOnSinglePage: false
+    }
+  },
+  filters: {
+    formatDate(date) {
+      return date ? moment(date).format('YYYY-M-DD H:mm') : ''
+    }
+  },
+  async mounted() {
+    await this.getMessages()
+    if (this.currentPageUnreadMessageIDs) {
+      await this.signMessages(this.currentPageUnreadMessageIDs)
+      await this.getUnreadMessages()
+    }
+  },
+  methods: {
+    ...mapActions({
+      getMessages: 'message/getMessages',
+      signMessages: 'message/signMessages',
+      getUnreadMessages: 'message/getUnreadMessages'
+    })
+  },
+  computed: {
+    ...mapGetters({
+      messages: 'message/messages'
+    }),
+    systemMessages() {
+      return _.filter(
+        _.get(this.messages, 'rows', []),
+        item => item.messages.sender === 0
+      )
+    },
+    currentPageUnreadMessageIDs() {
+      return _.map(
+        _.filter(this.systemMessages, item => item.state === 0),
+        msg => msg.id
+      )
     }
   }
 }
@@ -81,9 +109,12 @@ export default {
         margin-top: 14px;
         color: #606266;
         font-size: 14px;
-        line-height: 1.8;
       }
     }
+  }
+  .message-pagination {
+    display: flex;
+    justify-content: flex-end;
   }
 }
 </style>

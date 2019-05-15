@@ -1,5 +1,5 @@
 <template>
-    <div class="message-page" v-loading="loading">
+  <div class="message-page" v-loading="loading">
     <div class="messsage-page-header">
       <common-header class="container"></common-header>
     </div>
@@ -25,6 +25,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import router from './message.router'
 import userModule from '@/store/user'
+import messageModule from '@/store/message'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -46,7 +47,8 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    user: userModule
+    user: userModule,
+    message: messageModule
   }
 })
 
@@ -58,10 +60,33 @@ export default {
     CommonHeader,
     CommonFooter,
     LoginDialog
- },
+  },
   data() {
     return {
       loading: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined'
+    })
+  },
+  async created() {
+    if (!this.isLogined) {
+      return window.location.href = window.location.origin
+    }
+    await this.loadAccountPresets()
+  },
+  methods: {
+    ...mapActions({
+      toggleLoginDialog: 'user/toggleLoginDialog',
+      getUserProfile: 'user/getProfile'
+    }),
+    async loadAccountPresets() {
+      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
+        console.error(err)
+      )
+      this.loading = false
     }
   }
 }
