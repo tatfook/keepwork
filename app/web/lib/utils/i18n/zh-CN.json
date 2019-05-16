@@ -856,6 +856,8 @@
     "searchMine": "我的网站"
   },
   "lesson": {
+    "viewLessonPackageInfo": "查看课程所属课程包",
+    "foldLessonPackageInfo": "收起课程包信息",
     "skillPointDetails": "技能点详情",
     "lessonIndexLabel": "课程",
     "formatError": "格式错误",
