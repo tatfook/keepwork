@@ -49,9 +49,9 @@ export default {
           this.toHistoryClassListPage()
         })
         .catch(error => {
-          console.log(error)
+          const message = error.data ? error.data.message : this.$t('org.failedUpdatedClass')
           this.$message({
-            message: this.$t('org.failedUpdatedClass'),
+            message: message,
             type: 'error'
           })
           this.isLoading = false
