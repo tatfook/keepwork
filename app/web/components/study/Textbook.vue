@@ -48,7 +48,7 @@
         <p class="textbook-page-foreword-intro-address"><a href="lixizhi@paraengine.com">lixizhi@paraengine.com</a></p>
         <p class="textbook-page-foreword-intro-address"><a href="https://keepwork.com/">https://keepwork.com/</a></p>
         <div class="textbook-page-foreword-long-words" v-show="showMoreInfo">
-          <combo-box projectName="junjun0517/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
+          <combo-box projectName="official/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
         </div>
         <div class="textbook-page-foreword-intro-more" @click="viewMoreInfo">{{showMoreInfo ? '收起':'阅读更多'}}</div>
       </div>
