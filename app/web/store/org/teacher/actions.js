@@ -57,8 +57,8 @@ const actions = {
       commit(GET_TAUGHT_CLASSROOM_COURSES_SUCCESS, { classId, classroomCourses })
     }
   },
-  async getOrgClassPackageDetail({ commit }, { classId, packageId }) {
-    const packageDetail = await lessonOrganizationClasses.getClassPackageDetail({ classId, packageId })
+  async getOrgClassPackageDetail({ commit }, { classId, packageId, roleId = 2 }) {
+    const packageDetail = await lessonOrganizationClasses.getClassPackageDetail({ classId, packageId, roleId })
     commit(GET_CLASS_PACKAGE_DETAIL_SUCCESS, { classId, packageId, packageDetail })
   },
   async addStudentToClass(

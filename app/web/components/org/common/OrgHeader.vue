@@ -33,7 +33,15 @@ export default {
       userLogout: 'user/logout'
     }),
     async logout() {
-      await this.userLogout().catch()
+      this.$confirm(this.$t('org.logoutTips'), this.$t('org.logoutHint'), {
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel'),
+        type: 'warning'
+      })
+      .then(() => {
+        this.userLogout().catch()
+      })
+      .catch(err => console.error(err))
     }
   }
 }

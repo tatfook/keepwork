@@ -19,6 +19,7 @@
 <script>
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueLazyload from 'vue-lazyload'
 import VueAnalytics from 'vue-analytics'
 import { sync } from 'vuex-router-sync'
 import { mapActions, mapGetters } from 'vuex'
@@ -45,6 +46,7 @@ Vue.use(ElementUI)
 Vue.use(VueClipboard)
 
 Vue.use(VueI18n)
+Vue.use(VueLazyload)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,

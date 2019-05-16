@@ -13,6 +13,7 @@
 import Vue from 'vue'
 import Vuex, { mapGetters, mapActions } from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueLazyload from 'vue-lazyload'
 import VueAnalytics from 'vue-analytics'
 import jsrsasign from 'jsrsasign'
 import Cookies from 'js-cookie'
@@ -33,6 +34,7 @@ import { keepwork } from '@/api'
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.component(Vhistogram.name, Vhistogram)
+Vue.use(VueLazyload)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,

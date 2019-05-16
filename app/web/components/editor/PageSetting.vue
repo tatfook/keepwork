@@ -271,6 +271,16 @@ export default {
       border-right: 40px solid white;
     }
   }
+  .fullscreen-template {
+    &-max-width {
+      border: 40px solid #fff;
+      border-width: 0 40px;
+    }
+  }
+  .content-max-width-template {
+    border: 40px solid #fff;
+    border-width: 0 40px;
+  }
 }
 </style>
 

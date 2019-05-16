@@ -1726,6 +1726,7 @@
     "forMoreInformation": "For more information, please contact QQ: {qq}"
   },
   "org": {
+    "Help": "Help",
     "moreStudy": "More",
     "loginToOrg": "Login To Organization",
     "kpUsername": "Keepwork Account",
@@ -1850,6 +1851,10 @@
     "historicalData": "Historical Data",
     "teachersName": "Teacher Name",
     "studentCunt": "Student Count",
-    "timeTo": "to"
+    "timeTo": "to",
+    "selectClassTime": "Please select date",
+    "noViewPermissions": "No view permissions",
+    "logoutHint": "Hint",
+    "logoutTips": "Are you sure to quit the course system?"
   }
 }

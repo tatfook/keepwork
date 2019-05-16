@@ -18,6 +18,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueLazyload from 'vue-lazyload'
 import Cookies from 'js-cookie'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -40,9 +41,12 @@ import { lesson } from '@/api'
 import axios from 'axios'
 import jsrsasign from 'jsrsasign'
 import { MessageBox } from 'element-ui'
+import comboModule from '@/store/combo'
+
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueLazyload)
 
 const i18n = new VueI18n({
   locale,
@@ -60,7 +64,8 @@ const store = new Vuex.Store({
     gitlab: gitlabModule,
     lesson: lessonModule,
     org: orgModule,
-    pbl: pblModule
+    pbl: pblModule,
+    combo: comboModule
   }
 })
 

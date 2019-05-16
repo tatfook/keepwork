@@ -14666,6 +14666,11 @@ vue-keep-scroll-position@^0.1.2:
   resolved "http://registry.npm.taobao.org/vue-keep-scroll-position/download/vue-keep-scroll-position-0.1.2.tgz#0ff8f4d2701c867556b0b0eff3cd0d06a453e14f"
   integrity sha1-D/j00nAchnVWsLDv880NBqRT4U8=
 
+vue-lazyload@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.npm.taobao.org/vue-lazyload/download/vue-lazyload-1.2.6.tgz#baa04c172d52a812608eb12c7a6bfb14f5c91079"
+  integrity sha1-uqBMFy1SqBJgjrEsemv7FPXJEHk=
+
 vue-loader@^15.7.0:
   version "15.7.0"
   resolved "http://registry.npm.taobao.org/vue-loader/download/vue-loader-15.7.0.tgz?cache=0&other_urls=http%3A%2F%2Fregistry.npm.taobao.org%2Fvue-loader%2Fdownload%2Fvue-loader-15.7.0.tgz#27275aa5a3ef4958c5379c006dd1436ad04b25b3"

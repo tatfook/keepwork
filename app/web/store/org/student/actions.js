@@ -87,8 +87,8 @@ const actions = {
       commit(GET_ORG_PACKAGES_SUCCESS, packages)
     }
   },
-  async getOrgPackageDetail({ commit }, { packageId }) {
-    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })
+  async getOrgPackageDetail({ commit }, { roleId = 1, packageId }) {
+    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId, roleId })
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
@@ -219,26 +219,26 @@ const actions = {
   },
   async getTeachingLesson({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
     const res = await graphql.getQueryResult({
-      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classroom{id, key, state, extra}} } }',
+      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classrooms{id, key, state, packageId, lessonId, extra}} } }',
       variables: {
         organizationId,
         username
       }
     })
     const today = Date.now()
-    const organizationClasses = _.filter(
-      _.get(res, 'organizationUser.organizationClasses', []),
-      item => item.classroom && +new Date(item.end) > today && (item.roleId & 1) > 0 // eslint-disable-line no-bitwise
-    )
-    const teachingLesson = _.map(organizationClasses, item => {
-      const { extra = {}, ...reset } = item.classroom
+    const organizationClasses = _.filter(_.get(res, 'organizationUser.organizationClasses', []), item => (item.roleId & 1) > 0 && +new Date(item.end) > today) // eslint-disable-line no-bitwise
+    const teachingLesson = _.reduce(organizationClasses, (arr, cur) => {
+      return [...arr, ...cur.classrooms]
+    }, [])
+    const result = _.map(teachingLesson, item => {
+      const { extra = {}, ...reset } = item
       return {
         id: item.id,
         ...extra,
         ...reset
       }
     })
-    commit(GET_TEACHING_LESSON_SUCCESS, teachingLesson)
+    commit(GET_TEACHING_LESSON_SUCCESS, result)
   },
   async checkClassroom({ commit, dispatch }) {
     await lesson.classrooms.currentClass().catch(e => {

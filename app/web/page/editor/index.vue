@@ -24,6 +24,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import VueLazyload from 'vue-lazyload'
 import VueAnalytics from 'vue-analytics'
 import { sync } from 'vuex-router-sync'
 import fullscreen from 'vue-fullscreen'
@@ -55,6 +56,7 @@ Vue.use(VueKeepScrollPosition)
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueLazyload)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,

@@ -19,7 +19,7 @@ export default {
     this.inputValue = this.inputTypeValue
   },
   watch: {
-    inputTypeValue(value) {
+    originValue(value) {
       this.inputValue = value
     }
   },

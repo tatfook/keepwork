@@ -632,7 +632,8 @@ export default [
       theme: {
         menu: {
           menuBackground: 'bgColor',
-          fontColor: 'fontsColor'
+          fontColor: 'color_5',
+          activeFontColor: 'color_1'
         }
       },
       config: {
@@ -663,7 +664,8 @@ export default [
       theme: {
         menu: {
           menuBackground: 'bg_color_4',
-          fontColor: 'fontsColor'
+          fontColor: 'fontsColor',
+          activeFontColor: 'color_7'
         }
       },
       config: {
@@ -694,7 +696,8 @@ export default [
       theme: {
         menu: {
           menuBackground: 'bg_color_0',
-          fontColor: 'color_4'
+          fontColor: 'color_4',
+          activeFontColor: 'color_7'
         }
       },
       config: {

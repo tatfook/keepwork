@@ -44,10 +44,10 @@ export default {
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
     switchTab(tabname, index) {
-      if (index == 1) {
-        this.$message.info('敬请期待')
-        return
-      }
+      // if (index == 1) {
+      //   this.$message.info('敬请期待')
+      //   return
+      // }
       if (index == 2) {
         window.open('https://keepwork.com/official/docs/index')
         return
@@ -93,7 +93,7 @@ export default {
         'EditPackage',
         'EditLesson'
       ]
-      if(CREATE_PACKAGE_ROUTER_NAME.includes(name)) {
+      if (CREATE_PACKAGE_ROUTER_NAME.includes(name)) {
         this.activeIndex = 6
       }
     }
@@ -119,7 +119,7 @@ export default {
   z-index: 999;
   position: relative;
   &-menu {
-    width: 1200px;
+    max-width: 1200px;
     min-height: 64px;
     margin: 24px auto;
     border-radius: 10px;
@@ -154,10 +154,21 @@ export default {
   .study-homepage-header {
     margin: 0;
     &-menu {
-      &-left-button {
+      &-left {
+      }
+      .tab-cell {
+        padding: 0 4px;
       }
       &-right {
       }
+    }
+  }
+}
+@media screen and (max-width: 362px) {
+  .study-homepage-header {
+    margin: 0;
+    &-menu {
+      padding: 0;
     }
   }
 }
