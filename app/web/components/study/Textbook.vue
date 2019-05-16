@@ -116,7 +116,8 @@ export default {
   data() {
     return {
       currentSelectedImg: 0,
-      content: '**李西峙**：1982年出生于哈尔滨。2005年毕业于浙江大学计算机系（竺可桢学院）。大学期间他在国内外会议和刊物上发表游戏引擎，脚本语言技术，三维动画制作，CPU芯片设计相关论文和著作8篇。2004年出于长期对人工智能的兴趣和研究，他创立了NPL语言（Neural Parallel Language）和ParaEngine 3D游戏引擎，至今写了过百万的开源代码和各种开发工具。Paracraft也是基于NPL语言开发的一款3D创作工具。2007-2015年，他先后获得著名风险投资IDG和国内著名企业家的投资，并任CEO。',
+      content:
+        '**李西峙**：1982年出生于哈尔滨。2005年毕业于浙江大学计算机系（竺可桢学院）。大学期间他在国内外会议和刊物上发表游戏引擎，脚本语言技术，三维动画制作，CPU芯片设计相关论文和著作8篇。2004年出于长期对人工智能的兴趣和研究，他创立了NPL语言（Neural Parallel Language）和ParaEngine 3D游戏引擎，至今写了过百万的开源代码和各种开发工具。Paracraft也是基于NPL语言开发的一款3D创作工具。2007-2015年，他先后获得著名风险投资IDG和国内著名企业家的投资，并任CEO。',
       books: [
         {
           imgUrl: require('@/assets/org/0.png')
@@ -142,7 +143,7 @@ export default {
   },
   components: {
     ProductZoom,
-    ComboBox,
+    ComboBox
   },
   methods: {
     goPurchase(url) {
@@ -581,6 +582,31 @@ export default {
           width: 30%;
           text-align: center;
           margin: 0 auto;
+        }
+      }
+    }
+    .purchase-dialog {
+      &-book {
+        display: block;
+        text-align: center;
+        &-cover {
+          text-align: center;
+          display: flex;
+          width: 100%;
+          justify-content: center;
+          padding: 12px;
+          box-sizing: border-box;
+          img {
+            width: 80%;
+          }
+        }
+      }
+      &-methods {
+        // display: block;
+      }
+      /deep/ {
+        .el-dialog {
+          width: 90% !important;
         }
       }
     }
