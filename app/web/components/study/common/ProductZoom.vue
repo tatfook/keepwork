@@ -6,7 +6,7 @@
         <div class="mask" ref="mask"></div>
       </div>
       <div class="big" ref="big">
-        <img width="200%" :src="imageUrl" ref="bigImg" />
+        <img :src="imageUrl" ref="bigImg" />
       </div>
     </div>
   </div>
@@ -76,6 +76,7 @@ $smallHeight: 267px;
     position: relative;
     width: $smallWidth;
     height: $smallHeight;
+    border-radius: 8px;
     &-img {
       width: 100%;
       height: 100%;
@@ -94,7 +95,7 @@ $smallHeight: 267px;
   }
   .big {
     width: 400px;
-    height: 400px;
+    height: 500px;
     border: 1px solid rgb(219, 238, 185);
     position: absolute;
     top: 0;
