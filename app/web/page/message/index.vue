@@ -9,9 +9,6 @@
     <div class="message-page-footer">
       <common-footer class="container"></common-footer>
     </div>
-    <!-- <div @click.stop v-if="isShowLoginDialog">
-      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
-    </div> -->
   </div>
 </template>
 
@@ -19,6 +16,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueLazyload from 'vue-lazyload'
+import VueSocketIO from 'vue-socket.io'
+import SocketIO from 'socket.io-client'
 import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -36,6 +35,24 @@ import CommonFooter from '@/components/common/CommonFooter'
 Vue.use(Vuex)
 Vue.use(VueLazyload)
 Vue.use(VueI18n)
+// Vue.use(
+//   new VueSocketIO({
+//     debug: true,
+//     connection: 'https://socket.keepwork.com:80',
+//     vuex: {
+//       sotre: messageModule,
+//       actionPrefix: 'SOCKET_',
+//       mutationPrefix: 'SOCKET_'
+//     },
+//     options: {
+//       query: {
+//         token: 'eyJhbGciOiJIUzEiLCJ0eXAiOiJKV1QifQ.eyJ1c2VySWQiOjEzNSwicm9sZUlkIjowLCJ1c2VybmFtZSI6ImtldmlueGZ0IiwiZXhwIjoxNTU4MTQ1MzUzLjIzMX0.VWQxYU00K1RiTU9FOHdZZFp6TTdmRlV0U1h3PQ',
+//         userId: 135
+//       }
+//     }
+//   })
+// )
+
 const i18n = new VueI18n({
   locale,
   messages: i18nMessages
@@ -61,6 +78,14 @@ export default {
     CommonFooter,
     LoginDialog
   },
+  // sockets: {
+  //   connect() {
+  //     console.warn('sockets connect 🙄🙄🙄')
+  //   },
+  //   error(err) {
+  //     console.error(err)
+  //   },
+  // },
   data() {
     return {
       loading: false
@@ -73,9 +98,22 @@ export default {
   },
   async created() {
     if (!this.isLogined) {
-      return window.location.href = window.location.origin
+      return (window.location.href = window.location.origin)
     }
     await this.loadAccountPresets()
+  },
+  mounted() {
+    // const io = SocketIO('http://socket.keepwork.com/', {
+    //   query: {
+    //     toekn: 'kevin',
+    //     userId: 135
+    //   },
+    //   transports: ['websocket']
+    // })
+    // io.on('connection', socket => {
+    //   console.log('connect')
+    // })
+    // io.on('boardcase', data => console.log('data'))
   },
   methods: {
     ...mapActions({
