@@ -4,7 +4,7 @@
       <div class="textbook-page-book-left">
         <product-zoom :imageUrl="currentImg"></product-zoom>
         <div class="textbook-page-book-left-images">
-          <img v-for="(i,index) in books" :key="index" class="textbook-page-book-left-images-img" :src="i.imgUrl" alt="" @click="selectImg(i)">
+          <img v-for="(i,index) in books" :key="index" :class="['textbook-page-book-left-images-img', {'img-selected': index === currentSelectedImg}]" :src="i.imgUrl" alt="" @click="selectImg(i,index)">
         </div>
       </div>
       <div class="textbook-page-book-right">
@@ -264,6 +264,7 @@ export default {
   name: 'Textbook',
   data() {
     return {
+      currentSelectedImg: 0,
       books: [
         {
           imgUrl: require('@/assets/org/book2.png')
@@ -370,8 +371,9 @@ export default {
           break
       }
     },
-    selectImg(i) {
+    selectImg(i,index) {
       this.currentImg = i.imgUrl
+      this.currentSelectedImg = index
     },
     viewMoreInfo() {
       this.showMoreInfo = !this.showMoreInfo
@@ -390,6 +392,7 @@ export default {
     padding: 16px;
     display: flex;
     flex-wrap: wrap;
+    box-sizing: border-box;
     &-left {
       width: 500px;
       border-radius: 10px;
@@ -402,6 +405,11 @@ export default {
           margin: 10px;
           object-fit: cover;
           cursor: pointer;
+          border-radius: 5px;
+          box-sizing: border-box;
+          &.img-selected {
+            border: 2px solid #409eff;
+          }
         }
       }
     }
