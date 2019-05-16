@@ -110,7 +110,6 @@
 <script>
 import ProductZoom from './common/ProductZoom'
 import ComboBox from '@/components/combo/ComboBox'
-import VueMarkdown from 'vue-markdown'
 
 export default {
   name: 'Textbook',
@@ -144,7 +143,6 @@ export default {
   components: {
     ProductZoom,
     ComboBox,
-    VueMarkdown
   },
   methods: {
     goPurchase(url) {
