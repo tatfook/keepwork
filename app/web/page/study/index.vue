@@ -41,6 +41,8 @@ import { lesson } from '@/api'
 import axios from 'axios'
 import jsrsasign from 'jsrsasign'
 import { MessageBox } from 'element-ui'
+import comboModule from '@/store/combo'
+
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -62,7 +64,8 @@ const store = new Vuex.Store({
     gitlab: gitlabModule,
     lesson: lessonModule,
     org: orgModule,
-    pbl: pblModule
+    pbl: pblModule,
+    combo: comboModule
   }
 })
 
