@@ -101,7 +101,14 @@ $smallHeight: 267px;
     left: $smallWidth + 8px;
     overflow: hidden;
     display: none;
-
+  }
+}
+@media screen and (max-width: 769px) {
+  .product-zoom {
+    .small {
+      width: 100%;
+      height: 100% * 496 / 267;
+    }
   }
 }
 </style>

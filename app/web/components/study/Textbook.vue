@@ -389,6 +389,7 @@ export default {
     margin: 20px auto;
     padding: 16px;
     display: flex;
+    flex-wrap: wrap;
     &-left {
       width: 500px;
       border-radius: 10px;
@@ -397,8 +398,9 @@ export default {
         padding-top: 12px;
         &-img {
           width: 80px;
-          height: 80px;
+          height: 50px;
           margin: 10px;
+          object-fit: cover;
           cursor: pointer;
         }
       }
@@ -645,6 +647,83 @@ export default {
         box-sizing: border-box;
         text-decoration: none;
         justify-content: center;
+      }
+    }
+  }
+}
+@media screen and (max-width: 769px) {
+  .textbook-page {
+    &-book {
+      &-left {
+        width: 100%;
+        &-images {
+          &-img {
+            margin: 4px;
+            border-radius: 8px;
+          }
+        }
+      }
+      &-right {
+        width: 100%;
+        &-price {
+          &-purchase {
+            display: inline-block;
+            width: 40%;
+            margin: 0 0 0 20px;
+            text-align: center;
+          }
+        }
+      }
+    }
+    &-information {
+      &-box {
+        width: 100%;
+        &-cover {
+          &-img {
+            width: 50%;
+            &-image {
+              width: 96%;
+              height: 120px;
+              border-radius: 10px;
+            }
+          }
+        }
+      }
+    }
+    &-teachers {
+      background: url(../../assets/org/图.png) center top no-repeat;
+      background-size: 100%;
+      min-height: 520px;
+      padding: 10px 30px 0;
+      margin: 0;
+      &-desc {
+        text-align: center;
+        // padding: 0 40px;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        &-rectangle {
+          display: block;
+          margin: 0 auto;
+        }
+        &-text {
+          margin: 10px 0;
+        }
+        &-more {
+          display: block;
+          width: 30%;
+          text-align: center;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 362px) {
+  .textbook-page {
+    &-teachers {
+      min-height: 500px;
+      &-desc {
       }
     }
   }
