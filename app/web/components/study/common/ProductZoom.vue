@@ -76,8 +76,8 @@ $smallHeight: 267px;
     position: relative;
     width: $smallWidth;
     height: $smallHeight;
-    border-radius: 8px;
     &-img {
+      border-radius: 8px;
       width: 100%;
       height: 100%;
       object-fit: cover;
