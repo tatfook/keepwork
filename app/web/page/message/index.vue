@@ -38,7 +38,7 @@ Vue.use(VueI18n)
 // Vue.use(
 //   new VueSocketIO({
 //     debug: true,
-//     connection: 'https://socket.keepwork.com:80',
+//     connection: 'https://socket.keepwork.com/',
 //     vuex: {
 //       sotre: messageModule,
 //       actionPrefix: 'SOCKET_',
@@ -46,9 +46,8 @@ Vue.use(VueI18n)
 //     },
 //     options: {
 //       query: {
-//         token: 'eyJhbGciOiJIUzEiLCJ0eXAiOiJKV1QifQ.eyJ1c2VySWQiOjEzNSwicm9sZUlkIjowLCJ1c2VybmFtZSI6ImtldmlueGZ0IiwiZXhwIjoxNTU4MTQ1MzUzLjIzMX0.VWQxYU00K1RiTU9FOHdZZFp6TTdmRlV0U1h3PQ',
-//         userId: 135
-//       }
+//       },
+//       transports: ['websocket']
 //     }
 //   })
 // )
@@ -80,11 +79,14 @@ export default {
   },
   // sockets: {
   //   connect() {
-  //     console.warn('sockets connect 🙄🙄🙄')
+  //     console.warn('sockets connect 💡')
   //   },
   //   error(err) {
   //     console.error(err)
   //   },
+  //   broadcast(data) {
+  //     console.log(data)
+  //   }
   // },
   data() {
     return {
@@ -101,19 +103,6 @@ export default {
       return (window.location.href = window.location.origin)
     }
     await this.loadAccountPresets()
-  },
-  mounted() {
-    // const io = SocketIO('http://socket.keepwork.com/', {
-    //   query: {
-    //     toekn: 'kevin',
-    //     userId: 135
-    //   },
-    //   transports: ['websocket']
-    // })
-    // io.on('connection', socket => {
-    //   console.log('connect')
-    // })
-    // io.on('boardcase', data => console.log('data'))
   },
   methods: {
     ...mapActions({
