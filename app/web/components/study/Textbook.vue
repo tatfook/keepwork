@@ -33,7 +33,7 @@
         <div class="textbook-page-book-right-price">
           <span class="textbook-page-book-right-price-icon">￥</span>
           <span class="textbook-page-book-right-price-count">96</span>
-          <span class="textbook-page-book-right-price-purchase" @click="goPurchase('https://s.taobao.com/search?q=Paracraft%E5%88%9B%E6%84%8F%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8&imgfile=&js=1&stats_click=search_radio_all%3A1&initiative_id=staobaoz_20190507&ie=utf8')">购买</span>
+          <span class="textbook-page-book-right-price-purchase" @click="goPurchase('https://item.taobao.com/item.htm?spm=a1z10.1-c-s.w4004-21675647078.2.40326b5eXGKqAM&id=594558350038')">购买</span>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
         <span class="textbook-page-teachers-desc-rectangle"></span>
         <p class="textbook-page-teachers-desc-text">学生、家长、教师的AI与编程入门教材，适合7岁以上用户使用。<br>
           学习《paracraft编程入门》，用编程创造世界。</p>
-        <span class="textbook-page-teachers-desc-more" @click="goPurchase('https://s.taobao.com/search?q=Paracraft%E5%88%9B%E6%84%8F%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8&imgfile=&js=1&stats_click=search_radio_all%3A1&initiative_id=staobaoz_20190507&ie=utf8')">马上订购</span>
+        <span class="textbook-page-teachers-desc-more" @click="goPurchase('https://item.taobao.com/item.htm?spm=a1z10.1-c-s.w4004-21675647078.2.40326b5eXGKqAM&id=594558350038')">马上订购</span>
       </div>
     </div>
     <el-dialog class="purchase-dialog" title="购买页面" :visible.sync="isShowPurchase" width="520px" center>
