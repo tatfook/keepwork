@@ -99,11 +99,9 @@ export default {
       })
     },
     orgClasses() {
-      return (
-        this.getOrgClassesById({
-          id: this.orgId
-        }) || []
-      )
+      const today = Date.now()
+      const theClass = this.getOrgClassesById({ id: this.orgId }) || []
+      return _.filter(theClass, cls => +new Date(cls.end) > today)
     },
     selectedClassName() {
       return this.selectedClassId

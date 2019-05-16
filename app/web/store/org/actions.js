@@ -130,9 +130,9 @@ const actions = {
     })
     return classPackages
   },
-  async getOrgPackageDetail({ commit }, { packageId }) {
+  async getOrgPackageDetail({ commit }, { packageId, classId = 0, roleId = 64 }) {
     const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail(
-      { packageId }
+      { packageId, classId, roleId }
     )
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail

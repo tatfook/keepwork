@@ -91,7 +91,7 @@
           <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
-          <lesson-references />
+          <!-- <lesson-references /> -->
         </el-col>
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
@@ -102,7 +102,7 @@
           <lesson-student-progress />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
-          <lesson-references />
+          <!-- <lesson-references /> -->
         </el-col>
       </el-row>
     </keep-work-sticky>

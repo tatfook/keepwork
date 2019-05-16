@@ -1718,6 +1718,7 @@
     "forMoreInformation": "如有疑问，请联系客服QQ: {qq}"
   },
   "org": {
+    "Help": "使用帮助",
     "moreStudy": "更多学习内容",
     "loginToOrg": "机构登录",
     "kpUsername": "keepwork账号",
@@ -1731,7 +1732,7 @@
     "includes": "包含:",
     "packagesCount": "个课程包",
     "moreLessons": "更多课程",
-    "logout": "退出",
+    "logout": "退出登录",
     "allowTeacherToManage": "是否允许任课教师管理学生信息",
     "ClassesLabel": "班级",
     "TeachersLabel": "教师",
@@ -1806,7 +1807,7 @@
     "latestTeachingTime": "最近上课: ",
     "notYetStarted": "尚未开始学习",
     "learnedLessonsCount": "已经学习{packageCount}个课程",
-    "learnedFinished": "学完了!",
+    "learnedFinished": "已学完!",
     "IAmLearningOnKp": "我正在keepwork学习 {lessonName}，点击",
     "here": "这里",
     "joinAndLearn": "加入，并和我一起学习",
@@ -1842,6 +1843,10 @@
     "historicalData": "历史数据",
     "teachersName": "教师姓名",
     "studentCunt": "学生数",
-    "timeTo": "至"
+    "timeTo": "至",
+    "selectClassTime": "请选择日期",
+    "noViewPermissions": "无查看权限",
+    "logoutHint": "提示",
+    "logoutTips": "确定退出课程系统吗？"
   }
 }

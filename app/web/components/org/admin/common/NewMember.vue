@@ -152,7 +152,8 @@ export default {
       this.newMembers.push({
         realname: '',
         memberName: '',
-        classIds: this.memberType == 'student' ? [this.filterOverDueClasses[0].id] : []
+        classIds:
+          this.memberType == 'student' ? [this.filterOverDueClasses[0].id] : []
       })
     },
     removeNewMember(index) {
@@ -184,9 +185,10 @@ export default {
           let index
           let memberLen = error.length
           for (index = 0; index < memberLen; index++) {
-            if ((error[index].roleId & this.memberTypeRoleId) > 0) {
-              break
-            }
+            let classId = error[index].classId
+            let classes = this.filterOverDueClasses
+            if (_.findIndex(classes, { id: classId }) == -1) continue
+            if ((error[index].roleId & this.memberTypeRoleId) > 0) break
           }
           if (index >= memberLen) {
             callback()

@@ -83,7 +83,7 @@ $borderColor: #e8e8e8;
   height: 100%;
   &-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 30px;
     display: flex;
     padding-top: 24px;
   }

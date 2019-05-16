@@ -1,7 +1,7 @@
 <template>
   <div class="my-organization-cabinet-box" @click="goOrg(organization.loginUrl)">
     <div class="my-organization-cabinet-box-left">
-      <img class="my-organization-cabinet-box-left-img" :src="organization.logo" alt="">
+      <img class="my-organization-cabinet-box-left-img" :src="organization.logo || defaultLogo" alt="">
     </div>
     <div class="my-organization-cabinet-box-right">
       <h3 class="my-organization-cabinet-box-right-name">{{organization.name}}</h3>
@@ -12,12 +12,18 @@
   </div>
 </template>
 <script>
+import defaultLogo from '@/assets/org/defaultLogo.png'
 export default {
   name: 'OrganizationCell',
   props: {
     organization: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      defaultLogo: defaultLogo
     }
   },
   methods: {
