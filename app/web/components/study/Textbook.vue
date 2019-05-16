@@ -213,7 +213,7 @@
             <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">Paracraft创意空间安装与基础教学</p>
           </div>
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间安装与基础教学.png" alt="" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">
+            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/paracraft_video.png" alt="" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">
             <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">Paracraft</p>
           </div>
         </div>
@@ -544,7 +544,7 @@ export default {
             margin: 0;
             font-size: 14px;
             cursor: pointer;
-            margin: 4px 0;
+            margin: 4px 4px;
           }
         }
       }
