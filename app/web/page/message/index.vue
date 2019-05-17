@@ -31,26 +31,12 @@ import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
 import CommonFooter from '@/components/common/CommonFooter'
+import { socket, socketMixin } from '@/socket'
 
 Vue.use(Vuex)
 Vue.use(VueLazyload)
 Vue.use(VueI18n)
-// Vue.use(
-//   new VueSocketIO({
-//     debug: true,
-//     connection: 'https://socket.keepwork.com/',
-//     vuex: {
-//       sotre: messageModule,
-//       actionPrefix: 'SOCKET_',
-//       mutationPrefix: 'SOCKET_'
-//     },
-//     options: {
-//       query: {
-//       },
-//       transports: ['websocket']
-//     }
-//   })
-// )
+Vue.use(socket)
 
 const i18n = new VueI18n({
   locale,
@@ -77,17 +63,7 @@ export default {
     CommonFooter,
     LoginDialog
   },
-  // sockets: {
-  //   connect() {
-  //     console.warn('sockets connect 💡')
-  //   },
-  //   error(err) {
-  //     console.error(err)
-  //   },
-  //   broadcast(data) {
-  //     console.log(data)
-  //   }
-  // },
+  mixins: [socketMixin],
   data() {
     return {
       loading: false

@@ -1,22 +1,35 @@
 import VueSocketIO from 'vue-socket.io'
+import { Notification } from 'element-ui'
 
 export const socket = new VueSocketIO({
   debug: true,
-  connection: 'https://socket.keepwork.com/',
+  connection: process.env.SOCKET_PREFIX,
   options: {
     query: {
+
     },
     transports: ['websocket']
   }
 })
 
-export const pageMixin = {
+export const socketMixin = {
+  data() {
+    return {
+      socketMessage: ''
+    }
+  },
   sockets: {
     connect() {
       console.warn('sockets connect 💡')
     },
-    broadcast(data) {
-      console.warn(data)
+    async broadcast(data) {
+      Notification({
+        type: 'info',
+        title: '收到系统消息',
+        offset: 100,
+        message: data.name
+      })
+      this.socketMessage = data
     }
   }
 }

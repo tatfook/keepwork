@@ -39,7 +39,6 @@ export default {
     await this.getMessages()
     if (this.currentPageUnreadMessageIDs) {
       await this.signMessages(this.currentPageUnreadMessageIDs)
-      await this.getUnreadMessages()
     }
   },
   methods: {

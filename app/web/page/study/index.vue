@@ -29,6 +29,7 @@ import gitlabModule from '@/store/gitlab'
 import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
 import pblModule from '@/store/pbl'
+import messageModule from '@/store/message'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
@@ -41,10 +42,12 @@ import { lesson } from '@/api'
 import axios from 'axios'
 import jsrsasign from 'jsrsasign'
 import { MessageBox } from 'element-ui'
+import { socket, socketMixin } from '@/socket'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueLazyload)
+Vue.use(socket)
 
 const i18n = new VueI18n({
   locale,
@@ -62,7 +65,8 @@ const store = new Vuex.Store({
     gitlab: gitlabModule,
     lesson: lessonModule,
     org: orgModule,
-    pbl: pblModule
+    pbl: pblModule,
+    message: messageModule
   }
 })
 
@@ -224,6 +228,7 @@ export default {
   router,
   store,
   i18n,
+  mixins: [socketMixin],
   data() {
     return {
       loading: true

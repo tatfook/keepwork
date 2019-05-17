@@ -28,6 +28,7 @@ import router from './account.router'
 import userModule from '@/store/user'
 import accountModule from '@/store/account'
 import messageModule from '@/store/message'
+import { socket, socketMixin } from '@/socket'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -38,6 +39,7 @@ import CommonFooter from '@/components/common/CommonFooter'
 Vue.use(Vuex)
 Vue.use(VueLazyload)
 Vue.use(VueI18n)
+Vue.use(socket)
 
 const i18n = new VueI18n({
   locale,
@@ -72,6 +74,7 @@ export default {
   router,
   store,
   i18n,
+  mixins: [socketMixin],
   data() {
     return {
       loading: true

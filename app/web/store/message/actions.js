@@ -12,8 +12,9 @@ export default {
     const res = await keepwork.message.getMessages(params)
     commit(GET_MESSAGES_SUCCESS, res)
   },
-  async signMessages({ commit }, ids) {
+  async signMessages({ dispatch }, ids) {
     await keepwork.message.signMessages(ids)
+    await dispatch('getMessages')
   },
   async getUnreadMessages({ commit }) {
     const res = await keepwork.message.getMessages({ state: 0 })
