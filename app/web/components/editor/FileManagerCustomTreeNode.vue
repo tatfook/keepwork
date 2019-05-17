@@ -25,7 +25,7 @@
         <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
       </div>
     </div>
-    <span :title="data | treeNodeTitleFilter(node, isFile, isFolder, isEn)" class="file-tree-node-tooltip-button">{{data | treeNodeLableFilter(node)}}</span>
+    <span v-if="!isRename" :title="data | treeNodeTitleFilter(node, isFile, isFolder, isEn)" class="file-tree-node-tooltip-button">{{data | treeNodeLableFilter(node)}}</span>
     <span class="file-manager-buttons-container" v-if="!isRename">
       <el-tooltip v-if="isHasOpened" :content="$t('editor.save')">
         <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" @click.stop='save(data)'></el-button>
