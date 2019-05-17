@@ -103,13 +103,14 @@ export default {
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson',
-      OrgIsStudent: 'org/isStudent'
+      OrgIsStudent: 'org/isStudent',
+      isCurrentOrgToken: 'org/isCurrentOrgToken'
     }),
     isJustStudent() {
       return !this.orgIsAdmin && !this.orgIsTeacher
     },
     hasOrgClasses() {
-      return _.get(this.orgClasses, 'length', 0) > 0
+      return this.isCurrentOrgToken && _.get(this.orgClasses, 'length', 0) > 0
     },
     isEn() {
       return locale === 'en-US' ? true : false

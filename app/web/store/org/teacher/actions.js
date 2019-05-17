@@ -93,11 +93,11 @@ const actions = {
       dispatch('getOrgClassPackageDetail', { classId, packageId })
     ])
     const { orgClassPackagesDetail } = getters
-    const packageIndex = _.findIndex(
+    const packageInfo = _.find(
       _.get(orgClassPackagesDetail, [ classId, packageId, 'lessons' ], []),
       item => item.lessonId === _.toNumber(lessonId)
     )
-    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
+    detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))

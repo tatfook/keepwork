@@ -15,17 +15,23 @@ const getters = {
     let { count, studentCount } = userCounts
     return count - studentCount
   },
-  roleId: (state, { token }) => {
-    if (!token) return
-    let { roleId } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+  roleId: (state, { tokenInfo }) => {
+    return tokenInfo.roleId
+  },
+  tokenOrgId: (state, { tokenInfo }) => {
+    return tokenInfo.organizationId
+  },
+  tokenInfo: (state, { token }) => {
+    if (!token) return {}
+    return jsrsasign.KJUR.jws.JWS.readSafeJSONString(
       jsrsasign.b64utoutf8(token.split('.')[1])
     )
-    return roleId
   },
-  isOrgMember: (state, { roleId }) => Boolean(roleId),
-  isAdmin: (sate, { roleId }) => (roleId & 64) > 0, // eslint-disable-line no-bitwise
-  isTeacher: (sate, { roleId }) => (roleId & 2) > 0, // eslint-disable-line no-bitwise
-  isStudent: (sate, { roleId }) => (roleId & 1) > 0, // eslint-disable-line no-bitwise
+  isCurrentOrgToken: (state, { currentOrgId, tokenOrgId }) => currentOrgId === tokenOrgId,
+  isOrgMember: (state, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && Boolean(roleId),
+  isAdmin: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 64) > 0, // eslint-disable-line no-bitwise
+  isTeacher: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 2) > 0, // eslint-disable-line no-bitwise
+  isStudent: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 1) > 0, // eslint-disable-line no-bitwise
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),
