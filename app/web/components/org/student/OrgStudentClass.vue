@@ -66,7 +66,7 @@ export default {
     },
     async handleContinueLearn(packageId) {
       const packageDetail = await this.getOrgPackageDetail({ packageId })
-      const lessons = _.get(packageDetail, 'lessons', [])
+      const lessons = _.sortBy(_.get(packageDetail, 'lessons', []), lesson => lesson.lessonNo)
       const { lessonId } = _.find(lessons, item => !item.isLearned)
       if (packageId && lessonId) {
         this.toLearnConfirm(packageId, lessonId, {
