@@ -2,10 +2,15 @@
   <div class="textbook-page">
     <div class="textbook-page-book">
       <div class="textbook-page-book-left">
-        <product-zoom :imageUrl="currentImg"></product-zoom>
+        <product-zoom class="textbook-page-book-left-zoom" :imageUrl="currentImg"></product-zoom>
         <div class="textbook-page-book-left-images">
           <img v-for="(i,index) in books" :key="index" :class="['textbook-page-book-left-images-img', {'img-selected': index === currentSelectedImg}]" :src="i.imgUrl" alt="" @click="selectImg(i,index)">
         </div>
+        <el-carousel class="textbook-page-book-left-carousel" :interval="5000" arrow="always">
+          <el-carousel-item v-for="(i,index) in booksCoverPhone" :key="index">
+            <img :src="i.imgUrl" alt="" width="100%">
+          </el-carousel-item>
+        </el-carousel>
       </div>
       <div class="textbook-page-book-right">
         <h3 class="textbook-page-book-right-title">Paracraft编程入门</h3>
@@ -47,22 +52,31 @@
         <p class="textbook-page-foreword-intro-text">创作于深圳大富配天集团NPL语言研发中心</p>
         <p class="textbook-page-foreword-intro-address"><a href="lixizhi@paraengine.com">lixizhi@paraengine.com</a></p>
         <p class="textbook-page-foreword-intro-address"><a href="https://keepwork.com/">https://keepwork.com/</a></p>
-        <div class="textbook-page-foreword-long-words" v-show="showMoreInfo">
-          <combo-box projectName="official/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
-        </div>
-        <div class="textbook-page-foreword-intro-more" @click="viewMoreInfo">{{showMoreInfo ? '收起':'阅读更多'}}</div>
       </div>
+      <div class="textbook-page-foreword-long-words" v-show="showMoreInfo">
+        <combo-box projectName="official/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
+      </div>
+      <div class="textbook-page-foreword-long-words" v-show="showMoreInfo_2">
+        <combo-box projectName="official/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
+      </div>
+      <div class="textbook-page-foreword-intro-more" @click="viewMoreInfo">{{showMoreInfo_2 ? '收起':'阅读更多'}}</div>
     </div>
     <div class="textbook-page-information">
       <div class="textbook-page-information-box">
         <h3 class="textbook-page-information-box-title">相关视频</h3>
         <div class="textbook-page-information-box-cover">
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间安装与基础教学.png" alt="" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">
+            <div class="textbook-page-information-box-cover-img-wrap">
+              <img class="textbook-page-information-box-cover-img-wrap-play" src="@/assets/lessonImg/play2.png" alt="">
+              <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间安装与基础教学.png" alt="" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">
+            </div>
             <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">Paracraft创意空间安装与基础教学</p>
           </div>
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/paracraft_video.png" alt="" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">
+            <div class="textbook-page-information-box-cover-img-wrap">
+              <img class="textbook-page-information-box-cover-img-wrap-play" src="@/assets/lessonImg/play2.png" alt="">
+              <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/paracraft_video.png" alt="" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">
+            </div>
             <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">Paracraft2分钟视频</p>
           </div>
         </div>
@@ -71,11 +85,11 @@
         <h3 class="textbook-page-information-box-title">相关书籍</h3>
         <div class="textbook-page-information-box-cover">
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间入门.png" alt="">
+            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间入门.png" alt="" @click="showPurchaseDialog(1)">
             <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(1)">Paracraft创意空间入门<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
           </div>
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/相似性与相似原理.png" alt="">
+            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/相似性与相似原理.png" alt="" @click="showPurchaseDialog(2)">
             <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(2)">相似性与相似原理<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
           </div>
         </div>
@@ -130,13 +144,28 @@ export default {
           imgUrl: require('@/assets/org/3.png')
         }
       ],
+      booksCoverPhone: [
+        {
+          imgUrl: require('@/assets/org/0_phone.png')
+        },
+        {
+          imgUrl: require('@/assets/org/1_phone.png')
+        },
+        {
+          imgUrl: require('@/assets/org/2_phone.png')
+        },
+        {
+          imgUrl: require('@/assets/org/3_phone.png')
+        }
+      ],
       isShowPurchase: false,
       purchaseMethodsImages: '',
       purchaseMethodsImagesBookName: '',
       purchaseMethodsImagesBookAuthor: '',
       purchaseMethods: [],
       currentImg: require('@/assets/org/0.png'),
-      showMoreInfo: false
+      showMoreInfo: false,
+      showMoreInfo_2: false
     }
   },
   components: {
@@ -228,7 +257,18 @@ export default {
       this.currentSelectedImg = index
     },
     viewMoreInfo() {
-      this.showMoreInfo = !this.showMoreInfo
+      if (!this.showMoreInfo) {
+        this.showMoreInfo = true
+        return
+      }
+      if (this.showMoreInfo && !this.showMoreInfo_2) {
+        this.showMoreInfo_2 = true
+        return
+      }
+      if (this.showMoreInfo && this.showMoreInfo_2) {
+        this.showMoreInfo = false
+        this.showMoreInfo_2 = false
+      }
     }
   }
 }
@@ -248,6 +288,9 @@ export default {
     &-left {
       width: 500px;
       border-radius: 10px;
+      &-carousel {
+        display: none;
+      }
       &-images {
         text-align: center;
         padding-top: 12px;
@@ -323,6 +366,7 @@ export default {
     margin: 20px auto;
     background: #fff;
     border-radius: 10px;
+    padding-bottom: 10px;
     &-title {
       border-bottom: 1px solid #f5f5f5;
       padding: 16px;
@@ -330,7 +374,7 @@ export default {
       margin: 0;
     }
     &-intro {
-      padding: 18px 62px;
+      padding: 18px 60px;
       &-text {
         margin: 0;
         color: #303133;
@@ -368,6 +412,7 @@ export default {
         font-size: 14px;
         margin-top: 20px;
         cursor: pointer;
+        margin: 20px;
       }
     }
     &-long-words {
@@ -399,10 +444,21 @@ export default {
         &-img {
           border-radius: 8px;
           width: 271px;
+          &-wrap {
+            position: relative;
+            &-play {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 80px;
+            }
+          }
           &-image {
             object-fit: cover;
             height: 153px;
             width: 100%;
+            cursor: pointer;
           }
           &-title {
             margin: 0;
@@ -412,6 +468,7 @@ export default {
             &-buy {
               color: #409eff;
               padding-left: 5px;
+              display: inline-block;
             }
           }
         }
@@ -520,16 +577,30 @@ export default {
 @media screen and (max-width: 769px) {
   .textbook-page {
     &-book {
+      padding: 0;
       &-left {
         width: 100%;
+        &-zoom {
+          display: none;
+        }
         &-images {
+          display: none;
           &-img {
             margin: 4px;
             border-radius: 8px;
           }
         }
+        &-carousel {
+          display: block;
+        }
+        /deep/ .el-carousel {
+          .el-carousel__container {
+            height: calc(100vw) !important;
+          }
+        }
       }
       &-right {
+        padding: 20px;
         width: 100%;
         &-price {
           &-purchase {
@@ -552,8 +623,18 @@ export default {
               height: 120px;
               border-radius: 10px;
             }
+            &-title {
+              &-buy {
+                display: block;
+              }
+            }
           }
         }
+      }
+    }
+    &-foreword {
+      &-intro {
+        padding: 18px 20px;
       }
     }
     &-teachers {
