@@ -110,6 +110,9 @@ $smallHeight: 267px;
       width: 100%;
       height: 100% * 496 / 267;
     }
+    .mask {
+      display: none;
+    }
   }
 }
 </style>
