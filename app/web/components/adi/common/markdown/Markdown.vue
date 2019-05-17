@@ -143,11 +143,15 @@ export default {
       padding: 8px 0;
     }
     pre {
+      font-weight: bolder;
       line-height: 1.2;
-      & > code {
-        font-size: 12px;
-        font-family: '宋体';
-      }
+      background-color: transparent;
+    }
+    code {
+      font-size: 12px;
+      font-family: 'Times New Roman';
+      font-weight: bold;
+      background-color: transparent;
     }
     li + li {
       margin-top: 0;
