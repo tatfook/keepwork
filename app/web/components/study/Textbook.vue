@@ -2,10 +2,15 @@
   <div class="textbook-page">
     <div class="textbook-page-book">
       <div class="textbook-page-book-left">
-        <product-zoom :imageUrl="currentImg"></product-zoom>
+        <product-zoom class="textbook-page-book-left-zoom" :imageUrl="currentImg"></product-zoom>
         <div class="textbook-page-book-left-images">
           <img v-for="(i,index) in books" :key="index" :class="['textbook-page-book-left-images-img', {'img-selected': index === currentSelectedImg}]" :src="i.imgUrl" alt="" @click="selectImg(i,index)">
         </div>
+        <el-carousel class="textbook-page-book-left-carousel" :interval="5000" arrow="always">
+          <el-carousel-item v-for="(i,index) in booksCoverPhone" :key="index">
+            <img :src="i.imgUrl" alt="" width="100%">
+          </el-carousel-item>
+        </el-carousel>
       </div>
       <div class="textbook-page-book-right">
         <h3 class="textbook-page-book-right-title">Paracraft编程入门</h3>
@@ -39,30 +44,42 @@
       <div class="textbook-page-foreword-intro">
         <h2>前言</h2>
         <p class="textbook-page-foreword-intro-text">"编程一直被误解为一件很难的事情。一个原因是几乎所有编程语言（工具，文档，开发者社区）都是英语文化圈下的产物，如果你英语不好，就无法真正融入其中。另一个原因是编程语言没有被教育者真正当成一种人类的语言去对待。</p>
+        <br>
         <p class="textbook-page-foreword-intro-text">本书希望能够作为编程的入门教材，将正确的工具，学习方法介绍给希望真正掌握编程的你。本书的目标是通过我们原创的Paracraft工具，让你可以随心所欲的创作出任意复杂的3D动画与游戏。当你具备这种入门能力时，你仍然可以继续使用Paracraft开发专业的计算机软件或自学任何其它语言。</p>
+        <br>
         <p class="textbook-page-foreword-intro-text">学习编程和学习外语很像，需要大量的打字练习。动手打字就如同学习外语中的发音一样重要。回忆一下，从出生开始，我们就在学习母语的发音，然后我们每天还要去使用它，长大后又系统的学习它。一个4岁的小孩已经能够用母语的发音表达自己的任何想法。相似的，本书希望营造一个类似的学习环境，让你可以在计算机世界中表达自己的任何想法。这也是当代希望从事科学与创造性工作的人的一项必备技能。拥有编程的入门能力并不困难，但也需要4年的时间或打5000行以上的代码。</p>
+        <br>
         <p class="textbook-page-foreword-intro-text">1989年，7岁的我照着一本我父亲给我的书编写了我人生中第一个程序，并从此喜欢上了编程，小学期间我完成了大量个人作品，到了随心所欲的入门状态，这要感谢我的老师。本书也希望和大家分享我的学习经历。</p>
         <p class="textbook-page-foreword-intro-name">李西峙</p>
         <p class="textbook-page-foreword-intro-text">2018.2.5</p>
         <p class="textbook-page-foreword-intro-text">创作于深圳大富配天集团NPL语言研发中心</p>
         <p class="textbook-page-foreword-intro-address"><a href="lixizhi@paraengine.com">lixizhi@paraengine.com</a></p>
         <p class="textbook-page-foreword-intro-address"><a href="https://keepwork.com/">https://keepwork.com/</a></p>
-        <div class="textbook-page-foreword-long-words" v-show="showMoreInfo">
-          <combo-box projectName="official/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
-        </div>
-        <div class="textbook-page-foreword-intro-more" @click="viewMoreInfo">{{showMoreInfo ? '收起':'阅读更多'}}</div>
       </div>
+      <div class="textbook-page-foreword-long-words" v-show="showMoreInfo">
+        <combo-box projectName="official/keepwork" filePath="Purchasetextbookpagecontent"></combo-box>
+      </div>
+      <div class="textbook-page-foreword-long-words" v-show="showMoreInfo_2">
+        <combo-box projectName="official/keepwork" filePath="Purchasethecontentsofthetextbookpage"></combo-box>
+      </div>
+      <div class="textbook-page-foreword-intro-more" @click="viewMoreInfo">{{showMoreInfo_2 ? '收起':'阅读更多'}}</div>
     </div>
     <div class="textbook-page-information">
       <div class="textbook-page-information-box">
         <h3 class="textbook-page-information-box-title">相关视频</h3>
         <div class="textbook-page-information-box-cover">
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间安装与基础教学.png" alt="" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">
+            <div class="textbook-page-information-box-cover-img-wrap" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">
+              <img class="textbook-page-information-box-cover-img-wrap-play" src="@/assets/lessonImg/play2.png" alt="">
+              <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间安装与基础教学.png" alt="">
+            </div>
             <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://v.qq.com/x/page/d08632md4lo.html')">Paracraft创意空间安装与基础教学</p>
           </div>
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/paracraft_video.png" alt="" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">
+            <div class="textbook-page-information-box-cover-img-wrap" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">
+              <img class="textbook-page-information-box-cover-img-wrap-play" src="@/assets/lessonImg/play2.png" alt="">
+              <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/paracraft_video.png" alt="">
+            </div>
             <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">Paracraft2分钟视频</p>
           </div>
         </div>
@@ -71,11 +88,11 @@
         <h3 class="textbook-page-information-box-title">相关书籍</h3>
         <div class="textbook-page-information-box-cover">
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间入门.png" alt="">
+            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间入门.png" alt="" @click="showPurchaseDialog(1)">
             <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(1)">Paracraft创意空间入门<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
           </div>
           <div class="textbook-page-information-box-cover-img">
-            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/相似性与相似原理.png" alt="">
+            <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/相似性与相似原理.png" alt="" @click="showPurchaseDialog(2)">
             <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(2)">相似性与相似原理<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
           </div>
         </div>
@@ -130,13 +147,28 @@ export default {
           imgUrl: require('@/assets/org/3.png')
         }
       ],
+      booksCoverPhone: [
+        {
+          imgUrl: require('@/assets/org/0_phone.png')
+        },
+        {
+          imgUrl: require('@/assets/org/1_phone.png')
+        },
+        {
+          imgUrl: require('@/assets/org/2_phone.png')
+        },
+        {
+          imgUrl: require('@/assets/org/3_phone.png')
+        }
+      ],
       isShowPurchase: false,
       purchaseMethodsImages: '',
       purchaseMethodsImagesBookName: '',
       purchaseMethodsImagesBookAuthor: '',
       purchaseMethods: [],
       currentImg: require('@/assets/org/0.png'),
-      showMoreInfo: false
+      showMoreInfo: false,
+      showMoreInfo_2: false
     }
   },
   components: {
@@ -228,7 +260,18 @@ export default {
       this.currentSelectedImg = index
     },
     viewMoreInfo() {
-      this.showMoreInfo = !this.showMoreInfo
+      if (!this.showMoreInfo) {
+        this.showMoreInfo = true
+        return
+      }
+      if (this.showMoreInfo && !this.showMoreInfo_2) {
+        this.showMoreInfo_2 = true
+        return
+      }
+      if (this.showMoreInfo && this.showMoreInfo_2) {
+        this.showMoreInfo = false
+        this.showMoreInfo_2 = false
+      }
     }
   }
 }
@@ -248,6 +291,9 @@ export default {
     &-left {
       width: 500px;
       border-radius: 10px;
+      &-carousel {
+        display: none;
+      }
       &-images {
         text-align: center;
         padding-top: 12px;
@@ -323,6 +369,7 @@ export default {
     margin: 20px auto;
     background: #fff;
     border-radius: 10px;
+    padding-bottom: 10px;
     &-title {
       border-bottom: 1px solid #f5f5f5;
       padding: 16px;
@@ -330,7 +377,7 @@ export default {
       margin: 0;
     }
     &-intro {
-      padding: 18px 62px;
+      padding: 18px 60px;
       &-text {
         margin: 0;
         color: #303133;
@@ -368,6 +415,7 @@ export default {
         font-size: 14px;
         margin-top: 20px;
         cursor: pointer;
+        margin: 20px;
       }
     }
     &-long-words {
@@ -399,10 +447,22 @@ export default {
         &-img {
           border-radius: 8px;
           width: 271px;
+          &-wrap {
+            position: relative;
+            &-play {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 80px;
+              cursor: pointer;
+            }
+          }
           &-image {
             object-fit: cover;
             height: 153px;
             width: 100%;
+            cursor: pointer;
           }
           &-title {
             margin: 0;
@@ -412,6 +472,7 @@ export default {
             &-buy {
               color: #409eff;
               padding-left: 5px;
+              display: inline-block;
             }
           }
         }
@@ -520,16 +581,30 @@ export default {
 @media screen and (max-width: 769px) {
   .textbook-page {
     &-book {
+      padding: 0;
       &-left {
         width: 100%;
+        &-zoom {
+          display: none;
+        }
         &-images {
+          display: none;
           &-img {
             margin: 4px;
             border-radius: 8px;
           }
         }
+        &-carousel {
+          display: block;
+        }
+        /deep/ .el-carousel {
+          .el-carousel__container {
+            height: calc(100vw) !important;
+          }
+        }
       }
       &-right {
+        padding: 20px;
         width: 100%;
         &-price {
           &-purchase {
@@ -552,8 +627,18 @@ export default {
               height: 120px;
               border-radius: 10px;
             }
+            &-title {
+              &-buy {
+                display: block;
+              }
+            }
           }
         }
+      }
+    }
+    &-foreword {
+      &-intro {
+        padding: 18px 20px;
       }
     }
     &-teachers {

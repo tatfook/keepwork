@@ -66,7 +66,7 @@ export default {
     },
     async handleContinueLearn(packageId) {
       const packageDetail = await this.getOrgPackageDetail({ packageId })
-      const lessons = _.get(packageDetail, 'lessons', [])
+      const lessons = _.sortBy(_.get(packageDetail, 'lessons', []), lesson => lesson.lessonNo)
       const { lessonId } = _.find(lessons, item => !item.isLearned)
       if (packageId && lessonId) {
         this.toLearnConfirm(packageId, lessonId, {
@@ -218,7 +218,25 @@ export default {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))
     },
     orgStudentPackageList() {
-      return _.filter(this.orgPackageList, item => _.get(item, 'lessonOrganizationClassMembers.roleId', 0) & 1 > 0)
+      const studentPackages = _.filter(
+        this.orgPackageList,
+        item =>
+          _.get(item, 'lessonOrganizationClassMembers.roleId', 0) & (1 > 0)
+      )
+      const learnedList = _.filter(studentPackages, item =>
+        _.some(item.lessons, lesson => lesson.isLearned)
+      )
+      const noLearnedList = _.filter(studentPackages, item =>
+        _.every(item.lessons, lesson => !lesson.isLearned)
+      )
+      const isDoneList = _.filter(studentPackages, item =>
+        _.every(item.lessons, lesson => lesson.isLearned)
+      )
+      const isDoneIDS = _.map(isDoneList, item => item.id)
+      const haveNotLearnedList = _.filter(learnedList, item =>
+        !_.includes(isDoneIDS, item.id)
+      )
+      return _.concat(haveNotLearnedList, noLearnedList, isDoneList)
     },
     orgPackageCount() {
       return this.orgStudentPackageList.length
