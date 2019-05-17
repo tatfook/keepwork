@@ -25,7 +25,7 @@
         <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
       </div>
     </div>
-    <el-button :title="data | treeNodeTitleFilter(node, isFile, isFolder, isEn)" class="file-tree-node-tooltip-button">{{data | treeNodeLableFilter(node)}}</el-button>
+    <span :title="data | treeNodeTitleFilter(node, isFile, isFolder, isEn)" class="file-tree-node-tooltip-button">{{data | treeNodeLableFilter(node)}}</span>
     <span class="file-manager-buttons-container" v-if="!isRename">
       <el-tooltip v-if="isHasOpened" :content="$t('editor.save')">
         <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" @click.stop='save(data)'></el-button>
@@ -505,7 +505,12 @@ export default {
       let name = (str && str.replace(/\.md$/, '')) || ''
       let pageTypeText = isEn ? 'pageName: ' : '页面名：'
       let folderTypeText = isEn ? 'folderName: ' : '文件夹名：'
-      let fileTypeText = isFile ? pageTypeText : folderTypeText
+      let siteTypeText = isEn ? 'siteName: ' : '网站名：'
+      let fileTypeText = isFile
+        ? pageTypeText
+        : isFolder
+        ? folderTypeText
+        : siteTypeText
       return fileTypeText + name
     }
   },
