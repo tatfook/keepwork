@@ -244,8 +244,10 @@ export default {
         : moment(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
     },
     newCurrentRecord() {
+      let filterClassroomLearnRecord = _.filter(this.classroomLearnRecord, i => i.name && i.username)
+      if(!filterClassroomLearnRecord.length) return []
       let currentRecord = _.map(
-        this.classroomLearnRecord,
+        filterClassroomLearnRecord,
         ({
           extra: {
             portrait,
