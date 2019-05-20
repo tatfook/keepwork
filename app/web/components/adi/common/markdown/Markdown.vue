@@ -149,7 +149,8 @@ export default {
     }
     code {
       font-size: 12px;
-      font-family: 'Times New Roman';
+      font-family: '宋体';
+      color: #bb3825;
       font-weight: bold;
       background-color: transparent;
     }
