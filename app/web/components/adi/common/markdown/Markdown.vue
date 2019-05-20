@@ -146,9 +146,11 @@ export default {
       font-weight: bolder;
       line-height: 1.2;
       background-color: transparent;
+      & > code {
+        font-size: 12px;
+      }
     }
     code {
-      font-size: 12px;
       font-family: '宋体';
       color: #bb3825;
       font-weight: bold;
