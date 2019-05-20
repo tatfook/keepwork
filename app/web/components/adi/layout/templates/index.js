@@ -7,6 +7,7 @@ import HeaderFullScreen from './HeaderFullScreen'
 import HeaderSidebar from './HeaderSidebar'
 import HeaderSidebarFooter from './HeaderSidebarFooter'
 import HeaderSidebarMaxWidth from './HeaderSidebarMaxWidth'
+import HeaderSidebarFooterMaxWidth from './HeaderSidebarFooterMaxWidth'
 
 import HeaderFooterMaxWidth from './HeaderFooterMaxWidth'
 import HeaderFooterFullScreen from './HeaderFooterFullScreen'
@@ -81,6 +82,12 @@ export default {
     header: true,
     sidebar: true,
     component: HeaderSidebarMaxWidth
+  },
+  header_sidebar_footer_max_width: {
+    header: true,
+    sidebar: true,
+    footer: true,
+    component: HeaderSidebarFooterMaxWidth
   },
 
   sidebar: {
