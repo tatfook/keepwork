@@ -93,10 +93,7 @@ export default {
   },
   watch: {
     socketMessage(value) {
-      Promise.all([
-        store.dispatch('message/getMessages'),
-        store.dispatch('message/getUnreadMessages')
-      ])
+      store.dispatch('message/getMessages')
     }
   },
   async created() {

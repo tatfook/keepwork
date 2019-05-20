@@ -44,17 +44,15 @@
       </el-menu-item>
       <!-- TODO: 消息 -->
       <el-menu-item v-if="isLogin" index="15" class="pull-right user-message-menu-item">
-        <el-popover popper-class="user-message-popper" placement="bottom" width="320" trigger="click">
-          <div class="user-message-main">
-
-            <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id">
+        <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger="click">
+          <div ref="scroll" class="user-message-main">
+            <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
               <span class="message-title">[系统]</span>
               <span class="message-content">
                 {{item.content}}
               </span>
               <span class="message-date">{{item.createdAt | formatDate}}</span>
             </div>
-
           </div>
           <div class="user-message-button" @click="toMessageCenter">打开消息中心</div>
           <div slot="reference" class="user-message-icon-container">
@@ -190,6 +188,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
 import moment from 'moment'
+import BScroll from 'better-scroll'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
@@ -211,7 +210,10 @@ export default {
       isLoginDialogShow: false,
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
-      activeIndex: '0'
+      activeIndex: '0',
+      msgScroll: null,
+      perPage: 10,
+      loadingMore: false
     }
   },
   computed: {
@@ -220,7 +222,7 @@ export default {
       userIsLogined: 'user/isLogined',
       username: 'user/username',
       unreadMessages: 'message/unreadMessages',
-      messages: 'message/messages'
+      messagesBox: 'message/messagesBox'
     }),
     isLogin: {
       get() {
@@ -238,7 +240,7 @@ export default {
       return this.$route.name
     },
     allMessages() {
-      return _.map(_.get(this.messages, 'rows', []), item => {
+      return _.map(_.get(this.messagesBox, 'rows', []), item => {
         const html = item.messages.msg.text
         const content = html
           .replace(/&lt;/g, '<')
@@ -252,11 +254,14 @@ export default {
         return { ...item, content }
       })
     },
+    messagesCount() {
+      return _.get(this.messagesBox, 'count', 0)
+    },
     unreadMessagesCount() {
       return _.get(this.unreadMessages, 'count', 0)
     }
   },
-  mounted() {
+  async mounted() {
     this.checkCurrentTab()
     if (!this.userIsLogined) {
       this.userGetProfile({ forceLogin: false })
@@ -268,7 +273,8 @@ export default {
         })
     }
     if (this.userIsLogined) {
-      Promise.all([this.getMessages(), this.getUnreadMessages()])
+      const params = { 'x-page': 1, 'x-per-page': this.perPage }
+      await this.loadMessages(params)
     }
   },
   watch: {
@@ -281,8 +287,43 @@ export default {
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout',
       getUnreadMessages: 'message/getUnreadMessages',
-      getMessages: 'message/getMessages'
+      loadMessages: 'message/loadMessages'
     }),
+    async initScroll() {
+      // this.refreshMessages()
+      this.$nextTick(() => {
+        this.msgScroll = document.querySelector('.user-message-main')
+        const msgScrollHeight = this.msgScroll.scrollHeight
+        this.msgScroll.addEventListener('scroll', async e => {
+          const {
+            scrollHeight,
+            scrollTop,
+            offsetHeight,
+            clientHeight
+          } = this.msgScroll
+          const height = clientHeight || offsetHeight
+          if (!this.loadingMore && height + scrollTop + 10 >= scrollHeight) {
+            this.loadMoreMessages()
+          }
+        })
+      })
+    },
+    async loadMoreMessages() {
+      if (this.allMessages.length < this.messagesCount) {
+        this.loadingMore = true
+        await this.loadMessages({
+          'x-per-page': _.add(this.allMessages.length, this.perPage)
+        })
+        this.loadingMore = false
+      }
+    },
+    toMessageDetail({ id }) {
+      const msgIndex = _.findIndex(this.messageList, item => item.id === id) || 1
+      console.log(msgIndex)
+      const msgPageIndex = _.ceil(_.divide(msgIndex, this.perPage))
+      console.log(msgPageIndex)
+      const msgUrl = `${window.location.origin}/msg?id=${id}`
+    },
     checkCurrentTab() {
       let pathname = window.location.pathname
       if (CREATE_REG.test(pathname)) {
@@ -379,7 +420,9 @@ export default {
       (str && str.trim()) || require('@/assets/img/default_portrait.png'),
     formatDate(date) {
       const _date = moment(date)
-      return _date.isSame(moment(), 'day') ? _date.format('H:mm') : _date.format('MM/DD')
+      return _date.isSame(moment(), 'day')
+        ? _date.format('H:mm')
+        : _date.format('MM/DD')
     }
   },
   components: {

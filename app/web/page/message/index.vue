@@ -69,6 +69,12 @@ export default {
       loading: false
     }
   },
+  watch: {
+    socketMessage(value) {
+      store.dispatch('message/getMessages')
+      console.log(this)
+    }
+  },
   computed: {
     ...mapGetters({
       isLogined: 'user/isLogined'

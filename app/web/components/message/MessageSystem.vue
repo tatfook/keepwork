@@ -1,7 +1,7 @@
 <template>
   <div class="message-system">
     <div class="message-system-title">系统</div>
-    <div class="message-system-item" v-for="item in systemMessages" :key="item.id">
+    <div class="message-system-item" :id="`msg-${item.id}`" v-for="item in systemMessages" :key="item.id">
       <img class="message-avatar" :src="systemAvatar" alt="系统头像">
       <div class="message-main">
         <span class="message-main-sender">系统</span>
@@ -10,8 +10,8 @@
         </div>
       </div>
     </div>
-    <div class="message-pagination">
-      <el-pagination :hide-on-single-page="hideOnSinglePage" :page-size="10" :total="5" layout="prev, pager, next">
+    <div class="message-pagination" v-if="isShowPagination">
+      <el-pagination :current-page="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="hideOnSinglePage" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -27,7 +27,9 @@ export default {
   data() {
     return {
       systemAvatar,
-      hideOnSinglePage: false
+      hideOnSinglePage: false,
+      perPage: 10,
+      currentPage: 1
     }
   },
   filters: {
@@ -35,10 +37,12 @@ export default {
       return date ? moment(date).format('YYYY-M-DD H:mm') : ''
     }
   },
-  async mounted() {
-    await this.getMessages()
-    if (this.currentPageUnreadMessageIDs) {
+  async created() {
+    const params = { 'x-page': this.currentPage, 'x-per-page': this.perPage }
+    await this.getMessages(params)
+    if (this.currentPageUnreadMessageIDs.length) {
       await this.signMessages(this.currentPageUnreadMessageIDs)
+      this.getMessages(params)
     }
   },
   methods: {
@@ -46,7 +50,18 @@ export default {
       getMessages: 'message/getMessages',
       signMessages: 'message/signMessages',
       getUnreadMessages: 'message/getUnreadMessages'
-    })
+    }),
+    async getCurrentPageMessages(pageIndex) {
+      const params = {
+        'x-page': pageIndex,
+        'x-per-page': this.perPage
+      }
+      await this.getMessages(params)
+      if (this.currentPageUnreadMessageIDs.length) {
+        await this.signMessages(this.currentPageUnreadMessageIDs)
+        this.getMessages(params)
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -57,6 +72,12 @@ export default {
         _.get(this.messages, 'rows', []),
         item => item.messages.sender === 0
       )
+    },
+    messagesCount() {
+      return _.get(this.messages, 'count', 0)
+    },
+    isShowPagination() {
+      return this.messagesCount > this.perPage
     },
     currentPageUnreadMessageIDs() {
       return _.map(
