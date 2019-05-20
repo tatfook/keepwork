@@ -336,6 +336,7 @@ export default {
   .right-icon {
     font-size: 13px;
     width: 0;
+    position: relative;
   }
 }
 .home-page {
