@@ -33,11 +33,14 @@ import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import '@/components/common/thirdAuth'
+import messageModule from '@/store/message'
+import { socket, socketMixin } from '@/socket'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueLazyload)
 Vue.use(VueClipboard)
+Vue.use(socket)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,
@@ -61,7 +64,8 @@ const store = new Vuex.Store({
   modules: {
     user: userModule,
     pbl: pblModule,
-    gitlab: gitlabModule
+    gitlab: gitlabModule,
+    message: messageModule
   }
 })
 
@@ -78,9 +82,15 @@ export default {
   router,
   store,
   i18n,
+  mixins: [socketMixin],
   data() {
     return {
       loading: true
+    }
+  },
+  watch: {
+    socketMessage(value) {
+      store.dispatch('message/refreshMessagesBox')
     }
   },
   async created() {

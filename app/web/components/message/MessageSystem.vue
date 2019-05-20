@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="message-pagination" v-if="isShowPagination">
-      <el-pagination :current-page="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="hideOnSinglePage" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
+      <el-pagination :current-page.sync="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="hideOnSinglePage" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -19,6 +19,7 @@
 
 <script>
 import systemAvatar from '@/assets/message/system-avatar.png'
+import scrollIntoView from 'scroll-into-view-if-needed'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
@@ -37,12 +38,19 @@ export default {
       return date ? moment(date).format('YYYY-M-DD H:mm') : ''
     }
   },
-  async created() {
+  async mounted() {
+    const { id = 0, page = 0 } = this.$route.query
+    if (page) {
+      this.currentPage = _.toNumber(page)
+    }
     const params = { 'x-page': this.currentPage, 'x-per-page': this.perPage }
     await this.getMessages(params)
     if (this.currentPageUnreadMessageIDs.length) {
       await this.signMessages(this.currentPageUnreadMessageIDs)
       this.getMessages(params)
+    }
+    if (id) {
+      this.blingTheMessage(id)
     }
   },
   methods: {
@@ -61,6 +69,19 @@ export default {
         await this.signMessages(this.currentPageUnreadMessageIDs)
         this.getMessages(params)
       }
+      this.$router.push({ query: { page: pageIndex } })
+    },
+    blingTheMessage(id) {
+      this.$nextTick(() => {
+        const messageEle = document.querySelector(`#msg-${id}`)
+        if (messageEle) {
+          scrollIntoView(messageEle, {
+            scrollMode: 'if-needed',
+            behavior: 'smooth'
+          })
+        }
+        messageEle.classList.add('bling')
+      })
     }
   },
   computed: {
@@ -135,6 +156,20 @@ export default {
   .message-pagination {
     display: flex;
     justify-content: flex-end;
+    padding: 10px 0;
+  }
+  .bling {
+    animation: flash 1.5s linear 1;
+  }
+  @keyframes flash {
+    from {
+      opacity: 0.4;
+      background: #909399;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 }
 </style>

@@ -234,6 +234,11 @@ export default {
       loading: true
     }
   },
+  watch: {
+    socketMessage(value) {
+      store.dispatch('message/refreshMessagesBox')
+    }
+  },
   async created() {
     await this.loadPblPresets()
   },

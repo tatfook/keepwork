@@ -26,8 +26,7 @@ export const socketMixin = {
       Notification({
         type: 'info',
         title: '收到系统消息',
-        offset: 100,
-        message: data.name
+        offset: 50
       })
       this.socketMessage = data
     }

@@ -28,8 +28,6 @@ import VueI18n from 'vue-i18n'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import lessonModule from '@/store/lesson'
-import messageModule from '@/store/message'
-import { socket, socketMixin } from '@/socket'
 import VueClipboard from 'vue-clipboard2'
 import ElementUI, { Progress } from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -40,11 +38,15 @@ import CommonFooter from '@/components/common/CommonFooter'
 import ToolHeader from '@/components/common/ToolHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
+// message push
+import messageModule from '@/store/message'
+import { socket, socketMixin } from '@/socket'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use(VueClipboard)
+// use socket
 Vue.use(socket)
 
 Vue.use(VueI18n)
@@ -93,7 +95,7 @@ export default {
   },
   watch: {
     socketMessage(value) {
-      store.dispatch('message/getMessages')
+      store.dispatch('message/refreshMessagesBox')
     }
   },
   async created() {

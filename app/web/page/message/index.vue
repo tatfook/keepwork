@@ -71,8 +71,7 @@ export default {
   },
   watch: {
     socketMessage(value) {
-      store.dispatch('message/getMessages')
-      console.log(this)
+      store.dispatch('message/refreshMessagesBox')
     }
   },
   computed: {

@@ -188,7 +188,6 @@ import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
 import moment from 'moment'
-import BScroll from 'better-scroll'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
@@ -318,11 +317,10 @@ export default {
       }
     },
     toMessageDetail({ id }) {
-      const msgIndex = _.findIndex(this.messageList, item => item.id === id) || 1
-      console.log(msgIndex)
+      const msgIndex = _.findIndex(this.allMessages, item => item.id === id) || 1
       const msgPageIndex = _.ceil(_.divide(msgIndex, this.perPage))
-      console.log(msgPageIndex)
-      const msgUrl = `${window.location.origin}/msg?id=${id}`
+      const msgUrl = `${window.location.origin}/msg?id=${id}&page=${msgPageIndex}`
+      window.location.href = msgUrl
     },
     checkCurrentTab() {
       let pathname = window.location.pathname
