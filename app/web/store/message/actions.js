@@ -35,6 +35,7 @@ export default {
   },
   async signMessages({ dispatch }, ids) {
     await keepwork.message.signMessages(ids)
+    dispatch('refreshMessagesBox')
   },
   async getUnreadMessages({ commit }) {
     const res = await keepwork.message.getMessages({ state: 0 })

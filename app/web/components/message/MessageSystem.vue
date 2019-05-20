@@ -67,7 +67,6 @@ export default {
       await this.getMessages(params)
       if (this.currentPageUnreadMessageIDs.length) {
         await this.signMessages(this.currentPageUnreadMessageIDs)
-        this.getMessages(params)
       }
       this.$router.push({ query: { page: pageIndex } })
     },
