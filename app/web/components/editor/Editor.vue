@@ -41,7 +41,7 @@
       </el-dialog>
     </el-col>
     <div class="col-between editor-resizer flex-order-two" v-show="!isWelcomeShow && isPreviewShow && isCodeShow" @mousedown="resizeCol($event, 'previewWinWidth', 'codeWinWidth')" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp"></div>
-    <el-col id="codeWin" v-show="!isWelcomeShow && isCodeShow" class="code-win" :style="setCodeWinStyle" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
+    <el-col id="codeWin" v-if="isCodeShow" v-show="!isWelcomeShow" class="code-win" :style="setCodeWinStyle" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
       <el-row class="toolbar">
         <el-scrollbar wrap-class="toolbar" :native="false">
           <el-col class="toolbar-content">
