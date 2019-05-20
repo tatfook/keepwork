@@ -6,7 +6,14 @@
           <router-link class="org-classes-menu-link" :to='{name: menu.indexPageName}'>{{menu.text}}</router-link>
         </div>
       </div>
-      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}<span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span></div>
+      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}
+        <span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span>
+        <el-popover popper-class="org-classes-popover" placement="bottom" title="" width="306" trigger="hover">
+          {{$t('org.moreRemainClassContact')}}
+          <span class="org-classes-stress">support@paraengine.com</span>
+          <span slot="reference"><i class="iconfont icon-help"></i></span>
+        </el-popover>
+      </div>
     </div>
     <router-view v-if="!isLoadPreset"></router-view>
   </div>
@@ -125,6 +132,20 @@ export default {
     &-warning {
       color: #f4b744;
     }
+    .icon-help {
+      color: #2397f3;
+      cursor: pointer;
+      vertical-align: text-bottom;
+      line-height: 1;
+      margin-left: 4px;
+    }
+  }
+  &-popover {
+    text-align: left;
+  }
+  &-stress {
+    white-space: nowrap;
+    color: #2397f3;
   }
 }
 </style>

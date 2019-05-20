@@ -1728,6 +1728,8 @@
     "forMoreInformation": "For more information, please contact QQ: {qq}"
   },
   "org": {
+    "classSelector": "Class: ",
+    "moreRemainClassContact": "For more remaining places, please contact ",
     "Help": "Help",
     "moreStudy": "More",
     "loginToOrg": "Login To Organization",
