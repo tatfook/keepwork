@@ -1859,6 +1859,7 @@
     "selectClassTime": "Please select date",
     "noViewPermissions": "No view permissions",
     "logoutHint": "Hint",
-    "logoutTips": "Are you sure to quit the course system?"
+    "logoutTips": "Are you sure to quit the course system?",
+    "text": "text"
   }
 }

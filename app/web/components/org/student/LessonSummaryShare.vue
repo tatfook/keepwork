@@ -27,11 +27,11 @@
             Today, I
             <template v-if="summary.read > 0">
               read
-              <span class="highlight">{{summary.read}}</span> lines of code,
+              <span class="highlight">{{summary.read}}</span> lines of code{{summary.write > 0 || summary.command > 0 ? ',' : '.'}}
             </template>
             <template v-if="summary.write > 0">
               wrote
-              <span class="highlight">{{summary.write}}</span> lines of code,
+              <span class="highlight">{{summary.write}}</span> lines of code{{summary.command > 0 ? ',' : '.'}}
             </template>
             <template v-if="summary.command > 0">
               <template v-if="hasAllSkills">and</template>
@@ -47,21 +47,21 @@
           <div class="summary-word-line">
             这是我第
             <span class="highlight">{{summary.day}}</span> 天在keepwork学习
-            <span class="highlight">{{summary.name}}</span>
+            <span class="highlight">{{summary.name}}</span>。
           </div>
           <div class="summary-word-line" v-if="hasSkills">
             今天，我
             <template v-if="summary.read > 0">
-              读了
-              <span class="highlight">{{summary.read}}</span> 行代码,
+            读了
+              <span class="highlight">{{summary.read}}</span> 行代码{{ summary.write > 0 || summary.command > 0 ? ',' : '。' }}
             </template>
             <template v-if="summary.write > 0">
               写了
-              <span class="highlight">{{summary.write}}</span> 行代码,
+              <span class="highlight">{{summary.write}}</span> 行代码{{ summary.command > 0 ? ',' : '。' }}
             </template>
             <template v-if="summary.command > 0">
               学习了
-              <span class="highlight">{{summary.command}}</span> 个电脑命令
+              <span class="highlight">{{summary.command}}</span> 个计算机指令。
             </template>
           </div>
         </div>
