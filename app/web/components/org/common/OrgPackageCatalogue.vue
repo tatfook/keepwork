@@ -78,12 +78,12 @@ export default {
       let lastLessonId = this.learnedLessons[this.learnedLessons.length - 1]
       if (lastLessonId) {
         let lastLessonIndex = _.findIndex(
-          this.lessonsList,
+          this.lessonsListSorted,
           lesson => lesson.id === lastLessonId
         )
-        while (++lastLessonIndex < this.lessonsList.length) {
-          if (!this.lessonsList[lastLessonIndex].isLearned) {
-            return this.lessonsList[lastLessonIndex]
+        while (++lastLessonIndex < this.lessonsListSorted.length) {
+          if (!this.lessonsListSorted[lastLessonIndex].isLearned) {
+            return this.lessonsListSorted[lastLessonIndex]
           }
         }
       }
