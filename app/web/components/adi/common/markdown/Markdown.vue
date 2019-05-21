@@ -146,8 +146,15 @@ export default {
       line-height: 1.2;
       & > code {
         font-size: 12px;
-        font-family: '宋体';
+        color: inherit;
+        font-weight: normal;
       }
+    }
+    code {
+      color: #bb3825;
+      font-weight: bold;
+      font-family: '宋体';
+      background-color: transparent;
     }
     li + li {
       margin-top: 0;
