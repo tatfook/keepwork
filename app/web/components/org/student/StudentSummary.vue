@@ -104,10 +104,10 @@ export default {
                   this.lessonCommands
                 }</span>`
               }
-            )}`
+            )},`
           : ''
       }
-      return str
+      return str.trim().replace(/\,$/, this.isEn ? '.': '。')
     }
   }
 }
