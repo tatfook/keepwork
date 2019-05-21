@@ -53,7 +53,6 @@
           </el-form-item>
           <el-form-item label="设定权限">
             <el-select v-model="tempAuth.level">
-              <el-option label="拒绝" :value="128"></el-option>
               <el-option label="浏览" :value="32"></el-option>
               <el-option label="编辑" :value="64"></el-option>
             </el-select>
@@ -94,13 +93,16 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WebsiteSettingPermission',
   props: {
-    siteDetail: {
-      type: Object,
-      required: true
-    },
     sitePath: String
   },
   async mounted() {
+    await this.userGetWebsiteDetailInfoByPath({
+      path: this.sitePath
+    })
+    this.siteDetail = _.cloneDeep(
+      this.getSiteDetailInfoByPath(this.sitePath).siteinfo
+    )
+    this.siteVisibility = this.siteDetail.visibility
     await this.userGetUserGroups()
     let siteId = this.siteId
     await this.userGetSiteGroupsBySiteId({ siteId })
@@ -112,14 +114,16 @@ export default {
         groupId: undefined,
         level: undefined
       },
+      siteDetail: {},
       tempGroups: [],
-      siteVisibility: this.siteDetail.visibility,
+      siteVisibility: undefined,
       isNewGroupDialogShow: false,
       editingGroupData: undefined
     }
   },
   computed: {
     ...mapGetters({
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       getSiteGroupsById: 'user/getSiteGroupsById',
       userGroups: 'user/userGroups'
     }),
@@ -132,8 +136,13 @@ export default {
         _.isUndefined(this.tempAuth.level)
       )
     },
-    siteGroups() {
+    siteGroupsWithDenied() {
       return _.cloneDeep(this.getSiteGroupsById({ siteId: this.siteId }))
+    },
+    siteGroups() {
+      return _.filter(this.siteGroupsWithDenied, group => {
+        return group.level != 128
+      })
     },
     filterAuthedGroups() {
       let authedGroupIds = _.map(this.siteGroups, 'groupId')
@@ -144,6 +153,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
       userSaveSiteBasicSetting: 'user/saveSiteBasicSetting',
       userGetSiteGroupsBySiteId: 'user/getSiteGroupsBySiteId',
       userGetUserGroups: 'user/getUserGroups',

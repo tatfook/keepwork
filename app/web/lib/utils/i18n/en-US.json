@@ -866,6 +866,8 @@
     "searchMine": "My Sites"
   },
   "lesson": {
+    "viewLessonPackageInfo": " View packages the lesson was added into.",
+    "foldLessonPackageInfo": "Fold the package information.",
     "skillPointDetails": "Skill point details",
     "lessonIndexLabel": "Lesson ",
     "formatError": "format error",
@@ -1726,6 +1728,8 @@
     "forMoreInformation": "For more information, please contact QQ: {qq}"
   },
   "org": {
+    "classSelector": "Class: ",
+    "moreRemainClassContact": "For more remaining places, please contact ",
     "Help": "Help",
     "moreStudy": "More",
     "loginToOrg": "Login To Organization",

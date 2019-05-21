@@ -8,17 +8,21 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 
 export default {
   name: 'WebsiteDelete',
   props: {
-    siteDetail: {
-      type: Object,
-      required: true
-    },
     sitePath: String
+  },
+  async mounted() {
+    await this.userGetWebsiteDetailInfoByPath({
+      path: this.sitePath
+    })
+    this.siteDetail = _.cloneDeep(
+      this.getSiteDetailInfoByPath(this.sitePath).siteinfo
+    )
   },
   data() {
     return {
@@ -27,12 +31,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath'
+    }),
     siteId() {
       _.get(this.siteDetail, 'id', '')
     }
   },
   methods: {
     ...mapActions({
+      userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',
       deleteWebsite: 'user/deleteWebsite',
       getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId'
     }),
@@ -61,7 +69,7 @@ export default {
   &-hint {
     color: #333;
     max-width: 480px;
-    word-break:break-all;
+    word-break: break-all;
     line-height: 30px;
     padding-left: 26px;
     position: relative;
@@ -78,7 +86,7 @@ export default {
       left: 4px;
       border: 1px solid #409eff;
       border-radius: 1px;
-      &::after{
+      &::after {
         content: '';
         width: 10px;
         height: 5px;

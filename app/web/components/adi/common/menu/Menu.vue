@@ -43,7 +43,8 @@ const renderTemplate = (h, m, data, parentIndex) => {
     if (!parentIndex) {
       parentIndex = index
     }
-    if (m.options.type === 'menu' && !menuData.child) {
+    let isItemHasChild = menuData.child && menuData.child.length > 0
+    if (m.options.type === 'menu' && !isItemHasChild) {
       return (
         <el-menu-item
           index={getIndexString(menuData.link, index)}
@@ -54,7 +55,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
           </a>
         </el-menu-item>
       )
-    } else if (m.options.type === 'menu' && menuData.child) {
+    } else if (m.options.type === 'menu' && isItemHasChild) {
       if (isLinkValid(menuData.link)) {
         return (
           <el-submenu
@@ -100,7 +101,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
           </el-submenu>
         )
       }
-    } else if (m.options.type !== 'menu' && menuData.child) {
+    } else if (m.options.type !== 'menu' && isItemHasChild) {
       return (
         <div
           index={getIndexString(menuData.link, index)}
