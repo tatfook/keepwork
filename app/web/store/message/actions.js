@@ -9,7 +9,7 @@ const {
 } = props
 
 export default {
-  async getMessages({ commit, dispatch }, params = {}) {
+  async getMessages({ commit }, params = {}) {
     const defaultParams = { 'x-order': 'id-desc-createdAt-desc' }
     const [messages, unreadMessages] = await Promise.all([
       keepwork.message.getMessages({ ...defaultParams, ...params }),
@@ -18,7 +18,7 @@ export default {
     commit(GET_MESSAGES_SUCCESS, messages)
     commit(GET_UNREAD_MESSAGES_SUCCESS, unreadMessages)
   },
-  async loadMessages({ commit, dispatch }, params = {}) {
+  async loadMessages({ commit }, params = {}) {
     const defaultParams = { 'x-order': 'id-desc-createdAt-desc' }
     const [messages, unreadMessages] = await Promise.all([
       keepwork.message.getMessages({ ...defaultParams, ...params }),
@@ -27,10 +27,14 @@ export default {
     commit(LOAD_MORE_MESSAGES_SUCCESS, messages)
     commit(GET_UNREAD_MESSAGES_SUCCESS, unreadMessages)
   },
-  async refreshMessagesBox({ dispatch, getters: { messagesBox } }) {
+  async refreshMessagesBox({ dispatch, getters: { messagesBox }, rootGetters: { 'user/isLogined': isLogin } }) {
+    if (!isLogin) return
     const messageCount = _.get(messagesBox, 'rows.length', 0)
     if (messageCount > 0) {
-      await dispatch('loadMessages', { 'x-per-page': messageCount })
+      await Promise.all([
+        dispatch('loadMessages', { 'x-per-page': messageCount }),
+        dispatch('getUnreadMessages')
+      ])
     }
   },
   async signMessages({ dispatch }, ids) {
