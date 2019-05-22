@@ -1719,7 +1719,7 @@
   },
   "org": {
     "classSelector": "请选择班级：",
-    "moreRemainClassContact": "如需提高学生数上线，请联系keepwork客服：",
+    "moreRemainClassContact": "如需提高学生数上限，请联系keepwork客服：",
     "Help": "使用帮助",
     "moreStudy": "更多学习内容",
     "loginToOrg": "机构登录",
