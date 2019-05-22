@@ -1850,6 +1850,7 @@
     "noViewPermissions": "无查看权限",
     "logoutHint": "提示",
     "logoutTips": "确定退出课程系统吗？",
-    "text": "文本"
+    "text": "文本",
+    "onlineLearning": "在线学习"
   }
 }
