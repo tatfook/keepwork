@@ -54,7 +54,7 @@ import _ from 'lodash'
 export default {
   name: 'SubmitWork',
   props: {
-    selectedGameAndProject: Object
+    selectedGameAndProject: Object,
   },
   data() {
     return {
@@ -111,8 +111,9 @@ export default {
     },
     selectedGameText() {
       if (!this.isGameSelectable) {
-        let gameInfo = this.selectedGameAndProject.game
-        return gameInfo.name + ' #' + gameInfo.id
+        let projectId = this.selectedGameAndProject.projectId
+        let projectName = this.selectedGameAndProject.originProjectDetail.name
+        return projectName + ' #' + projectId
       }
       return ''
     },
