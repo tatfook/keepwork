@@ -263,7 +263,7 @@ const actions = {
     )
     const lessonsID = _.map(lessons, item => item.lessonId)
     const filterLearnRecords = _.filter(learnRecords.rows, item => _.includes(lessonsID, item.lessonId))
-    const lastLearnRecord = filterLearnRecords[0]
+    const lastLearnRecord = _.get(filterLearnRecords, '[0]', {})
     const theLesson = _.find(lessons, item => item.lessonId === lastLearnRecord.lessonId)
     const theLessonIndex = _.findIndex(lessons, item => item.lessonId === lastLearnRecord.lessonId)
     if (lastLearnRecord.state === 0 && !theLesson.isLearned) {
