@@ -261,6 +261,9 @@ const actions = {
       _.get(packageDetail, 'lessons', []),
       lesson => lesson.lessonNo
     )
+    if (_.every(lessons, item => !item.isLearned)) {
+      return _.get(lessons, '[0]')
+    }
     const lessonsID = _.map(lessons, item => item.lessonId)
     const filterLearnRecords = _.filter(learnRecords.rows, item => _.includes(lessonsID, item.lessonId))
     const lastLearnRecord = _.get(filterLearnRecords, '[0]', {})
