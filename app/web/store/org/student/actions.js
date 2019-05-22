@@ -251,6 +251,35 @@ const actions = {
   },
   switchSummary({ commit }, flag) {
     commit(SWITCH_SUMMARY, flag)
+  },
+  async getNextLesson({ commit }, packageId) {
+    const [ learnRecords, packageDetail ] = await Promise.all([
+      lesson.lessons.getPackageLearnRecords({ packageId }),
+      lessonOrganizations.getOrgStudentPackageDetail({ packageId, roleId: 1 })
+    ])
+    const lessons = _.sortBy(
+      _.get(packageDetail, 'lessons', []),
+      lesson => lesson.lessonNo
+    )
+    const lessonsID = _.map(lessons, item => item.lessonId)
+    const filterLearnRecords = _.filter(learnRecords.rows, item => _.includes(lessonsID, item.lessonId))
+    const lastLearnRecord = filterLearnRecords[0]
+    const theLesson = _.find(lessons, item => item.lessonId === lastLearnRecord.lessonId)
+    const theLessonIndex = _.findIndex(lessons, item => item.lessonId === lastLearnRecord.lessonId)
+    if (lastLearnRecord.state === 0 && !theLesson.isLearned) {
+      return theLesson
+    }
+    if (lastLearnRecord.state === 1 && theLesson.isLearned && theLessonIndex + 1 < lessons.length) {
+      const nextLesson = lessons[theLessonIndex + 1]
+      if (!nextLesson.isLearned) {
+        return nextLesson
+      }
+    }
+    const res = _.find(lessons, item => !item.isLearned)
+    if (res) {
+      return res
+    }
+    return lessons[0]
   }
 }
 

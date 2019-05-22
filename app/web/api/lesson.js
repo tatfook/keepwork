@@ -89,7 +89,8 @@ export const lessons = {
   getSkills: async ({ lessonId }) => get(`lessons/${lessonId}/skills`),
   learnRecords: async ({ lessonId }) => get(`lessons/${lessonId}/learnRecords`),
   getLastLearnRecordById: async ({ lessonId }) => get(`learnRecords?lessonId=${lessonId}&x-per-page=1&x-order=createdAt-desc`),
-  getLastLearnRecords: async () => get('learnRecords?x-per-page=1&x-order=createdAt-desc')
+  getLastLearnRecords: async () => get('learnRecords?x-per-page=1&x-order=createdAt-desc'),
+  getPackageLearnRecords: async params => get('learnRecords', { params: { 'x-per-page': 30, 'x-order': 'createdAt-desc', ...params } })
 }
 
 export const users = {

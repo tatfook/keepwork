@@ -56,7 +56,8 @@ export default {
     ...mapActions({
       getOrgPackages: 'org/student/getOrgPackages',
       enterClassroom: 'org/student/enterClassroom',
-      getOrgPackageDetail: 'org/student/getOrgPackageDetail'
+      getOrgPackageDetail: 'org/student/getOrgPackageDetail',
+      getNextLesson: 'org/student/getNextLesson'
     }),
     handleToPackagePage(packageId) {
       this.$router.push({
@@ -65,12 +66,7 @@ export default {
       })
     },
     async handleContinueLearn(packageId) {
-      const packageDetail = await this.getOrgPackageDetail({ packageId })
-      const lessons = _.sortBy(
-        _.get(packageDetail, 'lessons', []),
-        lesson => lesson.lessonNo
-      )
-      const { lessonId } = _.find(lessons, item => !item.isLearned)
+      const { lessonId } = await this.getNextLesson(packageId)
       if (packageId && lessonId) {
         this.toLearnConfirm(packageId, lessonId, {
           name: 'OrgStudentPackageLesson',

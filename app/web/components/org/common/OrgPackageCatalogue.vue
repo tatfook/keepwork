@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
@@ -149,6 +149,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getNextLesson: 'org/student/getNextLesson'
+    }),
     toLessonDetail(lesson) {
       if (this.isClassCompleted) {
         return
@@ -193,20 +196,21 @@ export default {
         params: { packageId: this.packageDetail.id, lessonId: lesson.lessonId }
       })
     },
-    continueToLearn() {
+    async continueToLearn() {
       if (this.isBeInClassroom) {
         return this.$message.error(this.$t('lesson.beInClass'))
       }
+      const { lessonId } = await this.getNextLesson(this.packageDetail.id)
       const rotuerObject = {
         name: `OrgStudentPackageLesson`,
         params: {
           packageId: this.packageDetail.id,
-          lessonId: this.continueLearnedLesson.id
+          lessonId: lessonId
         }
       }
       this.toLearnConfirm(
         this.packageDetail.id,
-        this.continueLearnedLesson.id,
+        lessonId,
         rotuerObject
       )
     },
