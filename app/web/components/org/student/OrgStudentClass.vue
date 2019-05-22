@@ -66,7 +66,10 @@ export default {
     },
     async handleContinueLearn(packageId) {
       const packageDetail = await this.getOrgPackageDetail({ packageId })
-      const lessons = _.sortBy(_.get(packageDetail, 'lessons', []), lesson => lesson.lessonNo)
+      const lessons = _.sortBy(
+        _.get(packageDetail, 'lessons', []),
+        lesson => lesson.lessonNo
+      )
       const { lessonId } = _.find(lessons, item => !item.isLearned)
       if (packageId && lessonId) {
         this.toLearnConfirm(packageId, lessonId, {
@@ -218,10 +221,19 @@ export default {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))
     },
     orgStudentPackageList() {
-      const studentPackages = _.filter(
+      const _studentPackages = _.filter(
         this.orgPackageList,
         item =>
-          _.get(item, 'lessonOrganizationClassMembers.roleId', 0) & (1 > 0)
+          (_.get(item, 'lessonOrganizationClassMembers.roleId', 0) & 1) > 0
+      )
+      const today = Date.now()
+      const expirationList = _.filter(
+        _studentPackages,
+        item => +new Date(item.lessonOrganizationClasses.end) < today
+      )
+      const studentPackages = _.filter(
+        _studentPackages,
+        item => +new Date(item.lessonOrganizationClasses.end) > today
       )
       const learnedList = _.filter(studentPackages, item =>
         _.some(item.lessons, lesson => lesson.isLearned)
@@ -233,10 +245,17 @@ export default {
         _.every(item.lessons, lesson => lesson.isLearned)
       )
       const isDoneIDS = _.map(isDoneList, item => item.id)
-      const haveNotLearnedList = _.filter(learnedList, item =>
-        !_.includes(isDoneIDS, item.id)
+      const haveNotLearnedList = _.filter(
+        learnedList,
+        item => !_.includes(isDoneIDS, item.id)
       )
-      return _.concat(haveNotLearnedList, noLearnedList, isDoneList)
+      const result = _.concat(
+        haveNotLearnedList,
+        noLearnedList,
+        isDoneList,
+        expirationList
+      )
+      return result
     },
     orgPackageCount() {
       return this.orgStudentPackageList.length
