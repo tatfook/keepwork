@@ -29,6 +29,10 @@ export default {
   props: {
     projectId: {
       required: true
+    },
+    originProjectDetail: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -87,7 +91,8 @@ export default {
     setSelectedGame(gameName) {
       this.selectedGameAndProject = {
         game: _.find(this.inProgressGames, { name: gameName }),
-        projectId: this.projectId
+        projectId: this.projectId,
+        originProjectDetail: this.originProjectDetail
       }
       return true
     },
