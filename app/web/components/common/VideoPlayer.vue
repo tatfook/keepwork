@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <video-player ref="videoPlayer" :options="playerOptions" @ready="playerReadies()" @pause="handleStopButton()" @playing="handlePlayButton()" class="vjs-custom-skin"/>
+    <video-player ref="videoPlayer" :options="playerOptions" class="vjs-custom-skin" />
   </div>
 </template>
 
@@ -9,11 +9,11 @@ import videojs from 'video.js'
 import { videoPlayer } from 'vue-video-player'
 import { setTimeout } from 'timers'
 
-import "video.js/dist/video-js.css"
-import "vue-video-player/src/custom-theme.css"
+import 'video.js/dist/video-js.css'
+import 'vue-video-player/src/custom-theme.css'
 
 export default {
-  name: "VideoPlayer",
+  name: 'VideoPlayer',
   components: {
     videoPlayer
   },
@@ -21,30 +21,6 @@ export default {
     src: String,
     autoplay: Boolean,
     playloop: Boolean
-  },
-  methods: {
-    playerReadies() {
-      this.player.removeChild('bigPlayButton')
-      this.playerButton = this.player.addChild('button')
-
-      this.playerButton.addClass("iconfont")
-      this.playerButton.addClass("icon-video5")
-      this.playerButton.addClass("keepwork-play-button")
-
-      this.playerButton.on(
-        'click',
-        () => {
-          this.player.play()
-        }
-      )
-    },
-    handleStopButton() {
-      this.playerButton.removeClass("keepwork-play-button-hide")
-    },
-    handlePlayButton() {
-      this.playerButton.removeClass("keepwork-play-button-hide")
-      this.playerButton.addClass("keepwork-play-button-hide")
-    }
   },
   computed: {
     player() {
@@ -59,10 +35,12 @@ export default {
         autoplay: this.autoplay || false,
         loop: this.playloop || false,
         inactivityTimeout: 0,
-        sources: [{
-          type: "video/mp4",
-          src: this.src
-        }],
+        sources: [
+          {
+            type: 'video/mp4',
+            src: this.src
+          }
+        ]
       }
     }
   }
@@ -73,27 +51,31 @@ export default {
 .player {
   .vjs-custom-skin {
     padding-bottom: 42px;
-
     .vjs-control-bar {
       overflow: hidden;
       position: inherit;
       display: flex;
     }
-
-    .keepwork-play-button {
-      position: absolute;
-      height: auto;
-      top: 50%;
-      left: 50%;
+    .vjs-big-play-button {
+      font-family: 'iconfont' !important;
+      font-style: normal;
+      background-color: transparent;
+      border: none;
       font-size: 70px;
-      color: #409EFF;
-      width: auto!important;
-      margin-left: -35px;
-      margin-top: -35px;
+      color: #409eff;
+      width: auto !important;
+      height: auto !important;
+      line-height: 1 !important;
+      transform: translate(70px, 35px);
       opacity: 0.7;
     }
-
-    .keepwork-play-button-hide {
+    .vjs-big-play-button:hover {
+      text-shadow: 0 0 1em #fff;
+    }
+    .vjs-big-play-button:before {
+      content: '\e68c';
+    }
+    .vjs-big-play-button .vjs-icon-placeholder {
       display: none;
     }
   }
