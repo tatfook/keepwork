@@ -74,7 +74,11 @@ export default {
     let isShowMod = false
 
     if (this.mod.data && Object.keys(this.mod.data).length !== 0) {
-      _.forEach(this.mod.data, (val, key) => {
+      let modData = this.mod.data
+      if (this.mod.modType === 'ModMixPositionList') {
+        modData = modData.list.collection
+      }
+      _.forEach(modData, (val, key) => {
         if (val && typeof val === 'object') {
           if (typeof val.hidden === 'undefined' || val.hidden === false) {
             isShowMod = true

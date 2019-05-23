@@ -32,7 +32,7 @@ export default {
     filteredCollection() {
       return _.filter(
         this.properties.collection,
-        collectionItem => collectionItem.isSubmodShow !== false
+        collectionItem => collectionItem.hidden == false
       )
     },
     colWidth() {

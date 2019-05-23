@@ -4,7 +4,7 @@
       <i class="list-type-add-icon el-icon-plus"></i>
       添加更多图文
     </div>
-    <div class="list-type-item" v-for="(item, index) in cardValue.collection" :key="index">
+    <div class="list-type-item" v-for="(item, index) in originVals" :key="index">
       <div class="list-type-item-main">
         <i class="iconfont icon-tuwen1"></i>
         图文{{index + 1}}
@@ -28,6 +28,19 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ListType',
   mixins: [protypesBaseMixin],
+  mounted() {
+    this.originVals = _.map(this.cardValue.collection, item => {
+      return {
+        ...item,
+        isSubmodShow: !item.hidden
+      }
+    })
+  },
+  data() {
+    return {
+      originVals: []
+    }
+  },
   computed: {
     ...mapGetters({
       activeMod: 'activeMod'
@@ -72,12 +85,28 @@ export default {
     },
     toggleSubModVisible(index, item) {
       let changedCollection = this.cardValue.collection
-      changedCollection[index] = item
+      changedCollection[index] = {
+        ...item,
+        hidden: !item.isSubmodShow
+      }
       let changedData = _.merge(this.cardValue, {
         collection: this.changedCollection
       })
       this.changeListVisibility(changedData)
     }
+  },
+  watch: {
+    cardValue: {
+      handler(val) {
+        this.originVals = _.map(val.collection, item => {
+          return {
+            ...item,
+            isSubmodShow: !item.hidden
+          }
+        })
+      }
+    },
+    deep: true
   }
 }
 </script>

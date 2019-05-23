@@ -256,7 +256,7 @@ const mutations = {
     let list = state.activePage.activeMod.data[key]
     action = _.upperCase(action)
     if (action === 'ADD') {
-      list.collection.splice(list.collection.length, 0, { isSubmodShow: true })
+      list.collection.splice(list.collection.length, 0, { hidden: false })
     } else if (action === 'DELETE') {
       list.collection.splice(index, 1)
     }
