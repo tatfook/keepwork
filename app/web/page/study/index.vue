@@ -42,12 +42,9 @@ import { lesson } from '@/api'
 import axios from 'axios'
 import jsrsasign from 'jsrsasign'
 import { MessageBox } from 'element-ui'
-<<<<<<< HEAD
 import { socket, socketMixin } from '@/socket'
-=======
 import comboModule from '@/store/combo'
 
->>>>>>> 7998e57e0d10a899a5a4932ad76661d19a966783
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
