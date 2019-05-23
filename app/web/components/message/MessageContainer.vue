@@ -2,8 +2,8 @@
   <div class="message-container">
     <div class="message-tab-left">
       <div class="message-tab">
-        <div class="message-tab-item is-title">消息中心</div>
-        <div class="message-tab-item is-active">系统</div>
+        <div class="message-tab-item is-title">{{$t('message.messageCenter')}}</div>
+        <div class="message-tab-item is-active">{{$t('message.system')}}</div>
       </div>
     </div>
     <div class="message-main-content">

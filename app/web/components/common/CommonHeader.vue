@@ -47,14 +47,14 @@
         <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger="click">
           <div ref="scroll" class="user-message-main">
             <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
-              <span class="message-title">[系统]</span>
+              <span class="message-title">[{{$t('message.system')}}]</span>
               <span class="message-content">
                 {{item.content}}
               </span>
               <span class="message-date">{{item.createdAt | formatDate}}</span>
             </div>
           </div>
-          <div class="user-message-button" @click="toMessageCenter">打开消息中心</div>
+          <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
           <div slot="reference" class="user-message-icon-container">
             <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" class="user-message-badge">
               <i class="iconfont icon-message-fill user-message-icon"></i>

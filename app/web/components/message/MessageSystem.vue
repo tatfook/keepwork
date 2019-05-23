@@ -1,10 +1,10 @@
 <template>
   <div class="message-system">
-    <div class="message-system-title">系统</div>
+    <div class="message-system-title">{{$t('message.messageCenter')}}</div>
     <div class="message-system-item" :id="`msg-${item.id}`" v-for="item in systemMessages" :key="item.id">
       <img class="message-avatar" :src="systemAvatar" alt="系统头像">
       <div class="message-main">
-        <span class="message-main-sender">系统</span>
+        <span class="message-main-sender">{{$t('message.system')}}</span>
         <span class="message-main-date">{{item.createdAt | formatDate}}</span>
         <div class="message-main-content" v-html="item.messages.msg.text">
         </div>

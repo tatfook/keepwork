@@ -1860,5 +1860,10 @@
     "noViewPermissions": "No view permissions",
     "logoutHint": "Hint",
     "logoutTips": "Are you sure to quit the course system?"
+  },
+  "message": {
+    "messageCenter": "message center",
+    "system": "system",
+    "openMessageCenter": "open the message center"
   }
 }
