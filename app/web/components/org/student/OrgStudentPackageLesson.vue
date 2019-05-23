@@ -201,7 +201,8 @@ export default {
       )
     },
     currentPackageLessons() {
-      return _.map(_.get(this.packageDetail, 'lessons', []), item => ({
+      const lessons =  _.sortBy(_.get(this.packageDetail, 'lessons', []), item => item.lessonNo)
+      return _.map(lessons, item => ({
         ...item,
         ...item.lesson
       }))
