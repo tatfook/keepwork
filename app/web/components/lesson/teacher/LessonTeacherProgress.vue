@@ -112,7 +112,7 @@ export default {
       top: -24px;
       left: -27px;
       &.light {
-        color: $green;
+        color: #409efe;
       }
     }
     .pointer {

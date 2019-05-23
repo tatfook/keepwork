@@ -11,6 +11,7 @@
       <div class="project-comments-sends-operations">
         <el-button type="primary" :loading='isAddingComment' size="medium" @click="sendComment" :disabled="!newCommenContent">{{$t('project.comment')}}</el-button>
       </div>
+      <div class="project-comments-sends-login" v-if="!isLogined" @click="toLogin">{{$t("project.commentAfterLogin")}}</div>
     </div>
     <div class="project-comments-list" v-loading='isLoading'>
       <div class="project-comments-item" v-for="(comment, index) in commentList" :key='index'>
@@ -33,6 +34,7 @@ import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'ProjectComments',
   props: {
@@ -108,15 +110,23 @@ export default {
       this.xPage++
       this.getCommentFromBackEnd()
     },
+    toLogin() {
+      this.toggleLoginDialog(true)
+    },
     async sendComment() {
       if (!this.isLogined) {
-        return this.toggleLoginDialog(true)
+        return this.toLogin()
       }
       this.isAddingComment = true
       let sensitiveResult = await checkSensitiveWords({
         checkedWords: this.newCommenContent
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.newCommenContent = _.get(
+          sensitiveResult,
+          '[0].word',
+          this.newCommenContent
+        )
         this.isAddingComment = false
         return
       }
@@ -208,6 +218,7 @@ export default {
     padding: 24px 16px 24px 24px;
     border: 1px solid #e8e8e8;
     border-width: 1px 0;
+    position: relative;
     &-profile-input {
       padding-left: 64px;
       position: relative;
@@ -219,6 +230,22 @@ export default {
     &-operations {
       text-align: right;
       padding-top: 16px;
+    }
+    &-login {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.6);
+      &:hover {
+        color: #409efe;
+      }
     }
   }
   &-item {
@@ -247,6 +274,7 @@ export default {
       padding-right: 96px;
       line-height: 1.5;
       word-break: break-word;
+      word-wrap: break-word;
     }
     &-detail {
       flex: 1;

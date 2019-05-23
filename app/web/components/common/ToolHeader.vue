@@ -1,39 +1,33 @@
 <template>
   <div class="tool-header">
     <div class="breadcrumb" v-loading='breadcrumbsLoading'>
-      <a class="breadcrumb-item iconfont icon-home-keepwork" href="/wiki/home"></a>
+      <a class="breadcrumb-item iconfont icon-home-keepwork" href="/"></a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
       <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
-      <!-- <a class="breadcrumb-item" :href="'/' + activePageInfo.username + '/' + activePageInfo.sitename">{{activePageInfo.sitename}}</a> -->
-      <div class="breadcrumb-item">
-        <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
-          <el-scrollbar tag='ul' wrap-class="file-list-content" view-class="view-box" :native="false">
-            <li v-for='(site,index) in siteList' :key='index'>
-              <a class="clearfix" @click="pushNewUrl(site)">
-                <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
-                <i class="iconfont icon-private" v-if="site.visibility===1"></i>
-              </a>
-            </li>
-          </el-scrollbar>
-          <span class="page-item-content" slot="reference">
-            {{siteDisplayName}}
-            <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
-          </span>
-        </el-popover>
-      </div>
-
+      <el-dropdown trigger="click" class="breadcrumb-item" placement="bottom-start" @command="pushNewUrl">
+        <span class="page-item-content">
+          {{siteDisplayName}}<i class="el-icon-arrow-down el-icon-caret-bottom"></i>
+        </span>
+        <el-dropdown-menu class="breadcrumb-item-dropdown" slot="dropdown">
+          <el-dropdown-item v-for='(site,index) in siteList' :key='index' :command="site">
+            <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
+            <i class="iconfont icon-private" v-if="site.visibility===1"></i>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <div class="breadcrumb-item" v-for='(fileList, index) in breadcrumbs' :key='index'>
         <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
-        <el-popover placement="bottom-start" popper-class="breadcrumb-item-dropdown">
-          <el-scrollbar tag='ul' wrap-class="file-list-content" :native="false">
-            <li class="file-list-item" v-for='file in fileList' :key='file.name' @click="handleBreadcrumbClick(file)">{{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}</li>
-          </el-scrollbar>
-          <span class="page-item-content" slot="reference">
-            {{activePageInfo.paths[index] | hideMarkdownExt}}
-            <i class="el-icon-arrow-down el-icon-caret-bottom"></i>
+        <el-dropdown trigger="click" placement="bottom-start" @command="handleBreadcrumbClick">
+          <span class="page-item-content">
+            {{activePageInfo.paths[index] | hideMarkdownExt}}<i class="el-icon-arrow-down el-icon-caret-bottom"></i>
           </span>
-        </el-popover>
+          <el-dropdown-menu class="breadcrumb-item-dropdown" slot="dropdown">
+            <el-dropdown-item class="file-list-item" v-for='(file,index) in fileList' :key='index' :command="file">
+              {{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </div>
 
@@ -42,7 +36,7 @@
         <el-tooltip v-if="!isEditable()" :content="$t('editor.checkCode')">
           <i class="iconfont el-icon-view"></i>
         </el-tooltip>
-        <el-tooltip  v-if="isEditable()" :content="$t('editor.toEdit')">
+        <el-tooltip v-if="isEditable()" :content="$t('editor.toEdit')">
           <i class="iconfont icon-edit"></i>
         </el-tooltip>
       </a>
@@ -54,12 +48,6 @@
       <el-popover ref='share' trigger='click' @show='showSocialShare' width='130'>
         <div class="kp-social-share"></div>
       </el-popover>
-      <span class="icon-item" v-loading='starPending'>
-        <el-tooltip :content="$t('editor.praise')">
-          <i class="iconfont icon-like-" :class="{'active': (activePageStarInfo && activePageStarInfo.starred)}" @click='togglePageStar'></i>
-        </el-tooltip>
-        <span class="info">{{(activePageStarInfo && activePageStarInfo.starredCount) || 0 }}</span>
-      </span>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog"></login-dialog>
@@ -93,7 +81,7 @@ export default {
       starPending: false,
       breadcrumbsLoading: false,
       siteList: [],
-      isLoginDialogShow: false,
+      isLoginDialogShow: false
     }
   },
   computed: {
@@ -105,7 +93,8 @@ export default {
       getSiteDetailInfoByPath: 'user/getSiteDetailInfoByPath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       userGetDetailByUsername: 'user/getDetailByUsername',
-      personalAndContributedSiteNameList: 'user/personalAndContributedSiteNameList',
+      personalAndContributedSiteNameList:
+        'user/personalAndContributedSiteNameList',
       userIsLogined: 'user/isLogined'
     }),
     isLogin: {
@@ -123,7 +112,10 @@ export default {
       if (!siteDetailInfo) return
       let siteDisplayName = _.get(siteDetailInfo, 'siteinfo.displayName')
       let name = _.get(siteDetailInfo, 'siteinfo.sitename')
-      if (siteDetailInfo.siteinfo && siteDetailInfo.siteinfo.domain === 'paracraft') {
+      if (
+        siteDetailInfo.siteinfo &&
+        siteDetailInfo.siteinfo.domain === 'paracraft'
+      ) {
         siteDisplayName = 'paracraft'
       }
       return siteDisplayName || name
@@ -181,26 +173,29 @@ export default {
       getProfile: 'user/getProfile'
     }),
     isEditable() {
-      if(!this.userIsLogined && !this.personalAndContributedSiteNameList && !this.activePageInfo) {
+      if (
+        !this.userIsLogined &&
+        !this.personalAndContributedSiteNameList &&
+        !this.activePageInfo
+      ) {
         return false
       }
 
       let editable
       _.forEach(this.personalAndContributedSiteNameList, (value, key) => {
-        if(this.activePageInfo.sitename === value) {
+        if (this.activePageInfo.sitename === value) {
           editable = value
         }
       })
 
-      if(editable) {
+      if (editable) {
         return true
-      }else {
+      } else {
         return false
       }
-
     },
     pushNewUrl(site) {
-      this.$router.push(`/${site.username}/${site.name}`)
+      window.location.href = `/${site.username}/${site.name}`
     },
     showSocialShare() {
       let { username: siteUsername, sitename } = this.activePageInfo
@@ -273,55 +268,16 @@ export default {
 </script>
 <style lang="scss">
 .breadcrumb-item-dropdown {
-  padding: 0;
+  padding: 16px 0;
   min-width: 40px;
   border-color: #e4e7ed;
-  .clearfix::after {
-    content: '';
-    clear: both;
-    display: table;
-  }
-  .file-list-content {
-    max-height: 380px;
-    box-sizing: border-box;
-    overflow: scroll;
-    padding: 15px 0;
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-  li {
-    list-style: none;
-    height: 36px;
-    line-height: 36px;
-    padding: 0 16px;
-    color: #909399;
-    cursor: pointer;
-    font-size: 14px;
-    a {
-      color: inherit;
-      text-decoration: none;
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-    }
-  }
-  li:hover {
-    background-color: #e5f2f8;
-    color: #0081ba;
-  }
+  max-height: 380px;
+  overflow: auto;
   .file-list-item {
     max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
-  }
-  .list-content {
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
   }
   .icon-private {
     float: right;
@@ -343,6 +299,9 @@ export default {
     }
   }
   .breadcrumb-item {
+    display: inline-block;
+  }
+  .el-dropdown {
     color: #909399;
     display: inline-block;
   }
@@ -458,6 +417,11 @@ export default {
     img {
       width: 20px;
     }
+  }
+}
+@media print {
+  .tool-header {
+    display: none;
   }
 }
 </style>

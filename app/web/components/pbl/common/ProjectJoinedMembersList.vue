@@ -17,12 +17,12 @@
         <span class="project-joined-members-list-card-title">{{$t("project.projectMembers")}}</span>
       </div>
       <div class="project-joined-members-list-card-created">
-        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="">
-        <span class="project-joined-members-list-card-username">{{originProjectUsername}}</span>
+        <img class="project-joined-members-list-card-profile" :src="projectOwnerPortrait || defaultPortrait" alt="" @click="goCreatorHome()">
+        <span class="project-joined-members-list-card-username" :title="originProjectUsername">{{originProjectUsername}}</span>
         <span class="project-joined-members-list-card-label">{{$t("project.creator")}}</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
-        <img v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
+        <img @click="goMemberHome(member)" v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :src='member.portrait || defaultPortrait' :title='member.username' alt="">
       </div>
       <div v-else class="project-joined-members-list-card-profiles-empty">{{$t("project.noOtherMembers")}}</div>
     </el-card>
@@ -30,7 +30,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import dayjs from 'dayjs'
+import moment from 'moment'
 export default {
   name: 'ProjectJoinedMembersList',
   props: {
@@ -88,6 +88,12 @@ export default {
       getProjectMember: 'pbl/getProjectMember',
       deleteMember: 'pbl/deleteMember'
     }),
+    goMemberHome(member){
+      window.open(`${window.location.origin}/u/${member.username}`)
+    },
+    goCreatorHome(){
+      window.open(`${window.location.origin}/u/${this.originProjectUsername}`)
+    },
     async deleteFromProject(memberDetail) {
       let { id } = memberDetail
       this.isLoading = true
@@ -111,7 +117,7 @@ export default {
   },
   filters: {
     formatDate(date, formatType) {
-      return dayjs(date).format(formatType)
+      return moment(date).format(formatType)
     }
   }
 }
@@ -153,6 +159,7 @@ export default {
       height: 48px;
       border-radius: 50%;
       object-fit: cover;
+      cursor: pointer;
     }
     &-created {
       height: 96px;
@@ -175,11 +182,15 @@ export default {
     &-username {
       margin: 0 16px;
       flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     &-profiles {
       padding: 16px 8px;
       &-item {
         padding: 8px;
+        cursor: pointer;
       }
     }
     &-profiles-empty {

@@ -11,7 +11,7 @@
       </ul>
     </div>
     <div class="website-setting-content">
-      <component :is='activeSettingComp' @close='handleClose' :siteDetail='siteDetail' :sitePath='sitePath'></component>
+      <component :is='activeSettingComp' @close='handleClose' :sitePath='sitePath'></component>
     </div>
   </el-dialog>
 </template>
@@ -20,6 +20,7 @@
 import _ from 'lodash'
 import WebsiteSettingLayout from './WebsiteSettingLayout'
 import WebsiteSettingPermission from './WebsiteSettingPermission'
+import WebsiteDelete from './WebsiteDelete'
 import WebsiteSettingBasicMessage from './WebsiteSettingBasicMessage'
 import WebsiteSettingStyle from './WebsiteSettingStyle'
 import { mapGetters } from 'vuex'
@@ -27,12 +28,14 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'WebsiteSettingDialog',
   props: {
-    siteDetail: {
-      type: Object,
-      required: true
-    },
     show: Boolean,
+    activeIndex: {
+      default: 0
+    },
     sitePath: String
+  },
+  mounted() {
+    this.activeSettingIndex = this.activeIndex
   },
   data() {
     return {
@@ -80,6 +83,11 @@ export default {
           text: this.$t('setting.sitePermission'),
           comp: WebsiteSettingPermission,
           isShow: this.isBasicSettingShow
+        },
+        {
+          text: this.$t('common.deleteWebsite'),
+          comp: WebsiteDelete,
+          isShow: this.isBasicSettingShow
         }
       ]
     },
@@ -97,11 +105,17 @@ export default {
       this.activeSettingIndex = index
     }
   },
+  watch: {
+    activeIndex(newVal) {
+      this.activeSettingIndex = newVal
+    }
+  },
   components: {
     WebsiteSettingLayout,
     WebsiteSettingPermission,
     WebsiteSettingBasicMessage,
-    WebsiteSettingStyle
+    WebsiteSettingStyle,
+    WebsiteDelete
   }
 }
 </script>

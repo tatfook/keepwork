@@ -48,7 +48,7 @@ const actions = {
     if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
-      .filter(({ cmd }) => cmd === 'Quiz')
+      .filter(item => (item.cmd === 'Quiz' && !_.isEmpty(item.data)))
       .map(({ data: { quiz: { data } } }) => ({
         key: data[0].id,
         data: data[0],
@@ -257,7 +257,6 @@ const actions = {
     await lesson.classrooms
       .getClassroomLearnRecords(id)
       .then(res => {
-        console.log('getClassroomLearnRecords', res)
         commit(GET_CLASSROOM_LEARN_RECORDS, res)
       })
       .catch(err => console.log(err))
@@ -266,8 +265,6 @@ const actions = {
     await lesson.classrooms
       .modifyClassroomLearnRecords({ id, learnRecordsArr })
       .then(res => {
-        console.log('modifyClassroomRecords', res)
-        // commit(GET_CLASSROOM_LEARN_RECORDS, res)
         dispatch('getClassLearnRecords', { id })
       })
       .catch(err => console.log(err))

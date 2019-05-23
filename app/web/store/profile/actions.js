@@ -7,7 +7,8 @@ let {
   GET_USER_FAVORITE_USERS_SUCCESS,
   GET_USER_FOLLOW_USERS_SUCCESS,
   GET_USER_CREATED_PROJECT_SUCCESS,
-  GET_USER_JOINED_PROJECT_SUCCESS
+  GET_USER_JOINED_PROJECT_SUCCESS,
+  GET_USER_STARRED_PROJECT_SUCCESS
 } = props
 
 const actions = {
@@ -120,6 +121,12 @@ const actions = {
       .getContributeProjectsByUserId({ objectType: 0, userId, exclude })
       .catch(err => console.error(err))
     commit(GET_USER_JOINED_PROJECT_SUCCESS, { joinedProjects, userId })
+  },
+  async getUserStarredProjects({ commit }, { userId }) {
+    let starredProjects = await keepwork.favorites
+      .getUserFavorites({ objectType: 5, userId })
+      .catch(err => console.error(err))
+    commit(GET_USER_STARRED_PROJECT_SUCCESS, { starredProjects, userId })
   }
 }
 

@@ -7,7 +7,8 @@ const state = {
   favoriteUsers: [],
   followUsers: [],
   createdProjects: [],
-  joinedProjects: []
+  joinedProjects: [],
+  starredProjects: []
 }
 export default {
   namespaced: true,

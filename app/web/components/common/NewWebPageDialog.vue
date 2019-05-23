@@ -4,7 +4,7 @@
       <el-row class="full-height">
         <el-col :span="3" class="full-height">
           <el-menu class="full-height" :default-active="''+selectedCategoryIndex" @select='setSelectedCategoryIndex'>
-            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index' v-if="(category.classify !== 'course')">
+            <el-menu-item v-for='(category, index) in categories' :key='category.name' :index='"" + index'>
               {{ $t(`templates.pageMenu${category.name}`) }}
             </el-menu-item>
           </el-menu>
@@ -22,9 +22,9 @@
       </el-row>
     </div>
     <div v-if="stepIndex===1">
-      <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm">
+      <el-form class="webpage-name" :model="webpageNameForm" :rules="webpageNameFormRules" ref="webpageNameForm" @submit.native.prevent>
         <el-form-item prop="value">
-          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model="webpageNameForm.value">
+          {{ locationOrigin }}/{{ folderPath }}/<el-input :placeholder="forExample.forExample" v-model.trim="webpageNameForm.value" @keyup.enter.native="handleSubmit">
           </el-input>
         </el-form-item>
       </el-form>
@@ -162,6 +162,7 @@ export default {
   async mounted() {
     await this.userGetWebPageTemplateConfig()
     this.loading = false
+    this.keyupSubmit()
   },
   methods: {
     ...mapActions({
@@ -169,6 +170,22 @@ export default {
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       userGetWebPageTemplateConfig: 'user/getWebPageTemplateConfig'
     }),
+    keyupSubmit() {
+      document.onkeydown = e => {
+        let _key = window.event.keyCode
+        if (_key === 13) {
+          if (this.stepIndex === 0) {
+            this.handleNextStep()
+          }
+          if (this.stepIndex === 1) {
+            this.handleSubmit()
+          }
+          if (this.stepIndex === 2) {
+            this.handleEdit()
+          }
+        }
+      }
+    },
     setSelectedCategoryIndex(index) {
       this.selectedCategoryIndex = index
       this.resetSelectedTemplateIndex()
@@ -199,6 +216,8 @@ export default {
     },
     handleEdit() {
       this.$router.push('/' + this.newPageUrl)
+      let url = this.$router.resolve({ path: this.$route.path }).href
+      history.replaceState('', '', url)
       this.resetAndClose()
     },
     resetAndClose() {
@@ -214,6 +233,11 @@ export default {
         checkedWords: this.webpageNameForm.value
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.webpageNameForm.value = _.get(
+          sensitiveResult,
+          '[0].word',
+          this.webpageNameForm.value
+        )
         return
       }
       await this.createNewPage()
@@ -247,6 +271,9 @@ export default {
 }
 
 .new-webpage-dialog {
+  .new-webpage-template{
+    padding-left: 20px;
+  }
   .full-height {
     height: 100%;
   }

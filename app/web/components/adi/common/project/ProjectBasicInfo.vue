@@ -158,7 +158,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
@@ -431,6 +431,7 @@ export default {
         checkedWords: this.applyText
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.applyText = _.get(sensitiveResult, '[0].word', this.applyText)
         this.isApplyButtonLoading = false
         return
       }
@@ -559,7 +560,7 @@ export default {
       return projectTypes[typeValue]
     },
     formatDate(date, formatType) {
-      return dayjs(date).format(formatType)
+      return moment(date).format(formatType)
     },
     applyStateFilter(applyState, applyStates) {
       let stateText = ''

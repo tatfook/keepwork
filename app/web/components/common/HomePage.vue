@@ -2,7 +2,9 @@
   <div class="home-page">
     <div class="home-page-advertising">
       <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
-        <i class="iconfont icon-sound-fill"></i>{{$t('home.paracraftIsFree')}}
+        <i class="iconfont icon-sound-fill"></i>
+        <span class="home-page-advertising-text">{{$t('home.paracraftIsFree')}}</span>
+        <a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="home-page-advertising-download">{{$t('editor.paracraftDownload')}}</a>
         <span class="close" @click="closeAd">&times;</span>
       </div>
     </div>
@@ -18,6 +20,12 @@
               <a href="https://keepwork.com/official/paracraft/to-educators" target="_blank" class="pedagogue">{{$t("home.toEducators")}}</a>
               <a href="https://keepwork.com/official/paracraft/to-parents" target="_blank">{{$t("home.toParents")}}</a>
             </div>
+            <a class="join-button download-button" href="http://paracraft.keepwork.com/download?lang=zh" target="_blank">{{$t('project.downloadParacraft')}}</a>
+            <div class="remainder">
+              <a target="_blank" class="pedagogue">{{$t('common.support')}} Windows</a>
+              <a target="_blank" class="pedagogue">Mac</a>
+              <a target="_blank">Android</a>
+            </div>
           </div>
           <div class="flexible-info-board">
             <img :src="boardImgUrl" alt="">
@@ -27,7 +35,6 @@
           <div class="home-page-simple-show-center-right-kp">
             <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div>
             <div class="video">
-              <!-- <video width="100%" src="https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4" poster="" controls></video> -->
               <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4' />
             </div>
           </div>
@@ -55,8 +62,6 @@
           <div class="box-text">
             <h2>{{$t('common.creativity')}}</h2>
             <p class="box-text-intro">{{$t("home.everyoneShouldHaveOwnWorks")}}</p>
-            <!-- <p class="box-text-own">已创建项目:
-              <span class="total">{{excellentProjectsCount}}</span></p> -->
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
@@ -67,8 +72,6 @@
           <div class="box-text">
             <h2>{{$t('common.explore')}}</h2>
             <p class="box-text-intro">{{$t("home.openDoorsToVariousWorlds")}}</p>
-            <!-- <p class="box-text-own">已共享内容:
-              <span class="total">123456</span></p> -->
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
@@ -79,8 +82,6 @@
           <div class="box-text">
             <h2>{{$t('common.study')}}</h2>
             <p class="box-text-intro">{{$t("home.learningIsFromExploringToCreating")}}</p>
-            <!-- <p class="box-text-own">拥有在线课程：
-              <span class="total">{{allPackagesCount}}</span></p> -->
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
@@ -100,20 +101,6 @@
         <el-row>
           <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in handpickProjects" :key="index">
             <project-cell :project='project'></project-cell>
-          </el-col>
-        </el-row>
-      </div>
-      <div class="home-page-cabinet-excellent hot">
-        <div class="title">
-          <div class="title-text">
-            <span class="star">
-              <img src="@/assets/img/hp_hot_lesson.png" alt="">
-            </span>{{$t("home.hotLessons")}}</div>
-          <div class="more" @click="viewMore('courseField')">{{$t("common.viewMore")}}&gt;</div>
-        </div>
-        <el-row>
-          <el-col class="hot-lesson" :sm="12" :md="6" :xs="12" v-for="(lessonPackage,index) in hotsPackages" :key="index">
-            <lesson-package-cell :lessonPackage="lessonPackage"></lesson-package-cell>
           </el-col>
         </el-row>
       </div>
@@ -148,7 +135,7 @@ import RegisterDialog from './RegisterComp'
 import _ from 'lodash'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import LessonPackageCell from './LessonPackageCell'
-import {  mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import videoPlayer from '@/components/common/VideoPlayer'
 
 export default {
@@ -203,22 +190,11 @@ export default {
   },
   async mounted() {
     this.textAnimation()
-    let [hotPackage, handpick, likes, news] = await Promise.all([
-      this.getHotPackage(),
+    let [ handpick, likes, news] = await Promise.all([
       this.getHandpick(),
       this.getLikes(),
       this.getNews()
     ]).catch(e => console.error(e))
-
-    this.hotsPackages = _.map(hotPackage, i => ({
-      ...i,
-      cover: i.extra.coverUrl,
-      name_title: i.packageName,
-      total_lessons: i.lessons.length,
-      age_min: i.minAge,
-      age_max: i.maxAge,
-      description: i.intro
-    }))
     this.newsHtml = news
     this.originHandpickProjects = handpick
     this.originLikesProjects = likes
@@ -238,9 +214,6 @@ export default {
     }
   },
   methods: {
-    async getHotPackage() {
-      return lesson.packages.getHotsPackages()
-    },
     async getHandpick() {
       return keepwork.projects.getProjects({
         'x-order': 'choicenessNo-desc',
@@ -251,7 +224,7 @@ export default {
     async getLikes() {
       return keepwork.projects.getProjects({
         'x-order': 'lastStar-desc-updatedAt-desc',
-        'x-per-page': 4,
+        'x-per-page': 8,
         'x-page': 1
       })
     },
@@ -315,18 +288,15 @@ export default {
       this.isRegisterDialogShow = false
     },
     goCreativityPage() {
-      this.$router.push(`/creativity`)
+      this.$router.push(`/create`)
     },
     goExplorationPage() {
-      this.$router.push(`/exploration`)
+      this.$router.push(`/explore`)
     },
     goStudyPage() {
-      if (this.isLogined) {
-        return (window.location.href = `${this.locationOrigin}/l/student`)
-      }
       window.location.href = `${
         this.locationOrigin
-      }/l/student/solution/teachingIdea`
+      }/s`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
@@ -391,6 +361,7 @@ export default {
       border: solid 1px #2397f3;
       color: #2397f3;
       position: relative;
+      font-size: 14px;
       .iconfont {
         font-size: 20px;
         margin-right: 6px;
@@ -406,6 +377,13 @@ export default {
         top: 0;
         cursor: pointer;
       }
+    }
+    &-text {
+      color: #333;
+    }
+    &-download {
+      text-decoration: none;
+      color: #2397f3;
     }
     .hidden-ad {
       height: 0;
@@ -468,6 +446,12 @@ export default {
             border: none;
             box-shadow: 3px 15px 18px -12px #ff720ee0;
             text-shadow: 0px 1px 6px #a52e02b0;
+          }
+          .download-button {
+            background: linear-gradient(0deg, #2497f4 0%, #3ec8f8 100%);
+            box-shadow: 0px 7px 9px 0px rgba(192, 228, 255, 0.88);
+            text-decoration: none;
+            text-shadow: 0 1px 6px rgb(23, 137, 208);
           }
           .remainder {
             a {

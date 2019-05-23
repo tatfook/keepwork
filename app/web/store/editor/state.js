@@ -60,6 +60,7 @@ const state = () => ({
   isSkyDriveManagerDialogShow: false,
   updateRecentUrlList: [],
   isAnglesToggle: false,
+  isFileHistoryVisible: false,
   iframeDialog: {}
 })
 

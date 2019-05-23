@@ -1,11 +1,11 @@
 <template>
   <div class="lesson-package-cell">
-    <div class="lesson">
-      <div class="lesson-cover" @click="goLessonPackage(lessonPackage)"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
-      <h4 class="lesson-title" @click="goLessonPackage(lessonPackage)" :title="lessonPackage.title" v-html="lessonPackage.title"></h4>
+    <div class="lesson" @click="goLessonPackage(lessonPackage)">
+      <div class="lesson-cover"><img class="lesson-cover-img" :src="lessonPackage.cover" alt=""></div>
+      <h4 class="lesson-title" :title="lessonPackage.title" v-html="lessonPackage.title || lessonPackage.packageName"></h4>
       <div class="lesson-desc">
         <p>{{$t('lesson.include')}}：
-          <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.packagesCount')}}</p>
+          <span>{{lessonPackage.total_lessons || 0}}</span>{{$t('lesson.lessonsCount')}}</p>
         <p>{{$t('lesson.ages')}}：{{getPackageSuitableAge(lessonPackage)}}</p>
         <p class="lesson-desc-text" v-html="`${$t('lesson.intro')}：${lessonPackage.description ? lessonPackage.description : ''}`"></p>
       </div>
@@ -25,7 +25,15 @@ export default {
   },
   methods: {
     goLessonPackage(lessonPackage) {
-      window.open(`/l/student/package/${lessonPackage.id}`)
+      if (this.$route.name === 'LessonPackage') {
+        return this.$router.push({
+          name: 'PackageDetail',
+          params: {
+            packageId: lessonPackage.id
+          }
+        })
+      }
+      window.location.href = `${window.location.origin}/s/lesson/package/${lessonPackage.id}`
     },
     getPackageSuitableAge(lessonPackage) {
       let { age_min, age_max } = lessonPackage
@@ -48,6 +56,7 @@ export default {
     margin: 0 auto 10px;
     border-radius: 4px;
     transition: all 200ms ease-in;
+    cursor: pointer;
     .red {
       color: red;
     }
@@ -58,20 +67,17 @@ export default {
     &-cover {
       width: 100%;
       height: 143px;
-      cursor: pointer;
       &-img {
         width: 100%;
         height: 143px;
         object-fit: cover;
         border-radius: 4px;
-        cursor: pointer;
       }
     }
     &-title {
       font-size: 14px;
       margin: 10px 0;
       height: 20px;
-      cursor: pointer;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -79,7 +85,7 @@ export default {
     &-desc {
       font-size: 12px;
       color: #909399;
-      &-text {
+      &-text {     
         height: 60px;
         overflow: hidden;
         text-overflow: ellipsis;

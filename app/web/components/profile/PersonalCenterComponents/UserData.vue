@@ -2,7 +2,7 @@
   <div class="user-data" v-loading="loading">
     <div class="user-data-title">{{$t('common.userData')}}</div>
     <div class="user-data-content">
-      <el-form ref="form" :model="userInfo" label-width="80px">
+      <el-form ref="form" :model="userInfo" label-width="80px" :rules="userInfoRules">
         <el-form-item :label='$t("card.pic")'>
           <div class="user-data-content-profile" @click="showMediaSkyDriveDialog">
             <img :src="portrait || defaultPortrait" alt="" class="profile">
@@ -31,11 +31,11 @@
         <el-form-item :label="$t('user.birthday')">
           <el-date-picker size="small" v-model="userInfo.info.birthdate" type="date" :placeholder="$t('user.inputBirth')"></el-date-picker>
         </el-form-item>
-        <el-form-item :label="$t('user.email')">
+        <el-form-item :label="$t('user.email')" prop="email">
           <el-input v-model="userInfo.email" size="small" :placeholder="$t('user.inputEmail')"></el-input>
         </el-form-item>
-        <el-form-item label="QQ">
-          <el-input v-model="userInfo.info.qq" size="small" :placeholder="$t('user.inputQQ')"></el-input>
+        <el-form-item label="QQ" prop="qq">
+          <el-input v-model="userInfo.qq" size="small" :placeholder="$t('user.inputQQ')"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.school')">
           <el-input v-model="userInfo.info.school" size="small" :placeholder="$t('user.inputSchool')"></el-input>
@@ -77,14 +77,35 @@ export default {
     this.loading = false
   },
   data() {
+    let checkQQ = (rule, value, callback) => {
+      if(value && !/^[0-9]*$/.test(value)) {
+        return callback(new Error('必须为数字'))
+      }
+      callback()
+    }
     return {
       loading: true,
       cities: cityName,
       tempLocation: null,
-      userInfo: {info:{}},
+      userInfo: { info: {} },
       copiedLoginUserProfile: {},
       defaultPortrait: require('@/assets/img/default_portrait.png'),
-      isMediaSkyDriveDialogShow: false
+      isMediaSkyDriveDialogShow: false,
+      userInfoRules: {
+        email: [
+          {
+            type: 'email',
+            message: '请输入正确的邮箱地址',
+            trigger: ['blur', 'change']
+          },
+        ],
+        qq: [
+          {
+            validator: checkQQ,
+            trigger: ['blur', 'change']
+          }
+        ]
+      }
     }
   },
   computed: {
@@ -116,8 +137,9 @@ export default {
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     getUserInfo() {
-      this.userInfo = _.cloneDeep(this.loginUserProfile)
-      this.userInfo.info = this.userInfo.info || {}
+      let info = _.cloneDeep(_.get(this.loginUserProfile, 'info', {}))
+      this.userInfo = {...this.loginUserProfile, qq: _.get(info, 'qq', '')}
+      this.userInfo.info = info || {}
       this.copiedLoginUserProfile = _.cloneDeep(this.userInfo)
       this.tempLocation = _.get(this.copiedLoginUserProfile, 'extra.location')
     },
@@ -142,24 +164,32 @@ export default {
       })
     },
     async saveUserData() {
-      let userInfo = this.userInfo
-      if (this.isModified) {
-        this.loading = true
-        let { id, nickname, sex, portrait, description } = userInfo
-        let location = this.tempLocation
-        let isSensitive = await this.checkSensitive([
-          nickname,
-          location,
-          description
-        ])
-        if (isSensitive) {
-          this.loading = false
-          return
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          let userInfo = this.userInfo
+          if (this.isModified) {
+            this.loading = true
+            let { id, nickname, sex, portrait, description } = userInfo
+            let location = this.tempLocation
+            let isSensitive = await this.checkSensitive([
+              nickname,
+              location,
+              description
+            ])
+            if (isSensitive) {
+              this.loading = false
+              return
+            }
+            const { qq } = this.updatingUserInfo
+            this.updatingUserInfo.info.qq = qq
+            await this.userUpdateUserInfo(this.updatingUserInfo)
+            this.loading = false
+          }
+          this.showMessage('success', this.$t('common.saveSuccess'))
+        } else {
+          this.$message.error(this.$t('common.saveFail'))
         }
-        await this.userUpdateUserInfo(this.updatingUserInfo)
-        this.loading = false
-      }
-      this.showMessage('success', this.$t('common.saveSuccess'))
+      })
     },
     handleClose() {
       this.$emit('close')

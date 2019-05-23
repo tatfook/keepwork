@@ -59,6 +59,7 @@ const SAVE_HISTORY = 'SAVE_HISTORY'
 const INIT_UNDO = 'INIT_UNDO'
 const TOGGLE_SKY_DRIVE = 'TOGGLE_SKY_DRIVE'
 const ADD_RECENT_OPENED_SITE = 'ADD_RECENT_OPENED_SITE'
+const TOGGLE_FILE_HISTORY = 'TOGGLE_FILE_HISTORY'
 const TOGGLE_ANGLES = 'TOGGLE_ANGLES'
 const TOGGLE_IFRAME_DIALOG = 'TOGGLE_IFRAME_DIALOG'
 
@@ -113,6 +114,7 @@ export const props = {
   INIT_UNDO,
   TOGGLE_SKY_DRIVE,
   ADD_RECENT_OPENED_SITE,
+  TOGGLE_FILE_HISTORY,
   TOGGLE_ANGLES,
   TOGGLE_IFRAME_DIALOG
 }
@@ -399,6 +401,9 @@ const mutations = {
   },
   [TOGGLE_ANGLES](state, { showAngle = false }) {
     Vue.set(state, 'isAnglesToggle', showAngle)
+  },
+  [TOGGLE_FILE_HISTORY](state, { isVisible }) {
+    Vue.set(state, 'isFileHistoryVisible', isVisible)
   },
   [TOGGLE_IFRAME_DIALOG](state, payload) {
     Vue.set(state, 'iframeDialog', payload)

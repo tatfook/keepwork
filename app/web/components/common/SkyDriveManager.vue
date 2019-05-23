@@ -1,13 +1,12 @@
 <template>
-
   <div v-loading='loading' class="sky-drive-manager" @drop.prevent='handleDrop' @dragover.prevent>
     <table-type v-if="defaultMode" ref="tableTypeComp" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @uploadFile='handleUploadFile' @insert='handleInsert' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @copy='handleCopy'></table-type>
-    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @insert='handleInsert'></media-type>
+    <media-type v-if="mediaLibraryMode" ref="mediaTypeComp" :info='info' :uploadingFiles='uploadingFiles' @uploadFile='handleUploadFile' :skyDriveMediaLibraryData='skyDriveMediaLibraryData' :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @remove='handleRemove' @removeFromUploadQue='removeFromUploadQue' @insert='handleInsert'></media-type>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import tableType from './skyDrive/tableType'
@@ -24,6 +23,7 @@ export default {
       type: Boolean,
       default: true
     },
+    isImageTabShow: Boolean,
     isVideoTabShow: Boolean
   },
   async mounted() {
@@ -53,7 +53,7 @@ export default {
     isEditorPage() {
       return _.get(this.$route, 'name') === 'Editor'
     },
-    isUseFileInSiteMode(){
+    isUseFileInSiteMode() {
       return this.isSiteMode === false ? false : this.isEditorPage
     },
     tableTypeComp() {
@@ -69,9 +69,24 @@ export default {
     },
     info() {
       let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
+      let uploadingFileSize = this.uploadingFileSize
+      let usedWithUpload = used + uploadingFileSize
       let unused = total - used
+      let unusedWithUpload = unused - uploadingFileSize
       let usedPercent = Math.max(0, ((100 * used) / total).toFixed(2))
-      return { total, used, unused, usedPercent }
+      let usedPercentWithUpload = Math.max(
+        0,
+        ((100 * usedWithUpload) / total).toFixed(2)
+      )
+      return {
+        total,
+        used,
+        usedWithUpload,
+        unused,
+        unusedWithUpload,
+        usedPercent,
+        usedPercentWithUpload
+      }
     },
     skyDriveTableData() {
       return this.userSkyDriveFileList
@@ -82,15 +97,15 @@ export default {
           return {
             ...item,
             file: { size, filename, type, downloadUrl: '' },
-            displaySize: this.biteToM(size) + 'MB',
+            displaySize: this.getSizeText(size),
             ext: getFileExt(item),
             checkPassed: checked === 1,
             checkedState:
               checked === 1
                 ? this.$t('skydrive.checkPassed')
                 : checked === 2
-                  ? this.$t('skydrive.checkUnpassed')
-                  : this.$t('skydrive.checking')
+                ? this.$t('skydrive.checkUnpassed')
+                : this.$t('skydrive.checking')
           }
         })
         .filter(this.itemFilterBySearchWord)
@@ -99,6 +114,15 @@ export default {
       return _.filter(this.uploadingFiles, file => {
         return file.state !== 'success'
       })
+    },
+    uploadingFileSize() {
+      return _.reduce(
+        this.filterFinishedUploadingFile,
+        (sum, file) => {
+          return sum + file.size
+        },
+        0
+      )
     },
     skyDriveTableDataWithUploading() {
       return _.sortBy(
@@ -143,30 +167,54 @@ export default {
       await Promise.all(
         _.map(files, async file => {
           let fileIndex = this.uploadingFiles.length
-          this.uploadingFiles.push({
+          let waitingUploadFile = {
             cover: URL.createObjectURL(file),
             percent: 0,
             filename: file.name,
             ext: getFileExt(file),
-            displaySize: this.biteToM(file.size) + 'MB',
+            size: file.size,
+            displaySize: this.getSizeText(file.size),
             type: file.type.split('/')[0] + 's',
             file: {
               downloadUrl: ''
             },
-            updatedAt: dayjs(
+            updatedAt: moment(
               new Date(Date.now() + 7 * 24 * 3600 * 1000)
             ).format('YYYY-MM-DD HH:mm:ss'), // add extra time for sort
             state: 'doing' // success, error, cancel, doing
-          })
+          }
+          this.uploadingFiles.push(waitingUploadFile)
+          if (this.info.unusedWithUpload < 0) {
+            this.removeFromUploadQue(waitingUploadFile)
+            this.$notify({
+              title: this.$t('common.failure'),
+              message: `网盘空间不足， ${file.name}无法上传`,
+              type: 'error'
+            })
+            return
+          }
           await this.uploadFile(file, fileIndex)
         })
       )
     },
-    biteToM(bite = 0) {
-      return (bite / (1024 * 1024))
+    getSizeText(bite = 0) {
+      let KBVal = (bite / 1024)
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')
+      let MBVal = (bite / 1024 / 1024)
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+      let GBVal = (bite / 1024 / 1024 / 1024)
+        .toFixed(2)
+        .toString()
+        .replace(/\.*0*$/, '')
+      return KBVal < 100
+        ? `${KBVal}KB`
+        : MBVal < 100
+        ? `${MBVal}MB`
+        : `${GBVal}GB`
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
@@ -227,7 +275,10 @@ export default {
     async handleInsert({ file }) {
       if (file.checkPassed) {
         let url = await this.handleGetUrl({ file })
-        this.$emit('close', { file, url: `${url}#${file.filename ? file.filename : ''}` })
+        this.$emit('close', {
+          file,
+          url: `${url}#${file.filename ? file.filename : ''}`
+        })
       }
     },
     async handleCopy(file) {
@@ -235,6 +286,7 @@ export default {
       let toCopyPrefix = await this.handleGetUrl({ file })
       let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
       await this.$confirm(toCopyLink, {
+        customClass: 'sky-drive-manager-messagebox',
         confirmButtonText: this.$t('common.copy'),
         cancelButtonText: this.$t('common.Cancel')
       })
@@ -305,3 +357,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.sky-drive-manager {
+  &-messagebox {
+    word-break: break-all;
+  }
+}
+</style>

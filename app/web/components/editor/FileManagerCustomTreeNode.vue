@@ -1,55 +1,59 @@
 <template>
-  <div class="el-tree-node__label" :class="operationButtonsCountClass"  v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
-    <span class="rename-wrapper" v-if="isRename">
-      <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
-      <el-tooltip :content="$t('editor.confirm')">
-        <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini"></el-button>
-      </el-tooltip>
-      <el-tooltip :content="$t('editor.cancel')">
-        <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini"></el-button>
-      </el-tooltip>
-    </span>
-    <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data.displayName || data.name || node.label | hideMDFileExtension}})</span>
-    <span v-else>{{data.displayName || data.name || node.label | hideMDFileExtension}}</span>
-    <span class="node-icon">
-      <i :class="['iconfont', isHasOpened ? 'icon-edited_file is-modified' : 'icon-file_']" v-if="isFile"></i>
-      <i class="iconfont icon-folder" v-else-if="isFolder"></i>
-      <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 1"></i>
-      <i class="iconfont icon-common_websites" v-else></i>
-    </span>
+  <div class="file-tree-node" :class="operationButtonsCountClass">
+    <div class="el-tree-node__label" v-loading="removePending || addFilePending || addFolderPending || renamePending || savePending">
+      <span class="rename-wrapper" v-if="isRename">
+        <el-input @click.native.stop ref="input" v-if="isRename" @blur="delayCancel" @keyup.enter.native="handleRenameConfirm" v-model="newName" class="rename-input" size="mini"></el-input>
+        <el-tooltip :content="$t('editor.confirm')">
+          <el-button @click.stop="handleRenameConfirm" class="rename-btn el-icon-check" type="text" size="mini"></el-button>
+        </el-tooltip>
+        <el-tooltip :content="$t('editor.cancel')">
+          <el-button @click.stop="handleRenameCancel" class="rename-btn el-icon-close" type="text" size="mini"></el-button>
+        </el-tooltip>
+      </span>
+      <span v-else-if="data.memberName">{{data.username}}/{{data.sitename}}({{data | treeNodeLableFilter(node)}})</span>
+      <span v-else>{{data | treeNodeLableFilter(node)}}</span>
+      <span class="node-icon">
+        <i :class="['iconfont', isHasOpened ? 'icon-edited_file is-modified' : 'icon-file_']" v-if="isFile"></i>
+        <i class="iconfont icon-folder" v-else-if="isFolder"></i>
+        <i class="iconfont icon-private" v-else-if="isWebsite && data.visibility === 1"></i>
+        <i class="iconfont icon-common_websites" v-else></i>
+      </span>
+      <div @click.stop v-if='isWebsiteSettingShow'>
+        <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog'></website-setting-dialog>
+      </div>
+      <div @click.stop v-if='isNewWebPageDialogShow'>
+        <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
+      </div>
+    </div>
+    <span v-if="!isRename" :title="data | treeNodeTitleFilter(node, isFile, isFolder, isEn)" class="file-tree-node-tooltip-button">{{data | treeNodeLableFilter(node)}}</span>
     <span class="file-manager-buttons-container" v-if="!isRename">
       <el-tooltip v-if="isHasOpened" :content="$t('editor.save')">
-        <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" @click.stop='save(data)' ></el-button>
+        <el-button v-loading='data.savePending' class="iconfont icon-save edit-hover" size="mini" type="text" @click.stop='save(data)'></el-button>
       </el-tooltip>
       <el-tooltip v-if="isHasOpened" :content="$t('editor.reload')">
         <el-button class="iconfont icon-refresh edit-hover" size="mini" type="text" @click.stop='confirmRefresh'></el-button>
       </el-tooltip>
       <el-tooltip v-if="isFile || isFolder" :content="$t('editor.rename')">
-        <el-button  class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename"></el-button>
+        <el-button class="iconfont el-icon-edit edit-hover" size="mini" type="text" @click.stop="toggleRename"></el-button>
       </el-tooltip>
       <el-tooltip v-if="isAddable" :content="$t('editor.newPage')">
         <el-button class="iconfont icon-add_file edit-hover" size="mini" type="text" @click.stop="addFile"></el-button>
       </el-tooltip>
       <el-tooltip v-if="isAddable" :content="$t('editor.newFolder')">
-        <el-button  class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder"></el-button>
+        <el-button class="iconfont icon-folder_ edit-hover" size="mini" type="text" @click.stop="addFolder"></el-button>
       </el-tooltip>
       <el-tooltip v-if="isRemovable" :content="$t('editor.delete')">
         <el-button class="iconfont icon-delete edit-hover" size="mini" type="text" @click.stop="removeFile"></el-button>
       </el-tooltip>
       <el-tooltip v-if="isSettable" :content="$t('editor.settings')">
-        <el-button  class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting"></el-button>
+        <el-button class="iconfont icon-set_up edit-hover" size="mini" type="text" @click.stop="goSetting"></el-button>
       </el-tooltip>
     </span>
-    <div @click.stop v-if='isWebsiteSettingShow'>
-      <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' :siteDetail='siteDetail' @close='closeWebsiteSettingDialog'></website-setting-dialog>
-    </div>
-    <div @click.stop v-if='isNewWebPageDialogShow'>
-      <NewWebPageDialog :show='isNewWebPageDialogShow' :folderPath='currentPath' :sitePath='sitePath' @close='closeNewWebPageDialog' />
-    </div>
   </div>
 </template>
 <script>
 import _ from 'lodash'
+import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import { suffixFileExtension, gitFilenameValidator } from '@/lib/utils/gitlab'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
@@ -95,13 +99,6 @@ export default {
     }),
     async addFile() {
       this.openNewWebPageDialog()
-      // let newFileName = await this.newFileNamePrompt()
-      // newFileName = suffixFileExtension(newFileName, 'md')
-      // let newFilePath = `${this.currentPath}/${newFileName}`
-      // this.addFilePending = true
-      // await this.gitlabCreateFile({ path: newFilePath })
-      // this.expandFolder(newFilePath)
-      // this.addFilePending = false
     },
     async addFolder() {
       let self = this
@@ -131,8 +128,7 @@ export default {
           inputValidator: str => {
             let value = (str || '').trim()
             if (!value) return self.$t('editor.required')
-            if (!gitFilenameValidator(value))
-              return self.$t('editor.nameRule')
+            if (!gitFilenameValidator(value)) return self.$t('editor.nameRule')
             if (childNames.indexOf(value) > -1)
               return self.$t('editor.nameExist')
             return true
@@ -152,8 +148,6 @@ export default {
       })
     },
     removeFolder(data) {
-      // let pathArr = data.path.split('/')
-      // let folderName = pathArr[pathArr.length - 1]
       let folder = data.path
       let toRemoveFiles = this.recursion(data)
 
@@ -179,18 +173,16 @@ export default {
         })
         .catch(e => console.error(e))
     },
-    removeRecentOpenFolder(toRemoveFiles){
-      let toDele = _.map(toRemoveFiles,(i => `/${i.replace(/\.md$/,'')}`))
-      let updateRecentUrlList = this.updateRecentUrlList.filter(item => toDele.indexOf(item.path) === -1 )
+    removeRecentOpenFolder(toRemoveFiles) {
+      let toDele = _.map(toRemoveFiles, i => `/${i.replace(/\.md$/, '')}`)
+      let updateRecentUrlList = this.updateRecentUrlList.filter(
+        item => toDele.indexOf(item.path) === -1
+      )
       this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     recursion(data) {
       let childrenFiles = []
       const recursionFile = data => {
-        // if (!/.md$/.test(data.path)) {
-        //   childrenFiles.push(`${data.path}/.gitignore.md`)
-        // } else {
-        //   childrenFiles.push(data.path)
         // }
         if (/.md$/.test(data.path)) {
           childrenFiles.push(data.path)
@@ -209,14 +201,18 @@ export default {
       await this.savePageByPath(path)
       data.savePending = false
     },
-    confirmRefresh(){
+    confirmRefresh() {
       this.$confirm(this.$t('editor.pullServerData'), this.$t('editor.hint'), {
         confirmButtonText: this.$t('el.messagebox.confirm'),
         cancelButtonText: this.$t('el.messagebox.cancel'),
         type: 'warning'
-      }).then(() => {
-        this.refreshOpenedFile(this.data)
-      }).catch((err) => { console.warn(err) });
+      })
+        .then(() => {
+          this.refreshOpenedFile(this.data)
+        })
+        .catch(err => {
+          console.warn(err)
+        })
     },
     async toggleRename() {
       if (this.isFolder) {
@@ -249,15 +245,14 @@ export default {
             confirmButtonText: this.$t('el.messagebox.confirm'),
             cancelButtonText: this.$t('el.messagebox.cancel'),
             type: 'warning'
-          })
-            .then(async () => {
-              await this.savePageByPath(this.filePath)
-              this.$message({
-                type: 'success',
-                message: this.$t('editor.saveSuccess')
-              })
-              this.toggleInputFocus()
+          }).then(async () => {
+            await this.savePageByPath(this.filePath)
+            this.$message({
+              type: 'success',
+              message: this.$t('editor.saveSuccess')
             })
+            this.toggleInputFocus()
+          })
           return
         }
       }
@@ -329,13 +324,17 @@ export default {
         return this.removeFolder(this.data)
       }
       const h = this.$createElement
-      let siteName = this.data.path.split('/').slice(1,2)
+      let siteName = this.data.path.split('/').slice(1, 2)
       let fileName = this.data.name.replace(/\.md$/, '')
       this.$msgbox({
         title: this.$t('editor.modDelMsgTitle'),
         message: h('p', null, [
           h('span', null, this.$t('editor.delConfirm')),
-          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${fileName} " `),
+          h(
+            'span',
+            { style: 'color: #FF4342' },
+            ` "${siteName}/${fileName} " `
+          ),
           h('span', null, '?')
         ]),
         showCancelButton: true,
@@ -344,7 +343,7 @@ export default {
       })
         .then(async () => {
           this.removePending = true
-          await this.gitlabRemoveFile({ path: this.currentPath})
+          await this.gitlabRemoveFile({ path: this.currentPath })
           await this.deletePagesFromLayout({ paths: [this.currentPath] })
           this.removeRecentOpenFile(this.currentPath)
           this.resetPage({ currentPath: this.currentPath })
@@ -352,9 +351,11 @@ export default {
         })
         .catch(() => {})
     },
-    removeRecentOpenFile(path){
-      let delPath = `/${path.replace(/\.md$/,'')}`
-      let updateRecentUrlList = this.updateRecentUrlList.filter(item => item.path !== delPath)
+    removeRecentOpenFile(path) {
+      let delPath = `/${path.replace(/\.md$/, '')}`
+      let updateRecentUrlList = this.updateRecentUrlList.filter(
+        item => item.path !== delPath
+      )
       this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async deletePagesFromLayout({ paths = [] }) {
@@ -418,10 +419,22 @@ export default {
       username: 'user/username',
       updateRecentUrlList: 'updateRecentUrlList'
     }),
-    operationButtonsCountClass(){
-      let count = _.compact([this.isHasOpened, this.isHasOpened, this.isFile, this.isFolder, this.isAddable, this.isAddable, this.isRemovable, this.isSettable]).length
+    isEn() {
+      return locale === 'en-US'
+    },
+    operationButtonsCountClass() {
+      let count = _.compact([
+        this.isHasOpened,
+        this.isHasOpened,
+        this.isFile,
+        this.isFolder,
+        this.isAddable,
+        this.isAddable,
+        this.isRemovable,
+        this.isSettable
+      ]).length
       let buttonCountClass = this.isRename ? '' : `buttons-count-${count}`
-      let websiteLabelClass = this.isWebsite ? ' website-node-label':''
+      let websiteLabelClass = this.isWebsite ? ' website-node-label' : ''
       return buttonCountClass + websiteLabelClass
     },
     pending() {
@@ -436,7 +449,9 @@ export default {
       return this.data.type === 'blob'
     },
     isHasOpened() {
-      return this.isFile && _.keys(this.openedFiles).indexOf(this.data.path) !== -1
+      return (
+        this.isFile && _.keys(this.openedFiles).indexOf(this.data.path) !== -1
+      )
     },
     isFolder() {
       return this.data.type === 'tree'
@@ -464,9 +479,6 @@ export default {
       let [username, name] = this.data.path.split('/')
       return `${username}/${name}`
     },
-    siteDetail(){
-      return this.isWebsite ? this.data : undefined
-    },
     filePath() {
       return this.data.path.replace(/\.md$/, '')
     },
@@ -481,63 +493,108 @@ export default {
     }
   },
   filters: {
-    hideMDFileExtension(str) {
-      return str && str.replace(/\.md$/, '') || ''
+    treeNodeLableFilter(data, node) {
+      let str = data.displayName || data.name || node.label
+      return (str && str.replace(/\.md$/, '')) || ''
+    },
+    treeNodeTitleFilter(data, node, isFile, isFolder, isEn) {
+      let str = data.displayName || data.name || node.label
+      let name = (str && str.replace(/\.md$/, '')) || ''
+      let pageTypeText = isEn ? 'pageName: ' : '页面名：'
+      let folderTypeText = isEn ? 'folderName: ' : '文件夹名：'
+      let siteTypeText = isEn ? 'siteName: ' : '网站名：'
+      let fileTypeText = isFile
+        ? pageTypeText
+        : isFolder
+        ? folderTypeText
+        : siteTypeText
+      return fileTypeText + name
     }
   },
   components: {
     WebsiteSettingDialog,
-    NewWebPageDialog,
+    NewWebPageDialog
   }
 }
 </script>
 
 <style lang="scss">
-.el-tree-node__label {
-  padding-left: 20px;
-}
-.website-node-label{
-  margin-left: -24px;
-  padding-left: 44px;
-  .node-icon{
-    left: 24px;
+.file-tree-node {
+  flex: 1;
+  overflow: hidden;
+  &-tooltip-button {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 0;
+    border: none;
+    background-color: transparent;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+  .el-tree-node__label {
+    padding-left: 20px;
+    .node-icon {
+      position: absolute;
+      left: 0;
+    }
+  }
+  .website-node-label {
+    margin-left: -24px;
+    padding-left: 44px;
+    .node-icon {
+      left: 24px;
+    }
+  }
+  .el-tree-node__label::before {
+    content: ' ';
+    display: inline-block;
+    position: absolute;
+    margin-left: -50px;
+    height: 30px;
+    width: 30px;
+  }
+
+  .icon-folder::before {
+    font-size: 0.8em;
+    color: #ffac33;
+  }
+  .edit-hover:hover {
+    color: #409eff !important;
+  }
+
+  .rename-wrapper {
+    display: inline-flex;
+    .rename-btn {
+      width: 20px;
+      margin: 0 10px;
+      color: #8a8a8a;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  }
+  .file-manager-buttons-container {
+    height: 100%;
+    top: 0;
+    background-color: #ccfffc;
   }
 }
-.el-tree-node__label::before {
-  content: ' ';
-  display: inline-block;
-  position: absolute;
-  margin-left: -50px;
-  height: 30px;
-  width: 30px;
-}
-.el-tree-node__content:hover {
-    .buttons-count-3{
+.el-tree-node__content {
+  position: relative;
+  &:hover {
+    .buttons-count-3 {
       padding-right: 105px;
     }
-    .buttons-count-4{
+    .buttons-count-4 {
       padding-right: 135px;
     }
-    .buttons-count-5{
+    .buttons-count-5 {
       padding-right: 160px;
     }
-  }
-.icon-folder::before {
-  font-size: 0.8em;
-  color: #ffac33;
-}
-.edit-hover:hover {
-  color: #409eff !important;
-}
-
-.rename-wrapper {
-  display: inline-flex;
-  .rename-btn {
-    width: 20px;
-    margin: 0 10px;
-    color: #8a8a8a;
-    font-weight: bold;
-    font-size: 1.2em;
   }
 }
 </style>

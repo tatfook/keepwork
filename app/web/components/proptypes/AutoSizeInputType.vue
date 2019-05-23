@@ -1,5 +1,5 @@
 <template>
-  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows:7, maxRows: maxRows }" resize='none' :placeholder="$t('field.' + editingKey)" v-model='inputTypeValue' @change='updateValue' @focus='getFocus' @blur='blurEventHandler'></el-input>
+  <el-input type='textarea' ref='autosizeTextarea' class="autosize-input-type" :autosize="{ minRows:7, maxRows: maxRows }" resize='none' :placeholder="$t('field.' + editingKey)" v-model='inputValue' @input='updateValue' @focus='getFocus' @blur='blurEventHandler'></el-input>
 </template>
 <script>
 const blurMinRows = 7
@@ -15,15 +15,24 @@ export default {
   data() {
     return {
       maxRows: blurMinRows,
-      onFocus: false
+      onFocus: false,
+      inputValue: ''
+    }
+  },
+  mounted() {
+    this.inputValue = this.inputTypeValue
+  },
+  watch: {
+    originValue(value) {
+      this.inputValue = value
     }
   },
   computed: {
-    inputTypeValue: {
-      get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.$t(this.optionsData.emptyAutoSizeInput) || '')
-      },
-      set() {}
+    inputTypeValue() {
+      return this.originValue
+        ? this.originValue
+        : (this.optionsData && this.$t(this.optionsData.emptyAutoSizeInput)) ||
+            ''
     }
   },
   methods: {

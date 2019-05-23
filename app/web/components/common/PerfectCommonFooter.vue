@@ -72,7 +72,7 @@
           <span class="line">|</span>
         </li>
         <li>
-          <a href="https://github.com/tatfook/keepwork/issues" target="_blank">{{$t('common.feedback')}}</a>
+          <span class="perfect-common-footer-fake-button" @click="showComplainDialog">投诉举报</span>
           <span class="line">|</span>
         </li>
         <li>
@@ -90,18 +90,34 @@
         </li>
       </ul>
     </div>
+    <complain-dialog :isComplainDialogVisible='isComplainDialogVisible' @close="hideComplainDialog"></complain-dialog>
   </div>
 </template>
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
+import ComplainDialog from './ComplainDialog'
 
 export default {
   name: 'PerfectCommonFooter',
+  data() {
+    return {
+      isComplainDialogVisible: false
+    }
+  },
   methods: {
     switchLanguage(language) {
       window.localStorage.setItem('keepwork-language-locale', language)
       window.location.reload()
+    },
+    showComplainDialog() {
+      this.isComplainDialogVisible = true
+    },
+    hideComplainDialog() {
+      this.isComplainDialogVisible = false
     }
+  },
+  components: {
+    ComplainDialog
   }
 }
 </script>
@@ -184,31 +200,44 @@ export default {
       }
     }
   }
+  &-fake-button {
+    cursor: pointer;
+    padding: 0 5px 5px;
+    margin: 0 25px;
+    &:hover {
+      border-bottom: 2px solid #3977ad;
+    }
+  }
 }
 @media screen and (max-width: 768px) {
   .perfect-common-footer {
     &-simple-list {
       .footer-container {
         text-align: center;
-        &-list{
-          li{
+        &-list {
+          li {
             display: block;
             text-align: center;
             height: 30px;
             line-height: 30px;
-            .logo{
-              img{
+            .logo {
+              img {
                 position: relative;
-                top:2px;
+                top: 2px;
               }
             }
-            .line{
+            .line {
               display: none;
             }
           }
         }
       }
     }
+  }
+}
+@media print {
+  .perfect-common-footer {
+    display: none;
   }
 }
 </style>

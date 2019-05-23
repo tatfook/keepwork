@@ -2,7 +2,6 @@
   <div class="comp-teachers">
     <span>{{$t('card.teachersColon')}}</span>
     <vue-markdown :source="validData" />
-    <!-- <pre class="content">{{this.validData}}</pre> -->
   </div>
 </template>
 

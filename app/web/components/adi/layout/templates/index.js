@@ -6,6 +6,8 @@ import HeaderFullScreen from './HeaderFullScreen'
 
 import HeaderSidebar from './HeaderSidebar'
 import HeaderSidebarFooter from './HeaderSidebarFooter'
+import HeaderSidebarMaxWidth from './HeaderSidebarMaxWidth'
+import HeaderSidebarFooterMaxWidth from './HeaderSidebarFooterMaxWidth'
 
 import HeaderFooterMaxWidth from './HeaderFooterMaxWidth'
 import HeaderFooterFullScreen from './HeaderFooterFullScreen'
@@ -14,6 +16,8 @@ import HeaderFooterSidebar from './HeaderFooterSidebar'
 import Sidebar from './Sidebar'
 import SidebarHeader from './SidebarHeader'
 import SidebarHeaderFooter from './SidebarHeaderFooter'
+import SidebarContentMaxWidth from './SidebarContentMaxWidth'
+import SideBarMaxWidth from './SidebarMaxWidth'
 
 export default {
   basic: {
@@ -74,6 +78,17 @@ export default {
     footer: true,
     component: HeaderSidebarFooter
   },
+  header_sidebar_max_width: {
+    header: true,
+    sidebar: true,
+    component: HeaderSidebarMaxWidth
+  },
+  header_sidebar_footer_max_width: {
+    header: true,
+    sidebar: true,
+    footer: true,
+    component: HeaderSidebarFooterMaxWidth
+  },
 
   sidebar: {
     header: false,
@@ -92,5 +107,17 @@ export default {
     sidebar: true,
     footer: true,
     component: SidebarHeaderFooter
+  },
+  sidebar_content_max_width: {
+    header: false,
+    sidebar: true,
+    footer: false,
+    component: SidebarContentMaxWidth
+  },
+  sidebar_max_width: {
+    header: false,
+    sidebar: true,
+    footer: false,
+    component: SideBarMaxWidth
   }
 }

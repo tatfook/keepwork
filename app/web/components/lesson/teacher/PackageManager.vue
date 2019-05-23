@@ -34,7 +34,9 @@
         </el-table-column>
         <el-table-column class-name="package-manager-table-packagename" :label="$t('lesson.nameLabel')">
           <template slot-scope="scope">
-            <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
+            <el-tooltip effect="dark" :content="$t('lesson.packageManage.clickToPreview')" placement="top-start">
+              <div @click="toPackgeDetail(scope.row)">{{scope.row.packageName}}</div>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column :label="$t('lesson.subjectLabel')" width="190">
@@ -89,7 +91,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
 import SubmitableInfo from './SubmitableInfo'
@@ -298,7 +300,13 @@ export default {
       ) {
         return false
       }
-      await this.lessonGetLessonList({ packageId: this.editingPackageId })
+      let isOffline = false
+      await this.lessonGetLessonList({ packageId: this.editingPackageId }).catch(error => {
+        this.isOffline = true
+      })
+      if (this.isOffline) {
+        return true
+      }
       let { lessons } = this.editingPackageDetail
       if (!lessons || lessons.length <= 0) {
         return false
@@ -306,10 +314,10 @@ export default {
       return true
     },
     async toSubmit(packageDetail) {
-      if (this.isLearner) {
-        this.isApplyInfoDialogVisible = true
-        return
-      }
+      // if (this.isLearner) {
+      //   this.isApplyInfoDialogVisible = true
+      //   return
+      // }
       this.isTableLoading = true
       this.editingPackageId = packageDetail.id
       let isComplete = await this.isPackageInfoComplete()
@@ -360,10 +368,10 @@ export default {
         })
     },
     toEdit(packageDetail) {
-      this.$router.push(`/teacher/package/${packageDetail.id}/edit`)
+      this.$router.push(`/createPackage/package/${packageDetail.id}/edit`)
     },
     toPackgeDetail(packageDetail) {
-      this.$router.push(`/teacher/package/${packageDetail.id}`)
+      this.$router.push(`/lesson/package/${packageDetail.id}`)
     },
     async confirmDelete(packageDetail) {
       this.editingPackageId = packageDetail.id
@@ -435,7 +443,7 @@ export default {
         })
     },
     toNewPackagePage() {
-      this.$router.push({ path: '/teacher/newPackage' })
+      this.$router.push({ path: '/createPackage/newPackage' })
     },
     handleClose(continueFnNameAfterEnsure) {
       this.isInfoDialogVisible = false

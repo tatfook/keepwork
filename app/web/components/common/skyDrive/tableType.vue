@@ -5,9 +5,9 @@
         <div>
           {{ $t('skydrive.usage') }}
           <span class="table-type-total">
-            <span class="table-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercent + '%' }"></span>
+            <span class="table-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercentWithUpload + '%' }"></span>
           </span>
-          {{ info.used | biteToG }}GB / {{ info.total | biteToG }}GB
+          {{ info.usedWithUpload | biteToG }}GB / {{ info.total | biteToG }}GB
         </div>
       </el-col>
       <el-col :span="6">
@@ -17,16 +17,16 @@
       </el-col>
     </el-row>
     <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" sortable width="40">
+      <el-table-column type="selection" sortable width="44">
       </el-table-column>
-      <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" sortable width="300">
+      <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
       </el-table-column>
       <el-table-column prop="ext" sortable :label="$t('skydrive.filetype')" width="80">
       </el-table-column>
       <el-table-column prop="size" sortable :label="$t('skydrive.filesize')" width="85" show-overflow-tooltip>
         <template slot-scope="scope">{{ scope.row.displaySize }}</template>
       </el-table-column>
-      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="155">
+      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="158">
         <template slot-scope="scope">
           <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
             <el-progress :stroke-width="10" :color="scope.row.state === 'doing' ? '#13ce67' : '#f56c6c'" :show-text=false :percentage="scope.row.percent"></el-progress>
@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import { getBareFilename } from '@/lib/utils/filename'
@@ -248,7 +248,7 @@ export default {
   },
   filters: {
     formatDate(date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     biteToG: (bite = 0) =>
       (bite / (1024 * 1024 * 1024))

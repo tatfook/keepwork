@@ -1,11 +1,6 @@
 <template>
   <el-input v-if="isShowSearchBar" v-model="searchText" class="search-bar-comp" :placeholder="$t('common.searchInKp')" @keyup.enter.native='goSearch'>
-    <!-- <el-select class="search-bar-comp-select" v-model="searchScope" slot="prepend">
-      <el-option :label="$t('search.searchAll')" value="all"></el-option>
-      <el-option :label="$t('search.searchMine')" value="loginUser" v-show="isLogin"></el-option>
-    </el-select> -->
     <i slot="suffix" class="el-icon-search search-bar-comp-button" @click="goSearch"></i>
-    <!-- <el-button slot="append" class="search-bar-comp-button" icon="el-icon-search" @click="goSearch"></el-button> -->
   </el-input>
 </template>
 <script>
@@ -45,7 +40,7 @@ export default {
       _.forIn(searchParams, (value, key) => {
         searchParamsArr.push(`${key}=${value}`)
       })
-      let searchUrl = encodeURI(`/exploration?tab=allProjects&${searchParamsArr.join('&')}`)
+      let searchUrl = encodeURI(`/explore?tab=allProjects&${searchParamsArr.join('&')}`)
       window.location.href = searchUrl
     }
   }

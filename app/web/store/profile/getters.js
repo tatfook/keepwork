@@ -5,7 +5,8 @@ const getters = {
   favoriteUsers: state => ({ userId }) => _.get(state.favoriteUsers, userId),
   followUsers: state => ({ userId }) => _.get(state.followUsers, userId),
   createdProjects: state => ({ userId }) => _.get(state.createdProjects, userId),
-  joinedProjects: state => ({ userId }) => _.get(state.joinedProjects, userId)
+  joinedProjects: state => ({ userId }) => _.get(state.joinedProjects, userId),
+  starredProjects: state => ({ userId }) => _.get(state.starredProjects, userId)
 }
 
 export default getters

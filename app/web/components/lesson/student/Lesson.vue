@@ -3,7 +3,7 @@
     <LessonStudentStatus v-if="isBeInClassroom && isCurrentClassroom" />
     <LessonHeader :data="lessonHeaderData" :isCurrentClassroom="isCurrentClassroom" />
     <LessonSummary v-if="isShowSummary && !isLoading" />
-    <LessonWrap v-show="!isShowSummary" v-for="mod in lessonMain" :key="mod.key" :mod="mod" />
+    <LessonWrapByGlass v-if="!isLoading" v-show="!isShowSummary" :lessonMain="lessonMain" :authUserPrivilege="authUserPrivilege" :organizations="organizations" />
     <el-dialog :visible="!isCurrentClassroom && isBeInClassroom" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" center fullscreen>
       <span slot="title">
         你正处于上课状态,请点击按钮返回当前所在的课堂
@@ -17,16 +17,17 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import LessonWrap from '../common/LessonWrap'
+import LessonWrapByGlass from '../common/LessonWrapByGlass'
 import LessonHeader from '../common/LessonHeader'
 import LessonSummary from './LessonStudentSummary'
 import LessonStudentStatus from './LessonStudentStatus'
-import { lesson } from '@/api'
+import { lesson, keepwork } from '@/api'
 import _ from 'lodash'
+
 export default {
   name: 'Learn',
   components: {
-    LessonWrap,
+    LessonWrapByGlass,
     LessonHeader,
     LessonSummary,
     LessonStudentStatus
@@ -36,7 +37,9 @@ export default {
       isCurrentClassroom: true,
       isRefresh: false,
       _interval: null,
-      isLoading: true
+      isLoading: true,
+      authUserPrivilege: 1,
+      organizations: []
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -64,11 +67,17 @@ export default {
 
     packageId = Number(packageId)
     lessonId = Number(lessonId)
-    // purchased check or lesson check
-    let isPurchased = await this.checkPackagePurchased({ packageId }, lessonId)
-    if (!isPurchased) return
-    // window.addEventListener('storage', this.handleStorageEvent, false)
-    await this.getLessonContent({ lessonId, packageId })
+
+    let [res] = await Promise.all([
+      this.getPrivilege(lessonId),
+      this.getLessonContent({ lessonId, packageId })
+    ])
+    const { authUserPrivilege = 0, organizations = [] } = res.lesson
+    if (authUserPrivilege === 0) {
+      this.authUserPrivilege = authUserPrivilege
+      this.organizations = organizations
+      return (this.isLoading = false)
+    }
     await this.resumeTheClass()
     // 不在课堂中直接返
     if (!this.isBeInClassroom) {
@@ -251,11 +260,10 @@ export default {
           center: true,
           confirmButtonText: this.$t('lesson.toAdd')
         })
-          .then(
-            () =>
-              isFree
-                ? this.addThePackage(payload)
-                : this.goToPurchase(payload, lessonId)
+          .then(() =>
+            isFree
+              ? this.addThePackage(payload)
+              : this.goToPurchase(payload, lessonId)
           )
           .catch(e => console.log(e))
       }
@@ -277,6 +285,26 @@ export default {
       this.$router.push(
         `/student/package/${packageId}/purchase?lessonId=${lessonId}`
       )
+    },
+    async getPrivilege(lessonId) {
+      const res = await keepwork.graphql.getQueryResult({
+        query:
+          'query($id: Int, $packageId: Int){lesson(id: $id, packageId: $packageId) {id, authUserPrivilege, organizations{name,cellphone}}}',
+        variables: {
+          id: lessonId,
+          packageId: 0
+        }
+      })
+      return res
+    },
+    async getUserAllLessons(userId) {
+      const res = await keepwork.graphql.getQueryResult({
+        query:
+          'query($id: Int){tag(id: $id) {id, tagname, packages{id, packageName, intro,  maxAge, minAge, extra, lessonCount} }}',
+        variables: {
+          id: 13
+        }
+      })
     }
   },
   computed: {

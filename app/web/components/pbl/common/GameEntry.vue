@@ -2,17 +2,22 @@
   <div class="game-entry">
     <el-dropdown class="game-entry-dropdown" placement="bottom-start" @visible-change='handleVisibleChange' @command='toJoin'>
       <div class="el-dropdown-link">
-        我要参赛<i class="el-icon-caret-bottom"></i>
+        {{$t('common.contestEntry')}}<i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu v-loading='isLoading' slot="dropdown">
         <el-dropdown-item v-show="filteredDuplicateGames.length > 0" v-for='(game, index) in filteredDuplicateGames' :key='index' :command='projectJoinedGames && projectJoinedGames.name === game ? undefined : game'>
           {{game}}<span v-if="projectJoinedGames && projectJoinedGames.name === game" class="game-entry-joined">已参赛</span>
         </el-dropdown-item>
-        <el-dropdown-item class="game-entry-empty" v-show="filteredDuplicateGames.length == 0">当前没有可供参加的比赛</el-dropdown-item>
+        <el-dropdown-item class="game-entry-empty" v-show="filteredDuplicateGames.length == 0">{{$t('project.noGames')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <el-dialog class="game-entry-submit" :visible.sync="isSubmitWorkVisible" v-if="isSubmitWorkVisible" width="614px" :before-close="closeSubmitDialog">
       <submit-work :selectedGameAndProject='selectedGameAndProject' @close='closeSubmitDialog' @submitSuccess="handleSubmitSuccess"></submit-work>
+    </el-dialog>
+    <el-dialog class="game-entry-hint-dialog" :visible.sync="isHintVisible" width="375px" center :before-close="closeHintDialog">
+      <p class="game-entry-hint-dialog-text">请完善个人信息</p>
+      <p class="game-entry-hint-dialog-text">包括姓名、手机号、出生年月、邮箱、QQ</p>
+      <a href="/u/p/userData" target="_blank" class="game-entry-hint-dialog-btn">现在就去</a>
     </el-dialog>
   </div>
 </template>
@@ -29,6 +34,7 @@ export default {
   data() {
     return {
       isSubmitWorkVisible: false,
+      isHintVisible: false,
       isLoading: false,
       selectedGameAndProject: undefined
     }
@@ -53,6 +59,16 @@ export default {
     filteredDuplicateGames() {
       let groupedGames = _.groupBy(this.inProgressGames, game => game.name)
       return _.keys(groupedGames)
+    },
+    isUserinfoSatisfied() {
+      return (
+        this.loginUserDetail.info &&
+        this.loginUserDetail.info.name &&
+        this.loginUserDetail.realname &&
+        this.loginUserDetail.info.birthdate &&
+        this.loginUserDetail.email &&
+        this.loginUserDetail.info.qq
+      )
     }
   },
   methods: {
@@ -75,24 +91,16 @@ export default {
       }
       return true
     },
-    checkUserInfoMeetDemmand() {
-      return (
-        this.loginUserDetail.info &&
-        this.loginUserDetail.info.name &&
-        this.loginUserDetail.realname &&
-        this.loginUserDetail.info.birthdate &&
-        this.loginUserDetail.email &&
-        this.loginUserDetail.info.qq
-      )
-    },
+    checkUserInfoMeetDemmand() {},
     showJoinComp() {
       this.isSubmitWorkVisible = true
     },
     toJoin(gameName) {
-      gameName &&
-        this.checkUserInfoMeetDemmand() &&
-        this.setSelectedGame(gameName) &&
-        this.showJoinComp()
+      if (!this.isUserinfoSatisfied) {
+        this.isHintVisible = true
+        return
+      }
+      gameName && this.setSelectedGame(gameName) && this.showJoinComp()
     },
     handleSubmitSuccess() {
       this.$message({
@@ -100,6 +108,9 @@ export default {
         type: 'success'
       })
       this.closeSubmitDialog()
+    },
+    closeHintDialog() {
+      this.isHintVisible = false
     },
     closeSubmitDialog() {
       this.isSubmitWorkVisible = false
@@ -136,6 +147,27 @@ export default {
   &-submit {
     .el-dialog__body {
       padding: 10px 80px;
+    }
+  }
+  &-hint-dialog {
+    &-text {
+      text-align: center;
+      color: #333;
+      font-size: 16px;
+    }
+    &-btn {
+      width: 90%;
+      margin: 40px auto;
+      display: block;
+      width: 285px;
+      height: 44px;
+      line-height: 44px;
+      color: #fff;
+      text-align: center;
+      background: #409eff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
     }
   }
 }

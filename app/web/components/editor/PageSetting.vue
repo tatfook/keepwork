@@ -30,7 +30,7 @@
       <el-button class="layoutManagerBtn" type="primary" size="small">{{$t('editor.layoutManagement')}}</el-button>
     </div>
     <div @click.stop v-if='isWebsiteSettingShow'>
-      <website-setting-dialog :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
+      <website-setting-dialog :activeIndex="1" :show='isWebsiteSettingShow' :sitePath='currentPath' @close='closeWebsiteSettingDialog' />
     </div>
   </div>
 </template>
@@ -270,6 +270,16 @@ export default {
       border-left: 40px solid white;
       border-right: 40px solid white;
     }
+  }
+  .fullscreen-template {
+    &-max-width {
+      border: 40px solid #fff;
+      border-width: 0 40px;
+    }
+  }
+  .content-max-width-template {
+    border: 40px solid #fff;
+    border-width: 0 40px;
   }
 }
 </style>

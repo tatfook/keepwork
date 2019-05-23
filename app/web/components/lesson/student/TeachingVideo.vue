@@ -3,19 +3,19 @@
     <div class="teaching-video-course">
       <el-row>
         <el-col :sm="8">
-          <div class="box" @click="goLesson(8)">
+          <div class="box" @click="goLesson('animate')">
             <img src="@/assets/lessonImg/teaching-video_2.png" alt="">
             <p>{{$t('lesson.animationsLesson')}}</p>
           </div>
         </el-col>
         <el-col :sm="8">
-          <div class="box" @click="goLesson(8)">
+          <div class="box" @click="goLesson('program')">
             <img src="@/assets/lessonImg/teaching-video_1.png" alt="">
             <p>{{$t('lesson.programmingLesson')}}</p>
           </div>
         </el-col>
         <el-col :sm="8">
-          <div class="box" @click="goLesson(8)">
+          <div class="box" @click="goLesson('cad')">
             <img src="@/assets/lessonImg/teaching-video_3.png" alt="">
             <p>{{$t('lesson.CADLesson')}}</p>
           </div>
@@ -31,8 +31,8 @@ export default {
     return {}
   },
   methods: {
-    goLesson(index) {
-      return this.$router.push(`/student/allteachingvideo/animate`)
+    goLesson(type) {
+      return this.$router.push(`/student/allteachingvideo/${type}`)
     }
   }
 }

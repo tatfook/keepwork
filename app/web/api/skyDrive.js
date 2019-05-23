@@ -1,6 +1,8 @@
 import * as qiniu from 'qiniu-js'
 import storage from './storage'
 import uuid from 'uuid/v1'
+import Cookies from 'js-cookie'
+import jsrsasign from 'jsrsasign'
 
 export const qiniuUpload = async (options) => {
   let result = await new Promise((resolve, reject) => {
@@ -35,7 +37,10 @@ export const getFileExtension = (filename = '') =>
   filename.split('.').pop().toLowerCase()
 
 export const getFileKey = file => {
-  let fileID = uuid()
+  const { userId } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+    jsrsasign.b64utoutf8(Cookies.get('token').split('.')[1])
+  )
+  let fileID = `${userId}-${uuid()}`
   let fileExt = getFileExtension(file.name)
   return `${fileID}.${fileExt}`
 }

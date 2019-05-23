@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = () => ({
   repositoryTrees: {},
-  files: {}
+  files: {},
+  filesCommitContent: {}
 })
 
 export default {

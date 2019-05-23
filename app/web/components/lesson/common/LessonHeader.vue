@@ -21,10 +21,10 @@
       <div class="full-font">C {{classroomId | idPretty}}</div>
     </el-dialog>
     <el-row>
-      <el-col :sm="14" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
+      <el-col :sm="12" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
         <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
-      <el-col :sm="10" :xm="24" class="lesson-desc">
+      <el-col :sm="12" :xm="24" class="lesson-desc">
         <div v-if="isTeacher && isBeInClass && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
           <el-tooltip placement="bottom">
             <div slot="content">{{$t('lesson.fullPage')}}</div>
@@ -54,11 +54,16 @@
           <div class="intro-title">
             {{$t('lesson.intro')}}:
           </div>
-          <el-scrollbar class="intro-list" :native="false">
+          <div class="intro-list">
             {{lessonGoals}}
-          </el-scrollbar>
+          </div>
+          <!-- <el-scrollbar class="intro-list" :native="false"> -->
+          <!-- </el-scrollbar> -->
         </div>
-        <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
+        <div class="lesson-info duration">
+          <div class="duration-title">{{$t('lesson.duration')}}: </div>
+          <div>45 {{$t('lesson.mins')}}</div>
+        </div>
         <div class="lesson-info skills">
           <div class="skills-title">
             {{$t('lesson.skillPoints')}}:
@@ -76,23 +81,31 @@
       </el-col>
     </el-row>
     <keep-work-sticky>
-      <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
+      <el-row v-if="isPreview" :gutter="20" class="lesson-progress-wrap">
+        <el-col :span="20" :sm="20">
+          <lesson-preview-progress/>
+        </el-col>
+        <el-col :span="4" :sm="4" class="lesson-references">
+          <!-- <lesson-references /> -->
+        </el-col>
+      </el-row>
+      <el-row v-else-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
         <el-col :span="20" :sm="20">
           <lesson-teacher-progress :reset="!isInCurrentClass" />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
-          <lesson-referencse />
+          <!-- <lesson-references /> -->
         </el-col>
       </el-row>
       <el-row v-else :gutter="20" class="lesson-progress-wrap">
         <el-col :span="2" :sm="2" class="lesson-award">
-          <lesson-jewel-box v-if="!isVisitor" />
+          <!-- <lesson-jewel-box v-if="!isVisitor" /> -->
         </el-col>
         <el-col :span="18" :sm="18">
           <lesson-student-progress :isVisitor="isVisitor" />
         </el-col>
         <el-col :span="4" :sm="4" class="lesson-references">
-          <lesson-referencse />
+          <!-- <lesson-references /> -->
         </el-col>
       </el-row>
     </keep-work-sticky>
@@ -109,16 +122,18 @@ import colI18n from '@/lib/utils/i18n/column'
 import LessonJewelBox from '../student/LessonJewelBox'
 import LessonStudentProgress from '../student/LessonStudentProgress'
 import LessonTeacherProgress from '../teacher/LessonTeacherProgress'
+import LessonPreviewProgress from '../preview/LessonPreviewProgress'
 import LessonReferences from './LessonReferences'
 import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
   components: {
-    'lesson-jewel-box': LessonJewelBox,
-    'lesson-student-progress': LessonStudentProgress,
-    'lesson-teacher-progress': LessonTeacherProgress,
-    'keep-work-sticky': KeepWorkSticky,
-    'lesson-referencse': LessonReferences
+    LessonJewelBox,
+    LessonStudentProgress,
+    LessonTeacherProgress,
+    KeepWorkSticky,
+    LessonReferences,
+    LessonPreviewProgress
   },
   filters: {
     idPretty(value) {
@@ -138,6 +153,10 @@ export default {
       default: true
     },
     isVisitor: {
+      type: Boolean,
+      default: false
+    },
+    isPreview: {
       type: Boolean,
       default: false
     }
@@ -321,7 +340,7 @@ export default {
       return !this.isTeacher && !this.isBeInClassroom
     },
     haqiCode() {
-      const { packageId, lessonId } = this.$route.params
+      const { packageId = 0, lessonId = 0 } = this.$route.params
       return `${packageId}x${lessonId}`
     }
   }
@@ -370,8 +389,10 @@ export default {
   }
 
   .lesson-desc {
-    padding: 0 20px;
+    padding-left: 28px;
+    box-sizing: border-box;
     position: relative;
+    height: 340px;
     .class-id-sign-wrap {
       display: flex;
       align-items: center;
@@ -398,50 +419,54 @@ export default {
     }
 
     .lesson-info {
+      display: flex;
       margin-top: 10px;
       &.title {
         font-size: 20px;
-        color: #4c4c4c;
+        color: #111;
         width: 90%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        font-family: 'MicrosoftYaHei';
       }
       &.intro {
-        color: #606266;
-        display: flex;
-        flex-direction: row;
+        color: #4c4c4c;
+        font-size: 18px;
+        .intro-title {
+          margin-right: 10px;
+        }
         .intro-list {
-          font-size: 16px;
-          height: 80px;
-          width: 80%;
-          white-space: normal;
-          line-height: 30px;
-          margin-left: 18px;
-          .el-scrollbar__wrap {
-            overflow-x: hidden;
-          }
+          flex: 1;
+          line-height: 26px;
+          max-height: 78px;
+          word-break: break-all;
+          overflow-x: none;
+          overflow-y: auto;
         }
       }
 
       &.duration {
-        color: #909399;
+        color: #4c4c4c;
         font-size: 16px;
+        .duration-title {
+          margin-right: 10px;
+        }
       }
 
       &.skills {
-        color: #909399;
+        color: #4c4c4c;
         display: flex;
         flex-direction: row;
         .skills-list {
           font-size: 16px;
-          height: 180px;
-          width: 80%;
+          height: 90px;
+          width: 70%;
           white-space: pre-line;
-          line-height: 30px;
-          margin-left: 18px;
+          line-height: 26px;
+          margin-left: 12px;
           &.reset-height {
-            height: 125px;
+            height: 100px;
           }
           .el-scrollbar__wrap {
             overflow-x: hidden;
@@ -452,6 +477,8 @@ export default {
   }
   .lesson-button-wrap {
     margin: 10px 0;
+    position: absolute;
+    bottom: 0;
     .lesson-button {
       height: 36px;
       width: 190px;
@@ -469,7 +496,7 @@ export default {
   }
   .lesson-progress-wrap {
     box-sizing: border-box;
-    background: white;
+    // background: #f8f8f8;
     padding: 26px 20px;
     display: flex;
     align-items: center;

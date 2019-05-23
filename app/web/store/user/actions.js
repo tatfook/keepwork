@@ -74,15 +74,8 @@ const actions = {
       Cookies.set('token', info.token)
       window.localStorage.setItem('satellizer_token', info.token)
       commit(LOGIN_SUCCESS, info)
-      // await dispatch('lesson/getUserDetail', null, { root: true })
     }
     return info
-  },
-  async loginByInfo({ commit, dispatch }, payload) {
-    Cookies.set('token', payload)
-    window.localStorage.setItem('satellizer_token', payload)
-    commit(LOGIN_SUCCESS, payload)
-    // await dispatch('lesson/getUserDetail', null, { root: true })
   },
   thirdLogin({ commit }, { userinfo, token }) {
     Cookies.set('token', token)
@@ -314,6 +307,12 @@ const actions = {
 
     let list = await keepwork.website.getAllSites()
     commit(GET_ALL_WEBSITE_SUCCESS, { username, list })
+  },
+  async deleteWebsite({ dispatch }, { siteId }) {
+    await keepwork.website.deleteWebsite({ siteId }).then(res => {
+      dispatch('getAllWebsite')
+    }).catch(err => {
+    })
   },
   async getAllSiteDataSource(context, payload) {
     let { useCache = false } = payload || {}
@@ -754,6 +753,14 @@ const actions = {
       unbindResut.status = 'failed'
     })
     return unbindResut
+  },
+  async createFeedback({ getters }, feedbackData) {
+    let { userId } = getters
+    let res = await keepwork.feedbacks.createFeedback({
+      ...feedbackData,
+      userId
+    }).catch(err => Promise.reject(err))
+    return Promise.resolve(res)
   }
 }
 

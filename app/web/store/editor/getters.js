@@ -173,6 +173,7 @@ const getters = {
   updateRecentUrlList: (state, getters, rootState, { 'user/username': username }) => state.updateRecentUrlList[username] || [],
   recentOpenedList: (state, { updateRecentUrlList, 'user/personalAndContributedSiteNameList': allSiteNameList }) => _.filter(updateRecentUrlList, ({ path }) => allSiteNameList.includes(path.split('/')[2])),
   showAngle: state => state.isAnglesToggle,
+  isFileHistoryVisible: state => state.isFileHistoryVisible,
   iframeDialog: state => state.iframeDialog
 }
 

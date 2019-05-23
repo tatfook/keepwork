@@ -32,7 +32,10 @@
           </el-row>
         </div>
         <div :class="['learn-to-build',{'hidden-learn': hiddenLearn}]" v-if="!hasProjects">
-          <span @click="showLearnStep" class="learn"><i class="el-icon-warning"></i>{{$t("create.howToCreateProject")}}</span><span class="close" @click="closeLearn">&times;</span></div>
+          <span @click="showLearnStep" class="learn">
+            <i class="el-icon-warning"></i>{{$t("create.howToCreateProject")}}
+          </span>
+          <span class="close" @click="closeLearn">&times;</span></div>
       </div>
     </div>
     <div class="creativity-page-projects">
@@ -103,7 +106,7 @@ export default {
     myProjectsData() {
       let arr = _.cloneDeep(this.myProjects).sort(this.sortByKey('createdAt'))
       return _.forEach(arr, i => {
-        i.name_title = i.name || this.$t("common.untitled")
+        i.name_title = i.name || this.$t('common.untitled')
       })
     },
     myContributeProjectsData() {
@@ -113,7 +116,7 @@ export default {
         project => project.user.userId !== this.userId
       )
       return _.forEach(myContribute, i => {
-        i.name_title = i.name || this.$t("common.untitled")
+        i.name_title = i.name || this.$t('common.untitled')
       })
     },
     hasProjects() {
@@ -123,11 +126,11 @@ export default {
       let tempArr = _.cloneDeep(_.get(this.excellentProjects, 'rows', []))
       let others = _.filter(
         tempArr,
-        project => (project.user.userId || project.userId) !== this.userId
+        project => (project.user && project.user.userId || project.userId) !== this.userId
       )
       let tempArr2 = _.cloneDeep(others.slice(0, 4))
       return _.forEach(tempArr2, i => {
-        i.name_title = i.name || this.$t("common.untitled")
+        i.name_title = i.name || this.$t('common.untitled')
       })
     }
   },
@@ -144,7 +147,7 @@ export default {
       window.location.href = '/pbl/project/new'
     },
     goExplorationPage() {
-      this.$router.push('exploration')
+      this.$router.push('explore?tab=allProjects')
     },
     closeLearn() {
       this.hiddenLearn = true

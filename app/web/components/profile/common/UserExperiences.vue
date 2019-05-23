@@ -58,7 +58,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import dayjs from 'dayjs'
+import moment from 'moment'
 export default {
   name: 'UserExperiences',
   props: {
@@ -177,7 +177,7 @@ export default {
   },
   filters: {
     formatDate(date) {
-      return dayjs(date).format('YYYY/MM/DD')
+      return moment(date).format('YYYY/MM/DD')
     }
   }
 }

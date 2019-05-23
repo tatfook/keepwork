@@ -60,7 +60,7 @@ export default {
     return {
       submitWorkInfo: {
         gameId: -1,
-        theme: '',
+        theme: '游戏',
         name: '',
         desc: '',
         cover: '',
@@ -79,8 +79,9 @@ export default {
       this.getLegalGamesProjects(),
       this.getGamesList()
     ]).catch(e => console.warn(e))
+    const nowTime = new Date()
     for (let i = 0; i < this.gamesList.rows.length; i++) {
-      if (this.gamesList.rows[i].state === 1) {
+      if (nowTime > new Date(this.gamesList.rows[i].startDate) && nowTime < new Date(this.gamesList.rows[i].endDate)) {
         this.submitWorkInfo.gameId = _.get(this.gamesList.rows[i], 'id', 0)
         break
       }

@@ -33,25 +33,24 @@ const getters = {
   isLearner: (state, { isTeacher, isAlliance }) => {
     return !isTeacher && !isAlliance
   },
-  learnDayCount: (state, { userinfo }) =>
-    _.get(userinfo, 'extra.learn.learnDayCount', 0),
-  lastLearnDate: (state, { userinfo }) =>
-    _.get(userinfo, 'extra.learn.lastLearnDate', ''),
+  learnDayCount: (state, { userinfo }) => _.get(userinfo, 'extra.learn.learnDayCount', 0),
+  lastLearnDate: (state, { userinfo }) => _.get(userinfo, 'extra.learn.lastLearnDate', ''),
   today: state => moment().format('YYYYMMDD'),
   howManyDays: (state, { today, lastLearnDate, learnDayCount }) => {
-    return lastLearnDate.toString() === today.toString()
-      ? learnDayCount
-      : learnDayCount + 1
+    const days = lastLearnDate.toString() === today.toString() ? learnDayCount : learnDayCount + 1
+    return days > 0 ? days : 1
   },
   userId: (state, { userinfo }) => _.get(userinfo, 'id', ''),
   lockCoin: (state, { userinfo }) => _.get(userinfo, 'lockCoin', 0),
-  packagesList: (state) => state.packagesList,
-  packageDetail: state => ({ packageId }) =>
-    _.get(state.packagesDetail, packageId),
+  packagesList: state => state.packagesList,
+  packageDetail: state => ({ packageId }) => _.get(state.packagesDetail, packageId),
   lessonDetail: state => ({ lessonId }) => _.get(state.lessonsDetail, lessonId),
   skills: state => state.skills,
   subjects: state => state.subjects,
-  isShowLoginDialog: state => state.isShowLoginDialog
+  isShowLoginDialog: state => state.isShowLoginDialog,
+  previewFlag: state => state.previewFlag,
+  TagsPackages: state => state.TagsPackages,
+  PackagesByTag: state => ({ typeId }) => _.get(state.TagsPackages, typeId)
 }
 
 export default getters

@@ -18,7 +18,7 @@ export default {
           projectName: 'official/paracraft',
           filePath: 'offline-courses'
         },
-        memtor: {
+        mentor: {
           projectName: 'official/paracraft',
           filePath: 'learn/mentor_service'
         },

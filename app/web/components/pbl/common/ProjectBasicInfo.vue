@@ -34,8 +34,8 @@
         <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <project-grade v-if="!isWebType" :projectDetail='originProjectDetail'></project-grade>
         <div class="project-basic-info-detail-operations">
-          <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
-          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{$t("project.edit")}}</el-button>
+          <el-button type="primary" @click="toProjectPage" v-show="visitButtonVisiable">{{ buttonName }}</el-button>
+          <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{toggleSetWebsiteWord}}</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
           <game-entry v-if="projectType === 1 && isLoginUserBeCreator" :projectId='projectId' class="project-basic-info-detail-operations-item"></game-entry>
         </div>
@@ -53,7 +53,7 @@
       <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
     <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
-    <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
+    <el-dialog title="" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleBinderDialogClose">{{$t("common.Cancel")}}</el-button>
@@ -73,7 +73,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import E from 'wangeditor'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
@@ -125,10 +125,15 @@ export default {
       undefined
     )
     this.isLogined &&
-      (await this.userGetUserPrivilege({
-        siteId: this.projectSiteId,
-        userId: this.loginUserId
-      }))
+      Promise.all([
+        this.userGetUserPrivilege({
+          siteId: this.projectSiteId,
+          userId: this.loginUserId
+        }),
+        this.getWebsiteDetailBySiteId({
+          siteId: this.projectSiteId
+        })
+      ])
   },
   data() {
     return {
@@ -187,6 +192,12 @@ export default {
       }
       return this.$t('project.visitWorld')
     },
+    visitButtonVisiable() {
+      if (!this.isWebType) {
+        return true
+      }
+      return this.siteDetailInfo ? true : false
+    },
     isCreating() {
       return !(
         this.originProjectDetail.world &&
@@ -239,13 +250,19 @@ export default {
     },
     projectSiteId() {
       // FIXME: 确认清楚是哪个id
-      return this.originProjectDetail.siteId || this.originProjectDetail.id
+      // return this.originProjectDetail.siteId || this.originProjectDetail.id
+      return this.originProjectDetail.siteId
     },
     siteDetailInfo() {
       if (!this.isWebType) {
         return
       }
       return this.getSiteDetailInfoById({ siteId: this.projectSiteId })
+    },
+    toggleSetWebsiteWord() {
+      return this.siteDetailInfo
+        ? this.$t('project.edit')
+        : this.$t('editor.associationWebsite')
     },
     siteUrl() {
       if (!this.isWebType) {
@@ -327,6 +344,7 @@ export default {
           checkedWords: editorText.text()
         }).catch()
         if (sensitiveResult && sensitiveResult.length > 0) {
+          this.descriptionEditor.txt.html(sensitiveResult[0].word)
           return
         }
         this.isLoading = true
@@ -371,6 +389,7 @@ export default {
         checkedWords: this.applyText
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
+        this.applyText = _.get(sensitiveResult, '[0].word', this.applyText)
         this.isApplyButtonLoading = false
         return
       }
@@ -418,14 +437,18 @@ export default {
     },
     async toEditWebsite() {
       if (this.projectSiteId) {
-        let tempWin = window.open('_blank')
         await this.getWebsiteDetailBySiteId({
           siteId: this.projectSiteId
         }).catch(e => console.error(e))
-        if (this.siteUrl) {
-          return (tempWin.location = `/ed${this.siteUrl}`)
+        if (this.siteDetailInfo) {
+          let tempWin = window.open('_blank')
+          if (this.siteUrl) {
+            return (tempWin.location = `/ed${this.siteUrl}`)
+          }
+          tempWin.close()
+        } else {
+          this.binderDialogVisible = true
         }
-        tempWin.close()
       } else {
         this.binderDialogVisible = true
       }
@@ -499,7 +522,7 @@ export default {
       return projectTypes[typeValue]
     },
     formatDate(date, formatType) {
-      return dayjs(date).format(formatType)
+      return moment(date).format(formatType)
     },
     applyStateFilter(applyState, applyStates) {
       let stateText = ''
@@ -666,7 +689,7 @@ export default {
         }
         label {
           color: #909399;
-          width: 72px;
+          width: 87px;
           display: inline-block;
         }
       }
