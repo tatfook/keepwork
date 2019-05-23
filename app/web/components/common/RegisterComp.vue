@@ -159,7 +159,7 @@ export default {
         return
       }
       keepwork.user
-        .getUser(_.lowerCase(this.ruleForm.username))
+        .getUser(this.ruleForm.username.toLowerCase())
         .then(res => {
           if (res) {
             this.usernameError = this.$t('common.existAccount')
@@ -174,8 +174,8 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid && !this.usernameError) {
           let payload = {
-            username: _.lowerCase(this.ruleForm.username),
-            password: _.lowerCase(this.ruleForm.password),
+            username: this.ruleForm.username.toLowerCase(),
+            password: this.ruleForm.password.toLowerCase(),
             cellphone: this.ruleForm.phoneNumber,
             captcha: this.ruleForm.authCode
           }

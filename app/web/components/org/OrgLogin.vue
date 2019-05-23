@@ -120,7 +120,7 @@ export default {
     async toLogin() {
       this.isLoading = true
       try {
-        const userinfo = await this.orgLogin({...this.loginData, username: _.toLower(this.loginData.username)})
+        const userinfo = await this.orgLogin({...this.loginData, username: this.loginData.username.toLowerCase()})
         await this.setCurrentOrg({ orgDetail: this.orgDetail })
         this.isLoading = false
         const { roleId } = userinfo
