@@ -64,7 +64,7 @@
           <span class="line">|</span>
         </li>
         <li>
-          <span>{{$t('common.caseNumberA')}}{{$t('common.caseNumberB')}}</span>
+          <a href="http://beian.miit.gov.cn/publish/query/indexFirst.action" target="_blank"><span>{{$t('common.caseNumberA')}}{{$t('common.caseNumberB')}}</span></a>
           <span class="line">|</span>
         </li>
         <li>
