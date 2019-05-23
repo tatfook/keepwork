@@ -1861,6 +1861,7 @@
     "logoutHint": "Hint",
     "logoutTips": "Are you sure to quit the course system?",
     "text": "text",
-    "onlineLearning": "online learning "
+    "onlineLearning": "online learning ",
+    "quiz":"quiz"
   }
 }

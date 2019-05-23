@@ -1851,6 +1851,7 @@
     "logoutHint": "提示",
     "logoutTips": "确定退出课程系统吗？",
     "text": "文本",
-    "onlineLearning": "在线学习"
+    "onlineLearning": "在线学习",
+    "quiz":"问题"
   }
 }

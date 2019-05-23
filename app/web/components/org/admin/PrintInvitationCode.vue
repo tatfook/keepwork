@@ -40,7 +40,7 @@
               <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
             </div>
             <div class="print-invitation-code-print-content-box-guide">
-              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>进入 keepwork.com/org/{{orgLoginUrl}}</p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>用浏览器打开网址：keepwork.com/org/{{orgLoginUrl}}</p>
               <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册keepwork账号，并登录</p>
               <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>输入上方邀请码</p>
               <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
@@ -259,7 +259,7 @@ export default {
           }
         }
         &-guide {
-          padding: 2px 0 18px 34px;
+          padding: 2px 0 18px 16px;
           position: relative;
           &-img {
             position: absolute;
