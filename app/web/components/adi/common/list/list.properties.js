@@ -1,3 +1,3 @@
 export default {
-  collection: []
+  collection: [{ isSubmodShow: true }, { isSubmodShow: true }]
 }
