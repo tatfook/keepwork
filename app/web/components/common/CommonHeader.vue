@@ -1,16 +1,16 @@
 <template>
   <div class="common-header">
-    <el-menu mode='horizontal' :default-active="activeIndex" class="hidden-xs-only common-header-menu">
+    <el-menu mode='horizontal' :default-active="activeIndex" class="common-header-menu">
       <el-menu-item index='0' class="home-page" @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
-      <el-menu-item index='1' @click="goCreativityPage">
+      <el-menu-item class="hidden-xxs-only" index='1' @click="goCreativityPage">
         {{$t('common.creativity')}}
       </el-menu-item>
-      <el-menu-item index='2' @click="goExplorationPage">
+      <el-menu-item class="hidden-xxs-only" index='2' @click="goExplorationPage">
         {{$t('common.explore')}}
       </el-menu-item>
-      <el-menu-item index='4' @click="goStudyPage">
+      <el-menu-item class="hidden-xxs-only" index='4' @click="goStudyPage">
         {{$t('common.study')}}
       </el-menu-item>
       <el-menu-item index="13" class="pull-right user-menu" v-if="isLogin">
@@ -65,7 +65,9 @@
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
-            <i class="iconfont icon-wrench-fill"></i>{{$t('common.tools')}}<i class="el-icon-caret-bottom right-icon"></i>
+            <i class="iconfont icon-wrench-fill"></i>
+            <span class="hidden-xxs-only">{{$t('common.tools')}}</span>
+            <i class="el-icon-caret-bottom right-icon"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
@@ -74,98 +76,36 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-
       <el-menu-item index='8' class="pull-right register-button" v-if="!isLogin">
         <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
       </el-menu-item>
       <el-menu-item index='9' class="pull-right login-button" v-if="!isLogin">
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
-
-      <el-menu-item index='14' class="pull-right common-header-menu-download" @click="downloadParacraft()">
-        <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
-      </el-menu-item>
-
-      <el-menu-item index='12' class="pull-right common-header-menu-ranking" @click="goRanking">
-        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
-      </el-menu-item>
-
-      <el-menu-item class="menu-searchbar" index='10'>
-        <search-bar></search-bar>
-      </el-menu-item>
-    </el-menu>
-
-    <el-menu mode='horizontal' class="hidden-sm-and-up">
-      <el-menu-item index='0' class="profile-menu-item" @click="goHomePage">
-        <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
-      </el-menu-item>
-
-      <el-menu-item index='1' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goJoin" class="register-btn">{{$t('common.register')}}</a>
-      </el-menu-item>
-
-      <el-menu-item index='2' class="pull-right" v-if="!isLogin">
-        <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
-      </el-menu-item>
-
-      <el-menu-item index="3" class="pull-right user-menu" v-if="isLogin">
-        <el-dropdown placement="bottom-end" trigger="click">
-          <span class="el-dropdown-link">
-            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
-            <div class="greeting">{{$t("common.hello")}}，{{username}}</div>
-            <el-dropdown-item divided>
-              <a :href="`/u/${userProfile.username}`"><i class="iconfont icon-user"></i>{{$t('common.myHomePage')}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item divided>
-              <a href="#" @click.stop.prevent="goPersonalCenter"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
-            </el-dropdown-item>
-            <el-dropdown-item divided>
-              <a @click.stop="logout"><i class="iconfont icon-ziyuan"></i>{{$t('common.logout')}}</a>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-menu-item>
-
-      <el-menu-item index="4" class="pull-right" v-if="isLogin">
-        <el-dropdown placement="bottom" trigger="click">
-          <span class="el-dropdown-link tool-menu">
-            <i class="iconfont icon-wrench-fill"></i><i class="el-icon-caret-bottom right-icon"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-menu-item>
-
-      <el-menu-item index="5" class="pull-right" v-if="isLogin">
+      <el-menu-item index="5" class="pull-right hidden-sm-and-up">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-menu"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="" @click.stop.prevent="goCreativityPage">{{$t('common.creativity')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="" @click.stop.prevent="goExplorationPage">{{$t('common.explore')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="" @click.stop.prevent="goStudyPage">{{$t('common.study')}}</a></el-dropdown-item>
+            <el-dropdown-item class="hidden-xs-and-up"><a href="" @click.stop.prevent="goCreativityPage">{{$t('common.creativity')}}</a></el-dropdown-item>
+            <el-dropdown-item class="hidden-xs-and-up"><a href="" @click.stop.prevent="goExplorationPage">{{$t('common.explore')}}</a></el-dropdown-item>
+            <el-dropdown-item class="hidden-xs-and-up"><a href="" @click.stop.prevent="goStudyPage">{{$t('common.study')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="/ranking">{{$t('common.ranking')}}</a></el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh">{{$t('project.downloadParacraft')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="/wiki/apps">{{$t('common.applicationCenter')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href='/official/help/index'>{{$t('common.help')}}</a></el-dropdown-item>
-            <el-dropdown-item v-if="!IS_GLOBAL_VERSION"><a href='//keepwork.com/official/creativeTimes/latest' target="_blank">{{$t('common.creatTimes')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
+      <el-menu-item index='14' class="hidden-xs-only pull-right common-header-menu-download" @click="downloadParacraft()">
+        <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
+      </el-menu-item>
+      <el-menu-item index='12' class="hidden-xs-only pull-right common-header-menu-ranking" @click="goRanking">
+        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
+      </el-menu-item>
+      <el-menu-item class="menu-searchbar" index='10'>
+        <search-bar></search-bar>
+      </el-menu-item>
     </el-menu>
-
     <div @click.stop v-if='isPersonalCenterShow'>
       <personal-center-dialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog'></personal-center-dialog>
     </div>
@@ -432,8 +372,7 @@ export default {
   }
 }
 </script>
-
-<style scoped>
+<style lang="scss" scoped>
 .pull-right {
   float: right !important;
 }
@@ -442,24 +381,29 @@ export default {
   width: 100%;
   height: 100%;
 }
-.el-menu .brand {
-  width: 115px;
-}
-.el-menu .login-btn {
-  background: #f5f5f5;
-  border: solid 1px #dddddd;
-  padding: 7px 11px;
-  border-radius: 3px;
-}
-.el-menu .register-btn {
-  background-color: #409eff;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 3px;
-}
-.el-menu .register-btn:hover {
-  background-color: #218efc;
-  color: #fff;
+.el-menu {
+  .brand {
+    width: 115px;
+  }
+  .login-btn {
+    background: #f5f5f5;
+    border: solid 1px #dddddd;
+    padding: 7px 11px;
+    border-radius: 3px;
+    &:hover {
+      background-color: #218efc;
+      color: #fff;
+    }
+  }
+  .register-btn {
+    background-color: #409eff;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 3px;
+  }
+  .is-active {
+    color: #409eff;
+  }
 }
 .menu-left {
   flex: 1;
@@ -473,9 +417,30 @@ export default {
 .el-dropdown-menu__item--divided:before {
   margin: 0px;
 }
-.el-menu-item .right-icon {
-  font-size: 13px;
-  width: 0;
+.el-menu-item {
+  padding: 0 12px;
+  color: #303133;
+  &:hover {
+    color: #409eff !important;
+  }
+  .right-icon {
+    font-size: 13px;
+    width: 0;
+    position: relative;
+  }
+}
+.home-page {
+  padding-left: 0;
+}
+.register-button {
+  padding: 0;
+}
+.user-menu {
+  padding-right: 5px;
+}
+.el-dropdown {
+  height: 60px;
+  line-height: 60px;
 }
 .el-dropdown-menu {
   font-size: 14px;
@@ -483,10 +448,6 @@ export default {
 .el-dropdown-menu__item {
   display: flex;
   padding: 0;
-}
-.el-dropdown-menu__item a {
-  padding: 0 20px;
-  width: 100%;
 }
 .el-dropdown-menu .iconfont {
   margin-right: 14px;
@@ -632,29 +593,8 @@ export default {
       padding-right: 18px;
     }
   }
-  .register-dialog {
-    max-width: 352px;
-    .el-dialog__body {
-      padding: 0;
-      .register-dialog-form {
-        margin: 0;
-        box-shadow: none;
-        .register-title {
-          padding: 0;
-        }
-      }
-    }
-  }
-}
-.el-menu-item {
-  padding: 0 10px;
 }
 .user-menu-dropdown {
-  .greeting {
-    padding: 0 20px;
-    height: 36px;
-    line-height: 36px;
-  }
   li {
     padding: 0;
   }
@@ -662,32 +602,28 @@ export default {
     padding: 0 50px 0 20px;
   }
 }
-.common-header-menu {
-  .el-dropdown {
-    height: 60px;
-    line-height: 60px;
+.el-dropdown-menu__item a {
+  padding: 0 20px;
+  width: 100%;
+}
+.greeting {
+  padding: 0 20px;
+  height: 36px;
+  line-height: 36px;
+}
+.register-dialog {
+  max-width: 352px;
+  /deep/.el-dialog__body {
+    padding: 0;
   }
-  .el-menu-item {
-    padding: 0 15px;
-    color: #303133;
-    &:hover {
-      color: #409eff !important;
-    }
-    &.home-page {
-      padding-left: 0;
-    }
-    &.register-button {
-      padding: 0;
-    }
-    &.user-menu {
-      padding-right: 5px;
-    }
-    &.is-active {
-      color: #409eff;
-    }
+  /deep/.register-dialog-form {
+    margin: 0;
+    box-shadow: none;
+  }
+  /deep/.register-title {
+    padding: 0;
   }
 }
-.profile-submenu,
 .el-popper {
   a {
     color: inherit;
@@ -696,24 +632,19 @@ export default {
     align-items: center;
   }
 }
-.iicc-logo {
-  width: 30px;
-  height: 30px;
-  margin-right: 5px;
+@media (max-width: 1180px) {
+  .menu-searchbar {
+    display: none;
+  }
 }
-@media (max-width: 768px) {
-  .el-submenu__title {
-    padding: 0 15px;
+@media (max-width: 499px) {
+  .hidden-xxs-only {
+    display: none;
   }
-  .el-menu--horizontal .greeting {
-    padding: 0 10px;
-  }
-  .el-menu--horizontal .function-menu {
-    a {
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-    }
+}
+@media (min-width: 500px) {
+  .hidden-xs-and-up {
+    display: none;
   }
 }
 @media print {

@@ -180,7 +180,8 @@ export default {
               if(this.$route.name == 'Login'){
                 window.location.href = '/'
               }else{
-                window.location.reload()
+                window.location.href = `${window.location.origin}/u/${payload.username}`
+                // window.location.reload()
               }
             })
             .catch(e => {

@@ -87,8 +87,8 @@ const actions = {
       commit(GET_ORG_PACKAGES_SUCCESS, packages)
     }
   },
-  async getOrgPackageDetail({ commit }, { packageId }) {
-    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId })
+  async getOrgPackageDetail({ commit }, { roleId = 1, packageId }) {
+    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId, roleId })
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
@@ -99,8 +99,11 @@ const actions = {
       dispatch('getOrgPackageDetail', { packageId })
     ])
     const { orgPackagesDetail } = getters
-    const packageIndex = _.findIndex(_.get(orgPackagesDetail, [ packageId, 'lessons'], []), item => item.lessonId === _.toNumber(lessonId))
-    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
+    const packageInfo = _.find(
+      _.get(orgPackagesDetail, [packageId, 'lessons'], []),
+      item => item.lessonId === _.toNumber(lessonId)
+    )
+    detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
@@ -219,7 +222,7 @@ const actions = {
   },
   async getTeachingLesson({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
     const res = await graphql.getQueryResult({
-      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classrooms{id, key, state, extra}} } }',
+      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classrooms{id, key, state, packageId, lessonId, extra}} } }',
       variables: {
         organizationId,
         username

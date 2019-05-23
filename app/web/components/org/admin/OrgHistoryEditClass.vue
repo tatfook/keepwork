@@ -49,9 +49,12 @@ export default {
           this.toHistoryClassListPage()
         })
         .catch(error => {
-          console.log(error)
+          let message = this.$t('org.failedUpdatedClass')
+          if (error.data && error.data.code === -1) {
+            message = '该班学生人数过多，不能完成延期操作。请联系keepwork客服处理:support@paraengine.com'
+          }
           this.$message({
-            message: this.$t('org.failedUpdatedClass'),
+            message: message,
             type: 'error'
           })
           this.isLoading = false

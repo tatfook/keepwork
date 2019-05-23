@@ -75,7 +75,7 @@ export default {
   methods: {
     learnMore(link) {
       if (link == `${window.location.origin}/s/textbook`) {
-        this.$message.info('敬请期待')
+        this.$router.push('/textbook')
         return
       }
       window.open(link)

@@ -134,12 +134,7 @@ const checkIsOrgMember = async function(
     return { isContinue: true, orgToken }
   }
   if (!orgToken && checkIsIgnore(name, next, params)) {
-    const token = await keepwork.user.getToken().catch(e => console.error(e))
-    if (token) {
-      Cookies.set('token', token)
-      store.dispatch('org/setTokenUpdateAt', { orgId })
-      return { isContinue: false }
-    }
+    return { isContinue: false }
   }
   if (nowPageRole != 'contact') {
     next({
@@ -309,8 +304,7 @@ body {
 }
 .org-page {
   width: 100%;
-  height: auto;
-  min-height: 100%;
+  height: 100%;
   background: #f5f5f5;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   display: table;

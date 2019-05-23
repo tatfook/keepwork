@@ -57,8 +57,8 @@ const actions = {
       commit(GET_TAUGHT_CLASSROOM_COURSES_SUCCESS, { classId, classroomCourses })
     }
   },
-  async getOrgClassPackageDetail({ commit }, { classId, packageId }) {
-    const packageDetail = await lessonOrganizationClasses.getClassPackageDetail({ classId, packageId })
+  async getOrgClassPackageDetail({ commit }, { classId, packageId, roleId = 2 }) {
+    const packageDetail = await lessonOrganizationClasses.getClassPackageDetail({ classId, packageId, roleId })
     commit(GET_CLASS_PACKAGE_DETAIL_SUCCESS, { classId, packageId, packageDetail })
   },
   async addStudentToClass(
@@ -93,11 +93,11 @@ const actions = {
       dispatch('getOrgClassPackageDetail', { classId, packageId })
     ])
     const { orgClassPackagesDetail } = getters
-    const packageIndex = _.findIndex(
+    const packageInfo = _.find(
       _.get(orgClassPackagesDetail, [ classId, packageId, 'lessons' ], []),
       item => item.lessonId === _.toNumber(lessonId)
     )
-    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
+    detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))

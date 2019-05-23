@@ -50,8 +50,10 @@ export default {
     }
   },
   async mounted() {
-    await this.getUserOrgRealName()
-    this.form.realname = this.orgRealName
+    if (this.isCurrentOrgToken) {
+      await this.getUserOrgRealName()
+      this.form.realname = this.orgRealName
+    }
   },
   methods: {
     ...mapActions({
@@ -80,7 +82,9 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      orgRealName: 'org/student/orgRealName'
+      orgRealName: 'org/student/orgRealName',
+      isCurrentOrgToken: 'org/isCurrentOrgToken',
+      tokenInfo: 'org/tokenInfo'
     }),
     orgName() {
       return _.get(this.currentOrg, 'name')

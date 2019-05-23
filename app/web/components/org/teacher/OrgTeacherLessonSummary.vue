@@ -180,11 +180,12 @@ export default {
       lessonId: this.$route.params.lessonId
     })
     this.modList = Parser.buildBlockList(res.content)
-    if (this.classroomLearnRecord.length === 0) {
+    let filterClassroomLearnRecord = _.filter(this.classroomLearnRecord, i => i.extra.name && i.extra.username)
+    if (filterClassroomLearnRecord.length === 0) {
       this.loading = false
       return
     }
-    this.totalStudent = this.classroomLearnRecord.length
+    this.totalStudent = filterClassroomLearnRecord.length
     await Promise.all([
       this.getLessonSkill(this.$route.params.lessonId),
       this.getQuizChartData(this.newCurrentRecord),
@@ -244,8 +245,10 @@ export default {
         : moment(this.currenClassInfo.createdAt).format('YYYY-MM-DD')
     },
     newCurrentRecord() {
+      let filterClassroomLearnRecord = _.filter(this.classroomLearnRecord, i => i.extra.name && i.extra.username)
+      if(!filterClassroomLearnRecord.length) return []
       let currentRecord = _.map(
-        this.classroomLearnRecord,
+        filterClassroomLearnRecord,
         ({
           extra: {
             portrait,

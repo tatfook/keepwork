@@ -3,7 +3,9 @@
     <div class="pbl-page-header">
       <common-header class="container"></common-header>
     </div>
-    <router-view class="pbl-page-main-content" id="pbl-page" />
+    <div class="pbl-page-main-content">
+      <router-view id="pbl-page" />
+    </div>
     <div class="pbl-page-footer">
       <perfect-common-footer></perfect-common-footer>
     </div>
@@ -137,7 +139,7 @@ body {
   padding: 0;
 }
 .pbl-page {
-  min-height: 100%;
+  height: 100%;
   display: table;
   width: 100%;
   border-collapse: collapse;

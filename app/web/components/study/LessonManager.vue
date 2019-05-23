@@ -29,59 +29,75 @@
       </div>
     </div>
     <div class="lesson-manager-details">
-      <el-table class="lesson-manager-table" :row-class-name="getRowClass" :row-key="setRowKey" :expand-row-keys="expandRowKeys" v-loading="isTableLoading" :data="filteredLessonList" style="width: 100%">
-        <el-table-column class-name="lesson-manager-table-index" type="index" :label="$t('lesson.serialNumber')" width="50">
-        </el-table-column>
-        <el-table-column prop='packages' type='expand' width="40">
-          <template slot-scope="expandProps">
-            <div class="lesson-manager-table-expand">
-              <div class="lesson-manager-table-package-item" :class="{'lesson-manager-table-package-item-active': searchParams.packageId === packageItem.id}" v-for="(packageItem, index) in expandProps.row.packages" :key="index">
-                <span class="lesson-manager-table-package-item-name">{{packageItem.packageName}}</span>
-                <el-popover popper-class='lesson-manager-table-package-popver' placement="bottom-start" trigger="click">
-                  <div class="lesson-manager-table-package-popver-box">
-                    <div class="lesson-manager-table-package-popver-item">
-                      <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.lessonManage.packageLabel')}}:</label>
-                      <span>{{packageItem.packageName}}</span>
-                    </div>
-                    <div class="lesson-manager-table-package-popver-item">
-                      <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.statusLabel')}}:</label>
-                      <span>{{packageItem.state | transformStateValue(statesArray)}}</span>
-                    </div>
-                    <div class="lesson-manager-table-package-popver-item">
-                      <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.intro')}}:</label>
-                      <div>{{packageItem.intro || $t('lesson.lessonManage.noIntro')}}</div>
-                    </div>
+      <table class="lesson-manager-table" v-loading="isTableLoading">
+        <thead>
+          <tr>
+            <th class="lesson-manager-table-index">{{$t('lesson.serialNumber')}}</th>
+            <th class="lesson-manager-table-toggle"></th>
+            <th class="lesson-manager-table-lessonName">{{$t('lesson.nameLabel')}}</th>
+            <th class="lesson-manager-table-subject">{{$t('lesson.subjectLabel')}}</th>
+            <th class="lesson-manager-table-operations"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-show="filteredLessonList.length > 0" v-for="(lesson, index) in filteredLessonList">
+            <tr :key="'lesson' + index" class="lesson-manager-table-row">
+              <td colspan="1" class="lesson-manager-table-index">{{index}}</td>
+              <td colspan="1" class="lesson-manager-table-toggle">
+                <el-tooltip :content="lesson.isPackageShow?$t('lesson.foldLessonPackageInfo'):$t('lesson.viewLessonPackageInfo')" v-show="lesson.packages.length > 0">
+                  <i class="el-icon el-icon-arrow-right" :class="{'lesson-manager-table-rotate': lesson.isPackageShow}" @click="toggleLessonPackageShow(lesson.id)"></i>
+                </el-tooltip>
+              </td>
+              <td colspan="1" class="lesson-manager-table-lessonName">
+                <el-tooltip effect="dark" :content="$t('lesson.lessonManage.toKpEditorInfo')" placement="top-start">
+                  <span @click='toEditor(lesson)'>{{lesson.lessonName}}</span>
+                </el-tooltip>
+              </td>
+              <td colspan="1" class="lesson-manager-table-subject">{{subjectName(lesson.subjectDetail)}}</td>
+              <td colspan="1" class="lesson-manager-table-operations">
+                <el-tooltip v-if="isEditable(lesson)" effect="dark" :content="$t('lesson.edit')" placement="top">
+                  <i class="iconfont icon-edit--" @click="toEdit(lesson)"></i>
+                </el-tooltip>
+                <el-tooltip v-if="isReleasable(lesson)" effect="dark" :content="$t('lesson.release')" placement="top">
+                  <i class="iconfont icon-Release" @click="toRelease(lesson)"></i>
+                </el-tooltip>
+                <el-tooltip v-if="isDeletable(lesson)" effect="dark" :content="$t('lesson.delete')" placement="top">
+                  <i class="iconfont icon-delete1" @click="confirmDelete(lesson)"></i>
+                </el-tooltip>
+              </td>
+            </tr>
+            <tr v-show="lesson.isPackageShow" :key="index" class="lesson-manager-table-expand">
+              <td colspan="5">
+                <div class="lesson-manager-table-expand-content">
+                  <div class="lesson-manager-table-package-item" :class="{'lesson-manager-table-package-item-active': searchParams.packageId === packageItem.id}" v-for="(packageItem, packageIndex) in lesson.packages" :key="packageIndex">
+                    <span class="lesson-manager-table-package-item-name">{{packageItem.packageName}}</span>
+                    <el-popover popper-class='lesson-manager-table-package-popver' placement="bottom-start" trigger="click">
+                      <div class="lesson-manager-table-package-popver-box">
+                        <div class="lesson-manager-table-package-popver-item">
+                          <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.lessonManage.packageLabel')}}:</label>
+                          <span>{{packageItem.packageName}}</span>
+                        </div>
+                        <div class="lesson-manager-table-package-popver-item">
+                          <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.statusLabel')}}:</label>
+                          <span>{{packageItem.state | transformStateValue(statesArray)}}</span>
+                        </div>
+                        <div class="lesson-manager-table-package-popver-item">
+                          <label class='lesson-manager-table-package-popver-label'>{{$t('lesson.intro')}}:</label>
+                          <div>{{packageItem.intro || $t('lesson.lessonManage.noIntro')}}</div>
+                        </div>
+                      </div>
+                      <el-button class="lesson-manager-table-package-state" type="text" slot="reference">{{packageItem.state | transformStateValue(statesArray)}}</el-button>
+                    </el-popover>
                   </div>
-                  <el-button class="lesson-manager-table-package-state" type="text" slot="reference">{{packageItem.state | transformStateValue(statesArray)}}</el-button>
-                </el-popover>
-              </div>
-            </div>
+                </div>
+              </td>
+            </tr>
           </template>
-        </el-table-column>
-        <el-table-column class-name="lesson-manager-table-lessonName" prop="lessonName" :label="$t('lesson.nameLabel')">
-          <template slot-scope='scope'>
-            <el-tooltip effect="dark" :content="$t('lesson.lessonManage.toKpEditorInfo')" placement="top-start">
-              <span @click='toEditor(scope.row)'>{{scope.row.lessonName}}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('lesson.subjectLabel')" width="190">
-          <template slot-scope='scope'>{{subjectName(scope.row.subjectDetail)}}</template>
-        </el-table-column>
-        <el-table-column label="" width="180" class-name="lesson-manager-table-operations">
-          <template slot-scope="scope">
-            <el-tooltip v-if="isEditable(scope.row)" effect="dark" :content="$t('lesson.edit')" placement="top">
-              <i class="iconfont icon-edit--" @click="toEdit(scope.row)"></i>
-            </el-tooltip>
-            <el-tooltip v-if="isReleasable(scope.row)" effect="dark" :content="$t('lesson.release')" placement="top">
-              <i class="iconfont icon-Release" @click="toRelease(scope.row)"></i>
-            </el-tooltip>
-            <el-tooltip v-if="isDeletable(scope.row)" effect="dark" :content="$t('lesson.delete')" placement="top">
-              <i class="iconfont icon-delete1" @click="confirmDelete(scope.row)"></i>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-      </el-table>
+          <tr class="lesson-manager-table-empty" v-show="filteredLessonList.length == 0">
+            <td colspan="5">{{$t('lesson.noData')}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <operate-result-dialog :infoDialogData='infoDialogData' :isInfoDialogVisible='isInfoDialogVisible' @close='handleClose'></operate-result-dialog>
   </div>
@@ -104,6 +120,7 @@ export default {
       this.lessonGetAllSubjects({})
     ])
     this.isTableLoading = false
+    this.initLessonPackageShowData()
   },
   data() {
     return {
@@ -112,6 +129,7 @@ export default {
         subjectId: null,
         packageId: null
       },
+      lessonPackagesShow: [],
       isTableLoading: false,
       isInfoDialogVisible: false,
       infoDialogData: {
@@ -182,7 +200,11 @@ export default {
           }
           let targetSubject = _.find(this.lessonSubjects, { id: subjectId })
           obj.subjectDetail = targetSubject
-          return obj
+          let packageShowData = _.find(this.lessonPackagesShow, { id: obj.id })
+          return {
+            ...obj,
+            isPackageShow: _.get(packageShowData, 'isPackageShow', false)
+          }
         }
       )
       return containSubjectNamePackageList
@@ -211,6 +233,24 @@ export default {
       lessonDeleteLesson: 'lesson/teacher/deleteLesson',
       gitlabGetFileDetail: 'gitlab/getFileDetail'
     }),
+    initLessonPackageShowData() {
+      this.lessonPackagesShow = []
+      _.map(this.filteredLessonList, lesson => {
+        this.lessonPackagesShow.push({
+          ...lesson,
+          isPackageShow: false
+        })
+      })
+    },
+    toggleLessonPackageShow(lessonId) {
+      let packageShowIndex = _.findIndex(this.lessonPackagesShow, {
+        id: lessonId
+      })
+      let packageShowData = this.lessonPackagesShow[packageShowIndex]
+      this.lessonPackagesShow[
+        packageShowIndex
+      ].isPackageShow = !packageShowData.isPackageShow
+    },
     getRowClass({ row, rowIndex }) {
       let { packages } = row
       if (packages.length <= 0) {
@@ -371,6 +411,11 @@ export default {
       return _.find(statesArray, { id: stateId }).value
     }
   },
+  watch: {
+    lessonUserLessons() {
+      this.initLessonPackageShowData()
+    }
+  },
   components: {
     OperateResultDialog
   }
@@ -465,18 +510,33 @@ export default {
   }
   &-table {
     border: 1px solid #d2d2d2;
-    height: 100%;
-    tr,
-    th {
+    width: 100%;
+    font-size: 14px;
+    border-spacing: 0;
+    border-collapse: collapse;
+    .el-icon {
+      cursor: pointer;
+      transition: transform 0.5s;
+    }
+    &-empty{
+      text-align: center;
+      color: #909399;
+    }
+    &-rotate {
+      transform: rotate(90deg);
+    }
+    &-row {
       color: #414141;
+      border-bottom: 1px solid #d2d2d2;
     }
-    td,
-    th.is-leaf {
-      border-color: #d2d2d2;
+    thead {
+      border-bottom: 1px solid #d2d2d2;
+    }
+    th {
+      padding: 16px 0px;
+    }
+    td {
       padding: 11px 0;
-    }
-    th.is-leaf {
-      padding: 15px 0;
     }
     .iconfont {
       font-size: 20px;
@@ -488,9 +548,8 @@ export default {
       margin-right: 0;
     }
     &-lessonName {
-      .cell {
-        white-space: nowrap;
-      }
+      white-space: nowrap;
+      text-align: left;
       .el-tooltip {
         cursor: pointer;
       }
@@ -499,18 +558,34 @@ export default {
       }
     }
     &-operations {
-      text-align: right;
+      width: 180px;
+      text-align: left;
       .cell {
         padding: 0 30px 0 20px;
       }
     }
     &-index {
       text-align: center;
+      width: 50px;
+    }
+    &-toggle {
+      width: 40px;
+      text-align: center;
+    }
+    &-subject {
+      width: 190px;
+      text-align: left;
     }
     &-expand {
-      display: flex;
-      flex-wrap: wrap;
-      margin-bottom: -1px;
+      td {
+        padding: 0;
+      }
+      &-content {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: -1px;
+        background-color: #f7f7f7;
+      }
     }
     &-no-expand {
       .el-icon-arrow-right {
@@ -518,6 +593,7 @@ export default {
       }
     }
     &-package-item {
+      box-sizing: border-box;
       width: 50%;
       display: flex;
       align-items: center;

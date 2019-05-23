@@ -350,7 +350,7 @@ export const lessonOrganizations = {
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
   getOrgStudentPackages: async () => get('lessonOrganizations/packages?roleId=1'),
-  getOrgStudentPackageDetail: async ({ packageId }) => get('lessonOrganizations/packageDetail', { params: { packageId } }),
+  getOrgStudentPackageDetail: async params => get('lessonOrganizations/packageDetail', { params }),
   getUserOrganizations: async () => get('lessonOrganizations'),
   searchOrganizations: async params => post('lessonOrganizations/search', params),
   createBatchCode: async params => post('lessonOrganizationActivateCodes', params),
@@ -361,7 +361,7 @@ export const lessonOrganizations = {
 export const lessonOrganizationClasses = {
   getClasses: async ({ organizationId }) => get(`lessonOrganizationClasses?organizationId=${organizationId}`),
   createClasses: async ({ organizationId, name, begin, end, packages }) => post('lessonOrganizationClasses', { organizationId, name, begin, end, packages }),
-  getClassPackageDetail: async ({ classId, packageId }) => get('lessonOrganizations/packageDetail', { params: { classId, packageId } }),
+  getClassPackageDetail: async params => get('lessonOrganizations/packageDetail', { params }),
   updateClass: async ({ organizationId, classId, name, begin, end, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, begin, end, packages }),
   getHistoryClasses: async (params) => get('lessonOrganizationClasses/history', { params })
 }
@@ -377,6 +377,10 @@ export const lessonOrganizationClassMembers = {
 
 export const graphql = {
   getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
+}
+
+export const feedbacks = {
+  createFeedback: async feedbackData => post('feedbacks', feedbackData)
 }
 
 export const systemTags = {
@@ -412,8 +416,9 @@ export const keepwork = {
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
   graphql,
-  systemTags,
-  message
+  message,
+  feedbacks,
+  systemTags
 }
 
 export default keepwork

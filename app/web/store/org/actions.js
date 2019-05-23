@@ -130,9 +130,9 @@ const actions = {
     })
     return classPackages
   },
-  async getOrgPackageDetail({ commit }, { packageId }) {
+  async getOrgPackageDetail({ commit }, { packageId, classId = 0, roleId = 64 }) {
     const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail(
-      { packageId }
+      { packageId, classId, roleId }
     )
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
@@ -147,12 +147,11 @@ const actions = {
       dispatch('getOrgPackageDetail', { packageId })
     ])
     const { orgPackagesDetail } = getters
-    const packageIndex = _.findIndex(
+    const packageInfo = _.find(
       _.get(orgPackagesDetail, [packageId, 'lessons'], []),
       item => item.lessonId === _.toNumber(lessonId)
     )
-    if (packageIndex !== -1) detail.packageIndex = packageIndex + 1
-
+    detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
     let modList = Parser.buildBlockList(res.content)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))

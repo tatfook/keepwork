@@ -1,15 +1,18 @@
 <template>
   <div class="student-list" v-loading="isLoading">
-    <el-select v-model="selectedClassId" v-if="orgStudentsCount > 0">
-      <el-option :label="$t('org.all')" :value="undefined">
-      </el-option>
-      <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
-      </el-option>
-    </el-select>
     <div class="student-list-header" v-if="orgStudentsCount > 0">
-      <div class="student-list-header-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
+      <div class="student-list-header-selector">
+        {{$t('org.classSelector')}}
+        <el-select v-model="selectedClassId">
+          <el-option :label="$t('org.all')" :value="undefined">
+          </el-option>
+          <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
+          </el-option>
+        </el-select>
+      </div>
       <div class="student-list-header-new" @click="toNewStudentPage"><i class="el-icon-circle-plus-outline"></i>{{$t('org.addStudents')}}</div>
     </div>
+    <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
     <el-table v-if="orgStudentsCount > 0" class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
       <el-table-column prop="realname" :label="$t('org.nameLabel')" width="172">
       </el-table-column>
@@ -99,11 +102,9 @@ export default {
       })
     },
     orgClasses() {
-      return (
-        this.getOrgClassesById({
-          id: this.orgId
-        }) || []
-      )
+      const today = Date.now()
+      const theClass = this.getOrgClassesById({ id: this.orgId }) || []
+      return _.filter(theClass, cls => +new Date(cls.end) > today)
     },
     selectedClassName() {
       return this.selectedClassId
@@ -191,20 +192,26 @@ export default {
 <style lang="scss" scoped>
 .student-list {
   padding: 16px 24px;
-  .el-select {
-    width: 120px;
-    margin-bottom: 18px;
-  }
   &-header {
     display: flex;
-    margin-bottom: 16px;
-    &-count {
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e8e8e8;
+    &-selector {
       flex: 1;
+      font-size: 14px;
+      .el-select {
+        width: 120px;
+      }
     }
     &-new {
       color: #2397f3;
       cursor: pointer;
     }
+  }
+  &-count {
+    font-size: 14px;
+    padding: 28px 0 16px;
   }
   &-table {
     &-header {

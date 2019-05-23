@@ -33,7 +33,9 @@ const renderTemplate = (h, m, data, parentIndex) => {
 
   function getMenuItemStyle(link) {
     let nowPageLink = window.location.href
-    return encodeURI(link) == nowPageLink ? `color: ${m.options.activeFontColor};` : ''
+    return encodeURI(link) == nowPageLink
+      ? `color: ${m.options.activeFontColor};`
+      : ''
   }
 
   return _.map(data, menuData => {
@@ -41,21 +43,19 @@ const renderTemplate = (h, m, data, parentIndex) => {
     if (!parentIndex) {
       parentIndex = index
     }
-    if (m.options.type === 'menu' && !menuData.child) {
+    let isItemHasChild = menuData.child && menuData.child.length > 0
+    if (m.options.type === 'menu' && !isItemHasChild) {
       return (
         <el-menu-item
           index={getIndexString(menuData.link, index)}
           style={parentIndex == 1 && m.itemStyle}
         >
-          <a
-            target={m.menuTarget}
-            href={menuData.link}
-          >
+          <a target={m.menuTarget} href={menuData.link}>
             {m.getNameMenu(menuData)}
           </a>
         </el-menu-item>
       )
-    } else if (m.options.type === 'menu' && menuData.child) {
+    } else if (m.options.type === 'menu' && isItemHasChild) {
       if (isLinkValid(menuData.link)) {
         return (
           <el-submenu
@@ -101,7 +101,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
           </el-submenu>
         )
       }
-    } else if (m.options.type !== 'menu' && menuData.child) {
+    } else if (m.options.type !== 'menu' && isItemHasChild) {
       return (
         <div
           index={getIndexString(menuData.link, index)}
@@ -236,12 +236,17 @@ export default {
       return parentIndex == 1 ? this.getItemTopStyle : this.getItemOtherStyle
     },
     setMenuOpend() {
+      if (this.mode !== 'vertical') {
+        return
+      }
       let nowPageLink = window.location.href
       let findedIndexLink = _.find(this.indexLinks, indexLinkObj => {
         return encodeURI(indexLinkObj.link) == nowPageLink
       })
       let parentKey = findedIndexLink && findedIndexLink.parentIndex
-      parentKey && _.split(parentKey, '-').length > 1 && this.$refs[this.menuRef].open(parentKey)
+      parentKey &&
+        _.split(parentKey, '-').length > 1 &&
+        this.$refs[this.menuRef].open(parentKey)
       this.defaultActiveIndex = findedIndexLink && findedIndexLink.index
     },
     setIndexLinks(key, link, parentIndex) {

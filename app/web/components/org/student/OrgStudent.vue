@@ -9,7 +9,8 @@
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-sidebar-top">
           <div class="org-student-message">
-            <el-dropdown class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
+            <div v-if="isJustStudent" class="org-student-role-label">{{$t("org.studentRole")}}</div>
+            <el-dropdown v-else class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
               <span class="el-dropdown-link">
                 {{$t("org.studentRole")}}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
@@ -102,10 +103,14 @@ export default {
       orgClasses: 'org/student/orgClasses',
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson',
-      OrgIsStudent: 'org/isStudent'
+      OrgIsStudent: 'org/isStudent',
+      isCurrentOrgToken: 'org/isCurrentOrgToken'
     }),
+    isJustStudent() {
+      return !this.orgIsAdmin && !this.orgIsTeacher
+    },
     hasOrgClasses() {
-      return _.get(this.orgClasses, 'length', 0) > 0
+      return this.isCurrentOrgToken && _.get(this.orgClasses, 'length', 0) > 0
     },
     isEn() {
       return locale === 'en-US' ? true : false
@@ -276,7 +281,7 @@ $borderColor: #e8e8e8;
   }
   &-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 30px;
     display: flex;
     padding-top: 24px;
   }
@@ -298,7 +303,6 @@ $borderColor: #e8e8e8;
   }
   &-main {
     flex: 1;
-    margin-bottom: 30px;
   }
   &-message {
     padding: 32px 16px 0;
@@ -368,15 +372,12 @@ $borderColor: #e8e8e8;
   }
   &-menu {
     padding-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
     padding: 10px;
     box-sizing: border-box;
     &-item {
-      margin-top: 10px;
-      margin-left: 8px;
-      width: 112px;
       height: 32px;
+      font-size: 16px;
+      width: 100%;
       line-height: 32px;
       padding: 0 10px;
       box-sizing: border-box;
@@ -384,8 +385,6 @@ $borderColor: #e8e8e8;
       white-space: nowrap;
       text-overflow: ellipsis;
       display: inline-block;
-      border-radius: 16px;
-      border: solid 1px #dddddd;
       color: #030313;
       font-size: 14px;
     }
