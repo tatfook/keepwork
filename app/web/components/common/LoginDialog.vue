@@ -16,7 +16,7 @@ export default {
       type: Boolean
     }
   },
-  methods: {   
+  methods: {
     handleClose() {
       !this.forceLogin && this.$emit('close')
     },
