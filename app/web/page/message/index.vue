@@ -16,8 +16,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueLazyload from 'vue-lazyload'
-import VueSocketIO from 'vue-socket.io'
-import SocketIO from 'socket.io-client'
 import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
