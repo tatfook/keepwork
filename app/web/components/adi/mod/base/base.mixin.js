@@ -217,6 +217,7 @@ export default {
         let isModSame = this.mod.uuid === this.activeMod.uuid
         let isSubModSame =
           this.activeSubMod &&
+          this.rootMod &&
           this.rootMod.uuid === this.activeMod.uuid &&
           this.mod.index === this.activeSubMod.childProperty
         if ((isModSame || isSubModSame) && name === this.activeProperty) {

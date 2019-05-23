@@ -10,5 +10,16 @@ const components = {
   list: 'AdiList'
 }
 const properties = generateProperties(name, components)
+properties.list = {
+  collection: [{ hidden: false }, { hidden: false }]
+}
 
-export default { mod, name, components, properties, styles, templates, modSettings }
+export default {
+  mod,
+  name,
+  components,
+  properties,
+  styles,
+  templates,
+  modSettings
+}
