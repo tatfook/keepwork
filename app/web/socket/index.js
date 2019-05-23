@@ -1,5 +1,4 @@
 import VueSocketIO from 'vue-socket.io'
-import { Notification } from 'element-ui'
 import Cookies from 'js-cookie'
 import jsrsasign from 'jsrsasign'
 
@@ -18,13 +17,11 @@ try {
 
 export const socket = new VueSocketIO({
   debug: true,
-  // connection: process.env.SOCKET_WS_PREFIX,
-  connection: 'https://socket-stage.keepwork.com',
-  // connection: 'https://socket.keepwork.com',
+  connection: process.env.SOCKET_API_PREFIX,
   options: {
     query: {
-      // token,
-      // userId
+      token,
+      userId
     },
     transports: ['websocket']
   }
@@ -38,14 +35,9 @@ export const socketMixin = {
   },
   sockets: {
     connect() {
-      console.warn('sockets connect 💡')
+      console.warn('socket connect 💡')
     },
     async broadcast(data) {
-      // Notification({
-      //   type: 'info',
-      //   title: '收到系统消息',
-      //   offset: 50
-      // })
       this.socketMessage = data
     }
   }

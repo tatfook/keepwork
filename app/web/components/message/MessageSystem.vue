@@ -162,12 +162,11 @@ export default {
   }
   @keyframes flash {
     from {
-      opacity: 0.4;
-      background: #909399;
+      color: #2397f3;
+      background: #ecf5ff;
     }
 
     to {
-      opacity: 1;
     }
   }
 }
