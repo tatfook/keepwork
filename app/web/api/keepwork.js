@@ -387,6 +387,11 @@ export const systemTags = {
   getSystemTags: async (type) => get(`systemTags?classify=${type}`)
 }
 
+export const message = {
+  getMessages: async (params = {}) => get('userMessages', { params }),
+  signMessages: async ids => post('userMessages/state', { state: 1, ids }),
+}
+
 export const keepwork = {
   user,
   website,
@@ -411,6 +416,7 @@ export const keepwork = {
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
   graphql,
+  message,
   feedbacks,
   systemTags
 }

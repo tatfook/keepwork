@@ -5,16 +5,16 @@ export default function createLayout(name, components, tpl) {
     components,
     computed: {
       vTitle() {
-        return this.$root.title || this.title || 'IBlog';
+        return this.$root.title || this.title || 'IBlog'
       },
       vKeywords() {
-        return this.$root.keywords || this.keywords || 'egg, typescript, vue, webpack, server side render';
+        return this.$root.keywords || this.keywords || 'egg, typescript, vue, webpack, server side render'
       },
       vDescription() {
-        return this.$root.description || this.description || 'IBlog';
+        return this.$root.description || this.description || 'IBlog'
       },
       baseClass() {
-        return this.$root.baseClass;
+        return this.$root.baseClass
       }
     },
     template: EASY_ENV_IS_BROWSER ? tpl : `<!DOCTYPE html>
@@ -36,7 +36,7 @@ export default function createLayout(name, components, tpl) {
                       <meta name="apple-mobile-web-app-title" content="Weather PWA">
                       <link rel="apple-touch-icon" href="/logo.png">
                       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-                      <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_rk567gj71k.css">
+                      <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_oisota9muvf.css">
                     </head>
                     <body :class="baseClass">
                       ${tpl}
@@ -45,5 +45,5 @@ export default function createLayout(name, components, tpl) {
     install(vue, options) {
       //
     }
-  };
+  }
 }
