@@ -409,6 +409,7 @@ const actions = {
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')
   },
   setActiveSubMod({ commit }, payload) {
+    commit(SET_ACTIVE_SUB_MOD, null)
     commit(SET_ACTIVE_SUB_MOD, payload)
   },
   setActiveProperty({ commit, dispatch, getters }, payload) {

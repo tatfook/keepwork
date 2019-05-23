@@ -20,7 +20,7 @@ export default {
   },
   watch: {
     originValue(value) {
-      this.inputValue = value
+      this.inputValue = this.inputTypeValue
     }
   },
   computed: {
