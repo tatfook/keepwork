@@ -59,6 +59,7 @@ export default {
   .message-main-content {
     flex: 1;
     margin-left: 29px;
+    margin-bottom: 24px;
   }
 }
 </style>
