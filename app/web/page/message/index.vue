@@ -7,7 +7,7 @@
       <router-view class="message-page-main-content-center" id="message-page" />
     </div>
     <div class="message-page-footer">
-      <common-footer class="container"></common-footer>
+      <perfect-common-footer class="container"></perfect-common-footer>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import { socket, socketMixin } from '@/socket'
 
 Vue.use(Vuex)
@@ -58,7 +58,7 @@ export default {
   i18n,
   components: {
     CommonHeader,
-    CommonFooter,
+    PerfectCommonFooter,
     LoginDialog
   },
   mixins: [socketMixin],
