@@ -258,7 +258,7 @@ export default {
     },
     toMessageDetail({ id }) {
       const msgIndex = _.findIndex(this.allMessages, item => item.id === id) || 1
-      const msgPageIndex = _.ceil(_.divide(msgIndex, this.perPage))
+      const msgPageIndex = _.ceil(_.divide(msgIndex + 1, this.perPage))
       const msgUrl = `${window.location.origin}/msg?id=${id}&page=${msgPageIndex}`
       window.location.href = msgUrl
     },

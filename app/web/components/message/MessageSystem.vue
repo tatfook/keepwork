@@ -69,6 +69,15 @@ export default {
         await this.signMessages(this.currentPageUnreadMessageIDs)
       }
       this.$router.push({ query: { page: pageIndex } })
+      this.$nextTick(() => {
+        const messageTitleEle = document.querySelector('.message-system-title')
+        if (messageTitleEle) {
+          scrollIntoView(messageTitleEle, {
+            scrollMode: 'if-needed',
+            behavior: 'smooth'
+          })
+        }
+      })
     },
     blingTheMessage(id) {
       this.$nextTick(() => {
