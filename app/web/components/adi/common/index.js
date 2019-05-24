@@ -28,6 +28,9 @@ import AdiHint from './hint/Hint'
 import AdiProject from './project/Project'
 import AdiPpt from './ppt/Ppt'
 
+import AdiList from './list/List'
+import AdiSubMod from './subMod/SubMod'
+
 export default {
   AdiMarkdown,
   AdiIFrame,
@@ -57,5 +60,8 @@ export default {
   AdiQuiz,
   AdiHint,
   AdiProject,
-  AdiPpt
+  AdiPpt,
+
+  AdiList,
+  AdiSubMod
 }

@@ -392,6 +392,7 @@
 
     "mixLayer": "Mix layer",
     "mixPosition": "Mix position",
+    "mixPositionList": "Mix position list",
     "interative": "Interactive",
     "qq": "Call QQ chat",
     "mixAndMatch": "Mix and match",
@@ -646,6 +647,9 @@
     "projectHome": "Project home",
     "projectNotFound": "Project Not Found",
     "projectInputId": "Enter the project ID to get the project data",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
     "projectForbidden": "Unable to display content"
   },
   "field": {

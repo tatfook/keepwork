@@ -27,6 +27,10 @@ const ModHint = () => import('./web/hint')
 const ModProject = () => import('./web/project')
 const ModPpt = () => import('./web/ppt')
 
+const ModMixLayerList = () => import('./list/mixLayerList')
+const ModMixPositionList = () => import('./list/mixPositionList')
+const ModTextMixLayerList = () => import('./group/textMixLayerList')
+
 export const modList = {
   ModMarkdown,
   ModIFrame,
@@ -55,7 +59,11 @@ export const modList = {
   ModQuiz,
   ModHint,
   ModProject,
-  ModPpt
+  ModPpt,
+
+  ModMixLayerList,
+  ModMixPositionList,
+  ModTextMixLayerList
 }
 
 export const load = async modName => {

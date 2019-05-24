@@ -18,12 +18,14 @@ const SET_PRE_MOD_KEY = 'SET_PRE_MOD_KEY'
 const SET_IS_MULTIPLE_TEXT_DIALOG_SHOW = 'SET_IS_MULTIPLE_TEXT_DIALOG_SHOW'
 
 const SET_ACTIVE_MOD = 'SET_ACTIVE_MOD'
+const SET_ACTIVE_SUB_MOD = 'SET_ACTIVE_SUB_MOD'
 const SET_ACTIVE_PROPERTY = 'SET_ACTIVE_PROPERTY'
 const SET_ACTIVE_PROPERTY_OPTIONS = 'SET_ACTIVE_PROPERTY_OPTIONS'
 const SET_ACTIVE_PROPERTY_DATA = 'SET_ACTIVE_PROPERTY_DATA'
 const SET_ACTIVE_AREA = 'SET_ACTIVE_AREA'
 
 const UPDATE_ACTIVE_MOD_ATTRIBUTES = 'UPDATE_ACTIVE_MOD_ATTRIBUTES'
+const UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST = 'UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST'
 const UPDATE_MODS = 'UPDATE_MODS'
 const UPDATE_THEME_NAME = 'UPDATE_THEME_NAME'
 const UPDATE_THEME_COLOR = 'UPDATE_THEME_COLOR'
@@ -72,12 +74,14 @@ export const props = {
   SET_IS_MULTIPLE_TEXT_DIALOG_SHOW,
 
   SET_ACTIVE_MOD,
+  SET_ACTIVE_SUB_MOD,
   SET_ACTIVE_PROPERTY,
   SET_ACTIVE_PROPERTY_OPTIONS,
   SET_ACTIVE_PROPERTY_DATA,
   SET_ACTIVE_AREA,
 
   UPDATE_ACTIVE_MOD_ATTRIBUTES,
+  UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST,
   UPDATE_MODS,
   UPDATE_THEME_NAME,
   UPDATE_THEME_COLOR,
@@ -181,6 +185,17 @@ const mutations = {
       Vue.set(state.activePage, 'activeMod', modList[index])
     }
   },
+  [SET_ACTIVE_SUB_MOD](state, payload) {
+    let subMod = state.activePage.activeSubMod
+    if (!payload || !payload.modType) {
+      Vue.set(state.activePage, 'activeSubMod', null)
+      if (subMod) {
+        Vue.set(state.activePage, 'activeProperty', subMod.parentProperty)
+      }
+    } else {
+      Vue.set(state.activePage, 'activeSubMod', payload)
+    }
+  },
   [SET_PRE_MOD_KEY](state, key) {
     Vue.set(state.activePage, 'preModKey', key)
   },
@@ -188,20 +203,35 @@ const mutations = {
     Vue.set(state, 'isMultipleTextDialogShow', isShow)
   },
   [SET_ACTIVE_PROPERTY](state, property) {
-    if (state.activePage && state.activePage.activeMod) {
+    if (!state.activePage || !state.activePage.activeMod) return
+    if (state.activePage.activeSubMod) {
+      Vue.set(state.activePage.activeSubMod, 'activeProperty', property)
+    } else {
       Vue.set(state.activePage, 'activeProperty', property)
     }
   },
   [SET_ACTIVE_PROPERTY_OPTIONS](state, payload) {
     Vue.set(state, 'activePropertyOptions', payload)
   },
-  [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data }) {
+  [SET_ACTIVE_PROPERTY_DATA](state, { activePropertyData, data, updateSubMod }) {
     let newData = { ...activePropertyData, ...data }
     const modList = activeModList(state)
+    let activeProperty = state.activePage.activeProperty
+    if (updateSubMod) {
+      let subMod = state.activePage.activeSubMod
+      activeProperty = subMod.parentProperty
+      let propertyData = _.cloneDeep(state.activePage.activeMod.data[activeProperty])
+      if (subMod.childProperty !== undefined) {
+        _.merge(propertyData.collection[subMod.childProperty], { [subMod.activeProperty]: newData })
+      } else {
+        _.merge(propertyData, { [subMod.activeProperty]: newData })
+      }
+      newData = propertyData
+    }
     Parser.updateBlockAttribute(
       modList,
       state.activePage.activeMod.key,
-      state.activePage.activeProperty,
+      activeProperty,
       newData
     )
   },
@@ -219,6 +249,22 @@ const mutations = {
       state.activePage.activeMod.key,
       key,
       value
+    )
+  },
+  [UPDATE_ACTIVE_MOD_ATTRIBUTES_LIST](state, { key, action, index }) {
+    const modList = activeModList(state)
+    let list = state.activePage.activeMod.data[key]
+    action = _.upperCase(action)
+    if (action === 'ADD') {
+      list.collection.splice(list.collection.length, 0, { hidden: false })
+    } else if (action === 'DELETE') {
+      list.collection.splice(index, 1)
+    }
+    Parser.updateBlockAttribute(
+      modList,
+      state.activePage.activeMod.key,
+      key,
+      list
     )
   },
   [UPDATE_MODS](state, blockList) {

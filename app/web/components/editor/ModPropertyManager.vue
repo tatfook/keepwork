@@ -1,11 +1,14 @@
 <template>
   <div class='property-manager-container' v-if='hasActiveMod'>
-    <el-tabs v-model='activeTab' @tab-click='tabClickHandle'>
+    <div class="property-manager-container-back" v-if='hasActiveSubMod' @click='backFromSubMod'>
+      <i class="el-icon-arrow-left"></i>{{$t('card.back')}}
+    </div>
+    <el-tabs :class="{'property-manager-container-tab-no-title': hasActiveSubMod}" v-model='activeTab' @tab-click='tabClickHandle'>
       <el-tab-pane :label='$t("editor.modAttr")' name='attr'>
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
         <prop-type-card v-for="(prop, key) in editingProps" :componentName='key' :prop='BaseCompProptypes[prop]' :key='key' :cardKey='key' :cardValue='cardValues(key)' :activePropertyOptions='activePropertyOptions' :isCardActive='key === activeProperty'></prop-type-card>
       </el-tab-pane>
-      <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="activeMod.cmd !== 'Markdown'">
+      <el-tab-pane :label='$t("editor.modStyle")' name='style' v-if="styleTabEnabled">
         <div class="currentModTilte">{{$t("modList."+currentModLabel)}}</div>
         <div class='styles-container'>
           <style-selector v-if="activePropertyTabType === 'style'" :mod='activeMod' />
@@ -51,10 +54,13 @@ export default {
       this.activeName = activeName.name
       this.setActivePropertyTabType(activeName)
     },
-    cardValues(key) {
-      let modType = 'Mod' + this.activeMod.cmd
+    getPropType(prop) {
+      return this.BaseCompProptypes[prop] || { data: 'subMod' }
+    },
+    modData(mod, key) {
+      let modType = mod.modType
       let activeModDafaultDatas = modLoader.load(modType).properties
-      let activeModDatas = { ...activeModDafaultDatas, ...this.activeMod.data }
+      let activeModDatas = { ...activeModDafaultDatas, ...mod.data }
 
       if (activeModDatas && typeof activeModDatas[key] == 'object') {
         _.forEach(activeModDatas[key], (itemA, keyA) => {
@@ -65,41 +71,14 @@ export default {
 
         return activeModDatas[key] || null
       }
-    }
-  },
-  watch: {
-    activeProperty() {
-      this.$nextTick(() => {
-        let ele = document.querySelector('.prop-box.active')
-        ele && scrollIntoView(ele, {
-          scrollMode: 'if-needed',
-          behavior: 'smooth'
-        })
-      })
-    }
-  },
-  computed: {
-    activePropertyDataCopy() {
-      return _.cloneDeep(this.activePropertyData)
     },
-    ...mapGetters({
-      activeMod: 'activeMod',
-      activeProperty: 'activeProperty',
-      activePropertyOptions: 'activePropertyOptions',
-      activePropertyData: 'activePropertyData',
-      hasActiveMod: 'hasActiveMod',
-      hasActiveProperty: 'hasActiveProperty',
-      activePropertyTabType: 'activePropertyTabType'
-    }),
-    currentModLabel() {
-      return this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
-      this.activeMod.cmd.substring(2)
+    cardValues(key) {
+      return this.modData(this.activeSubMod || this.activeMod, key)
     },
-    editingProps() {
-      let modType = 'Mod' + this.activeMod.cmd
-      let modStyleID = this.activeMod.data.styleID || 0
+    modProps(modType, modStyleID = 0) {
       let mod = modLoader.load(modType)
       let modComponents = mod.components
+      let subMods = mod.subMods
       let currentStyle = mod.styles[modStyleID]
       let currentTemplate =
         mod.templates[currentStyle ? currentStyle.templateID || 0 : 0]
@@ -136,13 +115,71 @@ export default {
         }
       })
 
+      _.forEach(subMods, (item, key) => {
+        filterModComponents[key] = item
+      })
+
       return filterModComponents
+    },
+    backFromSubMod() {
+      this.$store.dispatch('setActiveSubMod', null)
+    }
+  },
+  watch: {
+    activeProperty() {
+      this.$nextTick(() => {
+        let ele = document.querySelector('.prop-box.active')
+        ele &&
+          scrollIntoView(ele, {
+            scrollMode: 'if-needed',
+            behavior: 'smooth'
+          })
+      })
+    }
+  },
+  computed: {
+    activePropertyDataCopy() {
+      return _.cloneDeep(this.activePropertyData)
+    },
+    ...mapGetters({
+      activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod',
+      activeProperty: 'activeProperty',
+      activePropertyOptions: 'activePropertyOptions',
+      activePropertyData: 'activePropertyData',
+      hasActiveMod: 'activeMod',
+      hasActiveSubMod: 'activeSubMod',
+      hasActiveProperty: 'hasActiveProperty',
+      activePropertyTabType: 'activePropertyTabType'
+    }),
+    currentModLabel() {
+      return (
+        this.activeMod.cmd.substring(0, 2).toLocaleLowerCase() +
+        this.activeMod.cmd.substring(2)
+      )
+    },
+    activeModProps() {
+      let modType = 'Mod' + this.activeMod.cmd
+      let modStyleID = this.activeMod.data.styleID || 0
+      return this.modProps(modType, modStyleID)
+    },
+    activeSubModProps() {
+      if (!this.activeSubMod) return
+      let modType = this.activeSubMod.modType
+      let modStyleID = this.activeSubMod.data.styleID || 0
+      return this.modProps(modType, modStyleID)
+    },
+    editingProps() {
+      return this.activeSubModProps || this.activeModProps
     },
     activeTab: {
       get() {
         return this.activePropertyTabType || 'attr'
       },
       set() {}
+    },
+    styleTabEnabled() {
+      return !this.hasActiveSubMod && this.activeMod.cmd !== 'Markdown'
     }
   },
   components: {
@@ -158,10 +195,30 @@ export default {
   background-color: #e9f5ff;
   padding: 0 18px;
   position: relative;
+  &-back {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    padding: 28px 0 24px 0;
+    .el-icon-arrow-left {
+      font-size: 18px;
+      vertical-align: bottom;
+      margin-right: 4px;
+    }
+    &:hover {
+      color: #3ba4ff;
+    }
+  }
+  &-tab-no-title {
+    .el-tabs__header {
+      display: none;
+    }
+  }
   > .el-tabs > .el-tabs__header {
     .el-tabs__nav-wrap.is-scrollable {
       padding: 0;
-      .el-tabs__nav-prev, .el-tabs__nav-next{
+      .el-tabs__nav-prev,
+      .el-tabs__nav-next {
         display: none !important;
       }
     }
@@ -205,11 +262,15 @@ export default {
   margin: 8px 18px;
   color: #505b65;
 }
-.el-tabs__nav-wrap::after{
+.el-tabs__nav-wrap::after {
   display: none;
 }
 @media (max-width: 1920px) {
-  .property-manager-container > .el-tabs > .el-tabs__header .el-tabs__nav .el-tabs__item{
+  .property-manager-container
+    > .el-tabs
+    > .el-tabs__header
+    .el-tabs__nav
+    .el-tabs__item {
     width: 134px;
   }
 }

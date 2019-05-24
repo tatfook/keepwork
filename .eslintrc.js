@@ -55,7 +55,6 @@ module.exports = {
     browser: true,
     node: true,
     commonjs: true,
-    jquery: true,
     es6: true
   },
   globals: {
