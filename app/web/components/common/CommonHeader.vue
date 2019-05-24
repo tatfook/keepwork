@@ -213,7 +213,7 @@ export default {
     }
     if (this.userIsLogined) {
       const params = { 'x-page': 1, 'x-per-page': this.perPage }
-      await this.loadMessages(params)
+      this.$nextTick(() => this.loadMessages(params))
     }
   },
   watch: {
@@ -225,11 +225,9 @@ export default {
     ...mapActions({
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout',
-      getUnreadMessages: 'message/getUnreadMessages',
       loadMessages: 'message/loadMessages'
     }),
     async initScroll() {
-      // this.refreshMessages()
       this.$nextTick(() => {
         this.msgScroll = document.querySelector('.user-message-main')
         const msgScrollHeight = this.msgScroll.scrollHeight
