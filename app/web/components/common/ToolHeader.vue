@@ -3,7 +3,7 @@
     <div class="breadcrumb" v-loading='breadcrumbsLoading'>
       <a class="breadcrumb-item iconfont icon-home-keepwork" href="/"></a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
-      <a class="breadcrumb-item" :href="'/' + activePageInfo.username">{{activePageInfo.username}}</a>
+      <a class="breadcrumb-item" :href="`/u/${activePageInfo.username}`">{{activePageInfo.username}}</a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
       <el-dropdown trigger="click" class="breadcrumb-item" placement="bottom-start" @command="pushNewUrl">
         <span class="page-item-content">
