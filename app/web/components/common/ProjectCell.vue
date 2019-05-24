@@ -144,8 +144,8 @@ export default {
   padding: 16px 16px 8px;
   margin: 0 auto 16px;
   box-sizing: border-box;
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
+  // border: 1px solid #e8e8e8;
+  border-radius: 8px;
   background: #fff;
   transition: all 200ms ease-in;
   position: relative;
@@ -211,7 +211,7 @@ export default {
       width: 100%;
       height: 143px;
       object-fit: cover;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
     }
     .video-mask {
@@ -314,6 +314,7 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-size: 14px;
       }
     }
     &-time {
@@ -328,6 +329,8 @@ export default {
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
+        font-size: 12px;
+        color: #b0b4bb;
       }
     }
   }

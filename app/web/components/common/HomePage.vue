@@ -62,6 +62,7 @@
           <div class="box-text">
             <h2>{{$t('common.creativity')}}</h2>
             <p class="box-text-intro">{{$t("home.everyoneShouldHaveOwnWorks")}}</p>
+            <div class="box-text-line"></div>
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
@@ -72,6 +73,7 @@
           <div class="box-text">
             <h2>{{$t('common.explore')}}</h2>
             <p class="box-text-intro">{{$t("home.openDoorsToVariousWorlds")}}</p>
+            <div class="box-text-line"></div>
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
@@ -82,6 +84,7 @@
           <div class="box-text">
             <h2>{{$t('common.study')}}</h2>
             <p class="box-text-intro">{{$t("home.learningIsFromExploringToCreating")}}</p>
+            <div class="box-text-line"></div>
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
@@ -358,7 +361,6 @@ export default {
       text-align: center;
       background: rgba(35, 151, 243, 0.2);
       border-radius: 4px;
-      border: solid 1px #2397f3;
       color: #2397f3;
       position: relative;
       font-size: 14px;
@@ -394,7 +396,7 @@ export default {
   }
   &-simple-show {
     padding-top: 16px;
-    padding-bottom: 40px;
+    padding-bottom: 16px;
     border-bottom: 1px solid #eeeeee;
     background: #fff;
     &-center {
@@ -552,8 +554,9 @@ export default {
       display: flex;
       .box {
         flex: 1;
-        margin: 24px 12px;
-        padding: 10px 36px 10px 24px;
+        height: 140px;
+        margin: 0 12px;
+        padding: 0 36px 0 24px;
         display: flex;
         cursor: pointer;
         border-radius: 4px;
@@ -567,6 +570,12 @@ export default {
           &-intro {
             color: #a0a4aa;
             font-size: 14px;
+          }
+          &-line {
+            height: 4px; 
+            width: 20px; 
+            background: #eee;
+            border-radius: 4px
           }
           &-own {
             color: #606266;
@@ -600,7 +609,7 @@ export default {
       }
       .line {
         width: 1px;
-        height: 156px;
+        // height: 156px;
         background: #eee;
         margin: 25px 14px;
       }
