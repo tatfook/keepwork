@@ -97,7 +97,6 @@ export default {
   },
   components: {
     CommonHeader,
-    CommonFooter,
     ToolHeader,
     PerfectCommonFooter
   },
