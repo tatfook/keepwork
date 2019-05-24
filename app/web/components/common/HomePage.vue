@@ -359,7 +359,7 @@ export default {
       height: 40px;
       line-height: 40px;
       text-align: center;
-      background: rgba(35, 151, 243, 0.2);
+      background: rgba(35, 151, 243, 0.1);
       border-radius: 4px;
       color: #2397f3;
       position: relative;
