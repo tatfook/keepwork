@@ -16,12 +16,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="举报说明（可选）：">
-          <el-input type="textarea" resize="none" v-model="feedbackData.description"></el-input>
+          <el-input placeholder="您可以对您举报的内容详细描述" type="textarea" resize="none" v-model="feedbackData.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取消</el-button>
-        <el-button type="primary" :disabled="!isFeedbackDataValid" @click="submitFeedback">确定</el-button>
+        <el-button type="primary" :disabled="!isFeedbackDataValid" @click="submitFeedback">提交</el-button>
       </span>
     </el-dialog>
     <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
@@ -67,16 +67,13 @@ export default {
       this.$emit('close')
     },
     async submitFeedback() {
-      console.log(this.feedbackData)
       this.isLoading = true
       await this.userCreateFeedback(this.feedbackData)
         .then(res => {
-          console.log(res)
           this.$message({ type: 'success', message: '举报成功' })
           this.closeDialog()
         })
         .catch(err => {
-          console.log(err)
           this.$message({ type: 'error', message: '举报失败' })
         })
       this.isLoading = false
@@ -94,6 +91,9 @@ export default {
       if (this.isComplainDialogVisible && !this.userIsLogined) {
         this.isShowLoginDialog = true
       }
+    },
+    $route() {
+      this.feedbackData.url = window.location.href
     }
   }
 }
@@ -118,6 +118,9 @@ export default {
   }
   /deep/.el-form-item__content {
     line-height: inherit;
+  }
+  /deep/.el-textarea__inner {
+    height: 87px;
   }
   /deep/.el-dialog__footer {
     padding: 0 24px 36px;

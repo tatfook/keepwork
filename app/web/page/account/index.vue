@@ -7,7 +7,7 @@
       <router-view v-if="!loading" class="account-page-main-content-center" id="account-page" />
     </div>
     <div class="account-page-footer">
-      <common-footer class="container"></common-footer>
+      <perfect-common-footer class="container"></perfect-common-footer>
     </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
@@ -34,7 +34,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 
 Vue.use(Vuex)
 Vue.use(VueLazyload)
@@ -91,7 +91,7 @@ export default {
   components: {
     LoginDialog,
     CommonHeader,
-    CommonFooter
+    PerfectCommonFooter
   },
   computed: {
     ...mapGetters({

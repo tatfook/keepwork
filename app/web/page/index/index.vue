@@ -34,7 +34,6 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/components/common/thirdAuth'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
 import ToolHeader from '@/components/common/ToolHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
@@ -104,7 +103,6 @@ export default {
   },
   components: {
     CommonHeader,
-    CommonFooter,
     ToolHeader,
     PerfectCommonFooter,
     LoginDialog

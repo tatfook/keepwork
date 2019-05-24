@@ -5,7 +5,7 @@
     </div>
     <router-view v-if="!loading" class="profile-page-main-content" id="profile-page" />
     <div class="profile-page-footer">
-      <common-footer class="container"></common-footer>
+      <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
@@ -32,7 +32,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import '@/components/common/thirdAuth'
 import messageModule from '@/store/message'
 import { socket, socketMixin } from '@/socket'
@@ -92,7 +92,7 @@ export default {
   components: {
     LoginDialog,
     CommonHeader,
-    CommonFooter
+    PerfectCommonFooter
   },
   computed: {
     ...mapGetters({
