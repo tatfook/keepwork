@@ -514,6 +514,7 @@ export default {
     font-size: 14px;
     border-spacing: 0;
     border-collapse: collapse;
+    table-layout: fixed;
     .el-icon {
       cursor: pointer;
       transition: transform 0.5s;
@@ -550,6 +551,8 @@ export default {
     &-lessonName {
       white-space: nowrap;
       text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
       .el-tooltip {
         cursor: pointer;
       }
