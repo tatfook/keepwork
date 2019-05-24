@@ -48,7 +48,7 @@ module.exports = {
       loader: 'raw-loader'
     },
     babel: {
-      exclude: /node_modules/
+      exclude: /node_modules(?!(\/|\\)vue-socket.io)/
     }
   },
   plugins: {
