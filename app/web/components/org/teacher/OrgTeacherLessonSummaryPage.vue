@@ -3,7 +3,7 @@
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgTeacherStatistics' }">{{$t('org.DataStaticsLabel')}}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'OrgTeacherStatistics', params: { classId } }">{{$t('org.DataStaticsLabel')}}25252</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </div>
@@ -15,6 +15,11 @@
 import OrgTeacherLessonSummary from './OrgTeacherLessonSummary'
 export default {
   name: 'OrgTeacherLessonSummaryPage',
+  computed: {
+    classId() {
+      return this.$route.query.classId
+    }
+  },
   components: {
     OrgTeacherLessonSummary
   }
