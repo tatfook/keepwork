@@ -7,7 +7,7 @@
       <router-view class="message-page-main-content-center" id="message-page" />
     </div>
     <div class="message-page-footer">
-      <perfect-common-footer class="container"></perfect-common-footer>
+      <perfect-common-footer></perfect-common-footer>
     </div>
   </div>
 </template>
