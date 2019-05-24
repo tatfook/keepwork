@@ -1,6 +1,6 @@
 <template>
   <div class="perfect-common-footer">
-    <div class="perfect-common-footer-detail-list hidden-sm-and-down">
+    <div v-show="isNavListShow" class="perfect-common-footer-detail-list hidden-sm-and-down">
       <div class="list-box-wrap">
         <div class="list-box">
           <h4 class="list-box-title">{{$t('footer.lettersTo')}}</h4>
@@ -99,6 +99,12 @@ import ComplainDialog from './ComplainDialog'
 
 export default {
   name: 'PerfectCommonFooter',
+  props: {
+    isNavListShow: {
+      default: true,
+      type: Boolean
+    }
+  },
   data() {
     return {
       isComplainDialogVisible: false
