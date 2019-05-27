@@ -27,10 +27,18 @@ export default {
   props: {
     mod: Object
   },
-  mounted() {
+  async mounted() {
+    await this.$nextTick()
+    await this.$nextTick()
+    await this.$nextTick()
+    await this.$nextTick()
     this.autoResizePreview()
   },
-  updated() {
+  async updated() {
+    await this.$nextTick()
+    await this.$nextTick()
+    await this.$nextTick()
+    await this.$nextTick()
     this.autoResizePreview()
   },
   computed: {
@@ -75,12 +83,12 @@ export default {
       let all = this.$el.querySelectorAll('.render-mod-container')
 
       let refactor = 0
-      if(window.innerWidth <= 1920){
+      if (window.innerWidth <= 1920) {
         refactor = 0.225
-      }else {
+      } else {
         refactor = 0.357
       }
-      _.forEach(all , (dom, key) => {
+      _.forEach(all, (dom, key) => {
         dom.style.height = null
         dom.style.height = dom.offsetHeight * refactor + 'px'
       })
@@ -97,7 +105,7 @@ export default {
   border: 2px solid transparent;
   display: block;
   margin-bottom: 12px;
-  &-image{
+  &-image {
     width: 100%;
   }
 }
@@ -146,6 +154,7 @@ export default {
     overflow: hidden;
 
     .render-mod {
+      max-width: unset;
       width: 1080px;
       transform: scale(0.357);
       transform-origin: top left;
@@ -166,6 +175,7 @@ export default {
       overflow: hidden;
 
       .render-mod {
+        max-width: unset;
         width: 1080px;
         transform: scale(0.225);
         transform-origin: top left;

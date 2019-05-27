@@ -60,8 +60,7 @@ export default [
         })
       }
     },
-    useImage: true,
-    cover: require('@/assets/adi/mixPositionList/styleCover1.png'),
+    cover: '',
     preview: {
       outter: {},
       inner: {}
@@ -87,8 +86,7 @@ export default [
         })
       }
     },
-    useImage: true,
-    cover: require('@/assets/adi/mixPositionList/styleCover2.png'),
+    cover: '',
     preview: {
       outter: {},
       inner: {}

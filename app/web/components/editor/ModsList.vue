@@ -1,79 +1,22 @@
 <template>
-  <el-row
-    type='flex'
-    class="full-height"
-    @mousemove.native="dragMouseMove"
-    @mouseup.native="dragMouseUp"
-  >
-    <el-col
-      class="mods-treeview"
-      unselectable="on"
-      :style="getTreeViewWidth"
-    >
-      <el-tree
-        ref='tree'
-        node-key='id'
-        :data='mods'
-        :props='defaultProps'
-        :default-expanded-keys='defaultExpandedKeys'
-        highlight-current
-        accordion
-        :indent=0
-        @node-click='nodeMenuClick'
-        @node-collapse='nodeCollapseHandle'
-      ></el-tree>
+  <el-row type='flex' class="full-height" @mousemove.native="dragMouseMove" @mouseup.native="dragMouseUp">
+    <el-col class="mods-treeview" unselectable="on" :style="getTreeViewWidth">
+      <el-tree ref='tree' node-key='id' :data='mods' :props='defaultProps' :default-expanded-keys='defaultExpandedKeys' highlight-current accordion :indent=0 @node-click='nodeMenuClick' @node-collapse='nodeCollapseHandle'></el-tree>
     </el-col>
-    <div
-      class="editor-resizer"
-      @mousedown="resizeCol($event, 'treeViewWidth', 'previewBoxViewWidth', 570)"
-    ></div>
-    <el-col
-      class="preview-box"
-      unselectable="on"
-      :style="getPreviewBoxWidth"
-    >
-      <div
-        v-for='mod in activeModsList'
-        :key='mod.name'
-        class="box-items"
-      >
-        <div
-          v-if='!style.useImage'
-          v-for='(style, index) in mod.styles'
-          :key='style.name'
-          class="style-cover render box-items-item"
-          @click='newMod(mod.name, index)'
-        >
+    <div class="editor-resizer" @mousedown="resizeCol($event, 'treeViewWidth', 'previewBoxViewWidth', 570)"></div>
+    <el-col class="preview-box" unselectable="on" :style="getPreviewBoxWidth">
+      <div v-for='mod in activeModsList' :key='mod.name' class="box-items">
+        <div v-if='!style.useImage' v-for='(style, index) in mod.styles' :key='style.name' class="style-cover render box-items-item" @click='newMod(mod.name, index)'>
           <div class="render-mod-container--click-prevent"></div>
-          <div
-            class="render-mod-container"
-            :style="getSettingStyle(style)"
-          >
-            <component
-              class="render-mod"
-              :is='mod.mod'
-              :renderMode='true'
-              :mod='modFactory(mod)'
-              :conf='modConf(mod, index)'
-              :theme='theme'
-            ></component>
+          <div class="render-mod-container" :style="getSettingStyle(style)">
+            <component class="render-mod" :is='mod.mod' :renderMode='true' :mod='modFactory(mod)' :conf='modConf(mod, index)' :theme='theme'></component>
             <div class="style-mask">
               <span>{{$t('tips.clickToAdd')}}</span>
             </div>
           </div>
         </div>
-        <div
-          class="style-cover box-items-item"
-          v-if='style.useImage'
-          v-for='(style, index) in mod.styles'
-          :key='style.name'
-        >
-          <img
-            class="style-cover-image"
-            :src="style.cover"
-            alt=""
-            @click='newMod(mod.name, index)'
-          >
+        <div class="style-cover box-items-item" v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name'>
+          <img class="style-cover-image" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
           <div class="style-mask">
             <span>{{$t('tips.clickToAdd')}}</span>
           </div>
@@ -121,8 +64,10 @@ export default {
       ;(this.treeViewWidth = 30), (this.previewBoxViewWidth = 70)
     }
   },
-  updated() {
+  async updated() {
     if (!this.resizeWinParams.isResizing) {
+      await this.$nextTick()
+      await this.$nextTick()
       this.autoResizePreview()
     }
   },
@@ -332,6 +277,7 @@ export default {
     width: 272px;
     overflow: hidden;
     .render-mod {
+      max-width: unset;
       width: 1080px;
       transform: scale(0.254);
       transform-origin: top left;
