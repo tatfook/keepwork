@@ -41,15 +41,9 @@
           <div class="home-page-simple-show-center-right-board">
             <div class="title">{{$t("home.officialAnnouncements")}}</div>
             <ul class="announce-list" v-html="newsHtml"></ul>
-            <!-- <ul v-else class="announce-list">
-              <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
-                <a href="//iicc.keepwork.com" target="_blank">进入</a>
-              </li>
-              <li>
-                <span class="icon-book">
-                  <i class="iconfont icon-book-fill"></i>
-                </span> Lessons系统即将上线，尽情期待！
-                <a href="/l/student/center" target="_blank">进入</a>
+            <!-- <ul class="announce-list">
+              <li  class="announce-list-item">
+                <a href="//iicc.keepwork.com" target="_blank"><img class="news-badge" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！<span class="entry">进入</span></a>
               </li>
             </ul> -->
           </div>
@@ -506,39 +500,34 @@ export default {
             padding-left: 28px;
             list-style: none;
             font-size: 14px;
-            li {
+            &-item {
               width: 320px;
               display: flex;
               align-items: center;
               position: relative;
               height: 40px;
               line-height: 40px;
+              border-radius: 8px;
+              padding: 0 5px;
+              &:hover {
+                background: rgb(245, 243, 243);
+              }
               a {
                 text-decoration: none;
-                position: absolute;
-                right: 2px;
-                top: 0px;
-              }
-              .iicc {
-                width: 22px;
-                height: 22px;
-                margin-right: 6px;
-              }
-              .news-badge {
-                width: 22px;
-                height: 22px;
-                margin-right: 6px;
-              }
-              .icon-book {
-                display: inline-flex;
-                justify-content: center;
-                width: 22px;
-                height: 22px;
-                line-height: 22px;
-                border-radius: 50%;
-                background: #409eff;
-                color: #fff;
-                margin-right: 6px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                color: #909399;
+                .news-badge {
+                  width: 22px;
+                  height: 22px;
+                  margin-right: 6px;
+                }
+                .entry {
+                  position: absolute;
+                  right: 10px;
+                  top: 0;
+                }
               }
             }
           }
