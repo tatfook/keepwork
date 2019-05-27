@@ -10,7 +10,7 @@ const {
 
 export default {
   async getMessages({ commit }, params = {}) {
-    const defaultParams = { 'x-order': 'id-desc-createdAt-desc' }
+    const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
     const [messages, unreadMessages] = await Promise.all([
       keepwork.message.getMessages({ ...defaultParams, ...params }),
       keepwork.message.getMessages({ state: 0 })
@@ -19,7 +19,7 @@ export default {
     commit(GET_UNREAD_MESSAGES_SUCCESS, unreadMessages)
   },
   async loadMessages({ commit }, params = {}) {
-    const defaultParams = { 'x-order': 'id-desc-createdAt-desc' }
+    const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
     const [messages, unreadMessages] = await Promise.all([
       keepwork.message.getMessages({ ...defaultParams, ...params }),
       keepwork.message.getMessages({ state: 0 })
