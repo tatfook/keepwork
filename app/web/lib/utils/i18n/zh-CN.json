@@ -1855,6 +1855,7 @@
     "logoutTips": "确定退出课程系统吗？",
     "text": "文本",
     "onlineLearning": "在线学习",
-    "quiz":"问题"
+    "quiz":"问题",
+    "openingTime": "结束时间不能比开班时间早,请调整！"
   }
 }

@@ -1865,6 +1865,7 @@
     "logoutTips": "Are you sure to quit the course system?",
     "text": "text",
     "onlineLearning": "online learning ",
-    "quiz":"quiz"
+    "quiz":"quiz",
+    "openingTime": "End time can not be earlier than the opening time, please adjust!"
   }
 }
