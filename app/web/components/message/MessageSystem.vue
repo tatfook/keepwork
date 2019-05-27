@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="message-pagination" v-if="isShowPagination">
-      <el-pagination :current-page.sync="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="hideOnSinglePage" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
+      <el-pagination background :current-page.sync="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="hideOnSinglePage" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -165,6 +165,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     padding: 10px 0;
+    background: #f5f5f5;
   }
   .bling {
     animation: flash 1.5s linear 1;
