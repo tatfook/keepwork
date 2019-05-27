@@ -1856,19 +1856,15 @@
     "selectClassTime": "请选择日期",
     "noViewPermissions": "无查看权限",
     "logoutHint": "提示",
-<<<<<<< HEAD
     "logoutTips": "确定退出课程系统吗？",
     "text": "文本",
     "onlineLearning": "在线学习",
     "quiz":"问题",
     "openingTime": "结束时间不能比开班时间早,请调整！"
-=======
-    "logoutTips": "确定退出课程系统吗？"
   },
   "message": {
     "messageCenter": "消息中心",
     "system": "系统",
     "openMessageCenter": "打开消息中心"
->>>>>>> dev
   }
 }
