@@ -19,6 +19,9 @@ import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
 
 import ModProject from './web/project'
+import ModMixLayerList from './list/mixLayerList'
+import ModMixPositionList from './list/mixPositionList'
+import ModTextMixLayerList from './group/textMixLayerList'
 
 let modsList = [
   {
@@ -35,6 +38,16 @@ let modsList = [
         label: 'modList.board',
         mods: [ModBoard]
       }
+      // {
+      //   id: '1-3',
+      //   label: 'modList.mixlayerlist',
+      //   mods: [ModMixLayerList]
+      // },
+      // {
+      //   id: '1-4',
+      //   label: 'modList.textmixlayerlist',
+      //   mods: [ModTextMixLayerList]
+      // },
     ]
   },
   {
@@ -139,6 +152,11 @@ let modsList = [
         id: '6-6',
         label: 'modList.textBoard',
         mods: [ModTextBoard]
+      },
+      {
+        id: '6-7',
+        label: 'modList.mixPositionList',
+        mods: [ModMixPositionList]
       }
     ]
   },

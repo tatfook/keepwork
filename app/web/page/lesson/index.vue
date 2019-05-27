@@ -35,7 +35,6 @@ import VueClipboard from 'vue-clipboard2'
 import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/CommonHeader'
 import LessonHeader from '@/components/lesson/common/Header'
-import CommonFooter from '@/components/common/CommonFooter'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
@@ -137,7 +136,6 @@ export default {
   components: {
     LessonHeader,
     CommonHeader,
-    CommonFooter,
     LoginDialog,
     PerfectCommonFooter
   },

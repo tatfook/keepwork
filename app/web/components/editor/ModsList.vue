@@ -223,7 +223,7 @@ export default {
     },
     modFactory(mod) {
       if (mod.name && mod.name != 'ModMarkdown') {
-        return modFactory.generate(mod.name)
+        return modFactory.generateProperties(mod.name)
       }
     },
     modConf(mod, index) {

@@ -391,6 +391,7 @@
     "board": "绘图板",
     "mixLayer": "图文叠加",
     "mixPosition": "图文拼接",
+    "mixPositionList": "图文拼接列表",
     "interative": "交互",
     "qq": "调用QQ聊天",
     "mixAndMatch": "混合搭配",
@@ -637,6 +638,9 @@
     "projectNotFound": "项目不存在",
     "projectInputId": "输入项目ID,获取项目数据",
     "projectForbidden": "无法显示内容",
+    "edit": "编辑",
+    "delete": "删除",
+    "back": "返回",
     "ppt": "PPT"
   },
   "field": {
@@ -1857,5 +1861,10 @@
     "onlineLearning": "在线学习",
     "quiz":"问题",
     "openingTime": "结束时间不能比开班时间早,请调整！"
+  },
+  "message": {
+    "messageCenter": "消息中心",
+    "system": "系统",
+    "openMessageCenter": "打开消息中心"
   }
 }

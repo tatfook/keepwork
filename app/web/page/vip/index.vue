@@ -4,7 +4,7 @@
       <common-header class="container"></common-header>
     </div>
     <lesson-vip class="vip-page-main"></lesson-vip>
-    <common-footer class="vip-page-footer"></common-footer>
+    <perfect-common-footer class="vip-page-footer"></perfect-common-footer>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
@@ -22,7 +22,7 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import LessonVip from '@/components/vip/LessonVip'
 
@@ -51,7 +51,7 @@ export default {
   i18n,
   components: {
     CommonHeader,
-    CommonFooter,
+    PerfectCommonFooter,
     LoginDialog,
     LessonVip
   },

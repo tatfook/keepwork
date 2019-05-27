@@ -1,6 +1,6 @@
 <template>
   <div class="prop-box" :class="{'active': isCardActive, 'card-only-title': !isCardShow}">
-    <el-row class="prop-header" type='flex' justify='space-between'>
+    <el-row v-show="isCardHeaderShow" class="prop-header" type='flex' justify='space-between'>
       <el-col>
         {{$t("card." + cardKey)}}
       </el-col>
@@ -21,16 +21,7 @@
       </el-col>
     </el-row>
     <el-row class="prop-item" v-show="isCardShow" :prop='prop' v-for='(propItem, index) in prop' :key='index'>
-      <component 
-        :is='proptypes[propItem]'
-        :prop='prop'
-        :optionsData='optionsData'
-        :editingKey='index'
-        :originValue='cardValue[index]'
-        :cardValue='cardValue'
-        :activePropertyOptions='activePropertyOptions'
-        @onPropertyChange='changeProptyData'
-        @onChangeValue='changeActivePropty'></component>
+      <component :is='getPropType(propItem)' :prop='prop' :optionsData='optionsData' :editingKey='index' :originValue='cardValue[index]' :cardValue='cardValue' :cardKey='cardKey' :activePropertyOptions='activePropertyOptions' @onPropertyChange='changePropertyData' @onChangeValue='changeActiveProperty'></component>
     </el-row>
   </div>
 </template>
@@ -51,41 +42,52 @@ export default {
     activePropertyOptions: Object,
     isCardActive: Boolean
   },
+  mounted() {
+    this.isCardShow = this.cardValue && !this.cardValue.hidden
+  },
   data() {
     return {
+      isCardShow: undefined,
       proptypes,
       BaseCompProptypes
     }
   },
   computed: {
     ...mapGetters({
-      activeMod: 'activeMod'
+      activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod'
     }),
-    isCardShow: {
-      get() {
-        return this.cardValue && !this.cardValue.hidden
-      },
-      set() {}
+    isCardHeaderShow() {
+      return this.cardKey !== 'list'
     },
-    isToolTip () {
-      if (this.isCardShow){
-        return this.$t("tips.clickToHide")
+    isToolTip() {
+      if (this.isCardShow) {
+        return this.$t('tips.clickToHide')
       } else {
-        return this.$t("tips.clickToShow")
+        return this.$t('tips.clickToShow')
       }
     },
     optionsData() {
-      if (!this.activeMod || !this.activeMod.modType || !this.activeMod.data || !this.activeMod.data.styleID === '') {
+      if (
+        !this.activeMod ||
+        !this.activeMod.modType ||
+        !this.activeMod.data ||
+        !this.activeMod.data.styleID === ''
+      ) {
         return {}
       }
       let modConf = modLoader.load(this.activeMod.modType)
 
-      if ( !modConf || !modConf.styles) {
+      if (!modConf || !modConf.styles) {
         return {}
       }
       let currentStyle = modConf.styles[this.activeMod.data.styleID]
 
-      if (!currentStyle || !currentStyle.options || !currentStyle.options.config) {
+      if (
+        !currentStyle ||
+        !currentStyle.options ||
+        !currentStyle.options.config
+      ) {
         return {}
       }
 
@@ -100,21 +102,24 @@ export default {
     }
   },
   methods: {
+    getPropType(prop) {
+      return this.proptypes[prop]
+    },
     ...mapActions({
       setActiveProperty: 'setActiveProperty',
       setActivePropertyData: 'setActivePropertyData',
       setIsMultipleTextDialogShow: 'setIsMultipleTextDialogShow'
     }),
-    changeActivePropty() {
+    changeActiveProperty() {
       this.setActiveProperty({
         key: this.activeMod.key,
         property: this.cardKey
       })
     },
-    changeProptyData(changedData) {
+    changePropertyData(changedData) {
       if (!this.changeProtyDataThrottle) {
         this.changeProtyDataThrottle = _.throttle(changedData => {
-          this.changeActivePropty()
+          this.changeActiveProperty()
           this.setActivePropertyData({
             data: changedData
           })
@@ -124,18 +129,23 @@ export default {
       this.changeProtyDataThrottle(changedData)
     },
     toggleModVisible(value) {
-      this.changeProptyData({
+      this.changePropertyData({
         hidden: !value
       })
     },
     showMultiTextDailog() {
-      this.changeProptyData(this.cardValue)
+      this.changePropertyData(this.cardValue)
       this.setIsMultipleTextDialogShow({
         isShow: true
       })
     },
-    tipTool(){
-      return this.$t("help." + this.cardKey)
+    tipTool() {
+      return this.$t('help.' + this.cardKey)
+    }
+  },
+  watch: {
+    cardValue() {
+      this.isCardShow = this.cardValue && !this.cardValue.hidden
     }
   }
 }
@@ -180,8 +190,8 @@ export default {
 }
 </style>
 <style>
-  .prop-header-tooltip-class {
-    max-width: 215px;
-  }
+.prop-header-tooltip-class {
+  max-width: 215px;
+}
 </style>
 

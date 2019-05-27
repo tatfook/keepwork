@@ -8,7 +8,7 @@
           </span>
         </div>
       </div>
-      
+
       <el-input class="media-type-link" :placeholder="$t('editor.pleaseInput')" v-model="linkValue">
         <el-button v-if="linkValue" slot="prepend" icon="iconfont icon-link_"></el-button>
         <el-button v-if="!linkValue" slot="prepend">{{$t('common.link')}}</el-button>
@@ -25,7 +25,7 @@
       </el-select>
 
     </div>
-    
+
     <div v-else-if='isVideo'>
 
       <div class="media-type-img">
@@ -59,7 +59,7 @@
         <el-checkbox v-model="autoplayValue">{{$t('field.autoplay')}}</el-checkbox>
         <el-checkbox v-model="playloopValue">{{$t('field.playloop')}}</el-checkbox>
       </div>
-    
+
     </div>
 
     <SkyDriveManagerDialog :mediaLibrary='true' :isVideoTabShow='isVideoTabShow' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog' />
@@ -185,7 +185,7 @@ export default {
       this.autoplayValue = true
     },
     insertImg() {
-      if (typeof this.optionsData.isVideoTabShow === 'boolean') {
+      if (typeof ( this.optionsData && this.optionsData.isVideoTabShow ) === 'boolean') {
         this.isVideoTabShow = this.optionsData.isVideoTabShow
       } else {
         this.isVideoTabShow = true

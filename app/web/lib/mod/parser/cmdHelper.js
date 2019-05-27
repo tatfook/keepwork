@@ -34,7 +34,11 @@ const cmdList = [
   'Quiz',
   'Hint',
   'Project',
-  'Ppt'
+  'Ppt',
+
+  'MixLayerList',
+  'MixPositionList',
+  'TextMixLayerList'
 ]
 
 const oldCmdMapper = {

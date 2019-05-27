@@ -5,7 +5,7 @@
     </div>
     <router-view v-if="!loading" class="profile-page-main-content" id="profile-page" />
     <div class="profile-page-footer">
-      <common-footer class="container"></common-footer>
+      <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
@@ -32,13 +32,16 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import '@/components/common/thirdAuth'
+import messageModule from '@/store/message'
+import { socket, socketMixin } from '@/socket'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueClipboard)
 Vue.use(VueLazyload)
+Vue.use(socket)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,
@@ -63,7 +66,8 @@ const store = new Vuex.Store({
     user: userModule,
     pbl: pblModule,
     profile: profileModule,
-    lesson: lessonModule
+    lesson: lessonModule,
+    message: messageModule
   }
 })
 
@@ -71,9 +75,15 @@ export default {
   router,
   store,
   i18n,
+  mixins: [socketMixin],
   data() {
     return {
       loading: true
+    }
+  },
+  watch: {
+    socketMessage(value) {
+      store.dispatch('message/refreshMessagesBox')
     }
   },
   async created() {
@@ -82,7 +92,7 @@ export default {
   components: {
     LoginDialog,
     CommonHeader,
-    CommonFooter
+    PerfectCommonFooter
   },
   computed: {
     ...mapGetters({

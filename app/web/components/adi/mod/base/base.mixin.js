@@ -11,6 +11,7 @@ jss.setup(preset())
 const buildCompWrapper = (h, m, property, compType) => {
   return (
     <CompWrapper
+      rootMod={m.rootMod}
       mod={m.mod}
       modData={m.modData}
       property={property}
@@ -54,6 +55,7 @@ const renderTemplate = (h, m, template, root) => {
 
 export default {
   props: {
+    rootMod: Object,
     mod: Object,
     conf: Object,
     theme: Object,
@@ -65,13 +67,18 @@ export default {
     const styleID = this.modData.styleID || 0
     const style = this.conf.styles[styleID]
 
-    const templateID = (style && typeof style.templateID === 'number') && style.templateID || 0
+    const templateID =
+      (style && typeof style.templateID === 'number' && style.templateID) || 0
     const template = this.conf.templates[templateID]
 
     let isShowMod = false
 
     if (this.mod.data && Object.keys(this.mod.data).length !== 0) {
-      _.forEach(this.mod.data, (val, key) => {
+      let modData = this.mod.data
+      if (this.mod.modType === 'ModMixPositionList') {
+        modData = modData.list.collection
+      }
+      _.forEach(modData, (val, key) => {
         if (val && typeof val === 'object') {
           if (typeof val.hidden === 'undefined' || val.hidden === false) {
             isShowMod = true
@@ -207,10 +214,13 @@ export default {
       classes.push('comp')
 
       if (this.activeMod) {
-        if (
-          this.mod.uuid === this.activeMod.uuid &&
-          name === this.activeProperty
-        ) {
+        let isModSame = this.mod.uuid === this.activeMod.uuid
+        let isSubModSame =
+          this.activeSubMod &&
+          this.rootMod &&
+          this.rootMod.uuid === this.activeMod.uuid &&
+          this.mod.index === this.activeSubMod.childProperty
+        if ((isModSame || isSubModSame) && name === this.activeProperty) {
           classes.push('comp-proptype-hover')
         }
       }
@@ -268,6 +278,7 @@ export default {
           })
         }
       }
+
       return options
     },
     compWrapperOptions(name) {
@@ -283,6 +294,7 @@ export default {
     ...mapGetters({
       activeProperty: 'activeProperty',
       activeMod: 'activeMod',
+      activeSubMod: 'activeSubMod',
       themeConf: 'themeConf',
       userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
     }),

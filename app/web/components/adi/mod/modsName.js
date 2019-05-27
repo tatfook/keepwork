@@ -10,6 +10,7 @@ export default {
   ModComment: 'modList.comment',
   ModQQ: 'modList.qq',
   ModMixPosition: 'modList.mixPosition',
+  ModMixPositionList: 'modList.mixPositionList',
   ModMixLayer: 'modList.mixLayer',
   ModParacraft: 'modList.paracraft',
   ModTextBoard: 'modList.textBoard',

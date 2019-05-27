@@ -15,6 +15,8 @@ import projectInput from './ProjectInput'
 import projectMembersSwitch from './ProjectMembersSwitch'
 import projectTagsSwitch from './ProjectTagsSwitch'
 import iframeLink from './IframeLink'
+import subMod from './SubModType'
+import list from './ListType'
 import bigFileSizeInput from './BigFileSizeInput'
 
 export default {
@@ -35,5 +37,7 @@ export default {
   projectMembersSwitch,
   projectTagsSwitch,
   iframeLink,
+  subMod,
+  list,
   bigFileSizeInput
 }

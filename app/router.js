@@ -21,6 +21,8 @@ module.exports = app => {
   router.get(/^\/pbl\//, controller.pbl.index)
   router.get('/org', controller.org.index)
   router.get(/^\/org\//, controller.org.index)
+  router.get('/msg', controller.message.index)
+  router.get(/^\/msg\//, controller.message.index)
   router.get('/u', controller.profile.index)
   router.get(/^\/u\//, controller.profile.index)
   router.get('/a', controller.account.index) // account
