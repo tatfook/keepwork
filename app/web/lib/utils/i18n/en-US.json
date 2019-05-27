@@ -395,6 +395,7 @@
 
     "mixLayer": "Mix layer",
     "mixPosition": "Mix position",
+    "mixPositionList": "Mix position list",
     "interative": "Interactive",
     "qq": "Call QQ chat",
     "mixAndMatch": "Mix and match",
@@ -649,6 +650,9 @@
     "projectHome": "Project home",
     "projectNotFound": "Project Not Found",
     "projectInputId": "Enter the project ID to get the project data",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
     "projectForbidden": "Unable to display content"
   },
   "field": {
@@ -1862,10 +1866,19 @@
     "selectClassTime": "Please select date",
     "noViewPermissions": "No view permissions",
     "logoutHint": "Hint",
+<<<<<<< HEAD
     "logoutTips": "Are you sure to quit the course system?",
     "text": "text",
     "onlineLearning": "online learning ",
     "quiz":"quiz",
     "openingTime": "End time can not be earlier than the opening time, please adjust!"
+=======
+    "logoutTips": "Are you sure to quit the course system?"
+  },
+  "message": {
+    "messageCenter": "message center",
+    "system": "system",
+    "openMessageCenter": "open the message center"
+>>>>>>> dev
   }
 }

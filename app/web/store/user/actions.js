@@ -753,6 +753,14 @@ const actions = {
       unbindResut.status = 'failed'
     })
     return unbindResut
+  },
+  async createFeedback({ getters }, feedbackData) {
+    let { userId } = getters
+    let res = await keepwork.feedbacks.createFeedback({
+      ...feedbackData,
+      userId
+    }).catch(err => Promise.reject(err))
+    return Promise.resolve(res)
   }
 }
 

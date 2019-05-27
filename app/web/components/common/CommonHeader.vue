@@ -42,6 +42,26 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
+      <el-menu-item v-if="isLogin" index="15" class="pull-right user-message-menu-item">
+        <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger="click">
+          <div ref="scroll" class="user-message-main">
+            <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
+              <span :class="['message-pointer', { 'is-read': item.state === 1 }]"></span>
+              <span class="message-title">[{{$t('message.system')}}]</span>
+              <span class="message-content">
+                {{item.content}}
+              </span>
+              <span class="message-date">{{item.createdAt | formatDate}}</span>
+            </div>
+          </div>
+          <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
+          <div slot="reference" class="user-message-icon-container">
+            <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" :max="99" class="user-message-badge">
+              <i class="iconfont icon-message-fill user-message-icon"></i>
+            </el-badge>
+          </div>
+        </el-popover>
+      </el-menu-item>
       <el-menu-item index="11" class="pull-right" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
@@ -106,6 +126,8 @@
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import { mapGetters, mapActions } from 'vuex'
+import _ from 'lodash'
+import moment from 'moment'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
@@ -127,7 +149,10 @@ export default {
       isLoginDialogShow: false,
       isRegisterDialogShow: false,
       locationOrigin: window.location.origin,
-      activeIndex: '0'
+      activeIndex: '0',
+      msgScroll: null,
+      perPage: 10,
+      loadingMore: false
     }
   },
   computed: {
@@ -135,7 +160,8 @@ export default {
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
       username: 'user/username',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
+      unreadMessages: 'message/unreadMessages',
+      messagesBox: 'message/messagesBox'
     }),
     isLogin: {
       get() {
@@ -151,9 +177,30 @@ export default {
     },
     currentRouteName() {
       return this.$route.name
+    },
+    allMessages() {
+      return _.map(_.get(this.messagesBox, 'rows', []), item => {
+        const html = item.messages.msg.text
+        const content = html
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&apos;/g, "'")
+          .replace(/&amp;/g, '&')
+          .replace(/&nbsp;/g, '')
+          .replace(/<\/?.+?\/?>/g, '')
+          .replace(/<[^>]+>/g, '')
+        return { ...item, content }
+      })
+    },
+    messagesCount() {
+      return _.get(this.messagesBox, 'count', 0)
+    },
+    unreadMessagesCount() {
+      return _.get(this.unreadMessages, 'count', 0)
     }
   },
-  mounted() {
+  async mounted() {
     this.checkCurrentTab()
     if (!this.userIsLogined) {
       this.userGetProfile({ forceLogin: false })
@@ -163,6 +210,10 @@ export default {
         .catch(() => {
           this.isLogin = false
         })
+    }
+    if (this.userIsLogined) {
+      const params = { 'x-page': 1, 'x-per-page': this.perPage }
+      this.$nextTick(() => this.loadMessages(params))
     }
   },
   watch: {
@@ -174,9 +225,44 @@ export default {
     ...mapActions({
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
-      changeStatus: 'lesson/student/changeStatus'
+      loadMessages: 'message/loadMessages'
     }),
+    async initScroll() {
+      this.$nextTick(() => {
+        this.msgScroll = document.querySelector('.user-message-main')
+        const msgScrollHeight = this.msgScroll.scrollHeight
+        this.msgScroll.addEventListener('scroll', async e => {
+          const {
+            scrollHeight,
+            scrollTop,
+            offsetHeight,
+            clientHeight
+          } = this.msgScroll
+          const height = clientHeight || offsetHeight
+          if (!this.loadingMore && height + scrollTop + 10 >= scrollHeight) {
+            this.loadMoreMessages()
+          }
+        })
+      })
+    },
+    async loadMoreMessages() {
+      if (this.allMessages.length < this.messagesCount) {
+        this.loadingMore = true
+        await this.loadMessages({
+          'x-per-page': _.add(this.allMessages.length, this.perPage)
+        })
+        this.loadingMore = false
+      }
+    },
+    toMessageDetail({ id }) {
+      const msgIndex =
+        _.findIndex(this.allMessages, item => item.id === id) || 1
+      const msgPageIndex = _.ceil(_.divide(msgIndex + 1, this.perPage))
+      const msgUrl = `${
+        window.location.origin
+      }/msg?id=${id}&page=${msgPageIndex}`
+      window.location.href = msgUrl
+    },
     checkCurrentTab() {
       let pathname = window.location.pathname
       if (CREATE_REG.test(pathname)) {
@@ -255,10 +341,6 @@ export default {
       this.isLoginDialogShow = false
     },
     async logout() {
-      if (this.isBeInClassroom) {
-        this.changeStatus(0)
-        await this.uploadLearnRecords().catch(e => console.error(e))
-      }
       this.userLogout()
       this.$emit('callback')
     },
@@ -267,11 +349,20 @@ export default {
     },
     closeRegisterDialog() {
       this.isRegisterDialogShow = false
+    },
+    toMessageCenter() {
+      window.location.href = `${window.location.origin}/msg`
     }
   },
   filters: {
     defaultPortrait: (str = '') =>
-      (str && str.trim()) || require('@/assets/img/default_portrait.png')
+      (str && str.trim()) || require('@/assets/img/default_portrait.png'),
+    formatDate(date) {
+      const _date = moment(date)
+      return _date.isSame(moment(), 'day')
+        ? _date.format('H:mm')
+        : _date.format('MM/DD')
+    }
   },
   components: {
     PersonalCenterDialog,
@@ -363,7 +454,143 @@ export default {
   margin-right: 14px;
   font-size: 20px;
 }
+@media (min-width: 768px) and (max-width: 1180px) {
+  .menu-searchbar {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .hidden-sm-and-up .user-profile {
+    width: 36px;
+    height: 36px;
+  }
+  .hidden-sm-and-up .el-icon-menu {
+    font-size: 30px;
+  }
+  .el-menu-item {
+    padding: 0 10px;
+  }
+  .profile-menu-item {
+    padding-left: 0;
+  }
+  .el-menu .login-btn {
+    padding-right: 8px;
+    background-color: transparent;
+    color: #3977ad;
+    border: none;
+  }
+  .el-menu .register-btn {
+    padding: 6px;
+  }
+}
+</style>
+<style lang="scss">
+.user-message-popper {
+  padding: 0px;
+  .user-message-main {
+    height: 250px;
+    padding: 12px 0;
+    overflow-y: auto;
+    .user-message-row {
+      display: flex;
+      font-size: 14px;
+      line-height: 21px;
+      padding: 10px 6px;
+      &.is-read {
+        color: #c0c4cc;
+      }
+      &:hover {
+        color: #2397f3;
+        cursor: pointer;
+        background: #ecf5ff;
+      }
+      .message-pointer {
+        display: inline-block;
+        height: 5px;
+        width: 5px;
+        padding: 0;
+        right: 0;
+        border-radius: 50%;
+        background-color: #f56c6c;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        border: 1px solid #fff;
+        margin-top: 8px;
+        margin-right: 4px;
+        &.is-read {
+          visibility: hidden;
+        }
+      }
+      .message-content {
+        flex: 1;
+        // height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-height: 20px;
+        -webkit-box-orient: vertical;
+        padding: 0 12px 0 6px;
+      }
+      .message-date {
+        font-size: 12px;
+      }
+    }
+  }
+  .user-message-button {
+    text-align: center;
+    cursor: pointer;
+    height: 45px;
+    line-height: 45px;
+    font-size: 13px;
+    border-top: 1px solid #e8e8e8;
+  }
+}
+.message-dropdown {
+  .message {
+    position: relative;
+    .news {
+      width: 10px;
+      height: 10px;
+      background: red;
+      position: absolute;
+      border-radius: 50%;
+      top: -4px;
+      right: -12px;
+    }
+  }
+  &-list {
+    .el-dropdown-menu__item {
+      display: flex;
+      .message-desc {
+        flex: 1;
+      }
+      .detail-time {
+        text-align: right;
+        width: 38px;
+        margin-left: 18px;
+      }
+    }
+  }
+}
 .common-header {
+  .user-message-icon-container {
+    .user-message-badge {
+      height: 20px;
+      line-height: 20px;
+      .el-badge__content {
+        height: 16px;
+        line-height: 16px;
+        padding: 0 4px;
+        font-size: 12px;
+      }
+    }
+    .user-message-icon {
+      font-size: 30px;
+    }
+  }
   &-menu-ranking {
     padding-right: 4px !important;
     &-img {

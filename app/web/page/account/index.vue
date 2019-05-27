@@ -7,7 +7,7 @@
       <router-view v-if="!loading" class="account-page-main-content-center" id="account-page" />
     </div>
     <div class="account-page-footer">
-      <common-footer class="container"></common-footer>
+      <perfect-common-footer class="container"></perfect-common-footer>
     </div>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
@@ -27,16 +27,19 @@ import 'element-ui/lib/theme-chalk/display.css'
 import router from './account.router'
 import userModule from '@/store/user'
 import accountModule from '@/store/account'
+import messageModule from '@/store/message'
+import { socket, socketMixin } from '@/socket'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
-import CommonFooter from '@/components/common/CommonFooter'
+import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 
 Vue.use(Vuex)
 Vue.use(VueLazyload)
 Vue.use(VueI18n)
+Vue.use(socket)
 
 const i18n = new VueI18n({
   locale,
@@ -50,7 +53,8 @@ Vue.use(ElementUI, {
 const store = new Vuex.Store({
   modules: {
     user: userModule,
-    account: accountModule
+    account: accountModule,
+    message: messageModule
   }
 })
 
@@ -70,9 +74,15 @@ export default {
   router,
   store,
   i18n,
+  mixins: [socketMixin],
   data() {
     return {
       loading: true
+    }
+  },
+  watch: {
+    socketMessage(value) {
+      store.dispatch('message/refreshMessagesBox')
     }
   },
   async created() {
@@ -81,7 +91,7 @@ export default {
   components: {
     LoginDialog,
     CommonHeader,
-    CommonFooter
+    PerfectCommonFooter
   },
   computed: {
     ...mapGetters({

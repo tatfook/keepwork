@@ -1,6 +1,7 @@
 export default {
   props: {
     cardValue: Object,
+    cardKey: String,
     editingKey: String,
     optionsData: Object,
     activePropertyOptions: Object

@@ -269,6 +269,7 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-right: 0;
       }
       .el-checkbox + .el-checkbox {
         margin-left: 0;

@@ -28,6 +28,9 @@ import AdiHint from './hint/hint.proptypes'
 import AdiProject from './project/project.proptypes'
 import AdiPpt from './ppt/ppt.proptypes'
 
+import AdiList from './list/list.proptypes'
+import AdiSubMod from './subMod/subMod.proptypes'
+
 export default {
   AdiMarkdown,
   AdiIFrame,
@@ -57,5 +60,8 @@ export default {
   AdiQuiz,
   AdiHint,
   AdiProject,
-  AdiPpt
+  AdiPpt,
+
+  AdiList,
+  AdiSubMod
 }
