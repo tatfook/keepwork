@@ -3,8 +3,13 @@
     <div class="content" slot="content">
       <div>{{$t('lesson.quiz')}}{{index}}</div>
       <div class="pop-title">{{title}}</div>
-      <div v-for="(item,index) in options" :class="['pop-answer',{'is-right-answer': item.isRightAnswer}]" :key="index">
+      <div v-for="(item,index) in options" :class="['pop-answer',{'is-right-answer': item.isRightAnswer || type === '3'}]" :key="index">
+        <template v-if="type === '3'">
+          {{$t('org.text')}}{{index+1}} : {{item.item}}
+        </template>
+        <template v-else>
         {{alphabet[index]}} : {{item.item}}
+        </template>
       </div>
       <div class="pop-desc">{{$t('card.explanation')}} {{desc}}</div>
     </div>

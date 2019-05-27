@@ -52,7 +52,7 @@ export default {
   async created() {
     await this.getOrgClasses({ cache: true })
     await this.getOrgClassPackagesById({ classId: this.firstOrgClassId })
-    this.selectedClassId = this.firstOrgClassId
+    this.selectedClassId = this.$route.params.classId || this.firstOrgClassId
     if (this.selectedClassId) {
       await this.getTaughtClassroomCourses({ classId: this.selectedClassId })
     }
@@ -121,7 +121,11 @@ export default {
       this.$router.push({
         path: `package/${course.packageId}/lesson/${
           course.lessonId
-        }/classroom/${course.id}/summary?className=${this.selectedClassName}`
+        }/classroom/${course.id}/summary`,
+        query: {
+          classId: course.classId,
+          className: this.selectedClassName
+        }
       })
     },
     async handleSwitchClass(classId) {

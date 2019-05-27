@@ -101,11 +101,15 @@ export default {
       getAllPersonalPageList: 'user/getAllPersonalPageList'
     }),
     keyupSubmit() {
-      document.onkeydown = e => {
-        let _key = window.event.keyCode
-        if (_key === 13 && !this.notButton) {
-          this.finishEditingMenu()
+      if (this.isDialogShow) {
+        document.onkeydown = e => {
+          let _key = window.event.keyCode
+          if (_key === 13 && !this.notButton) {
+            this.finishEditingMenu()
+          }
         }
+      } else {
+        document.onkeydown = null
       }
     },
     handleClose() {
@@ -302,6 +306,11 @@ export default {
   },
   destroyed() {
     document.onkeydown = null
+  },
+  watch: {
+    isDialogShow(isShow) {
+      this.keyupSubmit()
+    }
   }
 }
 </script>

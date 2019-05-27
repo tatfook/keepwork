@@ -145,7 +145,10 @@
 
     "support": "Support",
 
-    "myOrganization": "My Organization"
+    "myOrganization": "My Organization",
+
+    "containsSensitiveWords": "The content contains sensitive words.",
+    "tooManyRequests": "Too many requests."
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
@@ -1863,7 +1866,11 @@
     "selectClassTime": "Please select date",
     "noViewPermissions": "No view permissions",
     "logoutHint": "Hint",
-    "logoutTips": "Are you sure to quit the course system?"
+    "logoutTips": "Are you sure to quit the course system?",
+    "text": "text",
+    "onlineLearning": "online learning ",
+    "quiz":"quiz",
+    "openingTime": "End time can not be earlier than the opening time, please adjust!"
   },
   "message": {
     "messageCenter": "message center",

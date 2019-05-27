@@ -37,7 +37,7 @@
           <el-button type="primary" @click="toProjectPage" v-show="visitButtonVisiable">{{ buttonName }}</el-button>
           <el-button @click="toEditWebsite" plain v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)">{{toggleSetWebsiteWord}}</el-button>
           <el-button :disabled="isApplied" :loading='isApplyButtonLoading' plain v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit" @click="showApplyBox">{{projectApplyState | applyStateFilter(applyStates)}}</el-button>
-          <game-entry v-if="projectType === 1 && isLoginUserBeCreator" :projectId='projectId' class="project-basic-info-detail-operations-item"></game-entry>
+          <game-entry v-if="projectType === 1 && isLoginUserBeCreator" :projectId='projectId' :originProjectDetail='originProjectDetail' class="project-basic-info-detail-operations-item"></game-entry>
         </div>
       </div>
     </div>

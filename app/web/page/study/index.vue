@@ -243,6 +243,7 @@ export default {
     }
   },
   async created() {
+    document.title = this.$t('org.onlineLearning')
     await this.loadPblPresets()
   },
   computed: {

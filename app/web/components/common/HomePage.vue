@@ -41,15 +41,9 @@
           <div class="home-page-simple-show-center-right-board">
             <div class="title">{{$t("home.officialAnnouncements")}}</div>
             <ul class="announce-list" v-html="newsHtml"></ul>
-            <!-- <ul v-else class="announce-list">
-              <li><img class="iicc" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！
-                <a href="//iicc.keepwork.com" target="_blank">进入</a>
-              </li>
-              <li>
-                <span class="icon-book">
-                  <i class="iconfont icon-book-fill"></i>
-                </span> Lessons系统即将上线，尽情期待！
-                <a href="/l/student/center" target="_blank">进入</a>
+            <!-- <ul class="announce-list">
+              <li  class="announce-list-item">
+                <a href="//iicc.keepwork.com" target="_blank"><img class="news-badge" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！<span class="entry">进入</span></a>
               </li>
             </ul> -->
           </div>
@@ -62,6 +56,7 @@
           <div class="box-text">
             <h2>{{$t('common.creativity')}}</h2>
             <p class="box-text-intro">{{$t("home.everyoneShouldHaveOwnWorks")}}</p>
+            <div class="box-text-line"></div>
           </div>
           <div class="box-img create" ref="create_box_img">
           </div>
@@ -72,6 +67,7 @@
           <div class="box-text">
             <h2>{{$t('common.explore')}}</h2>
             <p class="box-text-intro">{{$t("home.openDoorsToVariousWorlds")}}</p>
+            <div class="box-text-line"></div>
           </div>
           <div class="box-img explore" ref="explore_box_img">
           </div>
@@ -82,6 +78,7 @@
           <div class="box-text">
             <h2>{{$t('common.study')}}</h2>
             <p class="box-text-intro">{{$t("home.learningIsFromExploringToCreating")}}</p>
+            <div class="box-text-line"></div>
           </div>
           <div class="box-img study" ref="study_box_img">
           </div>
@@ -356,9 +353,8 @@ export default {
       height: 40px;
       line-height: 40px;
       text-align: center;
-      background: rgba(35, 151, 243, 0.2);
+      background: rgba(35, 151, 243, 0.1);
       border-radius: 4px;
-      border: solid 1px #2397f3;
       color: #2397f3;
       position: relative;
       font-size: 14px;
@@ -394,7 +390,7 @@ export default {
   }
   &-simple-show {
     padding-top: 16px;
-    padding-bottom: 40px;
+    padding-bottom: 16px;
     border-bottom: 1px solid #eeeeee;
     background: #fff;
     &-center {
@@ -504,39 +500,34 @@ export default {
             padding-left: 28px;
             list-style: none;
             font-size: 14px;
-            li {
+            &-item {
               width: 320px;
               display: flex;
               align-items: center;
               position: relative;
               height: 40px;
               line-height: 40px;
+              border-radius: 8px;
+              padding: 0 5px;
+              &:hover {
+                background: rgb(245, 243, 243);
+              }
               a {
                 text-decoration: none;
-                position: absolute;
-                right: 2px;
-                top: 0px;
-              }
-              .iicc {
-                width: 22px;
-                height: 22px;
-                margin-right: 6px;
-              }
-              .news-badge {
-                width: 22px;
-                height: 22px;
-                margin-right: 6px;
-              }
-              .icon-book {
-                display: inline-flex;
-                justify-content: center;
-                width: 22px;
-                height: 22px;
-                line-height: 22px;
-                border-radius: 50%;
-                background: #409eff;
-                color: #fff;
-                margin-right: 6px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                color: #909399;
+                .news-badge {
+                  width: 22px;
+                  height: 22px;
+                  margin-right: 6px;
+                }
+                .entry {
+                  position: absolute;
+                  right: 10px;
+                  top: 0;
+                }
               }
             }
           }
@@ -552,8 +543,9 @@ export default {
       display: flex;
       .box {
         flex: 1;
-        margin: 24px 12px;
-        padding: 10px 36px 10px 24px;
+        height: 140px;
+        margin: 0 12px;
+        padding: 0 36px 0 24px;
         display: flex;
         cursor: pointer;
         border-radius: 4px;
@@ -567,6 +559,12 @@ export default {
           &-intro {
             color: #a0a4aa;
             font-size: 14px;
+          }
+          &-line {
+            height: 4px; 
+            width: 20px; 
+            background: #eee;
+            border-radius: 4px
           }
           &-own {
             color: #606266;
@@ -600,7 +598,7 @@ export default {
       }
       .line {
         width: 1px;
-        height: 156px;
+        // height: 156px;
         background: #eee;
         margin: 25px 14px;
       }

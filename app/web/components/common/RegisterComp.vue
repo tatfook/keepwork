@@ -13,15 +13,15 @@
       </el-popover>
     </el-form-item>
     <el-form-item prop="password">
-      <el-input type="password" v-model="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
+      <el-input type="password" v-model.trim="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
     </el-form-item>
     <el-form-item prop="phoneNumber">
-      <el-input v-model="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
+      <el-input v-model.trim="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
     </el-form-item>
     <el-form-item prop="authCode">
       <el-row class="send-auth">
         <el-col class="send-auth-code">
-          <el-input v-model="ruleForm.authCode" :placeholder="$t('common.authCode')"></el-input>
+          <el-input v-model.trim="ruleForm.authCode" :placeholder="$t('common.authCode')"></el-input>
         </el-col>
         <el-col class="send-auth-send-code">
           <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !this.isCellphoneVerify" type="primary" class="send-code-button" @click.stop="sendAuthCode">
@@ -32,7 +32,9 @@
       </el-row>
     </el-form-item>
     <el-form-item>
-      <div class="agreement"><el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox></div>
+      <div class="agreement">
+        <el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox>
+      </div>
       <el-button class="login-btn" :disabled="!checkedAgreement" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
     </el-form-item>
   </el-form>
@@ -40,6 +42,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork } from '@/api'
+import { checkSensitiveWords } from '@/lib/utils/sensitive'
 
 export default {
   name: 'RegisterDialog',
@@ -143,11 +146,20 @@ export default {
       this.visible = true
       this.usernameError = ''
     },
-    isExist() {
+    async checkSensitive(checkedWords) {
+      let result = await checkSensitiveWords({ checkedWords }).catch()
+      return result && result.length > 0
+    },
+    async isExist() {
       this.visible = false
       if (!this.ruleForm.username) return
+      let isSensitive = await this.checkSensitive([this.ruleForm.username])
+      if (isSensitive) {
+        this.usernameError = this.$t('common.containsSensitiveWords')
+        return
+      }
       keepwork.user
-        .getUser(this.ruleForm.username)
+        .getUser(this.ruleForm.username.toLowerCase())
         .then(res => {
           if (res) {
             this.usernameError = this.$t('common.existAccount')
@@ -162,8 +174,8 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid && !this.usernameError) {
           let payload = {
-            username: this.ruleForm.username,
-            password: this.ruleForm.password,
+            username: this.ruleForm.username.toLowerCase(),
+            password: this.ruleForm.password.toLowerCase(),
             cellphone: this.ruleForm.phoneNumber,
             captcha: this.ruleForm.authCode
           }
@@ -172,9 +184,9 @@ export default {
             .then(res => {
               this.registerLoading = false
               this.handleClose()
-              if(this.$route.name == 'Register'){
+              if (this.$route.name == 'Register') {
                 window.location.href = '/'
-              }else{
+              } else {
                 window.location.reload()
               }
             })
@@ -188,6 +200,8 @@ export default {
                 this.showMessage('error', this.$t('user.verificationCodeError'))
               } else if (e.response.data.code == 2) {
                 this.showMessage('error', this.$t('common.notValidAccount'))
+              } else if (e.response.data.code == 8) {
+                this.showMessage('error', this.$t('common.containsSensitiveWords'))
               } else {
                 this.showMessage('error', this.$t('common.registerFailed'))
               }
@@ -203,27 +217,31 @@ export default {
       let payload = {
         cellphone: this.ruleForm.phoneNumber
       }
-      let info = await this.verifyCellphoneOne(payload).catch(e => {
-        console.error(e)
-      })
-      this.sendCodeLoading = false
-      if (info === 'OK') {
-        this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
-        this.sendCodeDisabled = true
-        this.timer = setInterval(() => {
-          if (this.count > 0) {
-            this.count--
-          } else {
-            this.sendCodeDisabled = false
-            clearInterval(this.timer)
-            this.timer = null
-            this.count = 60
-          }
-        }, 1000)
-        return
-      } else {
-        this.$message.error(this.$t('user.smsCodeSentFailed'))
-        this.sendCodeLoading = false
+      try {
+        let info = await this.verifyCellphoneOne(payload)
+        if (info === 'OK') {
+          this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
+          this.sendCodeDisabled = true
+          this.timer = setInterval(() => {
+            if (this.count > 0) {
+              this.count--
+            } else {
+              this.sendCodeDisabled = false
+              clearInterval(this.timer)
+              this.timer = null
+              this.count = 60
+            }
+          }, 1000)
+          return
+        } else {
+          this.$message.error(this.$t('user.smsCodeSentFailed'))
+          this.sendCodeLoading = false
+        }
+      } catch (error) {
+        if (_.includes(_.get(error, 'response.data'), '请求次数过多')) {
+          this.$message.error(this.$t('common.tooManyRequests'))
+          this.sendCodeLoading = false
+        }
       }
     }
   }
@@ -248,7 +266,7 @@ export default {
   }
   &-form {
     max-width: 352px;
-    margin:  80px auto 10px;
+    margin: 80px auto 10px;
     box-shadow: 1px 1px 5px #ccc;
     padding: 0 32px;
     position: relative;
@@ -291,17 +309,17 @@ export default {
         }
       }
     }
-    .agreement{
-      .el-checkbox{
+    .agreement {
+      .el-checkbox {
         display: flex;
         align-items: center;
       }
-      .el-checkbox__label{
+      .el-checkbox__label {
         display: inline-block;
         word-break: break-word;
         white-space: normal;
-       }
-      a{
+      }
+      a {
         text-decoration: none;
         color: #409efe;
       }

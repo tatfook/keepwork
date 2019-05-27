@@ -19,7 +19,7 @@
         <div class="lesson-student-record-content-table">
           <ul class="table">
             <li class="table-cell" v-for="(quiz,index) in records" :key="index">
-              <div class="question-number">quiz{{index + 1}}</div>
+              <div class="question-number">{{$t('org.quiz')}}{{index + 1}}</div>
               <div :title="formatTRF(quiz.answer)" v-if="quiz.data.type == 2" :class="['answer',quiz.result ? 'right-answer':'wrong-answer']">{{ formatTRF(quiz.answer)}}</div>
               <div :title="quiz.answer | formatQuiz" v-else :class="['answer',quiz.result ? 'right-answer':'wrong-answer']">{{quiz.answer | formatQuiz}}</div>
             </li>

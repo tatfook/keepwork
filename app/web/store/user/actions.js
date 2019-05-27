@@ -160,7 +160,7 @@ const actions = {
   },
   async verifyCellphoneOne(context, { bind, setRealNameInfo, cellphone }) {
     let { commit } = context
-    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone }).catch(e => console.error(e))
+    let verifyInfoOne = await keepwork.user.verifyCellphoneOne({ bind, setRealNameInfo, cellphone })
     commit(SET_REAL_AUTH_PHONE_NUM, verifyInfoOne)
     return verifyInfoOne
   },

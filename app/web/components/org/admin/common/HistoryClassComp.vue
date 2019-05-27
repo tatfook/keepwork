@@ -169,7 +169,7 @@ export default {
         let classDetail = this.classDetail
         this.classData = classDetail
         this.beginClassTime = classDetail.begin
-        this.endClassTime = classDetail.end
+        this.endClassTime = +new Date(classDetail.end) - 24 * 60 * 60 * 1000 + 1000
       } else {
         this.classData = {
           name: '',
@@ -238,9 +238,13 @@ export default {
         this.classData.end = endTime
       }
     },
-    save() {
+    async save() {
       this.setSelectedPackages()
-      this.setSelectedTime()
+      await this.setSelectedTime()
+      if(+this.classData.end < this.classData.begin) {
+        this.$message.error(this.$t('org.openingTime'))
+        return
+      }
       this.$emit('save', this.classData)
     }
   },
