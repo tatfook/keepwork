@@ -104,9 +104,9 @@ export default {
             isSubmodShow: !item.hidden
           }
         })
-      }
-    },
-    deep: true
+      },
+      deep: true
+    }
   }
 }
 </script>
@@ -155,6 +155,7 @@ export default {
         padding-right: 62px;
         .list-type-item-main-operates {
           display: inline-block;
+          cursor: pointer;
         }
       }
     }
