@@ -39,6 +39,9 @@ export const socketMixin = {
     },
     async broadcast(data) {
       this.socketMessage = data
+    },
+    async msg(data) {
+      this.socketMessage = data
     }
   }
 }
