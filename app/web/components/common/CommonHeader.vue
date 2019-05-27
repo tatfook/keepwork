@@ -42,11 +42,11 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <!-- TODO: 消息 -->
       <el-menu-item v-if="isLogin" index="15" class="pull-right user-message-menu-item">
         <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger="click">
           <div ref="scroll" class="user-message-main">
             <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
+              <span :class="['message-pointer', { 'is-read': item.state === 1 }]"></span>
               <span class="message-title">[{{$t('message.system')}}]</span>
               <span class="message-content">
                 {{item.content}}
@@ -56,7 +56,7 @@
           </div>
           <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
           <div slot="reference" class="user-message-icon-container">
-            <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" class="user-message-badge">
+            <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" :max="99" class="user-message-badge">
               <i class="iconfont icon-message-fill user-message-icon"></i>
             </el-badge>
           </div>
@@ -255,9 +255,12 @@ export default {
       }
     },
     toMessageDetail({ id }) {
-      const msgIndex = _.findIndex(this.allMessages, item => item.id === id) || 1
+      const msgIndex =
+        _.findIndex(this.allMessages, item => item.id === id) || 1
       const msgPageIndex = _.ceil(_.divide(msgIndex + 1, this.perPage))
-      const msgUrl = `${window.location.origin}/msg?id=${id}&page=${msgPageIndex}`
+      const msgUrl = `${
+        window.location.origin
+      }/msg?id=${id}&page=${msgPageIndex}`
       window.location.href = msgUrl
     },
     checkCurrentTab() {
@@ -492,7 +495,7 @@ export default {
       display: flex;
       font-size: 14px;
       line-height: 21px;
-      padding: 12px;
+      padding: 10px 6px;
       &.is-read {
         color: #c0c4cc;
       }
@@ -500,6 +503,25 @@ export default {
         color: #2397f3;
         cursor: pointer;
         background: #ecf5ff;
+      }
+      .message-pointer {
+        display: inline-block;
+        height: 5px;
+        width: 5px;
+        padding: 0;
+        right: 0;
+        border-radius: 50%;
+        background-color: #f56c6c;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        border: 1px solid #fff;
+        margin-top: 8px;
+        margin-right: 4px;
+        &.is-read {
+          visibility: hidden;
+        }
       }
       .message-content {
         flex: 1;
@@ -510,7 +532,7 @@ export default {
         -webkit-line-clamp: 2;
         line-height: 20px;
         -webkit-box-orient: vertical;
-        padding: 0 6px;
+        padding: 0 12px 0 6px;
       }
       .message-date {
         font-size: 12px;
