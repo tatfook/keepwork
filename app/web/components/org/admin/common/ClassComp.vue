@@ -206,7 +206,7 @@ export default {
     async save() {
       this.setSelectedPackages()
       await this.setSelectedTime()
-      if(this.classData.end < this.classData.begin) {
+      if(this.classData.end < +new Date(this.classData.begin)) {
         this.$message.error(this.$t('org.openingTime'))
         return
       }

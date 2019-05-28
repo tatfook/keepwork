@@ -1,8 +1,8 @@
 <template>
-  <el-input :placeholder="$t('editor.pleaseInput')" v-model="linkTypeValue" @change='updateValue' class="input-with-select">
-    <el-button v-if="linkTypeValue" slot="prepend" icon="iconfont icon-link_"></el-button>
+  <el-input :placeholder="$t('editor.pleaseInput')" v-model="linkVal" @change='updateValue' class="input-with-select">
+    <el-button v-if="linkVal" slot="prepend" icon="iconfont icon-link_"></el-button>
     <el-button v-else slot="prepend">{{$t('common.link')}}</el-button>
-    <el-select v-model="linkTypeValue" @change='updateValue' slot="append" placeholder="Select">
+    <el-select v-model="linkVal" @change='updateValue' slot="append" placeholder="Select" popper-class="link-type-popper">
       <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
         {{ path }}
       </el-option>
@@ -21,19 +21,22 @@ export default {
     originValue: String
   },
   async mounted() {
+    this.linkVal = this.linkTypeValue
     await this.getAllPersonalPageList()
+  },
+  data() {
+    return {
+      linkVal: ''
+    }
   },
   computed: {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
     }),
-    linkTypeValue: {
-      get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.optionsData.emptyLink || '')
-      },
-      set(data) {
-        this.updateValue(data)
-      }
+    linkTypeValue() {
+      return this.originValue
+        ? this.originValue
+        : (this.optionsData && this.optionsData.emptyLink) || ''
     }
   },
   methods: {
@@ -47,6 +50,11 @@ export default {
     },
     getLocationUrl(url) {
       return url ? location.origin + '/' + url : ''
+    }
+  },
+  watch: {
+    originValue(value) {
+      this.linkVal = this.linkTypeValue
     }
   }
 }
@@ -73,6 +81,11 @@ export default {
   }
   > .el-input-group__append {
     padding-left: 12px;
+  }
+}
+.link-type {
+  &-popper {
+    max-width: 400px;
   }
 }
 </style>
