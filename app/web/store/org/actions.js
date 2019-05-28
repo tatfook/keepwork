@@ -323,6 +323,13 @@ const actions = {
   },
   toggleExpirationDialogVisible({ commit }, status) {
     commit(TOGGLE_EXPIRATION_DIALOG, status)
+  },
+  checkCurrentOrgExpire({ dispatch, getters: { currentOrgToExpire, currentOrgHaveExpired } }, { haveExpired = true, toExpire = true }) {
+    if ((haveExpired && currentOrgHaveExpired) || (toExpire && currentOrgToExpire)) {
+      dispatch('toggleExpirationDialogVisible', true)
+      return true
+    }
+    return false
   }
 }
 

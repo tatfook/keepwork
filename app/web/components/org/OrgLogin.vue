@@ -104,7 +104,8 @@ export default {
       let roleName = ''
       if ((roleId & 64) > 0) {
         return this.$router.push({
-          name: 'OrgPackages'
+          name: 'OrgPackages',
+          query: { firstLogin: true }
         })
       }
       if ((roleId & 2) > 0) {
