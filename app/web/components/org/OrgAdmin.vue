@@ -95,7 +95,7 @@ export default {
   mounted() {
     if (this.$route.query.firstLogin) {
       window.history.replaceState({}, '', '?firstLogin')
-      this.checkCurrentOrgExpire(true)
+      this.checkCurrentOrgExpire()
     }
   },
   computed: {
