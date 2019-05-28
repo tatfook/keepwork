@@ -17,6 +17,7 @@
           </el-dropdown>
           <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
           <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
+          <div class="org-validity-date">有效期: {{startDate}}-{{endDate}} <span v-if="currentOrgToExpire" class="expire-tips">即将到期</span> <span v-if="currentOrgHaveExpired" class="expire-tips">已到期</span></div>
         </div>
         <ul class="org-admin-menu">
           <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': isMenuItemActive(menuItem)}" :key="index">
@@ -36,6 +37,7 @@
 </template>
 <script>
 import OrgHeader from './common/OrgHeader'
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
   name: 'OrgAdmin',
@@ -94,7 +96,10 @@ export default {
     ...mapGetters({
       orgIsStudent: 'org/isStudent',
       orgIsTeacher: 'org/isTeacher',
-      orgUserinfo: 'org/userinfo'
+      orgUserinfo: 'org/userinfo',
+      currentOrg: 'org/currentOrg',
+      currentOrgToExpire: 'org/currentOrgToExpire',
+      currentOrgHaveExpired: 'org/currentOrgHaveExpired'
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
@@ -103,6 +108,12 @@ export default {
       return !['OrgAdminPackageDetail', 'OrgAdminPackageLesson'].includes(
         this.nowPageName
       )
+    },
+    startDate() {
+      return moment(this.currentOrg.startDate).format('YYYY/M/D')
+    },
+    endDate() {
+      return moment(this.currentOrg.endDate).format('YYYY/M/D')
     }
   },
   methods: {
@@ -125,6 +136,14 @@ $borderColor: #e8e8e8;
 .org-admin {
   width: 100%;
   background-color: #f5f5f5;
+  .org-validity-date {
+    color: #666;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .expire-tips {
+    color:#f56c6c;
+  }
   &-container {
     max-width: 1200px;
     margin: 0 auto 30px;
@@ -141,7 +160,7 @@ $borderColor: #e8e8e8;
     margin-bottom: 24px;
   }
   &-message {
-    padding: 32px 16px 48px;
+    padding: 32px 16px 20px;
     position: relative;
     text-align: center;
     background-color: #fff;

@@ -35,6 +35,23 @@ const getters = {
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),
+  currentOrgHaveExpired: (state, { endTimestamp }) => {
+    return Date.now() > endTimestamp
+  },
+  currentOrgToExpire: (state, { currentOrgHaveExpired, endTimestamp }) => {
+    if (currentOrgHaveExpired) {
+      return false
+    }
+    const now = Date.now()
+    const oneDay = 1000 * 60 * 60 * 24
+    const days = _.ceil(_.divide(_.subtract(endTimestamp, now), oneDay), 2)
+    return days <= 20
+  },
+  endTimestamp: (state, { currentOrg: { endDate } }) => {
+    const _endDate = endDate.split('T')[0]
+    const endTime = +new Date(_endDate) + 1000 * 60 * 60 * 24 - 1000
+    return endTime
+  },
   currentOrg: state => state.currentOrg,
   currentOrgId: (state, { currentOrg }) => currentOrg.id,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
