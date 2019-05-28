@@ -1890,7 +1890,7 @@
     "text": "text",
     "onlineLearning": "online learning ",
     "quiz":"quiz",
-    "openingTime": "End time can not be earlier than the opening time, please adjust!"
+    "openingTime": "The opening time is not reasonable, please adjust it!"
   },
   "message": {
     "messageCenter": "message center",

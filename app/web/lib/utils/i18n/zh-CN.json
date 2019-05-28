@@ -1880,7 +1880,7 @@
     "text": "文本",
     "onlineLearning": "在线学习",
     "quiz":"问题",
-    "openingTime": "结束时间不能比开班时间早,请调整！"
+    "openingTime": "开班时间设置不合理,请调整！"
   },
   "message": {
     "messageCenter": "消息中心",
