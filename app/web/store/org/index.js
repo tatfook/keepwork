@@ -20,7 +20,8 @@ const state = {
   userOrg: [],
   orgActiveCodeList: {},
   printCodeList: {},
-  orgHistoricalClasses: {}
+  orgHistoricalClasses: {},
+  expirationDialogVisible: false
 }
 export default {
   namespaced: true,
