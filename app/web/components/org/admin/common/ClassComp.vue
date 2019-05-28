@@ -35,6 +35,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'ClassComp',
   props: {
@@ -42,6 +43,8 @@ export default {
   },
   mounted() {
     this.initClassData()
+    this.beginClassTime = this.startDate
+    this.endClassTime = this.endDate
   },
   data() {
     return {
@@ -63,6 +66,12 @@ export default {
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
+    },
+    startDate() {
+      return new Date(this.currentOrg.startDate)
+    },
+    endDate() {
+      return new Date(this.currentOrg.endDate)
     },
     isDetailPage() {
       return _.get(this.$route, 'name') === 'OrgClassDetail'
@@ -134,12 +143,13 @@ export default {
         let classDetail = this.classDetail
         this.classData = classDetail
         this.beginClassTime = classDetail.begin
-        this.endClassTime = +new Date(classDetail.end) - 24 * 60 * 60 * 1000 + 1000
+        this.endClassTime =
+          +new Date(classDetail.end) - 24 * 60 * 60 * 1000 + 1000
       } else {
         this.classData = {
           name: '',
-          begin: null,
-          end: null,
+          begin: this.startDate,
+          end: this.endDate,
           packages: []
         }
       }
@@ -206,7 +216,11 @@ export default {
     async save() {
       this.setSelectedPackages()
       await this.setSelectedTime()
-      if(this.classData.end < +new Date(this.classData.begin)) {
+      if (
+        this.beginClassTime < this.startDate ||
+        this.endClassTime > this.endDate ||
+        this.classData.end < +new Date(this.classData.begin)
+      ) {
         this.$message.error(this.$t('org.openingTime'))
         return
       }
