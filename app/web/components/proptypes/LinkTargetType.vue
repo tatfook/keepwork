@@ -1,5 +1,4 @@
 <template>
-  <!-- <el-input class="link-type" :placeholder='editingKey' v-model='inputTypeValue' clearable @change='updateValue' @focus='getFocus'></el-input> -->
   <el-select class="link-target-type" v-model='linkTargetValue' :placeholder='$t("field." + editingKey)' @input='updateValue' size='mini' @focus='getFocus'>
     <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'></el-option>
   </el-select>
@@ -14,10 +13,13 @@ export default {
   props: {
     originValue: String
   },
+  mounted() {
+    this.linkTargetValue = this.targetVal
+  },
   data() {
     let self = this
-
     return {
+      linkTargetValue: '',
       linkTargets: [
         {
           label: self.$t('editor.selfWindowOpen'),
@@ -31,22 +33,25 @@ export default {
     }
   },
   computed: {
-    linkTargetValue: {
-      get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.optionsData.emptyLinkTarget || '')
-      },
-      set() {}
+    targetVal() {
+      return this.originValue
+        ? this.originValue
+        : (this.optionsData && this.optionsData.emptyLinkTarget) || ''
     }
   },
   methods: {
     updateValue(newVal) {
-      this.linkTargetValue = newVal
       let tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
     },
     getFocus() {
       this.$emit('onChangeValue')
+    }
+  },
+  watch: {
+    originValue(value) {
+      this.linkTargetValue = this.targetVal
     }
   }
 }
