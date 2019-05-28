@@ -38,7 +38,7 @@
 <script>
 import OrgHeader from './common/OrgHeader'
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgAdmin',
   data() {
@@ -92,6 +92,12 @@ export default {
       ]
     }
   },
+  mounted() {
+    if (this.$route.query.firstLogin) {
+      window.history.replaceState({}, '', '?firstLogin')
+      this.checkCurrentOrgExpire(true)
+    }
+  },
   computed: {
     ...mapGetters({
       orgIsStudent: 'org/isStudent',
@@ -117,6 +123,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire'
+    }),
     toRolePage(pageName) {
       this.$router.push({
         name: pageName

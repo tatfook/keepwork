@@ -150,9 +150,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      getNextLesson: 'org/student/getNextLesson'
+      getNextLesson: 'org/student/getNextLesson',
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire'
     }),
-    toLessonDetail(lesson) {
+    async toLessonDetail(lesson) {
+      if (this.isAdmin) {
+        const isExpired = await this.checkCurrentOrgExpire({
+          haveExpired: true,
+          toExpire: false
+        })
+        if (isExpired) {
+          return
+        }
+      }
       if (this.isClassCompleted) {
         return
       }
@@ -208,11 +218,7 @@ export default {
           lessonId: lessonId
         }
       }
-      this.toLearnConfirm(
-        this.packageDetail.id,
-        lessonId,
-        rotuerObject
-      )
+      this.toLearnConfirm(this.packageDetail.id, lessonId, rotuerObject)
     },
     toLearnAgain(lesson) {
       if (this.isClassCompleted) {
