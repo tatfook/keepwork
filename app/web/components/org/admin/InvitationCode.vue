@@ -114,7 +114,9 @@ export default {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       getOrgClassesById: 'org/getOrgClassesById',
-      orgActiveCodeList: 'org/orgActiveCodeList'
+      orgActiveCodeList: 'org/orgActiveCodeList',
+      currentOrgToExpire: 'org/currentOrgToExpire',
+      currentOrgHaveExpired: 'org/currentOrgHaveExpired'
     }),
     className() {
       return _.get(
@@ -176,7 +178,8 @@ export default {
   methods: {
     ...mapActions({
       getOrgActivateCodes: 'org/getOrgActivateCodes',
-      getOrgClassList: 'org/getOrgClassList'
+      getOrgClassList: 'org/getOrgClassList',
+      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible'
     }),
     handleSizeChange(val) {
       this.perPage = val
@@ -190,6 +193,10 @@ export default {
       this.multipleSelection = val
     },
     createActiveCode() {
+      if(this.currentOrgHaveExpired) {
+        this.toggleExpirationDialogVisible(true)
+        return
+      }
       this.$router.push({ name: 'NewInvitationCode' })
     },
     stateFilter(state) {

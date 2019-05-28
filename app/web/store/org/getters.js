@@ -67,7 +67,8 @@ const getters = {
   userOrg: state => state.userOrg,
   orgActiveCodeList: state => state.orgActiveCodeList,
   printCodeList: state => state.printCodeList,
-  orgHistoricalClasses: state => state.orgHistoricalClasses
+  orgHistoricalClasses: state => state.orgHistoricalClasses,
+  expirationDialogVisible: state => state.expirationDialogVisible
 }
 
 export default getters

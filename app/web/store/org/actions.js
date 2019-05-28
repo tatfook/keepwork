@@ -20,7 +20,8 @@ const {
   GET_USER_ORG_SUCCESS,
   GET_ORG_ACTIVATE_CODE_SUCCESS,
   SET_PRINT_CODE_LIST,
-  GET_HISTORY_CLASSES_SUCCESS
+  GET_HISTORY_CLASSES_SUCCESS,
+  TOGGLE_EXPIRATION_DIALOG
 } = props
 
 const actions = {
@@ -319,6 +320,9 @@ const actions = {
         console.error(err)
       })
     }
+  },
+  toggleExpirationDialogVisible({ commit }, status) {
+    commit(TOGGLE_EXPIRATION_DIALOG, status)
   }
 }
 
