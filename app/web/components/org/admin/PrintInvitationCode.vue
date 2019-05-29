@@ -13,7 +13,7 @@
     </div>
     <div class="print-invitation-code-table">
       <el-table ref="codeTable" border :data="printCodeListData" tooltip-effect="dark" style="width: 70%">
-        <el-table-column :label="$t('org.InvitationCode')" width="135" prop="key"></el-table-column>
+        <el-table-column :label="$t('org.InvitationCode')" width="135"><template slot-scope="scope">{{scope.row.key | idPretty}}</template></el-table-column>
         <el-table-column :label="$t('org.stateLabel')" width="135"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
         <el-table-column :label="$t('org.createdTime')" width="135"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
         <el-table-column :label="$t('org.classLabel')" width="" prop="className"></el-table-column>
@@ -32,9 +32,9 @@
       </div>
       <div class="print-invitation-code-print-content">
         <div class="print-invitation-code-print-row" v-for="(item,index) in printCodeListDataRow" :key="index">
-          <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key" >
+          <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key">
             <div class="print-invitation-code-print-content-box-top">
-              <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
+              <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key | idPretty}}</p>
               <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
               <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
               <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
@@ -80,7 +80,7 @@ export default {
       return _.map(this.printCodeList, i => {
         return {
           ...i,
-          className: this.className
+          className: this.className,
         }
       })
     },
@@ -103,6 +103,13 @@ export default {
     },
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD') : ''
+    }
+  },
+  filters: {
+    idPretty(value) {
+      return _.map(_.chunk(value.toString().split(''), 4), i =>
+        i.join('')
+      ).join(' ')
     }
   }
 }
