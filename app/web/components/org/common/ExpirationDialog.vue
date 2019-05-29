@@ -2,13 +2,13 @@
   <div class="expiration">
     <el-dialog class="expiration-dialog" title="" :visible.sync="isExpirationVisible" center :before-close="handleClose">
       <div class="expiration-dialog-body">
-        <h3 class="expiration-dialog-body-title">尊敬的用户</h3>
-        <p class="expiration-dialog-body-service">您的服务合约<span class="expiration-dialog-body-service-date">{{isExporationHint}}</span>。</p>
-        <p class="expiration-dialog-body-tip">{{currentOrgHaveExpired ?'部分功能已停止使用' : '请及时延期，以免影响您的使用'}}</p>
-        <p class="expiration-dialog-body-contact">如需咨询，请联系 support@paraengine.com</p>
+        <h3 class="expiration-dialog-body-title">{{$t('org.dearUser')}}</h3>
+        <p class="expiration-dialog-body-service">{{$t('org.serviceContract')}}<span class="expiration-dialog-body-service-date">{{isExporationHint}}</span>。</p>
+        <p class="expiration-dialog-body-tip">{{currentOrgHaveExpired ? `${$t('org.functionsHaveBeenDiscontinued')}` : `${$t('org.timelyDelay')}`}}</p>
+        <p class="expiration-dialog-body-contact">{{$t('org.contactUs')}} support@paraengine.com</p>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleClose">确定</el-button>
+        <el-button type="primary" @click="handleClose">{{$t('common.Sure')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -37,7 +37,11 @@ export default {
       return moment(this.currentOrg.endDate).format('LL')
     },
     isExporationHint() {
-      return this.currentOrgHaveExpired ? '已到期' : `将${this.endDate}到期`
+      return this.currentOrgHaveExpired
+        ? this.$t('org.haveExpired')
+        : this.isEn
+        ? ` expires on ${this.endDate} `
+        : `将${this.endDate}到期`
     }
   },
   methods: {

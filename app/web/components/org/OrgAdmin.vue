@@ -17,7 +17,7 @@
           </el-dropdown>
           <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
           <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
-          <div class="org-validity-date">有效期: {{startDate}}-{{endDate}} <span v-if="currentOrgToExpire" class="expire-tips">即将到期</span> <span v-if="currentOrgHaveExpired" class="expire-tips">已到期</span></div>
+          <div class="org-validity-date">{{$t('org.validity')}}: {{startDate}}-{{endDate}} <span v-if="currentOrgToExpire" class="expire-tips">{{$t('org.toExpire')}}</span> <span v-if="currentOrgHaveExpired" class="expire-tips">{{$t('org.haveExpired')}}</span></div>
         </div>
         <ul class="org-admin-menu">
           <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': isMenuItemActive(menuItem)}" :key="index">
