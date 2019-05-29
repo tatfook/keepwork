@@ -141,7 +141,10 @@ export default {
       return _.get(this.orgActiveCodeList, 'count', 0)
     },
     codeTableData() {
-      return _.get(this.orgActiveCodeList, 'rows', [])
+      let codeData = _.get(this.orgActiveCodeList, 'rows', [])
+      return _.map(codeData, i => {
+        return { ...i, key: this.handleKey(i.key) }
+      })
     },
     printCodeListDataRow() {
       return _.chunk(this.multipleSelection, 2)
@@ -181,6 +184,20 @@ export default {
       getOrgClassList: 'org/getOrgClassList',
       toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible'
     }),
+    handleKey(key) {
+      let tempArr = key.split('')
+      let count = 0
+      let result = []
+      _.map(tempArr, (val, i) => {
+        result.push(val)
+        count++
+        if (count === 4) {
+          result.push('  ')
+          count = 0
+        }
+      })
+      return result.join('')
+    },
     handleSizeChange(val) {
       this.perPage = val
     },
@@ -193,7 +210,7 @@ export default {
       this.multipleSelection = val
     },
     createActiveCode() {
-      if(this.currentOrgHaveExpired) {
+      if (this.currentOrgHaveExpired) {
         this.toggleExpirationDialogVisible(true)
         return
       }
