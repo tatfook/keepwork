@@ -16,7 +16,7 @@ try {
 }
 
 export const socket = new VueSocketIO({
-  debug: true,
+  debug: false,
   connection: process.env.SOCKET_API_PREFIX,
   options: {
     query: {
