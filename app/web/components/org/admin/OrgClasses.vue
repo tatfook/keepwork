@@ -6,6 +6,9 @@
           <router-link class="org-classes-menu-link" :to='{name: menu.indexPageName}'>{{menu.text}}</router-link>
         </div>
       </div>
+      <div class="org-classes-reminder">
+        <p class="org-classes-reminder-text">{{$t('org.viewOverdueClass')}}<span class="org-classes-reminder-text-history" @click="goToHistory"> {{$t('org.historicalData')}}</span></p>
+      </div>
       <div class="org-classes-available">{{$t('org.RemainingPlaces')}}
         <span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span>
         <el-popover popper-class="org-classes-popover" placement="bottom" title="" width="306" trigger="hover">
@@ -59,12 +62,14 @@ export default {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       getOrgRestCount: 'org/getOrgRestCount',
-      getOrgClassesById: 'org/getOrgClassesById'
+      getOrgClassesById: 'org/getOrgClassesById',
+      currentOrgHaveExpired: 'org/currentOrgHaveExpired'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
     orgRestUserCount() {
+      if (this.currentOrgHaveExpired) return 0
       return this.getOrgRestCount({ id: this.orgId })
     },
     currentPageName() {
@@ -81,6 +86,9 @@ export default {
     ...mapActions({
       getOrgClassList: 'org/getOrgClassList'
     }),
+    goToHistory() {
+      this.$router.push({ name: 'HistoricalData' })
+    },
     isMenuItemActive(menuItem) {
       return _.indexOf(menuItem.pageNames, this.currentPageName) !== -1
     }
@@ -104,7 +112,7 @@ export default {
     }
   }
   &-menu {
-    flex: 1;
+    width: 220px;
     padding: 0 16px;
     &-item {
       display: inline-block;
@@ -125,7 +133,22 @@ export default {
       border-color: inherit;
     }
   }
+  &-reminder {
+    flex: 1;
+    &-text {
+      line-height: 56px;
+      margin: 0;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      &-history {
+        color: #2397f3;
+        cursor: pointer;
+      }
+    }
+  }
   &-available {
+    width: 220px;
     padding: 0 24px;
     font-size: 12px;
     color: #333;

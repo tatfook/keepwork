@@ -1890,7 +1890,16 @@
     "text": "text",
     "onlineLearning": "online learning ",
     "quiz":"quiz",
-    "openingTime": "The opening time is not reasonable, please adjust it!"
+    "openingTime": "The opening time is not reasonable, please adjust it!",
+    "viewOverdueClass": "To view overdue class information, please go to",
+    "dearUser": "Dear user",
+    "serviceContract": "Your service contract",
+    "functionsHaveBeenDiscontinued": "Some functions have been discontinued",
+    "timelyDelay": "Please timely delay, so as not to affect your use",
+    "haveExpired": " have expired",
+    "contactUs": "For more information, please contact us ",
+    "validity": "validity",
+    "toExpire": "to expire"
   },
   "message": {
     "messageCenter": "message center",

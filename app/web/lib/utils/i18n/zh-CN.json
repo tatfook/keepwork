@@ -1880,7 +1880,16 @@
     "text": "文本",
     "onlineLearning": "在线学习",
     "quiz":"问题",
-    "openingTime": "开班时间设置不合理,请调整！"
+    "openingTime": "开班时间设置不合理,请调整！",
+    "viewOverdueClass": "查看过期班级信息，请前往",
+    "dearUser": "尊敬的用户",
+    "serviceContract": "您的服务合约",
+    "functionsHaveBeenDiscontinued": "部分功能已停止使用",
+    "timelyDelay": "请及时延期，以免影响您的使用",
+    "haveExpired": "已到期",
+    "contactUs": "如需咨询，请联系",
+    "validity": "有效期",
+    "toExpire": "即将到期"
   },
   "message": {
     "messageCenter": "消息中心",
