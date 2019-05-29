@@ -72,19 +72,27 @@ export default {
     const template = this.conf.templates[templateID]
 
     let isShowMod = false
+    let getIsModDataShow = function(modData) {
+      let isModDataShow = false
+      _.forIn(modData, (val, key) => {
+        if (
+          val &&
+          typeof val === 'object' &&
+          (typeof val.hidden === 'undefined' || val.hidden === false)
+        ) {
+          isModDataShow = true
+          return false
+        }
+      })
+      return isModDataShow
+    }
 
     if (this.mod.data && Object.keys(this.mod.data).length !== 0) {
       let modData = this.mod.data
       if (this.mod.modType === 'ModMixPositionList') {
         modData = modData.list.collection
       }
-      _.forEach(modData, (val, key) => {
-        if (val && typeof val === 'object') {
-          if (typeof val.hidden === 'undefined' || val.hidden === false) {
-            isShowMod = true
-          }
-        }
-      })
+      isShowMod = getIsModDataShow(modData)
     } else {
       isShowMod = true
     }
