@@ -4,7 +4,7 @@
       <router-view />
     </div>
     <el-footer class="org-page-footer" height="auto">
-      <perfect-common-footer></perfect-common-footer>
+      <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
     <expiration-dialog :isExpirationVisible="expirationDialogVisible" @close="handleCloseExpirationDialog"></expiration-dialog>
   </div>
