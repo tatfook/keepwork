@@ -98,8 +98,7 @@ export default {
 <style lang="scss" scoped>
 .org-classes {
   background-color: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
+  border-radius: 8px;
   &-header {
     display: flex;
     height: 56px;
