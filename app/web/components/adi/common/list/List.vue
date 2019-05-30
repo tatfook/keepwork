@@ -1,6 +1,6 @@
 <template>
   <div class='comp-list'>
-    <el-row :gutter='options.gutter'>
+    <el-row class="comp-list-row" :gutter='options.gutter' type="flex">
       <el-col :span="colWidth" v-for='(item, index) in filteredCollection' :key='index'>
         <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(item, item.index)' :theme='theme' :modType='options.modType' :editMode='editMode' />
       </el-col>
@@ -53,5 +53,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.comp-list {
+  &-row {
+    flex-wrap: wrap;
+  }
+}
 </style>
+
