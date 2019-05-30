@@ -66,7 +66,7 @@
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>
-            <i class="el-icon-caret-bottom right-icon"></i>
+            <i class="el-icon-caret-bottom right-icon right-icon-tool"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
@@ -404,9 +404,6 @@ export default {
     color: #409eff;
   }
 }
-.el-menu-item.is-active i {
-  color: #909399;
-}
 .menu-left {
   flex: 1;
 }
@@ -421,7 +418,6 @@ export default {
 }
 .el-menu-item {
   padding: 0 12px;
-  color: #303133;
   &:hover {
     color: #409eff !important;
   }
@@ -429,6 +425,7 @@ export default {
     font-size: 13px;
     width: 0;
     position: relative;
+    left: 1px;
   }
 }
 .home-page {
@@ -456,29 +453,16 @@ export default {
   font-size: 20px;
 }
 .right-icon-item {
-    border-bottom: none;
-  &.is-active {
-    border-bottom: none;
-    color: #909399;
-    &:hover {
-      color: #909399 !important;
-    }
-    &:active {
-      color: #909399 !important;
-    }
+  border-bottom: none;
+  i:hover {
+    color: #409eff;
   }
-  &:hover {
-    color: #909399;
+  .right-icon-tool {
+    font-size: 13px;
+    width: 0;
+    position: relative;
+    left: -6px;
   }
-  &:active {
-    color: #909399 !important;
-  }
-  &:visited {
-    color: #909399
-  }
-}
-.right-icon-item.el-menu-item {
-  color: #909399 !important;
 }
 
 @media (min-width: 768px) and (max-width: 1180px) {
