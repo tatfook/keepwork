@@ -68,7 +68,7 @@ export default {
     }),
     handleSizeChange(val) {
       this.perPage = val
-       this.targetPage(1)
+      this.targetPage(1)
     },
     targetPage(targetPage) {
       this.page = targetPage
