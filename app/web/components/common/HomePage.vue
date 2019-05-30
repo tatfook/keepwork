@@ -487,7 +487,7 @@ export default {
           border: 1px solid #eeeeee;
           .video {
             width: 352px;
-            height: 240px;
+            height: 200px;
             margin: 17px;
             text-align: center;
           }
