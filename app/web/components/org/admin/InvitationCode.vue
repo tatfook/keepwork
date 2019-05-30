@@ -288,7 +288,7 @@ export default {
 <style lang="scss" scoped>
 .invitation-code {
   background: #fff;
-  border: solid 1px #e8e8e8;
+  border-radius: 8px;
   &-top {
     min-height: 56px;
     border-bottom: solid 2px #e8e8e8;
@@ -344,6 +344,9 @@ export default {
   &-pages {
     text-align: center;
     margin: 40px;
+  }
+  &-table {
+    margin:0 24px;
   }
 }
 .clearfix::after {

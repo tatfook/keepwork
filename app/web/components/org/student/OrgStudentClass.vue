@@ -286,6 +286,7 @@ export default {
     background: #fff;
     box-sizing: border-box;
     padding-left: 24px;
+    border-radius: 8px;
     .join-classroom {
       &-icon {
         display: inline-block;

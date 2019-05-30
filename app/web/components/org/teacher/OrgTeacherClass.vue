@@ -332,6 +332,8 @@ export default {
 
 <style lang="scss" scoped>
 .org-teacher-classes {
+  border-radius: 8px;
+  overflow: hidden;
   .pull-right {
     float: right;
     right: 0;
@@ -341,6 +343,7 @@ export default {
     background: #fff;
     padding: 0 24px 24px;
     box-sizing: border-box;
+    border-radius: 0 0 8px 8px;
     .students-table-header {
       height: 50px;
       line-height: 50px;

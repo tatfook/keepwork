@@ -173,8 +173,8 @@ $borderColor: #e8e8e8;
     position: relative;
     text-align: center;
     background-color: #fff;
-    border: 1px solid $borderColor;
-    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid $borderColor;
+    border-radius: 8px 8px 0 0;
   }
   &-role-label {
     position: absolute;
@@ -211,7 +211,6 @@ $borderColor: #e8e8e8;
     list-style: none;
     padding: 24px 16px 8px;
     background-color: #fff;
-    border: 1px solid $borderColor;
     border-width: 0 1px;
     border-radius: 0;
     &-item {
@@ -237,10 +236,9 @@ $borderColor: #e8e8e8;
   }
   &-help {
     background-color: #fff;
-    border: 1px solid $borderColor;
     border-width: 0 1px 1px;
-    border-radius: 0 0 4px 4px;
     padding: 0 16px 16px;
+    border-radius: 0 0 8px 8px;
     &-link {
       text-decoration: none;
       color: #2397f3;

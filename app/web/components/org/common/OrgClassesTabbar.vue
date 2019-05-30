@@ -1,5 +1,5 @@
 <template>
-  <div :class="['classes-tabbar', { 'reset-width': singleButton && name }]">
+  <div :class="['classes-tabbar', { 'reset-width': singleButton && name, 'is-round': round }]">
     <template v-if="singleButton && name">
        <el-button class="classes-tabbar-button tab-button-selected" icon="iconfont icon-team">{{name}}</el-button>
     </template>
@@ -23,6 +23,10 @@ export default {
       type: Boolean,
       default: false
     },
+    round: {
+      type: Boolean,
+      default: false
+    },
     name: '',
     value: ''
   },
@@ -43,6 +47,9 @@ export default {
 .classes-tabbar {
   background: #ffff;
   padding: 0 13px 13px;
+  &.is-round {
+    border-radius: 8px;
+  }
   &-button {
     height: 40px;
     border-radius: 20px;
