@@ -73,6 +73,9 @@
           <span>Powered by NPL</span>
         </li>
         <li class="footer-container-list-item">
+          <span class="footer-container-list-item-inform" @click="showComplainDialog">投诉举报</span>
+        </li>
+        <li class="footer-container-list-item">
           <span>
             <el-dropdown @command='switchLanguage' trigger="click" placement="top">
               <span class="el-dropdown-link">
@@ -174,8 +177,11 @@ export default {
         justify-content: center;
         &-item {
           font-size: 13px;
-          padding:0 20px;
+          padding: 0 20px;
           line-height: 15px;
+          &-inform {
+            cursor: pointer;
+          }
           &-keepwork {
             color: #218fe9;
           }
@@ -203,7 +209,7 @@ export default {
     }
   }
 }
-.footer-container-list-item-select{
+.footer-container-list-item-select {
   overflow: unset;
 }
 @media screen and (max-width: 768px) {
