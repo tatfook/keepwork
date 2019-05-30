@@ -1,11 +1,10 @@
 <template>
   <div class="media-type">
     <div v-if='isImage'>
-      <div class="media-type-img" :style="{backgroundImage: 'url(' + mediaData + ')'}">
+      <div class="media-type-img">
+        <img class="media-type-img-content" :src="mediaData">
         <div class="media-type-img-cover">
-          <span>
-            <el-button class="media-type-img-cover-btn_change" size="mini" round @click="insertImg()">{{$t('common.change')}}</el-button>
-          </span>
+          <el-button class="media-type-img-cover-btn_change" size="mini" round @click="insertImg()">{{$t('common.change')}}</el-button>
         </div>
       </div>
 
@@ -107,13 +106,10 @@ export default {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
     }),
-    mediaData: {
-      get() {
-        return this.originValue
-          ? this.originValue
-          : (this.optionsData && this.optionsData.emptyMedia) || ''
-      },
-      set() {}
+    mediaData() {
+      return this.originValue
+        ? this.originValue
+        : (this.optionsData && this.optionsData.emptyMedia) || ''
     },
     isImage() {
       return Media.isImage(this.mediaData)
@@ -162,7 +158,6 @@ export default {
   },
   methods: {
     updateValue(newKey, newVal) {
-      console.log(newKey, newVal)
       let tempChangedDataObj = {}
       tempChangedDataObj[newKey] = newVal
       this.$emit('onPropertyChange', tempChangedDataObj)
@@ -282,6 +277,11 @@ export default {
       .media-type-img-play {
         display: none;
       }
+    }
+    &-content {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     &-cover {
       height: 100%;
