@@ -148,7 +148,20 @@
     "myOrganization": "My Organization",
 
     "containsSensitiveWords": "The content contains sensitive words.",
-    "tooManyRequests": "Too many requests."
+    "tooManyRequests": "Too many requests.",
+
+    "complaintReporting": "Complaint reporting",
+    "websitesYouReport": "The websites you report are:",
+    "reportType": "Report type",
+    "fakeWebsite": "Fake website",
+    "transmitVirus":"transmit virus",
+    "reaction":"reaction",
+    "eroticism":"eroticism",
+    "violence":"violence",
+    "other":"other",
+    "reportDesc": "To report to describe (optional):",
+    "reportDetail": "You can describe the content of your report in detail",
+    "submit": "Submit"
   },
   "editor": {
     "zenModeTips": "Help you to eliminate interference and concentrate on the creative content. A dim background color also helps to reduce the pressure on the screen when creating a long time.",
