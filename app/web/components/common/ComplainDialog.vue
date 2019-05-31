@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-loading="isLoading" class="complain-dialog" title="投诉举报" v-if="userIsLogined && isComplainDialogVisible" visible width="680" :before-close="closeDialog">
+    <el-dialog v-loading="isLoading" class="complain-dialog" title="投诉举报" v-if="userIsLogined && isComplainDialogVisible" visible width="680px" :before-close="closeDialog">
       <el-form label-position="top" :model="feedbackData">
         <el-form-item label="您举报的网站是：">
           <el-input disabled v-model="feedbackData.url"></el-input>
