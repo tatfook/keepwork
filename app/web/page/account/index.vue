@@ -6,9 +6,7 @@
     <div class="account-page-main-content">
       <router-view v-if="!loading" class="account-page-main-content-center" id="account-page" />
     </div>
-    <div class="account-page-footer">
-      <perfect-common-footer class="container"></perfect-common-footer>
-    </div>
+    <perfect-common-footer></perfect-common-footer>
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
     </div>
@@ -139,11 +137,6 @@ body {
     width: 100%;
     background: #f5f5f5;
   }
-
-  &-footer {
-    background-color: #f5f5f5;
-  }
-
   .container {
     width: 1200px;
     margin: 0 auto;
