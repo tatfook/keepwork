@@ -22,10 +22,8 @@ export default {
   async refreshMessagesBox({ dispatch, getters: { messagesBox }, rootGetters: { 'user/isLogined': isLogin } }) {
     if (!isLogin) return
     const messageCount = _.get(messagesBox, 'rows.length', 0)
-    if (messageCount > 0) {
-      await dispatch('loadMessages', { 'x-per-page': messageCount })
-      await dispatch('getUnreadMessages')
-    }
+    await dispatch('loadMessages', { 'x-per-page': _.max(messageCount, 10) })
+    await dispatch('getUnreadMessages')
   },
   async signMessages({ dispatch }, ids) {
     await keepwork.message.signMessages(ids)

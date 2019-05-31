@@ -344,7 +344,7 @@ const actions = {
   },
   async addModToMarkdown({ commit, dispatch, getters }, payload) {
     // this function will causes add bigfile fail
-    let modProperties = ModFactory.generate(payload.modName)
+    let modProperties = ModFactory.generateProperties(payload.modName)
     modProperties.styleID = payload.styleID || modProperties.styleID
     modProperties = _.merge(modProperties, payload.modProperties)
     let newMod = Parser.buildBlock(
