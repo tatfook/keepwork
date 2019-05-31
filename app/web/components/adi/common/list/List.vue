@@ -1,8 +1,8 @@
 <template>
   <div class='comp-list'>
-    <el-row :gutter='options.gutter'>
+    <el-row class="comp-list-row" :gutter='options.gutter' type="flex">
       <el-col :span="colWidth" v-for='(item, index) in filteredCollection' :key='index'>
-        <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(item, index)' :theme='theme' :modType='options.modType' :editMode='editMode' />
+        <mod-comp-loader :rootMod='rootMod' :mod='modWithExtraConf(item, item.index)' :theme='theme' :modType='options.modType' :editMode='editMode' />
       </el-col>
     </el-row>
   </div>
@@ -29,8 +29,16 @@ export default {
     }
   },
   computed: {
+    collectionWithIndex() {
+      return _.map(this.properties.collection, (value, index) => {
+        return {
+          ...value,
+          index
+        }
+      })
+    },
     filteredCollection() {
-      return _.filter(this.properties.collection, collectionItem => {
+      return _.filter(this.collectionWithIndex, collectionItem => {
         let isCollectShow = true
         if (collectionItem.hidden) {
           isCollectShow = false
@@ -63,5 +71,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.comp-list {
+  &-row {
+    flex-wrap: wrap;
+  }
+}
 </style>
+

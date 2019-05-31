@@ -135,6 +135,7 @@ export default {
     padding-left: 24px;
     display: flex;
     border-bottom: 1px solid #e8e8e8;
+    word-break: break-all;
     .message-avatar {
       height: 56px;
       width: 56px;

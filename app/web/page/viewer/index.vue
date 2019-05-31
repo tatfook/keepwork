@@ -4,15 +4,12 @@
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
-      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide && !isHomePage"></tool-header>
+      <tool-header class="container" v-if="!isSystemCompShow.isSystemHeaderHide"></tool-header>
       <router-view :pageLoading="pageLoading" v-if="presetLoaded"></router-view>
     </el-main>
     <el-aside></el-aside>
-    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide && !isHomePage">
-      <common-footer class="container"></common-footer>
-    </el-footer>
-    <el-footer class="home-page-footer" v-if='isHomePage'>
-      <perfect-common-footer></perfect-common-footer>
+    <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
+      <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
   </el-container>
 </template>
@@ -171,9 +168,6 @@ export default {
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       activePageInfo: 'activePageInfo'
     }),
-    isHomePage() {
-      return this.$route.name === 'HomePage'
-    },
     userSiteLayoutConfig() {
       let sitePath = _.get(this.activePageInfo, 'sitepath', '')
       return this.userSiteLayoutConfigBySitePath(sitePath)
@@ -227,11 +221,6 @@ body {
 .index-page {
   &-header {
     border-bottom: 1px solid #e6e6e6;
-  }
-  &-footer {
-    display: flex;
-    align-items: center;
-    background-color: #f9f9f9;
   }
   &-footer {
     padding: 0;
