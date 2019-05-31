@@ -159,7 +159,7 @@ export default {
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
       username: 'user/username',
-      unreadMessages: 'message/unreadMessages',
+      unreadMessagesCount: 'message/unreadMessagesCount',
       messagesBox: 'message/messagesBox'
     }),
     isLogin: {
@@ -194,9 +194,6 @@ export default {
     },
     messagesCount() {
       return _.get(this.messagesBox, 'count', 0)
-    },
-    unreadMessagesCount() {
-      return _.get(this.unreadMessages, 'count', 0)
     }
   },
   async mounted() {

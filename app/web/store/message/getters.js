@@ -1,5 +1,5 @@
 export default {
   messages: state => state.messages,
-  unreadMessages: state => state.unreadMessages,
+  unreadMessagesCount: state => state.unreadMessagesCount,
   messagesBox: state => state.messagesBox
 }

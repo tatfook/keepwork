@@ -15,7 +15,7 @@ export default {
     Vue.set(state, 'messages', payload)
   },
   [GET_UNREAD_MESSAGES_SUCCESS](state, payload) {
-    Vue.set(state, 'unreadMessages', payload)
+    Vue.set(state, 'unreadMessagesCount', payload)
   },
   [LOAD_MORE_MESSAGES_SUCCESS](state, payload) {
     Vue.set(state, 'messagesBox', payload)
