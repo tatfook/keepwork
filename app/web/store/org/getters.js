@@ -68,7 +68,11 @@ const getters = {
   orgActiveCodeList: state => state.orgActiveCodeList,
   printCodeList: state => state.printCodeList,
   orgHistoricalClasses: state => state.orgHistoricalClasses,
-  expirationDialogVisible: state => state.expirationDialogVisible
+  expirationDialogVisible: state => state.expirationDialogVisible,
+  isFirstView: (state, { currentOrg, userinfo: { id } }) => {
+    const accessList = _.get(currentOrg, 'extra.accessList', [])
+    return !_.includes(accessList, id)
+  }
 }
 
 export default getters

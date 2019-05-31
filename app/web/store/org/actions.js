@@ -330,6 +330,17 @@ const actions = {
       return true
     }
     return false
+  },
+  async checkFirstView({ getters: { currentOrg, userinfo } }) {
+    const { id: userID } = userinfo
+    const { extra, id: orgId } = currentOrg
+    const accessList = _.get(extra, 'accessList', [])
+    const isFirstView = !_.includes(accessList, userID)
+    const newAccessList = _.uniq([...accessList, userID])
+    if (isFirstView) {
+      keepwork.lessonOrganizations.updateOrg({ orgId, orgData: { extra: { ...extra, accessList: newAccessList } } })
+    }
+    return isFirstView
   }
 }
 
