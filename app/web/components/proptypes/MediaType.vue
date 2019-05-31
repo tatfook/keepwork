@@ -1,25 +1,24 @@
 <template>
   <div class="media-type">
-    <div  v-if='isImage'>
-      <div class="media-type-img" :style="{backgroundImage: 'url(' + mediaData + ')'}">
+    <div v-if='isImage'>
+      <div class="media-type-img">
+        <img class="media-type-img-content" :src="mediaData">
         <div class="media-type-img-cover">
-          <span>
-            <el-button class="media-type-img-cover-btn_change" size="mini" round @click="insertImg()">{{$t('common.change')}}</el-button>
-          </span>
+          <el-button class="media-type-img-cover-btn_change" size="mini" round @click="insertImg()">{{$t('common.change')}}</el-button>
         </div>
       </div>
 
-      <el-input class="media-type-link" :placeholder="$t('editor.pleaseInput')" v-model="linkValue">
+      <el-input class="media-type-link" :placeholder="$t('editor.pleaseInput')" v-model="linkValue" @change="updateValue('link', linkValue)">
         <el-button v-if="linkValue" slot="prepend" icon="iconfont icon-link_"></el-button>
         <el-button v-if="!linkValue" slot="prepend">{{$t('common.link')}}</el-button>
-        <el-select v-model="linkValue" slot="append" placeholder="Select">
+        <el-select v-model="linkValue" @change="updateValue('link', linkValue)" slot="append" placeholder="Select" popper-class="media-type-popper">
           <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
             {{path}}
           </el-option>
         </el-select>
       </el-input>
 
-      <el-select class="media-type-target" v-model="targetValue" size='mini' :placeholder="$t('editor.newWindowOpen')">
+      <el-select class="media-type-target" v-model="targetValue" size='mini' :placeholder="$t('editor.newWindowOpen')" @change="updateValue('target', targetValue)">
         <el-option v-for="targetType in linkTargets" :key='targetType.value' :label='targetType.label' :value='targetType.value'>
         </el-option>
       </el-select>
@@ -77,10 +76,16 @@ export default {
     originValue: String
   },
   mixins: [protypesBaseMixin],
+  mounted() {
+    this.targetValue = this.targetGetterValue
+    this.linkValue = this.linkGetterValue
+  },
   data() {
     let self = this
     return {
-      openType: "image",
+      targetValue: '',
+      linkValue: '',
+      openType: 'image',
       isSkyDriveManagerDialogShow: false,
       isPlayIconShow: true,
       isVideoTabShow: true,
@@ -101,11 +106,10 @@ export default {
     ...mapGetters({
       personalAllPagePathList: 'user/personalAllPagePathList'
     }),
-    mediaData: {
-      get() {
-        return this.originValue ? this.originValue : (this.optionsData && this.optionsData.emptyMedia || '')
-      },
-      set() {}
+    mediaData() {
+      return this.originValue
+        ? this.originValue
+        : (this.optionsData && this.optionsData.emptyMedia) || ''
     },
     isImage() {
       return Media.isImage(this.mediaData)
@@ -113,21 +117,11 @@ export default {
     isVideo() {
       return Media.isVideo(this.mediaData)
     },
-    linkValue: {
-      get() {
-        return this.cardValue.link
-      },
-      set(data) {
-        this.updateValue('link', data)
-      }
+    linkGetterValue() {
+      return this.cardValue.link
     },
-    targetValue: {
-      get() {
-        return this.cardValue.target
-      },
-      set(data) {
-        this.updateValue('target', data)
-      }
+    targetGetterValue() {
+      return this.cardValue.target
     },
     autoplayValue: {
       get() {
@@ -185,23 +179,26 @@ export default {
       this.autoplayValue = true
     },
     insertImg() {
-      if (typeof ( this.optionsData && this.optionsData.isVideoTabShow ) === 'boolean') {
+      if (
+        typeof (this.optionsData && this.optionsData.isVideoTabShow) ===
+        'boolean'
+      ) {
         this.isVideoTabShow = this.optionsData.isVideoTabShow
       } else {
         this.isVideoTabShow = true
       }
 
-      this.openType = "image"
+      this.openType = 'image'
       this.openSkyDriveManagerDialog()
     },
     insertVideo() {
       this.isVideoTabShow = true
-      this.openType = "video"
+      this.openType = 'video'
       this.openSkyDriveManagerDialog()
     },
     changeCover() {
       this.isVideoTabShow = false
-      this.openType = "cover"
+      this.openType = 'cover'
       this.openSkyDriveManagerDialog()
     },
     openSkyDriveManagerDialog() {
@@ -215,22 +212,21 @@ export default {
 
       if (!url) return
 
-      switch(this.openType) {
-        case "image":
+      switch (this.openType) {
+        case 'image':
           this.posterValue = ''
           this.autoplayValue = true
-          this.updateValue("src", url)
+          this.updateValue('src', url)
           break
-        case "video":
+        case 'video':
           this.autoplayValue = true
-          this.updateValue("src", url)
+          this.updateValue('src', url)
           break
-        case "cover":
+        case 'cover':
           this.autoplayValue = false
-          this.updateValue("poster", url)
+          this.updateValue('poster', url)
           break
       }
-
     },
     getLocationUrl(url) {
       return url ? location.origin + '/' + url : ''
@@ -238,6 +234,14 @@ export default {
   },
   components: {
     SkyDriveManagerDialog
+  },
+  watch: {
+    targetGetterValue(val) {
+      this.targetValue = val
+    },
+    linkGetterValue(val) {
+      this.linkValue = val
+    }
   }
 }
 </script>
@@ -268,10 +272,16 @@ export default {
         align-items: center;
       }
     }
-    &:hover, &.selected {
+    &:hover,
+    &.selected {
       .media-type-img-play {
         display: none;
       }
+    }
+    &-content {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     &-cover {
       height: 100%;
@@ -316,7 +326,7 @@ export default {
       }
       &-icon {
         font-size: 40px;
-        color:#747474;
+        color: #747474;
       }
     }
   }
@@ -343,6 +353,9 @@ export default {
     .el-input__inner {
       color: #909399;
     }
+  }
+  &-popper {
+    max-width: 400px;
   }
 
   .video-cover {
