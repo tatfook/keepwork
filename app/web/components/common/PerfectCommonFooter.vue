@@ -216,9 +216,14 @@ export default {
   .perfect-common-footer {
     &-simple-list {
       .footer-container {
-        text-align: center;
         &-list {
+          text-align: center;
+          display: block;
           &-item {
+            padding: 3px 0;
+            & + .footer-container-list-item {
+              border-left: none;
+            }
           }
         }
       }
