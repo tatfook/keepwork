@@ -9,19 +9,15 @@ const {
 } = props
 
 export default {
-  async getMessages({ commit }, params = {}) {
-    const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
-    const messages = await keepwork.message.getMessages({ ...defaultParams, ...params })
-    const unreadMessages = await keepwork.message.getMessages({ state: 0 })
+  async getMessages({ commit, dispatch }, params = {}) {
+    const messages = await dispatch('getMessagesAndFormat', params)
     commit(GET_MESSAGES_SUCCESS, messages)
-    commit(GET_UNREAD_MESSAGES_SUCCESS, unreadMessages)
+    await dispatch('getUnreadMessages')
   },
-  async loadMessages({ commit }, params = {}) {
-    const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
-    const messages = await keepwork.message.getMessages({ ...defaultParams, ...params })
-    const unreadMessages = await keepwork.message.getMessages({ state: 0 })
+  async loadMessages({ commit, dispatch }, params = {}) {
+    const messages = await dispatch('getMessagesAndFormat', params)
     commit(LOAD_MORE_MESSAGES_SUCCESS, messages)
-    commit(GET_UNREAD_MESSAGES_SUCCESS, unreadMessages)
+    await dispatch('getUnreadMessages')
   },
   async refreshMessagesBox({ dispatch, getters: { messagesBox }, rootGetters: { 'user/isLogined': isLogin } }) {
     if (!isLogin) return
@@ -38,5 +34,10 @@ export default {
   async getUnreadMessages({ commit }) {
     const res = await keepwork.message.getMessages({ state: 0 })
     commit(GET_UNREAD_MESSAGES_SUCCESS, res)
+  },
+  async getMessagesAndFormat(context, params = {}) {
+    const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
+    const messages = await keepwork.message.getMessages({ ...defaultParams, ...params })
+    return messages
   }
 }
