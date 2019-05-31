@@ -93,7 +93,9 @@ export default {
 .comp-markdown {
   color: unset;
   font-size: unset;
-
+  strong {
+    font-weight: bolder;
+  }
   p {
     word-wrap: break-word;
     font-size: 14px;
