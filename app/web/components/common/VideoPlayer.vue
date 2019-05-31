@@ -20,7 +20,11 @@ export default {
   props: {
     src: String,
     autoplay: Boolean,
-    playloop: Boolean
+    playloop: Boolean,
+    showRates: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     player() {
@@ -29,7 +33,7 @@ export default {
     playerOptions() {
       // videojs options
       return {
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        playbackRates: this.showRates ? [0.7, 1.0, 1.5, 2.0] : [],
         aspectRatio: '16:9',
         muted: false,
         autoplay: this.autoplay || false,
