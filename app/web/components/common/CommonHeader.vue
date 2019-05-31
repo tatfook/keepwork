@@ -454,8 +454,15 @@ export default {
 }
 .right-icon-item {
   border-bottom: none;
-  i:hover {
-    color: #409eff;
+  &:hover {
+    i {
+      color: #409eff;
+    }
+  }
+  .tool-menu:hover {
+    i {
+      color: #409eff;
+    }
   }
   .right-icon-tool {
     font-size: 13px;
