@@ -399,6 +399,9 @@ export default {
     color: #fff;
     padding: 8px 12px;
     border-radius: 3px;
+    &:hover {
+      color: #fff;
+    }
   }
   .is-active {
     color: #409eff;

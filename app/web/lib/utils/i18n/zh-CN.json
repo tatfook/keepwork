@@ -148,7 +148,20 @@
     "myOrganization": "我的机构",
 
     "containsSensitiveWords": "您输入的内容包含敏感词！",
-    "tooManyRequests": "您今天的免费短信使用次数已达上限，请明天再试！"
+    "tooManyRequests": "您今天的免费短信使用次数已达上限，请明天再试！",
+
+    "complaintReporting": "投诉举报",
+    "websitesYouReport": "您举报的网站是：",
+    "reportType": "举报类型",
+    "fakeWebsite": "假冒网站",
+    "transmitVirus":"传播病毒",
+    "reaction":"反动",
+    "eroticism":"色情",
+    "violence":"暴力",
+    "other":"其它",
+    "reportDesc": "举报说明（可选）：",
+    "reportDetail": "您可以对您举报的内容详细描述",
+    "submit": "提交"
   },
   "editor": {
     "zenModeTips": "帮助您排除干扰，全神贯注的创作内容。较暗淡的背景色也有利于降低长时间创作时屏幕对眼睛带来的压力",

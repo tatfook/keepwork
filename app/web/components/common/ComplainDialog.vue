@@ -1,27 +1,27 @@
 <template>
   <div>
-    <el-dialog v-loading="isLoading" class="complain-dialog" title="投诉举报" v-if="userIsLogined && isComplainDialogVisible" visible width="680px" :before-close="closeDialog">
+    <el-dialog v-loading="isLoading" class="complain-dialog" :title="$t('common.complaintReporting')" v-if="userIsLogined && isComplainDialogVisible" visible width="680px" :before-close="closeDialog">
       <el-form label-position="top" :model="feedbackData">
-        <el-form-item label="您举报的网站是：">
+        <el-form-item :label="$t('common.websitesYouReport')">
           <el-input disabled v-model="feedbackData.url"></el-input>
         </el-form-item>
-        <el-form-item label="举报类型">
+        <el-form-item :label="$t('common.reportType')">
           <el-radio-group v-model="feedbackData.type">
-            <el-radio :label="1">假冒网站</el-radio>
-            <el-radio :label="2">传播病毒</el-radio>
-            <el-radio :label="3">反动</el-radio>
-            <el-radio :label="4">色情</el-radio>
-            <el-radio :label="5">暴力</el-radio>
-            <el-radio :label="0">其它</el-radio>
+            <el-radio :label="1">{{$t('common.fakeWebsite')}}</el-radio>
+            <el-radio :label="2">{{$t('common.transmitVirus')}}</el-radio>
+            <el-radio :label="3">{{$t('common.reaction')}}</el-radio>
+            <el-radio :label="4">{{$t('common.eroticism')}}</el-radio>
+            <el-radio :label="5">{{$t('common.violence')}}</el-radio>
+            <el-radio :label="0">{{$t('common.other')}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="举报说明（可选）：">
-          <el-input placeholder="您可以对您举报的内容详细描述" type="textarea" resize="none" v-model="feedbackData.description"></el-input>
+        <el-form-item :label="$t('common.reportDesc')">
+          <el-input :placeholder="$t('common.reportDetail')" type="textarea" resize="none" v-model="feedbackData.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取消</el-button>
-        <el-button type="primary" :disabled="!isFeedbackDataValid" @click="submitFeedback">提交</el-button>
+        <el-button @click="closeDialog">{{$t('common.Cancel')}}</el-button>
+        <el-button type="primary" :disabled="!isFeedbackDataValid" @click="submitFeedback">{{$t('common.submit')}}</el-button>
       </span>
     </el-dialog>
     <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>

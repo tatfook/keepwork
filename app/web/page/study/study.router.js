@@ -22,6 +22,9 @@ const NewLesson = () => import('@/components/study/NewLesson')
 
 const EditPackage = () => import('@/components/study/EditPackage')
 const EditLesson = () => import('@/components/study/EditLesson')
+const Autobiography = () => import('@/components/study/common/Autobiography')
+const Solution = () => import('@/components/study/common/Solution')
+
 
 Vue.use(Router)
 
@@ -134,6 +137,16 @@ export default new Router({
       path: '/teachingGroup',
       name: TeachingGroup,
       component: TeachingGroup
+    },
+    {
+      path: '/autobiography',
+      name: Autobiography,
+      component: Autobiography
+    },
+    {
+      path: '/solution/:command',
+      name: 'TeacherSolution',
+      component: Solution
     }
   ]
 })
