@@ -30,7 +30,7 @@
         </div>
         <div class="textbook-page-book-right-text">
           <div class="textbook-page-book-right-text-label">说明：</div>
-          <div class="textbook-page-book-right-text-content">目前图书还没有正式出版，发给您的版本为彩色印刷内部版，印刷质量可能没有正式版好，但我们会赠送您价值500元的在线课程包激活码。</div>
+          <div class="textbook-page-book-right-text-content">目前图书还没有正式出版，发给您的版本为彩色印刷内部版，我们会赠送您价值500元的在线课程包激活码。</div>
         </div>
         <div class="textbook-page-book-right-price">
           <span class="textbook-page-book-right-price-icon">￥</span>
@@ -313,7 +313,7 @@ export default {
     }
     &-right {
       flex: 1;
-      padding: 40px 0 0 24px;
+      padding: 0 0 0 24px;
       &-title {
         color: #303133;
         font-size: 24px;
