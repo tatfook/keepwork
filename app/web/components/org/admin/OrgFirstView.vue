@@ -44,11 +44,14 @@ export default {
     if (!isFirstView) {
       this.removeHistory()
       this.$router.push({ name: 'OrgPackages' })
+    } else {
+      this.checkCurrentOrgExpire()
     }
   },
   methods: {
     ...mapActions({
-      checkFirstView: 'org/checkFirstView'
+      checkFirstView: 'org/checkFirstView',
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire'
     }),
     onToClassPage() {
       this.removeHistory()
@@ -56,7 +59,7 @@ export default {
     },
     removeHistory() {
       let { pathname = '' } = window.location
-      pathname = pathname.replace(/firstView/, 'packages')
+      pathname = pathname.replace(/firstView/, 'packages?firstLogin=true')
       window.history.replaceState({}, '', pathname)
     }
   }
