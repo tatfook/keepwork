@@ -159,6 +159,9 @@ export default {
         margin-top: 14px;
         color: #606266;
         font-size: 14px;
+        /deep/ a {
+          color: #409eff;
+        }
       }
     }
   }
