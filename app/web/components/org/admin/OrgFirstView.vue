@@ -43,7 +43,7 @@ export default {
     const isFirstView = await this.checkFirstView()
     if (!isFirstView) {
       this.removeHistory()
-      this.$router.push({ name: 'OrgPackages' })
+      this.$router.push({ name: 'OrgPackages', query: { firstLogin: true } })
     } else {
       this.checkCurrentOrgExpire()
     }
@@ -59,7 +59,7 @@ export default {
     },
     removeHistory() {
       let { pathname = '' } = window.location
-      pathname = pathname.replace(/firstView/, 'packages?firstLogin=true')
+      pathname = pathname.replace(/firstView/, 'packages')
       window.history.replaceState({}, '', pathname)
     }
   }
