@@ -1544,9 +1544,9 @@
     "deleteProject": "删除项目"
   },
   "footer": {
-    "lettersTo": "致社区",
+    "lettersTo": "教育理念",
     "educators": "致教育工作者",
-    "parents": "写给父母的话",
+    "parents": "写给父母们的话",
     "developers": "致开发者",
     "programmingFans": "对爱好编程的你说",
     "independentLearn": "关于自主学习",
@@ -1579,7 +1579,7 @@
     "haqi": "魔法哈奇",
     "paracraftOnlineLessons": "Paracraft网络课程",
     "paracraftOfflineTraining": "Paracraft线下培训班",
-    "buildingBlocks": "幼儿智能积木",
+    "buildingBlocks": "Paracraft幼儿智能积木",
     "support": "支持",
     "contactUs": "联系我们",
     "joinUs": "加入我们",
@@ -1589,7 +1589,7 @@
     "solution": "解决方案",
     "cooperation": "商务合作",
     "business": "商务",
-    "partner": "伙伴",
+    "partner": "合作伙伴",
     "leaflet": "宣传页下载",
     "about": "关于",
     "corporation": "公司"
