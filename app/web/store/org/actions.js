@@ -331,7 +331,7 @@ const actions = {
     }
     return false
   },
-  async checkFirstView({ dispatch, getters: { currentOrg, userinfo } }) {
+  async checkFirstView({ getters: { currentOrg, userinfo } }) {
     const { id: userID } = userinfo
     const { extra, id: orgId, loginUrl: orgLoginUrl } = currentOrg
     const visitedList = _.get(extra, 'visitedList', [])
