@@ -21,7 +21,7 @@
           <div class="textbook-page-book-right-text-content">李西峙</div>
         </div>
         <div class="textbook-page-book-right-text">
-          <div class="textbook-page-book-right-text-label">出版日期：</div>
+          <div class="textbook-page-book-right-text-label">出版：</div>
           <div class="textbook-page-book-right-text-content">2019-09-12</div>
         </div>
         <div class="textbook-page-book-right-text">
@@ -232,23 +232,22 @@ export default {
           this.purchaseMethods = [
             {
               label: '去京东购买',
-              purchaseUrl:
-                'https://search.jd.com/Search?keyword=Paracraft%E5%88%9B%E6%84%8F%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8&enc=utf-8&wq=Paracraft%E5%88%9B%E6%84%8F%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8&pvid=9e8b9bb5cce747b2aa60594645623257'
+              purchaseUrl: 'https://search.jd.com/Search?keyword=%E7%9B%B8%E4%BC%BC%E6%80%A7%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&enc=utf-8&wq=%E7%9B%B8%E4%BC%BC%E6%80%A7%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&pvid=ae761b5051e6412d96c186612f9de69f'
             },
             {
               label: '去当当购买',
               purchaseUrl:
-                'http://search.dangdang.com/?key=Paracraft%B4%B4%D2%E2%B6%AF%BB%AD%C8%EB%C3%C5&act=input'
+                'http://search.dangdang.com/?key=%CF%E0%CB%C6%D0%D4%D3%EB%CF%E0%CB%C6%D4%AD%C0%ED&act=input'
             },
             {
               label: '去淘宝购买',
               purchaseUrl:
-                'https://s.taobao.com/search?q=Paracraft%E5%88%9B%E6%84%8F%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8&imgfile=&js=1&stats_click=search_radio_all%3A1&initiative_id=staobaoz_20190507&ie=utf8'
+                'https://s.taobao.com/search?q=%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%92%8C%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&imgfile=&commend=all&ssid=s5-e&search_type=item&sourceId=tb.index&spm=a21bo.2017.201856-taobao-item.1&ie=utf8&initiative_id=tbindexz_20170306'
             },
             {
               label: '去孔夫子旧书网购买',
               purchaseUrl:
-                'http://search.kongfz.com/product_result/?key=Paracraft%E5%88%9B%E6%84%8F%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8&status=0&_stpmt=eyJzZWFyY2hfdHlwZSI6ImFjdGl2ZSJ9'
+                'http://search.kongfz.com/product_result/?select=0&key=%E7%9B%B8%E4%BC%BC%E6%80%A7%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&_stpmt=eyJzZWFyY2hfdHlwZSI6ImFjdGl2ZSJ9'
             }
           ]
           this.isShowPurchase = true
