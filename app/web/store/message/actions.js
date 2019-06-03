@@ -8,6 +8,9 @@ const {
   LOAD_MORE_MESSAGES_SUCCESS
 } = props
 
+const REGISTER_MESSAGE = 1
+const SYSTEM_MESSAGE = 0
+
 const registerMessage = username => {
   let html = `<p>欢迎来到 keepwork, ${username}!</p>`
   html += '<p>我们很荣幸有你的参与！通过keepwork，你可以创建自己的3D动画项目、编程项目、网站项目，并将你的作品分享给大家。</p>'
@@ -19,11 +22,12 @@ const registerMessage = username => {
   return html
 }
 
-const formatMessages = (messages, username) => {
-  return _.map(messages, (item, index) => {
-    if (index === 0) {
+
+const formatMessages = messages => {
+  return _.map(messages, item => {
+    if (_.get(item, 'messages.type', 0) === SYSTEM_MESSAGE && _.get(item, 'messages.msg.type', 0) === REGISTER_MESSAGE) {
+      const username = _.get(item, 'messages.msg.user.nickname', '')
       item.messages.msg.text = registerMessage(username)
-      return item
     }
     return item
   })
@@ -55,10 +59,10 @@ export default {
     const count = _.get(res, 'count', 0)
     commit(GET_UNREAD_MESSAGES_SUCCESS, count)
   },
-  async getMessagesAndFormat({ getters: { username } }, params = {}) {
+  async getMessagesAndFormat(context, params = {}) {
     const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
     const messages = await keepwork.message.getMessages({ ...defaultParams, ...params })
-    messages.rows = formatMessages(messages.rows, username)
+    messages.rows = formatMessages(messages.rows)
     return messages
   }
 }
