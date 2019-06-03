@@ -40,7 +40,7 @@
             <li><a href="https://keepwork.com/intro/keepwork/NPLCAD" target="_blank">NPL CAD</a></li>
             <li><a href="https://keepwork.com/official/haqi/index" target="_blank">{{$t("footer.haqi")}}</a></li>
             <li><a href="http://cc.paraengine.com/twiki/bin/view/HaqiTeen/WebHome" target="_blank">{{$t("footer.haqi")}} 2</a></li>
-            <li><a href="https://keepwork.com/official/bluetooth/apps" target="_blank">Paracraft {{$t("footer.buildingBlocks")}}</a></li>
+            <li><a href="https://keepwork.com/official/bluetooth/apps" target="_blank">{{$t("footer.buildingBlocks")}}</a></li>
           </ul>
         </div>
         <div class="list-box">
@@ -141,7 +141,7 @@ export default {
       padding-bottom: 40px;
       .list-box {
         flex: 1;
-        padding-left: 40px;
+        padding-left: 28px;
         &-title {
           color: #ffffff;
           margin: 38px 0 31px;
