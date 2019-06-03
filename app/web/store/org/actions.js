@@ -333,12 +333,12 @@ const actions = {
   },
   async checkFirstView({ getters: { currentOrg, userinfo } }) {
     const { id: userID } = userinfo
-    const { extra, id: orgId } = currentOrg
-    const accessList = _.get(extra, 'accessList', [])
-    const isFirstView = !_.includes(accessList, userID)
-    const newAccessList = _.uniq([...accessList, userID])
+    const { extra, id: orgId, loginUrl: orgLoginUrl } = currentOrg
+    const visitedList = _.get(extra, 'visitedList', [])
+    const isFirstView = !_.includes(visitedList, userID)
+    const newVisitedList = _.uniq([...visitedList, userID])
     if (isFirstView) {
-      keepwork.lessonOrganizations.updateOrg({ orgId, orgData: { extra: { ...extra, accessList: newAccessList } } })
+      keepwork.lessonOrganizations.updateOrg({ orgId, orgData: { extra: { ...extra, visitedList: newVisitedList } } })
     }
     return isFirstView
   }

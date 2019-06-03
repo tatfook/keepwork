@@ -43,12 +43,15 @@ export default {
     const isFirstView = await this.checkFirstView()
     if (!isFirstView) {
       this.removeHistory()
-      this.$router.push({ name: 'OrgPackages' })
+      this.$router.push({ name: 'OrgPackages', query: { firstLogin: true } })
+    } else {
+      this.checkCurrentOrgExpire()
     }
   },
   methods: {
     ...mapActions({
-      checkFirstView: 'org/checkFirstView'
+      checkFirstView: 'org/checkFirstView',
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire'
     }),
     onToClassPage() {
       this.removeHistory()
