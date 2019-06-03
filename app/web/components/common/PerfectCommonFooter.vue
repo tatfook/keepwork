@@ -48,7 +48,7 @@
           <ul class="list">
             <li><a href="https://biz.keepwork.com/" target="_blank">{{$t("footer.business")}}</a></li>
             <li><a href="/s/solution/organization" target="_blank">{{$t("footer.partner")}}</a></li>
-            <li><a href="https://qiniu.keepwork.com/39392320-5519-11e9-a375-9ba583510c11.pdf?e=1557805380&token=LYZsjH0681n9sWZqCM4E2KmU6DsJOE7CAM4O3eJq:r5gjjcesrKgFTOrDCJilLIdq-is=#paracraft_biz_brochure.pdf" target="_blank">{{$t("footer.leaflet")}}</a></li>
+            <!-- <li><a href="https://qiniu.keepwork.com/39392320-5519-11e9-a375-9ba583510c11.pdf?e=1557805380&token=LYZsjH0681n9sWZqCM4E2KmU6DsJOE7CAM4O3eJq:r5gjjcesrKgFTOrDCJilLIdq-is=#paracraft_biz_brochure.pdf" target="_blank">{{$t("footer.leaflet")}}</a></li> -->
           </ul>
         </div>
         <div class="list-box">

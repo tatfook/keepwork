@@ -43,8 +43,6 @@ export default {
   },
   mounted() {
     this.initClassData()
-    this.beginClassTime = this.startDate
-    this.endClassTime = this.endDate
   },
   data() {
     return {
@@ -146,12 +144,8 @@ export default {
         this.endClassTime =
           +new Date(classDetail.end) - 24 * 60 * 60 * 1000 + 1000
       } else {
-        this.classData = {
-          name: '',
-          begin: this.startDate,
-          end: this.endDate,
-          packages: []
-        }
+        this.beginClassTime = this.startDate
+        this.endClassTime = this.endDate
       }
     },
     async initTreeData() {
