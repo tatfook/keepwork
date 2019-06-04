@@ -114,6 +114,10 @@ export default {
     opacity: 0;
   }
 
+  li {
+    font-size: 14px;
+  }
+
   .icon-link_:hover:before {
     opacity: 1;
   }
