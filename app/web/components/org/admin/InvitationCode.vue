@@ -114,7 +114,9 @@ export default {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       getOrgClassesById: 'org/getOrgClassesById',
-      orgActiveCodeList: 'org/orgActiveCodeList'
+      orgActiveCodeList: 'org/orgActiveCodeList',
+      currentOrgToExpire: 'org/currentOrgToExpire',
+      currentOrgHaveExpired: 'org/currentOrgHaveExpired'
     }),
     className() {
       return _.get(
@@ -139,7 +141,10 @@ export default {
       return _.get(this.orgActiveCodeList, 'count', 0)
     },
     codeTableData() {
-      return _.get(this.orgActiveCodeList, 'rows', [])
+      let codeData = _.get(this.orgActiveCodeList, 'rows', [])
+      return _.map(codeData, i => {
+        return { ...i, key: this.handleKey(i.key) }
+      })
     },
     printCodeListDataRow() {
       return _.chunk(this.multipleSelection, 2)
@@ -176,8 +181,23 @@ export default {
   methods: {
     ...mapActions({
       getOrgActivateCodes: 'org/getOrgActivateCodes',
-      getOrgClassList: 'org/getOrgClassList'
+      getOrgClassList: 'org/getOrgClassList',
+      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible'
     }),
+    handleKey(key) {
+      let tempArr = key.split('')
+      let count = 0
+      let result = []
+      _.map(tempArr, (val, i) => {
+        result.push(val)
+        count++
+        if (count === 4) {
+          result.push('  ')
+          count = 0
+        }
+      })
+      return result.join('')
+    },
     handleSizeChange(val) {
       this.perPage = val
     },
@@ -190,6 +210,10 @@ export default {
       this.multipleSelection = val
     },
     createActiveCode() {
+      if (this.currentOrgHaveExpired) {
+        this.toggleExpirationDialogVisible(true)
+        return
+      }
       this.$router.push({ name: 'NewInvitationCode' })
     },
     stateFilter(state) {
@@ -264,7 +288,7 @@ export default {
 <style lang="scss" scoped>
 .invitation-code {
   background: #fff;
-  border: solid 1px #e8e8e8;
+  border-radius: 8px;
   &-top {
     min-height: 56px;
     border-bottom: solid 2px #e8e8e8;
@@ -320,6 +344,9 @@ export default {
   &-pages {
     text-align: center;
     margin: 40px;
+  }
+  &-table {
+    margin:0 24px;
   }
 }
 .clearfix::after {

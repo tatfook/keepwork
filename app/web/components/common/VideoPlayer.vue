@@ -20,7 +20,11 @@ export default {
   props: {
     src: String,
     autoplay: Boolean,
-    playloop: Boolean
+    playloop: Boolean,
+    showRates: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     player() {
@@ -29,7 +33,7 @@ export default {
     playerOptions() {
       // videojs options
       return {
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        playbackRates: this.showRates ? [0.7, 1.0, 1.5, 2.0] : [],
         aspectRatio: '16:9',
         muted: false,
         autoplay: this.autoplay || false,
@@ -50,11 +54,18 @@ export default {
 <style lang="scss">
 .player {
   .vjs-custom-skin {
-    padding-bottom: 42px;
+    &:hover {
+      .vjs-control-bar {
+        visibility: visible;
+      }
+    }
     .vjs-control-bar {
       overflow: hidden;
       position: inherit;
       display: flex;
+      bottom: 42px;
+      left: 0;
+      visibility: hidden;
     }
     .vjs-big-play-button {
       font-family: 'iconfont' !important;
@@ -67,13 +78,17 @@ export default {
       height: auto !important;
       line-height: 1 !important;
       transform: translate(70px, 35px);
-      opacity: 0.7;
     }
     .vjs-big-play-button:hover {
       text-shadow: 0 0 1em #fff;
     }
     .vjs-big-play-button:before {
-      content: '\e68c';
+      content: '';
+      display: block;
+      width: 42px;
+      height: 42px;
+      background: url(../../assets/img/play_0.png);
+      background-size: 100%;
     }
     .vjs-big-play-button .vjs-icon-placeholder {
       display: none;

@@ -15,8 +15,10 @@ try {
   console.error(error)
 }
 
+const debugMode = ['release', 'stage'].some(env => process.env.SOCKET_API_PREFIX.includes(env))
+
 export const socket = new VueSocketIO({
-  debug: false,
+  debug: debugMode,
   connection: process.env.SOCKET_API_PREFIX,
   options: {
     query: {

@@ -20,7 +20,8 @@ const {
   GET_USER_ORG_SUCCESS,
   GET_ORG_ACTIVATE_CODE_SUCCESS,
   SET_PRINT_CODE_LIST,
-  GET_HISTORY_CLASSES_SUCCESS
+  GET_HISTORY_CLASSES_SUCCESS,
+  TOGGLE_EXPIRATION_DIALOG
 } = props
 
 const actions = {
@@ -319,6 +320,27 @@ const actions = {
         console.error(err)
       })
     }
+  },
+  toggleExpirationDialogVisible({ commit }, status) {
+    commit(TOGGLE_EXPIRATION_DIALOG, status)
+  },
+  checkCurrentOrgExpire({ dispatch, getters: { currentOrgToExpire, currentOrgHaveExpired } }, { haveExpired = true, toExpire = true } = {}) {
+    if ((haveExpired && currentOrgHaveExpired) || (toExpire && currentOrgToExpire)) {
+      dispatch('toggleExpirationDialogVisible', true)
+      return true
+    }
+    return false
+  },
+  async checkFirstView({ getters: { currentOrg, userinfo } }) {
+    const { id: userID } = userinfo
+    const { extra, id: orgId, loginUrl: orgLoginUrl } = currentOrg
+    const visitedList = _.get(extra, 'visitedList', [])
+    const isFirstView = !_.includes(visitedList, userID)
+    const newVisitedList = _.uniq([...visitedList, userID])
+    if (isFirstView) {
+      keepwork.lessonOrganizations.updateOrg({ orgId, orgData: { extra: { ...extra, visitedList: newVisitedList } } })
+    }
+    return isFirstView
   }
 }
 

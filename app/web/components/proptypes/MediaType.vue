@@ -11,7 +11,7 @@
       <el-input class="media-type-link" :placeholder="$t('editor.pleaseInput')" v-model="linkValue" @change="updateValue('link', linkValue)">
         <el-button v-if="linkValue" slot="prepend" icon="iconfont icon-link_"></el-button>
         <el-button v-if="!linkValue" slot="prepend">{{$t('common.link')}}</el-button>
-        <el-select v-model="linkValue" @change="updateValue('link', linkValue)" slot="append" placeholder="Select" popper-class="media-type-popper">
+        <el-select v-model="linkValue" @change="updateValue('link', linkValue)"  :loading="isPageListLoading" @visible-change="handleOptionVisible" slot="append" placeholder="Select" popper-class="media-type-popper">
           <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
             {{path}}
           </el-option>
@@ -68,7 +68,7 @@
 import protypesBaseMixin from './protypes.base.mixin'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import Media from '@/components/adi/common/media/media.types'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'MediaType',
@@ -83,6 +83,7 @@ export default {
   data() {
     let self = this
     return {
+      isPageListLoading: false,
       targetValue: '',
       linkValue: '',
       openType: 'image',
@@ -157,6 +158,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getAllPersonalPageList: 'user/getAllPersonalPageList'
+    }),
+    async handleOptionVisible(isVisible) {
+      if (isVisible) {
+        this.isPageListLoading = true
+        await this.getAllPersonalPageList().catch()
+        this.isPageListLoading = false
+      }
+    },
     updateValue(newKey, newVal) {
       let tempChangedDataObj = {}
       tempChangedDataObj[newKey] = newVal

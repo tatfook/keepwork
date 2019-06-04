@@ -99,7 +99,7 @@ export default {
   margin-top: 13px;
 }
 .mask {
-  z-index: 9;
+  z-index: 99999;
   cursor: pointer;
   background-color: rgba(0, 0, 0, .2);
   -moz-opacity: 0.5;

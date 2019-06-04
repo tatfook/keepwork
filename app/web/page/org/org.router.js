@@ -42,6 +42,7 @@ const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitation
 const HistoricalData = () => import('@/components/org/admin/HistoricalData')
 const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
 const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
+const OrgFirstView = () => import('@/components/org/admin/OrgFirstView')
 
 Vue.use(Router)
 
@@ -197,6 +198,11 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'OrgAdminPackageLesson',
           component: OrgAdminPackageLesson,
+        },
+        {
+          path: 'firstView',
+          name: 'OrgFirstView',
+          component: OrgFirstView
         },
         {
           path: 'classes',

@@ -290,14 +290,14 @@ $borderColor: #e8e8e8;
     border-radius: 4px;
     margin-right: 24px;
     &-top {
-      border: 1px solid $borderColor;
+      border-radius: 8px;
       background: #fff;
       padding-bottom: 22px;
     }
     &-bottom {
       margin-top: 22px;
       background: #fff;
-      border: 1px solid $borderColor;
+      border-radius: 8px;
       margin-bottom: 40px;
     }
   }
@@ -306,7 +306,6 @@ $borderColor: #e8e8e8;
   }
   &-message {
     padding: 32px 16px 0;
-    // border-bottom: 1px solid $borderColor;
     position: relative;
     text-align: center;
   }

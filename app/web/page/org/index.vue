@@ -4,8 +4,9 @@
       <router-view />
     </div>
     <el-footer class="org-page-footer" height="auto">
-      <perfect-common-footer></perfect-common-footer>
+      <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
+    <expiration-dialog :isExpirationVisible="expirationDialogVisible" @close="handleCloseExpirationDialog"></expiration-dialog>
   </div>
 </template>
 
@@ -30,6 +31,8 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 import { keepwork } from '@/api'
+import ExpirationDialog from '@/components/org/common/ExpirationDialog'
+
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -237,7 +240,7 @@ export default {
   i18n,
   data() {
     return {
-      loading: true
+      loading: true,
     }
   },
   async created() {
@@ -246,7 +249,8 @@ export default {
   computed: {
     ...mapGetters({
       userIsLogined: 'user/isLogined',
-      currentOrg: 'org/currentOrg'
+      currentOrg: 'org/currentOrg',
+      expirationDialogVisible: 'org/expirationDialogVisible'
     }),
     routeLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
@@ -266,8 +270,12 @@ export default {
   methods: {
     ...mapActions({
       getOrgUserCountsByGraphql: 'org/getOrgUserCountsByGraphql',
-      getUserProfile: 'user/getProfile'
+      getUserProfile: 'user/getProfile',
+      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible'
     }),
+    handleCloseExpirationDialog() {
+      this.toggleExpirationDialogVisible(false)
+    },
     async loadOrgPresets() {
       await this.getUserProfile({ force: false, useCache: false }).catch(err =>
         console.error(err)
@@ -283,7 +291,8 @@ export default {
     }
   },
   components: {
-    PerfectCommonFooter
+    PerfectCommonFooter,
+    ExpirationDialog
   },
   watch: {
     $route() {

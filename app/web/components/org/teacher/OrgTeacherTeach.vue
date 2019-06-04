@@ -1,7 +1,7 @@
 <template>
   <div class="org-teacher-teach">
     <template v-if="!isLoading">
-      <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
+      <org-classes-tabbar :round="true" :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
       <div class="package-count">
         {{$t('org.includes')}} <span class="package-count-number">{{selectedClassPackagesCount}}{{$t('org.packagesCount')}}</span>
       </div>
