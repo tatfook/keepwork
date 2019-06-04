@@ -43,7 +43,7 @@
       <h3 class="textbook-page-foreword-title">内容介绍</h3>
       <div class="textbook-page-foreword-intro">
         <h2>前言</h2>
-        <p class="textbook-page-foreword-intro-text">"编程一直被误解为一件很难的事情。一个原因是几乎所有编程语言（工具，文档，开发者社区）都是英语文化圈下的产物，如果你英语不好，就无法真正融入其中。另一个原因是编程语言没有被教育者真正当成一种人类的语言去对待。</p>
+        <p class="textbook-page-foreword-intro-text">编程一直被误解为一件很难的事情。一个原因是几乎所有编程语言（工具，文档，开发者社区）都是英语文化圈下的产物，如果你英语不好，就无法真正融入其中。另一个原因是编程语言没有被教育者真正当成一种人类的语言去对待。</p>
         <br>
         <p class="textbook-page-foreword-intro-text">本书希望能够作为编程的入门教材，将正确的工具，学习方法介绍给希望真正掌握编程的你。本书的目标是通过我们原创的Paracraft工具，让你可以随心所欲的创作出任意复杂的3D动画与游戏。当你具备这种入门能力时，你仍然可以继续使用Paracraft开发专业的计算机软件或自学任何其它语言。</p>
         <br>
@@ -80,7 +80,7 @@
               <img class="textbook-page-information-box-cover-img-wrap-play" src="@/assets/lessonImg/play2.png" alt="">
               <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/paracraft_video.png" alt="">
             </div>
-            <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">Paracraft2分钟视频</p>
+            <p class="textbook-page-information-box-cover-img-title" @click="goPurchase('https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4')">Paracraft2分钟介绍视频</p>
           </div>
         </div>
       </div>
@@ -89,11 +89,11 @@
         <div class="textbook-page-information-box-cover">
           <div class="textbook-page-information-box-cover-img">
             <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/Paracraft创意空间入门.png" alt="" @click="showPurchaseDialog(1)">
-            <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(1)">Paracraft创意空间入门<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
+            <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(1)">Paracraft 创意动画入门<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
           </div>
           <div class="textbook-page-information-box-cover-img">
             <img class="textbook-page-information-box-cover-img-image" src="@/assets/org/相似性与相似原理.png" alt="" @click="showPurchaseDialog(2)">
-            <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(2)">相似性与相似原理<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
+            <p class="textbook-page-information-box-cover-img-title" @click="showPurchaseDialog(2)">相似性和相似原理<span class="textbook-page-information-box-cover-img-title-buy">点击购买</span></p>
           </div>
         </div>
       </div>
@@ -183,7 +183,7 @@ export default {
       switch (index) {
         case 1:
           ;(this.purchaseMethodsImages = require('@/assets/org/Paracraft创意空间入门.png')),
-            (this.purchaseMethodsImagesBookName = 'Paracaraft创意空间入门'),
+            (this.purchaseMethodsImagesBookName = 'Paracaraft 创意动画入门'),
             (this.purchaseMethodsImagesBookAuthor =
               '作者：于平、李玉霞、鞠慧敏'),
             (this.purchaseMethods = [
