@@ -4,7 +4,7 @@
       <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
         <i class="iconfont icon-sound-fill"></i>
         <span class="home-page-advertising-text">{{$t('home.paracraftIsFree')}}</span>
-        <a href="/contests" class="home-page-advertising-download">{{$t('project.knowMore')}}</a>
+        <!-- <a href="/contests" class="home-page-advertising-download">{{$t('project.knowMore')}}</a> -->
         <span class="close" @click="closeAd">&times;</span>
       </div>
     </div>
