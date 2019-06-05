@@ -4,7 +4,7 @@
       <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
         <i class="iconfont icon-sound-fill"></i>
         <span class="home-page-advertising-text">{{$t('home.paracraftIsFree')}}</span>
-        <a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="home-page-advertising-download">{{$t('editor.paracraftDownload')}}</a>
+        <a href="/contests" class="home-page-advertising-download">{{$t('project.knowMore')}}</a>
         <span class="close" @click="closeAd">&times;</span>
       </div>
     </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="home-page-simple-show-center-right hidden-sm-and-down">
           <div class="home-page-simple-show-center-right-kp">
-            <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div>
+            <!-- <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div> -->
             <div class="video">
               <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4' />
             </div>
