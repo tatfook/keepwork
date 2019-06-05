@@ -6,6 +6,8 @@ const ExplorationPage = () => import('@/components/common/ExplorationPage')
 const KeepworkAgreement = () => import('@/components/common/KeepworkAgreement')
 const RankingList = () => import('@/components/common/RankingList')
 const NPL = () => import('@/components/common/NPL')
+const Contests = () => import('@/components/common/Contests')
+const Exhibition = () => import('@/components/common/Exhibition')
 
 
 Vue.use(Router)
@@ -42,6 +44,16 @@ export default new Router({
       path: '/NPL',
       name: 'NPL',
       component: NPL
+    },
+    {
+      path: '/contests',
+      name: 'Contests',
+      component: Contests
+    },
+    {
+      path: '/exhibition',
+      name: 'Exhibition',
+      component: Exhibition
     }
   ]
 })
