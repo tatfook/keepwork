@@ -48,8 +48,11 @@ const getters = {
     return days <= 20
   },
   endTimestamp: (state, { currentOrg: { endDate } }) => {
-    const _endDate = endDate.split('T')[0]
-    const endTime = +new Date(_endDate) + 1000 * 60 * 60 * 24 - 1000
+    const _endDate = new Date(endDate)
+    const year = _endDate.getFullYear()
+    const month = _endDate.getMonth() + 1
+    const day = _endDate.getDate()
+    const endTime = +new Date(`${year}-${month}-${day}`) + 1000 * 60 * 60 * 24 - 1000
     return endTime
   },
   currentOrg: state => state.currentOrg,
