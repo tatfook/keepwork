@@ -48,10 +48,6 @@ export default {
   name: 'mediaType',
   props: {
     mediaFilterType: String,
-    info: {
-      type: Object,
-      required: true
-    },
     uploadingFiles: Array,
     skyDriveMediaLibraryData: Array,
     isImageTabShow: Boolean,

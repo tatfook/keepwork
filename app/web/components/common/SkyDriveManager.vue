@@ -2,12 +2,8 @@
   <div v-loading='loading' class="skydrive-manager" @drop.prevent="handleDrop" @dragenter.prevent="handleDragEnter" @dragover.prevent="handleDragOver" @dragleave="handleDragLeave">
     <div class="skydrive-manager-header">
       <div class='skydrive-manager-header-first'>
-        <div class='skydrive-manager-header-usage'>
-          {{ $t('skydrive.usage') }}
-          <el-progress class="skydrive-manager-header-progress" :percentage="info.usedPercentWithUpload || 0" :color="skyDriveUsedColors" :show-text="false" :stroke-width='11'></el-progress>
-          {{ info.usedWithUpload | biteToG }}GB / {{ info.total | biteToG }}GB
-        </div>
-        <file-uploader ref="uploaderRef" class="skydrive-manager-header-upload" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :info="info" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
+        <usage-bar class='skydrive-manager-header-usage' :uploadingFileSize="uploadingFileSize"></usage-bar>
+        <file-uploader ref="uploaderRef" class="skydrive-manager-header-upload" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
       </div>
       <div class='skydrive-manager-header-second'>
         <div class='skydrive-manager-header-tabs'>
@@ -26,9 +22,9 @@
         </div>
       </div>
     </div>
-    <table-type class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='list'" :info='info' :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @selectAllStateChange='changeSelectAllState' @insert='handleInsert' @copy='handleCopy' @removeFromUploadQue="removeFromUploadQue"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :info='info' :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @insert='handleInsert'></media-type>
-    <file-uploader v-show="isDroping" class="skydrive-manager-drop" :isDragMode="true" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :info="info" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
+    <table-type class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='list'" :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @selectAllStateChange='changeSelectAllState' @insert='handleInsert' @copy='handleCopy' @removeFromUploadQue="removeFromUploadQue"></table-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @insert='handleInsert'></media-type>
+    <file-uploader v-show="isDroping" class="skydrive-manager-drop" :isDragMode="true" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
   </div>
 </template>
 <script>
@@ -37,6 +33,7 @@ import moment from 'moment'
 import { getFileExt, getBareFilename } from '@/lib/utils/filename'
 import tableType from './skyDrive/tableType'
 import mediaType from './skyDrive/mediaType'
+import UsageBar from './skyDrive/UsageBar'
 import FileDownloader from './skyDrive/FileDownloader'
 import FileDeleter from './skyDrive/FileDeleter'
 import FileUploader from './skyDrive/FileUploader'
@@ -69,20 +66,6 @@ export default {
       viewType: 'list',
       searchWord: '',
       mediaFilterType: 'all',
-      skyDriveUsedColors: [
-        {
-          color: '#3ba4ff',
-          percentage: 70
-        },
-        {
-          color: '#f97b00',
-          percentage: 90
-        },
-        {
-          color: '#ff1e02',
-          percentage: 100
-        }
-      ],
       loading: false,
       isMounted: false,
       uploadingFiles: [],
@@ -91,7 +74,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userSkyDriveInfo: 'user/skyDriveInfo',
       userRawUrlByFileId: 'user/rawUrlByFileId',
       userSkyDriveFileList: 'user/skyDriveFileList',
       activePageInfo: 'activePageInfo',
@@ -99,27 +81,6 @@ export default {
     }),
     isEditorPage() {
       return _.get(this.$route, 'name') === 'Editor'
-    },
-    info() {
-      let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
-      let uploadingFileSize = this.uploadingFileSize
-      let usedWithUpload = used + uploadingFileSize
-      let unused = total - used
-      let unusedWithUpload = unused - uploadingFileSize
-      let usedPercent = Math.max(0, ((100 * used) / total).toFixed(2))
-      let usedPercentWithUpload = Math.max(
-        0,
-        ((100 * usedWithUpload) / total).toFixed(2)
-      )
-      return {
-        total,
-        used,
-        usedWithUpload,
-        unused,
-        unusedWithUpload,
-        usedPercent,
-        usedPercentWithUpload
-      }
     },
     activeChildComp() {
       if (!this.isMounted) {
@@ -372,16 +333,10 @@ export default {
       })
     }
   },
-  filters: {
-    biteToG: (bite = 0) =>
-      (bite / (1024 * 1024 * 1024))
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-  },
   components: {
     tableType,
     mediaType,
+    UsageBar,
     FileDownloader,
     FileDeleter,
     FileUploader
@@ -401,14 +356,6 @@ export default {
     }
     &-usage {
       flex: 1;
-    }
-    &-progress {
-      width: 187px;
-      display: inline-block;
-      margin-right: 20px;
-      .el-progress-bar__outer {
-        background-color: #f5f5f5;
-      }
     }
     &-second {
       display: flex;

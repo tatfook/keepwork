@@ -3,13 +3,7 @@
     <div v-show="!isDragMode" class="file-uploader-info">{{$t('skydrive.dragAndDrop')}}</div>
     <el-upload class="file-uploader-button" action="" multiple :drag="isDragMode" :show-file-list="false" :auto-upload="false" :accept="acceptTypes" :on-change="handleUploadFile">
       <el-button v-show="!isDragMode" slot="trigger" size="small" type="primary" round>{{uploadText}}</el-button>
-      <!-- <i v-show="isDragMode" class="el-icon-upload"></i>
-      <div v-show="isDragMode" class="el-upload__text">将文件拖到此处上传</div> -->
     </el-upload>
-    <!-- <div class="file-uploader-button">
-      <span class="file-uploader-button-text">{{$t('skydrive.uploadFile')}}</span>
-      <input ref="mediaInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm" multiple style="display:none;" @change="handleUploadFile">
-    </div> -->
   </div>
 </template>
 <script>
@@ -38,16 +32,23 @@ export default {
       type: Array,
       default: []
     },
-    info: {
-      type: Object
+    uploadingFileSize: {
+      type: Number,
+      default: 0
     },
-    isDragMode:{
+    isDragMode: {
       type: Boolean,
       default: false
     }
   },
+  data() {
+    return {
+      waitingFiles: []
+    }
+  },
   computed: {
     ...mapGetters({
+      userSkyDriveInfo: 'user/skyDriveInfo',
       userSkyDriveFileList: 'user/skyDriveFileList'
     }),
     acceptTypes() {
@@ -65,6 +66,19 @@ export default {
         : this.uploadType == 'video'
         ? this.$t('skydrive.uploadVideo')
         : this.$t('skydrive.uploadFile')
+    },
+    waitingFileSize() {
+      return _.reduce(
+        this.waitingFiles,
+        (sum, file) => {
+          return sum + file.size
+        },
+        0
+      )
+    },
+    unusedWithUpload() {
+      let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
+      return total - used - this.uploadingFileSize - this.waitingFileSize
     }
   },
   methods: {
@@ -115,17 +129,16 @@ export default {
         ), // add extra time for sort
         state: 'doing' // success, error, cancel, doing
       }
-      this.$emit('addUploadingFiles', waitingUploadFile)
-      if (this.info.unusedWithUpload < 0) {
-        this.$emit('removeUploadingFiles', waitingUploadFile)
+      if (this.unusedWithUpload < file.size) {
         this.$notify({
           title: this.$t('common.failure'),
           message: `网盘空间不足， ${file.name}无法上传`,
           type: 'error'
         })
-        console.log(3333333)
         return
       }
+      this.waitingFiles.push(waitingUploadFile)
+      this.$emit('addUploadingFiles', waitingUploadFile)
       await this.uploadFile(file, fileIndex)
     },
     async handleFilenameIllegal({ file, fileIndex, filenameValidateResult }) {
@@ -180,6 +193,11 @@ export default {
         file,
         updatedAt: new Date()
       })
+    }
+  },
+  watch: {
+    uploadingFiles() {
+      this.waitingFiles = []
     }
   }
 }
