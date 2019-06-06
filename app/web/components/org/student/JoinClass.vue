@@ -7,10 +7,10 @@
     <div class="join-class-form">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="邀请码" prop="key">
-          <el-input placeholder="请输入邀请码" v-model="form.key"></el-input>
+          <el-input placeholder="请输入邀请码" v-model.trim="form.key"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="realname">
-          <el-input placeholder="请输入姓名" v-model="form.realname"></el-input>
+          <el-input placeholder="请输入姓名" v-model.trim="form.realname"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="" @click="onCancel">取消</el-button>
