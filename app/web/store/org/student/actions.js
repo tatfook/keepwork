@@ -1,9 +1,8 @@
 import { props } from './mutations'
 import { keepwork, lesson } from '@/api'
-const { graphql } = keepwork
+const { graphql, lessonOrganizations } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
-const { lessonOrganizations } = keepwork
 import { Message } from 'element-ui'
 
 const {
@@ -67,7 +66,7 @@ const actions = {
   async getUserOrgRealName({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
     const res = await graphql.getQueryResult({
       query:
-      'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId, realname} }}',
+        'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId, realname} }}',
       variables: {
         organizationId,
         username
@@ -93,7 +92,7 @@ const actions = {
     return packageDetail
   },
   async getLessonDetail({ commit, dispatch, getters }, { packageId, lessonId }) {
-    let [ res, detail ] = await Promise.all([
+    let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId }),
       dispatch('getOrgPackageDetail', { packageId })
@@ -182,9 +181,17 @@ const actions = {
     }
   },
   async enterClassroom({ commit }, { key }) {
-    const classInfo = await lesson.classrooms.join({ key })
-    commit(ENTER_CLASSROOM, { ...classInfo, state: 1, key })
-    return classInfo
+    try {
+      const [ classInfo, classroom ] = await Promise.all([
+        lesson.classrooms.join({ key }),
+        lesson.classrooms.getClassroomInfo(key)
+      ])
+      const { userId } = classroom
+      commit(ENTER_CLASSROOM, { ...classInfo, userId, state: 1, key })
+      return classInfo
+    } catch (error) {
+      console.error(error)
+    }
   },
   async resumeClassroom({ dispatch, getters: { orgClasses }, rootGetters: { 'org/currentOrgId': organizationId } }) {
     try {
@@ -206,18 +213,42 @@ const actions = {
       commit(RESUME_CLASSROOM, _classroom)
     }
   },
-  async uploadLearnRecords({ getters: { classId, learnRecords } }, state = 0) {
+  async uploadLearnRecords({ dispatch, getters: { classId, classroom, learnRecords } }, state = 0) {
     const { username } = learnRecords
+    const { userId } = classroom
+    const record = {
+      classId,
+      ...classroom,
+      extra: {
+        ...learnRecords
+      },
+      state
+    }
     if (username) {
       await lesson.classrooms.uploadLearnRecords({
         classId,
         learnRecords,
         state
       })
+      await dispatch('sendSocketMessageToTeacher', record)
     }
   },
-  async leaveTheClass({ commit, dispatch }) {
+  async sendSocketMessageToTeacher({ getters: { classroom } }, record = {}) {
+    const { userId = '' } = classroom
+    if (userId) {
+      await lessonOrganizations.sendSocketMessage({
+        userIds: [userId],
+        msg: {
+          type: 1,
+          record
+        }
+      })
+    }
+  },
+  async leaveTheClass({ commit, dispatch, rootGetters: { 'org/userinfo': userInfo } }) {
+    const { username } = userInfo
     await lesson.classrooms.leave()
+    await dispatch('sendSocketMessageToTeacher', { leaveClass: true, extra: { username } })
     commit(LEAVE_THE_CLASS)
   },
   async getTeachingLesson({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
@@ -253,7 +284,7 @@ const actions = {
     commit(SWITCH_SUMMARY, flag)
   },
   async getNextLesson({ commit }, packageId) {
-    const [ learnRecords, packageDetail ] = await Promise.all([
+    const [learnRecords, packageDetail] = await Promise.all([
       lesson.lessons.getPackageLearnRecords({ packageId }),
       lessonOrganizations.getOrgStudentPackageDetail({ packageId, roleId: 1 })
     ])

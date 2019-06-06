@@ -65,7 +65,7 @@
         </li>
       </ul>
     </el-dialog>
-    <el-dialog class="org-student-join-class-dialog" width="500px"  :visible.sync="isShowJoinClassDialog">
+    <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
   </div>

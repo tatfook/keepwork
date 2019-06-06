@@ -32,12 +32,13 @@ import Vhistogram from 'v-charts/lib/histogram.common'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 import { keepwork } from '@/api'
 import ExpirationDialog from '@/components/org/common/ExpirationDialog'
-
+import { socket, socketMixin } from '@/socket'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.component(Vhistogram.name, Vhistogram)
 Vue.use(VueLazyload)
+Vue.use(socket)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,
@@ -243,6 +244,7 @@ export default {
       loading: true,
     }
   },
+  // mixins: [socketMixin],
   async created() {
     await this.loadOrgPresets()
   },

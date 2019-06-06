@@ -43,7 +43,9 @@ export const socketMixin = {
       this.socketMessage = data
     },
     async msg(data) {
-      this.socketMessage = data
+      if (data.type === 0) {
+        this.socketMessage = data
+      }
     }
   }
 }

@@ -24,7 +24,29 @@ export default {
       isFirstCheck: true
     }
   },
+  sockets: {
+    msg(data) {
+      const { payload = {} } = data
+      if (payload.type === 1 && (payload.beginClass || payload.classOver)) {
+        this.getTeachingLesson()
+        if (this.isBeInClassroom){
+          this.checkClassroom().catch(e => {
+            this._notify && this._notify.close()
+            this._notify = null
+            if (this.$route.name === 'OrgStudentPackageLesson') {
+              this.$message({
+                message: this.$t('lesson.classIsOver'),
+                type: 'warning',
+                duration: 10000
+              })
+            }
+          })
+        }
+      }
+    }
+  },
   async created() {
+    console.log(this.classroom)
     try {
       await Promise.all([
         this.getUserOrgRealName(),
@@ -33,7 +55,7 @@ export default {
       ])
       await this.resumeClassroom()
       this.checkIsInClassroom(this.$route)
-      this.intervalCheckClass()
+      // this.intervalCheckClass()
     } catch (error) {
       console.error(error)
     }
@@ -46,7 +68,8 @@ export default {
       checkClassroom: 'org/student/checkClassroom',
       getUserInfo: 'org/student/getUserInfo',
       getUserOrgRealName: 'org/student/getUserOrgRealName',
-      getOrgClasses: 'org/student/getOrgClasses'
+      getOrgClasses: 'org/student/getOrgClasses',
+      getTeachingLesson: 'org/student/getTeachingLesson'
     }),
     backToClassroom() {
       const { packageId, lessonId } = this.classroom

@@ -56,10 +56,18 @@ export default {
       _interval: null
     }
   },
+  sockets: {
+    async msg(data) {
+      const { payload } = data
+      if (payload.type === 1) {
+        this.updateLearnRecordsBySocket(payload.record)
+      }
+    }
+  },
   async created() {
     if (this.isInCurrentClass) {
-      this.copyClassroomQuiz()
-      this.intervalUpdateLearnRecords()
+      await this.copyClassroomQuiz()
+      this.updateLearnRecords()
     }
   },
   async destroyed() {
@@ -77,9 +85,10 @@ export default {
     ...mapActions({
       updateLearnRecords: 'org/teacher/updateLearnRecords',
       leaveTheClassroom: 'org/teacher/leaveTheClassroom',
-      copyClassroomQuiz: 'org/teacher/copyClassroomQuiz'
+      copyClassroomQuiz: 'org/teacher/copyClassroomQuiz',
+      updateLearnRecordsBySocket: 'org/teacher/updateLearnRecordsBySocket'
     }),
-    async intervalUpdateLearnRecords(delay = 4000) {
+    async intervalUpdateLearnRecords(delay = 1000 * 60) {
       try {
         await this.updateLearnRecords()
         clearTimeout(this._interval)
@@ -95,7 +104,7 @@ export default {
     },
     async clearIntervalUpdateLearnRecords() {
       clearTimeout(this._interval)
-      await this.updateLearnRecords()
+      // await this.updateLearnRecords()
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
