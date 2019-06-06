@@ -45,6 +45,7 @@ const actions = {
   async joinOrgClass({ dispatch, rootGetters: { 'org/currentOrg': currentOrg } }, payload) {
     try {
       const { refreshToken = true, ...rest } = payload
+      rest.key = rest.key.replace(/ /g, '')
       await lessonOrganizations.joinOrganization(rest)
       await dispatch('org/refreshToken', {}, { root: true })
       await Promise.all([
