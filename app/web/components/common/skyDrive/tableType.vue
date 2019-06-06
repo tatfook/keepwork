@@ -31,10 +31,10 @@
           </span>
           <span v-else>
             <el-tooltip :content="$t('common.copyURI')">
-              <span class='iconfont icon-copy' :class='{disabled: !scope.row.checkPassed}' @click='handleCopy(scope.row)'></span>
+              <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFile="scope.row" operateType="copy"></file-url-getter>
             </el-tooltip>
             <el-tooltip :content="$t('common.insert')">
-              <span class='iconfont icon-insert' v-if="insertable" :class='{disabled: !scope.row.checkPassed}' @click='handleInsert(scope.row)'></span>
+              <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFile="scope.row" operateType="insert" @close="handleClose"></file-url-getter>
             </el-tooltip>
             <el-tooltip :content="$t('common.download')">
               <file-downloader :selectedFiles="[scope.row]" :isTextShow="false"></file-downloader>
@@ -65,6 +65,7 @@ import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import { getBareFilename } from '@/lib/utils/filename'
 import FileDownloader from './FileDownloader'
 import FileDeleter from './FileDeleter'
+import FileUrlGetter from './FileUrlGetter'
 const ErrFilenamePatt = new RegExp('^[^\\\\/*?|<>:"]+$')
 export default {
   name: 'tableType',
@@ -111,6 +112,9 @@ export default {
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
       userUseFileInSite: 'user/useFileInSite'
     }),
+    handleClose({ file, url }) {
+      this.$emit('close', { file, url })
+    },
     selectAll() {
       let selected = this.isAllSelected ? false : true
       _.forEach(this.skyDriveTableDataWithUploading, row => {
@@ -119,12 +123,6 @@ export default {
     },
     handleSelectionChange(selectionResults) {
       this.multipleSelectionResults = selectionResults
-    },
-    async handleCopy(file) {
-      if (!file && !file.checkPassed) {
-        return false
-      }
-      this.$emit('copy', file)
     },
     async showRenamePrompt({ bareFilename, filename, ext }) {
       return await this.$prompt(
@@ -178,12 +176,6 @@ export default {
         ? errMsg
         : true
     },
-    async handleInsert(file) {
-      if (!file.checkPassed) {
-        return
-      }
-      this.$emit('insert', { file })
-    },
     handleUploadFile(e) {
       this.$emit('uploadFile', e)
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
@@ -209,7 +201,8 @@ export default {
   },
   components: {
     FileDownloader,
-    FileDeleter
+    FileDeleter,
+    FileUrlGetter
   }
 }
 </script>

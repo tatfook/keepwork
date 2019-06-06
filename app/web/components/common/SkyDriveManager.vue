@@ -22,8 +22,8 @@
         </div>
       </div>
     </div>
-    <table-type class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='list'" :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @selectAllStateChange='changeSelectAllState' @insert='handleInsert' @copy='handleCopy' @removeFromUploadQue="removeFromUploadQue"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @insert='handleInsert'></media-type>
+    <table-type class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='list'" :userSkyDriveFileList='userSkyDriveFileList' :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow'></media-type>
     <file-uploader v-show="isDroping" class="skydrive-manager-drop" :isDragMode="true" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
   </div>
 </template>
@@ -74,10 +74,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userRawUrlByFileId: 'user/rawUrlByFileId',
       userSkyDriveFileList: 'user/skyDriveFileList',
-      activePageInfo: 'activePageInfo',
-      userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId'
+      activePageInfo: 'activePageInfo'
     }),
     isEditorPage() {
       return _.get(this.$route, 'name') === 'Editor'
@@ -166,9 +164,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      userRefreshSkyDrive: 'user/refreshSkyDrive',
-      userGetFileRawUrl: 'user/getFileRawUrl',
-      userUseFileInSite: 'user/useFileInSite'
+      userRefreshSkyDrive: 'user/refreshSkyDrive'
     }),
     handleDragEnter(e) {
       this.$set(this, 'isDroping', true)
@@ -267,57 +263,8 @@ export default {
       let filenameLowerCase = (filename || '').toLowerCase()
       return filenameLowerCase.indexOf(searchWord) >= 0
     },
-    async handleGetUrl({ file }) {
-      return this.isSiteMode || this.isEditorPage
-        ? await this.getSiteFileUrl(file)
-        : await this.getFileRawUrl(file)
-    },
-    async handleInsert({ file }) {
-      if (file.checkPassed) {
-        let url = await this.handleGetUrl({ file })
-        this.$emit('close', {
-          file,
-          url: `${url}#${file.filename ? file.filename : ''}`
-        })
-      }
-    },
-    async handleCopy(file) {
-      this.$emit('copy', file)
-      let toCopyPrefix = await this.handleGetUrl({ file })
-      let toCopyLink = `${toCopyPrefix}#${file.filename ? file.filename : ''}`
-      await this.$confirm(toCopyLink, {
-        customClass: 'skydrive-manager-messagebox',
-        confirmButtonText: this.$t('common.copy'),
-        cancelButtonText: this.$t('common.Cancel')
-      })
-      this.$copyText(toCopyLink).catch(e => {
-        console.error(e)
-        this.$message({
-          showClose: true,
-          message: this.$t('editor.copyFail'),
-          type: 'error'
-        })
-      })
-      this.$message({
-        showClose: true,
-        message: this.$t('editor.copySuccess'),
-        type: 'success'
-      })
-    },
-    async getSiteFileUrl(file) {
-      let { sitepath: sitePath } = this.activePageInfo
-      let fileId = file.id
-      this.loading = true
-      await this.userUseFileInSite({ fileId, sitePath }).catch()
-      this.loading = false
-      return this.userSiteFileBySitePathAndFileId({ fileId, sitePath })
-    },
-    async getFileRawUrl(file) {
-      this.loading = true
-      let fileId = file.id
-      await this.userGetFileRawUrl({ fileId })
-      this.loading = false
-      return this.userRawUrlByFileId({ fileId })
+    handleClose({ file, url }) {
+      this.$emit('close', { file, url })
     },
     removeFromUploadQue(file) {
       let { filename, state } = file
@@ -432,9 +379,6 @@ export default {
       position: relative;
       font-size: 18px;
     }
-  }
-  &-messagebox {
-    word-break: break-all;
   }
 }
 </style>
