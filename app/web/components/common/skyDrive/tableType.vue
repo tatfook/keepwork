@@ -1,21 +1,5 @@
 <template>
   <div class="table-type" v-loading='loading' droppable="true">
-    <el-row class="table-type-header">
-      <el-col :span="18">
-        <div>
-          {{ $t('skydrive.usage') }}
-          <span class="table-type-total">
-            <span class="table-type-total-used" :class="usedProcessBarClass" :style="{ width: info.usedPercentWithUpload + '%' }"></span>
-          </span>
-          {{ info.usedWithUpload | biteToG }}GB / {{ info.total | biteToG }}GB
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
-          <i slot="suffix" class="el-input__icon el-icon-search"></i>
-        </el-input>
-      </el-col>
-    </el-row>
     <el-table ref="skyDriveTable" :data="skyDriveTableDataWithUploading" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
@@ -53,7 +37,7 @@
               <span class='iconfont icon-insert' v-if="insertable" :class='{disabled: !scope.row.checkPassed}' @click='handleInsert(scope.row)'></span>
             </el-tooltip>
             <el-tooltip :content="$t('common.download')">
-              <span class='el-icon-download' @click='download(scope.row)'></span>
+              <file-downloader :selectedFiles="[scope.row]" :isTextShow="false"></file-downloader>
             </el-tooltip>
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -63,8 +47,8 @@
                 <el-dropdown-item @click.native='handleRename(scope.row)'>
                   <span class='el-icon-edit'></span>{{ $t('common.rename') }}
                 </el-dropdown-item>
-                <el-dropdown-item @click.native='handleRemove(scope.row)'>
-                  <span class='el-icon-delete'></span>{{ $t('common.remove') }}
+                <el-dropdown-item>
+                  <file-deleter :selectedFiles="[scope.row]"></file-deleter>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -72,19 +56,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-row class="table-type-footer">
-      <el-col :span="6">
-        <el-button size="small" :disabled="!approvedMultipleSelectionResults.length" round @click="downloadAllSelected">{{ $t('skydrive.downloadSelected') }}</el-button>
-        <el-button size="small" :disabled="!multipleSelectionResults.length" round @click="removeAllSelected">{{ $t('skydrive.removeSelected') }}</el-button>
-      </el-col>
-      <el-col :span="10" :offset="8" class="table-type-upload">
-        {{ $t('skydrive.dragAndDrop') }}
-        <label class="el-button table-type-upload-btn el-button--primary el-button--small is-round">
-          <span>{{ $t('skydrive.uploadFile') }}</span>
-          <input ref="fileInput" type="file" style="display:none;" multiple @change="handleUploadFile">
-        </label>
-      </el-col>
-    </el-row>
   </div>
 </template>
 <script>
@@ -92,14 +63,12 @@ import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import { getFilenameWithExt } from '@/lib/utils/gitlab'
 import { getBareFilename } from '@/lib/utils/filename'
+import FileDownloader from './FileDownloader'
+import FileDeleter from './FileDeleter'
 const ErrFilenamePatt = new RegExp('^[^\\\\/*?|<>:"]+$')
 export default {
   name: 'tableType',
   props: {
-    info: {
-      type: Object,
-      required: true
-    },
     userSkyDriveFileList: {
       type: Array,
       required: true
@@ -130,13 +99,11 @@ export default {
         ({ checked }) => Number(checked) === 1
       )
     },
-    usedProcessBarClass() {
-      let { usedPercent } = this.info
-      return usedPercent >= 90
-        ? 'table-type-total-used-danger'
-        : usedPercent >= 70
-          ? 'table-type-total-used-warning'
-          : ''
+    isAllSelected() {
+      return (
+        this.approvedMultipleSelectionResults.length ==
+        this.skyDriveTableDataWithUploading.length
+      )
     }
   },
   methods: {
@@ -144,32 +111,14 @@ export default {
       userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
       userUseFileInSite: 'user/useFileInSite'
     }),
+    selectAll() {
+      let selected = this.isAllSelected ? false : true
+      _.forEach(this.skyDriveTableDataWithUploading, row => {
+        this.$refs.skyDriveTable.toggleRowSelection(row, selected)
+      })
+    },
     handleSelectionChange(selectionResults) {
       this.multipleSelectionResults = selectionResults
-    },
-    async downloadAllSelected() {
-      this.approvedMultipleSelectionResults.map(file => this.download(file))
-    },
-    async download(file) {
-      let downloadUrl = file.downloadUrl
-      if (!downloadUrl) return
-      let { filename } = file
-      await new Promise((resolve, reject) => {
-        let a = document.createElement('a')
-        a.target = '_blank'
-        a.style.display = 'none'
-        a.href = `${downloadUrl}&attname=${filename}`
-        a.download = filename || ''
-        document.body.appendChild(a)
-        a.click()
-        setTimeout(() => {
-          a.remove()
-          resolve()
-        }, 300)
-      }).catch(e => console.error(e))
-    },
-    async removeAllSelected() {
-      this.$emit('remove', this.multipleSelectionResults)
     },
     async handleCopy(file) {
       if (!file && !file.checkPassed) {
@@ -235,9 +184,6 @@ export default {
       }
       this.$emit('insert', { file })
     },
-    handleRemove(file) {
-      this.$emit('remove', file)
-    },
     handleUploadFile(e) {
       this.$emit('uploadFile', e)
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
@@ -255,34 +201,20 @@ export default {
         .toFixed(2)
         .toString()
         .replace(/\.*0*$/, '')
+  },
+  watch: {
+    isAllSelected(val) {
+      this.$emit('selectAllStateChange', val)
+    }
+  },
+  components: {
+    FileDownloader,
+    FileDeleter
   }
 }
 </script>
 <style lang="scss">
 .table-type {
-  &-header {
-    margin-bottom: 20px;
-  }
-  &-total {
-    display: inline-block;
-    margin: 0 15px 0 5px;
-    width: 190px;
-    height: 10px;
-    border-radius: 5px;
-    background: #f5f5f5;
-    &-used {
-      display: block;
-      height: 100%;
-      border-radius: 5px;
-      background: #3ba4ff;
-      &-danger {
-        background-color: #ff1e02;
-      }
-      &-warning {
-        background-color: #f97b00;
-      }
-    }
-  }
   &-footer {
     margin-top: 20px;
   }
