@@ -93,7 +93,9 @@ export default {
 .comp-markdown {
   color: unset;
   font-size: unset;
-
+  strong {
+    font-weight: bolder;
+  }
   p {
     word-wrap: break-word;
     font-size: 14px;
@@ -110,6 +112,10 @@ export default {
     font-size: 20px;
     margin-left: -23px;
     opacity: 0;
+  }
+
+  li {
+    font-size: 14px;
   }
 
   .icon-link_:hover:before {

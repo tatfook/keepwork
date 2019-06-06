@@ -487,7 +487,7 @@ export default {
           border: 1px solid #eeeeee;
           .video {
             width: 352px;
-            height: 240px;
+            height: 200px;
             margin: 17px;
             text-align: center;
           }
@@ -497,27 +497,27 @@ export default {
           border-radius: 4px;
           border: 1px solid #eeeeee;
           .announce-list {
-            padding-left: 28px;
+            padding:0 8px;
             list-style: none;
             font-size: 14px;
             &-item {
-              width: 320px;
               display: flex;
               align-items: center;
               position: relative;
               height: 40px;
               line-height: 40px;
               border-radius: 8px;
-              padding: 0 5px;
+              padding: 0 25px;
               &:hover {
-                background: rgb(245, 243, 243);
+                background: rgba(0,0,0,0.05);
               }
               a {
                 text-decoration: none;
                 width: 100%;
                 display: flex;
+                font-weight: bold;
                 align-items: center;
-                color: #909399;
+                color: #303133;
                 .news-badge {
                   width: 22px;
                   height: 22px;
@@ -525,8 +525,12 @@ export default {
                 }
                 .entry {
                   position: absolute;
-                  right: 10px;
+                  right: 20px;
                   top: 0;
+                  .icon-fire1 {
+                    color: rgb(219, 43, 52);
+                    font-size: 25px;
+                  }
                 }
               }
             }

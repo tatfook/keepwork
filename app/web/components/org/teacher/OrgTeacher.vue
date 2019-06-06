@@ -89,10 +89,8 @@ $borderColor: #e8e8e8;
   }
   &-sidebar {
     width: 270px;
-    border: 1px solid $borderColor;
-    border-radius: 4px;
+    overflow: hidden;
     margin-right: 24px;
-    background-color: #fff;
   }
   &-main {
     flex: 1;
@@ -102,6 +100,8 @@ $borderColor: #e8e8e8;
     border-bottom: 1px solid $borderColor;
     position: relative;
     text-align: center;
+    background-color: #fff;
+    border-radius: 8px 8px 0 0;
   }
   &-role-label {
     position: absolute;
@@ -137,6 +137,8 @@ $borderColor: #e8e8e8;
     padding: 0;
     list-style: none;
     padding: 24px 16px 8px;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
     &-item {
       margin-bottom: 16px;
       text-align: center;

@@ -37,7 +37,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -64,7 +64,7 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -78,7 +78,7 @@ export default [
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
           height: '490px',
-          'overflow': 'auto'
+          overflow: 'auto'
         }
       }
     },
@@ -119,7 +119,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -147,7 +147,7 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -161,7 +161,7 @@ export default [
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
           height: '490px',
-          'overflow': 'auto'
+          overflow: 'auto'
         }
       }
     },
@@ -202,7 +202,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -230,7 +230,7 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -244,7 +244,7 @@ export default [
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
           height: '490px',
-          'overflow': 'auto'
+          overflow: 'auto'
         }
       }
     },
@@ -285,7 +285,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -311,7 +311,7 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -325,7 +325,7 @@ export default [
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
           height: '300px',
-          'overflow': 'auto'
+          overflow: 'auto'
         }
       }
     },
@@ -366,7 +366,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -393,7 +393,7 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -407,7 +407,7 @@ export default [
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
           height: '300px',
-          'overflow': 'auto'
+          overflow: 'auto'
         }
       }
     },
@@ -448,7 +448,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -475,7 +475,7 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
           'margin-top': '20px',
@@ -489,7 +489,7 @@ export default [
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
           height: '300px',
-          'overflow': 'auto'
+          overflow: 'auto'
         }
       }
     },
@@ -530,7 +530,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -539,8 +539,8 @@ export default [
         opacity: '0.5'
       },
       colCouple: {
-        'margin-top': '-250px',
-        position: 'relative',
+        bottom: '24px',
+        position: 'absolute',
         'z-index': 2
       },
       title: {
@@ -556,9 +556,10 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
+          position: 'relative',
           'margin-top': '20px',
           'text-align': 'left'
         },
@@ -569,8 +570,8 @@ export default [
       },
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
-          height: '150px',
-          'overflow': 'auto'
+          'max-height': '570px',
+          overflow: 'auto'
         }
       }
     },
@@ -611,7 +612,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -620,9 +621,9 @@ export default [
         opacity: '0.5'
       },
       colCouple: {
-        'margin-top': '-250px',
+        bottom: '24px',
         'text-align': 'center',
-        position: 'relative',
+        position: 'absolute',
         'z-index': 2
       },
       title: {
@@ -638,9 +639,10 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
+          position: 'relative',
           'margin-top': '20px',
           'text-align': 'center'
         },
@@ -651,8 +653,8 @@ export default [
       },
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
-          height: '150px',
-          'overflow': 'auto'
+          'max-height': '570px',
+          overflow: 'auto'
         }
       }
     },
@@ -693,7 +695,7 @@ export default [
       },
       colGroup: {
         'background-color': '#000',
-        'float': 'none',
+        float: 'none',
         padding: 0
       },
       media: {
@@ -702,9 +704,9 @@ export default [
         opacity: '0.5'
       },
       colCouple: {
-        'margin-top': '-250px',
+        'bottom': '24px',
         'text-align': 'right',
-        position: 'relative',
+        position: 'absolute',
         'z-index': 2
       },
       title: {
@@ -720,9 +722,10 @@ export default [
         },
         colGroup: {
           'background-color': 'rgba(0,0,0,0)',
-          'float': 'none'
+          float: 'none'
         },
         colCouple: {
+          position: 'relative',
           'margin-top': '20px',
           'text-align': 'right'
         },
@@ -733,8 +736,8 @@ export default [
       },
       '@media only screen and (min-width: 768px)': {
         colParagraph: {
-          height: '150px',
-          'overflow': 'auto'
+          'max-height': '570px',
+          overflow: 'auto'
         }
       }
     },

@@ -74,7 +74,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl'
+      orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
+      isFirstView: 'org/isFirstView'
     }),
     orgLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
@@ -103,8 +104,14 @@ export default {
     toRolePage({ roleId }) {
       let roleName = ''
       if ((roleId & 64) > 0) {
+        if (this.isFirstView) {
+          return this.$router.push({
+            name: 'OrgFirstView'
+          })
+        }
         return this.$router.push({
-          name: 'OrgPackages'
+          name: 'OrgPackages',
+          query: { firstLogin: true }
         })
       }
       if ((roleId & 2) > 0) {
@@ -120,7 +127,10 @@ export default {
     async toLogin() {
       this.isLoading = true
       try {
-        const userinfo = await this.orgLogin({...this.loginData, username: this.loginData.username.toLowerCase()})
+        const userinfo = await this.orgLogin({
+          ...this.loginData,
+          username: this.loginData.username.toLowerCase()
+        })
         await this.setCurrentOrg({ orgDetail: this.orgDetail })
         this.isLoading = false
         const { roleId } = userinfo

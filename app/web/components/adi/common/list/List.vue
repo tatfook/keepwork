@@ -38,10 +38,28 @@ export default {
       })
     },
     filteredCollection() {
-      return _.filter(
-        this.collectionWithIndex,
-        collectionItem => collectionItem.hidden == false
-      )
+      return _.filter(this.collectionWithIndex, collectionItem => {
+        let isCollectShow = true
+        if (collectionItem.hidden) {
+          isCollectShow = false
+        } else {
+          let isCollectHaveCompShow = false
+          let isCollectHaveComp = false
+          _.forIn(collectionItem, val => {
+            if (val && typeof val === 'object') {
+              isCollectHaveComp = true
+              if (typeof val.hidden === 'undefined' || val.hidden === false) {
+                isCollectHaveCompShow = true
+                return false
+              }
+            }
+          })
+          if (!isCollectHaveCompShow && isCollectHaveComp) {
+            isCollectShow = false
+          }
+        }
+        return isCollectShow
+      })
     },
     colWidth() {
       if (this.options.colSize) {

@@ -1,7 +1,7 @@
 <template>
   <div class="common-header">
     <el-menu mode='horizontal' :default-active="activeIndex" class="common-header-menu">
-      <el-menu-item index='0' class="home-page" @click="goHomePage">
+      <el-menu-item class="home-page right-icon-item" @click="goHomePage">
         <img class="brand" src="@/assets/img/logo_old.svg" alt="KeepWork">
       </el-menu-item>
       <el-menu-item class="hidden-xxs-only" index='1' @click="goCreativityPage">
@@ -13,7 +13,7 @@
       <el-menu-item class="hidden-xxs-only" index='4' @click="goStudyPage">
         {{$t('common.study')}}
       </el-menu-item>
-      <el-menu-item index="13" class="pull-right user-menu" v-if="isLogin">
+      <el-menu-item class="pull-right user-menu right-icon-item" v-if="isLogin">
         <el-dropdown placement="bottom-end" trigger="click">
           <span class="el-dropdown-link">
             <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
@@ -42,7 +42,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item v-if="isLogin" index="15" class="pull-right user-message-menu-item">
+      <el-menu-item v-if="isLogin" class="pull-right user-message-menu-item right-icon-item">
         <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger="click">
           <div ref="scroll" class="user-message-main">
             <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
@@ -62,12 +62,11 @@
           </div>
         </el-popover>
       </el-menu-item>
-      <el-menu-item index="11" class="pull-right" v-if="isLogin">
+      <el-menu-item class="pull-right right-icon-item" v-if="isLogin">
         <el-dropdown placement="bottom" trigger="click">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>
-            <span class="hidden-xxs-only">{{$t('common.tools')}}</span>
-            <i class="el-icon-caret-bottom right-icon"></i>
+            <i class="el-icon-caret-bottom right-icon right-icon-tool"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
@@ -96,11 +95,11 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index='14' class="hidden-xs-only pull-right common-header-menu-download" @click="downloadParacraft()">
-        <i class="iconfont icon-xiazai"></i><span class="common-header-menu-download-text">{{$t('project.downloadParacraft')}}</span>
+      <el-menu-item class="hidden-xs-only pull-right common-header-menu-download right-icon-item" @click="downloadParacraft()">
+        <i class="iconfont icon-xiazai"></i>
       </el-menu-item>
-      <el-menu-item index='12' class="hidden-xs-only pull-right common-header-menu-ranking" @click="goRanking">
-        <img class="common-header-menu-ranking-img" src="@/assets/pblImg/ranking.png" alt="排行榜"><span class="common-header-menu-ranking-text">{{$t('common.ranking')}}</span>
+      <el-menu-item class="hidden-xs-only pull-right common-header-menu-ranking right-icon-item" @click="goRanking">
+        <i class="iconfont icon-trophy-fill"></i>
       </el-menu-item>
       <el-menu-item class="menu-searchbar" index='10'>
         <search-bar></search-bar>
@@ -160,7 +159,7 @@ export default {
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
       username: 'user/username',
-      unreadMessages: 'message/unreadMessages',
+      unreadMessagesCount: 'message/unreadMessagesCount',
       messagesBox: 'message/messagesBox'
     }),
     isLogin: {
@@ -195,9 +194,6 @@ export default {
     },
     messagesCount() {
       return _.get(this.messagesBox, 'count', 0)
-    },
-    unreadMessagesCount() {
-      return _.get(this.unreadMessages, 'count', 0)
     }
   },
   async mounted() {
@@ -274,10 +270,6 @@ export default {
       if (STUDY_REG.test(pathname)) {
         return (this.activeIndex = '4')
       }
-      if (RANKING_REG.test(pathname)) {
-        return (this.activeIndex = '12')
-      }
-      this.activeIndex = '0'
     },
     goKnowledgeManagement() {
       this.$alert('开发中~~~~~~', '', {
@@ -381,6 +373,9 @@ export default {
   display: inline-block;
   width: 100%;
   height: 100%;
+  .icon-wrench-fill {
+    font-size: 30px;
+  }
 }
 .el-menu {
   .brand {
@@ -401,6 +396,9 @@ export default {
     color: #fff;
     padding: 8px 12px;
     border-radius: 3px;
+    &:hover {
+      color: #fff;
+    }
   }
   .is-active {
     color: #409eff;
@@ -420,7 +418,6 @@ export default {
 }
 .el-menu-item {
   padding: 0 12px;
-  color: #303133;
   &:hover {
     color: #409eff !important;
   }
@@ -428,6 +425,7 @@ export default {
     font-size: 13px;
     width: 0;
     position: relative;
+    left: 1px;
   }
 }
 .home-page {
@@ -454,6 +452,26 @@ export default {
   margin-right: 14px;
   font-size: 20px;
 }
+.right-icon-item {
+  border-bottom: none;
+  &:hover {
+    i {
+      color: #409eff;
+    }
+  }
+  .tool-menu:hover {
+    i {
+      color: #409eff;
+    }
+  }
+  .right-icon-tool {
+    font-size: 13px;
+    width: 0;
+    position: relative;
+    left: -6px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1180px) {
   .menu-searchbar {
     display: none;
@@ -593,19 +611,15 @@ export default {
   }
   &-menu-ranking {
     padding-right: 4px !important;
-    &-img {
-      margin-right: 10px;
-    }
-    &-text {
-      color: #ffa405;
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
-      padding-right: 18px;
+    .icon-trophy-fill {
+      font-size: 30px;
+      color: #909399;
     }
   }
   &-menu-download {
     padding-right: 4px !important;
     .iconfont.icon-xiazai {
-      color: #2397f3;
+      font-size: 30px;
     }
     &-text {
       color: #2397f3;

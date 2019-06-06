@@ -2,6 +2,7 @@ import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import axiosRetry from 'axios-retry'
+import { Message } from 'element-ui'
 
 axiosRetry(axios, { retries: 3 })
 
@@ -46,14 +47,29 @@ const createEndpoint = (config, parseResponse = true) => {
       const CODES = [401]
       if (CODES.some(code => code === _.get(error, 'response.status', '')) && Cookies.get('token')) {
         _instance.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('token')}`
-        _instance.post('/user/getProfile').catch(e => {
-          if (window.navigator.userAgent.indexOf('Edge') > -1) {
-            Cookies.set('token', '')
+        _instance.get('/users/profile').catch(e => {
+          if (CODES.some(code => code === _.get(e, 'response.status', ''))) {
+            if (['release', 'stage'].some(item => process.env.KEEPWORK_API_PREFIX.includes(item))) {
+              Message({
+                type: 'error',
+                message: 'token失效，将于3秒后刷新页面'
+              })
+              setTimeout(() => {
+                Cookies.remove('token')
+                Cookies.remove('token', { path: '/' })
+                window.localStorage.removeItem('satellizer_token')
+                window.location.reload()
+              }, 1000 * 3)
+            } else {
+              if (window.navigator.userAgent.indexOf('Edge') > -1) {
+                Cookies.set('token', '')
+              }
+              Cookies.remove('token')
+              Cookies.remove('token', { path: '/' })
+              window.localStorage.removeItem('satellizer_token')
+              window.location.reload()
+            }
           }
-          Cookies.remove('token')
-          Cookies.remove('token', { path: '/' })
-          window.localStorage.removeItem('satellizer_token')
-          window.location.reload()
         })
       }
       console.error(error.message)

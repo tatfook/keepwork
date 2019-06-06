@@ -4,7 +4,7 @@
       <el-menu-item index='1' v-if="orgLogo">
         <img class="org-header-brand" :src="orgLogo" alt="KeepWork">
       </el-menu-item>
-      <el-menu-item index='2'>
+      <el-menu-item class="org-header-name" index='2'>
         {{currentOrg.name}}
       </el-menu-item>
       <el-menu-item index='3' class="pull-right" @click="logout">
@@ -50,6 +50,9 @@ export default {
 .org-header {
   border-bottom: solid 1px #e6e6e6;
   background-color: #fff;
+  &-name {
+    font-weight: bold;
+  }
   &-menu {
     padding: 12px 0;
     max-width: 1200px;

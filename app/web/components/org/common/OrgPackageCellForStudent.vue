@@ -113,8 +113,9 @@ export default {
   box-sizing: border-box;
   cursor: pointer;
   margin-top: 10px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow: hidden;
   &:hover {
     box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
     transition: all 200ms ease-in;

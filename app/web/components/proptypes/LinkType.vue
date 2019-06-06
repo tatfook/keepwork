@@ -2,7 +2,7 @@
   <el-input :placeholder="$t('editor.pleaseInput')" v-model="linkVal" @change='updateValue' class="input-with-select">
     <el-button v-if="linkVal" slot="prepend" icon="iconfont icon-link_"></el-button>
     <el-button v-else slot="prepend">{{$t('common.link')}}</el-button>
-    <el-select v-model="linkVal" @change='updateValue' slot="append" placeholder="Select" popper-class="link-type-popper">
+    <el-select v-model="linkVal" @change='updateValue' @visible-change="handleOptionVisible" slot="append" placeholder="Select" popper-class="link-type-popper" :loading="isPageListLoading">
       <el-option v-for="(path, pathIndex) in personalAllPagePathList" :key="pathIndex" :value="getLocationUrl(path)">
         {{ path }}
       </el-option>
@@ -22,10 +22,10 @@ export default {
   },
   async mounted() {
     this.linkVal = this.linkTypeValue
-    await this.getAllPersonalPageList()
   },
   data() {
     return {
+      isPageListLoading: false,
       linkVal: ''
     }
   },
@@ -43,6 +43,13 @@ export default {
     ...mapActions({
       getAllPersonalPageList: 'user/getAllPersonalPageList'
     }),
+    async handleOptionVisible(isVisible) {
+      if (isVisible) {
+        this.isPageListLoading = true
+        await this.getAllPersonalPageList().catch()
+        this.isPageListLoading = false
+      }
+    },
     updateValue(newVal) {
       let tempChangedDataObj = {}
       tempChangedDataObj[this.editingKey] = newVal

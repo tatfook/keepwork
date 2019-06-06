@@ -182,7 +182,8 @@ export default {
 <style lang='scss' scoped>
 .org-teacher-statistics {
   background: #fff;
-  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
   &-summary {
     border-top: 1px solid #e8e8e8;
     padding-left: 13px;

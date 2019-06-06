@@ -17,6 +17,7 @@
           </el-dropdown>
           <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
           <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
+          <div class="org-validity-date">{{$t('org.validity')}}: {{startDate}}-{{endDate}} <span v-if="currentOrgToExpire" class="expire-tips">{{$t('org.toExpire')}}</span> <span v-if="currentOrgHaveExpired" class="expire-tips">{{$t('org.haveExpired')}}</span></div>
         </div>
         <ul class="org-admin-menu">
           <li class="org-admin-menu-item" v-for="(menuItem, index) in adminMenu" :class="{'org-admin-menu-item-active': isMenuItemActive(menuItem)}" :key="index">
@@ -36,7 +37,8 @@
 </template>
 <script>
 import OrgHeader from './common/OrgHeader'
-import { mapGetters } from 'vuex'
+import moment from 'moment'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OrgAdmin',
   data() {
@@ -90,11 +92,20 @@ export default {
       ]
     }
   },
+  mounted() {
+    if (this.$route.query.firstLogin) {
+      window.history.replaceState({}, '', '?firstLogin')
+      this.checkCurrentOrgExpire()
+    }
+  },
   computed: {
     ...mapGetters({
       orgIsStudent: 'org/isStudent',
       orgIsTeacher: 'org/isTeacher',
-      orgUserinfo: 'org/userinfo'
+      orgUserinfo: 'org/userinfo',
+      currentOrg: 'org/currentOrg',
+      currentOrgToExpire: 'org/currentOrgToExpire',
+      currentOrgHaveExpired: 'org/currentOrgHaveExpired'
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
@@ -103,9 +114,18 @@ export default {
       return !['OrgAdminPackageDetail', 'OrgAdminPackageLesson'].includes(
         this.nowPageName
       )
+    },
+    startDate() {
+      return moment(this.currentOrg.startDate).format('YYYY/M/D')
+    },
+    endDate() {
+      return moment(this.currentOrg.endDate).format('YYYY/M/D')
     }
   },
   methods: {
+    ...mapActions({
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire'
+    }),
     toRolePage(pageName) {
       this.$router.push({
         name: pageName
@@ -125,6 +145,14 @@ $borderColor: #e8e8e8;
 .org-admin {
   width: 100%;
   background-color: #f5f5f5;
+  .org-validity-date {
+    color: #666;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .expire-tips {
+    color:#f56c6c;
+  }
   &-container {
     max-width: 1200px;
     margin: 0 auto 30px;
@@ -141,12 +169,12 @@ $borderColor: #e8e8e8;
     margin-bottom: 24px;
   }
   &-message {
-    padding: 32px 16px 48px;
+    padding: 32px 16px 20px;
     position: relative;
     text-align: center;
     background-color: #fff;
-    border: 1px solid $borderColor;
-    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid $borderColor;
+    border-radius: 8px 8px 0 0;
   }
   &-role-label {
     position: absolute;
@@ -183,7 +211,6 @@ $borderColor: #e8e8e8;
     list-style: none;
     padding: 24px 16px 8px;
     background-color: #fff;
-    border: 1px solid $borderColor;
     border-width: 0 1px;
     border-radius: 0;
     &-item {
@@ -209,10 +236,9 @@ $borderColor: #e8e8e8;
   }
   &-help {
     background-color: #fff;
-    border: 1px solid $borderColor;
     border-width: 0 1px 1px;
-    border-radius: 0 0 4px 4px;
     padding: 0 16px 16px;
+    border-radius: 0 0 8px 8px;
     &-link {
       text-decoration: none;
       color: #2397f3;

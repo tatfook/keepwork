@@ -95,8 +95,8 @@ export default {
 <style lang="scss" scoped>
 .historical-data {
   background: #fff;
-  border: solid 1px #e8e8e8;
   padding: 0 24px 26px;
+  border-radius: 8px;
   &-title {
     margin: 20px 0;
     font-size: 14px;

@@ -70,7 +70,7 @@ export default {
     width: 288px;
     box-sizing: border-box;
     padding: 16px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     &:hover {
       box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.16);
@@ -83,7 +83,7 @@ export default {
     display: block;
     background: #c0c4cc;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 8px;
   }
   &-desc {
     font-size: 12px;
