@@ -41,6 +41,7 @@ import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import avatar from '@/assets/lessonImg/default_avatar.png'
 import TableHeaderPopover from './TableHeaderPopover'
+import io from 'socket.io-client'
 export default {
   name: 'OrgTeacherLessonPerformance',
   components: {
@@ -53,21 +54,18 @@ export default {
       defaultAvatar: avatar,
       KEEPWORK_SIGN: 'k',
       PARACRAFT_SIGN: 'p',
-      _interval: null
-    }
-  },
-  sockets: {
-    async msg(data) {
-      const { payload } = data
-      if (payload.type === 1) {
-        this.updateLearnRecordsBySocket(payload.record)
-      }
+      _interval: null,
+      socketQueue: [],
+      _socketQueueInterval: null,
+      isRunning: false
     }
   },
   async created() {
     if (this.isInCurrentClass) {
       await this.copyClassroomQuiz()
       this.updateLearnRecords()
+      this.intervalCheckQueue()
+      this.initSocket()
     }
   },
   async destroyed() {
@@ -88,6 +86,47 @@ export default {
       copyClassroomQuiz: 'org/teacher/copyClassroomQuiz',
       updateLearnRecordsBySocket: 'org/teacher/updateLearnRecordsBySocket'
     }),
+    initSocket() {
+      const socket = io(process.env.SOCKET_API_PREFIX, {
+        query: {
+          userId: this.userId,
+          token: this.token
+        },
+        transports: ['websocket']
+      })
+      socket.on('msg', data => {
+        const { payload } = data
+        if (payload.type === 1) {
+          this.socketQueue.push({
+            timestamp: +Date.now(),
+            record: payload.record
+          })
+        }
+      })
+    },
+    async intervalCheckQueue(delay = 500) {
+      clearTimeout(this._socketQueueInterval)
+      if (!this.isRunning && this.socketQueue.length) {
+        await this.runQueue()
+      }
+      this._socketQueueInterval = setTimeout(
+        () => this.intervalCheckQueue(),
+        delay
+      )
+    },
+    async runQueue() {
+      this.isRunning = true
+      const queue = _.clone(this.socketQueue)
+      const queueTimestamps = _.map(queue, item => item.timestamp)
+      while (queue.length > 0) {
+        const { timestamp, record } = queue.pop()
+        await this.updateLearnRecordsBySocket(record)
+      }
+      _.remove(this.socketQueue, item =>
+        _.includes(queueTimestamps, item.timestamp)
+      )
+      this.isRunning = false
+    },
     async intervalUpdateLearnRecords(delay = 1000 * 60) {
       try {
         await this.updateLearnRecords()
@@ -104,7 +143,7 @@ export default {
     },
     async clearIntervalUpdateLearnRecords() {
       clearTimeout(this._interval)
-      // await this.updateLearnRecords()
+      clearTimeout(this._socketQueueInterval)
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
@@ -196,8 +235,12 @@ export default {
       learnRecords: 'org/teacher/learnRecords',
       classroomQuiz: 'org/teacher/classroomQuiz',
       classroom: 'org/teacher/classroom',
-      isClassIsOver: 'org/teacher/isClassIsOver'
+      userinfo: 'org/userinfo',
+      token: 'org/token'
     }),
+    userId() {
+      return this.userinfo.id
+    },
     isInCurrentClass() {
       const { classId: cid, packageId: pid, lessonId: lid } = this.$route.params
       const { classId, packageId, lessonId } = this.classroom

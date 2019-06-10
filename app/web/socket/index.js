@@ -14,7 +14,6 @@ try {
 } catch (error) {
   console.error(error)
 }
-
 const debugMode = ['release', 'stage'].some(env => process.env.SOCKET_API_PREFIX.includes(env))
 
 export const socket = new VueSocketIO({

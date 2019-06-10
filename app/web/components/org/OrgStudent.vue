@@ -10,6 +10,7 @@
 import OrgHeader from './common/OrgHeader'
 import { mapActions, mapGetters } from 'vuex'
 import { lesson } from '@/api'
+import io from 'socket.io-client'
 
 export default {
   name: 'OrgStudentContainer',
@@ -24,29 +25,7 @@ export default {
       isFirstCheck: true
     }
   },
-  sockets: {
-    msg(data) {
-      const { payload = {} } = data
-      if (payload.type === 1 && (payload.beginClass || payload.classOver)) {
-        this.getTeachingLesson()
-        if (this.isBeInClassroom){
-          this.checkClassroom().catch(e => {
-            this._notify && this._notify.close()
-            this._notify = null
-            if (this.$route.name === 'OrgStudentPackageLesson') {
-              this.$message({
-                message: this.$t('lesson.classIsOver'),
-                type: 'warning',
-                duration: 10000
-              })
-            }
-          })
-        }
-      }
-    }
-  },
   async created() {
-    console.log(this.classroom)
     try {
       await Promise.all([
         this.getUserOrgRealName(),
@@ -55,6 +34,7 @@ export default {
       ])
       await this.resumeClassroom()
       this.checkIsInClassroom(this.$route)
+      this.initSocket()
       // this.intervalCheckClass()
     } catch (error) {
       console.error(error)
@@ -79,6 +59,34 @@ export default {
           params: { packageId, lessonId }
         })
       }
+    },
+    initSocket() {
+      const socket = io(process.env.SOCKET_API_PREFIX, {
+        query: {
+          userId: this.userId,
+          token: this.token
+        },
+        transports: ['websocket']
+      })
+      socket.on('msg', data => {
+        const { payload = {} } = data
+        if (payload.type === 1 && (payload.beginClass || payload.classOver)) {
+          this.getTeachingLesson()
+          if (this.isBeInClassroom) {
+            this.checkClassroom().catch(e => {
+              this._notify && this._notify.close()
+              this._notify = null
+              if (this.$route.name === 'OrgStudentPackageLesson') {
+                this.$message({
+                  message: this.$t('lesson.classIsOver'),
+                  type: 'warning',
+                  duration: 10000
+                })
+              }
+            })
+          }
+        }
+      })
     },
     checkIsInClassroom(route) {
       const {
@@ -130,8 +138,13 @@ export default {
     ...mapGetters({
       isBeInClassroom: 'org/student/isBeInClassroom',
       classroom: 'org/student/classroom',
-      isTeaching: 'org/student/isTeaching'
-    })
+      isTeaching: 'org/student/isTeaching',
+      userinfo: 'org/userinfo',
+      token: 'org/token'
+    }),
+    userId() {
+      return this.userinfo.id
+    }
   },
   destroyed() {
     this._notify && this._notify.close()

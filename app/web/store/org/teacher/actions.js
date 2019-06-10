@@ -144,18 +144,19 @@ const actions = {
       classId
     })
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
+    return Promise.resolve()
   },
   async updateLearnRecordsBySocket({ dispatch, commit, getters: { learnRecords } }, payload) {
     const username = _.get(payload, 'extra.username', '')
     if (!username) {
-      dispatch('updateLearnRecords')
-      return
+      await dispatch('updateLearnRecords')
+      return Promise.resolve()
     }
     const _learnRecords = _.cloneDeep(learnRecords)
     if (payload.leaveClass) {
       _.remove(_learnRecords, item => item.extra.username === username)
       commit(UPDATE_LEARN_RECORDS_SUCCESS, _learnRecords)
-      return
+      return Promise.resolve()
     }
     const index = _.findIndex(_learnRecords, item => item.extra.username === username)
     if (index >= 0) {
@@ -164,6 +165,7 @@ const actions = {
       _learnRecords.push(payload)
     }
     commit(UPDATE_LEARN_RECORDS_SUCCESS, _learnRecords)
+    return Promise.resolve()
   },
   async getCurrentClass({ commit, rootGetters: { 'org/currentOrgId': organizationId, 'org/userinfo': userInfo } }) {
     await lesson.classrooms
