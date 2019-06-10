@@ -7,7 +7,7 @@
         <span :title="$t('common.Cancel')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
         <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
       </div>
-      <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' @click='handleSelectMediaItem(mediaItem)'>
+      <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item'>
         <div class="media-type-media-item-main">
           <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
           <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
@@ -19,6 +19,7 @@
             </div>
             <div class="media-type-media-item-operations">
               <file-url-getter title="复制" :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
+              <file-url-getter title="插入" :selectFile="mediaItem" operateType="insert" @close="handleClose"></file-url-getter>
               <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
               <file-renamer title="重命名" :isTextShow="false" :selectFile="mediaItem"></file-renamer>
               <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
@@ -41,9 +42,7 @@
       </div>
     </div>
     <el-row class="media-type-footer">
-      <el-col :span="6" :offset="18">
-        <el-button size="small" :type="availableSelectedMediaItem ? 'primary':''" :disabled='!availableSelectedMediaItem' round @click="handleInsert(availableSelectedMediaItem)">{{ $t('common.apply') }}</el-button>
-      </el-col>
+      <file-url-getter class="media-type-footer-button" :isDisabled="!isHaveSelected" :selectFile="approvedMultipleSelectionResults[0] || {}" :isApplyButtonType="true" operateType="insert" @close="handleClose"></file-url-getter>
     </el-row>
   </div>
 </template>
@@ -95,12 +94,13 @@ export default {
     isVideoTabShow: Boolean
   },
   mounted() {
+    this.fileList = this.skyDriveMediaLibraryData
     this.keyupSubmit()
   },
   data() {
     return {
+      fileList: [],
       selectedMediaItem: null,
-      searchWord: '',
       loading: false,
       qiniuImgThumbnail: '&imageView2/2/w/100'
     }
@@ -108,18 +108,37 @@ export default {
   computed: {
     sortedSkyDriveMediaLibraryData() {
       return _.sortBy(
-        this.skyDriveMediaLibraryData,
+        this.fileList,
         mediaItem => -moment(mediaItem.updatedAt).valueOf()
       )
     },
-    availableSelectedMediaItem() {
-      let item = this.itemFilterBySearchWord(this.selectedMediaItem)
-        ? this.selectedMediaItem
-        : null
-      return item && item.checkPassed ? item : null
+    approvedMultipleSelectionResults() {
+      return (
+        this.sortedSkyDriveMediaLibraryData.filter(
+          ({ isChecked }) => Number(isChecked) === 1
+        ) || []
+      )
+    },
+    isAllSelected() {
+      return (
+        this.approvedMultipleSelectionResults.length ==
+        this.sortedSkyDriveMediaLibraryData.length
+      )
+    },
+    isHaveSelected() {
+      return this.approvedMultipleSelectionResults.length > 0
     }
   },
   methods: {
+    selectAll() {
+      let selected = this.isAllSelected ? false : true
+      this.fileList = _.map(this.fileList, mediaItem => {
+        return {
+          ...mediaItem,
+          isChecked: selected
+        }
+      })
+    },
     getExtClass(file) {
       let { ext } = file
       return ExtIcons[ext] || 'icon-ukown_file'
@@ -136,22 +155,8 @@ export default {
       this.$emit('uploadFile', e)
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
     },
-    handleSelectMediaItem(mediaItem) {
-      this.selectedMediaItem = mediaItem
-    },
-    itemFilterBySearchWord(item) {
-      if (!item) return false
-      let { filename } = item
-      let searchWord = this.searchWord && this.searchWord.trim().toLowerCase()
-      if (!searchWord) return true
-      let filenameLowerCase = (filename || '').toLowerCase()
-      return filenameLowerCase.indexOf(searchWord) >= 0
-    },
-    async handleInsert(file) {
-      if (!file.checkPassed) {
-        return
-      }
-      this.$emit('insert', { file })
+    handleClose({ file, url }) {
+      this.$emit('close', { file, url })
     },
     handlePlay(mediaItem) {
       let mediaItemVideoPreviewId = `mediaItemVideoPreview_${Date.now()}`
@@ -183,6 +188,14 @@ export default {
   filters: {
     formatDate(date) {
       return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    }
+  },
+  watch: {
+    skyDriveMediaLibraryData() {
+      this.fileList = this.skyDriveMediaLibraryData
+    },
+    isAllSelected(val) {
+      this.$emit('selectAllStateChange', val)
     }
   },
   destroyed() {
@@ -285,14 +298,18 @@ export default {
     &-operations {
       position: absolute;
       left: 0;
-      right: 0;
+      right: 3px;
       color: #fff;
       display: flex;
       justify-content: flex-end;
       bottom: 8px;
+      .iconfont {
+        font-size: 13px;
+        margin-right: 0;
+      }
     }
     .el-button + .el-button {
-      margin-left: 8px;
+      margin-left: 6px;
     }
     &-play {
       width: 32px;
@@ -354,6 +371,7 @@ export default {
   &-footer {
     margin-top: 20px;
     text-align: right;
+    padding: 0 36px 30px;
   }
 }
 </style>

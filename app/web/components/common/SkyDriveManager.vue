@@ -23,7 +23,7 @@
       </div>
     </div>
     <table-type class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='list'" :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow'></media-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
     <file-uploader v-show="isDroping" class="skydrive-manager-drop" :isDragMode="true" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
   </div>
 </template>
@@ -221,6 +221,7 @@ export default {
     },
     toggleViewType() {
       this.viewType = this.viewType == 'list' ? 'thumb' : 'list'
+      this.isAllSelected = this.activeChildComp.isAllSelected
     },
     changeMediaFilterType(type) {
       this.mediaFilterType = type

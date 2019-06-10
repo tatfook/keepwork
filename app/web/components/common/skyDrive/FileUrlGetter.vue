@@ -1,7 +1,8 @@
 <template>
-  <el-button :disabled="isDisabled" class="file-url-getter" type="text" @click="handleClick">
-    <i v-if="operateType == 'copy'" class="iconfont icon-copy"></i>
-    <i v-else class="iconfont icon-insert"></i>
+  <el-button :disabled="isDisabled" class="file-url-getter" :class="{'file-url-getter-button': isApplyButtonType}" :type="type" @click="handleClick">
+    <i v-if="operateType == 'copy' && !isApplyButtonType" class="iconfont icon-copy"></i>
+    <i v-if="operateType == 'insert' && !isApplyButtonType" class="iconfont icon-insert"></i>
+    <span v-if="isApplyButtonType">{{$t('common.apply')}}</span>
   </el-button>
 </template>
 
@@ -10,6 +11,10 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FileUrlGetter',
   props: {
+    isApplyButtonType: {
+      type: Boolean,
+      default: false
+    },
     isDisabled: {
       type: Boolean,
       default: false
@@ -32,6 +37,9 @@ export default {
     }),
     isEditorPage() {
       return _.get(this.$route, 'name') === 'Editor'
+    },
+    type() {
+      return this.isApplyButtonType ? 'primary' : 'text'
     }
   },
   methods: {
@@ -98,6 +106,11 @@ export default {
 .file-url-getter {
   padding: 0;
   color: inherit;
+  &-button {
+    padding: 9px 30px;
+    font-size: 14px;
+    color: #fff;
+  }
   &-messagebox {
     word-break: break-all;
   }
