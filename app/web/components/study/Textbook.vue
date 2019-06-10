@@ -232,12 +232,12 @@ export default {
           this.purchaseMethods = [
             {
               label: '去京东购买',
-              purchaseUrl: 'https://search.jd.com/Search?keyword=%E7%9B%B8%E4%BC%BC%E6%80%A7%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&enc=utf-8&wq=%E7%9B%B8%E4%BC%BC%E6%80%A7%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&pvid=ae761b5051e6412d96c186612f9de69f'
+              purchaseUrl: 'https://search.jd.com/Search?keyword=%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%92%8C%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&enc=utf-8&suggest=1.his.0.0&wq=&pvid=e0e76e510d5542668feed3848715deaa'
             },
             {
               label: '去当当购买',
               purchaseUrl:
-                'http://search.dangdang.com/?key=%CF%E0%CB%C6%D0%D4%D3%EB%CF%E0%CB%C6%D4%AD%C0%ED&act=input'
+                'http://search.dangdang.com/?key=%CF%E0%CB%C6%D0%D4%BA%CD%CF%E0%CB%C6%D4%AD%C0%ED&act=input'
             },
             {
               label: '去淘宝购买',
@@ -247,7 +247,7 @@ export default {
             {
               label: '去孔夫子旧书网购买',
               purchaseUrl:
-                'http://search.kongfz.com/product_result/?select=0&key=%E7%9B%B8%E4%BC%BC%E6%80%A7%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&_stpmt=eyJzZWFyY2hfdHlwZSI6ImFjdGl2ZSJ9'
+                'http://search.kongfz.com/product_result/?select=0&key=%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%92%8C%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&_stpmt=eyJzZWFyY2hfdHlwZSI6ImFjdGl2ZSJ9'
             }
           ]
           this.isShowPurchase = true
