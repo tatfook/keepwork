@@ -44,8 +44,8 @@
                 <i class="el-icon-more el-icon--right"></i>
               </span>
               <el-dropdown-menu class='table-type-cell-actions-menu' slot="dropdown">
-                <el-dropdown-item @click.native='handleRename(scope.row)'>
-                  <span class='el-icon-edit'></span>{{ $t('common.rename') }}
+                <el-dropdown-item>
+                  <file-renamer :selectFile="scope.row"></file-renamer>
                 </el-dropdown-item>
                 <el-dropdown-item>
                   <file-deleter :selectedFiles="[scope.row]"></file-deleter>
@@ -61,19 +61,13 @@
 <script>
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
-import { getFilenameWithExt } from '@/lib/utils/gitlab'
-import { getBareFilename } from '@/lib/utils/filename'
 import FileDownloader from './FileDownloader'
 import FileDeleter from './FileDeleter'
+import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
-const ErrFilenamePatt = new RegExp('^[^\\\\/*?|<>:"]+$')
 export default {
   name: 'tableType',
   props: {
-    userSkyDriveFileList: {
-      type: Array,
-      required: true
-    },
     skyDriveTableDataWithUploading: {
       type: Array,
       required: true
@@ -92,6 +86,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      // userSkyDriveFileList: 'user/skyDriveFileList',
       userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId',
       activePageInfo: 'activePageInfo'
     }),
@@ -109,7 +104,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      userChangeFileNameInSkyDrive: 'user/changeFileNameInSkyDrive',
       userUseFileInSite: 'user/useFileInSite'
     }),
     handleClose({ file, url }) {
@@ -123,58 +117,6 @@ export default {
     },
     handleSelectionChange(selectionResults) {
       this.multipleSelectionResults = selectionResults
-    },
-    async showRenamePrompt({ bareFilename, filename, ext }) {
-      return await this.$prompt(
-        this.$t('skydrive.newFilenamePromptMsg'),
-        this.$t('common.rename'),
-        {
-          inputValue: bareFilename,
-          confirmButtonText: this.$t('common.OK'),
-          cancelButtonText: this.$t('common.Cancel'),
-          inputValidator: str => {
-            if (str === bareFilename || str === filename) return true
-            if (!str) return this.$t('skydrive.nameEmptyError')
-            let isFilenameValid = this.testFilenameIsValid(str)
-            if (typeof isFilenameValid === 'string') return isFilenameValid
-            return this.filenameValidator(getFilenameWithExt(str, ext))
-          }
-        }
-      )
-    },
-    async handleRename(item) {
-      let { _id, ext, filename, key } = item
-      let bareFilename = getBareFilename(filename)
-      let { value: newname } = await this.showRenamePrompt({
-        bareFilename,
-        filename,
-        ext
-      })
-      newname = (newname || '').trim()
-      if (!newname) return
-      let newnameExt = /.+\./.test(newname) ? newname.split('.').pop() : ''
-      newnameExt = newnameExt.toLowerCase()
-      newname = newnameExt !== ext ? `${newname}.${ext}` : newname
-      let newFilename = newname
-      if (newFilename === filename) return
-      this.loading = true
-      await this.userChangeFileNameInSkyDrive({
-        key,
-        filename: newFilename
-      }).catch(err => console.error(err))
-      this.loading = false
-    },
-    testFilenameIsValid(newFilename) {
-      let errMsg = this.$t('skydrive.nameContainSpecialCharacterError')
-      return !ErrFilenamePatt.test(newFilename) ? errMsg : true
-    },
-    filenameValidator(newFilename) {
-      let errMsg = this.$t('skydrive.nameConflictError')
-      return this.userSkyDriveFileList.filter(
-        ({ filename }) => filename === newFilename
-      ).length
-        ? errMsg
-        : true
     },
     handleUploadFile(e) {
       this.$emit('uploadFile', e)
@@ -202,6 +144,7 @@ export default {
   components: {
     FileDownloader,
     FileDeleter,
+    FileRenamer,
     FileUrlGetter
   }
 }
