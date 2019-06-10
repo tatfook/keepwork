@@ -9,7 +9,6 @@ import Cookies from 'js-cookie'
 import contactContent from '@/assets/source/contact.md'
 import profileContent from '@/assets/source/profile.md'
 import siteContent from '@/assets/source/site.md'
-import storage from '../../api/storage'
 
 const {
   TOGGLE_LOGIN_DIALOG,
@@ -119,7 +118,8 @@ const actions = {
   async getProfile({ commit }, { forceLogin = true, useCache = true } = {}) {
     if (useCache) return
     const profile = await keepwork.user.getProfile()
-    commit(GET_PROFILE_SUCCESS, profile)
+    const token = Cookies.get('token')
+    commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context
