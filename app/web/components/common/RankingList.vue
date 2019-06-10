@@ -76,7 +76,7 @@ export default {
         : this.gameStagesWorks
     },
     showProjectRate(){
-      return  this.showProjectsByTab === this.rankingList ? true : false 
+      return  this.showProjectsByTab === this.rankingList ? true : false
     },
     rankingList() {
       return _.get(this.ranking, 'rows', [])

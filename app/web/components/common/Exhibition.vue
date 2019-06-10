@@ -7,15 +7,30 @@
       </el-breadcrumb>
     </div>
     <div class="exhibition-hall-filter">
-      <el-cascader v-model="selectedGameType" :options="gameTypeOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameType" :options="gameTypeOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
+    </div>
+    <el-row>
+      <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
+        <project-cell :project="project"></project-cell>
+      </el-col>
+    </el-row>
+    <div class="all-projects-pages" v-if="projectsCount > perPage">
+      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
+      </el-pagination>
     </div>
   </div>
 </template>
 <script>
+import ProjectCell from '@/components/common/ProjectCell'
+
 export default {
   name: 'ExhibitionHall',
   data() {
     return {
+      perPage: 10,
+      page: 1,
       selectedGameType: [],
       gameTypeOptions: [
         {
@@ -29,16 +44,48 @@ export default {
             {
               value: '1-2',
               label: '获奖作品'
-            },
+            }
           ]
         }
-      ]
+      ],
+      gamePeriodicalOptions: [
+        {
+          value: '1',
+          label: '第一期'
+        },
+        {
+          value: '2',
+          label: '第2期'
+        }
+      ],
+      gameThemeOptions: [
+        {
+          value: '1',
+          label: '春天'
+        },
+        {
+          value: '2',
+          label: '夏天'
+        }
+      ],
+      allProjectsDataOptimize: []
+    }
+  },
+  computed: {
+    projectsCount() {
+      return 0
     }
   },
   methods: {
     handleChange(value) {
       console.log(value)
+    },
+    targetPage(targetPage) {
+      console.log(targetPage)
     }
+  },
+  components: {
+    ProjectCell
   }
 }
 </script>
@@ -48,11 +95,23 @@ export default {
   max-width: 1200px;
   margin: 10px auto;
   &-filter {
-    height: 164px;
+    height: 64px;
     background-color: #fff;
     padding-left: 20px;
-    border: 1px solid red;
     margin: 20px 0;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    &-options {
+      margin: 0 6px;
+      /deep/ .el-input {
+        .el-input__inner {
+          background: rgb(242, 242, 242);
+          border-radius: 20px;
+          border: none;
+        }
+      }
+    }
   }
 }
 </style>
