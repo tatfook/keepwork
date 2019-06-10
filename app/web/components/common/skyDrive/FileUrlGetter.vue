@@ -97,7 +97,7 @@ export default {
 <style lang="scss" scoped>
 .file-url-getter {
   padding: 0;
-  color: #606266;
+  color: inherit;
   &-messagebox {
     word-break: break-all;
   }

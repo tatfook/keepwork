@@ -10,10 +10,11 @@
       <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' @click='handleSelectMediaItem(mediaItem)'>
         <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
         <img v-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
-        <div class='media-type-media-item-cover'>
+        <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
           <el-checkbox v-model="mediaItem.isChecked"></el-checkbox>
           <div class="media-type-media-item-operations">
             <i v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
+            <file-url-getter title="复制" :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
             <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
             <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
           </div>
@@ -44,6 +45,7 @@ import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import FileDeleter from './FileDeleter'
 import FileDownloader from './FileDownloader'
+import FileUrlGetter from './FileUrlGetter'
 export default {
   name: 'mediaType',
   props: {
@@ -145,7 +147,8 @@ export default {
   },
   components: {
     FileDownloader,
-    FileDeleter
+    FileDeleter,
+    FileUrlGetter
   }
 }
 </script>
@@ -202,6 +205,10 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+      &-checked {
+        display: inline-block;
+      }
       .el-checkbox {
         position: absolute;
         top: 8px;
@@ -268,7 +275,6 @@ export default {
     &:hover,
     &.selected {
       .media-type-media-item-cover {
-        background: rgba(0, 0, 0, 0.4);
         display: inline-block;
       }
       .el-icon-delete {

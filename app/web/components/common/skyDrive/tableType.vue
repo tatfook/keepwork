@@ -261,5 +261,10 @@ export default {
       transform: rotate(90deg);
     }
   }
+  &-cell-actions {
+    [class*='icon'] {
+      margin-right: 0;
+    }
+  }
 }
 </style>
