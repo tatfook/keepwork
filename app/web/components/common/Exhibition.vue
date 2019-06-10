@@ -24,6 +24,7 @@
 </template>
 <script>
 import ProjectCell from '@/components/common/ProjectCell'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ExhibitionHall',
@@ -71,12 +72,24 @@ export default {
       allProjectsDataOptimize: []
     }
   },
+  async mounted() {
+    await this.getGamesList()
+    console.log('1', this.gamesList)
+    this.loading = false
+  },
   computed: {
+    ...mapGetters({
+      gamesList: 'pbl/gamesList',
+      gameWorks: 'pbl/gameWorks'
+    }),
     projectsCount() {
       return 0
     }
   },
   methods: {
+    ...mapActions({
+      getGamesList: 'pbl/getGamesList'
+    }),
     handleChange(value) {
       console.log(value)
     },

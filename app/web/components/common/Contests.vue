@@ -245,7 +245,7 @@ export default {
       &-top {
         text-align: center;
         padding: 20px 28px;
-        background-color: #e1f1ff;
+        background-color: rgb(229,243,255);
         border-radius: 10px 10px 0 0;
         &-img {
           height: 60px;
