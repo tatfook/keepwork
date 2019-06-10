@@ -8,17 +8,23 @@
         <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
       </div>
       <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' @click='handleSelectMediaItem(mediaItem)'>
-        <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
-        <img v-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
-        <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
-          <el-checkbox v-model="mediaItem.isChecked"></el-checkbox>
-          <div class="media-type-media-item-operations">
-            <i v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)"></i>
-            <file-url-getter title="复制" :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
-            <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
-            <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
+        <div class="media-type-media-item-main">
+          <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          <img v-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
+          <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
+            <el-checkbox v-model="mediaItem.isChecked"></el-checkbox>
+            <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
+              <i class="el-icon-caret-right"></i>
+            </div>
+            <div class="media-type-media-item-operations">
+              <file-url-getter title="复制" :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
+              <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
+              <file-renamer title="重命名" :isTextShow="false" :selectFile="mediaItem"></file-renamer>
+              <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
+            </div>
           </div>
         </div>
+        <div class="media-type-media-item-name" :title="mediaItem.filename">{{mediaItem.filename}}</div>
       </div>
       <div v-if="!sortedSkyDriveMediaLibraryData.length && !uploadingFiles.length" class="media-type-media-library-placeholder">
         <img src="@/assets/img/media_library_empty.png">
@@ -45,6 +51,7 @@ import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import FileDeleter from './FileDeleter'
 import FileDownloader from './FileDownloader'
+import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
 export default {
   name: 'mediaType',
@@ -148,6 +155,7 @@ export default {
   components: {
     FileDownloader,
     FileDeleter,
+    FileRenamer,
     FileUrlGetter
   }
 }
@@ -173,13 +181,16 @@ export default {
   }
   &-media-item {
     box-sizing: border-box;
-    width: 100px;
-    height: 100px;
     margin: 5px 10px 5px 0px;
     display: inline-block;
-    background-color: #d1d1d1;
-    position: relative;
-    vertical-align: middle;
+    width: 100px;
+    &-main {
+      width: 100px;
+      height: 100px;
+      background-color: #d1d1d1;
+      position: relative;
+      vertical-align: middle;
+    }
     [class*='icon'] {
       cursor: pointer;
     }
@@ -205,7 +216,7 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-        background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.4);
       &-checked {
         display: inline-block;
       }
@@ -238,28 +249,22 @@ export default {
       justify-content: flex-end;
       bottom: 8px;
     }
+    .el-button + .el-button {
+      margin-left: 8px;
+    }
     &-play {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      border: 3px solid #90908b;
-      position: relative;
+      position: absolute;
+      left: 34px;
+      top: 34px;
       cursor: pointer;
-      &:after {
-        content: '';
-        display: block;
-        position: relative;
-        left: 2px;
-        box-sizing: border-box;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 8px 0px 8px 12px;
-        border-color: transparent transparent transparent #90908b;
-      }
+      color: #fff;
+      text-align: center;
+      line-height: 32px;
+      background-color: rgba(0, 0, 0, 0.5);
+      font-size: 20px;
     }
     .el-progress {
       width: 100%;
@@ -280,34 +285,12 @@ export default {
       .el-icon-delete {
         display: block;
       }
-      .media-type-media-item-play {
-        border: 1px solid white;
-        width: 11px;
-        height: 11px;
-        top: 31.4px;
-        right: 32px;
-        &:after {
-          content: '';
-          display: block;
-          position: relative;
-          left: 1.7px;
-          top: 0.4px;
-          box-sizing: border-box;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 4.5px 0px 4.5px 5.5px;
-          border-color: transparent transparent transparent white;
-        }
-      }
-      .media-type-media-item-play:hover {
-        border: 1px solid #3ba4ff;
-        width: 11px;
-        height: 11px;
-        &:after {
-          border-color: transparent transparent transparent #3ba4ff;
-        }
-      }
+    }
+    &-name {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   &-video-preview-dialog {
