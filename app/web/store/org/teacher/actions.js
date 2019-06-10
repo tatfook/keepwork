@@ -87,14 +87,14 @@ const actions = {
     }
   },
   async getLessonDetail({ commit, dispatch, getters }, { classId, packageId, lessonId }) {
-    let [ res, detail ] = await Promise.all([
+    let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId }),
       dispatch('getOrgClassPackageDetail', { classId, packageId })
     ])
     const { orgClassPackagesDetail } = getters
     const packageInfo = _.find(
-      _.get(orgClassPackagesDetail, [ classId, packageId, 'lessons' ], []),
+      _.get(orgClassPackagesDetail, [classId, packageId, 'lessons'], []),
       item => item.lessonId === _.toNumber(lessonId)
     )
     detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
@@ -121,14 +121,14 @@ const actions = {
   toggleLessonHint({ commit }) {
     commit(TOGGLE_LESSON_HINT)
   },
-  async beginTheClass({ commit, rootGetters: { 'org/currentOrgId': organizationId } }, payload) {
+  async beginTheClass({ dispatch, commit, rootGetters: { 'org/currentOrgId': organizationId } }, payload) {
     const classroom = await lesson.classrooms.begin({
       payload: { ...payload, organizationId }
     })
     commit(BEGIN_THE_CLASS_SUCCESS, classroom)
+    dispatch('broadcastBeginClass')
   },
-  async dismissTheClass(context, payload) {
-    const { commit, getters: { classroom, classId } } = context
+  async dismissTheClass({ dispatch, commit, getters: { classroom, classId } }, payload) {
     let flag = await lesson.classrooms.dismiss({
       classId
     })
@@ -136,6 +136,7 @@ const actions = {
       let _classroom = _.clone(classroom)
       _classroom.state = 2
       commit(DISMISS_THE_CLASS_SUCCESS, _classroom)
+      dispatch('broadcastClassOver')
     }
   },
   async updateLearnRecords({ commit, getters: { classId } }, payload) {
@@ -143,6 +144,28 @@ const actions = {
       classId
     })
     commit(UPDATE_LEARN_RECORDS_SUCCESS, learnRecords)
+    return Promise.resolve()
+  },
+  async updateLearnRecordsBySocket({ dispatch, commit, getters: { learnRecords } }, payload) {
+    const username = _.get(payload, 'extra.username', '')
+    if (!username) {
+      await dispatch('updateLearnRecords')
+      return Promise.resolve()
+    }
+    const _learnRecords = _.cloneDeep(learnRecords)
+    if (payload.leaveClass) {
+      _.remove(_learnRecords, item => item.extra.username === username)
+      commit(UPDATE_LEARN_RECORDS_SUCCESS, _learnRecords)
+      return Promise.resolve()
+    }
+    const index = _.findIndex(_learnRecords, item => item.extra.username === username)
+    if (index >= 0) {
+      _learnRecords[index] = payload
+    } else {
+      _learnRecords.push(payload)
+    }
+    commit(UPDATE_LEARN_RECORDS_SUCCESS, _learnRecords)
+    return Promise.resolve()
   },
   async getCurrentClass({ commit, rootGetters: { 'org/currentOrgId': organizationId, 'org/userinfo': userInfo } }) {
     await lesson.classrooms
@@ -167,6 +190,25 @@ const actions = {
   },
   async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
     isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
+  },
+  async broadcastBeginClass({ dispatch }, payload) {
+    const userIds = await dispatch('getStudentIDs')
+    await dispatch('sendSocketMessage', { userIds, msg: { type: 1, beginClass: true, ...payload } })
+  },
+  async broadcastClassOver({ dispatch }, payload) {
+    const userIds = await dispatch('getStudentIDs')
+    await dispatch('sendSocketMessage', { userIds, msg: { type: 1, classOver: true, ...payload } })
+  },
+  async sendSocketMessage(context, payload) {
+    await lessonOrganizations.sendSocketMessage(payload)
+  },
+  async getStudentList({ rootGetters: { 'org/currentOrgId': organizationId } }, params = {}) {
+    const res = await lessonOrganizationClassMembers.getStudents({ organizationId, ...params })
+    return res.rows
+  },
+  async getStudentIDs({ dispatch }, params = {}) {
+    const studentList = await dispatch('getStudentList', params)
+    return _.map(studentList, item => item.memberId)
   }
 }
 

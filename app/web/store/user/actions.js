@@ -116,12 +116,10 @@ const actions = {
   //   let thirdRegisterInfo = await keepwork.user.register(payload, null, true)
   //   return thirdRegisterInfo
   // },
-  async getProfile(context, { forceLogin = true, useCache = true } = {}) {
-    let { commit, dispatch, getters: { token } } = context
+  async getProfile({ commit }, { forceLogin = true, useCache = true } = {}) {
     if (useCache) return
     const profile = await keepwork.user.getProfile()
-    await commit(GET_PROFILE_SUCCESS, { ...profile, token })
-    // await dispatch('lesson/resumeClassData', null, { root: true })
+    commit(GET_PROFILE_SUCCESS, profile)
   },
   async getUserDetailByUsername(context, { username }) {
     let { commit, getters: { usersDetail } } = context
