@@ -10,7 +10,8 @@
       <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item' @click='handleSelectMediaItem(mediaItem)'>
         <div class="media-type-media-item-main">
           <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
-          <img v-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
+          <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
+          <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
             <el-checkbox v-model="mediaItem.isChecked"></el-checkbox>
             <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
@@ -53,6 +54,37 @@ import FileDeleter from './FileDeleter'
 import FileDownloader from './FileDownloader'
 import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
+const ExtIcons = {
+  txt: 'icon-txt1',
+  mp4: 'icon-mp4-1',
+  mp3: 'icon-mp3-1',
+  rar: 'icon-rar1',
+  gif: 'icon-gif1',
+  ppt: 'icon-ppt',
+  png: 'icon-PNG',
+  html: 'icon-html',
+  pdf: 'icon-pdf1',
+  xls: 'icon-excel',
+  xlsx: 'icon-excel',
+  jpg: 'icon-jpg',
+  psd: 'icon-PSD',
+  svg: 'icon-SVG',
+  zip: 'icon-zip',
+  ts: 'icon-ts',
+  less: 'icon-less',
+  jsx: 'icon-jsx',
+  js: 'icon-js',
+  css: 'icon-css',
+  sketch: 'icon-sketch',
+  exe: 'icon-exe',
+  xmind: 'icon-xmind',
+  svga: 'icon-SVGA',
+  md: 'icon-markdown',
+  json: 'icon-json',
+  doc: 'icon-word',
+  docx: 'icon-word',
+  sql: 'icon-sql'
+}
 export default {
   name: 'mediaType',
   props: {
@@ -88,6 +120,10 @@ export default {
     }
   },
   methods: {
+    getExtClass(file) {
+      let { ext } = file
+      return ExtIcons[ext] || 'icon-ukown_file'
+    },
     keyupSubmit() {
       document.onkeydown = e => {
         let _key = window.event.keyCode
@@ -190,6 +226,8 @@ export default {
       background-color: #d1d1d1;
       position: relative;
       vertical-align: middle;
+      text-align: center;
+      line-height: 100px;
     }
     [class*='icon'] {
       cursor: pointer;
@@ -197,6 +235,9 @@ export default {
     &.selected {
       border: 2px solid #3ba4ff;
       border-radius: 2px;
+    }
+    &-ext-cover {
+      font-size: 50px;
     }
     &-img {
       display: block;
@@ -221,6 +262,7 @@ export default {
         display: inline-block;
       }
       .el-checkbox {
+        line-height: initial;
         position: absolute;
         top: 8px;
         left: 8px;
@@ -291,6 +333,9 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      line-height: initial;
+      font-size: 12px;
+      padding: 8px 0;
     }
   }
   &-video-preview-dialog {
@@ -310,5 +355,91 @@ export default {
     margin-top: 20px;
     text-align: right;
   }
+}
+</style>
+<style lang="scss" scoped>
+.icon-txt1 {
+  color: rgb(186, 189, 194);
+}
+.icon-mp4-1 {
+  color: rgb(98, 166, 245);
+}
+.icon-mp3-1 {
+  color: rgb(245, 108, 73);
+}
+.icon-rar1 {
+  color: rgb(159, 209, 59);
+}
+.icon-gif1 {
+  color: rgb(210, 110, 219);
+}
+.icon-ppt {
+  color: rgb(243, 115, 39);
+}
+.icon-PNG {
+  color: rgb(60, 153, 216);
+}
+.icon-html {
+  color: rgb(240, 70, 49);
+}
+.icon-pdf1 {
+  color: rgb(238, 126, 113);
+}
+.icon-excel {
+  color: rgb(102, 188, 92);
+}
+.icon-jpg {
+  color: rgb(56, 173, 255);
+}
+.icon-PSD {
+  color: rgb(60, 153, 216);
+}
+.icon-SVG {
+  color: rgb(249, 189, 15);
+}
+.icon-zip {
+  color: rgb(249, 189, 15);
+}
+.icon-ts {
+  color: rgb(60, 153, 216);
+}
+.icon-less {
+  color: rgb(42, 78, 138);
+}
+.icon-jsx {
+  color: rgb(249, 189, 15);
+}
+.icon-js {
+  color: rgb(249, 189, 15);
+}
+.icon-css {
+  color: rgb(102, 188, 92);
+}
+.icon-sketch {
+  color: rgb(249, 189, 15);
+}
+.icon-exe {
+  color: rgb(119, 149, 198);
+}
+.icon-xmind {
+  color: rgb(245, 90, 35);
+}
+.icon-SVGA {
+  color: rgb(178, 193, 142);
+}
+.icon-markdown {
+  color: rgb(72, 79, 89);
+}
+.icon-json {
+  color: rgb(102, 188, 92);
+}
+.icon-word {
+  color: rgb(77, 151, 255);
+}
+.icon-sql {
+  color: #333;
+}
+.icon-ukown_file {
+  color: rgb(86, 155, 255);
 }
 </style>
