@@ -1,6 +1,6 @@
 <template>
-  <el-dialog v-if='show' :title="title" class="skydrive-manager-dialog" :close-on-click-modal="false" :visible.sync="show" width="960px" :before-close="handleClose" :append-to-body='true'>
-    <sky-drive ref='skyDriveManager' :isSiteMode='isSiteMode' :mediaLibrary='mediaLibrary' :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' :insertable='insertable' @close='handleClose'></sky-drive>
+  <el-dialog v-if='show' :title="this.$t('skydrive.skyDrive')" class="skydrive-manager-dialog" :close-on-click-modal="false" :visible.sync="show" width="960px" :before-close="handleClose" :append-to-body='true'>
+    <sky-drive ref='skyDriveManager' :isInsertable="isInsertable" :isApplicable="isApplicable" :isImageShow="isImageShow" :isVideoShow="isVideoShow" :isNoMediaFileShow="isNoMediaFileShow" @close='handleClose'></sky-drive>
   </el-dialog>
 </template>
 
@@ -10,35 +10,28 @@ import SkyDriveManager from './SkyDriveManager'
 export default {
   name: 'SkyDriveManagerDialog',
   props: {
-    isSiteMode: {
-      validator: function(value) {
-        return [true, false, undefined].indexOf(value) !== -1
-      }
-    },
     show: Boolean,
-    mediaLibrary: Boolean,
-    isVideoTabShow: {
+    isInsertable: {
       type: Boolean,
       default: false
     },
-    isImageTabShow: {
+    isApplicable: {
+      type: Boolean,
+      default: false
+    },
+    isImageShow: {
       type: Boolean,
       default: true
     },
-    insertable: {
+    isVideoShow: {
+      type: Boolean,
+      default: true
+    },
+    isNoMediaFileShow: {
       type: Boolean,
       default: true
     }
   },
-  data() {
-    return {
-      title: this.mediaLibrary
-        ? this.$t('skydrive.mediaLibrary')
-        : this.$t('skydrive.skyDrive')
-    }
-  },
-  async mounted() {},
-  computed: {},
   methods: {
     handleClose(event) {
       let { uploadingFiles } = this.$refs.skyDriveManager

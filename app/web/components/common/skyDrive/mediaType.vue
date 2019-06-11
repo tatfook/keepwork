@@ -13,13 +13,13 @@
           <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
-            <el-checkbox v-model="mediaItem.isChecked"></el-checkbox>
+            <el-checkbox v-model="mediaItem.isChecked" @change="handleItemSelectChange(mediaItem)"></el-checkbox>
             <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
               <i class="el-icon-caret-right"></i>
             </div>
             <div class="media-type-media-item-operations">
               <file-url-getter title="复制" :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
-              <file-url-getter title="插入" :selectFile="mediaItem" operateType="insert" @close="handleClose"></file-url-getter>
+              <file-url-getter v-if="isInsertable" title="插入" :selectFile="mediaItem" operateType="insert" @close="handleClose"></file-url-getter>
               <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
               <file-renamer title="重命名" :isTextShow="false" :selectFile="mediaItem"></file-renamer>
               <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
@@ -41,7 +41,7 @@
         </label>
       </div>
     </div>
-    <el-row class="media-type-footer">
+    <el-row class="media-type-footer" v-if="isApplicable">
       <file-url-getter class="media-type-footer-button" :isDisabled="!isHaveSelected" :selectFile="approvedMultipleSelectionResults[0] || {}" :isApplyButtonType="true" operateType="insert" @close="handleClose"></file-url-getter>
     </el-row>
   </div>
@@ -90,11 +90,11 @@ export default {
     mediaFilterType: String,
     uploadingFiles: Array,
     skyDriveMediaLibraryData: Array,
-    isImageTabShow: Boolean,
-    isVideoTabShow: Boolean
+    isInsertable: Boolean,
+    isApplicable: Boolean
   },
   mounted() {
-    this.fileList = this.skyDriveMediaLibraryData
+    this.fileList = _.cloneDeep(this.skyDriveMediaLibraryData)
     this.keyupSubmit()
   },
   data() {
@@ -138,6 +138,20 @@ export default {
           isChecked: selected
         }
       })
+    },
+    handleItemSelectChange(file) {
+      if (
+        this.isApplicable &&
+        file.isChecked &&
+        this.approvedMultipleSelectionResults.length > 1
+      ) {
+        this.fileList = _.map(this.fileList, mediaItem => {
+          return {
+            ...mediaItem,
+            isChecked: mediaItem.filename == file.filename ? true : false
+          }
+        })
+      }
     },
     getExtClass(file) {
       let { ext } = file
@@ -192,7 +206,7 @@ export default {
   },
   watch: {
     skyDriveMediaLibraryData() {
-      this.fileList = this.skyDriveMediaLibraryData
+      this.fileList = _.cloneDeep(this.skyDriveMediaLibraryData)
     },
     isAllSelected(val) {
       this.$emit('selectAllStateChange', val)

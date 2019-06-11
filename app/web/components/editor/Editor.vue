@@ -13,7 +13,7 @@
             <el-button class="iconfont icon-historyrecord" @click="showFileHistory"></el-button>
           </el-tooltip>
         </el-button-group>
-        <sky-drive-manager-dialog :show="showSkyDrive" @close="closeSkyDriveManagerDialog"></sky-drive-manager-dialog>
+        <sky-drive-manager-dialog :isInsertable="true" :show="showSkyDrive" @close="closeSkyDriveManagerDialog"></sky-drive-manager-dialog>
       </el-row>
       <el-scrollbar wrap-class="manager-content-box el-row" view-class="manager-content-inner" :native="false">
         <keep-alive>

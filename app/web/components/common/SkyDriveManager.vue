@@ -7,23 +7,23 @@
       </div>
       <div class='skydrive-manager-header-second'>
         <div class='skydrive-manager-header-tabs'>
-          <span class="skydrive-manager-header-tabs-item" :class="{'active': mediaFilterType==='all'}" @click.stop="changeMediaFilterType('all')">全部</span>
-          <span class="skydrive-manager-header-tabs-item" v-if="isImageAvailable" :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
-          <span class="skydrive-manager-header-tabs-item" v-if="isVideoAvailable" :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
+          <span class="skydrive-manager-header-tabs-item" v-if="isNoMediaFileShow" :class="{'active': mediaFilterType==='all'}" @click.stop="changeMediaFilterType('all')">全部</span>
+          <span class="skydrive-manager-header-tabs-item" v-if="isImageShow" :class="{'active': mediaFilterType==='image'}" @click.stop="changeMediaFilterType('image')">{{ $t('skydrive.image') }}</span>
+          <span class="skydrive-manager-header-tabs-item" v-if="isVideoShow" :class="{'active': mediaFilterType==='video'}" @click.stop="changeMediaFilterType('video')">{{ $t('skydrive.video') }}</span>
         </div>
         <div class="skydrive-manager-header-operations">
-          <el-checkbox v-model="isAllSelected" class="skydrive-manager-header-operations-item" @change="selectAll">全选</el-checkbox>
-          <file-downloader class="skydrive-manager-header-operations-item" :selectedFiles='activeSelectedFiles'></file-downloader>
-          <file-deleter @changeLoadingState="changeLoadingState" class="skydrive-manager-header-operations-item" :selectedFiles='activeSelectedFiles'></file-deleter>
+          <el-checkbox v-model="isAllSelected" v-if="!isApplicable" class="skydrive-manager-header-operations-item" @change="selectAll">全选</el-checkbox>
+          <file-downloader class="skydrive-manager-header-operations-item" v-if="!isApplicable" :selectedFiles='activeSelectedFiles'></file-downloader>
+          <file-deleter @changeLoadingState="changeLoadingState" v-if="!isApplicable" class="skydrive-manager-header-operations-item" :selectedFiles='activeSelectedFiles'></file-deleter>
           <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
             <i slot="suffix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <div class="skydrive-manager-header-operations-item" @click="toggleViewType"><i class="iconfont icon-menu"></i></div>
+          <div class="skydrive-manager-header-operations-item" v-if="!isApplicable" @click="toggleViewType"><i class="iconfont icon-menu"></i></div>
         </div>
       </div>
     </div>
-    <table-type class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='list'" :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' :insertable='insertable' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
+    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :isInsertable="isInsertable" :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
     <file-uploader v-show="isDroping" class="skydrive-manager-drop" :isDragMode="true" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
   </div>
 </template>
@@ -40,17 +40,11 @@ import FileUploader from './skyDrive/FileUploader'
 export default {
   name: 'SkyDriveManager',
   props: {
-    isSiteMode: Boolean,
-    mediaLibrary: {
-      type: Boolean,
-      default: false
-    },
-    insertable: {
-      type: Boolean,
-      default: true
-    },
-    isImageTabShow: Boolean,
-    isVideoTabShow: Boolean
+    isInsertable: Boolean,
+    isApplicable: Boolean,
+    isImageShow: Boolean,
+    isVideoShow: Boolean,
+    isNoMediaFileShow: Boolean
   },
   async mounted() {
     this.loading = true
@@ -63,9 +57,13 @@ export default {
       leaveTimer: undefined,
       isDroping: false,
       isAllSelected: false,
-      viewType: 'list',
+      viewType: this.isApplicable ? 'thumb' : 'table',
       searchWord: '',
-      mediaFilterType: 'all',
+      mediaFilterType: this.isNoMediaFileShow
+        ? 'all'
+        : this.isImageShow
+        ? 'image'
+        : 'video',
       loading: false,
       isMounted: false,
       uploadingFiles: [],
@@ -84,7 +82,7 @@ export default {
       if (!this.isMounted) {
         return
       }
-      return this.viewType == 'list'
+      return this.viewType == 'table'
         ? this.$refs.tableTypeComp
         : this.$refs.mediaTypeComp
     },
@@ -94,13 +92,6 @@ export default {
           this.activeChildComp.approvedMultipleSelectionResults) ||
         []
       )
-    },
-    isImageAvailable() {
-      return this.isImageTabShow || !this.isVideoAvailable
-    },
-    isVideoAvailable() {
-      // return this.isVideoTabShow
-      return true
     },
     formatedFileList() {
       return this.userSkyDriveFileList.map(item => {
@@ -220,7 +211,7 @@ export default {
       this.isAllSelected = isAllSelected
     },
     toggleViewType() {
-      this.viewType = this.viewType == 'list' ? 'thumb' : 'list'
+      this.viewType = this.viewType == 'table' ? 'thumb' : 'table'
       this.isAllSelected = this.activeChildComp.isAllSelected
     },
     changeMediaFilterType(type) {

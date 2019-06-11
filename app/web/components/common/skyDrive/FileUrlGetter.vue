@@ -35,8 +35,8 @@ export default {
       userRawUrlByFileId: 'user/rawUrlByFileId',
       userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId'
     }),
-    isEditorPage() {
-      return _.get(this.$route, 'name') === 'Editor'
+    isSiteMode() {
+      return Boolean(_.get(this.activePageInfo, 'sitepath'))
     },
     type() {
       return this.isApplyButtonType ? 'primary' : 'text'
@@ -59,7 +59,7 @@ export default {
       return this.userRawUrlByFileId({ fileId })
     },
     async handleGetUrl() {
-      return this.isEditorPage
+      return this.isSiteMode
         ? await this.getSiteFileUrl()
         : await this.getFileRawUrl()
     },

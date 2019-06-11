@@ -33,7 +33,7 @@
             <el-tooltip :content="$t('common.copyURI')">
               <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFile="scope.row" operateType="copy"></file-url-getter>
             </el-tooltip>
-            <el-tooltip :content="$t('common.insert')">
+            <el-tooltip v-if="isInsertable" :content="$t('common.insert')">
               <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFile="scope.row" operateType="insert" @close="handleClose"></file-url-getter>
             </el-tooltip>
             <el-tooltip :content="$t('common.download')">
@@ -68,13 +68,10 @@ import FileUrlGetter from './FileUrlGetter'
 export default {
   name: 'tableType',
   props: {
+    isInsertable: Boolean,
     skyDriveTableDataWithUploading: {
       type: Array,
       required: true
-    },
-    insertable: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
@@ -86,7 +83,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // userSkyDriveFileList: 'user/skyDriveFileList',
       userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId',
       activePageInfo: 'activePageInfo'
     }),

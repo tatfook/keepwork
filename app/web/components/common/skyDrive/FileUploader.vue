@@ -16,7 +16,7 @@ export default {
   props: {
     viewType: {
       validator: value => {
-        return ['list', 'thumb'].indexOf(value) !== -1
+        return ['table', 'thumb'].indexOf(value) !== -1
       }
     },
     uploadType: {
@@ -108,7 +108,7 @@ export default {
       this.filesQueueToUpload(file)
     },
     async filesQueueToUpload(file) {
-      if (this.viewType == 'list') {
+      if (this.viewType == 'table') {
         this.$emit('resetTableSort')
       }
       file = file.raw || file

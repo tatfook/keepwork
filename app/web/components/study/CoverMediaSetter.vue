@@ -33,7 +33,7 @@
         </template>
       </el-input>
     </div>
-    <sky-drive-manager-dialog :isImageTabShow='isImageTabShow' :isVideoTabShow='isVideoTabShow' :show='isSkyDriveShow' :mediaLibrary='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :isImageShow='isImageTabShow' :isNoMediaFileShow="false" :isVideoShow='isVideoTabShow' :show='isSkyDriveShow' :isApplicable="true" @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
