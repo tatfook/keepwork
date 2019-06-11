@@ -41,35 +41,17 @@
           :src="tempVideoUrl"
           controls
         ></video>
-        <!-- <p
-          v-if="isLoginUserEditable"
-          class="project-basic-info-detail-cover-cursor show-on-hover"
-          @click="showMediaSkyDriveDialog"
-        ><i class="el-icon-edit-outline"></i>{{$t("project.changeImageOrVideo")}}</p> -->
       </div>
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectType")}}:</label>{{ projectType | projectTypeFilter(projectTypes) }}</p>
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectId")}}:</label>{{originProjectDetail.id}}</p>
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate(formatType)}}</p>
-        <!-- <p class="project-basic-info-detail-message-item"><label>当前版本:</label>12.1</p> -->
         <div class="project-basic-info-detail-operations">
           <el-button
             type="primary"
             @click="toProjectPage"
           >{{ buttonName }}</el-button>
-          <!-- <el-button
-            @click="toEditWebsite"
-            plain
-            v-if="isWebType && (isProjectOwner || isLoginUserEditableForProjectSite)"
-          >{{$t("project.edit")}}</el-button> -->
           <el-button @click="toProejctHomePage" plain>{{$t('card.projectHome')}}</el-button>
-          <!-- <el-button
-            :disabled="isApplied"
-            :loading='isApplyButtonLoading'
-            plain
-            v-show="!isLoginUserEditable && !isLoginUserBeProjectMember && !isProjectStopRecruit"
-            @click="showApplyBox"
-          >{{projectApplyState | applyStateFilter(applyStates)}}</el-button> -->
         </div>
       </div>
     </div>
@@ -79,18 +61,6 @@
     >
       <div class="project-basic-info-description-title">
         {{$t("project.projectDescription")}}:
-        <!-- <el-button
-          v-if="isLoginUserEditable"
-          class="project-website-card-button"
-          type="text"
-          @click="toggleIsDescEditing"
-        >
-          <i
-            class="el-icon-edit-outline"
-            v-show="!isDescriptionEditing"
-          ></i>
-          <span v-show="isDescriptionEditing"><i class="iconfont icon-save3"></i>{{$t("common.Save")}}</span>
-        </el-button> -->
       </div>
       <div
         class="project-basic-info-description-content"
@@ -103,12 +73,6 @@
         class="project-basic-info-description-editor"
       ></div>
     </div>
-    <!-- <sky-drive-manager-dialog
-      :mediaLibrary='true'
-      :show='isMediaSkyDriveDialogShow'
-      :isVideoTabShow='true'
-      @close='closeSkyDriveManagerDialog'
-    ></sky-drive-manager-dialog> -->
     <el-dialog
       title="提示"
       v-loading='isBinderDialogLoading'
@@ -162,7 +126,6 @@ import moment from 'moment'
 import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
-// import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
 import launchUri from '@/lib/utils/launchUri'
@@ -515,24 +478,6 @@ export default {
     showMediaSkyDriveDialog() {
       this.isMediaSkyDriveDialogShow = true
     },
-    async closeSkyDriveManagerDialog({ file, url }) {
-      this.isMediaSkyDriveDialogShow = false
-      if (url) {
-        let fileType = file && file.type
-        if (fileType === 'videos') {
-          this.tempCoverUrl = undefined
-          this.tempVideoUrl = url
-          this.isCoverZoneLoading = true
-          await this.updateDescToBackend()
-          this.isCoverZoneLoading = false
-        } else {
-          this.isCoverZoneLoading = true
-          this.tempVideoUrl = undefined
-          this.tempCoverUrl = url
-          this.waitUpdateCover = true
-        }
-      }
-    },
     async coverImageLoaded() {
       this.waitUpdateCover &&
         (await this.updateDescToBackend()) &&
@@ -585,7 +530,6 @@ export default {
     }
   },
   components: {
-    // SkyDriveManagerDialog,
     ParacraftInfo,
     WebsiteBinder
   }

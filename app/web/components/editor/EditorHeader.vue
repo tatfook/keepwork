@@ -139,19 +139,6 @@
           <span class='iconfont icon-revocation'></span>
         </el-tooltip>
       </el-menu-item>
-      <!-- <el-menu-item index=' 8 ' class='li-btn'>
-        <el-dropdown @command='changeViewType '>
-          <el-button class='dropdown-btn'>
-            {{showingType}}
-            <i class='el-icon-arrow-down el-icon--right dropdown-arrow'></i>
-          </el-button>
-          <el-dropdown-menu slot='dropdown'>
-            <el-dropdown-item :command='{isCodeShow: false, isPreviewShow: true} '>{{ $t('editor.preview') }}</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: false} '>{{ $t('editor.code') }}</el-dropdown-item>
-            <el-dropdown-item :command='{isCodeShow: true, isPreviewShow: true} '>{{ $t('editor.splitScreen') }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-menu-item> -->
       <el-menu-item index='6' class="link-box" v-if="activePage && hasOpenedFiles">
         <el-tooltip :content="$t('tips.copyUrl')">
           <i class="iconfont icon-copy" @click='doCopyLink'></i>
