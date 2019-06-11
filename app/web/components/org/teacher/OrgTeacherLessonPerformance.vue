@@ -118,9 +118,8 @@ export default {
       this.isRunning = true
       const queue = _.clone(this.socketQueue)
       const queueTimestamps = _.map(queue, item => item.timestamp)
-      while (queue.length > 0) {
-        const { timestamp, record } = queue.pop()
-        await this.updateLearnRecordsBySocket(record)
+      for (let item of queue) {
+        await this.updateLearnRecordsBySocket(item.record)
       }
       _.remove(this.socketQueue, item =>
         _.includes(queueTimestamps, item.timestamp)
