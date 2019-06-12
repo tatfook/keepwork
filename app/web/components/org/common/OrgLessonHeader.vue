@@ -72,14 +72,14 @@
         </div>
         <div v-if="isTeacher" class="lesson-button-wrap">
           <template v-if="isTeacherBeInClasroom && isInCurrentClass">
-            <el-button @click="handleDismissTheClass" :disabled="isClassIsOver" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
+            <el-button @click="handleDismissTheClass" :disabled="isClassIsOver" :loading="isLoading" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
             <span class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
           </template>
           <template v-else>
             <el-tooltip v-if="isNotStated" placement="top" content="本学期还未开始">
               <el-button type="primary" @click="handleNoStatedTips" class="lesson-button no-started">{{$t('lesson.begin')}}</el-button>
             </el-tooltip>
-            <el-button v-else  @click="handleBeginTheClass" :disabled="!isInCurrentClass || isNotStated" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
+            <el-button v-else  @click="handleBeginTheClass" :loading="isLoading" :disabled="!isInCurrentClass || isNotStated" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
             <span class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
           </template>
         </div>
@@ -156,7 +156,8 @@ export default {
       dialogVisible: false,
       classIdDialogVisible: false,
       classIdFullScreen: false,
-      _interval: null
+      _interval: null,
+      isLoading: false
     }
   },
   methods: {
@@ -195,6 +196,7 @@ export default {
         name,
         params: { classId, packageId, lessonId }
       } = this.$route
+      this.isLoading = true
       await this.beginTheClass({
         classId: Number(classId),
         packageId: Number(packageId),
@@ -206,9 +208,11 @@ export default {
           }
           this.classIdDialogVisible = true
           this.copyClassroomQuiz()
+          this.isLoading = false
         })
         .catch(e => {
           this.$message.error(this.$t('lesson.beginTheClassFail'))
+          this.isLoading = false
           console.error(e)
         })
     },
@@ -225,9 +229,11 @@ export default {
         }
       )
         .then(async () => {
+          this.isLoading = true
           await this.dismissTheClass()
             .then(res => {
               const { lessonId, id } = this.classroom
+              this.isLoading = false
               this.$router.push({
                 name: 'OrgTeacherLessonSummary',
                 params: {
@@ -239,6 +245,7 @@ export default {
               })
             })
             .catch(e => {
+              this.isLoading = false
               this.$message.error(this.$t('common.failure'))
               console.error(e)
             })
