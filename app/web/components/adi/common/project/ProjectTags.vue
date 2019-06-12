@@ -26,7 +26,10 @@ export default {
   props: {
     originProjectDetail: {
       type: Object,
-      required: true
+      required: true,
+      default() {
+        return {}
+      }
     },
     projectId: {
       required: true
@@ -39,8 +42,10 @@ export default {
   mounted() {
     this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
     let tags = this.copiedProjectDetail.tags
-    tags = _.trim(tags, '|')
-    this.tempTags = _.filter(tags.split('|'), obj => obj) || []
+    if (tags) {
+      tags = _.trim(tags, '|')
+      this.tempTags = _.filter(tags.split('|'), obj => obj) || []
+    }
   },
   data() {
     return {
@@ -116,37 +121,37 @@ export default {
       this.inputVisible = false
       this.inputValue = ''
     },
-    async toggleIsTagEditing() {
-      if (this.isTagEditing) {
-        if (!this.isModified) {
-          this.isTagEditing = !this.isTagEditing
-          return
-        }
-        this.isLoading = true
-        await this.pblUpdateProject({
-          projectId: this.projectId,
-          updatingProjectData: this.updatingProjectData
-        })
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: this.$t('project.labelUpdated')
-            })
-            this.isTagEditing = !this.isTagEditing
-            this.isLoading = false
-          })
-          .catch(error => {
-            this.$message({
-              type: 'error',
-              message: '标签更新失败,请重试'
-            })
-            this.isLoading = false
-            console.error(error)
-          })
-      } else {
-        this.isTagEditing = !this.isTagEditing
-      }
-    }
+    // async toggleIsTagEditing() {
+    //   if (this.isTagEditing) {
+    //     if (!this.isModified) {
+    //       this.isTagEditing = !this.isTagEditing
+    //       return
+    //     }
+    //     this.isLoading = true
+    //     await this.pblUpdateProject({
+    //       projectId: this.projectId,
+    //       updatingProjectData: this.updatingProjectData
+    //     })
+    //       .then(() => {
+    //         this.$message({
+    //           type: 'success',
+    //           message: this.$t('project.labelUpdated')
+    //         })
+    //         this.isTagEditing = !this.isTagEditing
+    //         this.isLoading = false
+    //       })
+    //       .catch(error => {
+    //         this.$message({
+    //           type: 'error',
+    //           message: '标签更新失败,请重试'
+    //         })
+    //         this.isLoading = false
+    //         console.error(error)
+    //       })
+    //   } else {
+    //     this.isTagEditing = !this.isTagEditing
+    //   }
+    // }
   }
 }
 </script>

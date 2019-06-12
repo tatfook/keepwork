@@ -3,7 +3,7 @@
     <div v-if='modConf.name == "ModMarkdown" || !style.useImage' v-for='(style, index) in modConf.styles' :key='style.name' class="style-item render" :class='{active: isActive(index)}' @click='changeStyle(index)'>
       <div class="render-mod-container--click-prevent"></div>
       <div class="render-mod-container">
-        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :editMode='true' :conf='modConf' :theme='theme'></component>
+        <component class="render-mod" :is='modConf.mod' :mod='currentMod(index)' :index="index" :editMode='true' :conf='modConf' :theme='theme'></component>
         <div class="style-shade">
           <span>{{$t('tips.clickToChange')}}</span>
         </div>
@@ -74,9 +74,7 @@ export default {
     },
     currentMod(index) {
       let currentMod = _.merge({}, this.mod)
-
       currentMod.data.styleID = index
-
       return currentMod
     },
     autoResizePreview() {

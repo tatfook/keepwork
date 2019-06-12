@@ -1,12 +1,5 @@
 <template>
   <div class="project-members">
-    <!-- <div class="project-members-invite">
-      <el-input placeholder="输入用户名进行邀请" v-model="inviteUsername">
-        <template slot="append">
-          <el-button type="info" @click="invitToProject" :disabled="!inviteUsername">邀请</el-button>
-        </template>
-      </el-input>
-    </div> -->
     <el-tabs class="project-members-tabs" type="card">
       <el-tab-pane :label="$t('project.applicants')">
         <project-applied-list :projectId='projectId'></project-applied-list>

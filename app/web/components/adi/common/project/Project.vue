@@ -1,35 +1,13 @@
 <template>
-  <div
-    class="project-mod-container"
-    v-if="!isLoading"
-  >
-    <template v-if="isProjectExist">
-      <template v-if="isLoginUserVisible">
-        <project-tags
-          v-if="isProjectExist && projectTagsShow"
-          :originProjectDetail="pblProjectDetail"
-          :projectId="projectId"
-          :isLoginUserEditable='loginUserIsProjectOwner'
-        ></project-tags>
-        <project-basic-info
-          v-if="isProjectExist"
-          class="project-index-basic"
-          :originProjectDetail='pblProjectDetail'
-          :projectOwnerUsername='editingProjectUsername'
-          :projectApplyState='projectApplyState'
-          :projectId='projectId'
-          :isProjectStopRecruit='isProjectStopRecruit'
-          :isLoginUserEditable='loginUserIsProjectOwner'
-        ></project-basic-info>
-        <project-joined-members-list
-          v-if="isProjectExist && projectMembersShow"
-          class="project-index-sidebar-item"
-          type='card'
-          :projectId='projectId'
-          :projectOwnerPortrait='projectOwnerPortrait'
-          :projectDetail='pblProjectDetail'
-          :originProjectUsername='editingProjectUsername'
-        ></project-joined-members-list>
+  <div class="project-mod-container">
+    <template>
+      <template v-if="isLoginUserVisible && isMiniStyle">
+        <project-mini :originProjectDetail='pblProjectDetail' :projectOwnerUsername='editingProjectUsername' :projectId="projectId"></project-mini>
+      </template>
+      <template v-else-if="isLoginUserVisible">
+        <project-tags v-if="projectTagsShow" :originProjectDetail="pblProjectDetail" :projectId="projectId" :isLoginUserEditable='loginUserIsProjectOwner'></project-tags>
+        <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='editingProjectUsername' :projectApplyState='projectApplyState' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='loginUserIsProjectOwner'></project-basic-info>
+        <project-joined-members-list v-if="projectMembersShow" class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername'></project-joined-members-list>
       </template>
       <template v-else>
         <div class="project-mod-tips">
@@ -37,18 +15,6 @@
         </div>
       </template>
     </template>
-    <template v-else-if="projectIdIsEmpty">
-      <div class="project-mod-tips">
-        <h2>{{$t('card.project')}}</h2>
-        {{$t('card.projectInputId')}}
-      </div>
-    </template>
-    <template v-else-if="!isProjectExist && !projectIdIsEmpty">
-      <div class="project-mod-tips">
-        <h2>{{$t('card.projectNotFound')}}</h2>
-      </div>
-    </template>
-
   </div>
 </template>
 
@@ -58,34 +24,34 @@ import compBaseMixin from '../comp.base.mixin'
 import ProjectTags from './ProjectTags'
 import ProjectBasicInfo from './ProjectBasicInfo'
 import ProjectJoinedMembersList from './ProjectJoinedMembersList'
+import ProjectMini from './ProjectMini'
 import _ from 'lodash'
 
 export default {
   name: 'AdiProject',
   mixins: [compBaseMixin],
   components: {
+    ProjectMini,
     ProjectTags,
     ProjectBasicInfo,
     ProjectJoinedMembersList
   },
   async mounted() {
-    if (this.projectId) {
-      return await this.initProjectDetail()
-    }
-    this.isProjectExist = false
+    await this.initProjectDetail()
   },
   data() {
     return {
-      isProjectExist: false,
+      isProjectExist: true,
       isLoading: false
     }
   },
   watch: {
     async projectId(value) {
       if (value) {
-        return await this.initProjectDetail()
+        await this.initProjectDetail()
+      } else {
+        this.refreshProjectData()
       }
-      this.isProjectExist = false
     }
   },
   computed: {
@@ -99,19 +65,34 @@ export default {
       projectMemberList: 'pbl/projectMemberList'
     }),
     pblProjectDetail() {
-      return this.projectDetail({ projectId: this.projectId })
+      return this.projectDetail({ projectId: this.projectId }) || {}
+    },
+    styleID() {
+      return (
+        _.get(this.options, 'styleID', '') ||
+        _.get(this.rootMod, 'data.styleID', 0)
+      )
+    },
+    isMiniStyle() {
+      return this.styleID === 1
     },
     _projectId() {
-      return this.properties.projectId ? this.properties.projectId : this.options.projectId
+      return this.properties.projectId
+        ? this.properties.projectId
+        : this.options.projectId
     },
     projectId() {
-      return this._projectId ? _.toNumber(this._projectId) : null
+      return this._projectId ? _.toNumber(this._projectId) : 0
     },
     projectTagsShow() {
-      return this.properties.projectTagsShow ? this.properties.projectTagsShow : this.options.projectTagsShow
+      return this.properties.projectTagsShow
+        ? this.properties.projectTagsShow
+        : this.options.projectTagsShow
     },
     projectMembersShow() {
-      return this.properties.projectMembersShow ? this.properties.projectMembersShow : this.options.projectMembersShow
+      return this.properties.projectMembersShow
+        ? this.properties.projectMembersShow
+        : this.options.projectMembersShow
     },
     projectIdIsEmpty() {
       return _.isEmpty(this._projectId)
@@ -154,7 +135,7 @@ export default {
     },
     editingProjectUser() {
       let userId = this.editingUserId
-      return this.getDetailByUserId({ userId })
+      return this.projectId ? this.getDetailByUserId({ userId }) : {}
     },
     editingProjectUsername() {
       return _.get(this.editingProjectUser, 'username', '')
@@ -186,6 +167,10 @@ export default {
       getFavoriteState: 'pbl/getFavoriteState',
       getStarState: 'pbl/getStarState'
     }),
+    async refreshProjectData() {
+      this.isLoading = true
+      this.$nextTick(() => (this.isLoading = false))
+    },
     async initProjectHeaderDetail() {
       this.editingUserId = _.get(this.pblProjectDetail, 'userId')
       let userId = this.editingUserId
@@ -205,6 +190,7 @@ export default {
       ).catch(e => console.error(e))
     },
     async initProjectDetail() {
+      if (!this.projectId) return
       this.isLoading = true
       this.isProjectExist = true
       await this.pblGetProjectDetail({ projectId: this.projectId }).catch(
@@ -232,6 +218,8 @@ export default {
 
 <style lang="scss">
 .project-mod-container {
+  max-width: 1080px;
+  margin: 0 auto;
   .project-mod {
     &-tips {
       text-align: center;

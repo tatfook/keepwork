@@ -1551,7 +1551,8 @@
     "WhiteBoardLabel": "Whiteboard",
     "CommentsLabel": "Comments",
     "commentAfterLogin": "Sign in to comment",
-    "deleteProject": "Delete Project"
+    "deleteProject": "Delete Project",
+    "createByAt": "create by {username} at"
   },
   "footer": {
     "lettersTo": "Educational ideas",
