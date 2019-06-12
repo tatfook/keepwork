@@ -12,11 +12,21 @@
               <i class="el-icon-caret-right"></i>
             </div>
             <div class="media-type-media-item-operations">
-              <file-url-getter title="复制" :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
-              <file-url-getter v-if="isInsertable" title="插入" :selectFile="mediaItem" operateType="insert" @close="handleClose"></file-url-getter>
-              <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
-              <file-renamer title="重命名" :isTextShow="false" :selectFile="mediaItem"></file-renamer>
-              <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
+              <el-tooltip content="复制链接">
+                <file-url-getter :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
+              </el-tooltip>
+              <el-tooltip content="插入">
+                <file-url-getter v-if="isInsertable" :selectFile="mediaItem" operateType="insert" @close="handleClose"></file-url-getter>
+              </el-tooltip>
+              <el-tooltip content="下载">
+                <file-downloader :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
+              </el-tooltip>
+              <el-tooltip content="重命名">
+                <file-renamer :isTextShow="false" :selectFile="mediaItem"></file-renamer>
+              </el-tooltip>
+              <el-tooltip content="删除">
+                <file-deleter :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
+              </el-tooltip>
             </div>
           </div>
         </div>

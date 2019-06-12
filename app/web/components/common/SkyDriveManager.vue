@@ -18,7 +18,14 @@
           <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
             <i slot="suffix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <div class="skydrive-manager-header-operations-item" v-if="!isApplicable" @click="toggleViewType"><i class="iconfont icon-menu"></i></div>
+          <div class="skydrive-manager-header-operations-item" v-if="!isApplicable" @click="toggleViewType">
+            <el-tooltip v-show="viewType == 'thumb'" content="切换到列表模式">
+              <i class="iconfont icon-menu"></i>
+            </el-tooltip>
+            <el-tooltip v-show="viewType == 'table'" content="切换到缩略图模式">
+              <i class="iconfont icon-tuwen1"></i>
+            </el-tooltip>
+          </div>
         </div>
       </div>
     </div>
@@ -307,6 +314,7 @@ export default {
         margin-left: 24px;
         margin-right: 0;
         display: inline-block;
+        cursor: pointer;
         .iconfont {
           margin-right: 8px;
         }
