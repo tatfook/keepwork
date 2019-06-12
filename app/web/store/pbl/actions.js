@@ -281,10 +281,13 @@ const actions = {
   },
   async submitGameWorks({ dispatch }, payload) {
     await keepwork.games.submitGameWorks(payload).then(async res => {
-      console.log('submitresult', res)
       let { gameId } = payload
       await dispatch('getWorksByGameId', { gameId })
     })
+  },
+  async getGameWorksStatistics({ commit }) {
+    const data = await keepwork.games.getGameWorksStatistics()
+    return data
   }
 }
 

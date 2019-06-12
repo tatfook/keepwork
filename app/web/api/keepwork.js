@@ -337,7 +337,8 @@ export const games = {
   getGamesList: async () => post('games/search'),
   getWorksByGameId: async ({ gameId }) => post('gameWorks/search', { gameId }),
   getLegalGamesProjects: async () => get('games/projects'),
-  submitGameWorks: async (...args) => post('gameWorks', ...args)
+  submitGameWorks: async (...args) => post('gameWorks', ...args),
+  getGameWorksStatistics: async () => get('gameWorks/statistics')
 }
 
 export const lessonOrganizations = {
