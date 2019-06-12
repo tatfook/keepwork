@@ -13184,7 +13184,7 @@ social-share.js@^1.0.16:
   resolved "http://registry.npm.taobao.org/social-share.js/download/social-share.js-1.0.16.tgz#1fd4a91c46c8c6835670f11472ecb2e293215310"
   integrity sha1-H9SpHEbIxoNWcPEUcuyy4pMhUxA=
 
-socket.io-client@^2.1.1:
+socket.io-client@^2.1.1, socket.io-client@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npm.taobao.org/socket.io-client/download/socket.io-client-2.2.0.tgz#84e73ee3c43d5020ccc1a258faeeb9aec2723af7"
   integrity sha1-hOc+48Q9UCDMwaJY+u65rsJyOvc=
