@@ -1,14 +1,8 @@
 <template>
   <div class="media-type" v-loading='loading'>
     <div class="media-type-media-library">
-      <div v-for="(file, index) in uploadingFiles" :key="index" class="media-type-media-uploading media-type-media-item" v-show="file.state !== 'success' && file.state != 'error'">
-        <img v-if="file.type === 'images'" :src="file.cover" class="media-type-media-item-img" />
-        <div class="media-type-media-uploading-cover"></div>
-        <span :title="$t('common.Cancel')" class='el-icon-delete' @click.stop="removeFromUploadQue(file)"></span>
-        <el-progress :show-text=false :stroke-width="10" :percentage="file.percent" status="success"></el-progress>
-      </div>
-      <div v-for='mediaItem in sortedSkyDriveMediaLibraryData' :key='mediaItem.key' class='media-type-media-item'>
-        <div class="media-type-media-item-main">
+      <div v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
+        <div class="media-type-media-item-main" v-if="mediaItem.key">
           <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
           <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
@@ -23,6 +17,17 @@
               <file-downloader title="下载" :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
               <file-renamer title="重命名" :isTextShow="false" :selectFile="mediaItem"></file-renamer>
               <file-deleter title="删除" :isTextShow="false" :selectedFiles="[mediaItem]"></file-deleter>
+            </div>
+          </div>
+        </div>
+        <div class="media-type-media-item-main" v-else>
+          <video v-if="mediaItem.type==='videos'" :src="mediaItem.cover" width="100%" height="100%"></video>
+          <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.cover" class="media-type-media-item-img" />
+          <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
+          <div class="media-type-media-item-cover media-type-media-item-cover-checked">
+            <el-progress :show-text=false :stroke-width="10" :percentage="mediaItem.percent" status="success"></el-progress>
+            <div class="media-type-media-item-operations">
+              <span :title="$t('common.Cancel')" class='el-icon-delete' @click.stop="removeFromUploadQue(mediaItem)"></span>
             </div>
           </div>
         </div>
@@ -106,10 +111,18 @@ export default {
     }
   },
   computed: {
+    filterdUploadingFiles() {
+      return _.filter(this.uploadingFiles, file => {
+        return file.state !== 'success' && file.state != 'error'
+      })
+    },
     sortedSkyDriveMediaLibraryData() {
-      return _.sortBy(
-        this.fileList,
-        mediaItem => -moment(mediaItem.updatedAt).valueOf()
+      return _.concat(
+        this.filterdUploadingFiles,
+        _.sortBy(
+          this.fileList,
+          mediaItem => -moment(mediaItem.updatedAt).valueOf()
+        )
       )
     },
     approvedMultipleSelectionResults() {
@@ -259,10 +272,6 @@ export default {
     [class*='icon'] {
       cursor: pointer;
     }
-    &.selected {
-      border: 2px solid #3ba4ff;
-      border-radius: 2px;
-    }
     &-ext-cover {
       font-size: 50px;
     }
@@ -340,18 +349,16 @@ export default {
       font-size: 20px;
     }
     .el-progress {
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
       position: absolute;
       top: 0;
-      left: 0;
+      left: 4px;
+      right: 4px;
       line-height: 100px;
     }
     .el-progress-bar {
       display: inline-block;
     }
-    &:hover,
-    &.selected {
+    &:hover {
       .media-type-media-item-cover {
         display: inline-block;
       }

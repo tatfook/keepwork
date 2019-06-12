@@ -190,6 +190,9 @@ export default {
     changeUploadingState({ state, file, errorMsg, percent, updatedAt }) {
       let filename = file.name
       let fileIndex = _.findIndex(this.uploadingFiles, file => {
+        if (state == 'error') {
+          return file.filename == filename && file.state != state
+        }
         return file.filename == filename
       })
       let fileDetail = this.uploadingFiles[fileIndex]
