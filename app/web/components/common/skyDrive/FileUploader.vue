@@ -53,9 +53,9 @@ export default {
     }),
     acceptTypes() {
       if (this.uploadType == 'image') {
-        return '.jpg,.jpeg,.png,.gif,.bmp'
+        return '.jpg,.jpeg,.png,.gif'
       } else if (this.uploadType == 'video') {
-        return '.mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm'
+        return '.mp4'
       } else {
         return ''
       }
@@ -105,6 +105,19 @@ export default {
         : `${GBVal}GB`
     },
     handleUploadFile(file) {
+      let supportedExt = _.split(this.acceptTypes, ',')
+      let fileExt = '.' + getFileExt(file.raw)
+      let uploadType = this.uploadType
+
+      let selectedType = uploadType == 'all' ? '' : uploadType
+      if (uploadType != 'all' && _.findIndex(supportedExt, ext => ext == fileExt) == -1) {
+        this.$message.error(
+          uploadType == 'image'
+            ? '请选择jpg、jpeg、gif、png格式图片上传'
+            : '请选择mp4格式视频上传'
+        )
+        return
+      }
       this.filesQueueToUpload(file)
     },
     async filesQueueToUpload(file) {

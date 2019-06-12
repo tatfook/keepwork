@@ -89,12 +89,13 @@ export default {
     approvedMultipleSelectionResults() {
       return this.multipleSelectionResults.filter(
         ({ checked }) => Number(checked) === 1
-      )
+      ) || []
     },
     isAllSelected() {
+      let selectedCount = this.approvedMultipleSelectionResults.length
       return (
-        this.approvedMultipleSelectionResults.length ==
-        this.skyDriveTableDataWithUploading.length
+        selectedCount > 0 &&
+        selectedCount == this.skyDriveTableDataWithUploading.length
       )
     }
   },

@@ -143,9 +143,10 @@ export default {
       )
     },
     isAllSelected() {
+      let selectedCount = this.approvedMultipleSelectionResults.length
       return (
-        this.approvedMultipleSelectionResults.length ==
-        this.sortedSkyDriveMediaLibraryData.length
+        selectedCount > 0 &&
+        selectedCount == this.sortedSkyDriveMediaLibraryData.length
       )
     },
     isHaveSelected() {
@@ -381,7 +382,7 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      line-height: initial;
+      line-height: 14px;
       font-size: 12px;
       padding: 8px 0;
     }

@@ -4,6 +4,7 @@
       <div class='skydrive-manager-header-first'>
         <usage-bar class='skydrive-manager-header-usage' :uploadingFileSize="uploadingFileSize"></usage-bar>
         <file-uploader ref="uploaderRef" class="skydrive-manager-header-upload" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
+        <p class="skydrive-manager-header-first-info" v-show="mediaFilterType==='image'">建议上传图片大小不能超过2M，支持jpg/png格式</p>
       </div>
       <div class='skydrive-manager-header-second'>
         <div class='skydrive-manager-header-tabs'>
@@ -198,7 +199,7 @@ export default {
       let filename = file.name
       let fileIndex = _.findIndex(this.uploadingFiles, file => {
         if (state == 'error') {
-          return file.filename == filename && file.state != state
+          return file.filename == filename && file.state == 'doing'
         }
         return file.filename == filename
       })
@@ -299,9 +300,17 @@ export default {
     padding: 30px 36px 0;
     background-color: #e8e8e8;
     &-first {
-      margin-bottom: 32px;
+      position: relative;
+      padding-bottom: 32px;
       display: flex;
       align-items: center;
+      &-info {
+        position: absolute;
+        right: 8px;
+        bottom: 0;
+        font-size: 12px;
+        color: #999;
+      }
     }
     &-usage {
       flex: 1;
