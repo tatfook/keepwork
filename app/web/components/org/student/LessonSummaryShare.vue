@@ -124,8 +124,6 @@ export default {
         })
         .catch(err => console.error(err))
     }
-    console.log(this.summary.day)
-    this.summary.day = 0
   },
   computed: {
     today() {
