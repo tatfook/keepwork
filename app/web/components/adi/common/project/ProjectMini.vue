@@ -170,13 +170,6 @@ export default {
   }
 }
 
-@media (max-width: 520px) {
-  .project-mod-mini {
-    .project-cover {
-      display: none;
-    }
-  }
-}
 </style>
 
 
