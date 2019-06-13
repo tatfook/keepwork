@@ -10,7 +10,7 @@
           {{$t("project.created")}}
         </span>
         <span class="project-basic-info-more-viewcount">
-          <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit ? originProjectDetail.visit + 1 : ''}}
+          <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit + 1}}
         </span>
         <span class="project-basic-info-more-starcount">
           <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star}}
