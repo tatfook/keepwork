@@ -12,7 +12,7 @@
         </div>
         <div class="project-info-count">
           <span class="project-info-count-item project-viewcount">
-            <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit ? originProjectDetail.visit + 1 : ''}}
+            <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit + 1}}
           </span>
           <span class="project-info-count-item project-starcount">
             <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star}}
