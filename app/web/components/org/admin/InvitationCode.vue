@@ -108,7 +108,6 @@ export default {
         organizationId: this.orgId
       })
     ])
-    console.log(this.orgClassesFilter)
     this.loading = false
   },
   computed: {
