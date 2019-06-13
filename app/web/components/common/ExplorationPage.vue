@@ -302,6 +302,7 @@ export default {
   }
   &-cabinet {
     background: #f6f7f8;
+    min-height: 580px;
     &-center {
       max-width: 1200px;
       margin: 0 auto;
