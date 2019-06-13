@@ -23,7 +23,8 @@
         </div>
       </div>
       <div class="project-info-owner">
-        <span class="project-info-owner-name">{{$t('project.createByAt', { username: projectOwnerUsername})}}</span>
+        <span>{{projectOwnerUsername}}</span>
+        <span class="project-info-owner-name">{{$t('project.createByAt')}}</span>
         <span>{{originProjectDetail.createdAt | formatDate(formatType)}}</span>
       </div>
     </div>
@@ -154,7 +155,7 @@ export default {
       color: #303133;
       font-size: 12px;
       &-name {
-        margin-right: 6px;
+        margin: 0 6px;
       }
     }
   }

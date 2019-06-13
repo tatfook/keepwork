@@ -1552,7 +1552,7 @@
     "CommentsLabel": "Comments",
     "commentAfterLogin": "Sign in to comment",
     "deleteProject": "Delete Project",
-    "createByAt": "create by {username} at"
+    "createByAt": "create at"
   },
   "footer": {
     "lettersTo": "Educational ideas",
