@@ -7,16 +7,17 @@
       </el-breadcrumb>
     </div>
     <div class="exhibition-hall-filter">
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameType" :options="gameTypeOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameType" :options="gameTypeOptions" @change="_handleChange"></el-cascader>
       <el-cascader class="exhibition-hall-filter-options" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
       <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
     </div>
-    <el-row>
+    <el-row class="exhibition-hall-cabinet">
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
+      <p class="exhibition-hall-cabinet-hint" v-if="allProjectsDataOptimize.length == 0">暂无项目</p>
     </el-row>
-    <div class="all-projects-pages" v-if="projectsCount > perPage">
+    <div class="exhibition-hall-pages" v-if="projectsCount > perPage">
       <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
       </el-pagination>
     </div>
@@ -33,48 +34,20 @@ export default {
       perPage: 10,
       page: 1,
       selectedGameType: [],
-      gameTypeOptions: [
-        {
-          value: '1',
-          label: '全国青少年科技创新大赛',
-          children: [
-            {
-              value: '1-1',
-              label: '参赛作品'
-            },
-            {
-              value: '1-2',
-              label: '获奖作品'
-            }
-          ]
-        }
-      ],
-      gamePeriodicalOptions: [
-        {
-          value: '1',
-          label: '第一期'
-        },
-        {
-          value: '2',
-          label: '第2期'
-        }
-      ],
-      gameThemeOptions: [
-        {
-          value: '1',
-          label: '春天'
-        },
-        {
-          value: '2',
-          label: '夏天'
-        }
-      ],
-      allProjectsDataOptimize: []
+      selectedGamePeriodical: [],
+      selectedGameTheme: [],
+      gameGroup: [],
+      perPage: 12,
+      page: 1
     }
   },
   async mounted() {
     await this.getGamesList()
-    console.log('1', this.gamesList)
+    this.gameGroup = _.groupBy(_.get(this.gamesList, 'rows', []), 'name')
+    await this.getWorksByGameId({
+      'x-page': this.page,
+      'x-per-page': this.perPage
+    })
     this.loading = false
   },
   computed: {
@@ -82,19 +55,166 @@ export default {
       gamesList: 'pbl/gamesList',
       gameWorks: 'pbl/gameWorks'
     }),
+    gameTypeOptions() {
+      let selectList = _.map(this.gameGroup, item => ({
+        value: item[0].name,
+        label: item[0].name,
+        children: [
+          {
+            value: '参赛作品',
+            label: '参赛作品'
+          },
+          {
+            value: '获奖作品',
+            label: '获奖作品'
+          }
+        ]
+      }))
+      selectList.push({ value: '', label: '全部' })
+      return selectList
+    },
+    gamePeriodicalOptions() {
+      if (this.selectedGameType.length !== 0) {
+        let selectNoList = _.map(
+          this.gameGroup[this.selectedGameType[0]],
+          item => ({
+            label: `第${item.no}期` + '#' + item.id,
+            value: item.id
+          })
+        )
+        selectNoList.push({ value: '', label: '全部' })
+        return selectNoList
+      }
+      return []
+    },
+    gameThemeOptions() {
+      if (this.selectedGameType[0] === 'NPL大赛') {
+        // NPL大赛
+        return [
+          {
+            value: '动画',
+            label: '动画'
+          },
+          {
+            value: '游戏',
+            label: '游戏'
+          },
+          {
+            value: '解谜',
+            label: '解谜'
+          },
+          {
+            value: '',
+            label: '全部'
+          }
+        ]
+      }
+      if (this.selectedGameType[0] === '全国青少年科技创新大赛') {
+        // 全国青少年科技创新大赛
+        return [
+          {
+            value: '计算机科学',
+            label: '计算机科学'
+          },
+          {
+            value: '',
+            label: '全部'
+          }
+        ]
+      }
+      if (this.selectedGameType[0] === '全国中小学科学影像节') {
+        // 全国中小学科学影像节
+        return [
+          {
+            value: '科普动画',
+            label: '科普动画'
+          },
+          {
+            value: '',
+            label: '全部'
+          }
+        ]
+      }
+      if (this.selectedGameType[0] === '全国中小学信息技术创新与实践大赛') {
+        // 全国中小学信息技术创新与实践大赛
+        return [
+          {
+            value: '动画创作',
+            label: '动画创作'
+          },
+          {
+            value: '微视频创作',
+            label: '微视频创作'
+          },
+          {
+            value: '移动端网页创作',
+            label: '移动端网页创作'
+          },
+          {
+            value: '3D智能作品创作',
+            label: '3D智能作品创作'
+          },
+          {
+            value: '',
+            label: '全部'
+          }
+        ]
+      }
+      return [
+        {
+          value: '',
+          label: '全部'
+        }
+      ]
+    },
+    allProjectsDataOptimize() {
+      let list = _.get(this.gameWorks, 'rows', [])
+      return _.filter(_.map(list, item => item.projects), v => v)
+    },
     projectsCount() {
-      return 0
+      return _.get(this.gameWorks, 'count', 0)
     }
   },
   methods: {
     ...mapActions({
-      getGamesList: 'pbl/getGamesList'
+      getGamesList: 'pbl/getGamesList',
+      getWorksByGameId: 'pbl/getWorksByGameId'
     }),
-    handleChange(value) {
-      console.log(value)
+    _handleChange(value) {
+      this.handleChange(value, true)
+    },
+    handleChange(value, clear = false) {
+      if (clear) {
+        this.selectedGamePeriodical = []
+        this.selectedGameTheme = []
+      }
+      let params = {
+        'x-page': this.page,
+        'x-per-page': this.perPage
+      }
+      let _selectedGameType = _.filter(this.selectedGameType, v => v)
+      if (_selectedGameType.length !== 0) {
+        params.gameName = this.selectedGameType[0]
+        this.selectedGameType[1] == '获奖作品'
+          ? (params.win = 1)
+          : (params.win = '')
+      }
+      let _selectedGamePeriodical = _.filter(
+        this.selectedGamePeriodical,
+        v => v
+      )
+      if (_selectedGamePeriodical.length !== 0) {
+        params.gameId = this.selectedGamePeriodical[0]
+      }
+      let _selectedGameTheme = _.filter(this.selectedGameTheme, v => v)
+      if (_selectedGameTheme.length !== 0) {
+        params.worksSubject = this.selectedGameTheme[0]
+      }
+      this.getWorksByGameId(params)
     },
     targetPage(targetPage) {
-      console.log(targetPage)
+      this.page = targetPage
+      this.handleChange()
     }
   },
   components: {
@@ -125,6 +245,16 @@ export default {
         }
       }
     }
+  }
+  &-cabinet {
+    min-height: 586px;
+    &-hint {
+      text-align: center;
+    }
+  }
+  &-pages {
+    text-align: center;
+    margin: 16px;
   }
 }
 </style>

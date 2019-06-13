@@ -264,8 +264,8 @@ const actions = {
       commit(GET_GAMES_LIST, res)
     }).catch(err => console.warn(err))
   },
-  async getWorksByGameId({ commit }, { gameId }) {
-    await keepwork.games.getWorksByGameId({ gameId }).then(res => {
+  async getWorksByGameId({ commit }, payload) {
+    await keepwork.games.getWorksByGameId(payload).then(res => {
       commit(GET_WORKS_BY_GAMEID, res)
     })
   },

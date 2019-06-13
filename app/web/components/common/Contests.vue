@@ -71,7 +71,7 @@
       </span>
     </div>
     <div class="contests-exhibition">
-      <div class="contests-exhibition-box" v-for="(gameInfo,index) in exhibitionData" :key="index">
+      <div class="contests-exhibition-box" v-for="(gameInfo,index) in exhibitionDataOptimize" :key="index">
         <div class="contests-exhibition-box-sign">
           <img class="contests-exhibition-box-sign-img" :src="gameInfo.gameLogo" alt="">
         </div>
@@ -171,6 +171,12 @@ export default {
     ...mapGetters({
       gamesList: 'pbl/gamesList'
     }),
+    exhibitionDataOptimize() {
+      return _.filter(
+        this.exhibitionData,
+        game => game.gameWorksCount !== '0个'
+      )
+    },
     NPLgameInfo() {
       return _.filter(this.gamesList.rows, game => game.type === 0)
     },
@@ -205,7 +211,6 @@ export default {
         }
       }
     }
-
   },
 
   methods: {
