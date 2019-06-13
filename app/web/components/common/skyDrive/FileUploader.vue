@@ -8,7 +8,7 @@
 </template>
 <script>
 import moment from 'moment'
-import { getFileExt } from '@/lib/utils/filename'
+import { getFileExt, getFileSizeText } from '@/lib/utils/filename'
 import waitForMilliSeconds from '@/lib/utils/waitForMilliSeconds'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -43,7 +43,8 @@ export default {
   },
   data() {
     return {
-      waitingFiles: []
+      waitingFiles: [],
+      qiniuUploadSubscriptions: {}
     }
   },
   computed: {
@@ -85,32 +86,16 @@ export default {
     ...mapActions({
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive'
     }),
-    getSizeText(bite = 0) {
-      let KBVal = (bite / 1024)
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-      let MBVal = (bite / 1024 / 1024)
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-      let GBVal = (bite / 1024 / 1024 / 1024)
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-      return KBVal < 100
-        ? `${KBVal}KB`
-        : MBVal < 100
-        ? `${MBVal}MB`
-        : `${GBVal}GB`
-    },
     handleUploadFile(file) {
       let supportedExt = _.split(this.acceptTypes, ',')
       let fileExt = '.' + getFileExt(file.raw)
       let uploadType = this.uploadType
 
       let selectedType = uploadType == 'all' ? '' : uploadType
-      if (uploadType != 'all' && _.findIndex(supportedExt, ext => ext == fileExt) == -1) {
+      if (
+        uploadType != 'all' &&
+        _.findIndex(supportedExt, ext => ext == fileExt) == -1
+      ) {
         this.$message.error(
           uploadType == 'image'
             ? '请选择jpg、jpeg、gif、png格式图片上传'
@@ -132,7 +117,7 @@ export default {
         filename: file.name,
         ext: getFileExt(file),
         size: file.size,
-        displaySize: this.getSizeText(file.size),
+        displaySize: getFileSizeText(file.size),
         type: file.type.split('/')[0] + 's',
         file: {
           downloadUrl: ''
@@ -186,7 +171,8 @@ export default {
       await this.userUploadFileToSkyDrive({
         file,
         onStart(subscription) {
-          self.$emit('addNewUploader', { subscription, filename: file.name })
+          let filename = file.name
+          self.qiniuUploadSubscriptions[filename] = subscription
         },
         onProgress(progress) {
           self.$emit('changeUploadingState', {

@@ -1,9 +1,13 @@
 <template>
   <div v-loading='loading' class="skydrive-manager" @drop.prevent="handleDrop" @dragenter.prevent="handleDragEnter" @dragover.prevent="handleDragOver" @dragleave="handleDragLeave">
     <div class="skydrive-manager-header">
-      <div class='skydrive-manager-header-first'>
+      <div class='skydrive-manager-header-first' :class="{'skydrive-manager-header-first-no-position':isDroping}">
         <usage-bar class='skydrive-manager-header-usage' :uploadingFileSize="uploadingFileSize"></usage-bar>
-        <file-uploader ref="uploaderRef" class="skydrive-manager-header-upload" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
+        <div class="skydrive-manager-header-fake-upload" v-show="isDroping">
+          {{$t('skydrive.dragAndDrop')}}
+          <el-button class="skydrive-manager-fake-upload-button" size="small" type="primary" round>{{uploadText}}</el-button>
+        </div>
+        <file-uploader ref="uploaderRef" :class="{'skydrive-manager-drop': isDroping, 'skydrive-manager-header-upload': !isDroping}" :isDragMode="isDroping" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @changeUploadingState="changeUploadingState" @resetTableSort="resetTableSort"></file-uploader>
         <p class="skydrive-manager-header-first-info" v-show="mediaFilterType==='image'">建议上传图片大小不能超过2M，支持jpg/png格式</p>
       </div>
       <div class='skydrive-manager-header-second'>
@@ -30,15 +34,14 @@
         </div>
       </div>
     </div>
-    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :isInsertable="isInsertable" :skyDriveTableDataWithUploading='skyDriveTableDataWithUploading' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='uploadingFiles' :skyDriveMediaLibraryData='skyDriveTableDataFilteredType' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
-    <file-uploader v-show="isDroping" class="skydrive-manager-drop" :isDragMode="true" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @removeUploadingFiles="removeUploadingFiles" @changeUploadingState="changeUploadingState" @addNewUploader="addNewUploader" @resetTableSort="resetTableSort"></file-uploader>
+    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :isInsertable="isInsertable" :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='uploadingFiles' :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></media-type>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import { getFileExt, getBareFilename } from '@/lib/utils/filename'
+import { getFileExt, getFileSizeText, getBareFilename } from '@/lib/utils/filename'
 import tableType from './skyDrive/tableType'
 import mediaType from './skyDrive/mediaType'
 import UsageBar from './skyDrive/UsageBar'
@@ -74,8 +77,7 @@ export default {
         : 'video',
       loading: false,
       isMounted: false,
-      uploadingFiles: [],
-      qiniuUploadSubscriptions: {}
+      uploadingFiles: []
     }
   },
   computed: {
@@ -83,8 +85,13 @@ export default {
       userSkyDriveFileList: 'user/skyDriveFileList',
       activePageInfo: 'activePageInfo'
     }),
-    isEditorPage() {
-      return _.get(this.$route, 'name') === 'Editor'
+    uploadText() {
+      let uploadType = this.mediaFilterType
+      return uploadType == 'image'
+        ? this.$t('skydrive.uploadImage')
+        : uploadType == 'video'
+        ? this.$t('skydrive.uploadVideo')
+        : this.$t('skydrive.uploadFile')
     },
     activeChildComp() {
       if (!this.isMounted) {
@@ -101,7 +108,7 @@ export default {
         []
       )
     },
-    formatedFileList() {
+    fileListFormated() {
       return this.userSkyDriveFileList.map(item => {
         // checked: 0 未审核, 1 通过, 2 未通过
         let { checked, size, filename, type, updatedAt } = item
@@ -109,7 +116,7 @@ export default {
         return {
           ...item,
           file: { size, filename, type, downloadUrl: '' },
-          displaySize: this.getSizeText(size),
+          displaySize: getFileSizeText(size),
           ext: getFileExt(item),
           checkPassed: checked === 1,
           checkedState:
@@ -121,44 +128,31 @@ export default {
         }
       })
     },
-    skyDriveTableData() {
-      return this.formatedFileList.filter(this.itemFilterBySearchWord)
-    },
-    skyDriveTableDataFilteredType() {
+    fileListFilteredType() {
       let selectedType =
         this.mediaFilterType == 'all' ? '' : this.mediaFilterType
-      return this.skyDriveTableData.filter(({ type }) =>
+      return this.fileListFormated.filter(({ type }) =>
         new RegExp(`^${selectedType}`).test(type)
       )
     },
+    fileListFilteredSearched() {
+      return this.fileListFilteredType.filter(this.itemFilterBySearchWord)
+    },
     filterFinishedUploadingFile() {
-      return _.filter(this.uploadingFiles, file => {
-        return file.state !== 'success'
-      })
+      return _.filter(this.uploadingFiles, file => file.state !== 'success')
+    },
+    fileListWithUploading() {
+      return _.concat(
+        this.filterFinishedUploadingFile,
+        this.fileListFilteredSearched
+      )
     },
     uploadingFileSize() {
       return _.reduce(
         this.filterFinishedUploadingFile,
-        (sum, file) => {
-          return sum + file.size
-        },
+        (sum, file) => sum + file.size,
         0
       )
-    },
-    skyDriveTableDataWithUploading() {
-      return _.sortBy(
-        [
-          ...this.filterFinishedUploadingFile,
-          ...this.skyDriveTableDataFilteredType
-        ],
-        'updateAt'
-      )
-    },
-    skyDriveMediaLibraryData() {
-      let mediaDatas = this.skyDriveTableData.filter(({ type }) => {
-        return new RegExp(`^${this.mediaFilterType}`).test(type)
-      })
-      return _.sortBy(mediaDatas, 'updateAt')
     }
   },
   methods: {
@@ -179,21 +173,11 @@ export default {
       clearTimeout(this.leaveTimer)
       this.leaveTimer = setTimeout(this.removeDropZone, 100)
     },
+    handleDrop(e) {
+      this.isDroping = false
+    },
     addUploadingFiles(file) {
       this.uploadingFiles.push(file)
-    },
-    removeUploadingFiles(file) {
-      let { filename, state } = file
-      if (state === 'doing') {
-        let removingFileSubscribtion = _.get(
-          this.qiniuUploadSubscriptions,
-          filename
-        )
-        removingFileSubscribtion && removingFileSubscribtion.unsubscribe()
-      }
-      this.uploadingFiles = _.remove(this.uploadingFiles, file => {
-        return file.filename !== filename
-      })
     },
     changeUploadingState({ state, file, errorMsg, percent, updatedAt }) {
       let filename = file.name
@@ -212,9 +196,6 @@ export default {
         updatedAt: updatedAt || fileDetail.updatedAt
       })
     },
-    addNewUploader({ subscription, filename }) {
-      this.qiniuUploadSubscriptions[filename] = subscription
-    },
     changeLoadingState(isLoading) {
       this.loading = isLoading
     },
@@ -230,28 +211,6 @@ export default {
     },
     selectAll() {
       this.activeChildComp.selectAll()
-    },
-    handleDrop(e) {
-      this.isDroping = false
-    },
-    getSizeText(bite = 0) {
-      let KBVal = (bite / 1024)
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-      let MBVal = (bite / 1024 / 1024)
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-      let GBVal = (bite / 1024 / 1024 / 1024)
-        .toFixed(2)
-        .toString()
-        .replace(/\.*0*$/, '')
-      return KBVal < 100
-        ? `${KBVal}KB`
-        : MBVal < 100
-        ? `${MBVal}MB`
-        : `${GBVal}GB`
     },
     resetTableSort() {
       let skyDriveTable = _.get(this.activeChildComp, '$refs.skyDriveTable')
@@ -271,11 +230,10 @@ export default {
     },
     removeFromUploadQue(file) {
       let { filename, state } = file
+      let qiniuUploadSubscriptions = this.$refs.uploaderRef
+        .qiniuUploadSubscriptions
       if (state === 'doing') {
-        let removingFileSubscribtion = _.get(
-          this.qiniuUploadSubscriptions,
-          filename
-        )
+        let removingFileSubscribtion = _.get(qiniuUploadSubscriptions, filename)
         removingFileSubscribtion && removingFileSubscribtion.unsubscribe()
       }
       this.uploadingFiles = _.remove(this.uploadingFiles, file => {
@@ -304,12 +262,24 @@ export default {
       padding-bottom: 32px;
       display: flex;
       align-items: center;
+      min-height: 32px;
+      &-no-position {
+        position: unset;
+      }
       &-info {
         position: absolute;
         right: 8px;
         bottom: 0;
         font-size: 12px;
         color: #999;
+      }
+    }
+    &-fake-upload {
+      .el-button--small {
+        display: inline-block;
+        margin-left: 20px;
+        font-size: 14px;
+        padding: 8px 15px;
       }
     }
     &-usage {
@@ -381,6 +351,7 @@ export default {
       bottom: 0;
       width: auto;
       height: auto;
+      background-color: transparent;
     }
     .el-icon-upload {
       font-size: 80px;

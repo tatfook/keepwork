@@ -104,12 +104,12 @@ export default {
   props: {
     mediaFilterType: String,
     uploadingFiles: Array,
-    skyDriveMediaLibraryData: Array,
+    fileListFilteredSearched: Array,
     isInsertable: Boolean,
     isApplicable: Boolean
   },
   mounted() {
-    this.fileList = _.cloneDeep(this.skyDriveMediaLibraryData)
+    this.fileList = _.cloneDeep(this.fileListFilteredSearched)
     this.keyupSubmit()
   },
   data() {
@@ -229,8 +229,8 @@ export default {
     }
   },
   watch: {
-    skyDriveMediaLibraryData() {
-      this.fileList = _.cloneDeep(this.skyDriveMediaLibraryData)
+    fileListFilteredSearched() {
+      this.fileList = _.cloneDeep(this.fileListFilteredSearched)
     },
     isAllSelected(val) {
       this.$emit('selectAllStateChange', val)
