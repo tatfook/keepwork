@@ -20,7 +20,7 @@
           </div> -->
           <div class="summary-word-line">
             This is my
-            <span class="highlight">{{summary.day}}</span> day of learning
+            <span class="highlight">{{summary.day || 1}}</span> day of learning
             <span class="highlight">{{summary.name}}</span> on Keepwork.
           </div>
           <div class="summary-word-line" v-if="hasSkills">
@@ -46,7 +46,7 @@
           </div>
           <div class="summary-word-line">
             这是我第
-            <span class="highlight">{{summary.day}}</span> 天在keepwork学习
+            <span class="highlight">{{summary.day || 1}}</span> 天在keepwork学习
             <span class="highlight">{{summary.name}}</span>。
           </div>
           <div class="summary-word-line" v-if="hasSkills">
@@ -124,6 +124,8 @@ export default {
         })
         .catch(err => console.error(err))
     }
+    console.log(this.summary.day)
+    this.summary.day = 0
   },
   computed: {
     today() {
