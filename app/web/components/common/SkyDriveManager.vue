@@ -7,7 +7,7 @@
           {{$t('skydrive.dragAndDrop')}}
           <el-button class="skydrive-manager-fake-upload-button" size="small" type="primary" round>{{uploadText}}</el-button>
         </div>
-        <file-uploader ref="uploaderRef" :class="{'skydrive-manager-drop': isDroping, 'skydrive-manager-header-upload': !isDroping}" :isDragMode="isDroping" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @changeUploadingState="changeUploadingState" @resetTableSort="resetTableSort"></file-uploader>
+        <file-uploader ref="uploaderRef" :class="{'skydrive-manager-drop': isDroping, 'skydrive-manager-header-upload': !isDroping}" :uploadText="uploadText" :isDragMode="isDroping" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @changeUploadingState="changeUploadingState" @resetTableSort="resetTableSort"></file-uploader>
         <p class="skydrive-manager-header-first-info" v-show="mediaFilterType==='image'">建议上传图片大小不能超过2M，支持jpg/png格式</p>
       </div>
       <div class='skydrive-manager-header-second'>
@@ -351,7 +351,7 @@ export default {
       bottom: 0;
       width: auto;
       height: auto;
-      background-color: transparent;
+      background-color: rgba(32, 159, 255, 0.06);
     }
     .el-icon-upload {
       font-size: 80px;

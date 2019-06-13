@@ -39,7 +39,8 @@ export default {
     isDragMode: {
       type: Boolean,
       default: false
-    }
+    },
+    uploadText: String
   },
   data() {
     return {
@@ -60,13 +61,6 @@ export default {
       } else {
         return ''
       }
-    },
-    uploadText() {
-      return this.uploadType == 'image'
-        ? this.$t('skydrive.uploadImage')
-        : this.uploadType == 'video'
-        ? this.$t('skydrive.uploadVideo')
-        : this.$t('skydrive.uploadFile')
     },
     waitingFileSize() {
       return _.reduce(
