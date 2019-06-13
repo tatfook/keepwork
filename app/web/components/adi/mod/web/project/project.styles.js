@@ -1,12 +1,28 @@
 export default [
   {
     theme: {
-      root: [ 'mod-space' ],
-      rootRow: [ 'mod-full-width' ]
+      name: 'normal'
     },
     options: {
       theme: {},
-      config: {}
+      config: {
+        project: {
+          styleID: 0
+        }
+      }
+    }
+  },
+  {
+    theme: {
+      name: 'mini'
+    },
+    options: {
+      theme: {},
+      config: {
+        project: {
+          styleID: 1
+        }
+      }
     }
   }
 ]

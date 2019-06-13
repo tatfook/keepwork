@@ -1541,7 +1541,8 @@
     "WhiteBoardLabel": "白板",
     "CommentsLabel": "评论",
     "commentAfterLogin": "登录后才能评论",
-    "deleteProject": "删除项目"
+    "deleteProject": "删除项目",
+    "createByAt": "由{username}创建于"
   },
   "footer": {
     "lettersTo": "教育理念",
