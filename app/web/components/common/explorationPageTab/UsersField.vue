@@ -1,6 +1,6 @@
 <template>
   <div class="user-field" v-loading="loading">
-    <el-row>
+    <el-row class="user-field-boxs">
       <el-col :sm="12" :md="6" :xs="12" v-for="(user) in allUsersData" :key="user.id">
         <user-cell :user="user"></user-cell>
       </el-col>
@@ -131,6 +131,9 @@ export default {
   .fade-enter,
   .fade-leave-to {
     opacity: 0;
+  }
+  &-boxs {
+    min-height: 560px;
   }
   &-pages {
     margin-top: 40px;

@@ -14,7 +14,6 @@ try {
 } catch (error) {
   console.error(error)
 }
-
 const debugMode = ['release', 'stage'].some(env => process.env.SOCKET_API_PREFIX.includes(env))
 
 export const socket = new VueSocketIO({
@@ -43,7 +42,9 @@ export const socketMixin = {
       this.socketMessage = data
     },
     async msg(data) {
-      this.socketMessage = data
+      if (data.type === 0) {
+        this.socketMessage = data
+      }
     }
   }
 }

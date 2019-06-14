@@ -96,7 +96,8 @@ export default {
           if (this.isInCurrentClass) {
             await this.resumeQuiz({ id: this.classroomId })
             await this.uploadLearnRecords()
-            !this._interval && this.intervalCheckClassroom()
+            await this.checkClassroom()
+            // !this._interval && this.intervalCheckClassroom()
           } else {
             const { packageId, lessonId } = this.classroom
             return this.$router.push({

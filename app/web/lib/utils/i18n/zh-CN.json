@@ -1346,7 +1346,7 @@
     "selectedProjects": "精选项目",
     "hotLessons": "热门课程",
     "likedByOthers": "大家都觉得赞",
-    "paracraftIsFree": "3D创作工具：Paracraft 永久免费！"
+    "paracraftIsFree": "用Paracraft制作作品，参加全国性赛事！"
   },
   "create": {
     "creationStartFromProject": "创造，从项目开始",
@@ -1541,7 +1541,8 @@
     "WhiteBoardLabel": "白板",
     "CommentsLabel": "评论",
     "commentAfterLogin": "登录后才能评论",
-    "deleteProject": "删除项目"
+    "deleteProject": "删除项目",
+    "createByAt": "创建于"
   },
   "footer": {
     "lettersTo": "教育理念",

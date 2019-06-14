@@ -14,6 +14,10 @@ export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 })
 
+const socketMessage = createEndpoint({
+  baseURL: process.env.SOCKET_API_PREFIX + '/api/v0/'
+})
+
 const withoutParseEndpoint = createEndpoint(
   {
     baseURL: process.env.KEEPWORK_API_PREFIX
@@ -331,9 +335,10 @@ export const groups = {
 
 export const games = {
   getGamesList: async () => post('games/search'),
-  getWorksByGameId: async ({ gameId }) => post('gameWorks/search', { gameId }),
+  getWorksByGameId: async (params) => post('gameWorks/search', params),
   getLegalGamesProjects: async () => get('games/projects'),
-  submitGameWorks: async (...args) => post('gameWorks', ...args)
+  submitGameWorks: async (...args) => post('gameWorks', ...args),
+  getGameWorksStatistics: async () => get('gameWorks/statistics')
 }
 
 export const lessonOrganizations = {
@@ -355,7 +360,8 @@ export const lessonOrganizations = {
   searchOrganizations: async params => post('lessonOrganizations/search', params),
   createBatchCode: async params => post('lessonOrganizationActivateCodes', params),
   getOrgActivateCodes: async params => post('lessonOrganizationActivateCodes/search', params),
-  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params)
+  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params),
+  sendSocketMessage: async params => socketMessage.post('app/msg', params)
 }
 
 export const lessonOrganizationClasses = {

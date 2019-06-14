@@ -1,6 +1,6 @@
 <template>
   <div class="paracraft-field" v-loading="loading">
-    <el-row>
+    <el-row class="paracraft-field-boxs">
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in pracraftData" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
@@ -109,6 +109,9 @@ export default {
   .fade-enter,
   .fade-leave-to {
     opacity: 0;
+  }
+  &-boxs {
+    min-height: 560px;
   }
   &-pages {
     margin-top: 40px;

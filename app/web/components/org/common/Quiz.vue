@@ -151,8 +151,9 @@ export default {
     async submit(result, answer) {
       this.doQuiz({ key: this.key, question: this.question, result, answer })
       if (this.isBeInClassroom) {
-        let state = this.lessonIsDone ? 1 : 0
-        return await this.uploadLearnRecords(state).catch(e => console.error(e))
+        const state = this.lessonIsDone ? 1 : 0
+        await this.uploadLearnRecords(state).catch(e => console.error(e))
+        return
       }
       // 一次只能自学一个页面
       let lastLearnRecords = await lesson.lessons
