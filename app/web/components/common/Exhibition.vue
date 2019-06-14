@@ -78,7 +78,7 @@ export default {
         let selectNoList = _.map(
           this.gameGroup[this.selectedGameType[0]],
           item => ({
-            label: `第${item.no}期` + '#' + item.id,
+            label: `第${item.no}期`,
             value: item.id
           })
         )
