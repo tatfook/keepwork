@@ -111,14 +111,13 @@ export default {
     }
   }
   &-menu {
-    width: 220px;
+    width: 234px;
     padding: 0 16px;
     &-item {
       display: inline-block;
       font-size: 16px;
       color: #999;
       border-color: transparent;
-      margin-right: 16px;
       &-active {
         color: #2397f2;
         border-color: #2397f3;
@@ -147,10 +146,11 @@ export default {
     }
   }
   &-available {
-    width: 220px;
+    width: 198px;
     padding: 0 24px;
     font-size: 12px;
     color: #333;
+    text-align: right;
     &-warning {
       color: #f4b744;
     }

@@ -1,9 +1,6 @@
 <template>
-  <div class="project-tags-switch">
-    {{$t('card.projectTags')}} <el-switch
-      v-model="tagsStatus"
-      @change="switchTags"
-    ></el-switch>
+  <div v-if="!isMiniStyle" class="project-tags-switch">
+    {{$t('card.projectTags')}} <el-switch :value="tagsStatus" @change="switchTags"></el-switch>
   </div>
 </template>
 
@@ -17,6 +14,12 @@ export default {
   computed: {
     tagsStatus() {
       return this.originValue
+    },
+    styleID() {
+      return this.optionsData.styleID
+    },
+    isMiniStyle() {
+      return this.styleID === 1
     }
   },
   methods: {
@@ -24,7 +27,6 @@ export default {
       this.$emit('onPropertyChange', { projectTagsShow: status })
     }
   }
-
 }
 </script>
 <style lang="scss">

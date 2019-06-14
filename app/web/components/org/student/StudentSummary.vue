@@ -44,7 +44,7 @@ export default {
     },
     day() {
       const suffix = ['', 'st', 'nd', 'rd', 'th']
-      let day = this.summary.day
+      let day = _.toNumber(this.summary.day) || 1
       if (this.isEn) {
         day = day > 3 ? `${day}th` : `${day}${suffix[day]}`
       }

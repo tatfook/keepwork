@@ -67,7 +67,7 @@ export default {
         return (
           (nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)) ||
           nowTime > new Date(i.endDate)
-        )
+        ) && i.type === 0  // type: 0  NPL大赛
       })
     },
     showProjectsByTab() {
@@ -75,8 +75,8 @@ export default {
         ? this.rankingList
         : this.gameStagesWorks
     },
-    showProjectRate(){
-      return  this.showProjectsByTab === this.rankingList ? true : false 
+    showProjectRate() {
+      return this.showProjectsByTab === this.rankingList ? true : false
     },
     rankingList() {
       return _.get(this.ranking, 'rows', [])
@@ -98,12 +98,13 @@ export default {
     }),
     gameNoState(i) {
       const nowTime = new Date()
-      let state = nowTime < new Date(i.startDate)
-        ? '未开始'
-        : nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)
-        ? '进行中'
-        : '已结束'
-        return `${i.name}第${i.no}期   （${state}）`
+      let state =
+        nowTime < new Date(i.startDate)
+          ? '未开始'
+          : nowTime > new Date(i.startDate) && nowTime < new Date(i.endDate)
+          ? '进行中'
+          : '已结束'
+      return `${i.name}第${i.no}期   （${state}）`
     },
     getRankingProjects() {
       keepwork.projects
