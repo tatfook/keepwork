@@ -11,7 +11,7 @@
       <el-cascader class="exhibition-hall-filter-options" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
       <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
     </div>
-    <el-row class="exhibition-hall-cabinet">
+    <el-row class="exhibition-hall-cabinet" v-loading="cabinetLoading">
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
         <project-cell :project="project"></project-cell>
       </el-col>
@@ -38,7 +38,8 @@ export default {
       selectedGameTheme: [],
       gameGroup: [],
       perPage: 12,
-      page: 1
+      page: 1,
+      cabinetLoading: true
     }
   },
   async mounted() {
@@ -48,7 +49,7 @@ export default {
       'x-page': this.page,
       'x-per-page': this.perPage
     })
-    this.loading = false
+    this.cabinetLoading = false
   },
   computed: {
     ...mapGetters({
@@ -183,7 +184,8 @@ export default {
     _handleChange(value) {
       this.handleChange(value, true)
     },
-    handleChange(value, clear = false) {
+    async handleChange(value, clear = false) {
+      this.cabinetLoading = true
       if (clear) {
         this.selectedGamePeriodical = []
         this.selectedGameTheme = []
@@ -210,7 +212,8 @@ export default {
       if (_selectedGameTheme.length !== 0) {
         params.worksSubject = this.selectedGameTheme[0]
       }
-      this.getWorksByGameId(params)
+      await this.getWorksByGameId(params)
+      this.cabinetLoading = false
     },
     targetPage(targetPage) {
       this.page = targetPage

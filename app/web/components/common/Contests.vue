@@ -42,7 +42,7 @@
         <p class="contests-games-box-subject">计算机科学</p>
         <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：2019/5/30前</p>
       </div>
-      <div class="contests-games-box" @click="goRelatedLinks('keepwork.com/NPL')" v-if="currentNPLgameInfo.no !== 0">
+      <div class="contests-games-box" @click="goRelatedLinks('/NPL')"  v-if="currentNPLgameInfo.no !== 0">
         <div class="contests-games-box-top">
           <!-- <img class="contests-games-box-top-img" src="@/assets/contests/c.png" alt=""> -->
           <p class="contests-games-box-top-text">NPL大赛第{{currentNPLgameInfo.no}}期</p>
