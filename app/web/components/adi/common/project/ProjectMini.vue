@@ -12,13 +12,13 @@
         </div>
         <div class="project-info-count">
           <span class="project-info-count-item project-viewcount">
-            <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit + 1}}
+            <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit ? originProjectDetail.visit + 1 : 0}}
           </span>
           <span class="project-info-count-item project-starcount">
-            <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star}}
+            <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star || 0}}
           </span>
           <span class="project-info-count-item project-commentcount">
-            <i class="icon-message_fill iconfont"></i>{{originProjectDetail.comment}}
+            <i class="icon-message_fill iconfont"></i>{{originProjectDetail.comment || 0}}
           </span>
         </div>
       </div>
