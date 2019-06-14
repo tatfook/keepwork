@@ -71,7 +71,7 @@
       </span>
     </div>
     <div class="contests-exhibition">
-      <div class="contests-exhibition-box" v-for="(gameInfo,index) in exhibitionDataOptimize" :key="index">
+      <div class="contests-exhibition-box" v-for="(gameInfo,index) in exhibitionDataOptimize" :key="index" @click="goRelatedLinks('/exhibition')">
         <div class="contests-exhibition-box-sign">
           <img class="contests-exhibition-box-sign-img" :src="gameInfo.gameLogo" alt="">
         </div>
@@ -205,9 +205,9 @@ export default {
 
     let winWorksList = _.get(this.workStatistics, 'winlist')
     for (let i = 1; i < this.exhibitionData.length; i = i + 2) {
-      for (let j = 0; j < allWorksList.length; j++) {
-        if (this.exhibitionData[i].gameName == allWorksList[j].name) {
-          this.exhibitionData[i].gameWorksCount = allWorksList[j].count + '个'
+      for (let j = 0; j < winWorksList.length; j++) {
+        if (this.exhibitionData[i].gameName == winWorksList[j].name) {
+          this.exhibitionData[i].gameWorksCount = winWorksList[j].count + '个'
         }
       }
     }
@@ -351,6 +351,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     &-box {
+      cursor: pointer;
       margin: 0 16px 16px 0;
       width: 288px;
       background: #fff;
