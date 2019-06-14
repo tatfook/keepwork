@@ -42,7 +42,7 @@
         <p class="contests-games-box-subject">计算机科学</p>
         <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：2019/5/30前</p>
       </div>
-      <div class="contests-games-box" @click="goRelatedLinks('/NPL')">
+      <div class="contests-games-box" @click="goRelatedLinks('/NPL')"  v-if="currentNPLgameInfo.no !== 0">
         <div class="contests-games-box-top">
           <!-- <img class="contests-games-box-top-img" src="@/assets/contests/c.png" alt=""> -->
           <p class="contests-games-box-top-text">NPL大赛第{{currentNPLgameInfo.no}}期</p>
@@ -98,70 +98,70 @@ export default {
           gameName: '全国青少年科技创新大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_1.png'),
           gameName: '全国青少年科技创新大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_3.png'),
           gameName: '全国中小学科学影像节',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_3.png'),
           gameName: '全国中小学科学影像节',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_2.png'),
           gameName: '全国中小学信息技术创新与实践大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_2.png'),
           gameName: '全国中小学信息技术创新与实践大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_1.png'),
           gameName: 'NPL大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_1.png'),
           gameName: 'NPL大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_4.png'),
           gameName: '汉字大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_4.png'),
           gameName: '汉字大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         }
       ],
       workStatistics: {}
@@ -178,7 +178,7 @@ export default {
       )
     },
     NPLgameInfo() {
-      return _.filter(this.gamesList.rows, game => game.type === 0)
+      return _.filter(this.gamesList.rows, game => game.name == 'NPL大赛')
     },
     currentNPLgameInfo() {
       let currentData = _.filter(this.NPLgameInfo, game => {
