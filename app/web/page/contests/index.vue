@@ -1,8 +1,6 @@
 <template>
   <div class="contests-page">
-    <contests-header></contests-header>
     <router-view></router-view>
-    <contests-footer></contests-footer>
   </div>
 </template>
 <script>
@@ -11,19 +9,37 @@ import Vuex from 'vuex'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './contests.router'
-import ContestsHeader from '@/components/contests/ContestsHeader'
-import ContestsFooter from '@/components/contests/ContestsFooter'
+import VueI18n from 'vue-i18n'
+import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
+import userModule from '@/store/user'
 
 Vue.use(Vuex)
+Vue.use(VueI18n)
+
+const i18n = new VueI18n({
+  locale,
+  messages: i18nMessages
+})
+
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
+const store = new Vuex.Store({
+  modules: {
+    user: userModule,
+  }
+})
 
 export default {
   name: 'ContestsPage',
   router,
-  data() {},
-  components: {
-    ContestsHeader,
-    ContestsFooter
-  }
+  i18n,
+  store,
+  data() {
+    return {}
+  },
+  components: {}
 }
 </script>
 
@@ -37,11 +53,6 @@ body {
   padding: 0;
 }
 .contests-page {
-  &-main-content {
-    border: 1px solid red;
-    height: 300px;
-    width: 300px;
-  }
 }
 </style>
 
