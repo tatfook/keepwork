@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item :label="$t('org.classLabel')" prop="classId">
           <el-select v-model="codeAssociateInfo.classId" :placeholder="$t('org.pleaseSelect')" size="medium">
-            <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
+            <el-option v-for="(classItem, index) in orgClassesFilter" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -54,6 +54,10 @@ export default {
     },
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    orgClassesFilter() {
+      const today = +new Date()
+      return _.filter(this.orgClasses, item => +new Date(item.end) > today)
     }
   },
   methods: {

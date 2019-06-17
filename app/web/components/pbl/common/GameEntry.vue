@@ -61,7 +61,8 @@ export default {
       })
     },
     filteredDuplicateGames() {
-      let groupedGames = _.groupBy(this.inProgressGames, game => game.name)
+      const inProgressGamesFilter = _.filter(this.inProgressGames, game => !['全国青少年科技创新大赛','全国中小学科学影像节','全国中小学信息技术创新与实践活动'].includes(game.name))
+      let groupedGames = _.groupBy(inProgressGamesFilter, game => game.name)
       return _.keys(groupedGames)
     },
     isUserinfoSatisfied() {

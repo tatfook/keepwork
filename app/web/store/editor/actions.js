@@ -416,7 +416,7 @@ const actions = {
     const { activeMod } = getters
     commit(SET_PRE_MOD_KEY, '')
     if (payload.key && (!activeMod || payload.key !== activeMod.key)) {
-      commit(SET_ACTIVE_MOD, payload.key)
+      dispatch('setActiveMod', payload.key)
     }
     commit(SET_ACTIVE_PROPERTY, payload.property)
     commit(UPDATE_MANAGE_PANE_COMPONENT, 'ModPropertyManager')

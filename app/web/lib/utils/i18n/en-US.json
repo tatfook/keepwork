@@ -1551,7 +1551,8 @@
     "WhiteBoardLabel": "Whiteboard",
     "CommentsLabel": "Comments",
     "commentAfterLogin": "Sign in to comment",
-    "deleteProject": "Delete Project"
+    "deleteProject": "Delete Project",
+    "createByAt": "create at"
   },
   "footer": {
     "lettersTo": "Educational ideas",
@@ -1564,7 +1565,7 @@
     "community": "Community",
     "createPersonalProject": "Projects & Works",
     "eventAnnouncements": "Event announcements",
-    "studentFeedback": "Students' Feedback",
+    "studentFeedback": "Students' feedback",
     "employeeBlogging": "Staff blog",
     "parentsBlog": "Parents blog",
     "createProjectWithTeachers": "Complete projects with teachers",
@@ -1572,7 +1573,7 @@
     "buildUpPersonalKnowledge": "Build up personal knowledge",
     "learnOnlineLessons": "Learn online lessons",
     "learningMethod": "Learn",
-    "networkCourse": "Paracraft Online lessons",
+    "networkCourse": "Paracraft online lessons",
     "offlineGuideClass": "Paracraft offline training",
     "document": "Documents",
     "commonProblems": "Frequently asked questions",

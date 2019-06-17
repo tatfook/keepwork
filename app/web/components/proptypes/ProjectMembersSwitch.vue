@@ -1,7 +1,7 @@
 <template>
-  <div class="project-members-switch">
+  <div v-if="!isMiniStyle" class="project-members-switch">
     {{$t('card.projectMembers')}} <el-switch
-      v-model="membersStatus"
+      :value="membersStatus"
       @change="switchMembers"
     ></el-switch>
   </div>
@@ -17,6 +17,12 @@ export default {
   computed: {
     membersStatus() {
       return this.originValue
+    },
+    styleID(){
+      return this.optionsData.styleID
+    },
+    isMiniStyle() {
+      return this.styleID === 1
     }
   },
   methods: {

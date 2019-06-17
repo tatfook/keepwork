@@ -1,6 +1,6 @@
 <template>
   <div class="contests">
-    <div class="contests-banner"></div>
+    <!-- <div class="contests-banner">暂时没有图片</div> -->
     <div class="contests-tab">
       <div class="contests-tab-option contests-tab-option-selected">赛事预告</div>
       <div class="contests-tab-option" @click="goRelatedLinks('/exhibition')">在线展厅</div>
@@ -42,24 +42,24 @@
         <p class="contests-games-box-subject">计算机科学</p>
         <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：2019/5/30前</p>
       </div>
-      <div class="contests-games-box" @click="goRelatedLinks('keepwork.com/NPL')">
+      <div class="contests-games-box" @click="goRelatedLinks('/NPL')"  v-if="currentNPLgameInfo.no !== 0">
         <div class="contests-games-box-top">
           <!-- <img class="contests-games-box-top-img" src="@/assets/contests/c.png" alt=""> -->
-          <p class="contests-games-box-top-text">NPL大赛第5期</p>
+          <p class="contests-games-box-top-text">NPL大赛第{{currentNPLgameInfo.no}}期</p>
         </div>
-        <h4 class="contests-games-box-title">NPL大赛第5期</h4>
+        <h4 class="contests-games-box-title">NPL大赛第{{currentNPLgameInfo.no}}期</h4>
         <p class="contests-games-box-subject"></p>
-        <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：2019/5/30前</p>
+        <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：{{currentNPLgameInfo.endDate | formatTime}}前</p>
       </div>
-      <div class="contests-games-box" @click="goRelatedLinks('keepwork.com/NPL')">
+      <!-- <div class="contests-games-box" @click="goRelatedLinks('keepwork.com/NPL')">
         <div class="contests-games-box-top">
-          <!-- <img class="contests-games-box-top-img" src="@/assets/contests/c.png" alt=""> -->
+          <img class="contests-games-box-top-img" src="@/assets/contests/c.png" alt="">
           <p class="contests-games-box-top-text">汉字大赛</p>
         </div>
         <h4 class="contests-games-box-title">汉字大赛 </h4>
         <p class="contests-games-box-subject"></p>
         <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：2019/5/30前</p>
-      </div>
+      </div> -->
     </div>
     <div class="contests-title">
       <span class="contests-title-icon">
@@ -71,7 +71,7 @@
       </span>
     </div>
     <div class="contests-exhibition">
-      <div class="contests-exhibition-box" v-for="(gameInfo,index) in exhibitionData" :key="index">
+      <div class="contests-exhibition-box" v-for="(gameInfo,index) in exhibitionDataOptimize" :key="index" @click="goRelatedLinks('/exhibition')">
         <div class="contests-exhibition-box-sign">
           <img class="contests-exhibition-box-sign-img" :src="gameInfo.gameLogo" alt="">
         </div>
@@ -84,9 +84,13 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
+import moment from 'moment'
+
 export default {
   name: 'Contests',
-  data(){
+  data() {
     return {
       exhibitionData: [
         {
@@ -94,77 +98,133 @@ export default {
           gameName: '全国青少年科技创新大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_1.png'),
           gameName: '全国青少年科技创新大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_3.png'),
           gameName: '全国中小学科学影像节',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_3.png'),
           gameName: '全国中小学科学影像节',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_2.png'),
           gameName: '全国中小学信息技术创新与实践大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_2.png'),
           gameName: '全国中小学信息技术创新与实践大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_1.png'),
           gameName: 'NPL大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_1.png'),
           gameName: 'NPL大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_4.png'),
           gameName: '汉字大赛',
           gameEntriesIcon: 'icon-image-fill',
           gameEntrierText: '参赛作品',
-          gameWorksCount: '100个'
+          gameWorksCount: '0个'
         },
         {
           gameLogo: require('@/assets/contests/contest_4.png'),
           gameName: '汉字大赛',
           gameEntriesIcon: 'icon-trophy-fill',
           gameEntrierText: '获奖作品',
-          gameWorksCount: '20个'
-        },
-      ]
+          gameWorksCount: '0个'
+        }
+      ],
+      workStatistics: {}
     }
   },
+  computed: {
+    ...mapGetters({
+      gamesList: 'pbl/gamesList'
+    }),
+    exhibitionDataOptimize() {
+      return _.filter(
+        this.exhibitionData,
+        game => game.gameWorksCount !== '0个'
+      )
+    },
+    NPLgameInfo() {
+      return _.filter(this.gamesList.rows, game => game.name == 'NPL大赛')
+    },
+    currentNPLgameInfo() {
+      let currentData = _.filter(this.NPLgameInfo, game => {
+        let startTime = new Date(game.startDate).getTime()
+        let endTime = new Date(game.endDate).getTime()
+        let nowTime = new Date().getTime()
+        return nowTime >= startTime && nowTime <= endTime
+      })
+      return currentData[0] || { no: 0 }
+    }
+  },
+  async mounted() {
+    await this.getGamesList()
+    this.workStatistics = await this.getGameWorksStatistics()
+
+    let allWorksList = _.get(this.workStatistics, 'list')
+    for (let i = 0; i < this.exhibitionData.length; i = i + 2) {
+      for (let j = 0; j < allWorksList.length; j++) {
+        if (this.exhibitionData[i].gameName == allWorksList[j].name) {
+          this.exhibitionData[i].gameWorksCount = allWorksList[j].count + '个'
+        }
+      }
+    }
+
+    let winWorksList = _.get(this.workStatistics, 'winlist')
+    for (let i = 1; i < this.exhibitionData.length; i = i + 2) {
+      for (let j = 0; j < winWorksList.length; j++) {
+        if (this.exhibitionData[i].gameName == winWorksList[j].name) {
+          this.exhibitionData[i].gameWorksCount = winWorksList[j].count + '个'
+        }
+      }
+    }
+  },
+
   methods: {
+    ...mapActions({
+      getGamesList: 'pbl/getGamesList',
+      getGameWorksStatistics: 'pbl/getGameWorksStatistics'
+    }),
     goRelatedLinks(url) {
       window.open(url)
+    }
+  },
+  filters: {
+    formatTime(time) {
+      return moment(time).format('YYYY/M/D')
     }
   }
 }
@@ -245,7 +305,7 @@ export default {
       &-top {
         text-align: center;
         padding: 20px 28px;
-        background-color: #e1f1ff;
+        background-color: rgb(229, 243, 255);
         border-radius: 10px 10px 0 0;
         &-img {
           height: 60px;
@@ -291,10 +351,11 @@ export default {
     display: flex;
     flex-wrap: wrap;
     &-box {
+      cursor: pointer;
       margin: 0 16px 16px 0;
       width: 288px;
       background: #fff;
-      padding: 21px 0  12px 0;
+      padding: 21px 0 12px 0;
       border-radius: 10px;
       &:nth-child(4n) {
         margin-right: 0;

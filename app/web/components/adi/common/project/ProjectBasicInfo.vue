@@ -2,10 +2,7 @@
   <div class="project-basic-info">
     <div class="project-basic-info-header">
       <p class="project-basic-info-name">{{originProjectDetail.name}}
-        <span
-          class="project-basic-info-state"
-          v-if="!isProjectStopRecruit"
-        >{{$t("explore.recruiting")}}</span>
+        <span class="project-basic-info-state" v-if="!isProjectStopRecruit">{{$t("explore.recruiting")}}</span>
       </p>
       <p class="project-basic-info-more">
         <span class="project-basic-info-more-created">{{$t("project.createBy")}}
@@ -24,514 +21,61 @@
       </p>
     </div>
     <div class="project-basic-info-detail">
-      <div
-        class="project-basic-info-detail-cover"
-        v-loading='isCoverZoneLoading'
-      >
-        <img
-          v-show="!isVideoShow"
-          class="project-basic-info-detail-cover-image"
-          :src='tempCoverUrl || defaultCoverUrl'
-          alt=""
-          @load="coverImageLoaded"
-        >
-        <video
-          v-show="isVideoShow"
-          class="project-basic-info-detail-cover-video"
-          :src="tempVideoUrl"
-          controls
-        ></video>
+      <div class="project-basic-info-detail-cover" v-loading='isCoverZoneLoading'>
+        <img v-show="!isVideoShow" class="project-basic-info-detail-cover-image" :src='projectCover' alt="" @load="coverImageLoaded">
+        <video v-show="isVideoShow" class="project-basic-info-detail-cover-video" :src="tempVideoUrl" controls></video>
       </div>
       <div class="project-basic-info-detail-message">
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectType")}}:</label>{{ projectType | projectTypeFilter(projectTypes) }}</p>
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.projectId")}}:</label>{{originProjectDetail.id}}</p>
         <p class="project-basic-info-detail-message-item"><label>{{$t("project.createTime")}}:</label>{{originProjectDetail.createdAt | formatDate(formatType)}}</p>
         <div class="project-basic-info-detail-operations">
-          <el-button
-            type="primary"
-            @click="toProjectPage"
-          >{{ buttonName }}</el-button>
+          <el-button type="primary" @click="toProjectPage">{{ buttonName }}</el-button>
           <el-button @click="toProejctHomePage" plain>{{$t('card.projectHome')}}</el-button>
         </div>
       </div>
     </div>
-    <div
-      class="project-basic-info-description"
-      v-loading='isLoading'
-    >
+    <div class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
         {{$t("project.projectDescription")}}:
       </div>
-      <div
-        class="project-basic-info-description-content"
-        v-show="!isDescriptionEditing"
-        v-html="tempDesc || $t('project.noDescripton')"
-      ></div>
-      <div
-        :id="descriptionId"
-        v-show="isDescriptionEditing"
-        class="project-basic-info-description-editor"
-      ></div>
+      <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || $t('project.noDescripton')"></div>
+      <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
-    <el-dialog
-      title="提示"
-      v-loading='isBinderDialogLoading'
-      :visible.sync="binderDialogVisible"
-      :before-close="handleBinderDialogClose"
-    >
+    <el-dialog title="提示" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+      <span slot="footer" class="dialog-footer">
         <el-button @click="handleBinderDialogClose">{{$t("common.Cancel")}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-      class="project-basic-info-apply-dialog"
-      :title='$t("project.applyForProject")'
-      :visible.sync="isApplyDialogVisible"
-      width="400px"
-      :before-close="handleApplyDialogClose"
-    >
-      <el-input
-        type="textarea"
-        :placeholder="$t('project.enterApplicationReason')"
-        resize='none'
-        v-model="applyText"
-      >
+    <el-dialog class="project-basic-info-apply-dialog" :title='$t("project.applyForProject")' :visible.sync="isApplyDialogVisible" width="400px" :before-close="handleApplyDialogClose">
+      <el-input type="textarea" :placeholder="$t('project.enterApplicationReason')" resize='none' v-model="applyText">
       </el-input>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+      <span slot="footer" class="dialog-footer">
         <el-button @click="handleApplyDialogClose">{{$t("common.Cancel")}}</el-button>
-        <el-button
-          type="primary"
-          @click="applyJoinProject"
-        >{{$t("common.Sure")}}</el-button>
+        <el-button type="primary" @click="applyJoinProject">{{$t("common.Sure")}}</el-button>
       </span>
     </el-dialog>
-    <paracraft-info
-      :isDialogVisible='isParacraftInfoDialogVisible'
-      :paracraftUrl='paracraftUrl'
-      @close='handleParacraftInfoDialogClose'
-    ></paracraft-info>
+    <paracraft-info :isDialogVisible='isParacraftInfoDialogVisible' :paracraftUrl='paracraftUrl' @close='handleParacraftInfoDialogClose'></paracraft-info>
   </div>
 </template>
+
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import E from 'wangeditor'
-import moment from 'moment'
-import { locale } from '@/lib/utils/i18n'
-import { checkSensitiveWords } from '@/lib/utils/sensitive'
-import paracraftUtil from '@/lib/utils/paracraft'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
 import WebsiteBinder from './WebsiteBinder'
-import launchUri from '@/lib/utils/launchUri'
+import projectMixins from './project.mixins'
 
 export default {
   name: 'ProjectBasicInfo',
-  props: {
-    originProjectDetail: {
-      type: Object,
-      required: true
-    },
-    projectOwnerUsername: {
-      type: String,
-      required: true
-    },
-    isLoginUserEditable: {
-      type: Boolean,
-      default: false
-    },
-    projectId: {
-      type: Number,
-      required: true
-    },
-    projectApplyState: Number,
-    isProjectStopRecruit: Boolean,
-    descriptionId: {
-      type: String,
-      default: 'projectDescriptoinEditor'
-    }
-  },
-  async mounted() {
-    this.copiedProjectDetail = _.cloneDeep(this.originProjectDetail)
-    this.tempDesc = this.copiedProjectDetail.description
-    this.tempSiteId = this.copiedProjectDetail.siteId
-    this.tempCoverUrl = _.get(
-      this.copiedProjectDetail,
-      'extra.imageUrl',
-      undefined
-    )
-    this.tempVideoUrl = _.get(
-      this.copiedProjectDetail,
-      'extra.videoUrl',
-      undefined
-    )
-    this.isLogined &&
-      (await this.userGetUserPrivilege({
-        siteId: this.projectSiteId,
-        userId: this.loginUserId
-      }))
-  },
-  data() {
-    return {
-      projectTypes: [this.$t("explore.websites"), this.$t("common.paracraft")],
-      applyStates: [this.$t("project.applyJoin"), this.$t("project.requested"), this.$t("project.joined")],
-      binderDialogVisible: false,
-      isApplyButtonLoading: false,
-      isBinderDialogLoading: false,
-      isDescriptionEditing: false,
-      descriptionEditor: undefined,
-      copiedProjectDetail: {},
-      tempSiteId: null,
-      tempDesc: '',
-      tempCoverUrl: '',
-      tempVideoUrl: '',
-      isLoading: false,
-      isCoverZoneLoading: false,
-      isMediaSkyDriveDialogShow: false,
-      defaultCoverUrl: require('@/assets/img/pbl_default_cover.png'),
-      waitUpdateCover: false,
-      applyText: '',
-      isApplyDialogVisible: false,
-      maxDescWithHtmlLen: 65535,
-      isParacraftInfoDialogVisible: false
-    }
-  },
-  computed: {
-    ...mapGetters({
-      loginUserId: 'user/userId',
-      loginUserDetail: 'user/profile',
-      userToken: 'user/token',
-      getSiteDetailInfoById: 'user/getSiteDetailInfoById',
-      isLogined: 'user/isLogined',
-      getUserSitePrivilege: 'user/getUserSitePrivilege'
-    }),
-    isEn() {
-      return locale === 'en-US' ? true : false
-    },
-    formatType() {
-      return this.isEn ? 'YYYY-MM-DD' : 'YYYY年MM月DD日'
-    },
-    buttonName() {
-      if (this.isWebType) {
-        return this.$t("project.visit")
-      }
-      if (this.isCreating && !this.isProjectOwner) {
-        return this.$t("project.creating")
-      }
-      return this.$t("project.visitWorld")
-    },
-    isCreating() {
-      return !(
-        this.originProjectDetail.world &&
-        this.originProjectDetail.world.archiveUrl
-      )
-    },
-    loginUserSitePrivilege() {
-      return this.getUserSitePrivilege({
-        siteId: this.projectSiteId,
-        userId: this.loginUserId
-      })
-    },
-    isLoginUserEditableForProjectSite() {
-      return this.loginUserSitePrivilege === 64
-    },
-    isProjectOwner() {
-      return this.loginUserId === this.originProjectDetail.userId
-    },
-    isApplied() {
-      return this.projectApplyState === 0
-    },
-    isLoginUserBeProjectMember() {
-      return this.projectApplyState === 1
-    },
-    originDesc() {
-      return this.copiedProjectDetail.description
-    },
-    originExtra() {
-      return this.originProjectDetail.extra
-    },
-    mergedExtra() {
-      let originExtra = _.cloneDeep(this.originExtra)
-      return _.merge(originExtra, {
-        imageUrl: this.tempCoverUrl,
-        videoUrl: this.tempVideoUrl
-      })
-    },
-    updatingProjectData() {
-      return _.merge(this.originProjectDetail, {
-        siteId: this.tempSiteId,
-        description: this.tempDesc,
-        extra: this.mergedExtra
-      })
-    },
-    projectType() {
-      return this.originProjectDetail.type
-    },
-    isWebType() {
-      return this.projectType === 0
-    },
-    projectSiteId() {
-      // FIXME: 确认清楚是哪个id
-      return this.originProjectDetail.siteId || this.originProjectDetail.id
-    },
-    siteDetailInfo() {
-      if (!this.isWebType) {
-        return
-      }
-      return this.getSiteDetailInfoById({ siteId: this.projectSiteId })
-    },
-    siteUrl() {
-      if (!this.isWebType) {
-        return
-      }
-      let { sitename, username } = this.siteDetailInfo
-      return `/${username}/${sitename}/index`
-    },
-    paracraftUrl() {
-      if (this.isWebType) {
-        return
-      }
-      if (this.isCreating) {
-        return paracraftUtil.getOpenUrl({
-          usertoken: this.userToken
-        })
-      }
-      let { archiveUrl } = this.originProjectDetail.world
-      return paracraftUtil.getUrl({
-        link: `${archiveUrl}`,
-        kpProjectId: this.projectId,
-        usertoken: this.userToken
-      })
-    },
-    isVideoShow() {
-      return this.tempVideoUrl
-    }
-  },
-  methods: {
-    ...mapActions({
-      pblApplyJoinProject: 'pbl/applyJoinProject',
-      pblUpdateProject: 'pbl/updateProject',
-      toggleLoginDialog: 'pbl/toggleLoginDialog',
-      getWebsiteDetailBySiteId: 'user/getWebsiteDetailBySiteId',
-      toggleLoginDialog: 'pbl/toggleLoginDialog',
-      userGetUserPrivilege: 'user/getUserPrivilege',
-      pblGetProjectDetail: 'pbl/getProjectDetail'
-    }),
-    toProejctHomePage() {
-      window.location.href = `${window.location.origin}/pbl/project/${this.projectId}`
-    },
-    async toggleIsDescEditing() {
-      if (!this.isDescriptionEditing) {
-        this.isDescriptionEditing = true
-        this.$nextTick(() => {
-          if (!this.descriptionEditor) {
-            this.descriptionEditor = new E(`#${this.descriptionId}`)
-            this.descriptionEditor.create()
-          }
-          this.descriptionEditor.txt.html(this.tempDesc)
-        })
-      } else {
-        let editorText = this.descriptionEditor.txt
-        this.tempDesc = editorText.text() && this.descriptionEditor.txt.html()
-        let descLen = this.tempDesc.length
-        if (descLen >= this.maxDescWithHtmlLen) {
-          this.$message({
-            type: 'error',
-            message: '项目描述太长了，请调整'
-          })
-          return
-        }
-        let sensitiveResult = await checkSensitiveWords({
-          checkedWords: editorText.text()
-        }).catch()
-        if (sensitiveResult && sensitiveResult.length > 0) {
-          return
-        }
-        this.isLoading = true
-        await this.updateDescToBackend()
-      }
-    },
-    async updateDescToBackend() {
-      await this.pblUpdateProject({
-        projectId: this.projectId,
-        updatingProjectData: this.updatingProjectData
-      })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: this.$t('project.projectInfoUpdated')
-          })
-          this.isLoading = false
-          this.isDescriptionEditing = false
-          return Promise.resolve()
-        })
-        .catch(error => {
-          this.$message({
-            type: 'error',
-            message: '项目信息更新失败,请重试'
-          })
-          this.isLoading = false
-          return Promise.reject()
-        })
-    },
-    handleApplyDialogClose() {
-      this.isApplyDialogVisible = false
-    },
-    showApplyBox() {
-      if (!this.isLogined) {
-        return this.toggleLoginDialog(true)
-      }
-      this.isApplyDialogVisible = true
-    },
-    async applyJoinProject() {
-      this.isApplyButtonLoading = true
-      let sensitiveResult = await checkSensitiveWords({
-        checkedWords: this.applyText
-      }).catch()
-      if (sensitiveResult && sensitiveResult.length > 0) {
-        this.applyText = _.get(sensitiveResult, '[0].word', this.applyText)
-        this.isApplyButtonLoading = false
-        return
-      }
-      await this.pblApplyJoinProject({
-        objectType: 5,
-        objectId: this.projectId,
-        applyType: 0,
-        applyId: this.loginUserId,
-        legend: this.applyText,
-        extra: this.loginUserDetail
-      })
-        .then(() => {
-          this.isApplyButtonLoading = false
-          this.$message({
-            type: 'success',
-            message: '申请成功，等待项目创建者处理'
-          })
-          this.handleApplyDialogClose()
-        })
-        .catch(error => {
-          let httpCode = _.get(error, 'response.status')
-          switch (httpCode) {
-            case 401:
-              this.toggleLoginDialog(true)
-              break
-            default:
-              break
-          }
-          this.isApplyButtonLoading = false
-          this.handleApplyDialogClose()
-          console.error(error)
-        })
-    },
-    toProjectPage() {
-      switch (this.projectType) {
-        case 0:
-          this.toSitePage()
-          break
-        case 1:
-          this.toParacraftPage()
-          break
-        default:
-          break
-      }
-    },
-    async toEditWebsite() {
-      if (this.projectSiteId) {
-        let tempWin = window.open('_blank')
-        await this.getWebsiteDetailBySiteId({
-          siteId: this.projectSiteId
-        }).catch(e => console.error(e))
-        if (this.siteUrl) {
-          return (tempWin.location = `/ed${this.siteUrl}`)
-        }
-        tempWin.close()
-      } else {
-        this.binderDialogVisible = true
-      }
-    },
-    async toSitePage() {
-      let tempWin = window.open('_blank')
-      if (this.projectSiteId) {
-        await this.getWebsiteDetailBySiteId({ siteId: this.projectSiteId })
-        if (this.siteUrl) {
-          return (tempWin.location = this.siteUrl)
-        }
-        tempWin.close()
-      } else {
-        this.binderDialogVisible = true
-      }
-    },
-    async toParacraftPage() {
-      if (this.isCreating && !this.isProjectOwner) {
-        return
-      }
-      if (this.paracraftUrl) {
-        launchUri(this.paracraftUrl)
-        this.isParacraftInfoDialogVisible = true
-      }
-    },
-    showMediaSkyDriveDialog() {
-      this.isMediaSkyDriveDialogShow = true
-    },
-    async coverImageLoaded() {
-      this.waitUpdateCover &&
-        (await this.updateDescToBackend()) &&
-        (this.waitUpdateCover = false)
-      this.isCoverZoneLoading = false
-    },
-    async handleConfirmSiteId({ siteId }) {
-      if (siteId) {
-        this.tempSiteId = siteId
-        this.isBinderDialogLoading = true
-        await this.updateDescToBackend()
-        this.isBinderDialogLoading = false
-        this.handleBinderDialogClose()
-      }
-    },
-    handleBinderDialogClose() {
-      this.binderDialogVisible = false
-    },
-    handleParacraftInfoDialogClose() {
-      this.isParacraftInfoDialogVisible = false
-    }
-  },
-  filters: {
-    projectTypeFilter(typeValue, projectTypes) {
-      return projectTypes[typeValue]
-    },
-    formatDate(date, formatType) {
-      return moment(date).format(formatType)
-    },
-    applyStateFilter(applyState, applyStates) {
-      let stateText = ''
-      switch (applyState) {
-        case -1:
-          stateText = applyStates[0]
-          break
-        case 0:
-          stateText = applyStates[1]
-          break
-        case 1:
-          stateText = applyStates[2]
-          break
-        case 2:
-          stateText = applyStates[0]
-          break
-        default:
-          stateText = applyStates[0]
-          break
-      }
-      return stateText
-    }
-  },
+  mixins: [projectMixins],
   components: {
     ParacraftInfo,
     WebsiteBinder
+  },
+  computed: {
+    projectCover() {
+      return this.tempCoverUrl || this.defaultCoverUrl
+    }
   }
 }
 </script>
@@ -560,7 +104,7 @@ export default {
     color: #fff;
   }
   &-state::before {
-    content: "";
+    content: '';
     display: inline-block;
     width: 4px;
     height: 4px;
@@ -580,7 +124,7 @@ export default {
       position: relative;
     }
     &-created::after {
-      content: "";
+      content: '';
       display: inline-block;
       width: 1px;
       height: 10px;

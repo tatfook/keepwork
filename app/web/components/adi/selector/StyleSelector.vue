@@ -74,9 +74,7 @@ export default {
     },
     currentMod(index) {
       let currentMod = _.merge({}, this.mod)
-
       currentMod.data.styleID = index
-
       return currentMod
     },
     autoResizePreview() {
