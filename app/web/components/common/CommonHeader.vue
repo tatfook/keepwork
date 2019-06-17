@@ -109,7 +109,7 @@
       <personal-center-dialog :show='isPersonalCenterShow' :sitePath='userProfile.username' @close='closePersonalCenterDialog'></personal-center-dialog>
     </div>
     <div @click.stop v-if='isSkyDriveManagerDialogShow'>
-      <sky-drive-manager-dialog :insertable='false' :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+      <sky-drive-manager-dialog :show='isSkyDriveManagerDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     </div>
     <div @click.stop v-if="isLoginDialogShow">
       <login-dialog :show="isLoginDialogShow" @close="closeLoginDialog" @isRegisterShow='goJoin'></login-dialog>

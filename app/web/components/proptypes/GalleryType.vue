@@ -132,8 +132,9 @@
       </div>
     </div>
     <sky-drive-manager-dialog
-      :mediaLibrary="true"
-      :isVideoTabShow="!isVideoTabHide"
+      :isApplicable="true"
+      :isNoMediaFileShow="false"
+      :isVideoShow="!isVideoTabHide"
       :show="isSkyDriveManagerDialogShow"
       @close="closeSkyDriveManagerDialog"
     ></sky-drive-manager-dialog>
