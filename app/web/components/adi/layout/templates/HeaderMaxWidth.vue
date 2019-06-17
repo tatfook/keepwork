@@ -15,7 +15,7 @@
 export default {}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .maxwidth-template {
   .el-header,
   .el-main {

@@ -4,7 +4,7 @@
       <slot name="header"></slot>
     </el-header>
     <el-container>
-      <el-aside width="400px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
+      <el-aside width="240px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
         <slot name="sidebar"></slot>
       </el-aside>
       <el-main :class="{'hide': showSidebarOrMain === 'sidebar'}">
@@ -23,12 +23,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .fullscreen-template {
   .el-header,
-  .el-main,
   .el-aside {
     padding: 0;
+  }
+  .el-main {
+    padding: 0 32px;
   }
 }
 </style>

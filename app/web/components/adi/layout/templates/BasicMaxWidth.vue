@@ -12,7 +12,7 @@
 export default {}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .maxwidth-template{
   .el-main {
     padding: 0;
