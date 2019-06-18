@@ -2,12 +2,12 @@
   <div v-loading='loading' class="skydrive-manager" @drop.prevent="handleDrop" @dragenter.prevent="handleDragEnter" @dragover.prevent="handleDragOver" @dragleave="handleDragLeave">
     <div class="skydrive-manager-header">
       <div class='skydrive-manager-header-first' :class="{'skydrive-manager-header-first-no-position':isDroping}">
-        <usage-bar class='skydrive-manager-header-usage' :uploadingFileSize="uploadingFileSize"></usage-bar>
+        <usage-bar class='skydrive-manager-header-usage'></usage-bar>
         <div class="skydrive-manager-header-fake-upload" v-show="isDroping">
           {{$t('skydrive.dragAndDrop')}}
           <el-button class="skydrive-manager-fake-upload-button" size="small" type="primary" round>{{uploadText}}</el-button>
         </div>
-        <file-uploader ref="uploaderRef" :class="{'skydrive-manager-drop': isDroping, 'skydrive-manager-header-upload': !isDroping}" :uploadText="uploadText" :isDragMode="isDroping" :viewType="viewType" :uploadType="mediaFilterType" :activeChildComp="activeChildComp" :uploadingFiles="uploadingFiles" :uploadingFileSize="uploadingFileSize" @addUploadingFiles="addUploadingFiles" @changeUploadingState="changeUploadingState" @resetTableSort="resetTableSort"></file-uploader>
+        <file-uploader :class="{'skydrive-manager-drop': isDroping, 'skydrive-manager-header-upload': !isDroping}" :uploadText="uploadText" :isDragMode="isDroping" :viewType="viewType" :uploadType="mediaFilterType" @resetTableSort="resetTableSort"></file-uploader>
         <p class="skydrive-manager-header-first-info" v-show="mediaFilterType==='image'">建议上传图片大小不能超过2M，支持jpg/png格式</p>
       </div>
       <div class='skydrive-manager-header-second'>
@@ -34,8 +34,8 @@
         </div>
       </div>
     </div>
-    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :isInsertable="isInsertable" :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='filterTypeUploadingFile' :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></media-type>
+    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :uploadText="uploadText" :mediaFilterType="mediaFilterType" :isInsertable="isInsertable" :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @close="handleClose"></table-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='filterTypeUploadingFile' :uploadText="uploadText" :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
   </div>
 </template>
 <script>
@@ -86,6 +86,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      noFinishedUploadingFiles: 'skydrive/noFinishedUploadingFiles',
+      subscriptions: 'skydrive/subscriptions',
       userSkyDriveFileList: 'user/skyDriveFileList',
       activePageInfo: 'activePageInfo'
     }),
@@ -138,23 +140,13 @@ export default {
     fileListFilteredSearched() {
       return this.fileListFilteredType.filter(this.itemFilterBySearchWord)
     },
-    filterFinishedUploadingFile() {
-      return _.filter(this.uploadingFiles, file => file.state !== 'success')
-    },
     filterTypeUploadingFile() {
-      return this.getTypeFilteredFiles(this.filterFinishedUploadingFile)
+      return this.getTypeFilteredFiles(this.noFinishedUploadingFiles)
     },
     fileListWithUploading() {
       return _.concat(
         this.filterTypeUploadingFile,
         this.fileListFilteredSearched
-      )
-    },
-    uploadingFileSize() {
-      return _.reduce(
-        this.filterFinishedUploadingFile,
-        (sum, file) => sum + file.size,
-        0
       )
     }
   },
@@ -182,29 +174,16 @@ export default {
     getTypeFilteredFiles(fileList) {
       let selectedType =
         this.mediaFilterType == 'all' ? '' : this.mediaFilterType
-      return fileList.filter(({ type }) =>
-        new RegExp(`^${selectedType}`).test(type)
-      )
+      return fileList.filter(file => {
+        if (!file) {
+          return false
+        }
+        let { type } = file
+        return new RegExp(`^${selectedType}`).test(type)
+      })
     },
     addUploadingFiles(file) {
       this.uploadingFiles.push(file)
-    },
-    changeUploadingState({ state, file, errorMsg, percent, updatedAt }) {
-      let filename = file.name
-      let fileIndex = _.findIndex(this.uploadingFiles, file => {
-        if (state == 'error') {
-          return file.filename == filename && file.state == 'doing'
-        }
-        return file.filename == filename
-      })
-      let fileDetail = this.uploadingFiles[fileIndex]
-      this.$set(this.uploadingFiles, fileIndex, {
-        ...fileDetail,
-        state: state || fileDetail.state,
-        errorMsg: errorMsg || fileDetail.errorMsg,
-        percent: percent || fileDetail.percent,
-        updatedAt: updatedAt || fileDetail.updatedAt
-      })
     },
     changeLoadingState(isLoading) {
       this.loading = isLoading
@@ -237,18 +216,6 @@ export default {
     },
     handleClose({ file, url }) {
       this.$emit('close', { file, url })
-    },
-    removeFromUploadQue(file) {
-      let { filename, state } = file
-      let qiniuUploadSubscriptions = this.$refs.uploaderRef
-        .qiniuUploadSubscriptions
-      if (state === 'doing') {
-        let removingFileSubscribtion = _.get(qiniuUploadSubscriptions, filename)
-        removingFileSubscribtion && removingFileSubscribtion.unsubscribe()
-      }
-      this.uploadingFiles = _.remove(this.uploadingFiles, file => {
-        return file.filename !== filename
-      })
     }
   },
   components: {
@@ -331,6 +298,7 @@ export default {
     }
   }
   &-table {
+    height: 500px;
     padding: 0 36px;
   }
   &-upload {

@@ -9,6 +9,7 @@ import router from './combo.router'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import editorModule from '@/store/editor'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import comboModule from '@/store/combo'
 import ElementUI from 'element-ui'
@@ -32,6 +33,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     editor: editorModule,
     combo: comboModule

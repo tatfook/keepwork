@@ -22,6 +22,7 @@ import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
 import appModule from '@/store/app'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
@@ -68,6 +69,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     app: appModule,
     user: userModule,
     gitlab: gitlabModule,

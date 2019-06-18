@@ -24,6 +24,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './study.router'
 import appModule from '@/store/app'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import orgModule from '@/store/org'
@@ -62,6 +63,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     app: appModule,
     user: userModule,
     gitlab: gitlabModule,

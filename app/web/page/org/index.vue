@@ -22,6 +22,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import createPersistedState from '@/store/createPersistedState'
 import router from './org.router'
 import appModule from '@/store/app'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
@@ -58,6 +59,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     app: appModule,
     user: userModule,
     lesson: lessonModule,
