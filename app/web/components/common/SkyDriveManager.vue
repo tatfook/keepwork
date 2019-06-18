@@ -35,13 +35,17 @@
       </div>
     </div>
     <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :isInsertable="isInsertable" :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='uploadingFiles' :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></media-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='filterTypeUploadingFile' :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @removeFromUploadQue="removeFromUploadQue" @close="handleClose"></media-type>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import { getFileExt, getFileSizeText, getBareFilename } from '@/lib/utils/filename'
+import {
+  getFileExt,
+  getFileSizeText,
+  getBareFilename
+} from '@/lib/utils/filename'
 import tableType from './skyDrive/tableType'
 import mediaType from './skyDrive/mediaType'
 import UsageBar from './skyDrive/UsageBar'
@@ -129,11 +133,7 @@ export default {
       })
     },
     fileListFilteredType() {
-      let selectedType =
-        this.mediaFilterType == 'all' ? '' : this.mediaFilterType
-      return this.fileListFormated.filter(({ type }) =>
-        new RegExp(`^${selectedType}`).test(type)
-      )
+      return this.getTypeFilteredFiles(this.fileListFormated)
     },
     fileListFilteredSearched() {
       return this.fileListFilteredType.filter(this.itemFilterBySearchWord)
@@ -141,9 +141,12 @@ export default {
     filterFinishedUploadingFile() {
       return _.filter(this.uploadingFiles, file => file.state !== 'success')
     },
+    filterTypeUploadingFile() {
+      return this.getTypeFilteredFiles(this.filterFinishedUploadingFile)
+    },
     fileListWithUploading() {
       return _.concat(
-        this.filterFinishedUploadingFile,
+        this.filterTypeUploadingFile,
         this.fileListFilteredSearched
       )
     },
@@ -175,6 +178,13 @@ export default {
     },
     handleDrop(e) {
       this.isDroping = false
+    },
+    getTypeFilteredFiles(fileList) {
+      let selectedType =
+        this.mediaFilterType == 'all' ? '' : this.mediaFilterType
+      return fileList.filter(({ type }) =>
+        new RegExp(`^${selectedType}`).test(type)
+      )
     },
     addUploadingFiles(file) {
       this.uploadingFiles.push(file)
