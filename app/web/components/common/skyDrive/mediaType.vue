@@ -6,11 +6,11 @@
           <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
           <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
+          <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
+            <i class="el-icon-caret-right"></i>
+          </div>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
             <el-checkbox v-model="mediaItem.isChecked" @change="handleItemSelectChange(mediaItem)"></el-checkbox>
-            <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
-              <i class="el-icon-caret-right"></i>
-            </div>
             <div class="media-type-media-item-operations">
               <el-tooltip content="复制链接">
                 <file-url-getter :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
@@ -331,6 +331,7 @@ export default {
       margin-left: 6px;
     }
     &-play {
+      z-index: 1;
       width: 32px;
       height: 32px;
       border-radius: 50%;
