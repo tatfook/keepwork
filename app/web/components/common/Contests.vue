@@ -15,7 +15,7 @@
       </span>
     </div>
     <div class="contests-hint">
-      全国青少年科技创新大赛、全国青少年科学影像节、全国中小学信息技术创新与实践活动，每年都会定期举办，你可以提前准备明年的参赛作品，使用Paracraft制作的作品参加全国性赛事，请与我们联系，有惊喜大礼等你拿。<span class="contests-hint-contact">(联系电话：123 4567 7890)</span>
+      全国青少年科技创新大赛、全国青少年科学影像节、全国中小学信息技术创新与实践活动，每年都会定期举办，你可以提前准备明年的参赛作品，使用Paracraft制作的作品参加全国性赛事，请与我们联系，有惊喜大礼等你拿。<span class="contests-hint-contact" v-if="false">(联系电话：123 4567 7890)</span>
     </div>
     <div class="contests-games">
       <div class="contests-games-box" @click="goRelatedLinks('http://castic.xiaoxiaotong.org/')">
