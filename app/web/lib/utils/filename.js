@@ -12,7 +12,20 @@ const getFileExt = file => {
   return ext
 }
 
-export {
-  getBareFilename,
-  getFileExt
+const getFileSizeText = (bite = 0) => {
+  let KBVal = (bite / 1024)
+    .toFixed(2)
+    .toString()
+    .replace(/\.*0*$/, '')
+  let MBVal = (bite / 1024 / 1024)
+    .toFixed(2)
+    .toString()
+    .replace(/\.*0*$/, '')
+  let GBVal = (bite / 1024 / 1024 / 1024)
+    .toFixed(2)
+    .toString()
+    .replace(/\.*0*$/, '')
+  return KBVal < 100 ? `${KBVal}KB` : MBVal < 100 ? `${MBVal}MB` : `${GBVal}GB`
 }
+
+export { getBareFilename, getFileExt, getFileSizeText }

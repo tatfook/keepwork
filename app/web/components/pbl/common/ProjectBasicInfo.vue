@@ -52,7 +52,7 @@
       <div class="project-basic-info-description-content" v-show="!isDescriptionEditing" v-html="tempDesc || $t('project.noDescripton')"></div>
       <div :id="descriptionId" v-show="isDescriptionEditing" class="project-basic-info-description-editor"></div>
     </div>
-    <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' :isVideoTabShow='true' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :isApplicable='true' :isNoMediaFileShow="false" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     <el-dialog title="" v-loading='isBinderDialogLoading' :visible.sync="binderDialogVisible" :before-close="handleBinderDialogClose">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
       <span slot="footer" class="dialog-footer">

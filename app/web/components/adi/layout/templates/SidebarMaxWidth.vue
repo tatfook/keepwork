@@ -1,6 +1,6 @@
 <template>
   <el-container class="maxwidth-template">
-    <el-aside width="400px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
+    <el-aside width="240px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
       <slot name="sidebar"></slot>
     </el-aside>
     <el-main :class="{'hide': showSidebarOrMain === 'sidebar'}">
@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .maxwidth-template{
   padding: 0;
   max-width: 1180px;
