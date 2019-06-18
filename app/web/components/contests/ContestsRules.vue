@@ -131,6 +131,15 @@
       <p class="contests-rules-participant-text">面向全球征集作品，不限年龄、不限性别、不限地域、不限国籍。特别欢迎中小学生、大学生（含职业院校）、计算机行业和汉语言文化行业等个人或团体踊跃报名。</p>
     </div>
     <h3 class="contests-rules-title"><img src="@/assets/contests/参赛流程.png" alt=""></h3>
+    <div class="contests-rules-flow">
+      <el-steps direction="vertical" :active="5">
+        <el-step title="登录网站，注册账号"></el-step>
+        <el-step title="在线提交报名资料" description="所有参赛者（含参赛团队）均须在2019年11月30日前完成注册和报名，团队参赛统一由队长填写注册和报名信息"></el-step>
+        <el-step title="下载Paracraft"></el-step>
+        <el-step title="登录信息，在线创造"></el-step>
+        <el-step title="完成作品提交"></el-step>
+      </el-steps>
+    </div>
     <img class="contests-rules-bgpic element_1" src="@/assets/contests/element_1.png" alt="">
     <img class="contests-rules-bgpic element_2" src="@/assets/contests/element_2.png" alt="">
     <img class="contests-rules-bgpic element_3" src="@/assets/contests/element_3.png" alt="">
@@ -219,12 +228,38 @@
       }
     }
   }
-  &-participant{
+  &-participant {
     text-align: center;
     font-size: 18px;
     color: #212121;
     max-width: 848px;
     margin: 0 auto 80px;
+  }
+  &-flow {
+    width: 700px;
+    margin: 40px auto 120px;
+    display: flex;
+    justify-content: center;
+    color: #212121;
+    /deep/ .el-steps {
+      .el-step {
+        .el-step__head.is-finish {
+          color: #212121;
+          border-color: #212121;
+        }
+        .el-step__main {
+          padding-bottom: 40px;
+          .el-step__title.is-finish {
+            color: #212121;
+            font-size: 20px;
+          }
+          .el-step__description.is-finish {
+            color: #212121;
+            font-size: 16px;
+          }
+        }
+      }
+    }
   }
 }
 </style>

@@ -18,8 +18,8 @@
       <p class="apply-way-time-hint">◆请各位参赛者务必注意报名时间，要是不小心错过了一网乾坤可是会为你伤心的哦！</p>
     </div>
     <img class="apply-way-bgpic element_text_1" src="@/assets/contests/element_text_1.png" alt="">
-    <img class="apply-way-bgpic element_text_2" src="@/assets/contests/element_text_2.png" alt="">
-    <img class="apply-way-bgpic element_text_3" src="@/assets/contests/element_text_3.png" alt="">
+    <!-- <img class="apply-way-bgpic element_text_2" src="@/assets/contests/element_text_2.png" alt=""> -->
+    <!-- <img class="apply-way-bgpic element_text_3" src="@/assets/contests/element_text_3.png" alt=""> -->
   </div>
 </template>
 <style lang="scss" scoped>
@@ -35,14 +35,14 @@
       right: 100px;
       top: 10px;
     }
-    &.element_text_2 {
-      left: 70px;
-      top: 100px;
-    }
-    &.element_text_3 {
-      right: 100px;
-      bottom: 20px;
-    }
+    // &.element_text_2 {
+    //   left: 0;
+    //   top: 120px;
+    // }
+    // &.element_text_3 {
+    //   left:  400px;
+    //   bottom: 0px;
+    // }
   }
   &-title {
     text-align: center;
