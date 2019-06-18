@@ -19,6 +19,8 @@
   display: flex;
   max-width: 1020px;
   margin: 0 auto;
+  font-family: 'STKaiti';
+  font-weight: bold;
   &-left {
     flex: 2;
     &-menu {

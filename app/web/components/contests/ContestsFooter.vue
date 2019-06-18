@@ -64,11 +64,12 @@ export default {
 
 <style lang="scss" scoped>
 .contests-footer {
+  font-family: 'STKaiti';
+  font-weight: bold;
   &-hint {
     text-align: center;
     font-size: 19px;
     color: #5c666c;
-    font-family: 'STKaitiSC-Black';
     margin: 0;
   }
   &-simple-list {

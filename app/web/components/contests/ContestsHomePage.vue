@@ -51,19 +51,152 @@
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_3.png" alt=""></h3>
     <div class="contests-home-page-awards">
       <div class="contests-home-page-awards-box award_1">
-        <p>· 荣誉奖 ·</p>
+        <div class="contests-home-page-awards-box-text">
+          <p class="award-name">• 荣誉奖 •</p>
+          <p class="award-subname">汉字传播贡献奖</p>
+          <p class="award-name">• 综合奖 •</p>
+          <p class="award-subname">最佳故事短片奖</p>
+          <p class="award-subname">最佳传播创意奖</p>
+          <p class="award-subname">最佳汉字气韵奖</p>
+          <p class="award-notice">注：优秀作品可在两个组别重复获奖</p>
+        </div>
       </div>
-      <div class="contests-home-page-awards-box award_2"></div>
-      <div class="contests-home-page-awards-box award_3"></div>
+      <div class="contests-home-page-awards-box award_2">
+        <div class="contests-home-page-awards-box-text">
+          <p class="award-name">• 综合奖 •</p>
+          <p class="award-subname">最佳故事短片奖</p>
+          <p class="award-name">• 单项奖 •</p>
+          <p class="award-subname">最佳视觉效果奖</p>
+          <p class="award-subname">最佳汉字解读奖</p>
+          <p class="award-subname">最佳场景设计奖</p>
+          <p class="award-notice">注：优秀作品可在两个组别重复获奖</p>
+        </div>
+      </div>
+      <div class="contests-home-page-awards-box award_3">
+        <div class="contests-home-page-awards-box-text">
+          <p class="award-subname">最佳组织奖</p>
+          <p class="award-subname">十佳人气奖</p>
+          <p class="award-notice">◆特别奖从公开组和学生组所有参赛作品中评选产生。</p>
+        </div>
+      </div>
     </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_4.png" alt=""></h3>
+    <div class="contests-home-page-sponsor">
+      <div class="contests-home-page-sponsor-item">
+        <div class="contests-home-page-sponsor-item-img">
+          <img src="@/assets/contests/big_1.png" alt="">
+        </div>
+        <p>国际智能创意大奖赛组委会</p>
+      </div>
+      <div class="contests-home-page-sponsor-item">
+        <div class="contests-home-page-sponsor-item-img">
+          <img src="@/assets/contests/big_2.png" alt="">
+        </div>
+        <p>深圳市大富配天投资有限公司</p>
+      </div>
+      <div class="contests-home-page-sponsor-item">
+        <div class="contests-home-page-sponsor-item-img">
+          <img src="@/assets/contests/big_5.png" alt="">
+        </div>
+        <p>深圳市大富科技股份有限公司</p>
+      </div>
+      <div class="contests-home-page-sponsor-item">
+        <div class="contests-home-page-sponsor-item-img">
+          <img src="@/assets/contests/big_4.png" alt="">
+        </div>
+        <p>中视科华文产中心</p>
+      </div>
+    </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_5.png" alt=""></h3>
+    <div class="contests-home-page-support">
+      <div class="contests-home-page-support-intro">
+        <div class="contests-home-page-support-intro-box">
+          <p>北京电影学院</p>
+          <p>北京开放大学</p>
+          <p>安徽科技学院</p>
+          <p>北京师范大学南山附属中学</p>
+          <p>中国科学院深圳先进技术研究院实验学校</p>
+          <p>深圳市中幼国际教育科技有限公司</p>
+        </div>
+      </div>
+      <div class="contests-home-page-support-intro">
+        <div class="contests-home-page-support-intro-box">
+          <p>深圳市方块动漫画文化发展有限公司</p>
+          <p>深圳市时代科腾文化传媒有限公司</p>
+          <p>深圳市噢深商贸有限公司</p>
+        </div>
+      </div>
+      <div class="contests-home-page-support-intro">
+        <div class="contests-home-page-support-intro-box">
+          <p>香港动漫电玩节组委会</p>
+          <p>国际先进动态影像协会</p>
+          <p>美国加州启智教育机构</p>
+          <p>美育国际（新加坡）文化传播有限公司</p>
+        </div>
+      </div>
+    </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_6.png" alt=""></h3>
+    <div class="contests-home-page-undertake">
+      <div class="contests-home-page-undertake-name">
+        <p>深圳市一网乾坤科技文化发展有限公司</p>
+      </div>
+      <div class="contests-home-page-undertake-name">
+        <p>深圳市大富网络技术有限公司</p>
+      </div>
+    </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_7.png" alt=""></h3>
+    <div class="contests-home-page-media">
+      <img src="@/assets/contests/logo.png" alt="">
+    </div>
+    <div class="contests-home-page-join">
+      <p class="contests-home-page-join-word">立即报名</p>
+    </div>
+    <img class="contests-home-page-bgpic element_1" src="@/assets/contests/element_1.png" alt="">
+    <img class="contests-home-page-bgpic element_2" src="@/assets/contests/element_2.png" alt="">
+    <img class="contests-home-page-bgpic element_3" src="@/assets/contests/element_3.png" alt="">
+    <img class="contests-home-page-bgpic element_4" src="@/assets/contests/element_4.png" alt="">
+    <img class="contests-home-page-bgpic element_text_1" src="@/assets/contests/element_text_1.png" alt="">
+    <img class="contests-home-page-bgpic element_text_2" src="@/assets/contests/element_text_2.png" alt="">
+    <img class="contests-home-page-bgpic element_text_3" src="@/assets/contests/element_text_3.png" alt="">
   </div>
 </template>
 <style lang="scss" scoped>
 .contests-home-page {
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto;
+  &-bgpic {
+    position: absolute;
+    z-index: -999;
+    &.element_1 {
+      left: 0;
+      top: 20px;
+    }
+    &.element_3 {
+      left: 0;
+      top: 1620px;
+    }
+    &.element_2 {
+      right: 0;
+      top: 620px;
+    }
+    &.element_4 {
+      right: 0;
+      top: 2120px;
+    }
+    &.element_text_1 {
+      right: 100px;
+      top: 120px;
+    }
+    &.element_text_2 {
+      left: 80px;
+      top: 700px;
+    }
+    &.element_text_3 {
+      right: 200px;
+      bottom: 400px;
+    }
+  }
   &-title {
     text-align: center;
     margin: 30px 0 0;
@@ -71,13 +204,11 @@
   &-paragraph {
     max-width: 928px;
     margin: 0 auto;
-    font-family: 'STKaiti';
     font-size: 18px;
     color: #000000;
     line-height: 32px;
     text-indent: 30px;
     text-align: center;
-    font-weight: bold;
     margin-bottom: 18px;
   }
   &-brief {
@@ -88,8 +219,6 @@
     background: url(../../assets/contests/paper.png) no-repeat top center;
     &-text {
       max-width: 780px;
-      font-family: 'STKaiti';
-      font-weight: bold;
       margin: 0 auto;
       font-size: 18px;
       line-height: 32px;
@@ -115,7 +244,6 @@
     margin: 0 auto;
     display: flex;
     &-item {
-      // width: 292px;
       padding-left: 20px;
       display: flex;
       &-left {
@@ -124,10 +252,8 @@
       &-right {
         flex: 1;
         font-size: 24px;
-        font-family: 'STKaiti';
         &-title {
           color: #13232f;
-          font-weight: bold;
           margin: 10px;
         }
         &-time {
@@ -147,9 +273,36 @@
     display: flex;
     justify-content: center;
     &-box {
-      width: 325px;
+      width: 330px;
       height: 510px;
       margin: 10px;
+      &-text {
+        max-width: 225px;
+        margin: 160px auto 0;
+        text-align: center;
+        .award-name {
+          font-size: 18px;
+          color: #fff;
+          opacity: 0.5;
+          margin-bottom: 4px;
+        }
+        .award-subname {
+          font-size: 20px;
+          color: #fff;
+          letter-spacing: 1px;
+          margin: 7px 0;
+        }
+        .award-notice {
+          font-size: 16px;
+          color: #fff;
+          opacity: 0.5;
+          letter-spacing: 1px;
+        }
+      }
+      &.award_3 {
+        padding-top: 50px;
+        box-sizing: border-box;
+      }
       @each $bg in award_1, award_2, award_3 {
         &.#{$bg} {
           background: url('../../assets/contests/#{$bg}.png')
@@ -158,6 +311,65 @@
             top;
         }
       }
+    }
+  }
+  &-sponsor {
+    display: flex;
+    justify-content: center;
+    &-item {
+      padding: 10px 26px;
+      font-size: 18px;
+      color: #212121;
+      &-img {
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+  &-support {
+    display: flex;
+    justify-content: center;
+    &-intro {
+      display: flex;
+      align-items: center;
+      padding: 40px;
+      color: #3b474f;
+      font-size: 20px;
+      &-box {
+        text-align: center;
+      }
+    }
+  }
+  &-undertake {
+    display: flex;
+    justify-content: center;
+    &-name {
+      width: 520px;
+      text-align: center;
+      font-size: 24px;
+      color: #13232f;
+      padding: 30px;
+    }
+  }
+  &-media {
+    display: flex;
+    justify-content: center;
+    padding: 70px 0 0;
+  }
+  &-join {
+    width: 372px;
+    height: 292px;
+    margin: 0 auto;
+    background: url('../../assets/contests/button_2.png');
+    cursor: pointer;
+    &-word {
+      margin: 0;
+      line-height: 320px;
+      font-size: 39px;
+      text-align: center;
+      color: #fff;
     }
   }
 }

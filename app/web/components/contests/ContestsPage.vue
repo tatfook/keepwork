@@ -97,6 +97,8 @@ body {
   display: table;
   width: 100%;
   box-sizing: border-box;
+  font-family: 'STKaiti';
+  font-weight: bold;
   background: url(../../assets/contests/bg.png) center top no-repeat,
     url(../../assets/contests/footer_bg.png) bottom center no-repeat;
   &-header {
