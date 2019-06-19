@@ -20,8 +20,8 @@
           <el-checkbox v-model="isAllSelected" v-if="!isApplicable" class="skydrive-manager-header-operations-item" @change="selectAll">全选</el-checkbox>
           <file-downloader class="skydrive-manager-header-operations-item" v-if="!isApplicable" :selectedFiles='activeSelectedFiles'></file-downloader>
           <file-deleter @changeLoadingState="changeLoadingState" v-if="!isApplicable" class="skydrive-manager-header-operations-item" :selectedFiles='activeSelectedFiles'></file-deleter>
-          <el-input :placeholder="$t('common.search')" size="mini" v-model="searchWord">
-            <i slot="suffix" class="el-input__icon el-icon-search"></i>
+          <el-input :placeholder="$t('common.search')" size="mini" :clearable="true" v-model="searchWord">
+            <i slot="suffix" class="el-input__icon el-icon-search" v-show="!searchWord"></i>
           </el-input>
           <div class="skydrive-manager-header-operations-item" v-if="!isApplicable" @click="toggleViewType">
             <el-tooltip v-show="viewType == 'thumb'" content="切换到列表模式">
