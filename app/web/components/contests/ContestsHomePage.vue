@@ -10,7 +10,7 @@
     <div class="contests-home-page-brief">
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·大赛主题：</span><span class="contests-home-page-brief-text-right">用计算机程序让汉字活起来走向世界。</span></p>
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·创作内容：</span><span class="contests-home-page-brief-text-right">利用自主原创的3D动画、编程软件Paracraft创意空间围绕《百家姓》创作能够充分体现汉字姓氏文化的视频短片。</span></p>
-      <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·指定创作工具：</span><span class="contests-home-page-brief-text-right">Paracraft创意空间<a href="#" class="download-paracraft">下载Paracraft</a></span></p>
+      <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·指定创作工具：</span><span class="contests-home-page-brief-text-right">Paracraft创意空间<a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="download-paracraft">下载Paracraft</a></span></p>
     </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_2.png" alt=""></h3>
     <div class="contests-home-page-progress">
@@ -96,7 +96,7 @@
       </div>
       <div class="contests-home-page-sponsor-item">
         <div class="contests-home-page-sponsor-item-img">
-          <img src="@/assets/contests/big_5.png" alt="">
+          <img src="@/assets/contests/big_3.png" alt="">
         </div>
         <p>深圳市大富科技股份有限公司</p>
       </div>
@@ -146,9 +146,10 @@
     </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_7.png" alt=""></h3>
     <div class="contests-home-page-media">
-      <img src="@/assets/contests/logo.png" alt="">
+      <img class="contests-home-page-media-web" src="@/assets/contests/logo.png" alt="">
+      <img class="contests-home-page-media-phone" src="@/assets/contests/logo_m.png" alt="">
     </div>
-    <div class="contests-home-page-join">
+    <div class="contests-home-page-join" @click="toApply">
       <p class="contests-home-page-join-word">立即报名</p>
     </div>
     <img class="contests-home-page-bgpic element_1" src="@/assets/contests/element_1.png" alt="">
@@ -160,6 +161,17 @@
     <img class="contests-home-page-bgpic element_text_3" src="@/assets/contests/element_text_3.png" alt="">
   </div>
 </template>
+<script>
+export default {
+  name: 'ContestsHomePage',
+  methods: {
+    toApply() {
+      window.open('http://paracraft.keepwork.com/download?lang=zh')
+    }
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 .contests-home-page {
   position: relative;
@@ -215,7 +227,7 @@
     max-width: 970px;
     min-height: 228px;
     margin: 0 auto;
-    padding-top: 50px;
+    padding: 50px 12px;
     background: url(../../assets/contests/paper.png) no-repeat top center;
     &-text {
       max-width: 780px;
@@ -243,6 +255,7 @@
     max-width: 1020px;
     margin: 0 auto;
     display: flex;
+    flex-wrap: wrap;
     &-item {
       padding-left: 20px;
       display: flex;
@@ -272,6 +285,7 @@
   &-awards {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     &-box {
       width: 330px;
       height: 510px;
@@ -316,7 +330,9 @@
   &-sponsor {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     &-item {
+      // width: 245px;
       padding: 10px 26px;
       font-size: 18px;
       color: #212121;
@@ -331,6 +347,7 @@
   &-support {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     &-intro {
       display: flex;
       align-items: center;
@@ -345,6 +362,7 @@
   &-undertake {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     &-name {
       width: 520px;
       text-align: center;
@@ -357,6 +375,9 @@
     display: flex;
     justify-content: center;
     padding: 70px 0 0;
+    &-phone {
+      display: none;
+    }
   }
   &-join {
     width: 372px;
@@ -370,6 +391,106 @@
       font-size: 39px;
       text-align: center;
       color: #fff;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .contests-home-page {
+    &-title {
+      img {
+        max-width: 84%;
+      }
+    }
+    &-bgpic {
+      display: none;
+    }
+    &-paragraph {
+      padding: 0 12px;
+      font-size: 14px;
+    }
+    &-brief {
+      padding: 30px 10px 0;
+      min-height: 210px;
+      &-text {
+        font-size: 14px;
+        line-height: 24px;
+        &-left {
+          width: 120px;
+        }
+      }
+    }
+
+    &-progress {
+      display: block;
+      &-item {
+        padding-left: 70px;
+        &-right {
+          font-size: 16px;
+          &-time {
+            font-size: 14px;
+          }
+        }
+      }
+      &-arrow {
+        padding: 12px;
+        img {
+          transform: rotate(90deg);
+        }
+      }
+    }
+    &-awards {
+      &-box {
+        &-text {
+          .award-name {
+            font-size: 14px;
+          }
+          .award-subname {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    &-sponsor {
+      justify-content: space-around;
+      padding: 20px 2px;
+      &-item {
+        width: 50%;
+        padding: 0;
+        font-size: 12px;
+        padding: 20px 0 0;
+        p {
+          text-align: center;
+        }
+        &-img {
+          img {
+            width: 70%;
+            max-width: 220px;
+          }
+        }
+      }
+    }
+    &-support {
+      &-intro {
+        font-size: 16px;
+        padding: 0;
+      }
+    }
+    &-undertake {
+      display: block;
+      &-name {
+        font-size: 16px;
+        padding: 0;
+        width: 100%;
+      }
+    }
+    &-media {
+      padding: 10px 0;
+      &-web {
+        display: none;
+      }
+      &-phone {
+        display: block;
+      }
     }
   }
 }

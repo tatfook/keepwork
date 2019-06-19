@@ -84,6 +84,7 @@ export default {
         padding: 24px;
         display: flex;
         justify-content: center;
+        flex-wrap: wrap;
         &-item {
           font-size: 13px;
           padding: 0 20px;
@@ -104,6 +105,27 @@ export default {
           .el-dropdown-link {
             cursor: pointer;
             color: #212121;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .contests-footer {
+    &-hint {
+      font-size: 14px;
+    }
+    &-simple-list {
+      .footer-container {
+        &-list {
+          text-align: center;
+          display: block;
+          &-item {
+            padding: 3px 0;
+            & + .footer-container-list-item {
+              border-left: none;
+            }
           }
         }
       }

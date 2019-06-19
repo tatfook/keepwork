@@ -4,15 +4,21 @@
       <contests-header></contests-header>
     </div>
     <div class="contests-page-top">
-      <p class="contests-page-top-streamer">用Paracraft软件演绎姓氏，用编程解读汉字，用视频媒介传播人文精神，用人工智能弘扬中华文化。</p>
+      <div class="contests-page-top-streamer">
+        <div class="contests-page-top-streamer-wrap">
+          <p class="contests-page-top-streamer-wrap-text" ref="topHintText">用Paracraft软件演绎姓氏，用编程解读汉字，用视频媒介传播人文精神，用人工智能弘扬中华文化。</p>
+        </div>
+      </div>
       <div class="contests-page-top-title"></div>
       <p class="contests-page-top-specifier">“用计算机程序让汉字活起来走向世界”</p>
       <p class="contests-page-top-apply">
         <img class="contests-page-top-apply-img" src="@/assets/contests/button_1.png" alt="">
-        <span class="contests-page-top-apply-text">我要报名</span>
+        <span class="contests-page-top-apply-text" @click="toApply">我要报名</span>
       </p>
       <div class="contests-page-top-tab">
-        <span v-for="(item, index) in tabData" :key="index" :class="['contests-page-top-tab-item', {'selected-item': index == currentSelected}]" @click="selectTabItem(index)">{{item.name}}</span>
+        <div class="contests-page-top-tab-phone-wrap">
+          <span v-for="(item, index) in tabData" :key="index" :class="['contests-page-top-tab-item', {'selected-item': index == currentSelected}]" @click="selectTabItem(index)">{{item.name}}</span>
+        </div>
       </div>
     </div>
     <div class="contests-page-main">
@@ -47,14 +53,36 @@ export default {
           name: '了解Paracraft'
         }
       ],
-      currentSelected: 0
+      currentSelected: 0,
+      topTextTimer: null
     }
   },
   components: {
     ContestsHeader,
     ContestsFooter
   },
+  mounted() {
+    this.topTextAnimation()
+  },
   methods: {
+    topTextAnimation() {
+      this.topTextTimer = setInterval(() => {
+        let leftLen = this.$refs['topHintText'].style['left'].replace(/px/, '')
+        let winWidth = document.body.clientWidth || document.documentElement.clientWidth
+        let comparisonValue = 840
+        let winCompLeft = 800
+        if (winWidth < 768) {
+          comparisonValue = 750
+          winCompLeft = 280
+        }
+        if (leftLen > -comparisonValue) {
+          leftLen -= 1
+          this.$refs['topHintText'].style['left'] = leftLen + 'px'
+        } else {
+          this.$refs['topHintText'].style['left'] = winCompLeft + 'px'
+        }
+      }, 20)
+    },
     selectTabItem(index) {
       this.currentSelected = index
       switch (index) {
@@ -71,13 +99,21 @@ export default {
           this.$router.push({ name: 'ApplyWay' })
           break
         case 4:
+          window.open('http://paracraft.keepwork.com')
           this.$router.push({ name: 'ContestsHomePage' })
+          this.currentSelected = 0
           break
         default:
           this.$router.push({ name: 'ContestsHomePage' })
           break
       }
+    },
+    toApply() {
+      window.open('http://paracraft.keepwork.com/download?lang=zh')
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.topTextTimer)
   }
 }
 </script>
@@ -114,7 +150,23 @@ body {
       letter-spacing: 1px;
       font-family: 'STKaiti';
       background: url(../../assets/contests/roll_bg.png) top center no-repeat;
-      margin: 0 0 18px;
+      margin: 0 auto 18px;
+      max-width: 940px;
+      overflow: hidden;
+      height: 38px;
+      &-wrap {
+        position: relative;
+        height: 38px;
+        width: 85%;
+        margin: 0 auto;
+        overflow: hidden;
+        &-text {
+          margin: 0;
+          width: 900px;
+          position: absolute;
+          left: 0px;
+        }
+      }
     }
     &-title {
       height: 184px;
@@ -151,7 +203,6 @@ body {
         text-align: center;
         color: #fff;
         font-size: 27px;
-        font-family: 'PangMenZhengDao-Cu';
       }
     }
     &-tab {
@@ -187,6 +238,53 @@ body {
   }
   &-footer {
     display: table-row;
+  }
+}
+@media screen and (max-width: 768px) {
+  .contests-page {
+    &-top {
+      &-streamer {
+        width: 90%;
+        background-size: 100% 100%;
+        font-size: 14px;
+        margin: 10px auto;
+      }
+      &-title {
+        max-width: 90%;
+        background-size: 100% 100%;
+        margin: 0 auto;
+        height: calc((100vw - 36px) / 692 * 184);
+      }
+      &-specifier {
+        font-size: 18px;
+      }
+      &-tab {
+        width: 100vw - 6;
+        overflow-x: scroll;
+        display: block;
+        position: relative;
+        z-index: 999;
+        &-phone-wrap {
+          width: 460px;
+        }
+        &-item {
+          display: inline-block;
+          width: auto;
+          padding: 0 10px;
+          font-size: 16px;
+          color: #212121;
+          opacity: 0.5;
+          height: 48px;
+          line-height: 48px;
+          margin-top: 20px;
+          &.selected-item {
+            opacity: 1;
+            color: #212121;
+            background: none;
+          }
+        }
+      }
+    }
   }
 }
 </style>
