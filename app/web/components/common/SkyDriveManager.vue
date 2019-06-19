@@ -203,6 +203,7 @@ export default {
     },
     resetTableSort() {
       let skyDriveTable = _.get(this.activeChildComp, '$refs.skyDriveTable')
+      if (!skyDriveTable) return
       skyDriveTable.clearSort()
       skyDriveTable.sort('updatedAt', 'descending')
     },

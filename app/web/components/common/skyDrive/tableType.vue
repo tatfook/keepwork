@@ -126,16 +126,10 @@ export default {
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
     },
     removeFromUploadQue(file) {
-      let { filename, state } = file
-      this.skydriveRemoveFromUploadQue({ filename, state })
+      this.skydriveRemoveFromUploadQue(file)
     },
     getRowKey(row) {
       return row.filename + row.state
-    },
-    resetTableSort() {
-      let skyDriveTable = this.$refs.skyDriveTable
-      skyDriveTable.clearSort()
-      skyDriveTable.sort('updatedAt', 'descending')
     }
   },
   filters: {

@@ -1,11 +1,12 @@
 import _ from 'lodash'
 
 const getters = {
-  uploadingFilesObj: state => {
-    return state.uploadingFilesObj || {}
-  },
-  uploadingFiles: (state, { uploadingFilesObj }) => {
-    return _.values(uploadingFilesObj) || []
+  uploadingFilesObj: state => state.uploadingFilesObj || {},
+  nameConflictFilesObj: state => state.nameConflictFilesObj || [],
+  nameConflictFiles: (state, { nameConflictFilesObj }) =>
+    _.values(nameConflictFilesObj),
+  uploadingFiles: (state, { nameConflictFiles, uploadingFilesObj }) => {
+    return _.concat(_.values(uploadingFilesObj), nameConflictFiles)
   },
   noFinishedUploadingFiles: (state, { uploadingFiles }) => {
     return _.filter(uploadingFiles, file => file.state !== 'success')

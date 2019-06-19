@@ -214,8 +214,7 @@ export default {
       )
     },
     removeFromUploadQue(file) {
-      let { filename, state } = file
-      this.skydriveRemoveFromUploadQue({ filename, state })
+      this.skydriveRemoveFromUploadQue(file)
     }
   },
   filters: {

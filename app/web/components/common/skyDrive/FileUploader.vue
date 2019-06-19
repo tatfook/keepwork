@@ -73,6 +73,7 @@ export default {
   methods: {
     ...mapActions({
       addUploadingFile: 'skydrive/addUploadingFile',
+      addNameConflictFile: 'skydrive/addNameConflictFile',
       changeUploadingState: 'skydrive/changeUploadingState',
       addSubscription: 'skydrive/addSubscription',
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive'
@@ -126,16 +127,23 @@ export default {
         })
         return
       }
+      let filenameValidateResult = this.filenameValidator(file.name)
+      if (filenameValidateResult !== true) {
+        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
+        waitingUploadFile = {
+          ...waitingUploadFile,
+          state: 'error',
+          isNameConflict: true,
+          errorMsg: filenameValidateResult
+        }
+        this.addNameConflictFile(waitingUploadFile)
+        return
+      }
       this.waitingFiles.push(waitingUploadFile)
       this.addUploadingFile(waitingUploadFile)
       await this.uploadFile(file, fileIndex)
     },
     async handleFilenameIllegal({ file, fileIndex, filenameValidateResult }) {
-      this.changeUploadingState({
-        state: 'error',
-        file,
-        errorMsg: filenameValidateResult
-      })
       await waitForMilliSeconds(Math.random() * 1000)
       this.$notify({
         title: this.$t('common.failure'),
@@ -145,7 +153,7 @@ export default {
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
-      return this.userSkyDriveFileList.filter(
+      return _.concat(this.uploadingFiles, this.userSkyDriveFileList).filter(
         ({ filename }) => filename === newFilename
       ).length
         ? errMsg
@@ -153,11 +161,6 @@ export default {
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
-      let filenameValidateResult = this.filenameValidator(file.name)
-      if (filenameValidateResult !== true) {
-        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
-        return
-      }
       let self = this
       await this.userUploadFileToSkyDrive({
         file,
