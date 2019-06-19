@@ -18,6 +18,7 @@ import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import vipModule from '@/store/vip'
 import userModule from '@/store/user'
+import skydriveModule from '@/store/skydrive'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
@@ -40,6 +41,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     vip: vipModule,
     user: userModule
   }

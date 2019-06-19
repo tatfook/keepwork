@@ -2,16 +2,16 @@
   <div class="media-type" v-loading='loading'>
     <div class="media-type-media-library">
       <div v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
-        <div class="media-type-media-item-main" v-if="mediaItem.key">
+        <div class="media-type-media-item-main" v-if="mediaItem.key" @click.prevent="selectItem(mediaItem)">
           <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
           <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
+          <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
+            <i class="el-icon-caret-right"></i>
+          </div>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
             <el-checkbox v-model="mediaItem.isChecked" @change="handleItemSelectChange(mediaItem)"></el-checkbox>
-            <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
-              <i class="el-icon-caret-right"></i>
-            </div>
-            <div class="media-type-media-item-operations">
+            <div class="media-type-media-item-operations" @click.stop>
               <el-tooltip content="复制链接">
                 <file-url-getter :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
               </el-tooltip>
@@ -43,18 +43,7 @@
         </div>
         <div class="media-type-media-item-name" :title="mediaItem.filename">{{mediaItem.filename}}</div>
       </div>
-      <div v-if="!sortedSkyDriveMediaLibraryData.length && !uploadingFiles.length" class="media-type-media-library-placeholder">
-        <img src="@/assets/img/media_library_empty.png">
-        <span class="media-type-media-library-placeholder-tip">{{ $t('skydrive.nothingHere') }}</span>
-        <label v-if="mediaFilterType === 'image'" class="el-button media-type-upload-btn el-button--primary el-button--small is-round">
-          <span>{{ $t('skydrive.uploadImage') }}</span>
-          <input ref="centerVideoInput" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" style="display:none;" multiple @change="handleUploadFile">
-        </label>
-        <label v-if="mediaFilterType === 'video'" class="el-button media-type-upload-btn el-button--primary el-button--small is-round">
-          <span>{{ $t('skydrive.uploadVideo') }}</span>
-          <input ref="centerVideoInput" type="file" accept=".mp4,.avi,.wmv,.mkv,.amv,.m4v,.webm" style="display:none;" multiple @change="handleUploadFile">
-        </label>
-      </div>
+      <file-list-empty v-if="!sortedSkyDriveMediaLibraryData.length && !uploadingFiles.length" :uploadText="uploadText" viewType="thumb" :uploadType="mediaFilterType"></file-list-empty>
     </div>
     <el-row class="media-type-footer" v-if="isApplicable">
       <file-url-getter class="media-type-footer-button" :isDisabled="!isHaveSelected" :selectFile="approvedMultipleSelectionResults[0] || {}" :isApplyButtonType="true" operateType="insert" @close="handleClose"></file-url-getter>
@@ -68,6 +57,7 @@ import FileDeleter from './FileDeleter'
 import FileDownloader from './FileDownloader'
 import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
+import FileListEmpty from './FileListEmpty'
 const ExtIcons = {
   txt: 'icon-txt1',
   mp4: 'icon-mp4-1',
@@ -106,7 +96,8 @@ export default {
     uploadingFiles: Array,
     fileListFilteredSearched: Array,
     isInsertable: Boolean,
-    isApplicable: Boolean
+    isApplicable: Boolean,
+    uploadText: String
   },
   mounted() {
     this.fileList = _.cloneDeep(this.fileListFilteredSearched)
@@ -154,6 +145,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue'
+    }),
     selectAll() {
       let selected = this.isAllSelected ? false : true
       this.fileList = _.map(this.fileList, mediaItem => {
@@ -220,7 +214,10 @@ export default {
       )
     },
     removeFromUploadQue(file) {
-      this.$emit('removeFromUploadQue', file)
+      this.skydriveRemoveFromUploadQue(file)
+    },
+    selectItem(mediaItem) {
+      this.$set(mediaItem, 'isChecked', !mediaItem.isChecked)
     }
   },
   filters: {
@@ -240,6 +237,7 @@ export default {
     document.onkeydown = null
   },
   components: {
+    FileListEmpty,
     FileDownloader,
     FileDeleter,
     FileRenamer,
@@ -254,17 +252,6 @@ export default {
     height: 500px;
     overflow-x: hidden;
     overflow-x: auto;
-    &-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      &-tip {
-        margin: 30px auto 60px;
-      }
-    }
   }
   &-media-item {
     box-sizing: border-box;
@@ -272,6 +259,7 @@ export default {
     display: inline-block;
     width: 100px;
     &-main {
+      cursor: pointer;
       width: 100px;
       height: 100px;
       background-color: #d1d1d1;
@@ -346,6 +334,7 @@ export default {
       margin-left: 6px;
     }
     &-play {
+      z-index: 1;
       width: 32px;
       height: 32px;
       border-radius: 50%;

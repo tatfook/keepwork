@@ -25,6 +25,7 @@ import router from './viewer.router'
 import VueI18n from 'vue-i18n'
 import VueClipboard from 'vue-clipboard2'
 import appModule from '@/store/app'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import gitlabModule from '@/store/gitlab'
@@ -64,6 +65,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     app: appModule,
     user: userModule,
     gitlab: gitlabModule,

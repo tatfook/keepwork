@@ -1,6 +1,6 @@
 <template>
   <div class="file-uploader">
-    <div v-show="!isDragMode" class="file-uploader-info">{{$t('skydrive.dragAndDrop')}}</div>
+    <div v-if="isDropable" v-show="!isDragMode" class="file-uploader-info">{{$t('skydrive.dragAndDrop')}}</div>
     <el-upload class="file-uploader-button" action="" multiple :drag="isDragMode" :show-file-list="false" :auto-upload="false" :accept="acceptTypes" :on-change="handleUploadFile">
       <el-button v-show="!isDragMode" slot="trigger" size="small" type="primary" round>{{uploadText}}</el-button>
     </el-upload>
@@ -14,6 +14,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'FileUploader',
   props: {
+    isDropable: {
+      type: Boolean,
+      default: true
+    },
     viewType: {
       validator: value => {
         return ['table', 'thumb'].indexOf(value) !== -1
@@ -25,17 +29,6 @@ export default {
         return ['all', 'image', 'video'].indexOf(value) !== -1
       }
     },
-    activeChildComp: {
-      required: true
-    },
-    uploadingFiles: {
-      type: Array,
-      default: []
-    },
-    uploadingFileSize: {
-      type: Number,
-      default: 0
-    },
     isDragMode: {
       type: Boolean,
       default: false
@@ -44,12 +37,13 @@ export default {
   },
   data() {
     return {
-      waitingFiles: [],
-      qiniuUploadSubscriptions: {}
+      waitingFiles: []
     }
   },
   computed: {
     ...mapGetters({
+      uploadingFiles: 'skydrive/uploadingFiles',
+      uploadingFileSize: 'skydrive/uploadingFileSize',
       userSkyDriveInfo: 'user/skyDriveInfo',
       userSkyDriveFileList: 'user/skyDriveFileList'
     }),
@@ -78,6 +72,10 @@ export default {
   },
   methods: {
     ...mapActions({
+      addUploadingFile: 'skydrive/addUploadingFile',
+      addNameConflictFile: 'skydrive/addNameConflictFile',
+      changeUploadingState: 'skydrive/changeUploadingState',
+      addSubscription: 'skydrive/addSubscription',
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive'
     }),
     handleUploadFile(file) {
@@ -129,16 +127,23 @@ export default {
         })
         return
       }
+      let filenameValidateResult = this.filenameValidator(file.name)
+      if (filenameValidateResult !== true) {
+        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
+        waitingUploadFile = {
+          ...waitingUploadFile,
+          state: 'error',
+          isNameConflict: true,
+          errorMsg: filenameValidateResult
+        }
+        this.addNameConflictFile(waitingUploadFile)
+        return
+      }
       this.waitingFiles.push(waitingUploadFile)
-      this.$emit('addUploadingFiles', waitingUploadFile)
+      this.addUploadingFile(waitingUploadFile)
       await this.uploadFile(file, fileIndex)
     },
     async handleFilenameIllegal({ file, fileIndex, filenameValidateResult }) {
-      this.$emit('changeUploadingState', {
-        state: 'error',
-        file,
-        errorMsg: filenameValidateResult
-      })
       await waitForMilliSeconds(Math.random() * 1000)
       this.$notify({
         title: this.$t('common.failure'),
@@ -148,40 +153,35 @@ export default {
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
-      return this.userSkyDriveFileList.filter(
-        ({ filename }) => filename === newFilename
+      return _.concat(this.uploadingFiles, this.userSkyDriveFileList).filter(
+        ({ filename }) => filename.toLowerCase() === newFilename.toLowerCase()
       ).length
         ? errMsg
         : true
     },
     async uploadFile(file, fileIndex) {
       if (!file) return
-      let filenameValidateResult = this.filenameValidator(file.name)
-      if (filenameValidateResult !== true) {
-        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
-        return
-      }
       let self = this
       await this.userUploadFileToSkyDrive({
         file,
         onStart(subscription) {
           let filename = file.name
-          self.qiniuUploadSubscriptions[filename] = subscription
+          self.addSubscription({ filename, subscription })
         },
         onProgress(progress) {
-          self.$emit('changeUploadingState', {
+          self.changeUploadingState({
             file,
             percent: progress.percent
           })
         }
       }).catch(err => {
-        self.$emit('changeUploadingState', {
+        self.changeUploadingState({
           state: 'error',
           file
         })
         console.error(err)
       })
-      this.$emit('changeUploadingState', {
+      this.changeUploadingState({
         state: 'success',
         file,
         updatedAt: new Date()
@@ -201,10 +201,10 @@ export default {
     color: #666;
     font-size: 14px;
     display: inline-block;
+    margin-right: 20px;
   }
   &-button {
     display: inline-block;
-    margin-left: 20px;
     /deep/.el-button--small {
       font-size: 14px;
       padding: 8px 15px;
