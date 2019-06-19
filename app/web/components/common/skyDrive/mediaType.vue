@@ -2,7 +2,7 @@
   <div class="media-type" v-loading='loading'>
     <div class="media-type-media-library">
       <div v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
-        <div class="media-type-media-item-main" v-if="mediaItem.key">
+        <div class="media-type-media-item-main" v-if="mediaItem.key" @click.prevent="selectItem(mediaItem)">
           <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
           <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
@@ -11,7 +11,7 @@
           </div>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
             <el-checkbox v-model="mediaItem.isChecked" @change="handleItemSelectChange(mediaItem)"></el-checkbox>
-            <div class="media-type-media-item-operations">
+            <div class="media-type-media-item-operations" @click.stop>
               <el-tooltip content="复制链接">
                 <file-url-getter :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
               </el-tooltip>
@@ -215,6 +215,9 @@ export default {
     },
     removeFromUploadQue(file) {
       this.skydriveRemoveFromUploadQue(file)
+    },
+    selectItem(mediaItem) {
+      this.$set(mediaItem, 'isChecked', !mediaItem.isChecked)
     }
   },
   filters: {
@@ -256,6 +259,7 @@ export default {
     display: inline-block;
     width: 100px;
     &-main {
+      cursor: pointer;
       width: 100px;
       height: 100px;
       background-color: #d1d1d1;
