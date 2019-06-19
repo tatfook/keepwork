@@ -574,7 +574,7 @@ export default {
     color: transparent;
   }
   .el-icon-caret-right:before {
-    content: '\E604';
+    content: '\e6e0';
   }
   .el-tree-node__label {
     width: 100%;
