@@ -6,6 +6,7 @@
 
 <script>
 import SkyDriveManager from './SkyDriveManager'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'SkyDriveManagerDialog',
@@ -32,12 +33,21 @@ export default {
       default: true
     }
   },
+  computed: {
+    ...mapGetters({
+      uploadingFiles: 'skydrive/uploadingFiles'
+    }),
+    stateDoingFiles() {
+      return _.filter(this.uploadingFiles, ['state', 'doing']) || []
+    }
+  },
   methods: {
+    ...mapActions({
+      removeFromUploadQue: 'skydrive/removeFromUploadQue'
+    }),
     handleClose(event) {
-      let { uploadingFiles } = this.$refs.skyDriveManager
       let that = this
-      let uploadingFileIndex = _.findIndex(uploadingFiles, ['state', 'doing'])
-      if (uploadingFileIndex >= 0) {
+      if (this.stateDoingFiles.length > 0) {
         this.$confirm(
           this.$t('skydrive.fileUploading'),
           this.$t('editor.closeDialogTitle'),
@@ -48,6 +58,7 @@ export default {
           }
         )
           .then(() => {
+            _.map(this.stateDoingFiles, file => this.removeFromUploadQue(file))
             that.$emit('close', event)
           })
           .catch(() => {})

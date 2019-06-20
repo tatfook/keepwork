@@ -13,8 +13,7 @@ const getters = {
   },
   uploadingFileSize: (state, { noFinishedUploadingFiles }) => {
     return _.reduce(noFinishedUploadingFiles, (sum, file) => sum + file.size, 0)
-  },
-  subscriptions: state => state.subscriptions
+  }
 }
 
 export default getters

@@ -4,8 +4,7 @@ import mutations from './mutations'
 
 const state = {
   uploadingFilesObj: {},
-  nameConflictFilesObj: {},
-  subscriptions: {}
+  nameConflictFilesObj: {}
 }
 export default {
   namespaced: true,
