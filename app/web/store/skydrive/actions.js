@@ -33,7 +33,7 @@ const actions = {
   addNameConflictFile({ commit }, file) {
     commit(ADD_NAME_CONFLICT_FILE, file)
   },
-  removeFromUploadQue({ commit, getters }, file) {
+  removeFromUploadQue({ commit }, file) {
     let { filename, state, isNameConflict } = file
     if (state === 'doing') {
       removeQiniuUpload(filename)
