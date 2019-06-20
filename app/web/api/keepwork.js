@@ -398,6 +398,12 @@ export const message = {
   signMessages: async ids => post('userMessages/state', { state: 1, ids }),
 }
 
+export const editorSocket = {
+  joinTheRoom: async params => socketMessage.post('app/join', params),
+  leaveTheRoom: async params => socketMessage.post('app/leave', params),
+  broadcastTheRoom: async params => socketMessage.post('app/msg', params)
+}
+
 export const keepwork = {
   user,
   website,
@@ -424,7 +430,8 @@ export const keepwork = {
   graphql,
   message,
   feedbacks,
-  systemTags
+  systemTags,
+  editorSocket
 }
 
 export default keepwork

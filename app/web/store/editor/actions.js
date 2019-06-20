@@ -12,7 +12,30 @@ import {
   getFileSitePathByPath,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
+import jsrsasign from 'jsrsasign'
 import { initPageState, initSiteState, initLayoutPageState } from './state'
+
+import io from 'socket.io-client'
+
+let socketInstance = null
+const createSocket = ({ token, callback }) => {
+  if (socketInstance) {
+    return socketInstance
+  }
+  const jwtInfo = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+    jsrsasign.b64utoutf8(token.split('.')[1])
+  )
+  const userId = jwtInfo.userId
+  socketInstance = io(process.env.SOCKET_API_PREFIX, {
+    query: {
+      userId,
+      token
+    },
+    transports: ['websocket']
+  })
+  socketInstance.on('app/msg', callback)
+  return socketInstance
+}
 
 const {
   SET_ACTIVE_PAGE,
@@ -67,7 +90,9 @@ const {
   ADD_RECENT_OPENED_SITE,
   TOGGLE_FILE_HISTORY,
   TOGGLE_ANGLES,
-  TOGGLE_IFRAME_DIALOG
+  TOGGLE_IFRAME_DIALOG,
+
+  UPDATE_OPENED_WEBSITES
 } = props
 
 const actions = {
@@ -130,6 +155,7 @@ const actions = {
         await dispatch('saveSiteConfigPage', pageData)
       }
     }
+    dispatch('broadcastTheRoom', { path: activePageUrl, type: 'update' })
   },
   async savePageByPath(
     {
@@ -226,6 +252,7 @@ const actions = {
   async openFile({ dispatch, commit }, { path, editorMode = true }) {
     let payload = await dispatch('loadFile', { path, editorMode })
     commit(ADD_OPENED_FILE, payload)
+    dispatch('joinTheRoom', { path })
   },
   async refreshOpenedFile(
     { commit, dispatch, getters },
@@ -561,11 +588,63 @@ const actions = {
     commit(TOGGLE_ANGLES, { showAngle })
   },
   toggleFileHistoryVisibility({ commit }, { isVisible }) {
-    console.log(isVisible)
     commit(TOGGLE_FILE_HISTORY, { isVisible })
   },
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)
+  },
+  async joinTheRoom({ dispatch, getters: { openedFiles } }, { path = '' }) {
+    const websiteName = getFileSitePathByPath(path)
+    socketInstance.emit('app/join', { room: websiteName })
+  },
+  async leaveTheRoom({ dispatch, getters: { openedFiles } }, { path = '' }) {
+    const websiteName = getFileSitePathByPath(path)
+    socketInstance.emit('app/leave', { room: websiteName })
+  },
+  async broadcastTheRoom({ getters: { code }, rootGetters: { 'user/username': username } }, { path = '', type = 'update' }) {
+    const websiteName = getFileSitePathByPath(path)
+    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path, username, code, type, time: Date.now() } })
+  },
+  addOpenedWebsite({ dispatch, getters: { openedWebsites } }, { websiteName, path }) {
+    dispatch('updateOpenedWebsites', {
+      ...openedWebsites,
+      [websiteName]: {
+        ...openedWebsites[websiteName],
+        [path]: { updated: false }
+      }
+    })
+  },
+  removeOpenedWebsite({ dispatch, getters: { openedWebsites } }, { websiteName, path }) {
+    const deletePath = _.get(openedWebsites, [websiteName, path], '')
+    if (deletePath) {
+      console.log(deletePath)
+    }
+  },
+  updateOpenedWebsites({ commit, getters: { openedFiles } }, payload) {
+    commit(UPDATE_OPENED_WEBSITES, payload)
+  },
+  initSocket({ dispatch, rootGetters: { 'user/token': token } }) {
+    createSocket({ token, callback: data => dispatch('disposeData', data) })
+    dispatch('recoverDataAndSocket')
+  },
+  recoverDataAndSocket({ dispatch, getters: { openedFiles } }) {
+    const openedPagesName = _.keys(openedFiles)
+    const websitesGroup = _.reduce(openedPagesName, (group, path) => {
+      const websiteName = getFileSitePathByPath(path)
+      _.set(group, [websiteName, path], { updated: false })
+      return group
+    }, {})
+    dispatch('updateOpenedWebsites', websitesGroup)
+    const openedWebsitesName = _.keys(websitesGroup)
+    if (openedWebsitesName.length) {
+      socketInstance.emit('app/join', { room: openedWebsitesName })
+    }
+  },
+  disposeData({ getters: { openedWebsites }, rootGetters: { 'user/username': username } }, data) {
+    const { payload } = data
+    if (payload.username !== username) {
+      console.warn(data)
+    }
   }
 }
 

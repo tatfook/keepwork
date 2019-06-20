@@ -8,10 +8,25 @@ import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 
 const getters = {
+  socket: state => state.socket,
   openedPages: (state) =>
     state.openedPages || {},
   openedFiles: (state, { 'user/username': username }) =>
     state.openedFiles[username] || {},
+  openedWebsites: state => state.openedWebsites,
+  // openedWebsites: (state, { openedPages }) => {
+  //   const openedPagesName = _.keys(openedPages)
+  //   const websitesGroup = _.reduce(openedPagesName, (group, page) => {
+  //     const websiteName = getFileSitePathByPath(page)
+  //     if (_.isArray(group[websiteName])) {
+  //       group[websiteName].push(page)
+  //     } else {
+  //       group[websiteName] = [page]
+  //     }
+  //     return group
+  //   }, {})
+  //   return websitesGroup
+  // },
   showOpenedFiles: (state, { openedFiles, 'user/personalAndContributedSiteNameList': allSiteNameList }) => {
     let _openedKeys = _.filter(_.keys(openedFiles), key => allSiteNameList.includes(key.split('/')[1]))
     let _openedFiles = _.pick(openedFiles, _openedKeys)

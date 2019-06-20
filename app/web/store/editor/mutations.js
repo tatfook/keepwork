@@ -63,6 +63,8 @@ const TOGGLE_FILE_HISTORY = 'TOGGLE_FILE_HISTORY'
 const TOGGLE_ANGLES = 'TOGGLE_ANGLES'
 const TOGGLE_IFRAME_DIALOG = 'TOGGLE_IFRAME_DIALOG'
 
+const UPDATE_OPENED_WEBSITES = 'UPDATE_OPENED_WEBSITES'
+
 export const props = {
   SET_ACTIVE_PAGE,
   SET_ACTIVE_PAGE_URL,
@@ -116,11 +118,13 @@ export const props = {
   ADD_RECENT_OPENED_SITE,
   TOGGLE_FILE_HISTORY,
   TOGGLE_ANGLES,
-  TOGGLE_IFRAME_DIALOG
+  TOGGLE_IFRAME_DIALOG,
+
+  UPDATE_OPENED_WEBSITES
 }
 
 const activeAreaData = state => {
-  const area = state.activePage.activeArea
+  const area = _.get(state, 'activePage.activeArea', '')
   if (area === LayoutHelper.Const.MAIN_AREA) return state.activePage
 
   const sitePath = getFileSitePathByPath(state.activePageUrl)
@@ -408,6 +412,9 @@ const mutations = {
   [TOGGLE_IFRAME_DIALOG](state, payload) {
     Vue.set(state, 'iframeDialog', payload)
   },
+  [UPDATE_OPENED_WEBSITES](state, payload) {
+    Vue.set(state, 'openedWebsites', payload)
+  }
 }
 
 export default mutations
