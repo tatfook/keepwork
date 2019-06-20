@@ -344,6 +344,13 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .menu-text {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+    box-sizing: border-box;
+  }
 }
 .el-menu--horizontal {
   border: none;
