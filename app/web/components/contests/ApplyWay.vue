@@ -51,8 +51,9 @@
   &-notice {
     max-width: 930px;
     margin: 0 auto;
+    padding: 0 12px;
+    font-size: 18px;
     &-step {
-      font-size: 18px;
       &.red-step {
         color: #d90948;
       }
@@ -62,14 +63,14 @@
     }
   }
   &-time {
-    max-width: 700px;
+    max-width: 740px;
     margin: 0 auto 100px;
+    font-size: 20px;
     &-part {
       display: flex;
-      font-size: 20px;
       justify-content: center;
       &-name {
-        width: 166px;
+        width: 168px;
       }
       &-time {
         width: 144px;
@@ -79,6 +80,28 @@
       text-align: center;
       font-size: 18px;
       color: #657d96;
+      padding: 0 12px;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .apply-way {
+    &-bgpic {
+      display: none;
+    }
+    &-title {
+      img {
+        max-width: 84%;
+      }
+    }
+    &-notice {
+      font-size: 14px;
+    }
+    &-time {
+      font-size: 14px;
+      &-hint {
+        font-size: 12px;
+      }
     }
   }
 }
