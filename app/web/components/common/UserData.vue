@@ -32,7 +32,7 @@
       <el-col class="user-data-setting-operations-col">
         <dialog-operations @save='saveUserData' @close='handleClose'></dialog-operations>
       </el-col>
-      <sky-drive-manager-dialog :mediaLibrary='true' :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+      <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="false" :isNoMediaFileShow="false" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
     </el-row>
   </el-container>
 </template>

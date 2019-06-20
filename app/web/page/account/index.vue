@@ -23,6 +23,7 @@ import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import router from './account.router'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import accountModule from '@/store/account'
 import messageModule from '@/store/message'
@@ -50,6 +51,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     account: accountModule,
     message: messageModule

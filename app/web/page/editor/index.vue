@@ -33,6 +33,7 @@ import infiniteScroll from 'vue-infinite-scroll'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './editor.router'
 import editorModule from '@/store/editor'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
@@ -78,6 +79,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     gitlab: gitlabModule,
     editor: editorModule,

@@ -24,6 +24,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VueLazyload from 'vue-lazyload'
 import VueClipboard from 'vue-clipboard2'
 import router from './pbl.router'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import gitlabModule from '@/store/gitlab'
@@ -64,6 +65,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     pbl: pblModule,
     gitlab: gitlabModule,

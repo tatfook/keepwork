@@ -37,7 +37,7 @@
     "egg-scripts": "^2.9.1",
     "egg-validate": "^1.0.0",
     "egg-view-vue-ssr": "^3.0.5",
-    "element-ui": "^2.4.1",
+    "element-ui": "^2.9.1",
     "extend": "~3.0.0",
     "file-saver": "^2.0.1",
     "filesize": "^3.6.1",

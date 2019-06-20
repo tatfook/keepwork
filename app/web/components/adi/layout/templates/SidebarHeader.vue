@@ -1,6 +1,6 @@
 <template>
   <el-container class="fullscreen-template">
-    <el-aside width="400px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
+    <el-aside width="240px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
       <slot name="sidebar"></slot>
     </el-aside>
     <el-container>
@@ -22,12 +22,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.fullscreen-template{
+<style lang="scss" scoped>
+.fullscreen-template {
   .el-header,
-  .el-main,
-  .el-aside{
+  .el-aside {
     padding: 0;
+  }
+  .el-main {
+    padding: 0 32px;
   }
 }
 </style>
