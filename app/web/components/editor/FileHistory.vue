@@ -56,7 +56,8 @@ export default {
       isPreviewShow: true,
       isCodeShow: true,
       options: {
-        readOnly: 'nocursor',
+        readOnly: true,
+        cursorBlinkRate: -1,
         mode: 'markdown',
         theme: 'default',
         lineNumbers: true,
