@@ -253,9 +253,60 @@
             color: #212121;
             font-size: 20px;
           }
+          .el-step__description {
+            padding-right: 0;
+          }
           .el-step__description.is-finish {
             color: #212121;
             font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .contests-rules {
+    font-size: 14px;
+    &-title {
+      img {
+        max-width: 84%;
+      }
+    }
+    &-bgpic {
+      display: none;
+    }
+    &-explain {
+      padding: 0 12px;
+      &-item {
+        font-size: 14px;
+        display: block;
+      }
+    }
+    &-demand {
+      padding: 0 12px;
+      &-item {
+        font-size: 14px;
+        display: block;
+      }
+    }
+    &-participant {
+      padding: 0 12px;
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+    &-flow {
+      width: auto;
+      padding: 0 10px;
+      /deep/ .el-steps {
+        .el-step {
+          .el-step__main {
+            .el-step__title.is-finish {
+              font-size: 16px;
+            }
+            .el-step__description.is-finish {
+              font-size: 14px;
+            }
           }
         }
       }

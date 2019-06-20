@@ -86,6 +86,36 @@ export default {
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .contests-dynamic {
+    &-bgpic {
+      display: none;
+    }
+    &-part {
+      display: block;
+      margin: 16px;
+      &-left {
+        &-img {
+          width: 100%;
+          max-width: 400px;
+          height: calc((100vw - 28px) / 317 * 179);
+        }
+      }
+      &-right {
+        padding: 0;
+        &-notice {
+          font-size: 16px;
+        }
+        &-hint {
+          font-size: 14px;
+        }
+        &-time {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
 </style>
 
 
