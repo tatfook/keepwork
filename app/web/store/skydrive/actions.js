@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { removeQiniuUpload } from '@/api/skyDrive'
 import { props } from './mutations'
 
 let {
@@ -6,8 +7,7 @@ let {
   UPDATE_UPLOADING_FILE,
   ADD_NAME_CONFLICT_FILE,
   DELETE_UPLOADING_FILE,
-  DELETE_NAME_CONFLICT_FILE,
-  ADD_SUBSCRIPTION
+  DELETE_NAME_CONFLICT_FILE
 } = props
 
 const actions = {
@@ -33,15 +33,10 @@ const actions = {
   addNameConflictFile({ commit }, file) {
     commit(ADD_NAME_CONFLICT_FILE, file)
   },
-  addSubscription({ commit }, { filename, subscription }) {
-    commit(ADD_SUBSCRIPTION, { filename, subscription })
-  },
   removeFromUploadQue({ commit, getters }, file) {
     let { filename, state, isNameConflict } = file
-    let { subscriptions } = getters
     if (state === 'doing') {
-      let removingSubscription = _.get(subscriptions, filename)
-      removingSubscription && removingSubscription.unsubscribe()
+      removeQiniuUpload(filename)
     }
     if (isNameConflict) {
       commit(DELETE_NAME_CONFLICT_FILE, { filename })

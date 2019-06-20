@@ -40,12 +40,6 @@ const mutations = {
   },
   [DELETE_NAME_CONFLICT_FILE](state, { filename }) {
     Vue.delete(state.nameConflictFilesObj, filename)
-  },
-  [ADD_SUBSCRIPTION](state, { filename, subscription }) {
-    Vue.set(state, 'subscriptions', {
-      ...state.subscriptions,
-      [filename]: subscription
-    })
   }
 }
 

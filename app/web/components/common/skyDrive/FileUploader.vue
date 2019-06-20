@@ -164,10 +164,6 @@ export default {
       let self = this
       await this.userUploadFileToSkyDrive({
         file,
-        onStart(subscription) {
-          let filename = file.name
-          self.addSubscription({ filename, subscription })
-        },
         onProgress(progress) {
           self.changeUploadingState({
             file,
