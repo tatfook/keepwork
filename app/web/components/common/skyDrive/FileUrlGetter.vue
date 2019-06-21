@@ -111,6 +111,10 @@ export default {
     font-size: 14px;
     color: #fff;
   }
+}
+</style>
+<style lang="scss">
+.file-url-getter {
   &-messagebox {
     word-break: break-all;
   }
