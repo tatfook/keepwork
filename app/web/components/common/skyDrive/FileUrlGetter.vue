@@ -106,10 +106,8 @@ export default {
 .file-url-getter {
   padding: 0;
   color: inherit;
-  &-button {
-    padding: 9px 30px;
-    font-size: 14px;
-    color: #fff;
+  &:hover {
+    color: #3ba4ff;
   }
 }
 </style>

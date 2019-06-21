@@ -50,6 +50,9 @@ export default {
   &.is-disabled {
     color: #c0c4cc;
   }
+  &:hover {
+    color: #3ba4ff;
+  }
 }
 .iconfont {
   margin-right: 4px;
