@@ -188,7 +188,7 @@
   }
   &-title {
     text-align: center;
-    margin: 30px 0 0;
+    margin: 70px 0 0;
   }
   &-explain {
     max-width: 1020px;
