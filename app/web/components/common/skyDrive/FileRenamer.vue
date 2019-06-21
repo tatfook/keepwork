@@ -55,6 +55,7 @@ export default {
         this.$t('skydrive.newFilenamePromptMsg'),
         this.$t('common.rename'),
         {
+          closeOnClickModal: false,
           inputValue: bareFilename,
           confirmButtonText: this.$t('common.OK'),
           cancelButtonText: this.$t('common.Cancel'),
