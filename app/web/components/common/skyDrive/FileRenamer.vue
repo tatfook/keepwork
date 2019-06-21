@@ -99,6 +99,9 @@ export default {
   [class*='el-icon-'] + span {
     margin-left: 0;
   }
+  &:hover {
+    color: #3ba4ff;
+  }
 }
 .iconfont {
   margin-right: 4px;

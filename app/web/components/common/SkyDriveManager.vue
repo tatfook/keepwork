@@ -276,6 +276,9 @@ export default {
         margin-right: 0;
         display: inline-block;
         cursor: pointer;
+        &:hover{
+          color: #3ba4ff;
+        }
         .iconfont {
           margin-right: 8px;
         }
@@ -295,6 +298,9 @@ export default {
         font-size: 14px;
         line-height: 16px;
         color: #333;
+        &:hover {
+          color: #3ba4ff;
+        }
       }
       .active {
         color: #3ba4ff;
