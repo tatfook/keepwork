@@ -103,7 +103,6 @@ export default {
         this.$emit('resetTableSort')
       }
       file = file.raw || file
-      let fileIndex = this.uploadingFiles.length
       let waitingUploadFile = {
         cover: URL.createObjectURL(file),
         percent: 0,
@@ -130,7 +129,7 @@ export default {
       }
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) {
-        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
+        this.handleFilenameIllegal({ file, filenameValidateResult })
         waitingUploadFile = {
           ...waitingUploadFile,
           state: 'error',
@@ -142,9 +141,9 @@ export default {
       }
       this.waitingFiles.push(waitingUploadFile)
       this.addUploadingFile(waitingUploadFile)
-      await this.uploadFile(file, fileIndex)
+      await this.uploadFile(file)
     },
-    async handleFilenameIllegal({ file, fileIndex, filenameValidateResult }) {
+    async handleFilenameIllegal({ file, filenameValidateResult }) {
       await waitForMilliSeconds(Math.random() * 1000)
       this.$notify({
         title: this.$t('common.failure'),
@@ -160,7 +159,7 @@ export default {
         ? errMsg
         : true
     },
-    async uploadFile(file, fileIndex) {
+    async uploadFile(file) {
       if (!file) return
       let self = this
       await this.userUploadFileToSkyDrive({
