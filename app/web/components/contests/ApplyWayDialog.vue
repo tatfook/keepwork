@@ -52,12 +52,13 @@ export default {
     justify-content: center;
     padding-top: 60px;
     &-button {
-      padding: 12px;
+      padding: 24px;
       background: rgb(0, 65, 149);
       color: #fff;
       margin: 10px;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 20px;
     }
   }
 }
@@ -72,6 +73,14 @@ export default {
     }
     &-text {
       font-size: 18px;
+    }
+    &-buttons {
+      display: block;
+      padding-top: 20px;
+      &-button {
+        display: block;
+        text-align: center;
+      }
     }
   }
 }

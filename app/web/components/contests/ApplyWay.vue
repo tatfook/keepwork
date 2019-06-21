@@ -58,7 +58,7 @@ export default {
     //   left: 0;
     //   top: 120px;
     // }
-    // &.element_text_3 {
+    // &.element_text_3 {  
     //   left:  400px;
     //   bottom: 0px;
     // }
