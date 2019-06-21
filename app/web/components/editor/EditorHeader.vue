@@ -193,6 +193,7 @@ export default {
   data: function() {
     return {
       savePending: false,
+      refreshPending: false,
       isNewWebsiteDialogShow: false,
       isWebsiteSettingShow: false,
       dialogVisible: false,
@@ -225,6 +226,7 @@ export default {
       userProfile: 'user/profile',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo',
+      openedWebsites: 'openedWebsites',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
@@ -299,6 +301,15 @@ export default {
     isActivePageSaved() {
       let { saved } = this.activeAreaFile || {}
       return saved === false ? false : true
+    },
+    isActivePageNeedRefresh() {
+      const { fullPath = '', sitepath = '' } = this.activePageInfo
+      if (!fullPath) {
+        return false
+      }
+      const { saved = true } = this.activeAreaFile
+      // FIXME: 这个判断写的有问题
+      return saved && this.openedWebsites[sitepath][fullPath].updated
     }
   },
   methods: {

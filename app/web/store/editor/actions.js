@@ -252,7 +252,7 @@ const actions = {
   async openFile({ dispatch, commit }, { path, editorMode = true }) {
     let payload = await dispatch('loadFile', { path, editorMode })
     commit(ADD_OPENED_FILE, payload)
-    dispatch('joinTheRoom', { path })
+    dispatch('addOpenedWebsite', { path: getFileFullPathByPath(path) })
   },
   async refreshOpenedFile(
     { commit, dispatch, getters },
@@ -283,17 +283,20 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
     let {
       commit,
+      dispatch,
       state,
       rootGetters: { 'user/username': username }
     } = context
     commit(CLOSE_OPENED_FILE, { username, path: fullPath })
-
+    dispatch('closeOpenedWebsite', { path: fullPath })
     if (path === state.activePageUrl) {
       commit(SET_ACTIVE_PAGE, null)
     }
   },
-  closeAllOpenedFile({ commit, rootGetters }) {
+  closeAllOpenedFile({ commit, dispatch, rootGetters }) {
     let { 'user/username': username } = rootGetters
+    dispatch('closeAllOpenedWebsite')
+    console.log('hehe')
     commit(CLOSE_ALL_OPENED_FILE, { username })
   },
 
@@ -593,19 +596,21 @@ const actions = {
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)
   },
-  async joinTheRoom({ dispatch, getters: { openedFiles } }, { path = '' }) {
-    const websiteName = getFileSitePathByPath(path)
+  async joinTheRoom({ getters: { openedFiles } }, { websiteName, path = '' }) {
+    websiteName = websiteName || getFileSitePathByPath(path)
     socketInstance.emit('app/join', { room: websiteName })
   },
-  async leaveTheRoom({ dispatch, getters: { openedFiles } }, { path = '' }) {
-    const websiteName = getFileSitePathByPath(path)
+  async leaveTheRoom({ getters: { openedFiles } }, { websiteName, path = '' }) {
+    websiteName = websiteName || getFileSitePathByPath(path)
     socketInstance.emit('app/leave', { room: websiteName })
   },
   async broadcastTheRoom({ getters: { code }, rootGetters: { 'user/username': username } }, { path = '', type = 'update' }) {
     const websiteName = getFileSitePathByPath(path)
-    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path, username, code, type, time: Date.now() } })
+    const fullPath = getFileFullPathByPath(path)
+    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path: fullPath, username, code, type, timestamp: Date.now() } })
   },
-  addOpenedWebsite({ dispatch, getters: { openedWebsites } }, { websiteName, path }) {
+  addOpenedWebsite({ dispatch, getters: { openedWebsites } }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
     dispatch('updateOpenedWebsites', {
       ...openedWebsites,
       [websiteName]: {
@@ -613,12 +618,23 @@ const actions = {
         [path]: { updated: false }
       }
     })
+    dispatch('joinTheRoom', { websiteName, path })
   },
-  removeOpenedWebsite({ dispatch, getters: { openedWebsites } }, { websiteName, path }) {
-    const deletePath = _.get(openedWebsites, [websiteName, path], '')
-    if (deletePath) {
-      console.log(deletePath)
+  closeOpenedWebsite({ dispatch, getters: { openedWebsites } }, { websiteName, path }) {
+    websiteName = websiteName || getFileSitePathByPath(path)
+    const _openedWebsites = _.cloneDeep(openedWebsites)
+    _.unset(_openedWebsites, [websiteName, path])
+    dispatch('updateOpenedWebsites', _openedWebsites)
+    if (_.isEmpty(_openedWebsites[websiteName])) {
+      dispatch('leaveTheRoom', { websiteName, path })
     }
+  },
+  closeAllOpenedWebsite({ dispatch, getters: { openedWebsites } }) {
+    const openedWebsitesName = _.keys(openedWebsites)
+    _.forEach((openedWebsitesName), websiteName => {
+      dispatch('leaveTheRoom', { websiteName })
+    })
+    dispatch('updateOpenedWebsites', {})
   },
   updateOpenedWebsites({ commit, getters: { openedFiles } }, payload) {
     commit(UPDATE_OPENED_WEBSITES, payload)
@@ -640,11 +656,58 @@ const actions = {
       socketInstance.emit('app/join', { room: openedWebsitesName })
     }
   },
-  disposeData({ getters: { openedWebsites }, rootGetters: { 'user/username': username } }, data) {
+  disposeData({ dispatch, getters: { openedWebsites }, rootGetters: { 'user/username': localUsername } }, data) {
     const { payload } = data
-    if (payload.username !== username) {
-      console.warn(data)
+    const { type = 'update', username, path, code, websiteName } = payload
+    if (username === localUsername) {
+      // TODO: 如果username是自己，则自动同步操作
+      console.warn('同步操作😁')
+      dispatch(`async${type}`, payload)
+      return
     }
+    if (username && username !== localUsername) {
+      dispatch(`dispose${_.upperFirst(type)}`, payload)
+    }
+  },
+  asyncUpdate(context, payload) {
+    console.warn('async update')
+  },
+  disposeUpdate({ dispatch, getters: { openedFiles, activePageUrl, openedWebsites } }, payload) {
+    // FIXME: 优先级最高 😎
+    console.warn('update')
+    let { websiteName, path, ...rest } = payload
+    const fullPath = getFileFullPathByPath(path)
+    const fullActivePath = getFileFullPathByPath(activePageUrl)
+    if (openedFiles[fullPath]) {
+      console.log(`${fullPath} 有更新`)
+      console.log(activePageUrl)
+      console.log(activePageUrl === '/')
+      const flag = activePageUrl !== '/' && fullPath === fullActivePath
+      console.log(flag)
+      dispatch('updateOpenedWebsites', {
+        ...openedWebsites,
+        [websiteName]: {
+          ...openedWebsites[websiteName],
+          [fullPath]: { updated: true, ...rest }
+        }
+      })
+    }
+  },
+  disposeDelete(context, payload) {
+    // TODO:如果该文档正在编辑，改如何处理？
+    console.warn('delete')
+  },
+  disposeMove(context, payload) {
+    // TODO: 如果该文档正在编辑的情况下，被别人移动了，需要如何处理？ 1.如果已经保存，则更新目录树应该就能解决。 2.如果未保存，那么就麻烦了。
+    console.warn('move')
+  },
+  disposeRename(context, payload) {
+    // TODO: 如果文档正在编辑，然后又被重命名了
+    console.warn('rename')
+  },
+  disposeDestroyWebsite(context, payload) {
+    // TODO: 直接提示后删除
+    console.warn('destroyWebsite')
   }
 }
 

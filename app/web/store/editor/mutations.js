@@ -130,7 +130,7 @@ const activeAreaData = state => {
   const sitePath = getFileSitePathByPath(state.activePageUrl)
   const siteSetting = state.siteSettings[sitePath]
   const layout = LayoutHelper.getLayoutByPath(
-    siteSetting.siteLayoutConfig,
+    _.get(siteSetting, 'siteLayoutConfig'),
     state.activePageUrl
   )
 
