@@ -65,7 +65,7 @@ export default {
   }
   &-title {
     text-align: center;
-    margin: 30px 0 0;
+    margin: 70px 0 0;
   }
   &-notice {
     max-width: 930px;

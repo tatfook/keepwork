@@ -27,11 +27,14 @@
     <div class="contests-page-footer">
       <contests-footer></contests-footer>
     </div>
+    <apply-way-dialog v-if='showApplyDialog' :showApplyDialog='showApplyDialog' @close="closeApplyDialog"></apply-way-dialog>
   </div>
 </template>
 <script>
 import ContestsHeader from '@/components/contests/ContestsHeader'
 import ContestsFooter from '@/components/contests/ContestsFooter'
+import ApplyWayDialog from './ApplyWayDialog'
+
 export default {
   name: 'ContestsPage',
   data() {
@@ -54,12 +57,14 @@ export default {
         }
       ],
       currentSelected: 0,
-      topTextTimer: null
+      topTextTimer: null,
+      showApplyDialog: false
     }
   },
   components: {
     ContestsHeader,
-    ContestsFooter
+    ContestsFooter,
+    ApplyWayDialog
   },
   mounted() {
     this.topTextAnimation()
@@ -68,7 +73,8 @@ export default {
     topTextAnimation() {
       this.topTextTimer = setInterval(() => {
         let leftLen = this.$refs['topHintText'].style['left'].replace(/px/, '')
-        let winWidth = document.body.clientWidth || document.documentElement.clientWidth
+        let winWidth =
+          document.body.clientWidth || document.documentElement.clientWidth
         let comparisonValue = 840
         let winCompLeft = 800
         if (winWidth < 768) {
@@ -109,7 +115,10 @@ export default {
       }
     },
     toApply() {
-      window.open('http://paracraft.keepwork.com/download?lang=zh')
+      this.showApplyDialog = true
+    },
+    closeApplyDialog() {
+      this.showApplyDialog = false
     }
   },
   beforeDestroy() {
@@ -216,8 +225,6 @@ body {
         height: 109px;
         line-height: 109px;
         text-align: center;
-        font-family: 'KaiTi';
-        font-weight: bold;
         font-size: 24px;
         color: #13232f;
         cursor: pointer;

@@ -53,29 +53,29 @@
       <div class="contests-home-page-awards-box award_1">
         <div class="contests-home-page-awards-box-text">
           <p class="award-name">• 荣誉奖 •</p>
-          <p class="award-subname">汉字传播贡献奖</p>
+          <p class="award-subname" @click="showExplain(0)">汉字传播贡献奖</p>
           <p class="award-name">• 综合奖 •</p>
-          <p class="award-subname">最佳故事短片奖</p>
-          <p class="award-subname">最佳传播创意奖</p>
-          <p class="award-subname">最佳汉字气韵奖</p>
+          <p class="award-subname" @click="showExplain(1)">最佳故事短片奖</p>
+          <p class="award-subname" @click="showExplain(2)">最佳传播创意奖</p>
+          <p class="award-subname" @click="showExplain(3)">最佳汉字气韵奖</p>
           <p class="award-notice">注：优秀作品可在两个组别重复获奖</p>
         </div>
       </div>
       <div class="contests-home-page-awards-box award_2">
         <div class="contests-home-page-awards-box-text">
           <p class="award-name">• 综合奖 •</p>
-          <p class="award-subname">最佳故事短片奖</p>
+          <p class="award-subname" @click="showExplain(1)">最佳故事短片奖</p>
           <p class="award-name">• 单项奖 •</p>
-          <p class="award-subname">最佳视觉效果奖</p>
-          <p class="award-subname">最佳汉字解读奖</p>
-          <p class="award-subname">最佳场景设计奖</p>
+          <p class="award-subname" @click="showExplain(4)">最佳视觉效果奖</p>
+          <p class="award-subname" @click="showExplain(5)">最佳汉字解读奖</p>
+          <p class="award-subname" @click="showExplain(6)">最佳场景设计奖</p>
           <p class="award-notice">注：优秀作品可在两个组别重复获奖</p>
         </div>
       </div>
       <div class="contests-home-page-awards-box award_3">
         <div class="contests-home-page-awards-box-text">
-          <p class="award-subname">最佳组织奖</p>
-          <p class="award-subname">十佳人气奖</p>
+          <p class="award-subname" @click="showExplain(7)">最佳组织奖</p>
+          <p class="award-subname" @click="showExplain(8)">十佳人气奖</p>
           <p class="award-notice">◆特别奖从公开组和学生组所有参赛作品中评选产生。</p>
         </div>
       </div>
@@ -152,6 +152,11 @@
     <div class="contests-home-page-join" @click="toApply">
       <p class="contests-home-page-join-word">立即报名</p>
     </div>
+    <el-dialog :visible.sync="showAwardExplain" width="450px" :before-close="closeAwardExplain" custom-class="contests-home-page-explain-dialog">
+      <h3 class="contests-home-page-explain-dialog-title">{{awardExplainData[selectedIndex].name}}</h3>
+      <p class="contests-home-page-explain-dialog-text">{{awardExplainData[selectedIndex].explain}}</p>
+    </el-dialog>
+    <apply-way-dialog v-if='showApplyDialog' :showApplyDialog='showApplyDialog' @close="closeApplyDialog"></apply-way-dialog>
     <img class="contests-home-page-bgpic element_1" src="@/assets/contests/element_1.png" alt="">
     <img class="contests-home-page-bgpic element_2" src="@/assets/contests/element_2.png" alt="">
     <img class="contests-home-page-bgpic element_3" src="@/assets/contests/element_3.png" alt="">
@@ -162,11 +167,79 @@
   </div>
 </template>
 <script>
+import ApplyWayDialog from './ApplyWayDialog'
 export default {
   name: 'ContestsHomePage',
+  data() {
+    return {
+      showAwardExplain: false,
+      showApplyDialog: false,
+      awardExplainData: [
+        {
+          name: '汉字传播贡献奖',
+          explain:
+            '作品立意深远、内涵丰富，充分利用了Paracraft软件功能，完整演绎百家姓氏的内涵，为汉字的传播和传承打开了新思路，让更多的人了解汉字的魅力，进一步扩大了汉字的全球影响力。'
+        },
+        {
+          name: '最佳故事短片奖',
+          explain:
+            '基于NPL代表软件Paracraft和它的原生引擎，通过研究、实践充分应用NPL相关功能，以Paracraf 动画作品形式充分展现汉字的精髓。结合作品故事情节、场景设计、音乐音效等综合因素确定大奖。'
+        },
+        {
+          name: '最佳传播创意奖',
+          explain:
+            '通过Paracraft软件制作以汉字为创作蓝本的视频作品，巧妙融入或借鉴了汉字结构元素、汉语言文化 精髓等，创新了汉字的传播方式。'
+        },
+        {
+          name: '最佳汉字气韵奖',
+          explain:
+            '作品形神兼备，意境悠远，展现出独特的艺术风格和生生不息的生命力，积极向上，充满正能量，一定程度上体现出创作者的灵魂。'
+        },
+        {
+          name: '最佳视觉效果奖',
+          explain:
+            '作品镜头表现、剪辑衔接和特效制作表现俱佳，保持高度的艺术性，技巧性和高保真度，足以令受众获得愉悦的视觉享受。'
+        },
+        {
+          name: '最佳汉字解读奖',
+          explain:
+            '作品对百家姓氏某个姓具有较高的演绎水准，能够充分反映其起源、发展和内涵，并将其外延应用到现代科技、创意设计等方面。'
+        },
+        {
+          name: '最佳场景设计奖',
+          explain:
+            '使用Paracraft的建筑功能，以单人或多人的形式搭建场景。充分发挥Paracraft优势特色，结合自定义材质、自定义模型等功能，创作出以汉字结构、汉字内涵为蓝本的场景，搭建相关的动态场景，体现汉字美学和汉语言文化内涵。'
+        },
+        {
+          name: '最佳组织奖',
+          explain:
+            '大赛进行期间，Paracraft教学中在统筹协调、精心组织、密切配合等方面有突出贡献且取得优异成效的学校及教育机构。'
+        },
+        {
+          name: '十佳人气奖',
+          explain:
+            '是由媒体和大众评审组成评审团，共同由网络投票选出，其中网络投票占60%，媒体占40%；排名前十位的将获得本次大赛十佳人气奖。'
+        }
+      ],
+      selectedIndex: 0
+    }
+  },
+  components: {
+    ApplyWayDialog
+  },
   methods: {
+    closeAwardExplain() {
+      this.showAwardExplain = false
+    },
+    showExplain(index) {
+      this.selectedIndex = index
+      this.showAwardExplain = true
+    },
     toApply() {
-      window.open('http://paracraft.keepwork.com/download?lang=zh')
+      this.showApplyDialog = true
+    },
+    closeApplyDialog() {
+      this.showApplyDialog = false
     }
   }
 }
@@ -177,6 +250,27 @@ export default {
   position: relative;
   max-width: 1920px;
   margin: 0 auto;
+  /deep/ &-explain-dialog {
+    box-shadow: none;
+    background: url('../../assets/contests/awardExplain.png') no-repeat top
+      center;
+    min-height: 330px;
+    .el-dialog__header {
+    }
+    .el-dialog__body {
+      padding: 0 40px;
+    }
+    &-title {
+      font-size: 30px;
+      color: rgb(210, 72, 11);
+      border-bottom: 2px solid rgb(224, 225, 220);
+      text-align: center;
+      margin: 0 20px;
+    }
+    &-text {
+      font-size: 20px;
+    }
+  }
   &-bgpic {
     position: absolute;
     z-index: -999;
@@ -211,7 +305,7 @@ export default {
   }
   &-title {
     text-align: center;
-    margin: 30px 0 0;
+    margin: 70px 0 0;
   }
   &-paragraph {
     max-width: 928px;
@@ -227,7 +321,7 @@ export default {
     max-width: 970px;
     min-height: 228px;
     margin: 0 auto;
-    padding: 50px 12px;
+    padding: 50px 12px 0;
     background: url(../../assets/contests/paper.png) no-repeat top center;
     &-text {
       max-width: 780px;
@@ -305,6 +399,7 @@ export default {
           color: #fff;
           letter-spacing: 1px;
           margin: 7px 0;
+          cursor: pointer;
         }
         .award-notice {
           font-size: 16px;
@@ -396,6 +491,18 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .contests-home-page {
+    /deep/ &-explain-dialog {
+      width: 80% !important;
+      .el-dialog__body {
+        padding: 0 10px;
+      }
+      &-title {
+        font-size: 20px;
+      }
+      &-text {
+        font-size: 18px;
+      }
+    }
     &-title {
       img {
         max-width: 84%;
