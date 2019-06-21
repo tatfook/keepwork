@@ -35,11 +35,6 @@ export default {
     },
     uploadText: String
   },
-  data() {
-    return {
-      waitingFiles: []
-    }
-  },
   computed: {
     ...mapGetters({
       uploadingFiles: 'skydrive/uploadingFiles',
@@ -57,18 +52,9 @@ export default {
         return ''
       }
     },
-    waitingFileSize() {
-      return _.reduce(
-        this.waitingFiles,
-        (sum, file) => {
-          return sum + file.size
-        },
-        0
-      )
-    },
     unusedWithUpload() {
       let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
-      return total - used - this.uploadingFileSize - this.waitingFileSize
+      return total - used - this.uploadingFileSize
     }
   },
   methods: {
@@ -139,7 +125,6 @@ export default {
         this.addNameConflictFile(waitingUploadFile)
         return
       }
-      this.waitingFiles.push(waitingUploadFile)
       this.addUploadingFile(waitingUploadFile)
       await this.uploadFile(file)
     },
@@ -182,11 +167,6 @@ export default {
         file,
         updatedAt: new Date()
       })
-    }
-  },
-  watch: {
-    uploadingFiles() {
-      this.waitingFiles = []
     }
   }
 }
