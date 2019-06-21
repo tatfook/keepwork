@@ -43,6 +43,7 @@ export default {
   computed: {
     ...mapGetters({
       uploadingFiles: 'skydrive/uploadingFiles',
+      noFinishedUploadingFiles: 'skydrive/noFinishedUploadingFiles',
       uploadingFileSize: 'skydrive/uploadingFileSize',
       userSkyDriveInfo: 'user/skyDriveInfo',
       userSkyDriveFileList: 'user/skyDriveFileList'
@@ -153,7 +154,7 @@ export default {
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
-      return _.concat(this.uploadingFiles, this.userSkyDriveFileList).filter(
+      return _.concat(this.noFinishedUploadingFiles, this.userSkyDriveFileList).filter(
         ({ filename }) => filename.toLowerCase() === newFilename.toLowerCase()
       ).length
         ? errMsg
