@@ -43,7 +43,7 @@ export default {
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
       return this.userSkyDriveFileList.filter(
-        ({ filename }) => filename === newFilename
+        ({ filename }) => filename.toLowerCase() === newFilename.toLowerCase()
       ).length
         ? errMsg
         : true

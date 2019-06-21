@@ -50,7 +50,11 @@ const renderTemplate = (h, m, data, parentIndex) => {
           index={getIndexString(menuData.link, index)}
           style={parentIndex == 1 && m.itemStyle}
         >
-          <a target={m.menuTarget} href={menuData.link}>
+          <a
+            target={m.menuTarget}
+            href={menuData.link}
+            title={m.getNameMenu(menuData)}
+          >
             {m.getNameMenu(menuData)}
           </a>
         </el-menu-item>
@@ -68,6 +72,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
                 style={getMenuItemStyle(menuData.link)}
                 target={m.menuTarget}
                 href={menuData.link}
+                title={m.getNameMenu(menuData)}
               >
                 {m.getNameMenu(menuData)}
               </a>
@@ -88,7 +93,11 @@ const renderTemplate = (h, m, data, parentIndex) => {
             style={parentIndex == 1 && m.itemStyle}
           >
             <template slot="title">
-              <span class="menu-text" style={getMenuItemStyle(menuData.link)}>
+              <span
+                class="menu-text"
+                style={getMenuItemStyle(menuData.link)}
+                title={m.getNameMenu(menuData)}
+              >
                 {m.getNameMenu(menuData)}
               </span>
             </template>
@@ -112,6 +121,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             target={m.menuTarget}
             style={m.getItemStyle(parentIndex)}
             href={menuData.link}
+            title={m.getNameMenu(menuData)}
           >
             {m.getNameMenu(menuData)}
           </a>
@@ -134,6 +144,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
             target={m.menuTarget}
             style={m.getItemStyle(parentIndex)}
             href={menuData.link}
+            title={m.getNameMenu(menuData)}
           >
             {m.getNameMenu(menuData)}
           </a>
@@ -148,7 +159,12 @@ export default {
   render(h) {
     if (this.options.type === 'menu') {
       return (
-        <div class="comp-menu">
+        <div
+          class={{
+            'comp-menu-vertical': this.mode === 'vertical',
+            'comp-menu': true
+          }}
+        >
           <el-menu
             mode={this.mode}
             background-color={this.options.menuBackground}
@@ -302,16 +318,12 @@ a {
   a {
     display: inline-block;
     height: 100%;
-    padding-left: 40px;
-    padding-right: 40px;
     position: relative;
     z-index: 999;
   }
   .menu-text {
     display: inline-block;
     height: 100%;
-    padding-left: 40px;
-    padding-right: 40px;
     position: relative;
     z-index: 999;
   }
@@ -322,8 +334,22 @@ a {
       height: 100%;
       line-height: 50px;
       border: 0;
-      padding: 0;
     }
+  }
+}
+.comp-menu-vertical {
+  a {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .menu-text {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+    box-sizing: border-box;
   }
 }
 .el-menu--horizontal {

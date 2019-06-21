@@ -23,6 +23,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import VueClipboard from 'vue-clipboard2'
 import router from './profile.router'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import lessonModule from '@/store/lesson'
@@ -63,6 +64,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     pbl: pblModule,
     profile: profileModule,

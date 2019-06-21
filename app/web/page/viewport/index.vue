@@ -9,6 +9,7 @@ import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
 import editorModule from '@/store/editor'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import pblModule from '@/store/pbl'
@@ -34,6 +35,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     gitlab: gitlabModule,
     editor: editorModule,

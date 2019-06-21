@@ -1,6 +1,6 @@
 <template>
   <div class="table-type" v-loading='loading' droppable="true">
-    <el-table ref="skyDriveTable" :data="fileListWithUploading" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table v-if="fileListWithUploading.length" ref="skyDriveTable" :data="fileListWithUploading" :row-key="getRowKey" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
       <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
@@ -56,6 +56,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <file-list-empty v-if="!fileListWithUploading.length" :uploadText="uploadText" viewType="table" :uploadType="mediaFilterType"></file-list-empty>
   </div>
 </template>
 <script>
@@ -65,6 +66,7 @@ import FileDownloader from './FileDownloader'
 import FileDeleter from './FileDeleter'
 import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
+import FileListEmpty from './FileListEmpty'
 export default {
   name: 'tableType',
   props: {
@@ -72,7 +74,9 @@ export default {
     fileListWithUploading: {
       type: Array,
       required: true
-    }
+    },
+    uploadText: String,
+    mediaFilterType: String
   },
   data() {
     return {
@@ -87,20 +91,22 @@ export default {
       activePageInfo: 'activePageInfo'
     }),
     approvedMultipleSelectionResults() {
-      return this.multipleSelectionResults.filter(
-        ({ checked }) => Number(checked) === 1
-      ) || []
+      return (
+        this.multipleSelectionResults.filter(
+          ({ checked }) => Number(checked) === 1
+        ) || []
+      )
     },
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
       return (
-        selectedCount > 0 &&
-        selectedCount == this.fileListWithUploading.length
+        selectedCount > 0 && selectedCount == this.fileListWithUploading.length
       )
     }
   },
   methods: {
     ...mapActions({
+      skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue',
       userUseFileInSite: 'user/useFileInSite'
     }),
     handleClose({ file, url }) {
@@ -120,7 +126,10 @@ export default {
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
     },
     removeFromUploadQue(file) {
-      this.$emit('removeFromUploadQue', file)
+      this.skydriveRemoveFromUploadQue(file)
+    },
+    getRowKey(row) {
+      return row.filename + row.state
     }
   },
   filters: {
@@ -139,6 +148,7 @@ export default {
     }
   },
   components: {
+    FileListEmpty,
     FileDownloader,
     FileDeleter,
     FileRenamer,

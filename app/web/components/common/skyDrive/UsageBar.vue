@@ -9,12 +9,6 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'UsageBar',
-  props: {
-    uploadingFileSize: {
-      type: Number,
-      default: 0
-    }
-  },
   data() {
     return {
       skyDriveUsedColors: [
@@ -35,6 +29,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      uploadingFileSize: 'skydrive/uploadingFileSize',
       userSkyDriveInfo: 'user/skyDriveInfo'
     }),
     info() {

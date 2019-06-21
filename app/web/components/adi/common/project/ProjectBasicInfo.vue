@@ -10,13 +10,13 @@
           {{$t("project.created")}}
         </span>
         <span class="project-basic-info-more-viewcount">
-          <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit + 1}}
+          <i class="icon-browse_fill iconfont"></i>{{originProjectDetail.visit ? originProjectDetail.visit : 0}}
         </span>
         <span class="project-basic-info-more-starcount">
-          <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star}}
+          <i class="icon-like-fill iconfont"></i>{{originProjectDetail.star || 0}}
         </span>
         <span class="project-basic-info-more-commentcount">
-          <i class="icon-message_fill iconfont"></i>{{originProjectDetail.comment}}
+          <i class="icon-message_fill iconfont"></i>{{originProjectDetail.comment || 0}}
         </span>
       </p>
     </div>

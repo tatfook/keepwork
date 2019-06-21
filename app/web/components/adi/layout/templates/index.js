@@ -17,7 +17,6 @@ import Sidebar from './Sidebar'
 import SidebarHeader from './SidebarHeader'
 import SidebarHeaderFooter from './SidebarHeaderFooter'
 import SidebarContentMaxWidth from './SidebarContentMaxWidth'
-import SideBarMaxWidth from './SidebarMaxWidth'
 
 export default {
   basic: {
@@ -113,11 +112,5 @@ export default {
     sidebar: true,
     footer: false,
     component: SidebarContentMaxWidth
-  },
-  sidebar_max_width: {
-    header: false,
-    sidebar: true,
-    footer: false,
-    component: SideBarMaxWidth
   }
 }

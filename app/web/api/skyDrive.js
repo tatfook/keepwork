@@ -4,7 +4,9 @@ import uuid from 'uuid/v1'
 import Cookies from 'js-cookie'
 import jsrsasign from 'jsrsasign'
 
-export const qiniuUpload = async (options) => {
+let subscriptionObj = {}
+
+export const qiniuUpload = async options => {
   let result = await new Promise((resolve, reject) => {
     let { file, key, token, putExtra, config, onProgress } = options
     let subscription
@@ -19,8 +21,15 @@ export const qiniuUpload = async (options) => {
     }
     subscription = observable.subscribe(observer)
     options.onStart && options.onStart(subscription)
+    let filename = file.name
+    subscriptionObj[filename] = subscription
   })
   return result
+}
+
+export const removeQiniuUpload = filename => {
+  let removingSubscription = subscriptionObj[filename]
+  removingSubscription && removingSubscription.unsubscribe()
 }
 
 export const getFileContent = async file => {
@@ -34,7 +43,10 @@ export const getFileContent = async file => {
 }
 
 export const getFileExtension = (filename = '') =>
-  filename.split('.').pop().toLowerCase()
+  filename
+    .split('.')
+    .pop()
+    .toLowerCase()
 
 export const getFileKey = file => {
   const { userId } = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
@@ -59,11 +71,11 @@ export const remove = async ({ file: { id } }) => {
   await storage.files.delete({ id })
 }
 
-export const list = async (payload) => {
+export const list = async payload => {
   return storage.files.list(payload)
 }
 
-export const info = async (payload) => {
+export const info = async payload => {
   return storage.files.statistics(payload)
 }
 
@@ -80,6 +92,7 @@ export const getFileRawUrl = async ({ fileId }) => {
 }
 
 export default {
+  removeQiniuUpload,
   upload,
   remove,
   list,

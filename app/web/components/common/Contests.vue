@@ -14,7 +14,7 @@
         <img src="@/assets/contests/contest_icon.png" alt="">
       </span>
     </div>
-    <div class="contests-hint">
+    <div class="contests-hint" v-if="false">
       全国青少年科技创新大赛、全国青少年科学影像节、全国中小学信息技术创新与实践活动，每年都会定期举办，你可以提前准备明年的参赛作品，使用Paracraft制作的作品参加全国性赛事，请与我们联系，有惊喜大礼等你拿。<span class="contests-hint-contact">(联系电话：123 4567 7890)</span>
     </div>
     <div class="contests-games">
@@ -42,7 +42,7 @@
         <p class="contests-games-box-subject">计算机科学</p>
         <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 截止日期：2019/5/30前</p>
       </div>
-      <div class="contests-games-box" @click="goRelatedLinks('/NPL')"  v-if="currentNPLgameInfo.no !== 0">
+      <div class="contests-games-box" @click="goRelatedLinks('/NPL')" v-if="currentNPLgameInfo.no !== 0">
         <div class="contests-games-box-top">
           <!-- <img class="contests-games-box-top-img" src="@/assets/contests/c.png" alt=""> -->
           <p class="contests-games-box-top-text">NPL大赛第{{currentNPLgameInfo.no}}期</p>

@@ -25,6 +25,7 @@ import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import router from './viewer.router'
 import VueI18n from 'vue-i18n'
+import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
 import lessonModule from '@/store/lesson'
@@ -71,6 +72,7 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
+    skydrive: skydriveModule,
     user: userModule,
     pbl: pblModule,
     lesson: lessonModule,
