@@ -222,6 +222,9 @@ export default {
     mode() {
       return this.options.mode
     },
+    isDefaultOpenAll() {
+      return this.options.isDefaultOpenAll
+    },
     data() {
       return this.properties.data
     },
@@ -251,9 +254,20 @@ export default {
     getItemStyle(parentIndex) {
       return parentIndex == 1 ? this.getItemTopStyle : this.getItemOtherStyle
     },
+    openAll() {
+      _.forEach(this.indexLinks, (indexLinkVal, key) => {
+        let parentKey = indexLinkVal && indexLinkVal.parentIndex
+        parentKey &&
+          _.split(parentKey, '-').length > 1 &&
+          this.$refs[this.menuRef].open(parentKey)
+      })
+    },
     setMenuOpend() {
       if (this.mode !== 'vertical') {
         return
+      }
+      if (this.isDefaultOpenAll) {
+        this.openAll()
       }
       let nowPageLink = window.location.href
       let findedIndexLink = _.find(this.indexLinks, indexLinkObj => {
@@ -340,7 +354,7 @@ a {
 .comp-menu-vertical {
   a {
     display: block;
-    max-width: 100%;
+    max-width: calc(100% - 14px);
     overflow: hidden;
     text-overflow: ellipsis;
   }
