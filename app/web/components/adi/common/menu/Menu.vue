@@ -354,9 +354,14 @@ a {
 .comp-menu-vertical {
   a {
     display: block;
-    max-width: calc(100% - 14px);
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .el-submenu__title {
+    a {
+      max-width: calc(100% - 14px);
+    }
   }
   .menu-text {
     max-width: 100%;
