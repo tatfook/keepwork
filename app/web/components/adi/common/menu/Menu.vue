@@ -384,7 +384,7 @@ a {
     .el-submenu__title {
       i {
         margin-left: -20px;
-        color: #ccc;
+        color: #909399;
       }
     }
   }
