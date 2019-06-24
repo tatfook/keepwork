@@ -57,7 +57,7 @@
           <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
           <div slot="reference" class="user-message-icon-container">
             <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" :max="99" class="user-message-badge">
-              <i class="iconfont icon-message-fill user-message-icon"></i>消息
+              <i class="iconfont icon-message-fill user-message-icon"></i>{{$t('message.message')}}
             </el-badge>
           </div>
         </el-popover>
@@ -66,8 +66,7 @@
         <el-dropdown placement="bottom">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>
-            <!-- <i class="el-icon-caret-bottom right-icon right-icon-tool"></i> -->
-            工具
+            {{$t('common.tools')}}
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
@@ -97,10 +96,10 @@
         </el-dropdown>
       </el-menu-item>
       <el-menu-item class="hidden-xs-only pull-right common-header-menu-download right-icon-item" @click="downloadParacraft()">
-        <i class="iconfont icon-xiazai"></i>下载
+        <i class="iconfont icon-xiazai"></i>{{$t('common.download')}}
       </el-menu-item>
       <el-menu-item class="hidden-xs-only pull-right common-header-menu-ranking right-icon-item" @click="goRanking">
-        <i class="iconfont icon-trophy-fill"></i>下载
+        <i class="iconfont icon-trophy-fill"></i>{{$t('common.ranking')}}
       </el-menu-item>
       <el-menu-item class="menu-searchbar" index='10'>
         <search-bar></search-bar>
@@ -443,7 +442,7 @@ export default {
 }
 .el-dropdown {
   height: 60px;
-  // line-height: 60px;
+  line-height: 58px;
 }
 .el-dropdown-menu {
   font-size: 14px;
@@ -509,6 +508,9 @@ export default {
 <style lang="scss">
 .user-message-popper {
   padding: 0px;
+  .popper__arrow {
+    display: none !important;
+  }
   .user-message-main {
     height: 250px;
     padding: 12px 0;
