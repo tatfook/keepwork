@@ -143,7 +143,8 @@ const activeAreaData = state => {
 }
 
 const activeModList = state => {
-  return activeAreaData(state).modList
+  const activeArea = activeAreaData(state)
+  return _.get(activeArea, 'modList')
 }
 
 const mutations = {

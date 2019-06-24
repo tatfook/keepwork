@@ -67,7 +67,6 @@ const getGitlabFileParams = async (
     content
   })
   let path = getFileFullPathByPath(inputPath)
-
   return { username, name, gitlab, options, path }
 }
 
@@ -131,16 +130,16 @@ const actions = {
     let result = await gitlab.getFile({ projectPath, fullPath, useCache })
     return result
   },
-  async readFile({ dispatch }, { path, editorMode }) {
+  async readFile({ dispatch }, { path, editorMode, showVersion }) {
     if (editorMode) {
-      await dispatch('readFileForOwner', { path }).catch(e =>
+      await dispatch('readFileForOwner', { path, showVersion }).catch(e =>
         dispatch('readFileForGuest', { path, forceAsGuest: true })
       )
     } else {
       await dispatch('readFileForGuest', { path })
     }
   },
-  async readFileForOwner(context, { path: inputPath }) {
+  async readFileForOwner(context, { path: inputPath, showVersion }) {
     let { commit } = context
     let { gitlab, path, options } = await getGitlabFileParams(context, {
       path: inputPath
@@ -150,7 +149,7 @@ const actions = {
       .split('/')
       .slice(0, 2)
       .join('/')
-    let file = await gitlab.getFile({ projectPath, fullPath: path })
+    let file = await gitlab.getFile({ projectPath, fullPath: path, showVersion })
     let markdownExtraLineToCheck404 = /\.md$/.test(path) ? '\n' : ''
     let payload = {
       path,
@@ -299,6 +298,7 @@ const actions = {
         useCache: false
       })
     }
+    dispatch('broadcastTheOperation', { path, type: 'create' })
   },
   async createMultipleFile(context, { projectName, files }) {
     const { gitlab } = await getGitlabFileParams(context, { path: '' })
@@ -385,6 +385,7 @@ const actions = {
       path: `${username}/${name}`,
       useCache: false
     })
+    // TODO: 删除文件夹的同步
   },
   async removeFile(context, { path }) {
     let { commit, dispatch } = context
@@ -392,7 +393,6 @@ const actions = {
       path
     })
     await gitlab.deleteFile(path, options)
-
     let payload = { path, branch: options.branch }
     commit(REMOVE_FILE_SUCCESS, payload)
 
@@ -402,6 +402,7 @@ const actions = {
       path: `${username}/${name}`,
       useCache: false
     })
+    dispatch('broadcastTheOperation', { path, type: 'delete' })
   },
   async uploadFile(
     { dispatch, rootGetters, getters },
@@ -451,6 +452,9 @@ const actions = {
     } catch (e) {
       console.error(e)
     }
+  },
+  broadcastTheOperation({ dispatch }, { path, type = 'update' }) {
+    dispatch('broadcastTheRoom', { path, type }, { root: true })
   }
 }
 

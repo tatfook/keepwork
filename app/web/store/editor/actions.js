@@ -155,7 +155,6 @@ const actions = {
         await dispatch('saveSiteConfigPage', pageData)
       }
     }
-    dispatch('broadcastTheRoom', { path: activePageUrl, type: 'update' })
   },
   async savePageByPath(
     {
@@ -169,6 +168,7 @@ const actions = {
     if (!saved) {
       await dispatch('gitlab/saveFile', { content, path }, { root: true })
       dispatch('updateOpenedFile', { saved: true, path })
+      dispatch('broadcastTheRoom', { path, type: 'update' })
     }
   },
 
@@ -227,17 +227,16 @@ const actions = {
   // Files
   async loadFile(
     { commit, dispatch, rootGetters, getters },
-    { path, editorMode = true }
+    { path, editorMode = true, showVersion = false }
   ) {
-    await dispatch('gitlab/readFile', { path, editorMode }, { root: true })
+    await dispatch('gitlab/readFile', { path, editorMode, showVersion }, { root: true })
     let {
       'gitlab/getFileByPath': gitlabGetFileByPath,
       'user/username': username
     } = rootGetters
     let file = gitlabGetFileByPath(path)
     if (!file) return
-
-    let { content } = file
+    let { content, _id, commit: _commit } = file
 
     let fullPath = getFileFullPathByPath(path)
     let timestamp = Date.now()
@@ -245,12 +244,12 @@ const actions = {
     let commitPayload = {
       username,
       path: fullPath,
-      data: { timestamp, path, content, saved }
+      data: { timestamp, path, content, saved, _id, ..._commit }
     }
     return commitPayload
   },
   async openFile({ dispatch, commit }, { path, editorMode = true }) {
-    let payload = await dispatch('loadFile', { path, editorMode })
+    let payload = await dispatch('loadFile', { path, editorMode, showVersion: true })
     commit(ADD_OPENED_FILE, payload)
     dispatch('addOpenedWebsite', { path: getFileFullPathByPath(path) })
   },
@@ -296,7 +295,6 @@ const actions = {
   closeAllOpenedFile({ commit, dispatch, rootGetters }) {
     let { 'user/username': username } = rootGetters
     dispatch('closeAllOpenedWebsite')
-    console.log('hehe')
     commit(CLOSE_ALL_OPENED_FILE, { username })
   },
 
@@ -607,7 +605,7 @@ const actions = {
   async broadcastTheRoom({ getters: { code }, rootGetters: { 'user/username': username } }, { path = '', type = 'update' }) {
     const websiteName = getFileSitePathByPath(path)
     const fullPath = getFileFullPathByPath(path)
-    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path: fullPath, username, code, type, timestamp: Date.now() } })
+    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path: fullPath, username, content: code, type, timestamp: Date.now() } })
   },
   addOpenedWebsite({ dispatch, getters: { openedWebsites } }, { path }) {
     const websiteName = getFileSitePathByPath(path)
@@ -657,20 +655,44 @@ const actions = {
     }
   },
   disposeData({ dispatch, getters: { openedWebsites }, rootGetters: { 'user/username': localUsername } }, data) {
-    const { payload } = data
-    const { type = 'update', username, path, code, websiteName } = payload
-    if (username === localUsername) {
-      // TODO: 如果username是自己，则自动同步操作
-      console.warn('同步操作😁')
-      dispatch(`async${type}`, payload)
+    const { payload, meta } = data
+    const { type = 'update', username } = payload
+    if (username === localUsername && meta.client !== socketInstance.id) {
+      dispatch(`async${_.upperFirst(type)}`, payload)
       return
     }
     if (username && username !== localUsername) {
       dispatch(`dispose${_.upperFirst(type)}`, payload)
     }
   },
-  asyncUpdate(context, payload) {
-    console.warn('async update')
+  async asyncUpdate({ dispatch, commit, getters: { openedFiles, activePageUrl } }, { path, username, content, timestamp }) {
+    if (_.includes(_.keys(openedFiles), path)) {
+      commit(UPDATE_OPENED_FILE, { data: { content, path, save: true, timestamp }, path, username })
+      if (getFileFullPathByPath(activePageUrl) === path) {
+        dispatch('refreshModList')
+      }
+    }
+  },
+  async asyncDelete({ dispatch, getters: { activePageUrl } }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    const fullPath = getFileFullPathByPath(path)
+    const activeFullPath = getFileFullPathByPath(activePageUrl)
+    if (fullPath === activeFullPath) {
+      dispatch('setActivePage', { path: '/' })
+      window.history && window.history.replaceState(null, null, '/ed')
+    }
+    dispatch('closeOpenedFile', { path: fullPath })
+    dispatch('gitlab/getRepositoryTree', {
+      path: websiteName,
+      useCache: false
+    })
+  },
+  async asyncCreate({ dispatch }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    dispatch('gitlab/getRepositoryTree', {
+      path: websiteName,
+      useCache: false
+    })
   },
   disposeUpdate({ dispatch, getters: { openedFiles, activePageUrl, openedWebsites } }, payload) {
     // FIXME: 优先级最高 😎
