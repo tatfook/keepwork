@@ -5,12 +5,12 @@
       汉字是中华民族的文化瑰宝，是传颂中华文明的基本符号，是传承中华民族精神的血脉基因，而姓氏文化精粹《百家姓》作为中华传统文化经典国学，记录着祖先一脉相承的智慧，是蒙学教育的识字读本。人工智能时代正在开启，编程教育席卷而来，呼吁用科技去创造未来。
     </p>
     <p class="contests-home-page-paragraph">
-      为了让中华民族优秀传统文化跳动时代的脉搏，2019年，大富配天集团携手中视科华举办“用计算机程序让汉字活起来 走向世界”内容创作大赛，面向全球征集 以中国自主原创的3D动画和编程软件Paracraft（创意空间）软件为创作工具，以《百家姓》的姓氏文化演绎为内容的视频作品。通过本届大赛用计算机代码激活汉字的灵动性，让汉字在人工智能时代独领风骚，让汉字的方块构造演绎出国人的刚正不阿的气骨，续写民族之魂。
+      为了让中华民族优秀传统文化跳动时代的脉搏，2019年，大富配天集团携手中视科华举办“用计算机程序让汉字活起来 走向世界”内容创作大赛，面向全球征集以中国自主原创的3D动画和编程软件Paracraft（创意空间）软件为创作工具，以《百家姓》的姓氏文化演绎为内容的视频作品。通过本届大赛用计算机代码激活汉字的灵动性，让汉字在人工智能时代独领风骚，让汉字的方块构造演绎出国人的刚正不阿的气骨，续写民族之魂。
     </p>
     <div class="contests-home-page-brief">
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·大赛主题：</span><span class="contests-home-page-brief-text-right">用计算机程序让汉字活起来走向世界。</span></p>
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·创作内容：</span><span class="contests-home-page-brief-text-right">利用自主原创的3D动画、编程软件Paracraft创意空间围绕《百家姓》创作能够充分体现汉字姓氏文化的视频短片。</span></p>
-      <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·指定创作工具：</span><span class="contests-home-page-brief-text-right">Paracraft创意空间<a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="download-paracraft">下载Paracraft</a></span></p>
+      <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·指定创作工具：</span><span class="contests-home-page-brief-text-right">Paracraft创意空间<a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="download-paracraft">下载Paracraft创意空间</a></span></p>
     </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_2.png" alt=""></h3>
     <div class="contests-home-page-progress">
@@ -86,25 +86,25 @@
         <div class="contests-home-page-sponsor-item-img">
           <img src="@/assets/contests/big_1.png" alt="">
         </div>
-        <p>国际智能创意大奖赛组委会</p>
+        <p class="contests-home-page-sponsor-item-name">国际智能创意大奖赛组委会</p>
       </div>
       <div class="contests-home-page-sponsor-item">
         <div class="contests-home-page-sponsor-item-img">
           <img src="@/assets/contests/big_2.png" alt="">
         </div>
-        <p>深圳市大富配天投资有限公司</p>
+        <p class="contests-home-page-sponsor-item-name">深圳市大富配天投资有限公司</p>
       </div>
       <div class="contests-home-page-sponsor-item">
         <div class="contests-home-page-sponsor-item-img">
           <img src="@/assets/contests/big_3.png" alt="">
         </div>
-        <p>深圳市大富科技股份有限公司</p>
+        <p class="contests-home-page-sponsor-item-name">深圳市大富科技股份有限公司</p>
       </div>
       <div class="contests-home-page-sponsor-item">
         <div class="contests-home-page-sponsor-item-img">
           <img src="@/assets/contests/big_4.png" alt="">
         </div>
-        <p>中视科华文产中心</p>
+        <p class="contests-home-page-sponsor-item-name">中视科华文产中心</p>
       </div>
     </div>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_5.png" alt=""></h3>
@@ -188,7 +188,7 @@ export default {
         {
           name: '最佳传播创意奖',
           explain:
-            '通过Paracraft软件制作以汉字为创作蓝本的视频作品，巧妙融入或借鉴了汉字结构元素、汉语言文化 精髓等，创新了汉字的传播方式。'
+            '通过Paracraft软件制作以汉字为创作蓝本的视频作品，巧妙融入或借鉴了汉字结构元素、汉语言文化精髓等，创新了汉字的传播方式。'
         },
         {
           name: '最佳汉字气韵奖',
@@ -436,6 +436,9 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      &-name {
+        text-align: center;
       }
     }
   }

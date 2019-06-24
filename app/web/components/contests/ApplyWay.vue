@@ -11,7 +11,7 @@
       <p class="apply-way-notice-step red-step">7、如果忘记账号密码，请点此<a class="apply-way-notice-step-link" @click="resetPwd">重置</a>。</p>
       <p class="apply-way-notice-step red-step">8、资格赛需要注册该场比赛后才能参加。</p>
     </div>
-    <h3 class="apply-way-title"><img src="@/assets/contests/报名须知.png" alt=""></h3>
+    <h3 class="apply-way-title"><img src="@/assets/contests/大赛时间.png" alt=""></h3>
     <div class="apply-way-time">
       <p class="apply-way-time-part"><span class="apply-way-time-part-name">大赛时间</span><span class="apply-way-time-part-time">2019年4月-12月</span></p>
       <p class="apply-way-time-part"><span class="apply-way-time-part-name">作品提交截止时间</span><span class="apply-way-time-part-time">2019年11月30日</span></p>
