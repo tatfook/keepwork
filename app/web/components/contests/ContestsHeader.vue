@@ -6,7 +6,7 @@
         <li class="contests-header-left-menu-item"><img src="@/assets/contests/little_2.png" alt=""></li>|
         <li class="contests-header-left-menu-item"><img src="@/assets/contests/little_5.png" alt=""></li>|
         <li class="contests-header-left-menu-item"><img src="@/assets/contests/little_4.png" alt=""></li><span class="phone-menu-item">|</span>
-        <li class="contests-header-left-menu-item phone-menu-item"><img src="@/assets/contests/little_3.png" alt="">官方指定创作软件：paracraft创意空间</li>
+        <li class="contests-header-left-menu-item phone-menu-item"><img src="@/assets/contests/little_3.png" alt="">官方指定创作软件：Paracraft创意空间</li>
       </ul>
     </div>
     <div class="contests-header-phone-suggest">

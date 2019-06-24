@@ -15,7 +15,7 @@
           2.最佳故事短片奖：
         </span>
         <span class="contests-rules-explain-item-right">
-          基于NPL代表软件Paracraft和它的原生引擎，通过研究、实践充分应用NPL相关功能，以Paracraf 动画作品形式充分展现汉字的精髓。结合作品故事情节、场景设计、音乐音效等综合因素确定大奖。
+          基于NPL代表软件Paracraft和它的原生引擎，通过研究、实践充分应用NPL相关功能，以Paracraf动画作品形式充分展现汉字的精髓。结合作品故事情节、场景设计、音乐音效等综合因素确定大奖。
         </span>
       </p>
       <p class="contests-rules-explain-item">
@@ -23,7 +23,7 @@
           3.最佳传播创意奖：
         </span>
         <span class="contests-rules-explain-item-right">
-          通过Paracraft软件制作以汉字为创作蓝本的视频作品，巧妙融入或借鉴了汉字结构元素、汉语言文化 精髓等，创新了汉字的传播方式。
+          通过Paracraft软件制作以汉字为创作蓝本的视频作品，巧妙融入或借鉴了汉字结构元素、汉语言文化精髓等，创新了汉字的传播方式。
         </span>
       </p>
       <p class="contests-rules-explain-item">
