@@ -4,7 +4,7 @@
     <span v-if="ranking && level>=3" class="project-cell-medal-4">{{level+1}}</span>
     <div class="project-cell-cover" @click="goProjectDetail(project)">
       <video v-if="(project.extra && project.extra.videoUrl)" class="project-cell-cover-img" controls="controls" :src="(project.extra && project.extra.videoUrl) || ''"></video>
-      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" alt="">
+      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" :alt="project.name">
       <div class="video-mask"></div>
       <span class="project-cell-cover-tag" v-if='showRate && showProjectRate'>{{projectRate}}</span>
     </div>
@@ -28,9 +28,9 @@
       <span>{{project.comment}}</span>
     </div>
     <div class="project-cell-author">
-      <a :href="`/u/${(project.user && project.user.username) || '未命名'}`" target="_blank" class="project-cell-author-name">
-        <img :src="(project.user && project.user.portrait) || default_portrait" alt="portrait">
-        <span class="username" :title="(project.user && project.user.username) || '未命名'">{{(project.user && project.user.username) || '未命名'}}</span>
+      <a :href="`/u/${projectUsername}`" target="_blank" class="project-cell-author-name">
+        <img :src="(project.user && project.user.portrait) || default_portrait" :alt="project.user && project.user.username">
+        <span class="username" :title="projectUsername">{{projectUsername}}</span>
       </a>
       <div class="project-cell-author-time">
         <p class="project-cell-author-time-text" :title="updatedAtTime">{{isEn ? $t('common.update')+'d' : ''}} {{relativeTime(project.updatedAt)}}{{isEn ? '' : $t('common.update')}}</p>
@@ -89,7 +89,8 @@ export default {
     },
     updatedAtTime() {
       return (
-        (this.isEn ? this.$t('common.update') + 'd' : '') + ' ' +
+        (this.isEn ? this.$t('common.update') + 'd' : '') +
+        ' ' +
         this.relativeTime(this.project.updatedAt) +
         (this.isEn ? '' : this.$t('common.update'))
       )
@@ -118,6 +119,9 @@ export default {
         this.projectRate > 0 &&
         _.get(this.project.extra.rate, 'count', 0) >= 8
       )
+    },
+    projectUsername() {
+      return _.get(this.project, 'user.username', '未命名')
     }
   },
   methods: {
