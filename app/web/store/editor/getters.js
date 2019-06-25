@@ -14,6 +14,12 @@ const getters = {
   openedFiles: (state, { 'user/username': username }) =>
     state.openedFiles[username] || {},
   openedWebsites: state => state.openedWebsites,
+  isActivePageHasConflict: (state, { activePageUrl, openedWebsites }) => {
+    const fullPath = getFileFullPathByPath(activePageUrl)
+    const websiteName = getFileSitePathByPath(activePageUrl)
+    const currentPage = _.get(openedWebsites, [websiteName, fullPath], {})
+    return _.get(openedWebsites, [websiteName, fullPath, 'version'], 0) < _.get(currentPage, 'updated.commit.version', 0)
+  },
   showOpenedFiles: (state, { openedFiles, 'user/personalAndContributedSiteNameList': allSiteNameList }) => {
     let _openedKeys = _.filter(_.keys(openedFiles), key => allSiteNameList.includes(key.split('/')[1]))
     let _openedFiles = _.pick(openedFiles, _openedKeys)

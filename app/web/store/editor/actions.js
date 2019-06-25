@@ -166,9 +166,9 @@ const actions = {
     if (!path) return
     let { content, saved } = getOpenedFileByPath(path)
     if (!saved) {
-      await dispatch('gitlab/saveFile', { content, path }, { root: true })
+      const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
       dispatch('updateOpenedFile', { saved: true, path })
-      dispatch('broadcastTheRoom', { path, type: 'update' })
+      dispatch('broadcastTheRoom', { path, type: 'update', commit })
     }
   },
 
@@ -257,8 +257,9 @@ const actions = {
     { commit, dispatch, getters },
     { path, editorMode = true }
   ) {
-    let payload = await dispatch('loadFile', { path, editorMode })
+    let payload = await dispatch('loadFile', { path, editorMode, showVersion: true })
     commit(UPDATE_OPENED_FILE, payload)
+    dispatch('addOpenedWebsite', { path: getFileFullPathByPath(path) })
     let fullPath = getFileFullPathByPath(path)
     if (getFileFullPathByPath(getters.activePageUrl) === fullPath) {
       dispatch('refreshModList')
@@ -602,66 +603,97 @@ const actions = {
     websiteName = websiteName || getFileSitePathByPath(path)
     socketInstance.emit('app/leave', { room: websiteName })
   },
-  async broadcastTheRoom({ getters: { code }, rootGetters: { 'user/username': username } }, { path = '', type = 'update' }) {
+  async broadcastTheRoom({ getters: { code }, rootGetters: { 'user/username': username } }, { path = '', type = 'update', ...rest }) {
     const websiteName = getFileSitePathByPath(path)
     const fullPath = getFileFullPathByPath(path)
-    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path: fullPath, username, content: code, type, timestamp: Date.now() } })
+    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path: fullPath, username, content: code, type, timestamp: Date.now(), ...rest } })
   },
-  addOpenedWebsite({ dispatch, getters: { openedWebsites } }, { path }) {
+  addOpenedWebsite({ commit, dispatch, getters: { openedWebsites, openedFiles } }, { path }) {
     const websiteName = getFileSitePathByPath(path)
-    dispatch('updateOpenedWebsites', {
+    const fullPath = getFileFullPathByPath(path)
+    commit(UPDATE_OPENED_WEBSITES, {
       ...openedWebsites,
       [websiteName]: {
         ...openedWebsites[websiteName],
-        [path]: { updated: false }
+        [path]: openedFiles[fullPath]
       }
     })
     dispatch('joinTheRoom', { websiteName, path })
   },
-  closeOpenedWebsite({ dispatch, getters: { openedWebsites } }, { websiteName, path }) {
+  closeOpenedWebsite({ commit, dispatch, getters: { openedWebsites } }, { websiteName, path }) {
     websiteName = websiteName || getFileSitePathByPath(path)
     const _openedWebsites = _.cloneDeep(openedWebsites)
     _.unset(_openedWebsites, [websiteName, path])
-    dispatch('updateOpenedWebsites', _openedWebsites)
     if (_.isEmpty(_openedWebsites[websiteName])) {
+      _.unset(_openedWebsites, [websiteName])
       dispatch('leaveTheRoom', { websiteName, path })
     }
+    commit(UPDATE_OPENED_WEBSITES, _openedWebsites)
   },
-  closeAllOpenedWebsite({ dispatch, getters: { openedWebsites } }) {
+  closeAllOpenedWebsite({ commit, dispatch, getters: { openedWebsites } }) {
     const openedWebsitesName = _.keys(openedWebsites)
     _.forEach((openedWebsitesName), websiteName => {
       dispatch('leaveTheRoom', { websiteName })
     })
-    dispatch('updateOpenedWebsites', {})
-  },
-  updateOpenedWebsites({ commit, getters: { openedFiles } }, payload) {
-    commit(UPDATE_OPENED_WEBSITES, payload)
+    commit(UPDATE_OPENED_WEBSITES, {})
   },
   initSocket({ dispatch, rootGetters: { 'user/token': token } }) {
     createSocket({ token, callback: data => dispatch('disposeData', data) })
     dispatch('recoverDataAndSocket')
   },
-  recoverDataAndSocket({ dispatch, getters: { openedFiles } }) {
+  async recoverDataAndSocket({ commit, dispatch, getters: { openedFiles } }) {
     const openedPagesName = _.keys(openedFiles)
     const websitesGroup = _.reduce(openedPagesName, (group, path) => {
       const websiteName = getFileSitePathByPath(path)
-      _.set(group, [websiteName, path], { updated: false })
+      const fullPath = getFileFullPathByPath(path)
+      _.set(group, [websiteName, path], openedFiles[fullPath])
       return group
     }, {})
-    dispatch('updateOpenedWebsites', websitesGroup)
+    commit(UPDATE_OPENED_WEBSITES, websitesGroup)
     const openedWebsitesName = _.keys(websitesGroup)
     if (openedWebsitesName.length) {
       socketInstance.emit('app/join', { room: openedWebsitesName })
     }
+    dispatch('checkOpenedFilesVersion')
   },
-  disposeData({ dispatch, getters: { openedWebsites }, rootGetters: { 'user/username': localUsername } }, data) {
+  async checkOpenedFilesVersion({ commit, dispatch, getters: { openedFiles, openedWebsites }, rootGetters: { 'user/username': localUsername } }) {
+    const openedFilesPath = _.keys(openedFiles)
+    if (openedFilesPath.length) {
+      const _openedWebsites = _.cloneDeep(openedWebsites)
+      const fetchLatestArr = _.map(openedFilesPath, path => dispatch('getLatestVersion', { path }, { root: true }))
+      const versionArr = await Promise.all(fetchLatestArr)
+      if (versionArr.length) {
+        _.forEach(versionArr, ({ websiteName, path, data }) => {
+          const localFileVersion = _.get(_openedWebsites, [websiteName, path, 'updated.commit.version'], 0)
+          const latestFileInfo = _.get(data, 'commit', {})
+          // TODO: 如果是自己改的，则自动更新本地数据
+          if (localUsername === latestFileInfo.username) {
+            dispatch('updateOpenedFile', { ...latestFileInfo, path, saved: true })
+            return
+          }
+          _openedWebsites[websiteName][path]['updated'] = data
+        })
+        commit(UPDATE_OPENED_WEBSITES, _openedWebsites)
+      }
+    }
+  },
+  async getLatestVersion({ dispatch }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    const data = await dispatch('gitlab/getFileLatestVersion', { path }, { root: true })
+    return {
+      websiteName,
+      path,
+      data
+    }
+  },
+  disposeData({ dispatch, rootGetters: { 'user/username': localUsername } }, data) {
     const { payload, meta } = data
-    const { type = 'update', username } = payload
+    const { type = 'update', username = '' } = payload
     if (username === localUsername && meta.client !== socketInstance.id) {
       dispatch(`async${_.upperFirst(type)}`, payload)
       return
     }
-    if (username && username !== localUsername) {
+    if (username !== localUsername) {
       dispatch(`dispose${_.upperFirst(type)}`, payload)
     }
   },
@@ -694,23 +726,19 @@ const actions = {
       useCache: false
     })
   },
-  disposeUpdate({ dispatch, getters: { openedFiles, activePageUrl, openedWebsites } }, payload) {
-    // FIXME: 优先级最高 😎
-    console.warn('update')
-    let { websiteName, path, ...rest } = payload
+  async asyncRename({ dispatch }, { path }) {
+    console.log('asyncRename >', path)
+  },
+  disposeUpdate({ commit, getters: { openedFiles, openedWebsites } }, payload) {
+    const { websiteName, path, ...updated } = payload
     const fullPath = getFileFullPathByPath(path)
-    const fullActivePath = getFileFullPathByPath(activePageUrl)
-    if (openedFiles[fullPath]) {
-      console.log(`${fullPath} 有更新`)
-      console.log(activePageUrl)
-      console.log(activePageUrl === '/')
-      const flag = activePageUrl !== '/' && fullPath === fullActivePath
-      console.log(flag)
-      dispatch('updateOpenedWebsites', {
+    const localFile = openedFiles[fullPath]
+    if (localFile) {
+      commit(UPDATE_OPENED_WEBSITES, {
         ...openedWebsites,
         [websiteName]: {
           ...openedWebsites[websiteName],
-          [fullPath]: { updated: true, ...rest }
+          [fullPath]: { ...localFile, updated }
         }
       })
     }

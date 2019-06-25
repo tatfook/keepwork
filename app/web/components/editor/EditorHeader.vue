@@ -124,7 +124,13 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
+      <!-- TODO: 文件有新版本的时候，提示 -->
+      <el-menu-item v-if="isConflict" index='3' class='li-btn conflict-btn'>
+        <el-tooltip content="版本冲突，请先合并再保存">
+          <span v-loading='savePending' class='iconfont icon-banbenchongtu' @click='openMergePreview'></span>
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item v-else index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
         <el-tooltip :content="$t('editor.save')">
           <span v-loading='savePending' class='iconfont icon-save' @click='save'></span>
         </el-tooltip>
@@ -226,7 +232,7 @@ export default {
       userProfile: 'user/profile',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo',
-      openedWebsites: 'openedWebsites',
+      isConflict: 'isActivePageHasConflict',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
@@ -301,15 +307,6 @@ export default {
     isActivePageSaved() {
       let { saved } = this.activeAreaFile || {}
       return saved === false ? false : true
-    },
-    isActivePageNeedRefresh() {
-      const { fullPath = '', sitepath = '' } = this.activePageInfo
-      if (!fullPath) {
-        return false
-      }
-      const { saved = true } = this.activeAreaFile
-      // FIXME: 这个判断写的有问题
-      return saved && this.openedWebsites[sitepath][fullPath].updated
     }
   },
   methods: {
@@ -331,6 +328,12 @@ export default {
       toggleAngles: 'toggleAngles',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
+    openMergePreview() {
+      this.$message({
+        type: 'warning',
+        message: '弹出mergePrivew窗口'
+      })
+    },
     openZenMode() {
       const dom = document.querySelector('#codeWin')
 
@@ -686,6 +689,11 @@ export default {
   border-bottom: 2px solid #f7bc2a !important;
 }
 .save-btn:not(.is-disabled) .icon-save {
+  background: #f7bc2a;
+  border-color: #f7bc2a;
+  color: white;
+}
+.conflict-btn:not(.is-disabled) .icon-banbenchongtu {
   background: #f7bc2a;
   border-color: #f7bc2a;
   color: white;

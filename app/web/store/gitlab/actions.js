@@ -158,6 +158,12 @@ const actions = {
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
   },
+  async getFileLatestVersion(context, { path, showVersion = true }) {
+    const { gitlab, path: fullPath } = await getGitlabFileParams(context, { path })
+    const projectPath = path.split('/').slice(0, 2).join('/')
+    const file = await gitlab.getFile({ projectPath, fullPath, showVersion })
+    return file
+  },
   async readFileForOwnerWithCommitId(
     context,
     { path: inputPath, barePath, commitId }
@@ -221,7 +227,7 @@ const actions = {
       path: inputPath,
       content
     })
-    await gitlab
+    const res = await gitlab
       .editFile(path, {
         ...options,
         content: /\.md$/.test(path) ? content.replace(/\n$/, '') : content,
@@ -237,6 +243,7 @@ const actions = {
       })
     let payload = { path, branch: options.branch }
     commit(SAVE_FILE_CONTENT_SUCCESS, payload)
+    return res
   },
   async getFileHistoryList(
     {
