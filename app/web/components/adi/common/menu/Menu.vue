@@ -162,6 +162,7 @@ export default {
         <div
           class={{
             'comp-menu-vertical': this.mode === 'vertical',
+            'comp-menu-default-opened': this.isDefaultOpenAll === true,
             'comp-menu': true
           }}
         >
@@ -369,6 +370,36 @@ a {
     text-overflow: ellipsis;
     padding-right: 10px;
     box-sizing: border-box;
+  }
+}
+.comp-menu-default-opened {
+  a {
+    overflow: unset;
+    text-overflow: unset;
+    word-break: break-word;
+    display: inline-block;
+    height: auto;
+    white-space: normal;
+    height: auto;
+  }
+  .el-menu {
+    .el-menu-item {
+      line-height: 1.2;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  }
+  /deep/.el-submenu__title {
+    height: auto;
+    line-height: 1.1;
+    padding-bottom: 2px;
+    line-height: 1.2;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  /deep/.el-submenu__icon-arrow {
+    top: 0;
+    margin-top: 7px;
   }
 }
 .el-menu--horizontal {
