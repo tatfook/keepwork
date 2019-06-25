@@ -25,7 +25,7 @@ export default {
     }),
     async removeFiles() {
       await this.$confirm(
-        '删除文件可能会导致相关网站引用的文件失效，确定要删除吗？',
+        '删除文件可能会导致相关网站引用的文件失效，确认要删除吗？',
         this.$t('editor.delNotice'),
         {
           confirmButtonText: this.$t('common.OK'),
@@ -50,6 +50,9 @@ export default {
   padding: 0;
   &.is-disabled {
     color: #c0c4cc;
+  }
+  &:hover {
+    color: #3ba4ff;
   }
 }
 .iconfont {

@@ -14,9 +14,9 @@
         {{$t('common.study')}}
       </el-menu-item>
       <el-menu-item class="pull-right user-menu right-icon-item" v-if="isLogin">
-        <el-dropdown placement="bottom-end" trigger="click">
+        <el-dropdown placement="bottom-end">
           <span class="el-dropdown-link">
-            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username"><i class="el-icon-caret-bottom right-icon"></i>
+            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <div class="greeting">{{$t("common.hello")}}，{{username}}
@@ -43,7 +43,7 @@
         </el-dropdown>
       </el-menu-item>
       <el-menu-item v-if="isLogin" class="pull-right user-message-menu-item right-icon-item">
-        <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger="click">
+        <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger='hover'>
           <div ref="scroll" class="user-message-main">
             <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
               <span :class="['message-pointer', { 'is-read': item.state === 1 }]"></span>
@@ -57,16 +57,16 @@
           <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
           <div slot="reference" class="user-message-icon-container">
             <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" :max="99" class="user-message-badge">
-              <i class="iconfont icon-message-fill user-message-icon"></i>
+              <i class="iconfont icon-message-fill user-message-icon"></i>{{$t('message.message')}}
             </el-badge>
           </div>
         </el-popover>
       </el-menu-item>
       <el-menu-item class="pull-right right-icon-item" v-if="isLogin">
-        <el-dropdown placement="bottom" trigger="click">
+        <el-dropdown placement="bottom">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>
-            <i class="el-icon-caret-bottom right-icon right-icon-tool"></i>
+            {{$t('common.tools')}}
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
@@ -82,7 +82,7 @@
         <a @click.stop.prevent="goLogin" class="login-btn">{{$t('common.login')}}</a>
       </el-menu-item>
       <el-menu-item index="5" class="pull-right hidden-sm-and-up">
-        <el-dropdown placement="bottom" trigger="click">
+        <el-dropdown placement="bottom">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-menu"></i>
           </span>
@@ -96,10 +96,10 @@
         </el-dropdown>
       </el-menu-item>
       <el-menu-item class="hidden-xs-only pull-right common-header-menu-download right-icon-item" @click="downloadParacraft()">
-        <i class="iconfont icon-xiazai"></i>
+        <i class="iconfont icon-xiazai"></i>{{$t('common.download')}}
       </el-menu-item>
       <el-menu-item class="hidden-xs-only pull-right common-header-menu-ranking right-icon-item" @click="goRanking">
-        <i class="iconfont icon-trophy-fill"></i>
+        <i class="iconfont icon-trophy-fill"></i>{{$t('common.ranking')}}
       </el-menu-item>
       <el-menu-item class="menu-searchbar" index='10'>
         <search-bar></search-bar>
@@ -373,6 +373,9 @@ export default {
   display: inline-block;
   width: 100%;
   height: 100%;
+  &:hover {
+    color: #218efc;
+  }
   .icon-wrench-fill {
     font-size: 30px;
   }
@@ -439,7 +442,7 @@ export default {
 }
 .el-dropdown {
   height: 60px;
-  line-height: 60px;
+  line-height: 58px;
 }
 .el-dropdown-menu {
   font-size: 14px;
@@ -505,6 +508,9 @@ export default {
 <style lang="scss">
 .user-message-popper {
   padding: 0px;
+  .popper__arrow {
+    display: none !important;
+  }
   .user-message-main {
     height: 250px;
     padding: 12px 0;

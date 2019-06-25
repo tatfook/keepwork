@@ -209,6 +209,9 @@ export default {
     .el-icon-more {
       color: #858585;
       transform: rotate(90deg);
+      &:hover {
+        color: #3ba4ff;
+      }
     }
   }
   &-cell-actions {

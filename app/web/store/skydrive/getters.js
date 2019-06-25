@@ -9,7 +9,7 @@ const getters = {
     return _.concat(_.values(uploadingFilesObj), nameConflictFiles)
   },
   noFinishedUploadingFiles: (state, { uploadingFiles }) => {
-    return _.filter(uploadingFiles, file => file.state !== 'success')
+    return _.filter(uploadingFiles, file => file.state !== 'success' && file.state !== 'error')
   },
   uploadingFileSize: (state, { noFinishedUploadingFiles }) => {
     return _.reduce(noFinishedUploadingFiles, (sum, file) => sum + file.size, 0)

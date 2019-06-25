@@ -35,14 +35,10 @@ export default {
     },
     uploadText: String
   },
-  data() {
-    return {
-      waitingFiles: []
-    }
-  },
   computed: {
     ...mapGetters({
       uploadingFiles: 'skydrive/uploadingFiles',
+      noFinishedUploadingFiles: 'skydrive/noFinishedUploadingFiles',
       uploadingFileSize: 'skydrive/uploadingFileSize',
       userSkyDriveInfo: 'user/skyDriveInfo',
       userSkyDriveFileList: 'user/skyDriveFileList'
@@ -56,18 +52,9 @@ export default {
         return ''
       }
     },
-    waitingFileSize() {
-      return _.reduce(
-        this.waitingFiles,
-        (sum, file) => {
-          return sum + file.size
-        },
-        0
-      )
-    },
     unusedWithUpload() {
       let { total = 0, used = 0 } = this.userSkyDriveInfo || {}
-      return total - used - this.uploadingFileSize - this.waitingFileSize
+      return total - used - this.uploadingFileSize
     }
   },
   methods: {
@@ -102,7 +89,6 @@ export default {
         this.$emit('resetTableSort')
       }
       file = file.raw || file
-      let fileIndex = this.uploadingFiles.length
       let waitingUploadFile = {
         cover: URL.createObjectURL(file),
         percent: 0,
@@ -129,7 +115,7 @@ export default {
       }
       let filenameValidateResult = this.filenameValidator(file.name)
       if (filenameValidateResult !== true) {
-        this.handleFilenameIllegal({ file, fileIndex, filenameValidateResult })
+        this.handleFilenameIllegal({ file, filenameValidateResult })
         waitingUploadFile = {
           ...waitingUploadFile,
           state: 'error',
@@ -139,11 +125,10 @@ export default {
         this.addNameConflictFile(waitingUploadFile)
         return
       }
-      this.waitingFiles.push(waitingUploadFile)
       this.addUploadingFile(waitingUploadFile)
-      await this.uploadFile(file, fileIndex)
+      await this.uploadFile(file)
     },
-    async handleFilenameIllegal({ file, fileIndex, filenameValidateResult }) {
+    async handleFilenameIllegal({ file, filenameValidateResult }) {
       await waitForMilliSeconds(Math.random() * 1000)
       this.$notify({
         title: this.$t('common.failure'),
@@ -153,13 +138,13 @@ export default {
     },
     filenameValidator(newFilename) {
       let errMsg = this.$t('skydrive.nameConflictError')
-      return _.concat(this.uploadingFiles, this.userSkyDriveFileList).filter(
+      return _.concat(this.noFinishedUploadingFiles, this.userSkyDriveFileList).filter(
         ({ filename }) => filename.toLowerCase() === newFilename.toLowerCase()
       ).length
         ? errMsg
         : true
     },
-    async uploadFile(file, fileIndex) {
+    async uploadFile(file) {
       if (!file) return
       let self = this
       await this.userUploadFileToSkyDrive({
@@ -182,11 +167,6 @@ export default {
         file,
         updatedAt: new Date()
       })
-    }
-  },
-  watch: {
-    uploadingFiles() {
-      this.waitingFiles = []
     }
   }
 }
