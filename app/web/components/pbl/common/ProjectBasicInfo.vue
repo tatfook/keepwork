@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="project-basic-info-description" v-loading='isLoading'>
+    <div v-show="tempDesc || isLoginUserEditable" class="project-basic-info-description" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
         {{$t("project.projectDescription")}}:
         <el-button v-if="isLoginUserEditable" class="project-website-card-button" type="text" @click="toggleIsDescEditing">
@@ -625,7 +625,6 @@ export default {
   &-detail {
     display: flex;
     padding: 16px;
-    border-bottom: 1px solid #e8e8e8;
     &-cover {
       width: 480px;
       height: 270px;
@@ -707,6 +706,7 @@ export default {
   }
 
   &-description {
+    border-top: 1px solid #e8e8e8;
     padding: 16px;
     &-title {
       margin: 8px 0 16px;
@@ -765,7 +765,6 @@ export default {
     }
   }
 }
-
 @media (max-width: 768px) {
   .project-basic-info {
     &-detail {
@@ -819,4 +818,30 @@ export default {
   }
 }
 </style>
-
+<style lang="scss" scoped>
+@media (min-width: 768px) and (max-width: 1038px) {
+  .project-basic-info {
+    &-detail-message {
+      padding-bottom: 0;
+    }
+    &-detail-operations {
+      position: relative;
+      margin-top: 16px;
+    }
+  }
+  /deep/.el-progress {
+    flex: 1;
+  }
+  /deep/.project-grade-stars {
+    .el-rate__icon {
+      margin-right: 0;
+    }
+  }
+  /deep/.project-grade-score {
+    font-size: 36px;
+  }
+  .el-button + .el-button {
+    margin: 10px 0 0;
+  }
+}
+</style>
