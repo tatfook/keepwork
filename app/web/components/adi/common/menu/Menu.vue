@@ -398,6 +398,7 @@ a {
       line-height: 1.2;
       padding-top: 4px;
       padding-bottom: 4px;
+      min-width: unset;
     }
     .mook-icon-arrow {
       position: absolute;
