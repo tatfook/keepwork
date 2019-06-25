@@ -74,6 +74,10 @@ const renderTemplate = (h, m, data, parentIndex) => {
                 href={menuData.link}
                 title={m.getNameMenu(menuData)}
               >
+                <a
+                  href="javascript:void(0)"
+                  class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow"
+                />
                 {m.getNameMenu(menuData)}
               </a>
             </template>
@@ -98,6 +102,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
                 style={getMenuItemStyle(menuData.link)}
                 title={m.getNameMenu(menuData)}
               >
+                <i class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow" />
                 {m.getNameMenu(menuData)}
               </span>
             </template>
@@ -351,6 +356,9 @@ a {
       border: 0;
     }
   }
+  .mook-icon-arrow {
+    display: none;
+  }
 }
 .comp-menu-vertical {
   a {
@@ -382,11 +390,23 @@ a {
     white-space: normal;
     height: auto;
   }
+  .menu-text {
+    overflow: visible;
+  }
   .el-menu {
     .el-menu-item {
       line-height: 1.2;
       padding-top: 4px;
       padding-bottom: 4px;
+    }
+    .mook-icon-arrow {
+      position: absolute;
+      display: inline-block;
+      right: auto;
+      margin-left: 0;
+      left: -16px;
+      top: 2px;
+      margin-top: 0;
     }
   }
   /deep/.el-submenu__title {
@@ -400,6 +420,7 @@ a {
   /deep/.el-submenu__icon-arrow {
     top: 0;
     margin-top: 7px;
+    display: none;
   }
 }
 .el-menu--horizontal {
