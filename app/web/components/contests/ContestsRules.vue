@@ -160,6 +160,7 @@
     &.element_1 {
       left: 0;
       top: 20px;
+      width: 18%;
     }
     &.element_3 {
       left: 0;
