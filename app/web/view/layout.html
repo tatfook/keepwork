@@ -9,6 +9,22 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="//at.alicdn.com/t/font_667420_axyaq2niukf.css">
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      var nowHost = window.location.host
+      if (nowHost === 'stage.keepwork.com') {
+        hm.src = "https://hm.baidu.com/hm.js?ff8bdaa7515729aeadde8557e43b841a";
+      }else if(nowHost === 'stage.keepwork.com'){
+        hm.src = "https://hm.baidu.com/hm.js?31750a0cbad35d493b00b304c5026ded";
+      }else{
+        hm.src = "https://hm.baidu.com/hm.js?80078a42a54a4dff4e361b8084e69762";
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 </head>
 <body>
   <div id="app"><!--vue-ssr-outlet--></div>
