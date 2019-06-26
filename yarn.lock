@@ -4204,7 +4204,7 @@ decode-uri-component@^0.2.0:
   resolved "http://registry.npm.taobao.org/decode-uri-component/download/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
   integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
 
-deep-equal@^1.0.0, deep-equal@~1.0.1:
+deep-equal@^1.0.0, deep-equal@^1.0.1, deep-equal@~1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/deep-equal/download/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
   integrity sha1-9dJgKStmDghO/0zbyfCK0yR0SLU=
@@ -14713,6 +14713,14 @@ vue-axios@^2.0.2, vue-axios@^2.1.2:
   resolved "http://registry.npm.taobao.org/vue-axios/download/vue-axios-2.1.4.tgz#a9d298f7e876f9a87feb336b37adcbce34ff9f9f"
   integrity sha1-qdKY9+h2+ah/6zNrN63LzjT/n58=
 
+vue-ba@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.npm.taobao.org/vue-ba/download/vue-ba-1.2.5.tgz#fef30732ee749a65a81a4f47113527ee41fda64b"
+  integrity sha1-/vMHMu50mmWoGk9HETUn7kH9pks=
+  dependencies:
+    deep-equal "^1.0.1"
+    vue "^2.3.3"
+
 vue-clipboard2@^0.1.0:
   version "0.1.1"
   resolved "http://registry.npm.taobao.org/vue-clipboard2/download/vue-clipboard2-0.1.1.tgz#1a3931cd162e037ef699def28270781d894ce83f"
@@ -14915,7 +14923,7 @@ vue-video-player@^5.0.2:
     videojs-flash "^2.1.0"
     videojs-hotkeys "^0.2.20"
 
-vue@^2.5.14, vue@^2.5.2:
+vue@^2.3.3, vue@^2.5.14, vue@^2.5.2:
   version "2.6.10"
   resolved "http://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
