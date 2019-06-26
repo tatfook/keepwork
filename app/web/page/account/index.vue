@@ -34,7 +34,9 @@ import { mapActions, mapGetters } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueLazyload)
 Vue.use(VueI18n)

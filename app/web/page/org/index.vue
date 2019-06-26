@@ -33,7 +33,9 @@ import Vhistogram from 'v-charts/lib/histogram.common'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 import { keepwork } from '@/api'
 import ExpirationDialog from '@/components/org/common/ExpirationDialog'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.component(Vhistogram.name, Vhistogram)

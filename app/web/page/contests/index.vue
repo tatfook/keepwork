@@ -25,7 +25,9 @@ import messageModule from '@/store/message'
 import pblModule from '@/store/pbl'
 import { socket, socketMixin } from '@/socket'
 import LoginDialog from '@/components/common/LoginDialog'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(socket)
