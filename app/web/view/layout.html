@@ -13,14 +13,7 @@
     let _hmt = _hmt || [];
     (function() {
       let hm = document.createElement('script')
-      let nowHost = window.location.host
-      if (nowHost === 'stage.keepwork.com') {
-        hm.src = 'https://hm.baidu.com/hm.js?ff8bdaa7515729aeadde8557e43b841a'
-      } else if (nowHost === 'stage.keepwork.com') {
-        hm.src = 'https://hm.baidu.com/hm.js?31750a0cbad35d493b00b304c5026ded'
-      } else {
-        hm.src = 'https://hm.baidu.com/hm.js?80078a42a54a4dff4e361b8084e69762'
-      }
+      hm.src = 'https://hm.baidu.com/hm.js?80078a42a54a4dff4e361b8084e69762'
       let s = document.getElementsByTagName('script')[0]
       s.parentNode.insertBefore(hm, s)
     })()
