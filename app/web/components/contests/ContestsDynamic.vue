@@ -2,7 +2,7 @@
   <div class="contests-dynamic">
     <div class="contests-dynamic-part">
       <div class="contests-dynamic-part-left">
-        <img class="contests-dynamic-part-left-img" src="@/assets/contests/logo.png" alt="">
+        <img class="contests-dynamic-part-left-img" src="@/assets/contests/样图.png" alt="">
       </div>
       <div class="contests-dynamic-part-right">
         <p class="contests-dynamic-part-right-notice">“用计算机程序让汉字活起来 走向世界”内容创作大赛征集公告</p>
@@ -12,7 +12,7 @@
     </div>
     <div class="contests-dynamic-part">
       <div class="contests-dynamic-part-left">
-        <img class="contests-dynamic-part-left-img" src="@/assets/contests/logo.png" alt="">
+        <img class="contests-dynamic-part-left-img" src="@/assets/contests/样图.png" alt="">
       </div>
       <div class="contests-dynamic-part-right">
         <p class="contests-dynamic-part-right-notice">“用计算机程序让汉字活起来 走向世界”内容创作大赛征集公告</p>
@@ -20,7 +20,7 @@
         <p class="contests-dynamic-part-right-time">2019 / 12 / 02<span class="contests-dynamic-part-right-time-right"><img src="@/assets/contests/toRight.png" alt=""></span></p>
       </div>
     </div>
-    <img class="contests-dynamic-bgpic element_text_1" src="@/assets/contests/element_text_1.png" alt="">
+    <!-- <img class="contests-dynamic-bgpic element_text_1" src="@/assets/contests/element_text_1.png" alt=""> -->
     <img class="contests-dynamic-bgpic element_text_2" src="@/assets/contests/element_text_2.png" alt="">
     <img class="contests-dynamic-bgpic element_text_3" src="@/assets/contests/element_text_3.png" alt="">
   </div>
@@ -35,7 +35,7 @@ export default {
   padding-top: 40px;
   position: relative;
   max-width: 1920px;
-  margin: 0 auto;
+  margin: 0 auto 280px;
   &-bgpic {
     position: absolute;
     z-index: -999;
@@ -57,12 +57,13 @@ export default {
     display: flex;
     margin: 12px auto;
     box-sizing: border-box;
-    padding: 12px;
-    background: #fff;
+    padding: 22px 0 0 22px;
+    background: url('../../assets/contests/baidi.png') no-repeat top center;
+    background-size: 100%;
     &-left {
       &-img {
-        width: 410px;
-        height: 230px;
+        width: 380px;
+        // height: 230px;
         object-fit: cover;
       }
     }
