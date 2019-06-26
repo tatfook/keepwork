@@ -183,6 +183,10 @@
         <el-button type="primary" @click.stop="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
       </span>
     </el-dialog>
+    <!-- TODO: mergep组件 -->
+    <el-dialog :visible.sync="isMergePreviewShow" custom-class="merge-preview-dialog">
+      <editor-merge-preview v-if="isMergePreviewShow"></editor-merge-preview>
+    </el-dialog>
   </div>
 </template>
 
@@ -193,6 +197,7 @@ import { gConst } from '@/lib/global'
 import { toggleLanguage, locale } from '@/lib/utils/i18n'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
+import EditorMergePreview from './EditorMergePreview'
 
 export default {
   name: 'EditorHeader',
@@ -202,6 +207,7 @@ export default {
       refreshPending: false,
       isNewWebsiteDialogShow: false,
       isWebsiteSettingShow: false,
+      isMergePreviewShow: false,
       dialogVisible: false,
       closeOneFile: false,
       toBeCloseFileName: '',
@@ -329,10 +335,7 @@ export default {
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
     }),
     openMergePreview() {
-      this.$message({
-        type: 'warning',
-        message: '弹出mergePrivew窗口'
-      })
+      this.isMergePreviewShow = true
     },
     openZenMode() {
       const dom = document.querySelector('#codeWin')
@@ -663,7 +666,8 @@ export default {
   },
   components: {
     NewWebsiteDialog,
-    WebsiteSettingDialog
+    WebsiteSettingDialog,
+    EditorMergePreview
   }
 }
 </script>
@@ -734,6 +738,7 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .input-link-copy-box {
   display: inline-block;
@@ -806,6 +811,10 @@ export default {
 }
 </style>
 <style lang="scss">
+.el-dialog.merge-preview-dialog {
+  width: 1300px;
+  max-width: 80vw;
+}
 .logo-submenu {
   .el-menu .el-submenu__title,
   a {

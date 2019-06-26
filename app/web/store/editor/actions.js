@@ -656,7 +656,7 @@ const actions = {
     }
     dispatch('checkOpenedFilesVersion')
   },
-  async checkOpenedFilesVersion({ commit, dispatch, getters: { openedFiles, openedWebsites }, rootGetters: { 'user/username': localUsername } }) {
+  async checkOpenedFilesVersion({ commit, dispatch, getters: { openedFiles, openedWebsites, activePageUrl }, rootGetters: { 'user/username': localUsername } }) {
     const openedFilesPath = _.keys(openedFiles)
     if (openedFilesPath.length) {
       const _openedWebsites = _.cloneDeep(openedWebsites)
@@ -664,17 +664,24 @@ const actions = {
       const versionArr = await Promise.all(fetchLatestArr)
       if (versionArr.length) {
         _.forEach(versionArr, ({ websiteName, path, data }) => {
-          const localFileVersion = _.get(_openedWebsites, [websiteName, path, 'updated.commit.version'], 0)
-          const latestFileInfo = _.get(data, 'commit', {})
-          // TODO: 如果是自己改的，则自动更新本地数据
-          if (localUsername === latestFileInfo.username) {
-            dispatch('updateOpenedFile', { ...latestFileInfo, path, saved: true })
+          const localFileVersion = _.get(_openedWebsites, [websiteName, path, 'version'], 0)
+          const { commit: latestFileInfo, ...rest } = data
+          console.log(localUsername)
+          console.log(latestFileInfo)
+          console.log(localFileVersion)
+          console.log(_openedWebsites)
+          console.log(localUsername === _.get(latestFileInfo, 'author_name', ''))
+          console.log(localFileVersion < _.get(latestFileInfo, 'version'))
+          console.log('*'.repeat(20))
+          if (localUsername === _.get(latestFileInfo, 'author_name', '') && localFileVersion < _.get(latestFileInfo, 'version')) {
+            dispatch('updateOpenedFile', { ...latestFileInfo, ...rest, path, saved: true })
             return
           }
           _openedWebsites[websiteName][path]['updated'] = data
         })
         commit(UPDATE_OPENED_WEBSITES, _openedWebsites)
       }
+      dispatch('refreshModList')
     }
   },
   async getLatestVersion({ dispatch }, { path }) {
@@ -699,7 +706,7 @@ const actions = {
   },
   async asyncUpdate({ dispatch, commit, getters: { openedFiles, activePageUrl } }, { path, username, content, timestamp }) {
     if (_.includes(_.keys(openedFiles), path)) {
-      commit(UPDATE_OPENED_FILE, { data: { content, path, save: true, timestamp }, path, username })
+      commit(UPDATE_OPENED_FILE, { data: { content, path, saved: true, timestamp }, path, username })
       if (getFileFullPathByPath(activePageUrl) === path) {
         dispatch('refreshModList')
       }

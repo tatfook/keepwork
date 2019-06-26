@@ -28,6 +28,7 @@
     "babel-polyfill": "^6.26.0",
     "blueimp-md5": "^2.10.0",
     "cross-env": "^5.0.0",
+    "diff-match-patch": "^1.0.4",
     "echarts": "^4.1.0",
     "egg": "^2.1.0",
     "egg-alinode": "^2.0.1",
