@@ -42,6 +42,7 @@ export default {
   mounted() {},
   computed: {
     ...mapGetters({
+      userUsername: 'user/username',
       userIsLogined: 'user/isLogined'
     }),
     isFeedbackDataValid() {
@@ -87,9 +88,16 @@ export default {
     LoginDialog
   },
   watch: {
-    isComplainDialogVisible() {
-      if (this.isComplainDialogVisible && !this.userIsLogined) {
+    isComplainDialogVisible(isVisible) {
+      if (isVisible && !this.userIsLogined) {
         this.isShowLoginDialog = true
+      }
+      if (isVisible && this.userIsLogined) {
+        _hmt.push([
+          '_setUserTag',
+          '7562',
+          `username: ${userUsername}, url: ${window.location.href}`
+        ])
       }
     },
     $route() {
