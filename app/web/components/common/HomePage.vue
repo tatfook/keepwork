@@ -227,7 +227,10 @@ export default {
       return keepwork.projects.getProjects({
         'x-order': 'lastStar-desc-star-desc-updatedAt-desc',
         'x-per-page': 8,
-        'x-page': 1
+        'x-page': 1,
+        'star':{
+          "$gt":2
+        }
       })
     },
     getPackageSuitableAge(lessonPackage) {

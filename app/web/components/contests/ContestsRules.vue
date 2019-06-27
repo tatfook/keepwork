@@ -134,13 +134,13 @@
     <div class="contests-rules-flow">
       <el-steps direction="vertical" :active="5">
         <el-step>
-          <p slot="title">登录网站<a href="https://keepwork.com/" target="_blank" style="color: #409eff">https://keepwork.com/</a></p>
+          <p slot="title">登录网站<a href="https://keepwork.com/" target="_blank" style="color: #409eff">https://keepwork.com/</a>，注册账号</p>
         </el-step>
         <el-step title="在线提交报名资料">
           <p slot="description">所有参赛者（含参赛团队）均须在<span style="color: #409eff">2019年11月30日</span>前完成注册和报名，团队参赛统一由队长填写注册和报名信息</p>
         </el-step>
-        <el-step title="下载Paracraft"></el-step>
-        <el-step title="登录信息，在线创造"></el-step>
+        <el-step title="下载Paracraft创意空间软件"></el-step>
+        <el-step title="登录信息，在线创作"></el-step>
         <el-step title="完成作品提交"></el-step>
       </el-steps>
     </div>
