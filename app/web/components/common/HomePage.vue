@@ -86,6 +86,11 @@
         </div>
       </div>
     </div>
+    <div class="home-page-notice">
+      <a href="/han" class="home-page-notice-link">
+        <img class="home-page-notice-link-img" src="@/assets/contests/han_banner.png" alt="">
+      </a>
+    </div>
     <div class="home-page-cabinet">
       <div class="home-page-cabinet-excellent selected">
         <div class="title">
@@ -324,6 +329,19 @@ export default {
 
 <style lang="scss">
 .home-page {
+  &-notice {
+    max-width: 1200px;
+    margin: 20px auto;
+    cursor: pointer;
+    &-link {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      &-img {
+        width: 100%;
+      }
+    }
+  }
   &-register-dialog {
     .el-dialog {
       width: 352px;

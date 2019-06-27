@@ -57,7 +57,7 @@
           <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
           <div slot="reference" class="user-message-icon-container">
             <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" :max="99" class="user-message-badge">
-              <i class="iconfont icon-message-fill user-message-icon"></i>{{$t('message.message')}}
+              <i class="iconfont icon-message-fill user-message-icon"></i><span class="hidden-xs-only">{{$t('message.message')}}</span>
             </el-badge>
           </div>
         </el-popover>
@@ -66,7 +66,7 @@
         <el-dropdown placement="bottom">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>
-            {{$t('common.tools')}}
+            <span class="hidden-xs-only">{{$t('common.tools')}}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
