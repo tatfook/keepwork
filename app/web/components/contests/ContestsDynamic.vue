@@ -1,6 +1,6 @@
 <template>
   <div class="contests-dynamic">
-    <div class="contests-dynamic-part">
+    <div class="contests-dynamic-part" @click="openLink('https://mp.weixin.qq.com/s/F64qcFRRqdAbC25AwdAIcw')">
       <div class="contests-dynamic-part-left">
         <img class="contests-dynamic-part-left-img" src="@/assets/contests/a1.png" alt="">
       </div>
@@ -10,7 +10,7 @@
         <p class="contests-dynamic-part-right-time">2019 / 4 / 24<span class="contests-dynamic-part-right-time-right"><img src="@/assets/contests/toRight.png" alt=""></span></p>
       </div>
     </div>
-    <div class="contests-dynamic-part">
+    <div class="contests-dynamic-part" @click="openLink('https://mp.weixin.qq.com/s/7vmA5tEkAZ1wyUwRV7NzNQ')">
       <div class="contests-dynamic-part-left">
         <img class="contests-dynamic-part-left-img" src="@/assets/contests/a2.png" alt="">
       </div>
@@ -20,7 +20,7 @@
         <p class="contests-dynamic-part-right-time">2019 / 5 / 24<span class="contests-dynamic-part-right-time-right"><img src="@/assets/contests/toRight.png" alt=""></span></p>
       </div>
     </div>
-    <div class="contests-dynamic-part">
+    <div class="contests-dynamic-part" @click="openLink('https://mp.weixin.qq.com/s/5npjVGyKdpEMhG1UK82sLQ')">
       <div class="contests-dynamic-part-left">
         <img class="contests-dynamic-part-left-img" src="@/assets/contests/a3.png" alt="">
       </div>
@@ -37,7 +37,12 @@
 </template>
 <script>
 export default {
-  name: 'ContestsDynamic'
+  name: 'ContestsDynamic',
+  methods: {
+    openLink(url) {
+      window.open(url)
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -72,6 +77,7 @@ export default {
     // background: url('../../assets/contests/baidi.png') no-repeat top center;
     background-size: 100%;
     border: 2px solid transparent;
+    cursor: pointer;
     &:hover {
       border: 2px solid #043e93;
     }
