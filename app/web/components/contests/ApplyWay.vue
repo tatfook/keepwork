@@ -91,10 +91,10 @@ export default {
       display: flex;
       justify-content: center;
       &-name {
-        width: 168px;
+        width: 188px;
       }
       &-time {
-        width: 144px;
+        width: 164px;
       }
     }
     &-hint {

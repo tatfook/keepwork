@@ -57,7 +57,7 @@ export default {
     display: flex;
     margin: 12px auto;
     box-sizing: border-box;
-    padding: 22px 0 0 22px;
+    padding: 22px 20px 0 22px;
     background: url('../../assets/contests/baidi.png') no-repeat top center;
     background-size: 100%;
     &-left {

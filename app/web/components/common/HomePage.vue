@@ -220,7 +220,7 @@ export default {
     },
     async getLikes() {
       return keepwork.projects.getProjects({
-        'x-order': 'lastStar-desc-updatedAt-desc',
+        'x-order': 'lastStar-desc-star-desc-updatedAt-desc',
         'x-per-page': 8,
         'x-page': 1
       })
