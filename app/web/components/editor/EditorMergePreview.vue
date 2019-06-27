@@ -1,6 +1,10 @@
 <template>
   <div class="merge-preview-container">
     <div class="merge-preview-header">
+      <div class="merge-operation">
+        <el-button @click="goPrevDiff">上一个</el-button>
+        <el-button @click="goNextDiff">下一个</el-button>
+      </div>
       <div class="merge-info">
         {{ updateUsername}}
         {{ updateAt}}
@@ -19,15 +23,15 @@ import _ from 'lodash'
 import 'codemirror/addon/merge/merge.css'
 import 'codemirror/addon/merge/merge.js'
 import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/3024-night.css'
+// import 'codemirror/theme/3024-night.css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/hint/show-hint.js'
 import 'codemirror/addon/hint/show-hint.css'
-import 'codemirror/addon/fold/foldgutter.css'
-import 'codemirror/addon/fold/foldcode.js'
-import 'codemirror/addon/fold/foldgutter.js'
-import 'codemirror/addon/fold/xml-fold'
-import 'codemirror/addon/fold/markdown-fold'
+// import 'codemirror/addon/fold/foldgutter.css'
+// import 'codemirror/addon/fold/foldcode.js'
+// import 'codemirror/addon/fold/foldgutter.js'
+// import 'codemirror/addon/fold/xml-fold'
+// import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/lint/json-lint'
 import 'codemirror/addon/selection/active-line.js'
 window.diff_match_patch = DiffMatchPatch
@@ -82,6 +86,9 @@ export default {
         ''
       )
       return moment(updateAt).format('YYYY H:mm')
+    },
+    mergePreview() {
+      return this.$refs.mergePreview
     }
   },
   methods: {
@@ -89,6 +96,14 @@ export default {
       this.cmOption.value = this.latestContent
       this.cmOption.orig = this.code
       this.initSuccess = true
+    },
+    goNextDiff() {
+      console.dir(this.mergePreview)
+      console.log(this.mergePreview.execCommand)
+      this.mergePreview.commands.goNextDiff()
+    },
+    goPrevDiff() {
+      this.mergePreview.commands.goNextDiff()
     }
   }
 }
@@ -98,8 +113,8 @@ export default {
 .merge-preview-container {
   $height: 750px;
   $max-height: 60vh;
-  height: $height;
-  max-height: $max-height;
+  height: 950px;
+  max-height: 65vh;
   .CodeMirror-merge-pane.CodeMirror-merge-editor {
     height: $height;
     max-height: $max-height;
