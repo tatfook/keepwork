@@ -86,11 +86,11 @@
         </div>
       </div>
     </div>
-    <!-- <div class="home-page-notice">
+    <div class="home-page-notice">
       <a href="/han" class="home-page-notice-link">
         <img class="home-page-notice-link-img" src="@/assets/contests/han_banner.png" alt="">
       </a>
-    </div> -->
+    </div>
     <div class="home-page-cabinet">
       <div class="home-page-cabinet-excellent selected">
         <div class="title">
