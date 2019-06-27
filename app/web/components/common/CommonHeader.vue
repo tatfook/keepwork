@@ -508,9 +508,6 @@ export default {
 <style lang="scss">
 .user-message-popper {
   padding: 0px;
-  .popper__arrow {
-    display: none !important;
-  }
   .user-message-main {
     height: 250px;
     padding: 12px 0;
