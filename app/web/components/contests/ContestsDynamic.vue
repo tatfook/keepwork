@@ -83,6 +83,7 @@ export default {
     }
     &-right {
       padding-left: 20px;
+      flex: 1;
       &-notice {
         font-size: 22px;
         color: #212121;
