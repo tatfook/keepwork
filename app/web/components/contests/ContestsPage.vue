@@ -34,6 +34,7 @@
 import ContestsHeader from '@/components/contests/ContestsHeader'
 import ContestsFooter from '@/components/contests/ContestsFooter'
 import ApplyWayDialog from './ApplyWayDialog'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ContestsPage',
@@ -61,6 +62,11 @@ export default {
       showApplyDialog: false
     }
   },
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined'
+    })
+  },
   components: {
     ContestsHeader,
     ContestsFooter,
@@ -68,8 +74,12 @@ export default {
   },
   mounted() {
     this.topTextAnimation()
+    this.selectTabItem(this.currentSelected)
   },
   methods: {
+    ...mapActions({
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
     topTextAnimation() {
       this.topTextTimer = setInterval(() => {
         let leftLen = this.$refs['topHintText'].style['left'].replace(/px/, '')
@@ -115,6 +125,9 @@ export default {
       }
     },
     toApply() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.showApplyDialog = true
     },
     closeApplyDialog() {
@@ -179,7 +192,7 @@ body {
     }
     &-title {
       height: 184px;
-      width: 692px;
+      max-width: 692px;
       background: url(../../assets/contests/banner_text.png) no-repeat top
         center;
       background-size: 80%;
@@ -237,7 +250,7 @@ body {
           color: rgb(4, 62, 147);
           // background: url(../../assets/contests/head_selected.png) no-repeat
           //   center top;
-          border: 2px solid rgb(4,62,147)
+          border: 2px solid rgb(4, 62, 147);
         }
       }
     }
