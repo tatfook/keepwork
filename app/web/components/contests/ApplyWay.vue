@@ -2,14 +2,11 @@
   <div class="apply-way">
     <h3 class="apply-way-title"><img src="@/assets/contests/报名须知.png" alt=""></h3>
     <div class="apply-way-notice">
-      <p class="apply-way-notice-step">1、打开keepwork网站<a class="apply-way-notice-step-link" @click="showRegisterDialog">注册</a> 账号并进行登录；</p>
-      <p class="apply-way-notice-step">2、仔细阅读汉字大赛官网信息并在规定时间内完成报名；</p>
-      <p class="apply-way-notice-step">3、仔细填写报名页面的信息，一经提交无法修改；</p>
-      <p class="apply-way-notice-step">4、报名完成后，请加入QQ交流群方便创作沟通，群号1016421059，有任何疑问也可发送邮件至3487844868@qq.com,我们将在12小时内给出解答；</p>
-      <!-- <p class="apply-way-notice-step">5、完成报名后，点击<a class="apply-way-notice-step-link" href="http://paracraft.keepwork.com/download?lang=zh" target="_blank">下载</a>指定创作软件《Paracraft创意空间》，可进行自由创作并提交作品；</p> -->
-      <!-- <p class="apply-way-notice-step">6、报名阶段，如果有任何疑问，请发邮件到我们的答疑邮箱 3487844868@qq.com，我们将及时为您解答；</p> -->
-      <p class="apply-way-notice-step red-step">7、忘记账号密码，请点此<a class="apply-way-notice-step-link" @click="resetPwd">重置</a>。</p>
-      <!-- <p class="apply-way-notice-step red-step">8、资格赛需要注册该场比赛后才能参加。</p> -->
+      <p class="apply-way-notice-step"><span class="step-num">1.</span>打开keepwork网站<a class="apply-way-notice-step-link" @click="showRegisterDialog">注册</a>账号并进行登录；</p>
+      <p class="apply-way-notice-step"><span class="step-num">2.</span>仔细阅读汉字大赛官网信息并在规定时间内完成报名；</p>
+      <p class="apply-way-notice-step"><span class="step-num">3.</span>仔细填写报名页面的信息，一经提交无法修改；</p>
+      <p class="apply-way-notice-step"><span class="step-num">4.</span>报名完成后，请加入QQ交流群方便创作沟通，群号1016421059，有任何疑问也可发送邮件至3487844868@qq.com,我们将在12小时内给出解答；</p>
+      <p class="apply-way-notice-step"><span class="step-num">5.</span>忘记账号密码，请点此<a class="apply-way-notice-step-link" @click="resetPwd">重置</a>。</p>
     </div>
     <h3 class="apply-way-title"><img src="@/assets/contests/大赛时间.png" alt=""></h3>
     <div class="apply-way-time">
@@ -58,7 +55,7 @@ export default {
     //   left: 0;
     //   top: 120px;
     // }
-    // &.element_text_3 {  
+    // &.element_text_3 {
     //   left:  400px;
     //   bottom: 0px;
     // }
@@ -73,8 +70,12 @@ export default {
     padding: 0 12px;
     font-size: 18px;
     &-step {
-      &.red-step {
-        color: #d90948;
+      padding-left: 20px;
+      position: relative;
+      .step-num {
+        position: absolute;
+        top: 0;
+        left: 0;
       }
       &-link {
         color: #0d73e4;
