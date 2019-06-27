@@ -251,6 +251,9 @@ export default {
       })
       this.loading = false
     }
+  },
+  beforeDestroy() {
+    document.onkeydown = null
   }
 }
 </script>

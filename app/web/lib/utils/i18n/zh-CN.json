@@ -1908,6 +1908,7 @@
   "message": {
     "messageCenter": "消息中心",
     "system": "系统",
-    "openMessageCenter": "打开消息中心"
+    "openMessageCenter": "打开消息中心",
+    "message": "消息"
   }
 }

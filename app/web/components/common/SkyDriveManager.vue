@@ -52,6 +52,8 @@ import UsageBar from './skyDrive/UsageBar'
 import FileDownloader from './skyDrive/FileDownloader'
 import FileDeleter from './skyDrive/FileDeleter'
 import FileUploader from './skyDrive/FileUploader'
+const ImageTypeExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp']
+const VideoTypeExts = ['mp4']
 export default {
   name: 'SkyDriveManager',
   props: {
@@ -172,15 +174,17 @@ export default {
       this.isDroping = false
     },
     getTypeFilteredFiles(fileList) {
-      let selectedType =
-        this.mediaFilterType == 'all' ? '' : this.mediaFilterType
-      return fileList.filter(file => {
-        if (!file) {
-          return false
-        }
-        let { type } = file
-        return new RegExp(`^${selectedType}`).test(type)
-      })
+      if (this.mediaFilterType === 'all') {
+        return fileList
+      } else {
+        let validExts =
+          this.mediaFilterType === 'image' ? ImageTypeExts : VideoTypeExts
+        return _.filter(
+          fileList,
+          ({ ext }) =>
+            _.findIndex(validExts, validExt => validExt === ext) !== -1
+        )
+      }
     },
     addUploadingFiles(file) {
       this.uploadingFiles.push(file)
@@ -272,6 +276,9 @@ export default {
         margin-right: 0;
         display: inline-block;
         cursor: pointer;
+        &:hover{
+          color: #3ba4ff;
+        }
         .iconfont {
           margin-right: 8px;
         }
@@ -291,6 +298,9 @@ export default {
         font-size: 14px;
         line-height: 16px;
         color: #333;
+        &:hover {
+          color: #3ba4ff;
+        }
       }
       .active {
         color: #3ba4ff;

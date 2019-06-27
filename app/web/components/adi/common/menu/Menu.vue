@@ -74,6 +74,10 @@ const renderTemplate = (h, m, data, parentIndex) => {
                 href={menuData.link}
                 title={m.getNameMenu(menuData)}
               >
+                <a
+                  href="javascript:void(0)"
+                  class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow"
+                />
                 {m.getNameMenu(menuData)}
               </a>
             </template>
@@ -98,6 +102,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
                 style={getMenuItemStyle(menuData.link)}
                 title={m.getNameMenu(menuData)}
               >
+                <i class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow" />
                 {m.getNameMenu(menuData)}
               </span>
             </template>
@@ -162,6 +167,7 @@ export default {
         <div
           class={{
             'comp-menu-vertical': this.mode === 'vertical',
+            'comp-menu-default-opened': this.isDefaultOpenAll === true,
             'comp-menu': true
           }}
         >
@@ -222,6 +228,9 @@ export default {
     mode() {
       return this.options.mode
     },
+    isDefaultOpenAll() {
+      return this.options.isDefaultOpenAll
+    },
     data() {
       return this.properties.data
     },
@@ -251,9 +260,20 @@ export default {
     getItemStyle(parentIndex) {
       return parentIndex == 1 ? this.getItemTopStyle : this.getItemOtherStyle
     },
+    openAll() {
+      _.forEach(this.indexLinks, (indexLinkVal, key) => {
+        let parentKey = indexLinkVal && indexLinkVal.parentIndex
+        parentKey &&
+          _.split(parentKey, '-').length > 1 &&
+          this.$refs[this.menuRef].open(parentKey)
+      })
+    },
     setMenuOpend() {
       if (this.mode !== 'vertical') {
         return
+      }
+      if (this.isDefaultOpenAll) {
+        this.openAll()
       }
       let nowPageLink = window.location.href
       let findedIndexLink = _.find(this.indexLinks, indexLinkObj => {
@@ -336,6 +356,9 @@ a {
       border: 0;
     }
   }
+  .mook-icon-arrow {
+    display: none;
+  }
 }
 .comp-menu-vertical {
   a {
@@ -344,12 +367,61 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .el-submenu__title {
+    a {
+      max-width: calc(100% - 14px);
+    }
+  }
   .menu-text {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-right: 10px;
     box-sizing: border-box;
+  }
+}
+.comp-menu-default-opened {
+  a {
+    overflow: unset;
+    text-overflow: unset;
+    word-break: break-word;
+    display: inline-block;
+    height: auto;
+    white-space: normal;
+    height: auto;
+  }
+  .menu-text {
+    overflow: visible;
+  }
+  .el-menu {
+    .el-menu-item {
+      line-height: 1.2;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      min-width: unset;
+    }
+    .mook-icon-arrow {
+      position: absolute;
+      display: inline-block;
+      right: auto;
+      margin-left: 0;
+      left: -16px;
+      top: 2px;
+      margin-top: 0;
+    }
+  }
+  /deep/.el-submenu__title {
+    height: auto;
+    line-height: 1.1;
+    padding-bottom: 2px;
+    line-height: 1.2;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  /deep/.el-submenu__icon-arrow {
+    top: 0;
+    margin-top: 7px;
+    display: none;
   }
 }
 .el-menu--horizontal {
@@ -370,7 +442,7 @@ a {
     .el-submenu__title {
       i {
         margin-left: -20px;
-        color: #ccc;
+        color: #909399;
       }
     }
   }

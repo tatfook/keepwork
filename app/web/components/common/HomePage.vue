@@ -42,8 +42,8 @@
             <div class="title">{{$t("home.officialAnnouncements")}}</div>
             <ul class="announce-list" v-html="newsHtml"></ul>
             <!-- <ul class="announce-list">
-              <li  class="announce-list-item">
-                <a href="//iicc.keepwork.com" target="_blank"><img class="news-badge" src="@/assets/img/iicc_logo.png" alt="iicc">IICC大赛火热进行中！<span class="entry">进入</span></a>
+              <li class="announce-list-item">
+                <a href="https://mp.weixin.qq.com/s/F64qcFRRqdAbC25AwdAIcw" target="_blank"><span>“汉字大赛”征集公告</span><span class="entry"><i class="iconfont icon-fire1"></i></span></a>
               </li>
             </ul> -->
           </div>
@@ -86,6 +86,11 @@
         </div>
       </div>
     </div>
+    <!-- <div class="home-page-notice">
+      <a href="/han" class="home-page-notice-link">
+        <img class="home-page-notice-link-img" src="@/assets/contests/han_banner.png" alt="">
+      </a>
+    </div> -->
     <div class="home-page-cabinet">
       <div class="home-page-cabinet-excellent selected">
         <div class="title">
@@ -187,7 +192,7 @@ export default {
   },
   async mounted() {
     this.textAnimation()
-    let [ handpick, likes, news] = await Promise.all([
+    let [handpick, likes, news] = await Promise.all([
       this.getHandpick(),
       this.getLikes(),
       this.getNews()
@@ -220,7 +225,7 @@ export default {
     },
     async getLikes() {
       return keepwork.projects.getProjects({
-        'x-order': 'lastStar-desc-updatedAt-desc',
+        'x-order': 'lastStar-desc-star-desc-updatedAt-desc',
         'x-per-page': 8,
         'x-page': 1
       })
@@ -291,9 +296,7 @@ export default {
       this.$router.push(`/explore`)
     },
     goStudyPage() {
-      window.location.href = `${
-        this.locationOrigin
-      }/s`
+      window.location.href = `${this.locationOrigin}/s`
     },
     goLessonPackage(lessonPackage) {
       window.open(`/l/student/package/${lessonPackage.id}`)
@@ -326,6 +329,19 @@ export default {
 
 <style lang="scss">
 .home-page {
+  &-notice {
+    max-width: 1200px;
+    margin: 20px auto;
+    cursor: pointer;
+    &-link {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      &-img {
+        width: 100%;
+      }
+    }
+  }
   &-register-dialog {
     .el-dialog {
       width: 352px;
@@ -497,7 +513,7 @@ export default {
           border-radius: 4px;
           border: 1px solid #eeeeee;
           .announce-list {
-            padding:0 8px;
+            padding: 0 8px;
             list-style: none;
             font-size: 14px;
             &-item {
@@ -507,9 +523,9 @@ export default {
               height: 40px;
               line-height: 40px;
               border-radius: 8px;
-              padding: 0 25px;
+              padding: 0 40px 0 25px;
               &:hover {
-                background: rgba(0,0,0,0.05);
+                background: rgba(0, 0, 0, 0.05);
               }
               a {
                 text-decoration: none;
@@ -518,6 +534,11 @@ export default {
                 font-weight: bold;
                 align-items: center;
                 color: #303133;
+                span {
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
                 .news-badge {
                   width: 22px;
                   height: 22px;
@@ -565,10 +586,10 @@ export default {
             font-size: 14px;
           }
           &-line {
-            height: 4px; 
-            width: 20px; 
+            height: 4px;
+            width: 20px;
             background: #eee;
-            border-radius: 4px
+            border-radius: 4px;
           }
           &-own {
             color: #606266;

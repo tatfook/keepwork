@@ -3,10 +3,10 @@
     <div class="media-type-media-library">
       <div v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
         <div class="media-type-media-item-main" v-if="mediaItem.key" @click.prevent="selectItem(mediaItem)">
-          <video v-if="mediaItem.type==='videos'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
-          <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
+          <video v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          <img v-else-if="getMediaItemTypeByExt(mediaItem.ext) ==='image'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
-          <div v-if="mediaItem.type==='videos'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
+          <div v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
             <i class="el-icon-caret-right"></i>
           </div>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
@@ -31,8 +31,8 @@
           </div>
         </div>
         <div class="media-type-media-item-main" v-else>
-          <video v-if="mediaItem.type==='videos'" :src="mediaItem.cover" width="100%" height="100%"></video>
-          <img v-else-if="mediaItem.type==='images'" v-lazy="mediaItem.cover" class="media-type-media-item-img" />
+          <video v-if="getMediaItemTypeByExt(mediaItem.ext) === 'video'" :src="mediaItem.cover" width="100%" height="100%"></video>
+          <img v-else-if="getMediaItemTypeByExt(mediaItem.ext) === 'image'" v-lazy="mediaItem.cover" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
           <div class="media-type-media-item-cover media-type-media-item-cover-checked">
             <el-progress :show-text=false :stroke-width="10" :percentage="mediaItem.percent" status="success"></el-progress>
@@ -148,6 +148,14 @@ export default {
     ...mapActions({
       skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue'
     }),
+    getMediaItemTypeByExt(ext) {
+      const ImageTypeExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp']
+      const VideoTypeExts = ['mp4']
+      if (_.findIndex(ImageTypeExts, validExt => validExt === ext) !== -1)
+        return 'image'
+      else if (_.findIndex(VideoTypeExts, validExt => validExt === ext) !== -1)
+        return 'video'
+    },
     selectAll() {
       let selected = this.isAllSelected ? false : true
       this.fileList = _.map(this.fileList, mediaItem => {

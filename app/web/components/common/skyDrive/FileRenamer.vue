@@ -55,6 +55,7 @@ export default {
         this.$t('skydrive.newFilenamePromptMsg'),
         this.$t('common.rename'),
         {
+          closeOnClickModal: false,
           inputValue: bareFilename,
           confirmButtonText: this.$t('common.OK'),
           cancelButtonText: this.$t('common.Cancel'),
@@ -97,6 +98,9 @@ export default {
   }
   [class*='el-icon-'] + span {
     margin-left: 0;
+  }
+  &:hover {
+    color: #3ba4ff;
   }
 }
 .iconfont {

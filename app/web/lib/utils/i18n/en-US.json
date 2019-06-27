@@ -1918,6 +1918,7 @@
   "message": {
     "messageCenter": "message center",
     "system": "system",
-    "openMessageCenter": "open the message center"
+    "openMessageCenter": "open the message center",
+    "message": "Message"
   }
 }
