@@ -282,7 +282,7 @@ export default {
     }
     &-text {
       font-size: 20px;
-      word-wrap: break-word;
+      word-break: break-word;
     }
   }
   &-bgpic {
