@@ -18,8 +18,11 @@ const getters = {
     const fullPath = getFileFullPathByPath(activePageUrl)
     const websiteName = getFileSitePathByPath(activePageUrl)
     const currentPage = _.get(openedWebsites, [websiteName, fullPath], {})
-    return _.get(openedWebsites, [websiteName, fullPath, 'version'], 0) < _.get(currentPage, 'updated.commit.version', 0)
+    const isVersionConflict = _.get(openedWebsites, [websiteName, fullPath, 'version'], 0) < _.get(currentPage, 'updated.commit.version', 0)
+    const contentConflict = _.get(openedWebsites, [websiteName, fullPath, 'content']) !== _.get(currentPage, 'updated.content')
+    return isVersionConflict && contentConflict
   },
+  isShowMergePreview: state => state.isShowMergePreview,
   activeWebsiteName: (state, { activePageUrl }) => getFileSitePathByPath(activePageUrl),
   activePageFullPath: (state, { activePageUrl }) => getFileFullPathByPath(activePageUrl),
   activePageLatestVersion(state, { activeWebsiteName, activePageFullPath, openedWebsites }) {

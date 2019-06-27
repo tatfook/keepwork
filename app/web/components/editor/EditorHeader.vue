@@ -127,7 +127,7 @@
       <!-- TODO: 文件有新版本的时候，提示 -->
       <el-menu-item v-if="isConflict" index='3' class='li-btn conflict-btn'>
         <el-tooltip content="版本冲突，请先合并再保存">
-          <span v-loading='savePending' class='iconfont icon-banbenchongtu' @click='openMergePreview'></span>
+          <span v-loading='savePending' class='iconfont icon-banbenchongtu' @click='onOpenMergePreview'></span>
         </el-tooltip>
       </el-menu-item>
       <el-menu-item v-else index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
@@ -183,10 +183,7 @@
         <el-button type="primary" @click.stop="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
       </span>
     </el-dialog>
-    <!-- TODO: mergep组件 -->
-    <el-dialog :visible.sync="isMergePreviewShow" custom-class="merge-preview-dialog">
-      <editor-merge-preview v-if="isMergePreviewShow"></editor-merge-preview>
-    </el-dialog>
+    <editor-merge-preview v-if="isShowMergePreview" @close="onCloseMergePreivew"></editor-merge-preview>
   </div>
 </template>
 
@@ -207,7 +204,6 @@ export default {
       refreshPending: false,
       isNewWebsiteDialogShow: false,
       isWebsiteSettingShow: false,
-      isMergePreviewShow: false,
       dialogVisible: false,
       closeOneFile: false,
       toBeCloseFileName: '',
@@ -219,7 +215,8 @@ export default {
   mounted() {
     Mousetrap.unbind('mod+s')
     Mousetrap.bind('mod+s', () => {
-      this.save()
+      this.isConflict ? this.onOpenMergePreview(true) : this.save()
+      // this.save()
       return false
     })
     Mousetrap.unbind('mod+z')
@@ -250,7 +247,8 @@ export default {
       isPreviewShow: 'isPreviewShow',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       showAngle: 'showAngle',
-      updateRecentUrlList: 'updateRecentUrlList'
+      updateRecentUrlList: 'updateRecentUrlList',
+      isShowMergePreview: 'isShowMergePreview'
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
@@ -332,10 +330,14 @@ export default {
       userDeletePagesConfig: 'user/deletePagesConfig',
       toggleFileHistoryVisibility: 'toggleFileHistoryVisibility',
       toggleAngles: 'toggleAngles',
-      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl',
+      toggleMergePreview: 'toggleMergePreview'
     }),
-    openMergePreview() {
-      this.isMergePreviewShow = true
+    onOpenMergePreview() {
+      this.toggleMergePreview(true)
+    },
+    onCloseMergePreivew() {
+      this.toggleMergePreview(false)
     },
     openZenMode() {
       const dom = document.querySelector('#codeWin')
@@ -811,10 +813,6 @@ export default {
 }
 </style>
 <style lang="scss">
-.el-dialog.merge-preview-dialog {
-  width: 1300px;
-  max-width: 80vw;
-}
 .logo-submenu {
   .el-menu .el-submenu__title,
   a {

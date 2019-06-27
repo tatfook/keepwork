@@ -92,7 +92,8 @@ const {
   TOGGLE_ANGLES,
   TOGGLE_IFRAME_DIALOG,
 
-  UPDATE_OPENED_WEBSITES
+  UPDATE_OPENED_WEBSITES,
+  TOGGLE_MERGE_PREVIEW
 } = props
 
 const actions = {
@@ -167,9 +168,19 @@ const actions = {
     let { content, saved } = getOpenedFileByPath(path)
     if (!saved) {
       const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
-      dispatch('updateOpenedFile', { saved: true, path })
-      dispatch('broadcastTheRoom', { path, type: 'update', commit })
+      dispatch('updateOpenedFile', { saved: true, path, ...commit })
+      dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
+      dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
     }
+  },
+  async saveMergedPage({ dispatch, getters: { activePageUrl } }, { content, path }) {
+    path = path || activePageUrl
+    path = getFileFullPathByPath(path)
+    const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    dispatch('updateMarkDown', { code: content })
+    dispatch('updateOpenedFile', { saved: true, path, ...commit })
+    dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
+    dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
   },
 
   // siteSetting
@@ -595,6 +606,9 @@ const actions = {
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)
   },
+  toggleMergePreview({ commit }, payload) {
+    commit(TOGGLE_MERGE_PREVIEW, payload)
+  },
   async joinTheRoom({ getters: { openedFiles } }, { websiteName, path = '' }) {
     websiteName = websiteName || getFileSitePathByPath(path)
     socketInstance.emit('app/join', { room: websiteName })
@@ -656,6 +670,17 @@ const actions = {
     }
     dispatch('checkOpenedFilesVersion')
   },
+  updateOpenedWebsites({ commit, getters: { openedWebsites } }, { path, updated, ...rest }) {
+    const websiteName = getFileSitePathByPath(path)
+    const fullPath = getFileFullPathByPath(path)
+    commit(UPDATE_OPENED_WEBSITES, {
+      ...openedWebsites,
+      [websiteName]: {
+        ...openedWebsites[websiteName],
+        [fullPath]: { ...openedWebsites[websiteName][fullPath], ...rest }
+      }
+    })
+  },
   async checkOpenedFilesVersion({ commit, dispatch, getters: { openedFiles, openedWebsites, activePageUrl }, rootGetters: { 'user/username': localUsername } }) {
     const openedFilesPath = _.keys(openedFiles)
     if (openedFilesPath.length) {
@@ -666,13 +691,6 @@ const actions = {
         _.forEach(versionArr, ({ websiteName, path, data }) => {
           const localFileVersion = _.get(_openedWebsites, [websiteName, path, 'version'], 0)
           const { commit: latestFileInfo, ...rest } = data
-          console.log(localUsername)
-          console.log(latestFileInfo)
-          console.log(localFileVersion)
-          console.log(_openedWebsites)
-          console.log(localUsername === _.get(latestFileInfo, 'author_name', ''))
-          console.log(localFileVersion < _.get(latestFileInfo, 'version'))
-          console.log('*'.repeat(20))
           if (localUsername === _.get(latestFileInfo, 'author_name', '') && localFileVersion < _.get(latestFileInfo, 'version')) {
             dispatch('updateOpenedFile', { ...latestFileInfo, ...rest, path, saved: true })
             return
@@ -734,7 +752,12 @@ const actions = {
     })
   },
   async asyncRename({ dispatch }, { path }) {
-    console.log('asyncRename >', path)
+    // close and refresh
+    const websiteName = getFileSitePathByPath(path)
+    dispatch('gitlab/getRepositoryTree', {
+      path: websiteName,
+      useCache: false
+    })
   },
   disposeUpdate({ commit, getters: { openedFiles, openedWebsites } }, payload) {
     const { websiteName, path, ...updated } = payload
@@ -750,21 +773,24 @@ const actions = {
       })
     }
   },
+  async disposeCreate({ dispatch }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    dispatch('gitlab/getRepositoryTree', {
+      path: websiteName,
+      useCache: false
+    })
+  },
   disposeDelete(context, payload) {
     // TODO:如果该文档正在编辑，改如何处理？
-    console.warn('delete')
   },
   disposeMove(context, payload) {
     // TODO: 如果该文档正在编辑的情况下，被别人移动了，需要如何处理？ 1.如果已经保存，则更新目录树应该就能解决。 2.如果未保存，那么就麻烦了。
-    console.warn('move')
   },
   disposeRename(context, payload) {
     // TODO: 如果文档正在编辑，然后又被重命名了
-    console.warn('rename')
   },
   disposeDestroyWebsite(context, payload) {
     // TODO: 直接提示后删除
-    console.warn('destroyWebsite')
   }
 }
 

@@ -64,6 +64,7 @@ const TOGGLE_ANGLES = 'TOGGLE_ANGLES'
 const TOGGLE_IFRAME_DIALOG = 'TOGGLE_IFRAME_DIALOG'
 
 const UPDATE_OPENED_WEBSITES = 'UPDATE_OPENED_WEBSITES'
+const TOGGLE_MERGE_PREVIEW = 'TOGGLE_MERGE_PREVIEW'
 
 export const props = {
   SET_ACTIVE_PAGE,
@@ -120,7 +121,8 @@ export const props = {
   TOGGLE_ANGLES,
   TOGGLE_IFRAME_DIALOG,
 
-  UPDATE_OPENED_WEBSITES
+  UPDATE_OPENED_WEBSITES,
+  TOGGLE_MERGE_PREVIEW
 }
 
 const activeAreaData = state => {
@@ -415,6 +417,9 @@ const mutations = {
   },
   [UPDATE_OPENED_WEBSITES](state, payload) {
     Vue.set(state, 'openedWebsites', payload)
+  },
+  [TOGGLE_MERGE_PREVIEW](state, payload) {
+    Vue.set(state, 'isShowMergePreview', payload)
   }
 }
 
