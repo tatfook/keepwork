@@ -145,8 +145,10 @@ export default {
     },
     activeCursorLine() {
       const cursor = this.editor.getCursor()
-      return cursor.line || this.editor.lastLine()
-      // return cursor.sticky ? cursor.line : this.editor.lastLine()
+      if (_.isNumber(cursor.line)) {
+         return cursor.line ? cursor.line : -1
+      }
+      return this.editor.lastLine()
     }
   },
   methods: {
