@@ -157,7 +157,7 @@
         <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
       </el-menu-item>
       <el-menu-item index='8' class='pull-right user-profile-box'>
-        <img class='user-profile' :src='userProfile.portrait' alt=''>
+        <img class='user-profile' :src='miniPortrait' alt=''>
       </el-menu-item>
       <el-menu-item v-if="!isWelcomeShow" index='9' class='switch-box'>
         <el-tooltip :content="$t('tips.ShowPreviewOnly')">
@@ -250,6 +250,17 @@ export default {
       updateRecentUrlList: 'updateRecentUrlList',
       isShowMergePreview: 'isShowMergePreview'
     }),
+    miniPortrait() {
+      let portrait = this.userProfile.portrait || ''
+      portrait = portrait.replace(/#.*/g, '')
+      if (
+        /^http:\/\/qiniu/.test(portrait) ||
+        /^https:\/\/qiniu/.test(portrait)
+      ) {
+        return `${portrait}&imageView2/2/w/100`
+      }
+      return `${portrait}?imageView2/2/w/100`
+    },
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
