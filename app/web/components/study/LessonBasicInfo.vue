@@ -29,7 +29,7 @@
             <el-checkbox v-model="isNewPackageSelected"></el-checkbox>
             <el-input v-model="newPackageName" size="small"></el-input>
             <i class="el-icon-circle-close" :title="$t('common.Cancel')" @click="hideNewPackageEditor"></i>
-            <i class="el-icon-circle-check-outline" :title="$t('common.Save')" @click="createNewPackage"></i>
+            <i class="el-icon-circle-check" :title="$t('common.Save')" @click="createNewPackage"></i>
           </div>
           <div v-if="isEditable" class="lesson-basic-info-packages-new" @click="showNewPackageEditor">
             <i class="el-icon-circle-plus-outline"></i>{{$t('lesson.newPackage')}}
@@ -138,6 +138,13 @@ export default {
       this.isNewPackageEditorShow = false
     },
     async createNewPackage() {
+      if (!this.newPackageName) {
+        this.$message({
+          type: 'error',
+          message: this.$t('lesson.packageManage.nameIsRequiredInfo')
+        })
+        return
+      }
       this.isPackageZoneLoading = true
       await this.teacherCreateNewPackage({
         newPackageData: {
@@ -292,7 +299,10 @@ export default {
         color: #ccc;
         cursor: pointer;
       }
-      .el-icon-circle-check-outline {
+      .el-checkbox {
+        margin-right: 0;
+      }
+      .el-icon-circle-check {
         font-size: 20px;
         color: #17da98;
         cursor: pointer;
