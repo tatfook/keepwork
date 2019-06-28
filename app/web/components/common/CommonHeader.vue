@@ -421,6 +421,7 @@ export default {
 }
 .el-menu-item {
   padding: 0 12px;
+  color: #909399;
   &:hover {
     color: #409eff !important;
   }
@@ -430,6 +431,9 @@ export default {
     position: relative;
     left: 1px;
   }
+}
+.el-menu--horizontal .el-menu-item:not(.is-disabled):focus {
+  color: #909399;
 }
 .home-page {
   padding-left: 0;
@@ -442,7 +446,8 @@ export default {
 }
 .el-dropdown {
   height: 60px;
-  line-height: 58px;
+  line-height: 57px;
+  color: #909399;
 }
 .el-dropdown-menu {
   font-size: 14px;
@@ -598,9 +603,12 @@ export default {
 }
 .common-header {
   .user-message-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 58px;
     .user-message-badge {
-      height: 20px;
-      line-height: 20px;
+      line-height: 22px;
       .el-badge__content {
         height: 16px;
         line-height: 16px;
@@ -623,11 +631,6 @@ export default {
     padding-right: 4px !important;
     .iconfont.icon-xiazai {
       font-size: 30px;
-    }
-    &-text {
-      color: #2397f3;
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
-      padding-right: 18px;
     }
   }
 }
