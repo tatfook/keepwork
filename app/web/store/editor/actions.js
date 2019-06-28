@@ -7,6 +7,7 @@ import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 import { gConst } from '@/lib/global'
 import { props } from './mutations'
+import { Notification } from 'element-ui'
 import {
   getFileFullPathByPath,
   getFileSitePathByPath,
@@ -738,29 +739,18 @@ const actions = {
       dispatch('setActivePage', { path: '/' })
       window.history && window.history.replaceState(null, null, '/ed')
     }
-    dispatch('closeOpenedFile', { path: fullPath })
-    dispatch('gitlab/getRepositoryTree', {
-      path: websiteName,
-      useCache: false
-    })
+    dispatch('closeOpenedFile', { path })
+    dispatch('refreshTree', { path })
   },
   async asyncCreate({ dispatch }, { path }) {
-    const websiteName = getFileSitePathByPath(path)
-    dispatch('gitlab/getRepositoryTree', {
-      path: websiteName,
-      useCache: false
-    })
+    dispatch('refreshTree', { path })
   },
   async asyncRename({ dispatch }, { path }) {
-    // close and refresh
-    const websiteName = getFileSitePathByPath(path)
-    dispatch('gitlab/getRepositoryTree', {
-      path: websiteName,
-      useCache: false
-    })
+    dispatch('closeOpenedFile', { path })
+    dispatch('refreshTree', { path })
   },
   disposeUpdate({ commit, getters: { openedFiles, openedWebsites } }, payload) {
-    const { websiteName, path, ...updated } = payload
+    const { websiteName, path, username, ...updated } = payload
     const fullPath = getFileFullPathByPath(path)
     const localFile = openedFiles[fullPath]
     if (localFile) {
@@ -771,26 +761,45 @@ const actions = {
           [fullPath]: { ...localFile, updated }
         }
       })
+      Notification({
+        title: '文件有更新',
+        message: `${username}更新了${path}的内容`,
+        type: 'info'
+      })
     }
   },
-  async disposeCreate({ dispatch }, { path }) {
+  async disposeCreate({ dispatch }, { path, username }) {
+    Notification({
+      title: '新增文件',
+      message: `${username}创建了${path}`,
+      type: 'success'
+    })
+    dispatch('refreshTree', { path })
+  },
+  disposeDelete({ dispatch }, { path, username }) {
+    // TODO:如果该文档正在编辑，改如何处理？
+    Notification({
+      title: '文件被删除',
+      message: `${path}已被${username}删除`,
+      type: 'warning'
+    })
+    dispatch('refreshTree', { path })
+  },
+  disposeMove(context, payload) {
+    // TODO: 如果该文档正在编辑的情况下，被别人移动了，需要如何处理？
+  },
+  disposeRename(context, payload) {
+    // TODO: 如果文档正在编辑，然后又被重命名了，需要如何处理？
+  },
+  disposeDestroyWebsite(context, payload) {
+    // TODO: 直接提示后删除
+  },
+  refreshTree({ dispatch }, { path }) {
     const websiteName = getFileSitePathByPath(path)
     dispatch('gitlab/getRepositoryTree', {
       path: websiteName,
       useCache: false
     })
-  },
-  disposeDelete(context, payload) {
-    // TODO:如果该文档正在编辑，改如何处理？
-  },
-  disposeMove(context, payload) {
-    // TODO: 如果该文档正在编辑的情况下，被别人移动了，需要如何处理？ 1.如果已经保存，则更新目录树应该就能解决。 2.如果未保存，那么就麻烦了。
-  },
-  disposeRename(context, payload) {
-    // TODO: 如果文档正在编辑，然后又被重命名了
-  },
-  disposeDestroyWebsite(context, payload) {
-    // TODO: 直接提示后删除
   }
 }
 
