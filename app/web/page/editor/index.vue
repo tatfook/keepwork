@@ -109,7 +109,8 @@ export default {
       loading: true,
       previewDialogVisible: false,
       isFullscreen: false,
-      showPreviewClose: false
+      showPreviewClose: false,
+      isFirstCheck: true
     }
   },
   async created() {
@@ -118,15 +119,23 @@ export default {
     await this.updateActivePage()
   },
   async mounted() {
+    // this.initSocket()
     document.title = 'Keepwork Editor'
   },
   watch: {
-    $route: 'updateActivePage'
+    $route: 'updateActivePage',
+    openedFiles(value) {
+      if (this.isFirstCheck) {
+        this.isFirstCheck = false
+        this.initSocket()
+      }
+    }
   },
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
-      userIsLogined: 'user/isLogined'
+      userIsLogined: 'user/isLogined',
+      openedFiles: 'openedFiles'
     }),
     showLoginDialog() {
       return !this.userIsLogined
@@ -134,6 +143,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      initSocket: 'initSocket',
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',

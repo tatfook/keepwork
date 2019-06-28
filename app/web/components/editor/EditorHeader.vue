@@ -124,7 +124,13 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
+      <!-- TODO: 文件有新版本的时候，提示 -->
+      <el-menu-item v-if="isConflict" index='3' class='li-btn conflict-btn'>
+        <el-tooltip content="版本冲突，请先合并再保存">
+          <span v-loading='savePending' class='iconfont icon-banbenchongtu' @click='onOpenMergePreview'></span>
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item v-else index='3' class='li-btn save-btn' :disabled='isActivePageSaved'>
         <el-tooltip :content="$t('editor.save')">
           <span v-loading='savePending' class='iconfont icon-save' @click='save'></span>
         </el-tooltip>
@@ -151,7 +157,7 @@
         <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
       </el-menu-item>
       <el-menu-item index='8' class='pull-right user-profile-box'>
-        <img class='user-profile' :src='userProfile.portrait' alt=''>
+        <img class='user-profile' :src='miniPortrait' alt=''>
       </el-menu-item>
       <el-menu-item v-if="!isWelcomeShow" index='9' class='switch-box'>
         <el-tooltip :content="$t('tips.ShowPreviewOnly')">
@@ -177,6 +183,7 @@
         <el-button type="primary" @click.stop="saveHandleClose" :disabled="savePending">{{this.$t("editor.saveClose")}}</el-button>
       </span>
     </el-dialog>
+    <editor-merge-preview v-if="isShowMergePreview" @close="onCloseMergePreivew"></editor-merge-preview>
   </div>
 </template>
 
@@ -187,12 +194,14 @@ import { gConst } from '@/lib/global'
 import { toggleLanguage, locale } from '@/lib/utils/i18n'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
+import EditorMergePreview from './EditorMergePreview'
 
 export default {
   name: 'EditorHeader',
   data: function() {
     return {
       savePending: false,
+      refreshPending: false,
       isNewWebsiteDialogShow: false,
       isWebsiteSettingShow: false,
       dialogVisible: false,
@@ -206,7 +215,8 @@ export default {
   mounted() {
     Mousetrap.unbind('mod+s')
     Mousetrap.bind('mod+s', () => {
-      this.save()
+      this.isConflict ? this.onOpenMergePreview(true) : this.save()
+      // this.save()
       return false
     })
     Mousetrap.unbind('mod+z')
@@ -225,6 +235,7 @@ export default {
       userProfile: 'user/profile',
       showingCol: 'showingCol',
       activePageInfo: 'activePageInfo',
+      isConflict: 'isActivePageHasConflict',
       canUndo: 'canUndo',
       canRedo: 'canRedo',
       openedFiles: 'openedFiles',
@@ -236,8 +247,20 @@ export default {
       isPreviewShow: 'isPreviewShow',
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       showAngle: 'showAngle',
-      updateRecentUrlList: 'updateRecentUrlList'
+      updateRecentUrlList: 'updateRecentUrlList',
+      isShowMergePreview: 'isShowMergePreview'
     }),
+    miniPortrait() {
+      let portrait = this.userProfile.portrait || ''
+      portrait = portrait.replace(/#.*/g, '')
+      if (
+        /^http:\/\/qiniu/.test(portrait) ||
+        /^https:\/\/qiniu/.test(portrait)
+      ) {
+        return `${portrait}&imageView2/2/w/100`
+      }
+      return `${portrait}?imageView2/2/w/100`
+    },
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
@@ -318,8 +341,15 @@ export default {
       userDeletePagesConfig: 'user/deletePagesConfig',
       toggleFileHistoryVisibility: 'toggleFileHistoryVisibility',
       toggleAngles: 'toggleAngles',
-      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl',
+      toggleMergePreview: 'toggleMergePreview'
     }),
+    onOpenMergePreview() {
+      this.toggleMergePreview(true)
+    },
+    onCloseMergePreivew() {
+      this.toggleMergePreview(false)
+    },
     openZenMode() {
       const dom = document.querySelector('#codeWin')
 
@@ -649,7 +679,8 @@ export default {
   },
   components: {
     NewWebsiteDialog,
-    WebsiteSettingDialog
+    WebsiteSettingDialog,
+    EditorMergePreview
   }
 }
 </script>
@@ -675,6 +706,11 @@ export default {
   border-bottom: 2px solid #f7bc2a !important;
 }
 .save-btn:not(.is-disabled) .icon-save {
+  background: #f7bc2a;
+  border-color: #f7bc2a;
+  color: white;
+}
+.conflict-btn:not(.is-disabled) .icon-banbenchongtu {
   background: #f7bc2a;
   border-color: #f7bc2a;
   color: white;
@@ -715,6 +751,7 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .input-link-copy-box {
   display: inline-block;
