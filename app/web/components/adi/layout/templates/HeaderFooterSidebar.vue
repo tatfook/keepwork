@@ -36,5 +36,10 @@ export default {
   .el-main {
     padding: 0 32px;
   }
+  @media (max-width: 768px) {
+    .el-aside {
+      width: 400px !important;
+    }
+  }
 }
 </style>

@@ -7,7 +7,7 @@
       <el-aside width="240px" :class="{'hide-on-phone': (showSidebarOrMain !== 'sidebar')}">
         <slot name="sidebar"></slot>
       </el-aside>
-      <el-main :class="{'hide': showSidebarOrMain === 'sidebar'}">
+      <el-main :class="{'hide-on-phone': showSidebarOrMain === 'sidebar'}">
         <slot> </slot>
       </el-main>
     </el-container>
@@ -40,6 +40,11 @@ export default {
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
+  }
+  @media (max-width: 768px) {
+    .el-aside {
+      width: 400px !important;
+    }
   }
 }
 </style>
