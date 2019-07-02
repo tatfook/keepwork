@@ -135,7 +135,7 @@ export default {
   },
   computed: {
     isImage() {
-      return ['jpg', 'png', 'gif'].includes(this.cardValue.ext)
+      return ['jpg', 'png', 'gif', 'mp4', 'pdf'].includes(this.cardValue.ext)
     },
     unit() {
       return this.cardValue.unit || '%'
