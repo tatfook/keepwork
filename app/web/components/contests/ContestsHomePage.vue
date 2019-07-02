@@ -58,7 +58,6 @@
           <p class="award-subname" @click="showExplain(1)">最佳故事短片奖</p>
           <p class="award-subname" @click="showExplain(2)">最佳传播创意奖</p>
           <p class="award-subname" @click="showExplain(3)">最佳汉字气韵奖</p>
-          <p class="award-notice">注：优秀作品可在两个组别重复获奖</p>
         </div>
       </div>
       <div class="contests-home-page-awards-box award_2">
