@@ -307,8 +307,11 @@ export default {
         padding: 20px 28px;
         background-color: rgb(229, 243, 255);
         border-radius: 10px 10px 0 0;
+        height: 104px;
+        box-sizing: border-box;
         &-img {
           height: 60px;
+          width: 100%;
         }
         &-text {
           font-size: 38px;
@@ -390,6 +393,23 @@ export default {
         color: #f07c0a;
         font-weight: bold;
         border-radius: 10px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .contests {
+    &-games {
+      display: block;
+      &-box {
+        margin: 20px;
+        width: 90%;
+      }
+    }
+    &-exhibition {
+      display: block;
+      &-box {
+        margin: 20px auto;
       }
     }
   }

@@ -34,6 +34,7 @@
 import ContestsHeader from '@/components/contests/ContestsHeader'
 import ContestsFooter from '@/components/contests/ContestsFooter'
 import ApplyWayDialog from './ApplyWayDialog'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ContestsPage',
@@ -61,6 +62,11 @@ export default {
       showApplyDialog: false
     }
   },
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined'
+    })
+  },
   components: {
     ContestsHeader,
     ContestsFooter,
@@ -68,8 +74,12 @@ export default {
   },
   mounted() {
     this.topTextAnimation()
+    this.selectTabItem(this.currentSelected)
   },
   methods: {
+    ...mapActions({
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
     topTextAnimation() {
       this.topTextTimer = setInterval(() => {
         let leftLen = this.$refs['topHintText'].style['left'].replace(/px/, '')
@@ -115,6 +125,9 @@ export default {
       }
     },
     toApply() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.showApplyDialog = true
     },
     closeApplyDialog() {
@@ -142,8 +155,8 @@ body {
   display: table;
   width: 100%;
   box-sizing: border-box;
-  font-family: 'STKaiti';
-  font-weight: bold;
+  // font-family: 'STKaiti';
+  // font-weight: bold;
   background: url(../../assets/contests/bg.png) center top no-repeat,
     url(../../assets/contests/footer_bg.png) bottom center no-repeat;
   &-header {
@@ -179,8 +192,11 @@ body {
     }
     &-title {
       height: 184px;
+      max-width: 692px;
       background: url(../../assets/contests/banner_text.png) no-repeat top
         center;
+      background-size: 80%;
+      margin: 0 auto;
     }
     &-specifier {
       text-align: center;
@@ -217,13 +233,13 @@ body {
     &-tab {
       display: flex;
       max-width: 1020px;
-      margin: 0 auto;
+      margin: 40px auto 0;
       justify-content: space-around;
       &-item {
         display: inline-block;
         width: 166px;
-        height: 109px;
-        line-height: 109px;
+        height: 52px;
+        line-height: 52px;
         text-align: center;
         font-size: 24px;
         color: #13232f;
@@ -231,9 +247,10 @@ body {
         position: relative;
         z-index: 999;
         &.selected-item {
-          color: #fff;
-          background: url(../../assets/contests/head_selected.png) no-repeat
-            center top;
+          color: rgb(4, 62, 147);
+          // background: url(../../assets/contests/head_selected.png) no-repeat
+          //   center top;
+          border: 2px solid rgb(4, 62, 147);
         }
       }
     }

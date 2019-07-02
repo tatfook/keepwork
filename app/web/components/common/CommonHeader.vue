@@ -57,7 +57,7 @@
           <div class="user-message-button" @click="toMessageCenter">{{$t('message.openMessageCenter')}}</div>
           <div slot="reference" class="user-message-icon-container">
             <el-badge :value="unreadMessagesCount" :hidden="unreadMessagesCount === 0" :max="99" class="user-message-badge">
-              <i class="iconfont icon-message-fill user-message-icon"></i>{{$t('message.message')}}
+              <i class="iconfont icon-message-fill user-message-icon"></i><span class="hidden-xs-only">{{$t('message.message')}}</span>
             </el-badge>
           </div>
         </el-popover>
@@ -66,7 +66,7 @@
         <el-dropdown placement="bottom">
           <span class="el-dropdown-link tool-menu">
             <i class="iconfont icon-wrench-fill"></i>
-            {{$t('common.tools')}}
+            <span class="hidden-xs-only">{{$t('common.tools')}}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
@@ -421,6 +421,7 @@ export default {
 }
 .el-menu-item {
   padding: 0 12px;
+  color: #909399;
   &:hover {
     color: #409eff !important;
   }
@@ -430,6 +431,9 @@ export default {
     position: relative;
     left: 1px;
   }
+}
+.el-menu--horizontal .el-menu-item:not(.is-disabled):focus {
+  color: #909399;
 }
 .home-page {
   padding-left: 0;
@@ -442,7 +446,8 @@ export default {
 }
 .el-dropdown {
   height: 60px;
-  line-height: 58px;
+  line-height: 57px;
+  color: #909399;
 }
 .el-dropdown-menu {
   font-size: 14px;
@@ -508,9 +513,6 @@ export default {
 <style lang="scss">
 .user-message-popper {
   padding: 0px;
-  .popper__arrow {
-    display: none !important;
-  }
   .user-message-main {
     height: 250px;
     padding: 12px 0;
@@ -601,9 +603,12 @@ export default {
 }
 .common-header {
   .user-message-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 58px;
     .user-message-badge {
-      height: 20px;
-      line-height: 20px;
+      line-height: 22px;
       .el-badge__content {
         height: 16px;
         line-height: 16px;
@@ -626,11 +631,6 @@ export default {
     padding-right: 4px !important;
     .iconfont.icon-xiazai {
       font-size: 30px;
-    }
-    &-text {
-      color: #2397f3;
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
-      padding-right: 18px;
     }
   }
 }

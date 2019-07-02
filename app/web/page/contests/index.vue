@@ -9,6 +9,7 @@
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
+    <quick-to-top></quick-to-top>
   </div>
 </template>
 <script>
@@ -25,6 +26,7 @@ import messageModule from '@/store/message'
 import pblModule from '@/store/pbl'
 import { socket, socketMixin } from '@/socket'
 import LoginDialog from '@/components/common/LoginDialog'
+import QuickToTop from '@/components/common/QuickToTop'
 import ba from 'vue-ba'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
@@ -64,7 +66,8 @@ export default {
   },
   components: {
     CommonHeader,
-    LoginDialog
+    LoginDialog,
+    QuickToTop
   },
   async mounted() {
     await this.loadUerInfo()

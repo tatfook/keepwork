@@ -168,6 +168,8 @@
 </template>
 <script>
 import ApplyWayDialog from './ApplyWayDialog'
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'ContestsHomePage',
   data() {
@@ -224,10 +226,18 @@ export default {
       selectedIndex: 0
     }
   },
+  computed: {
+    ...mapGetters({
+      isLogined: 'user/isLogined'
+    })
+  },
   components: {
     ApplyWayDialog
   },
   methods: {
+    ...mapActions({
+      toggleLoginDialog: 'pbl/toggleLoginDialog'
+    }),
     closeAwardExplain() {
       this.showAwardExplain = false
     },
@@ -236,6 +246,9 @@ export default {
       this.showAwardExplain = true
     },
     toApply() {
+      if (!this.isLogined) {
+        return this.toggleLoginDialog(true)
+      }
       this.showApplyDialog = true
     },
     closeApplyDialog() {
@@ -269,7 +282,7 @@ export default {
     }
     &-text {
       font-size: 20px;
-      word-wrap: break-word;
+      word-break: break-word;
     }
   }
   &-bgpic {
@@ -278,10 +291,12 @@ export default {
     &.element_1 {
       left: 0;
       top: 20px;
+      width: 18%;
     }
     &.element_3 {
       left: 0;
       top: 1620px;
+      width: 18%;
     }
     &.element_2 {
       right: 0;
@@ -290,6 +305,7 @@ export default {
     &.element_4 {
       right: 0;
       top: 2120px;
+      width: 15%;
     }
     &.element_text_1 {
       right: 100px;
