@@ -181,7 +181,7 @@ const actions = {
     dispatch('updateMarkDown', { code: content })
     dispatch('updateOpenedFile', { saved: true, path, ...commit })
     dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
-    dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
+    dispatch('broadcastTheRoom', { path, type: 'merge', content, commit })
   },
 
   // siteSetting
@@ -731,6 +731,9 @@ const actions = {
       }
     }
   },
+  async asyncMerge({ dispatch, commit, getters: { openedFiles, activePageUrl } }, payload) {
+    dispatch('asyncUpdate', payload)
+  },
   async asyncDelete({ dispatch, getters: { activePageUrl } }, { path }) {
     const websiteName = getFileSitePathByPath(path)
     const fullPath = getFileFullPathByPath(path)
@@ -745,12 +748,15 @@ const actions = {
   async asyncCreate({ dispatch }, { path }) {
     dispatch('refreshTree', { path })
   },
+  async asyncCreateFolder({ dispatch }, { path }) {
+    dispatch('refreshTree', { path })
+  },
   async asyncRename({ dispatch }, { path }) {
     dispatch('closeOpenedFile', { path })
     dispatch('refreshTree', { path })
   },
   disposeUpdate({ commit, getters: { openedFiles, openedWebsites } }, payload) {
-    const { websiteName, path, username, ...updated } = payload
+    const { websiteName, path, username, notify = true, ...updated } = payload
     const fullPath = getFileFullPathByPath(path)
     const localFile = openedFiles[fullPath]
     if (localFile) {
@@ -761,12 +767,17 @@ const actions = {
           [fullPath]: { ...localFile, updated }
         }
       })
-      Notification({
-        title: '文件有更新',
-        message: `${username}更新了${path}的内容`,
-        type: 'info'
-      })
+      if (notify) {
+        Notification({
+          title: '文件有更新',
+          message: `${username}更新了${path}的内容`,
+          type: 'info'
+        })
+      }
     }
+  },
+  disposeMerge({ dispatch }, payload) {
+    dispatch('disposeUpdate', { ...payload, notify: false })
   },
   async disposeCreate({ dispatch }, { path, username }) {
     Notification({
@@ -776,8 +787,12 @@ const actions = {
     })
     dispatch('refreshTree', { path })
   },
-  disposeDelete({ dispatch }, { path, username }) {
-    // TODO:如果该文档正在编辑，改如何处理？
+  async disposeCreateFolder({ dispatch }, { path }) {
+    dispatch('refreshTree', { path })
+  },
+  disposeDelete({ dispatch, getters: { activePageUrl } }, { path, username }) {
+    const fullPath = getFileFullPathByPath(activePageUrl)
+    // TODO:如果该文档正在编辑，如何处理？
     Notification({
       title: '文件被删除',
       message: `${path}已被${username}删除`,
@@ -792,7 +807,7 @@ const actions = {
     // TODO: 如果文档正在编辑，然后又被重命名了，需要如何处理？
   },
   disposeDestroyWebsite(context, payload) {
-    // TODO: 直接提示后删除
+    // TODO: 直接提示后删除, 并关闭该网站下面全部打开的页面
   },
   refreshTree({ dispatch }, { path }) {
     const websiteName = getFileSitePathByPath(path)
