@@ -5,7 +5,7 @@
       <div class="history-list-header-username">{{$t("editor.operatorLabel")}}</div>
       <div class="history-list-header-date">{{$t("editor.updateAtLabel")}}</div>
     </div>
-    <div class="history-list-item" :class="{'history-list-item-active': activeVersion == history.version}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)" :title='getHoverMessage(history)'>
+    <div class="history-list-item" :class="{'history-list-item-active': activeVersion == history.version, 'disabled': getIsHistoryDisabled(history)}" v-for="(history, index) in historyList" :key="index" @click="getHistoryContent(history)" :title='getHoverMessage(history)'>
       <div class="history-list-item-version">{{history.version}}
         <span class="history-list-item-version-sub">{{history.message | sourceVersionFilter}}</span>
       </div>
@@ -23,6 +23,7 @@ export default {
   name: 'HistoryList',
   data() {
     return {
+      initialIndex: 0,
       perPage: 10,
       historyList: [],
       isBusy: false,
@@ -39,6 +40,9 @@ export default {
     ...mapActions({
       gitlabGetFileHistoryList: 'gitlab/getFileHistoryList'
     }),
+    getIsHistoryDisabled(history) {
+      return history.short_id === 'pending'
+    },
     getHistoryList(page, perPage) {
       let projectPath = _.get(this.activePageInfo, 'sitepath')
       let filePath = _.get(this.activePageInfo, 'fullPath')
@@ -57,17 +61,23 @@ export default {
         resolve()
       })
     },
-    getHistoryContent(history) {
-      let version = history.version
+    getHistoryContent(historyParam) {
+      let history = historyParam || this.historyList[this.initialIndex]
+      if (this.getIsHistoryDisabled(history)) {
+        !this.activeVersion && this.initialIndex++ && this.getHistoryContent()
+        return
+      }
       let commitId = history.short_id
+      let version = history.version
       this.activeVersion = version
       this.$emit('selectHistory', { commitId, version })
     },
     async loadMore() {
       await this.getHistoryList(this.nowPage++, this.perPage)
-      !this.activeVersion && this.getHistoryContent(this.historyList[0])
+      !this.activeVersion && this.getHistoryContent()
     },
     getHoverMessage(history) {
+      if (this.getIsHistoryDisabled(history)) return '同步中'
       let commitMessage = history.message
       let index = commitMessage.indexOf(SourceVersionStr)
       if (index == -1) {
@@ -89,6 +99,7 @@ export default {
       return moment(time).format('YYYY/MM/DD HH:mm')
     },
     sourceVersionFilter(commitMessage) {
+      if (!commitMessage) return ''
       let index = commitMessage.indexOf(SourceVersionStr)
       return index != -1
         ? '(' + commitMessage.substring(index + SourceVersionStr.length) + ')'
@@ -133,6 +144,10 @@ export default {
     }
     &-active {
       background-color: #d4e8fb;
+    }
+    &.disabled {
+      color: #909399;
+      cursor: not-allowed;
     }
     &-version {
       width: 80px;
