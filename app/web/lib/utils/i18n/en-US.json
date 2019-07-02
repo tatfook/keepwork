@@ -368,7 +368,14 @@
     "versionLabel": "Version",
     "operatorLabel": "Operator",
     "updateAtLabel": "Update at",
-    "associationWebsite": "Reset website"
+    "associationWebsite": "Reset website",
+
+    "updated": "Update",
+    "needRefresh": "Web content is updated,click update.",
+    "nextDiff": "next diff",
+    "prevDiff": "prev diff",
+    "yourVersion": "your version",
+    "userVersion": "{username} version"
   },
   "tips": {
     "mod": "Module",
