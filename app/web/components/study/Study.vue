@@ -2,7 +2,7 @@
   <div class="study-home-region">
     <div class="study-home-region-banner">
       <div class="study-home-region-banner-center">
-        <div class="study-home-region-banner-center-img"><img src="@/assets/study/title.png" alt=""></div>
+        <div class="study-home-region-banner-center-img"><img src="@/assets/study/title.png" alt="编程学习"></div>
         <div class="study-home-region-banner-center-desc">
           <p class="study-home-region-banner-center-desc-text">你是动画爱好者？还是希望提升编程技能？<br>keepwork为各个阶段、水平的3D动画与编程学习者提供了多种多样的学习资源，从免费的教程到现场培训。</p>
         </div>
@@ -11,7 +11,7 @@
     </div>
     <div class="study-home-region-module">
       <div class="study-home-region-module-box" v-for="(i,index) in centerIntroData" :key="index">
-        <img class="study-home-region-module-box-img" :src="i.imgUrl" alt="" @click="learnMore(i.moreLink)">
+        <img class="study-home-region-module-box-img" :src="i.imgUrl" :alt="i.title" @click="learnMore(i.moreLink)">
         <h4 class="study-home-region-module-box-title" @click="learnMore(i.moreLink)">{{i.title}}</h4>
         <div class="study-home-region-module-box-intro">
           <div class="study-home-region-module-box-intro-text">

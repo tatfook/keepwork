@@ -18,7 +18,9 @@ import { transfer } from 'vuex-iframe-sync'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import EditorViewport from '@/components/editor/EditorViewport'
 import '@/components/common/thirdAuth'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueI18n)
