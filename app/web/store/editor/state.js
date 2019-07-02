@@ -42,6 +42,8 @@ const state = () => ({
   activePageUrl: '',
   openedPages: {},
   openedFiles: {},
+  openedWebsites: {},
+  isShowMergePreview: false,
   siteSettings: {},
   openenLayoutFiles: {},
   filemanagerTreeNodeExpandMapByPath: {},

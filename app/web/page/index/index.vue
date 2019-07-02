@@ -41,7 +41,9 @@ import LoginDialog from '@/components/common/LoginDialog'
 // message push
 import messageModule from '@/store/message'
 import { socket, socketMixin } from '@/socket'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)

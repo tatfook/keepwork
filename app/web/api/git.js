@@ -73,12 +73,11 @@ const gitLabAPIGenerator = ({ url, token }) => {
             await instance.delete(`projects/${projectPath}/files/${path}`)
             return true
           },
-          async show({ projectPath, fullPath, useCache }) {
+          async show({ projectPath, fullPath, showVersion = false, useCache }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            let res = await instance.get(
-              `projects/${projectPath}/files/${fullPath}`
-            )
+            const url = `projects/${projectPath}/files/${fullPath}${showVersion ? '?commit=true' : ''}`
+            let res = await instance.get(url)
             return res.data
           },
           async showWithCommitId({
@@ -209,9 +208,9 @@ export class GitAPI {
     return this.client.projects.repository.tree(projectName, path, recursive)
   }
 
-  async getFile({ projectPath, fullPath, useCache = false }) {
+  async getFile({ projectPath, fullPath, useCache = false, showVersion = false }) {
     return this.client.projects.repository.files
-      .show({ projectPath, fullPath, useCache })
+      .show({ projectPath, fullPath, useCache, showVersion })
       .then(file => file)
   }
 

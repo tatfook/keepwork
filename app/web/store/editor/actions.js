@@ -7,12 +7,36 @@ import UndoHelper from '@/lib/utils/undo/undoHelper'
 import LayoutHelper from '@/lib/mod/layout'
 import { gConst } from '@/lib/global'
 import { props } from './mutations'
+import { Notification } from 'element-ui'
 import {
   getFileFullPathByPath,
   getFileSitePathByPath,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
+import jsrsasign from 'jsrsasign'
 import { initPageState, initSiteState, initLayoutPageState } from './state'
+
+import io from 'socket.io-client'
+
+let socketInstance = null
+const createSocket = ({ token, callback }) => {
+  if (socketInstance) {
+    return socketInstance
+  }
+  const jwtInfo = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+    jsrsasign.b64utoutf8(token.split('.')[1])
+  )
+  const userId = jwtInfo.userId
+  socketInstance = io(process.env.SOCKET_API_PREFIX, {
+    query: {
+      userId,
+      token
+    },
+    transports: ['websocket']
+  })
+  socketInstance.on('app/msg', callback)
+  return socketInstance
+}
 
 const {
   SET_ACTIVE_PAGE,
@@ -67,7 +91,10 @@ const {
   ADD_RECENT_OPENED_SITE,
   TOGGLE_FILE_HISTORY,
   TOGGLE_ANGLES,
-  TOGGLE_IFRAME_DIALOG
+  TOGGLE_IFRAME_DIALOG,
+
+  UPDATE_OPENED_WEBSITES,
+  TOGGLE_MERGE_PREVIEW
 } = props
 
 const actions = {
@@ -141,9 +168,20 @@ const actions = {
     if (!path) return
     let { content, saved } = getOpenedFileByPath(path)
     if (!saved) {
-      await dispatch('gitlab/saveFile', { content, path }, { root: true })
-      dispatch('updateOpenedFile', { saved: true, path })
+      const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
+      dispatch('updateOpenedFile', { saved: true, path, ...commit })
+      dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
+      dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
     }
+  },
+  async saveMergedPage({ dispatch, getters: { activePageUrl } }, { content, path }) {
+    path = path || activePageUrl
+    path = getFileFullPathByPath(path)
+    const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    dispatch('updateMarkDown', { code: content })
+    dispatch('updateOpenedFile', { saved: true, path, ...commit })
+    dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
+    dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
   },
 
   // siteSetting
@@ -201,17 +239,16 @@ const actions = {
   // Files
   async loadFile(
     { commit, dispatch, rootGetters, getters },
-    { path, editorMode = true }
+    { path, editorMode = true, showVersion = false }
   ) {
-    await dispatch('gitlab/readFile', { path, editorMode }, { root: true })
+    await dispatch('gitlab/readFile', { path, editorMode, showVersion }, { root: true })
     let {
       'gitlab/getFileByPath': gitlabGetFileByPath,
       'user/username': username
     } = rootGetters
     let file = gitlabGetFileByPath(path)
     if (!file) return
-
-    let { content } = file
+    let { content, _id, commit: _commit } = file
 
     let fullPath = getFileFullPathByPath(path)
     let timestamp = Date.now()
@@ -219,20 +256,22 @@ const actions = {
     let commitPayload = {
       username,
       path: fullPath,
-      data: { timestamp, path, content, saved }
+      data: { timestamp, path, content, saved, _id, ..._commit }
     }
     return commitPayload
   },
   async openFile({ dispatch, commit }, { path, editorMode = true }) {
-    let payload = await dispatch('loadFile', { path, editorMode })
+    let payload = await dispatch('loadFile', { path, editorMode, showVersion: true })
     commit(ADD_OPENED_FILE, payload)
+    dispatch('addOpenedWebsite', { path: getFileFullPathByPath(path) })
   },
   async refreshOpenedFile(
     { commit, dispatch, getters },
     { path, editorMode = true }
   ) {
-    let payload = await dispatch('loadFile', { path, editorMode })
+    let payload = await dispatch('loadFile', { path, editorMode, showVersion: true })
     commit(UPDATE_OPENED_FILE, payload)
+    dispatch('addOpenedWebsite', { path: getFileFullPathByPath(path) })
     let fullPath = getFileFullPathByPath(path)
     if (getFileFullPathByPath(getters.activePageUrl) === fullPath) {
       dispatch('refreshModList')
@@ -256,17 +295,19 @@ const actions = {
     let fullPath = getFileFullPathByPath(path)
     let {
       commit,
+      dispatch,
       state,
       rootGetters: { 'user/username': username }
     } = context
     commit(CLOSE_OPENED_FILE, { username, path: fullPath })
-
+    dispatch('closeOpenedWebsite', { path: fullPath })
     if (path === state.activePageUrl) {
       commit(SET_ACTIVE_PAGE, null)
     }
   },
-  closeAllOpenedFile({ commit, rootGetters }) {
+  closeAllOpenedFile({ commit, dispatch, rootGetters }) {
     let { 'user/username': username } = rootGetters
+    dispatch('closeAllOpenedWebsite')
     commit(CLOSE_ALL_OPENED_FILE, { username })
   },
 
@@ -561,11 +602,204 @@ const actions = {
     commit(TOGGLE_ANGLES, { showAngle })
   },
   toggleFileHistoryVisibility({ commit }, { isVisible }) {
-    console.log(isVisible)
     commit(TOGGLE_FILE_HISTORY, { isVisible })
   },
   toggleIframeDialog({ commit }, payload) {
     commit(TOGGLE_IFRAME_DIALOG, payload)
+  },
+  toggleMergePreview({ commit }, payload) {
+    commit(TOGGLE_MERGE_PREVIEW, payload)
+  },
+  async joinTheRoom({ getters: { openedFiles } }, { websiteName, path = '' }) {
+    websiteName = websiteName || getFileSitePathByPath(path)
+    socketInstance.emit('app/join', { room: websiteName })
+  },
+  async leaveTheRoom({ getters: { openedFiles } }, { websiteName, path = '' }) {
+    websiteName = websiteName || getFileSitePathByPath(path)
+    socketInstance.emit('app/leave', { room: websiteName })
+  },
+  async broadcastTheRoom({ getters: { code }, rootGetters: { 'user/username': username } }, { path = '', type = 'update', ...rest }) {
+    const websiteName = getFileSitePathByPath(path)
+    const fullPath = getFileFullPathByPath(path)
+    socketInstance.emit('app/msg', { target: websiteName, payload: { websiteName, path: fullPath, username, content: code, type, timestamp: Date.now(), ...rest } })
+  },
+  addOpenedWebsite({ commit, dispatch, getters: { openedWebsites, openedFiles } }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    const fullPath = getFileFullPathByPath(path)
+    commit(UPDATE_OPENED_WEBSITES, {
+      ...openedWebsites,
+      [websiteName]: {
+        ...openedWebsites[websiteName],
+        [path]: openedFiles[fullPath]
+      }
+    })
+    dispatch('joinTheRoom', { websiteName, path })
+  },
+  closeOpenedWebsite({ commit, dispatch, getters: { openedWebsites } }, { websiteName, path }) {
+    websiteName = websiteName || getFileSitePathByPath(path)
+    const _openedWebsites = _.cloneDeep(openedWebsites)
+    _.unset(_openedWebsites, [websiteName, path])
+    if (_.isEmpty(_openedWebsites[websiteName])) {
+      _.unset(_openedWebsites, [websiteName])
+      dispatch('leaveTheRoom', { websiteName, path })
+    }
+    commit(UPDATE_OPENED_WEBSITES, _openedWebsites)
+  },
+  closeAllOpenedWebsite({ commit, dispatch, getters: { openedWebsites } }) {
+    const openedWebsitesName = _.keys(openedWebsites)
+    _.forEach((openedWebsitesName), websiteName => {
+      dispatch('leaveTheRoom', { websiteName })
+    })
+    commit(UPDATE_OPENED_WEBSITES, {})
+  },
+  initSocket({ dispatch, rootGetters: { 'user/token': token } }) {
+    createSocket({ token, callback: data => dispatch('disposeData', data) })
+    dispatch('recoverDataAndSocket')
+  },
+  async recoverDataAndSocket({ commit, dispatch, getters: { openedFiles } }) {
+    const openedPagesName = _.keys(openedFiles)
+    const websitesGroup = _.reduce(openedPagesName, (group, path) => {
+      const websiteName = getFileSitePathByPath(path)
+      const fullPath = getFileFullPathByPath(path)
+      _.set(group, [websiteName, path], openedFiles[fullPath])
+      return group
+    }, {})
+    commit(UPDATE_OPENED_WEBSITES, websitesGroup)
+    const openedWebsitesName = _.keys(websitesGroup)
+    if (openedWebsitesName.length) {
+      socketInstance.emit('app/join', { room: openedWebsitesName })
+    }
+    dispatch('checkOpenedFilesVersion')
+  },
+  updateOpenedWebsites({ commit, getters: { openedWebsites } }, { path, updated, ...rest }) {
+    const websiteName = getFileSitePathByPath(path)
+    const fullPath = getFileFullPathByPath(path)
+    commit(UPDATE_OPENED_WEBSITES, {
+      ...openedWebsites,
+      [websiteName]: {
+        ...openedWebsites[websiteName],
+        [fullPath]: { ...openedWebsites[websiteName][fullPath], ...rest }
+      }
+    })
+  },
+  async checkOpenedFilesVersion({ commit, dispatch, getters: { openedFiles, openedWebsites, activePageUrl }, rootGetters: { 'user/username': localUsername } }) {
+    const openedFilesPath = _.keys(openedFiles)
+    if (openedFilesPath.length) {
+      const _openedWebsites = _.cloneDeep(openedWebsites)
+      const fetchLatestArr = _.map(openedFilesPath, path => dispatch('getLatestVersion', { path }, { root: true }))
+      const versionArr = await Promise.all(fetchLatestArr)
+      if (versionArr.length) {
+        _.forEach(versionArr, ({ websiteName, path, data }) => {
+          const localFileVersion = _.get(_openedWebsites, [websiteName, path, 'version'], 0)
+          const { commit: latestFileInfo, ...rest } = data
+          if (localUsername === _.get(latestFileInfo, 'author_name', '') && localFileVersion < _.get(latestFileInfo, 'version')) {
+            dispatch('updateOpenedFile', { ...latestFileInfo, ...rest, path, saved: true })
+            return
+          }
+          _openedWebsites[websiteName][path]['updated'] = data
+        })
+        commit(UPDATE_OPENED_WEBSITES, _openedWebsites)
+      }
+      dispatch('refreshModList')
+    }
+  },
+  async getLatestVersion({ dispatch }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    const data = await dispatch('gitlab/getFileLatestVersion', { path }, { root: true })
+    return {
+      websiteName,
+      path,
+      data
+    }
+  },
+  disposeData({ dispatch, rootGetters: { 'user/username': localUsername } }, data) {
+    const { payload, meta } = data
+    const { type = 'update', username = '' } = payload
+    if (username === localUsername && meta.client !== socketInstance.id) {
+      dispatch(`async${_.upperFirst(type)}`, payload)
+      return
+    }
+    if (username !== localUsername) {
+      dispatch(`dispose${_.upperFirst(type)}`, payload)
+    }
+  },
+  async asyncUpdate({ dispatch, commit, getters: { openedFiles, activePageUrl } }, { path, username, content, timestamp }) {
+    if (_.includes(_.keys(openedFiles), path)) {
+      commit(UPDATE_OPENED_FILE, { data: { content, path, saved: true, timestamp }, path, username })
+      if (getFileFullPathByPath(activePageUrl) === path) {
+        dispatch('refreshModList')
+      }
+    }
+  },
+  async asyncDelete({ dispatch, getters: { activePageUrl } }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    const fullPath = getFileFullPathByPath(path)
+    const activeFullPath = getFileFullPathByPath(activePageUrl)
+    if (fullPath === activeFullPath) {
+      dispatch('setActivePage', { path: '/' })
+      window.history && window.history.replaceState(null, null, '/ed')
+    }
+    dispatch('closeOpenedFile', { path })
+    dispatch('refreshTree', { path })
+  },
+  async asyncCreate({ dispatch }, { path }) {
+    dispatch('refreshTree', { path })
+  },
+  async asyncRename({ dispatch }, { path }) {
+    dispatch('closeOpenedFile', { path })
+    dispatch('refreshTree', { path })
+  },
+  disposeUpdate({ commit, getters: { openedFiles, openedWebsites } }, payload) {
+    const { websiteName, path, username, ...updated } = payload
+    const fullPath = getFileFullPathByPath(path)
+    const localFile = openedFiles[fullPath]
+    if (localFile) {
+      commit(UPDATE_OPENED_WEBSITES, {
+        ...openedWebsites,
+        [websiteName]: {
+          ...openedWebsites[websiteName],
+          [fullPath]: { ...localFile, updated }
+        }
+      })
+      Notification({
+        title: '文件有更新',
+        message: `${username}更新了${path}的内容`,
+        type: 'info'
+      })
+    }
+  },
+  async disposeCreate({ dispatch }, { path, username }) {
+    Notification({
+      title: '新增文件',
+      message: `${username}创建了${path}`,
+      type: 'success'
+    })
+    dispatch('refreshTree', { path })
+  },
+  disposeDelete({ dispatch }, { path, username }) {
+    // TODO:如果该文档正在编辑，改如何处理？
+    Notification({
+      title: '文件被删除',
+      message: `${path}已被${username}删除`,
+      type: 'warning'
+    })
+    dispatch('refreshTree', { path })
+  },
+  disposeMove(context, payload) {
+    // TODO: 如果该文档正在编辑的情况下，被别人移动了，需要如何处理？
+  },
+  disposeRename(context, payload) {
+    // TODO: 如果文档正在编辑，然后又被重命名了，需要如何处理？
+  },
+  disposeDestroyWebsite(context, payload) {
+    // TODO: 直接提示后删除
+  },
+  refreshTree({ dispatch }, { path }) {
+    const websiteName = getFileSitePathByPath(path)
+    dispatch('gitlab/getRepositoryTree', {
+      path: websiteName,
+      useCache: false
+    })
   }
 }
 
