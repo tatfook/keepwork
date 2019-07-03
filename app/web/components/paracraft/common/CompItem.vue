@@ -1,6 +1,9 @@
 <template>
   <div class="comp-item">
-    <img class="comp-item-cover" :src="compDetail.cover" :alt="compDetail.name">
+    <div class="comp-item-cover">
+      <span class="comp-item-badge">{{compDetail.code}}</span>
+      <img :src="compDetail.cover" :alt="compDetail.name">
+    </div>
     <div class="comp-item-info">
       <div class="comp-item-info-left">
         <div class="comp-item-type-name">
@@ -40,12 +43,30 @@ export default {
   padding: 12px;
   background-color: #fff;
   &-cover {
-    max-width: 100%;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    font-size: 0;
+    img {
+      width: 100%;
+    }
+  }
+  &-badge {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0 6px;
+    height: 24px;
+    line-height: 24px;
+    color: #fff;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
   }
   &-info {
     display: flex;
     align-items: center;
-    margin-top: 4px;
+    margin-top: 8px;
     &-left {
       flex: 1;
     }

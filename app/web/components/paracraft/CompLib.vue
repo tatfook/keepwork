@@ -106,7 +106,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .comp-lib {
+  height: 100vh;
+  position: relative;
   &-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
     border-bottom: 1px solid #e5e5e5;
     height: 60px;
     padding: 0 16px 0 36px;
@@ -128,6 +136,7 @@ export default {
   &-main {
     background-color: #f5f5f5;
     height: 100%;
+    padding-top: 60px;
   }
   &-sidebar {
     width: 162px;
@@ -138,6 +147,8 @@ export default {
   &-content {
     flex-wrap: wrap;
     padding: 16px 8px;
+    overflow: auto;
+    max-height: 100%;
   }
   &-item {
     margin-bottom: 16px;
