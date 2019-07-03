@@ -2,8 +2,8 @@
   <el-dialog :visible.sync="showApplyDialog" width="450px" :before-close="closeApplyDialog" custom-class="apply-way-dialog" :lock-scroll="false">
     <h3 class="apply-way-dialog-title">我要报名</h3>
     <p class="apply-way-dialog-buttons">
-      <span class="apply-way-dialog-buttons-button" @click="applyWay('http://fks3jraffxdd6act.mikecrm.com/cT0jaMi')">公开组报名</span>
-      <span class="apply-way-dialog-buttons-button" @click="applyWay('http://fks3jraffxdd6act.mikecrm.com/YfPlpuu')">学生组报名</span>
+      <span class="apply-way-dialog-buttons-button" @click="applyWay('http://qwijb4z0yf0b35zg.mikecrm.com/rO6zuJC')">公开组报名</span>
+      <span class="apply-way-dialog-buttons-button" @click="applyWay('http://qwijb4z0yf0b35zg.mikecrm.com/ptz6tbX')">学生组报名</span>
     </p>
   </el-dialog>
 </template>
