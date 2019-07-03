@@ -60,7 +60,7 @@
         </div>
         <div class="lesson-info duration">
           <div class="duration-title">{{$t('lesson.duration')}}: </div>
-          <div>45 {{$t('lesson.mins')}}</div>
+          <div>{{lessonDuration}}</div>
         </div>
         <div class="lesson-info skills">
           <div class="skills-title">
@@ -297,6 +297,10 @@ export default {
     },
     lessonGoals() {
       return _.get(this.lesson, 'goals', '')
+    },
+    lessonDuration() {
+      let durationKey = _.get(this.lesson, 'extra.duration', '45min')
+      return this.$t(`lesson.${durationKey}`)
     },
     title() {
       return _.get(this.lesson, 'Title', '')

@@ -29,7 +29,7 @@
             <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
-            <span>45{{$t('lesson.minUnit')}}</span>
+            <span>{{getLessonDuration(lesson)}}</span>
           </div>
           <el-button v-show="lesson.isFinished && !isTeacher" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
           <el-button v-show="lesson.isFinished && !isTeacher" plain size="small" class="package-catalogue-item-button learn-again" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
@@ -151,6 +151,10 @@ export default {
     }
   },
   methods: {
+    getLessonDuration(lesson) {
+      let durationKey = _.get(lesson, 'extra.duration', '45min')
+      return this.$t(`lesson.${durationKey}`)
+    },
     toLessonDetail(lesson) {
       if (this.isPreview) {
          return this.$router.push({
