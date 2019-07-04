@@ -13937,6 +13937,11 @@ thread-loader@^1.1.5:
     loader-runner "^2.3.0"
     loader-utils "^1.1.0"
 
+three@^0.106.2:
+  version "0.106.2"
+  resolved "https://registry.npm.taobao.org/three/download/three-0.106.2.tgz#6752d304c470e4df230944ecd45325e7bf79e1f8"
+  integrity sha1-Z1LTBMRw5N8jCUTs1FMl57954fg=
+
 throat@^4.0.0:
   version "4.1.0"
   resolved "http://registry.npm.taobao.org/throat/download/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
