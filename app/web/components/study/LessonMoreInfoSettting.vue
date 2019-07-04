@@ -9,7 +9,13 @@
     <div class="lesson-more-info-setting-duration">
       <div class="lesson-more-info-setting-label">{{$t('lesson.duration')}}</div>
       <el-select v-model="moreInfoData.duration" :disabled="!isEditable">
-        <el-option label="45min" value="45min">
+        <el-option :label="this.$t('lesson.45min')" value="45min">
+        </el-option>
+        <el-option :label="this.$t('lesson.90min')" value="90min">
+        </el-option>
+        <el-option :label="this.$t('lesson.1day')" value="1day">
+        </el-option>
+        <el-option :label="this.$t('lesson.1week')" value="1week">
         </el-option>
       </el-select>
     </div>

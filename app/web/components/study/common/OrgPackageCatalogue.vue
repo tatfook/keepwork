@@ -3,7 +3,7 @@
     <div class="package-catalogue-progress" v-show="isStudent">
       <div class="package-catalogue-progress-detail">
         <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
-        <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button" >{{buttonText}}</el-button>
+        <el-button type="primary" :disabled="lessonProgressPercent === 100" class="package-catalogue-progress-button">{{buttonText}}</el-button>
       </div>
       <p>{{lessonProgressInfo}}</p>
     </div>
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="package-catalogue-item-detail">
-          <div class="package-catalogue-item-title" >
+          <div class="package-catalogue-item-title">
             <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>({{$t('lesson.lessonId')}} {{packageId}}x{{lesson.id}} )</span></span>
           </div>
           <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
@@ -29,11 +29,11 @@
             <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
-            <span>45{{$t('lesson.minUnit')}}</span>
+            <span>{{getLessonDuration(lesson)}}</span>
           </div>
           <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button">{{$t('lesson.viewLearnSummary')}}</el-button>
           <el-button v-show="lesson.isLearned && isStudent" plain size="small" class="package-catalogue-item-button learn-again">{{$t('lesson.learnAgain')}}</el-button>
-          <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button" >{{$t('card.startToLearn')}}</el-button>
+          <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button">{{$t('card.startToLearn')}}</el-button>
           <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> {{$t('org.chapterIsFinished')}}</span>
         </div>
       </div>
@@ -134,6 +134,12 @@ export default {
     },
     packageId() {
       return _.get(this.packageDetail, 'id', '')
+    }
+  },
+  methods: {
+    getLessonDuration(lesson) {
+      let durationKey = _.get(lesson, 'extra.duration', '45min')
+      return this.$t(`lesson.${durationKey}`)
     }
   }
 }
