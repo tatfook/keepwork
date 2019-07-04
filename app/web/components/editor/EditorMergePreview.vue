@@ -118,9 +118,6 @@ export default {
         ''
       )
       return moment(updateAt).format('YYYY-MM-DD H:mm')
-    },
-    $mergePreview() {
-      return this.$refs.mergePreview.codemirror.edit
     }
   },
   methods: {
@@ -137,21 +134,24 @@ export default {
     },
     async onUpdate() {
       this.savePending = true
-      const content = this.$mergePreview.getValue()
+      const content = this.$refs.mergePreview.codemirror.edit.getValue()
       await this.saveMergedPage({ content })
       this.savePending = false
       this.onClose()
     },
     onGoNextDiff() {
-      this.$mergePreview.execCommand('goNextDiff')
+      this.$refs.mergePreview.codemirror.edit.execCommand('goNextDiff')
     },
     onGoPrevDiff() {
-      this.$mergePreview.execCommand('goPrevDiff')
+     this.$refs.mergePreview.codemirror.edit.execCommand('goPrevDiff')
     },
     onRefresh() {
       this.initSuccess = false
-      this.cmOption.value = this.$mergePreview.getValue()
-      this.cmOption.orig = this.latestContent
+      this.cmOption = {
+        ...this.cmOption,
+        value: this.$refs.mergePreview.codemirror.edit.getValue(),
+        orig: this.latestContent
+      }
       this.isNeedRefresh = false
       this.$nextTick(() => (this.initSuccess = true))
     },
