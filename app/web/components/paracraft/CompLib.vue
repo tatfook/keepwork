@@ -82,8 +82,12 @@ export default {
         return {
           code: 'E' + (1234 + index),
           type: ['bmax', 'x', 'template', 'stl'][_.random(0, 3)],
-          cover:
-            'https://api.keepwork.com/storage/v0/siteFiles/3368/raw#table.gif',
+          coverSourceUrl: [
+            'https://api.keepwork.com/storage/v0/siteFiles/4389/raw#Duck.glb',
+            // 'https://api.keepwork.com/storage/v0/siteFiles/4393/raw#Duck.gltf',
+            'https://api.keepwork.com/storage/v0/siteFiles/4386/raw#Soldier.glb'
+          ][_.random(0, 1)],
+          bgColor: ['#ff0', '#f00', '#ff7f7f', '#7fffd5', '#8edff6'][_.random(0, 4)],
           name: '会动的桌子' + index,
           author: '李宇' + index,
           downloadUrl: 'downloadUrl' + index

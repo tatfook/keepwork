@@ -13937,10 +13937,10 @@ thread-loader@^1.1.5:
     loader-runner "^2.3.0"
     loader-utils "^1.1.0"
 
-three@^0.106.2:
-  version "0.106.2"
-  resolved "https://registry.npm.taobao.org/three/download/three-0.106.2.tgz#6752d304c470e4df230944ecd45325e7bf79e1f8"
-  integrity sha1-Z1LTBMRw5N8jCUTs1FMl57954fg=
+three@^0.105.2:
+  version "0.105.2"
+  resolved "https://registry.npm.taobao.org/three/download/three-0.105.2.tgz#d135f1549bdcf5a9acd904ba3dbf9198a0268984"
+  integrity sha1-0TXxVJvc9ams2QS6Pb+RmKAmiYQ=
 
 throat@^4.0.0:
   version "4.1.0"
@@ -14699,6 +14699,13 @@ vm-browserify@0.0.4:
   integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
   dependencies:
     indexof "0.0.1"
+
+vue-3d-model@^1.1.0-aplha.0:
+  version "1.1.0-aplha.0"
+  resolved "https://registry.npm.taobao.org/vue-3d-model/download/vue-3d-model-1.1.0-aplha.0.tgz#ca46368742e77e78621e9dfce2b04fd9e4064907"
+  integrity sha1-ykY2h0LnfnhiHp384rBP2eQGSQc=
+  dependencies:
+    three "^0.105.2"
 
 vue-analytics@^5.16.0:
   version "5.16.4"
