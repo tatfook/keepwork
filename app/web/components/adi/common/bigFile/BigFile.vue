@@ -24,10 +24,10 @@
         <img :style="style" :src="actualUrl">
       </div>
       <div v-if="getType === handleExt['mp4']">
-        <video-player :src="actualUrl" />
+        <video-player :style="style" :src="actualUrl" />
       </div>
       <div class="bigfile-pdf" v-if="getType === handleExt['pdf']">
-        <iframe :src="getPdfSrc"></iframe>
+        <iframe :style="style" :src="getPdfSrc"></iframe>
       </div>
     </div>
   </div>
@@ -271,6 +271,9 @@ export default {
       if (this.alignment === 'right') {
         alignmentStyle = `margin: 0 0 0 auto`
       }
+      if(this.alignment === 'center') {
+        alignmentStyle = `margin: 0 auto`
+      }
       if (this.isPx) {
         if (this.isCustom) {
           return `width: ${this.width}px; height: ${this.height}px;${alignmentStyle}`
@@ -305,6 +308,7 @@ export default {
   }
 
   .bigfile-pdf {
+    display: flex;
     iframe {
       width: 100%;
       height: 1000px;
