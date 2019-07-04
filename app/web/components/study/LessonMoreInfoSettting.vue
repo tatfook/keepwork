@@ -74,14 +74,14 @@ export default {
     if (this.isEditing) {
       let editingLessonDetailProp = this.editingLessonDetailProp
       let { goals, extra, skills } = editingLessonDetailProp
-      let { videoUrl } = extra
+      let { videoUrl, duration } = extra
       let formatedSkills = this.formatSkill(skills)
       this.editingCoverUrl = videoUrl
       this.moreInfoData = {
         goals,
         videoUrl,
         skills: formatedSkills,
-        duration: '45min'
+        duration: duration || '45min'
       }
     }
     this.isMounted = true
