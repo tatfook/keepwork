@@ -38,7 +38,9 @@ import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import '@/components/common/thirdAuth'
 import messageModule from '@/store/message'
 import { socket, socketMixin } from '@/socket'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueLazyload)

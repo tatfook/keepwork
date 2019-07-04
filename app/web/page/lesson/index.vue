@@ -42,7 +42,9 @@ import '@/components/common/thirdAuth'
 import { broadcast } from 'vuex-iframe-sync'
 import { MessageBox } from 'element-ui'
 import { lesson } from '@/api'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueLazyload)

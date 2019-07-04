@@ -36,7 +36,9 @@ import '@/components/common/thirdAuth'
 import CommonHeader from '../../components/common/CommonHeader'
 import ToolHeader from '../../components/common/ToolHeader'
 import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(ElementUI)

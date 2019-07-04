@@ -10,21 +10,21 @@
           <el-row>
             <el-col :sm="8">
               <div class="project-type-item">
-                <img src="@/assets/img/create_paracraft.png" alt="">
+                <img src="@/assets/img/create_paracraft.png" :alt='`Paracraft${$t("create.create3DGameAndAnim")}`'>
                 <div class="project-type-item-title">Paracraft</div>
                 <div class="project-type-item-brief">{{$t("create.create3DGameAndAnim")}}</div>
               </div>
             </el-col>
             <el-col :sm="8">
               <div class="project-type-item">
-                <img src="@/assets/img/create_web.png" alt="">
+                <img src="@/assets/img/create_web.png" :alt='`${$t("create.website")}${$t("create.createYourOwnSite")}`'>
                 <div class="project-type-item-title">{{$t("create.website")}}</div>
                 <div class="project-type-item-brief">{{$t("create.createYourOwnSite")}}</div>
               </div>
             </el-col>
             <el-col :sm="8">
               <div class="project-type-item">
-                <img src="@/assets/img/crate_knowledge_no.png" alt="">
+                <img src="@/assets/img/crate_knowledge_no.png" :alt='`${$t("create.konwledgeEngine")}${$t("create.toBeReleased")}`'>
                 <div class="project-type-item-title">{{$t("create.konwledgeEngine")}}</div>
                 <div class="project-type-item-brief">{{$t("create.toBeReleased")}}</div>
               </div>

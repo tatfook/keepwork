@@ -87,7 +87,7 @@
       </p>
       <p class="contests-rules-demand-item">
         <span class="contests-rules-demand-item-left">
-          • 创作工具
+          • 创作工具：
         </span>
         <span class="contests-rules-demand-item-right">
           以Paracraft为主，音效、配音、音乐可以借助其他工具，提倡和鼓励原创音乐。

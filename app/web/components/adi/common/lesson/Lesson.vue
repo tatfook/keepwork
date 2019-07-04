@@ -22,7 +22,7 @@
                 {{lessonGoals}}
               </el-scrollbar>
             </div>
-            <div class="lesson-info duration">{{$t('lesson.duration')}}: 45 {{$t('lesson.mins')}}</div>
+            <div class="lesson-info duration">{{$t('lesson.duration')}}: {{lessonDuration}}</div>
             <div class="lesson-info skills">
               <div class="skills-title">
                 {{$t('lesson.skillPoints')}}:
@@ -75,6 +75,10 @@ export default {
     },
     lessonGoals() {
       return this.lessonData.goals
+    },
+    lessonDuration() {
+      let durationKey = _.get(this.lessonData, 'extra.duration', '45min')
+      return this.$t(`lesson.${durationKey}`)
     },
     lessonSkills() {
       return _.map(

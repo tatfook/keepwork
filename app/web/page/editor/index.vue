@@ -48,7 +48,9 @@ import { mapActions, mapGetters } from 'vuex'
 import PageViewer from '@/components/viewer/MdPageViewer'
 import LoginDialog from '@/components/common/LoginDialog'
 import EditorHeader from '@/components/editor/EditorHeader'
+import ba from 'vue-ba'
 
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(fullscreen)
 Vue.use(VueClipboard)
 Vue.use(infiniteScroll)
@@ -107,7 +109,8 @@ export default {
       loading: true,
       previewDialogVisible: false,
       isFullscreen: false,
-      showPreviewClose: false
+      showPreviewClose: false,
+      isFirstCheck: true
     }
   },
   async created() {
@@ -116,15 +119,23 @@ export default {
     await this.updateActivePage()
   },
   async mounted() {
+    // this.initSocket()
     document.title = 'Keepwork Editor'
   },
   watch: {
-    $route: 'updateActivePage'
+    $route: 'updateActivePage',
+    openedFiles(value) {
+      if (this.isFirstCheck) {
+        this.isFirstCheck = false
+        this.initSocket()
+      }
+    }
   },
   computed: {
     ...mapGetters({
       activePageInfo: 'activePageInfo',
-      userIsLogined: 'user/isLogined'
+      userIsLogined: 'user/isLogined',
+      openedFiles: 'openedFiles'
     }),
     showLoginDialog() {
       return !this.userIsLogined
@@ -132,6 +143,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      initSocket: 'initSocket',
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
       userGetWebsiteDetailInfoByPath: 'user/getWebsiteDetailInfoByPath',

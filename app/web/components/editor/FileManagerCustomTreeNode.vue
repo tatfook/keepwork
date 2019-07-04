@@ -95,7 +95,9 @@ export default {
       userDeletePagesConfig: 'user/deletePagesConfig',
       savePageByPath: 'savePageByPath',
       refreshOpenedFile: 'refreshOpenedFile',
-      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl',
+      broadcastTheRoom: 'broadcastTheRoom'
+      //  dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
     }),
     async addFile() {
       this.openNewWebPageDialog()
@@ -112,6 +114,7 @@ export default {
       await this.gitlabAddFolder({ path: newFolderPath })
       this.expandFolder(newFolderPath)
       this.addFolderPending = false
+      this.broadcastTheRoom({ path: newFolderPath, type: 'createFolder' })
     },
     async newFileNamePrompt({ what = this.$t('editor.website') } = {}) {
       let self = this

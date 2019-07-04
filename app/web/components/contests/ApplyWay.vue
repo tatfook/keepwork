@@ -5,7 +5,7 @@
       <p class="apply-way-notice-step"><span class="step-num">1.</span>打开keepwork网站<a class="apply-way-notice-step-link" @click="showRegisterDialog">注册</a>账号并进行登录；</p>
       <p class="apply-way-notice-step"><span class="step-num">2.</span>仔细阅读汉字大赛官网信息并在规定时间内完成报名；</p>
       <p class="apply-way-notice-step"><span class="step-num">3.</span>仔细填写报名页面的信息，一经提交无法修改；</p>
-      <p class="apply-way-notice-step"><span class="step-num">4.</span>报名完成后，请加入QQ交流群方便创作沟通，群号1016421059，有任何疑问也可发送邮件至3487844868@qq.com,我们将在12小时内给出解答；</p>
+      <p class="apply-way-notice-step"><span class="step-num">4.</span>报名完成后，请加入QQ交流群方便创作沟通，群号1016421059，有任何疑问也可发送邮件至3487844868@qq.com，我们将在12小时内给出解答；</p>
       <p class="apply-way-notice-step"><span class="step-num">5.</span>忘记账号密码，请点此<a class="apply-way-notice-step-link" @click="resetPwd">重置</a>。</p>
     </div>
     <h3 class="apply-way-title"><img src="@/assets/contests/大赛时间.png" alt=""></h3>

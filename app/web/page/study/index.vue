@@ -45,8 +45,9 @@ import jsrsasign from 'jsrsasign'
 import { MessageBox } from 'element-ui'
 import { socket, socketMixin } from '@/socket'
 import comboModule from '@/store/combo'
+import ba from 'vue-ba'
 
-
+Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueLazyload)

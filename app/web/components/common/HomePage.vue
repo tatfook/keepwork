@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="flexible-info-board">
-            <img :src="boardImgUrl" alt="">
+            <img :src="boardImgUrl" alt="Keepwork">
           </div>
         </div>
         <div class="home-page-simple-show-center-right hidden-sm-and-down">

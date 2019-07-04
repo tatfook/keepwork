@@ -26,7 +26,7 @@
 
 
 <script>
-import EditLesson from '@/components/lesson/teacher/EditLesson'
+import EditLesson from '@/components/study/EditLesson'
 import moment from 'moment'
 import protypesBaseMixin from './protypes.base.mixin'
 import Parser from '@/lib/mod/parser'
