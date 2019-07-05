@@ -10,7 +10,7 @@ export default new Router({
   base: '/p',
   routes: [
     {
-      path: '/comp',
+      path: '/comp/system',
       name: 'ParacraftComps',
       component: CompLib
     }

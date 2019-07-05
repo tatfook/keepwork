@@ -2,7 +2,7 @@
   <div class="comp-item">
     <div class="comp-item-cover">
       <span class="comp-item-badge">{{compDetail.code}}</span>
-      <model-gltf class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="compDetail.coverSourceUrl" :backgroundColor="compDetail.bgColor" @on-load="onLoadGltf"></model-gltf>
+      <model-gltf class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="compDetail.coverSourceUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf>
     </div>
     <div class="comp-item-info">
       <div class="comp-item-info-left">
@@ -18,6 +18,20 @@
 </template>
 
 <script>
+const BgColors = [
+  '#ff7875',
+  '#ff9c6e',
+  '#ffc069',
+  '#ffd666',
+  '#fff566',
+  '#d3f261',
+  '#95de64',
+  '#5cdbd3',
+  '#69c0ff',
+  '#85a5ff',
+  '#b37feb',
+  '#ff85c0'
+]
 import { ModelGltf } from 'vue-3d-model'
 export default {
   name: 'CompItem',
@@ -30,6 +44,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      bgColor: BgColors[_.random(0, BgColors.length - 1)],
       rotation: {
         x: 0,
         y: 0,
