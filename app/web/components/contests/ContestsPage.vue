@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="contests-page-top-title"></div>
-      <p class="contests-page-top-specifier">“用计算机程序让汉字活起来走向世界”</p>
+      <p class="contests-page-top-specifier">“用计算机程序让汉字活起来&nbsp;&nbsp;走向世界”</p>
       <p class="contests-page-top-apply">
         <img class="contests-page-top-apply-img" src="@/assets/contests/button_1.png" alt="">
         <span class="contests-page-top-apply-text" @click="toApply">我要报名</span>

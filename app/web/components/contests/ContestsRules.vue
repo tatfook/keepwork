@@ -234,10 +234,11 @@
     }
   }
   &-participant {
-    text-align: center;
     font-size: 18px;
     color: #212121;
     max-width: 848px;
+    line-height: 36px;
+    text-indent: 2em;
     margin: 0 auto 80px;
   }
   &-flow {
