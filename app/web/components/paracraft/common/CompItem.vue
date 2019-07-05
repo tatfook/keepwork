@@ -48,7 +48,7 @@ export default {
       this.rotate()
     },
     rotate() {
-      this.rotation.y += 0.01
+      this.rotation.y -= 0.01
       requestAnimationFrame(this.rotate)
     },
     useComp() {

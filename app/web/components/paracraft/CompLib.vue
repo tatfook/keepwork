@@ -87,7 +87,20 @@ export default {
             // 'https://api.keepwork.com/storage/v0/siteFiles/4393/raw#Duck.gltf',
             'https://api.keepwork.com/storage/v0/siteFiles/4386/raw#Soldier.glb'
           ][_.random(0, 1)],
-          bgColor: ['#ff0', '#f00', '#ff7f7f', '#7fffd5', '#8edff6'][_.random(0, 4)],
+          bgColor: [
+            '#ff7875',
+            '#ff9c6e',
+            '#ffc069',
+            '#ffd666',
+            '#fff566',
+            '#d3f261',
+            '#95de64',
+            '#5cdbd3',
+            '#69c0ff',
+            '#85a5ff',
+            '#b37feb',
+            '#ff85c0'
+          ][_.random(0, 11)],
           name: '会动的桌子' + index,
           author: '李宇' + index,
           downloadUrl: 'downloadUrl' + index
