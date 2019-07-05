@@ -1,16 +1,16 @@
 <template>
   <div class="comp-item">
     <div class="comp-item-cover">
-      <span class="comp-item-badge">{{compDetail.code}}</span>
-      <model-gltf class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="compDetail.coverSourceUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf>
+      <span class="comp-item-badge">{{compDetail.id}}</span>
+      <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf>
     </div>
     <div class="comp-item-info">
       <div class="comp-item-info-left">
         <div class="comp-item-type-name">
-          <span class="comp-item-type">{{compDetail.type}}</span>
+          <span class="comp-item-type">{{compDetail.fileType}}</span>
           {{compDetail.name}}
         </div>
-        <div class="comp-item-author">贡献者：{{compDetail.author}}</div>
+        <div class="comp-item-author">贡献者：{{compDetail.contributor}}</div>
       </div>
       <el-button @click="useComp">使用</el-button>
     </div>
@@ -54,7 +54,10 @@ export default {
   },
   computed: {
     downloadUrl() {
-      return _.get(this.compDetail, 'downloadUrl')
+      return _.get(this.compDetail, 'fileUrl')
+    },
+    previewUrl() {
+      return _.get(this.compDetail, 'previewUrl')
     }
   },
   methods: {
@@ -72,6 +75,11 @@ export default {
   },
   components: {
     ModelGltf
+  },
+  watch: {
+    previewUrl() {
+      this.isLoading = true
+    }
   }
 }
 </script>

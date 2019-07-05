@@ -11,7 +11,9 @@
     </el-row>
     <el-row type="flex" class="comp-lib-main">
       <el-col class="comp-lib-sidebar">
-        <el-tree :data="compsClassList" :props="defaultProps" :indent="12" @node-click="handleNodeClick"></el-tree>
+        <el-tree :data="compsClassList" node-key="id" :default-expanded-keys="defaultExpandedKeys" :props="defaultProps" :indent="12" @node-click="handleNodeClick">
+          <span slot-scope="{ node, data }" class="comp-lib-tree-label" :class="{'comp-lib-tree-active': data.id === activeClassId}">{{ node.label }}</span>
+        </el-tree>
       </el-col>
       <el-col>
         <el-row type="flex" class="comp-lib-content">
@@ -26,72 +28,66 @@
 
 <script>
 import CompItem from './common/CompItem'
-import { type } from 'os'
+
+import fakeClassifies from './fakeClassifies'
+import fakeBlocks from './fakeBlocks'
+
 export default {
   name: 'CompLib',
+  mounted() {
+    this.initActiveClassifyId()
+  },
   data() {
     return {
+      activeClassId: undefined,
+      defaultExpandedKeys: [],
       seachContent: '',
       defaultProps: {
         children: 'children',
-        label: 'label'
-      },
-      compsClassList: [
-        {
-          label: '建筑',
-          children: [
-            {
-              label: '房子'
-            },
-            {
-              label: '高塔'
-            },
-            {
-              label: '大厦'
-            }
-          ]
-        },
-        {
-          label: '家居',
-          children: [
-            {
-              label: '桌子'
-            },
-            {
-              label: '椅子'
-            }
-          ]
-        },
-        {
-          label: '植物',
-          children: [
-            {
-              label: '树'
-            },
-            {
-              label: '草'
-            }
-          ]
-        }
-      ]
+        label: 'name'
+      }
     }
   },
   computed: {
+    compsClassList() {
+      const parents = _.filter(fakeClassifies, item => item.parentId === 0)
+      const children = _.filter(fakeClassifies, item => item.parentId)
+      const translator = (parents, children) => {
+        _.forEach(parents, parent => {
+          _.forEach(children, (current, index) => {
+            if (current.parentId === parent.id) {
+              const temp = JSON.parse(JSON.stringify(children))
+              temp.splice(index, 1)
+              translator([current], temp)
+              Array.isArray(parent.children)
+                ? parent.children.push(current)
+                : (parent.children = [current])
+            }
+          })
+        })
+      }
+      translator(parents, children)
+      return parents || []
+    },
+    classifiesKeyById() {
+      return _.keyBy(fakeClassifies, 'id')
+    },
+    activeClassifyComps() {
+      return _.get(
+        this.classifiesKeyById,
+        `${this.activeClassId}.pBlockClassifies`,
+        []
+      )
+    },
+    compsKeyById() {
+      return _.keyBy(fakeBlocks, 'id')
+    },
     compsList() {
-      return _.map([1, 2, 3, 4, 5, 6], index => {
-        return {
-          code: 'E' + (1234 + index),
-          type: ['bmax', 'x', 'template', 'stl'][_.random(0, 3)],
-          coverSourceUrl: [
-            'https://api.keepwork.com/storage/v0/siteFiles/4389/raw#Duck.glb',
-            // 'https://api.keepwork.com/storage/v0/siteFiles/4393/raw#Duck.gltf',
-            'https://api.keepwork.com/storage/v0/siteFiles/4386/raw#Soldier.glb'
-          ][_.random(0, 1)],
-          name: '会动的桌子' + index,
-          author: '李宇' + index,
-          downloadUrl: 'downloadUrl' + index
-        }
-      })
+      return (
+        _.map(this.activeClassifyComps, ({ blockId }) => {
+          return this.compsKeyById[blockId]
+        }) || []
+      )
     }
   },
   methods: {
@@ -99,7 +95,19 @@ export default {
       alert('closeCompsLib')
     },
     handleNodeClick(data) {
-      console.log(data)
+      if (!data.children) {
+        this.activeClassId = data.id
+      }
+    },
+    initActiveClassifyId(classifyItem) {
+      classifyItem = classifyItem || this.compsClassList[0]
+      let { children } = classifyItem
+      if (children) {
+        this.initActiveClassifyId(children)
+        this.defaultExpandedKeys.push(classifyItem.id)
+        return
+      }
+      this.activeClassId = classifyItem[0].id
     }
   },
   components: {
@@ -146,6 +154,15 @@ export default {
     background-color: #fff;
     flex-shrink: 0;
     padding: 16px 12px;
+  }
+  &-tree {
+    &-label {
+      font-size: 14px;
+    }
+    &-active {
+      color: #2397f3;
+      font-weight: bold;
+    }
   }
   &-content {
     flex-wrap: wrap;
