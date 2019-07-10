@@ -113,13 +113,11 @@ export default {
       classifyItem = classifyItem || this.compsClassList[0]
       let { children } = classifyItem
       if (children) {
-        this.initActiveClassifyId(children)
+        this.initActiveClassifyId(children[0])
         this.defaultExpandedKeys.push(classifyItem.id)
         return
       }
-      this.activeClassId = _.isArray(classifyItem)
-        ? classifyItem[0].id
-        : classifyItem.id
+      this.activeClassId = classifyItem.id
     }
   },
   components: {

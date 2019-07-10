@@ -1,14 +1,14 @@
 <template>
   <div class="comp-item">
-    <div class="comp-item-cover">
+    <div class="comp-item-cover" :style="{background:bgColor}">
       <span class="comp-item-badge">{{compDetail.id}}</span>
-      <img :src="compDetail.gifUrl" alt="">
+      <img class="comp-item-preview" :src="compDetail.gifUrl" alt="">
       <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
     <div class="comp-item-info">
       <div class="comp-item-info-left">
         <div class="comp-item-type-name">
-          <span class="comp-item-type">{{compDetail.fileType}}</span>
+          <span class="comp-item-type">{{compDetail.filetype}}</span>
           {{compDetail.name}}
         </div>
         <div class="comp-item-author">贡献者：{{compDetail.contributor}}</div>
@@ -94,6 +94,12 @@ export default {
     overflow: hidden;
     font-size: 0;
     padding-bottom: 56%;
+  }
+  &-preview {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   &-gltf {
     position: absolute !important;
