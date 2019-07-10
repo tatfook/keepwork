@@ -2,7 +2,8 @@
   <div class="comp-item">
     <div class="comp-item-cover">
       <span class="comp-item-badge">{{compDetail.id}}</span>
-      <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf>
+      <img :src="compDetail.gifUrl" alt="">
+      <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
     <div class="comp-item-info">
       <div class="comp-item-info-left">

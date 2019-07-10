@@ -5,6 +5,7 @@
 <script>
 import Vue from 'vue'
 import Vuex from 'vuex'
+import paracraftModule from '@/store/paracraft'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
@@ -16,8 +17,15 @@ Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 
+const store = new Vuex.Store({
+  modules: {
+    paracraft: paracraftModule
+  }
+})
+
 export default {
-  router
+  router,
+  store
 }
 </script>
 <style lang="scss">

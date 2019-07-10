@@ -28,13 +28,12 @@
 
 <script>
 import CompItem from './common/CompItem'
-
-import fakeClassifies from './fakeClassifies'
-import fakeBlocks from './fakeBlocks'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'CompLib',
-  mounted() {
+  async mounted() {
+    await Promise.all([this.getSystemClassifies(), this.getSystemComps()])
     this.initActiveClassifyId()
   },
   data() {
@@ -49,9 +48,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      systemClassifies: 'paracraft/systemClassifies',
+      systemComps: 'paracraft/systemComps'
+    }),
     compsClassList() {
-      const parents = _.filter(fakeClassifies, item => item.parentId === 0)
-      const children = _.filter(fakeClassifies, item => item.parentId)
+      const parents = _.filter(
+        this.systemClassifies,
+        item => item.parentId === 0
+      )
+      const children = _.filter(this.systemClassifies, item => item.parentId)
       const translator = (parents, children) => {
         _.forEach(parents, parent => {
           _.forEach(children, (current, index) => {
@@ -70,7 +76,7 @@ export default {
       return parents || []
     },
     classifiesKeyById() {
-      return _.keyBy(fakeClassifies, 'id')
+      return _.keyBy(this.systemClassifies, 'id')
     },
     activeClassifyComps() {
       return _.get(
@@ -80,7 +86,7 @@ export default {
       )
     },
     compsKeyById() {
-      return _.keyBy(fakeBlocks, 'id')
+      return _.keyBy(this.systemComps, 'id')
     },
     compsList() {
       return (
@@ -91,6 +97,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getSystemClassifies: 'paracraft/getSystemClassifies',
+      getSystemComps: 'paracraft/getSystemComps'
+    }),
     closeCompsLib() {
       alert('closeCompsLib')
     },
@@ -107,7 +117,9 @@ export default {
         this.defaultExpandedKeys.push(classifyItem.id)
         return
       }
-      this.activeClassId = classifyItem[0].id
+      this.activeClassId = _.isArray(classifyItem)
+        ? classifyItem[0].id
+        : classifyItem.id
     }
   },
   components: {
