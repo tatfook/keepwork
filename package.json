@@ -66,6 +66,7 @@
     "v-charts": "^1.17.10",
     "video.js": "^7.3.0",
     "vue": "^2.5.2",
+    "vue-3d-model": "^1.1.0-aplha.0",
     "vue-analytics": "^5.16.0",
     "vue-authenticate": "^1.3.4",
     "vue-axios": "^2.1.2",
