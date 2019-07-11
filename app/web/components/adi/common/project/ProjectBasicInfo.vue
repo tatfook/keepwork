@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="project-basic-info-description" v-loading='isLoading'>
+    <div class="project-basic-info-description"  v-if="tempDesc" v-loading='isLoading'>
       <div class="project-basic-info-description-title">
         {{$t("project.projectDescription")}}:
       </div>
