@@ -49,14 +49,10 @@ const renderTemplate = (h, m, data, parentIndex) => {
         <el-menu-item
           index={getIndexString(menuData.link, index)}
           style={parentIndex == 1 && m.itemStyle}
+          title={m.getNameMenu(menuData)}
+          onClick={() => m.handleMenuItemClick(menuData.link)}
         >
-          <a
-            target={m.menuTarget}
-            href={menuData.link}
-            title={m.getNameMenu(menuData)}
-          >
-            {m.getNameMenu(menuData)}
-          </a>
+          {m.getNameMenu(menuData)}
         </el-menu-item>
       )
     } else if (m.options.type === 'menu' && isItemHasChild) {
@@ -284,6 +280,9 @@ export default {
         _.split(parentKey, '-').length > 1 &&
         this.$refs[this.menuRef].open(parentKey)
       this.defaultActiveIndex = findedIndexLink && findedIndexLink.index
+    },
+    handleMenuItemClick(link) {
+      !this.editMode && link && window.open(link, this.menuTarget)
     },
     setIndexLinks(key, link, parentIndex) {
       this.indexLinks[key] = {
