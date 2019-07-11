@@ -3,7 +3,7 @@
     <el-row type="flex" class="comp-lib-header" align="middle">
       <el-col class="comp-lib-header-left">元件库</el-col>
       <el-col class="comp-lib-header-right">
-        <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent">
+        <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent" clearable @blur="search" @keyup.enter.native="search">
           <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
         </el-input>
         <i class="el-icon-close" @click="closeCompsLib"></i>
@@ -17,7 +17,7 @@
       </el-col>
       <el-col>
         <el-row type="flex" class="comp-lib-content">
-          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in compsList" :key="index">
+          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in compsListSearched" :key="index">
             <comp-item :compDetail='comp'></comp-item>
           </el-col>
         </el-row>
@@ -35,11 +35,12 @@ export default {
   name: 'CompLib',
   async created() {
     this.isLoading = true
-    await Promise.all([this.getSystemClassifies(), this.getSystemComps({})])
+    await Promise.all([this.getSystemClassifies(), this.getSystemComps()])
     this.isLoading = false
   },
   data() {
     return {
+      searchWord: '',
       isLoading: false,
       allClassObj: { name: '全部', id: AllClassId },
       activeClassId: AllClassId,
@@ -97,6 +98,11 @@ export default {
         : _.map(this.activeClassifyComps, ({ blockId }) => {
             return this.compsKeyById[blockId]
           }) || []
+    },
+    compsListSearched() {
+      return _.filter(this.compsList, ({ id, name }) => {
+        return (id + name).indexOf(this.searchWord) >= 0
+      })
     }
   },
   methods: {
@@ -113,9 +119,8 @@ export default {
       }
     },
     search() {
-      let seachContent = this.seachContent
-      if (!seachContent) return
-      this.getSystemComps({ seachContent })
+      this.activeClassId = AllClassId
+      this.searchWord = this.seachContent
     }
   },
   components: {

@@ -8,7 +8,7 @@ const { get, post } = paracraftEndpoint
 
 export const pBlocks = {
   getClassifies: async () => get('pBlocks/systemClassifies'),
-  getCopms: async ({ filterParams }) => get(`pBlocks/system?${filterParams}`),
+  getCopms: async () => get('pBlocks/system'),
   updateUsedCount: async ({ id }) => post(`pBlocks/${id}/use`)
 }
 
