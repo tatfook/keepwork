@@ -9,8 +9,11 @@ const actions = {
     let result = await paracraft.pBlocks.getClassifies()
     commit(GET_CLASSIFIES_SUCCESS, result)
   },
-  async getSystemComps({ commit }) {
-    let result = await paracraft.pBlocks.getCopms()
+  async getSystemComps({ commit }, { seachContent }) {
+    let filterParams = seachContent
+      ? `id-op=${seachContent}&name-op=${seachContent}`
+      : ''
+    let result = await paracraft.pBlocks.getCopms({ filterParams })
     commit(GET_SYSTEM_COMPS_SUCCESS, result)
   }
 }
