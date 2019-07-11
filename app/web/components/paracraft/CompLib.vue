@@ -1,23 +1,23 @@
 <template>
-  <div class="comp-lib">
+  <div class="comp-lib" v-loading="isLoading">
     <el-row type="flex" class="comp-lib-header" align="middle">
       <el-col class="comp-lib-header-left">元件库</el-col>
       <el-col class="comp-lib-header-right">
-        <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent">
-          <i slot="suffix" class="el-input__icon el-icon-search"></i>
+        <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent" clearable @blur="search" @keyup.enter.native="search">
+          <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
         </el-input>
         <i class="el-icon-close" @click="closeCompsLib"></i>
       </el-col>
     </el-row>
     <el-row type="flex" class="comp-lib-main">
       <el-col class="comp-lib-sidebar">
-        <el-tree :data="compsClassList" node-key="id" :default-expanded-keys="defaultExpandedKeys" :props="defaultProps" :indent="12" @node-click="handleNodeClick">
+        <el-tree :data="compsClassList" node-key="id" :props="defaultProps" :indent="12" @node-click="handleNodeClick">
           <span slot-scope="{ node, data }" class="comp-lib-tree-label" :class="{'comp-lib-tree-active': data.id === activeClassId}">{{ node.label }}</span>
         </el-tree>
       </el-col>
       <el-col>
         <el-row type="flex" class="comp-lib-content">
-          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in compsList" :key="index">
+          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in compsListSearched" :key="index">
             <comp-item :compDetail='comp'></comp-item>
           </el-col>
         </el-row>
@@ -30,16 +30,20 @@
 import CompItem from './common/CompItem'
 import { mapActions, mapGetters } from 'vuex'
 
+const AllClassId = 'all'
 export default {
   name: 'CompLib',
-  async mounted() {
+  async created() {
+    this.isLoading = true
     await Promise.all([this.getSystemClassifies(), this.getSystemComps()])
-    this.initActiveClassifyId()
+    this.isLoading = false
   },
   data() {
     return {
-      activeClassId: undefined,
-      defaultExpandedKeys: [],
+      searchWord: '',
+      isLoading: false,
+      allClassObj: { name: '全部', id: AllClassId },
+      activeClassId: AllClassId,
       seachContent: '',
       defaultProps: {
         children: 'children',
@@ -73,7 +77,7 @@ export default {
         })
       }
       translator(parents, children)
-      return parents || []
+      return _.concat([this.allClassObj], parents || [])
     },
     classifiesKeyById() {
       return _.keyBy(this.systemClassifies, 'id')
@@ -89,11 +93,16 @@ export default {
       return _.keyBy(this.systemComps, 'id')
     },
     compsList() {
-      return (
-        _.map(this.activeClassifyComps, ({ blockId }) => {
-          return this.compsKeyById[blockId]
-        }) || []
-      )
+      return this.activeClassId === AllClassId
+        ? this.systemComps
+        : _.map(this.activeClassifyComps, ({ blockId }) => {
+            return this.compsKeyById[blockId]
+          }) || []
+    },
+    compsListSearched() {
+      return _.filter(this.compsList, ({ id, name }) => {
+        return (id + name).indexOf(this.searchWord) >= 0
+      })
     }
   },
   methods: {
@@ -109,15 +118,9 @@ export default {
         this.activeClassId = data.id
       }
     },
-    initActiveClassifyId(classifyItem) {
-      classifyItem = classifyItem || this.compsClassList[0]
-      let { children } = classifyItem
-      if (children) {
-        this.initActiveClassifyId(children[0])
-        this.defaultExpandedKeys.push(classifyItem.id)
-        return
-      }
-      this.activeClassId = classifyItem.id
+    search() {
+      this.activeClassId = AllClassId
+      this.searchWord = this.seachContent
     }
   },
   components: {
@@ -143,6 +146,9 @@ export default {
     &-right {
       white-space: nowrap;
       width: auto;
+      .el-icon-search {
+        cursor: pointer;
+      }
     }
     .el-input {
       width: 240px;
