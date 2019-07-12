@@ -13,7 +13,7 @@
         </div>
         <div class="comp-item-author">贡献者：{{compDetail.contributor}}</div>
       </div>
-      <el-button @click="useComp">使用</el-button>
+      <el-button v-loading="isUseLoading" @click="useComp">使用</el-button>
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@ const BgColors = [
   '#ff85c0'
 ]
 import { ModelGltf } from 'vue-3d-model'
+import { mapActions } from 'vuex'
 export default {
   name: 'CompItem',
   props: {
@@ -45,6 +46,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      isUseLoading: false,
       bgColor: BgColors[_.random(0, BgColors.length - 1)],
       rotation: {
         x: 0,
@@ -54,6 +56,9 @@ export default {
     }
   },
   computed: {
+    paracraftPort() {
+      return _.get(this.$route, 'query.port', '8099')
+    },
     downloadUrl() {
       return _.get(this.compDetail, 'fileUrl')
     },
@@ -62,6 +67,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      useCompToParacraft: 'paracraft/useCompToParacraft'
+    }),
     onLoadGltf() {
       this.isLoading = false
       this.rotate()
@@ -70,8 +78,22 @@ export default {
       this.rotation.y -= 0.01
       requestAnimationFrame(this.rotate)
     },
-    useComp() {
-      alert(this.downloadUrl)
+    async useComp() {
+      let { filetype, name, fileUrl, id } = this.compDetail
+      this.isUseLoading = true
+      await this.useCompToParacraft({
+        port: this.paracraftPort,
+        fileType: filetype,
+        fileName: name,
+        downloadUrl: fileUrl,
+        id
+      }).catch(error => {
+        this.$message({
+          type: 'error',
+          message: error
+        })
+      })
+      this.isUseLoading = false
     }
   },
   components: {
