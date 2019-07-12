@@ -60,6 +60,7 @@
   </div>
 </template>
 <script>
+import uuidV1 from 'uuid/v1'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import FileDownloader from './FileDownloader'
@@ -129,7 +130,7 @@ export default {
       this.skydriveRemoveFromUploadQue(file)
     },
     getRowKey(row) {
-      return row.filename + row.state
+      return row.state ? row.filename + row.state : row.filename + uuidV1()
     }
   },
   filters: {
