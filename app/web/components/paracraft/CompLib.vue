@@ -89,12 +89,20 @@ export default {
         []
       )
     },
+    formatedSystemComps() {
+      return _.map(this.systemComps, compDetail => {
+        return {
+          ...compDetail,
+          id: 'E' + (1000 + compDetail.id)
+        }
+      })
+    },
     compsKeyById() {
-      return _.keyBy(this.systemComps, 'id')
+      return _.keyBy(this.formatedSystemComps, 'id')
     },
     compsList() {
       return this.activeClassId === AllClassId
-        ? this.systemComps
+        ? this.formatedSystemComps
         : _.map(this.activeClassifyComps, ({ blockId }) => {
             return this.compsKeyById[blockId]
           }) || []

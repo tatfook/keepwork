@@ -1,7 +1,7 @@
 <template>
   <div class="comp-item">
     <div class="comp-item-cover" :style="{background:bgColor}">
-      <span class="comp-item-badge">{{compDetail.id | idFilter}}</span>
+      <span class="comp-item-badge">{{compDetail.id}}</span>
       <img class="comp-item-preview" :src="compDetail.gifUrl" alt="">
       <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
@@ -102,11 +102,6 @@ export default {
   watch: {
     previewUrl() {
       this.isLoading = true
-    }
-  },
-  filters: {
-    idFilter(id) {
-      return 'E' + (1000 + id)
     }
   }
 }
