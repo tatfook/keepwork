@@ -86,7 +86,7 @@ export default {
           q: this.searchKey,
           sort: this.sortProjects
         })
-        this.$set(this, 'page', targetPage)
+        this.page = targetPage
         this.loading = false
         this.$emit('getAmount', this.projectsCount)
       })
