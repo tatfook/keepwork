@@ -6,7 +6,7 @@
       </el-col>
     </el-row>
     <div class="user-field-pages" v-if="usersCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="usersCount">
+      <el-pagination :current-page="page" background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="usersCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -94,6 +94,7 @@ export default {
           q: this.searchKey,
           sort: this.sortUsers
         })
+        this.page = targetPage
         this.loading = false
         this.$emit('getAmount', this.usersCount)
         this.getFollows()

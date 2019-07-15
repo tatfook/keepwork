@@ -6,7 +6,7 @@
       </el-col>
     </el-row>
     <div class="all-projects-pages" v-if="projectsCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
+      <el-pagination :current-page="page" background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -86,6 +86,7 @@ export default {
           q: this.searchKey,
           sort: this.sortProjects
         })
+        this.$set(this, 'page', targetPage)
         this.loading = false
         this.$emit('getAmount', this.projectsCount)
       })
