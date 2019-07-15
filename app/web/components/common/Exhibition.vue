@@ -13,7 +13,7 @@
     </div>
     <el-row class="exhibition-hall-cabinet" v-loading="cabinetLoading">
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
-        <project-cell :project="project"></project-cell>
+        <project-cell :project="project" :showProjectRate="false"></project-cell>
       </el-col>
       <p class="exhibition-hall-cabinet-hint" v-if="allProjectsDataOptimize.length == 0">暂无项目</p>
     </el-row>
@@ -31,13 +31,12 @@ export default {
   name: 'ExhibitionHall',
   data() {
     return {
-      perPage: 10,
       page: 1,
       selectedGameType: [],
       selectedGamePeriodical: [],
       selectedGameTheme: [],
       gameGroup: [],
-      perPage: 12,
+      perPage: 20,
       page: 1,
       cabinetLoading: true
     }

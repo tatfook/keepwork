@@ -8,6 +8,7 @@ import LayoutHelper from '@/lib/mod/layout'
 import { gConst } from '@/lib/global'
 import { props } from './mutations'
 import { Notification } from 'element-ui'
+import { locale } from '@/lib/utils/i18n'
 import {
   getFileFullPathByPath,
   getFileSitePathByPath,
@@ -755,7 +756,7 @@ const actions = {
     dispatch('closeOpenedFile', { path })
     dispatch('refreshTree', { path })
   },
-  disposeUpdate({ commit, getters: { openedFiles, openedWebsites } }, payload) {
+  disposeUpdate({ commit, dispatch, getters: { openedFiles, openedWebsites } }, payload) {
     const { websiteName, path, username, notify = true, ...updated } = payload
     const fullPath = getFileFullPathByPath(path)
     const localFile = openedFiles[fullPath]
@@ -768,36 +769,26 @@ const actions = {
         }
       })
       if (notify) {
-        Notification({
-          title: '文件有更新',
-          message: `${username}更新了${path}的内容`,
-          type: 'info'
-        })
+        dispatch('notification', { username, path, operation: 'update' })
       }
     }
   },
   disposeMerge({ dispatch }, payload) {
     dispatch('disposeUpdate', { ...payload, notify: false })
   },
-  async disposeCreate({ dispatch }, { path, username }) {
-    Notification({
-      title: '新增文件',
-      message: `${username}创建了${path}`,
-      type: 'success'
-    })
+  async disposeCreate({ dispatch }, { path }) {
     dispatch('refreshTree', { path })
   },
   async disposeCreateFolder({ dispatch }, { path }) {
     dispatch('refreshTree', { path })
   },
-  disposeDelete({ dispatch, getters: { activePageUrl } }, { path, username }) {
-    const fullPath = getFileFullPathByPath(activePageUrl)
-    // TODO:如果该文档正在编辑，如何处理？
-    Notification({
-      title: '文件被删除',
-      message: `${path}已被${username}删除`,
-      type: 'warning'
-    })
+  disposeDelete({ dispatch, getters: { activePageUrl, openedFiles } }, { path, username }) {
+    const fullPath = getFileFullPathByPath(path)
+    const localFile = openedFiles[fullPath]
+    if (localFile) {
+      dispatch('notification', { username, path, operation: 'delete' })
+    }
+    dispatch('closeOpenedFile', { path: fullPath })
     dispatch('refreshTree', { path })
   },
   disposeMove(context, payload) {
@@ -814,6 +805,26 @@ const actions = {
     dispatch('gitlab/getRepositoryTree', {
       path: websiteName,
       useCache: false
+    })
+  },
+  notification(context, { username = '', path = '', operation = 'update', title = '', message = '', type = 'info', duration = 4500, dangerouslyUseHTMLString = true }) {
+    const isEn = locale === 'en-US'
+    const wrapParagraph = str => `<p style="word-break: break-all">${str}</p>`
+    const boldStr = username => `<span style="color: #303133; font-weight: bold">${username}</span>`
+    const boldUsernameHTML = boldStr(username)
+    if (dangerouslyUseHTMLString && operation === 'update') {
+      message = isEn ? wrapParagraph(`${boldUsernameHTML} updated the contents of ${path}`) : wrapParagraph(`${boldUsernameHTML}更新了${path}`)
+    }
+    if (dangerouslyUseHTMLString && operation === 'delete') {
+      message = isEn ? wrapParagraph(`${boldUsernameHTML} deleted ${path}`) : wrapParagraph(`${boldUsernameHTML}删除了${path}`)
+      type = 'warning'
+    }
+    Notification({
+      title,
+      dangerouslyUseHTMLString,
+      message,
+      type,
+      duration
     })
   }
 }

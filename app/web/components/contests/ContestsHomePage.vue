@@ -5,7 +5,7 @@
       汉字是中华民族的文化瑰宝，是传颂中华文明的基本符号，是传承中华民族精神的血脉基因，而姓氏文化精粹《百家姓》作为中华传统文化经典国学，记录着祖先一脉相承的智慧，是蒙学教育的识字读本。人工智能时代正在开启，编程教育席卷而来，呼吁用科技去创造未来。
     </p>
     <p class="contests-home-page-paragraph">
-      为了让中华民族优秀传统文化跳动时代的脉搏，2019年，大富配天集团携手中视科华举办“用计算机程序让汉字活起来 走向世界”内容创作大赛，面向全球征集以中国自主原创的3D动画和编程软件Paracraft（创意空间）软件为创作工具，以《百家姓》的姓氏文化演绎为内容的视频作品。通过本届大赛用计算机代码激活汉字的灵动性，让汉字在人工智能时代独领风骚，让汉字的方块构造演绎出国人的刚正不阿的气骨，续写民族之魂。
+      为了让中华民族优秀传统文化跳动时代的脉搏，2019年，大富配天集团携手中视科华举办“用计算机程序让汉字活起来&nbsp;&nbsp;走向世界”内容创作大赛，面向全球征集以中国自主原创的3D动画和编程软件Paracraft（创意空间）软件为创作工具，以《百家姓》的姓氏文化演绎为内容的视频作品。通过本届大赛用计算机代码激活汉字的灵动性，让汉字在人工智能时代独领风骚，让汉字的方块构造演绎出国人的刚正不阿的气骨，续写民族之魂。
     </p>
     <div class="contests-home-page-brief">
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·大赛主题：</span><span class="contests-home-page-brief-text-right">用计算机程序让汉字活起来走向世界。</span></p>
@@ -330,8 +330,8 @@ export default {
     color: #000000;
     line-height: 32px;
     text-indent: 30px;
-    text-align: center;
     margin-bottom: 18px;
+    text-indent: 2em;
   }
   &-brief {
     max-width: 970px;
@@ -348,9 +348,11 @@ export default {
       box-sizing: border-box;
       display: flex;
       &-left {
-        width: 154px;
-        text-align: right;
+        width: 150px;
         color: #6e1612;
+        text-align: justify;
+        text-justify: distribute-all-lines;
+        text-align-last: justify;
       }
       &-right {
         flex: 1;

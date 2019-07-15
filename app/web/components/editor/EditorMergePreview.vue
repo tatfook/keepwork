@@ -1,20 +1,25 @@
 <template>
   <el-dialog :visible="true" @close="onClose" custom-class="merge-preview-dialog">
     <div class="merge-operation">
-      <span> {{ updateUsername}}于{{ updateAt}}更新了内容,请先合并再保存</span>
+      <span v-if="isEn" class="merge-operation-tips">
+        {{ updateUsername }} updated the content at {{updateAt}},<span class="tips-highlight"> please <span class="tips-normal">⇜</span> merge and save it first.</span>
+      </span>
+      <span v-else class="merge-operation-tips">
+        {{ updateUsername }}于{{updateAt}}更新了内容， <span class="tips-highlight"> 点击合并<span class="tips-normal"> ⇜ </span> 按钮再保存</span>
+      </span>
       <span class="diff-position-icon" @click="onGoPrevDiff">
-        <el-tooltip content="上一个冲突">
+        <el-tooltip :content="$t('editor.prevDiff')">
           <i class="el-icon-caret-top"></i>
         </el-tooltip>
       </span>
       <span class="diff-position-icon" @click="onGoNextDiff">
-        <el-tooltip content="下一个冲突">
+        <el-tooltip :content="$t('editor.nextDiff')">
           <i class="el-icon-caret-bottom"></i>
         </el-tooltip>
       </span>
       <span class="need-refresh-code" v-if="isNeedRefresh">
-        <el-tooltip content="服务器有新版本，点击拉取">
-          <el-button @click="onRefresh" size="mini" type="warning" plain>需要刷新</el-button>
+        <el-tooltip :content="$t('editor.needRefresh')">
+          <el-button @click="onRefresh" size="mini" type="warning" plain>{{$t('editor.updated')}}</el-button>
         </el-tooltip>
       </span>
       <span class="merge-operation-save">
@@ -25,10 +30,11 @@
     </div>
     <div class="merge-pane">
       <span class="merge-pane-left">
-        您的版本
+        {{$t('editor.yourVersion')}}
       </span>
+      <span class="merge-pane-center"></span>
       <span class="merge-pane-right">
-        {{ updateUsername}}的版本
+        {{$t('editor.userVersion', { username: updateUsername})}}
       </span>
     </div>
     <code-mirror v-if="initSuccess" :merge="true" ref="mergePreview" :options="cmOption"></code-mirror>
@@ -40,6 +46,7 @@ import { codemirror as CodeMirror } from 'vue-codemirror'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import DiffMatchPatch from 'diff-match-patch'
+import { locale } from '@/lib/utils/i18n'
 import _ from 'lodash'
 import 'codemirror/addon/merge/merge.css'
 import 'codemirror/addon/merge/merge.js'
@@ -79,7 +86,7 @@ export default {
       },
       initSuccess: false,
       savePending: false,
-      isNeedRefresh: false,
+      isNeedRefresh: false
     }
   },
   mounted() {
@@ -95,6 +102,9 @@ export default {
       activePageLatestVersion: 'activePageLatestVersion',
       code: 'code'
     }),
+    isEn() {
+      return locale === 'en-US'
+    },
     latestContent() {
       return this.activePageLatestVersion.content
     },
@@ -108,9 +118,6 @@ export default {
         ''
       )
       return moment(updateAt).format('YYYY-MM-DD H:mm')
-    },
-    $mergePreview() {
-      return this.$refs.mergePreview.codemirror.edit
     }
   },
   methods: {
@@ -127,23 +134,26 @@ export default {
     },
     async onUpdate() {
       this.savePending = true
-      const content = this.$mergePreview.getValue()
+      const content = this.$refs.mergePreview.codemirror.edit.getValue()
       await this.saveMergedPage({ content })
       this.savePending = false
       this.onClose()
     },
     onGoNextDiff() {
-      this.$mergePreview.execCommand('goNextDiff')
+      this.$refs.mergePreview.codemirror.edit.execCommand('goNextDiff')
     },
     onGoPrevDiff() {
-      this.$mergePreview.execCommand('goPrevDiff')
+     this.$refs.mergePreview.codemirror.edit.execCommand('goPrevDiff')
     },
     onRefresh() {
       this.initSuccess = false
-      this.cmOption.value = this.$mergePreview.getValue()
-      this.cmOption.orig = this.latestContent
+      this.cmOption = {
+        ...this.cmOption,
+        value: this.$refs.mergePreview.codemirror.edit.getValue(),
+        orig: this.latestContent
+      }
       this.isNeedRefresh = false
-      this.$nextTick(() => this.initSuccess = true)
+      this.$nextTick(() => (this.initSuccess = true))
     },
     checkNeedRefresh(newValue, oldValue) {
       if (this.cmOption.orig !== newValue) {
@@ -162,9 +172,19 @@ export default {
     font-size: 26px;
   }
   .merge-operation {
-    height: 44px;
-    line-height: 44px;
-    padding-right: 50px;
+    height: 55px;
+    line-height: 55px;
+    padding:0 50px 0 10px;
+    user-select: none;
+    &-tips {
+      font-size: 16px;
+      .tips-highlight {
+        color: #409eff;
+      }
+      .tips-normal {
+        color: #606266;
+      }
+    }
     .diff-position-icon {
       $size: 22px;
       cursor: pointer;
@@ -200,9 +220,29 @@ export default {
     }
   }
   .merge-pane {
+    background: #f8f8f8;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    color: #409eff;
+    border: 1px solid #ddd;
+    border-bottom: none;
     &-left {
       display: inline-block;
-      width: 53%;
+      box-sizing: border-box;
+      width: 47%;
+      border-right: 1px solid #ddd;
+      padding-left: 30px;
+    }
+
+    &-center {
+      display: inline-block;
+      width: 5%;
+    }
+    &-right {
+      border-left: 1px solid #ddd;
+      display: inline-block;
+      padding-left: 30px;
     }
   }
   .el-dialog__header {
@@ -214,7 +254,7 @@ export default {
 }
 /deep/.merge-preview-dialog {
   $height: 750px;
-  $max-height: 60vh;
+  $max-height: 55vh;
   height: 950px;
   max-height: 70vh;
   .CodeMirror-merge-pane.CodeMirror-merge-editor {

@@ -31,8 +31,8 @@
         <el-form-item :label="$t('user.birthday')">
           <el-date-picker size="small" v-model="userInfo.info.birthdate" type="date" :placeholder="$t('user.inputBirth')"></el-date-picker>
         </el-form-item>
-        <el-form-item :label="$t('user.email')" prop="email">
-          <el-input v-model="userInfo.email" size="small" :placeholder="$t('user.inputEmail')"></el-input>
+        <el-form-item :label="$t('user.email')" prop="info.email">
+          <el-input v-model="userInfo.info.email" size="small" :placeholder="$t('user.inputEmail')"></el-input>
         </el-form-item>
         <el-form-item label="QQ" prop="qq">
           <el-input v-model="userInfo.qq" size="small" :placeholder="$t('user.inputQQ')"></el-input>
@@ -92,7 +92,7 @@ export default {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       isMediaSkyDriveDialogShow: false,
       userInfoRules: {
-        email: [
+        'info.email': [
           {
             type: 'email',
             message: '请输入正确的邮箱地址',

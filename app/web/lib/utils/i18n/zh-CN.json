@@ -367,7 +367,14 @@
     "versionLabel": "版本",
     "operatorLabel": "操作人",
     "updateAtLabel": "更新时间",
-    "associationWebsite": "重新设定网站"
+    "associationWebsite": "重新设定网站",
+
+    "updated": "更新",
+    "needRefresh": "网页内容有更新，点击更新",
+    "nextDiff": "下个冲突",
+    "prevDiff": "上个冲突",
+    "yourVersion": "您的版本",
+    "userVersion": "{username}的版本"
   },
   "tips": {
     "mod": "模块",
@@ -1212,6 +1219,10 @@
     "classes": "堂课",
     "hours": "小时",
     "mins": "分钟",
+    "45min": "45分钟",
+    "90min": "90分钟",
+    "1week": "1周",
+    "1day": "1天",
     "totalTeachingTime": "总授课时长",
     "haveEnteredClass": "您已进入该课堂。",
     "print": "打印",

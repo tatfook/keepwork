@@ -32,7 +32,7 @@
         </div>
         <h4 class="contests-games-box-title">全国中小学科学影像节 <span class="contests-games-box-title-num">1项</span></h4>
         <p class="contests-games-box-subject">计算机科学</p>
-        <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 2019/1 ~ 7/15</p>
+        <p class="contests-games-box-time"><i class="iconfont icon-time-circle"></i> 2019/7/1 ~ 7/15</p>
       </div>
       <div class="contests-games-box" @click="goRelatedLinks('http://s.noc.net.cn/Student/Index')">
         <div class="contests-games-box-top">

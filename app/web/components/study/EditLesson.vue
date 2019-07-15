@@ -104,9 +104,10 @@ export default {
           id: this.editingLessonId
         },
         this.updatingBasicInfo,
-        _.omit(this.updatingMoreInfo, ['videoUrl']),
+        _.omit(this.updatingMoreInfo, ['videoUrl', 'duration']),
         {
           extra: {
+            duration: this.updatingMoreInfo.duration,
             coverUrl: this.updatingCoverUrl,
             videoUrl: this.updatingMoreInfo.videoUrl
           }
