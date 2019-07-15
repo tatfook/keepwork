@@ -6,7 +6,7 @@
       </el-col>
     </el-row>
     <div class="recruiting-field-pages" v-if="recruitingCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="recruitingCount">
+      <el-pagination :current-page="page" background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="recruitingCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -87,6 +87,7 @@ export default {
             this.recruitongProjects = res
           })
           .catch(err => console.error(err))
+        this.page = targetPage
         this.loading = false
         this.$emit('getAmount', this.recruitingCount)
       })

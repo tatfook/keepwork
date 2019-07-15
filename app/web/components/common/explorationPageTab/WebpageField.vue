@@ -8,7 +8,7 @@
       <p class="webpage-field-content-text" v-html="webpage.content"></p>
     </div>
     <div class="webpage-field-pages" v-if="webpagesCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="webpagesCount">
+      <el-pagination :current-page="page" background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="webpagesCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -78,6 +78,7 @@ export default {
             this.webpages = res
           })
           .catch(err => console.error(err))
+        this.page = targetPage
         this.loading = false
         this.$emit('getAmount', this.webpagesCount)
       })

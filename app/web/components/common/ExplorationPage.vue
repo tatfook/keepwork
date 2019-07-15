@@ -124,9 +124,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allProjects: 'pbl/allProjects',
-      paracraft: 'pbl/paracraft',
-      website: 'pbl/website'
+      allProjects: 'pbl/allProjects'
     }),
     currSortColumn() {
       let tabs = [
