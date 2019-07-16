@@ -7,9 +7,9 @@
       </el-breadcrumb>
     </div>
     <div class="exhibition-hall-filter">
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameType" :options="gameTypeOptions" @change="_handleChange"></el-cascader>
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" popper-class="exhibition-hall-filter-popper" v-model="selectedGameType" :options="gameTypeOptions" @change="_handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" popper-class="exhibition-hall-filter-popper" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" popper-class="exhibition-hall-filter-popper" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
     </div>
     <el-row class="exhibition-hall-cabinet" v-loading="cabinetLoading">
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
@@ -261,4 +261,21 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.exhibition-hall-filter-popper {
+  .el-cascader-panel {
+    .el-scrollbar {
+      .el-cascader-menu__wrap {
+        height: unset;
+        min-height: 60px;
+        max-height: 220px;
+        .el-cascader-menu__list {
+          position: static;
+        }
+      }
+    }
+  }
+}
+</style>
+
 
