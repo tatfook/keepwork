@@ -21,7 +21,8 @@ const actions = {
     { dispatch },
     { port, fileType, fileName, downloadUrl, id }
   ) {
-    let paracraftBaseUrl = `http://127.0.0.1:${port}/ajax/console?action=runcode&text=cmd("/install -${fileType} -filename ${fileName} ${downloadUrl}")`
+    fileType = _.lowerCase(fileType)
+    let paracraftBaseUrl = `http://127.0.0.1:${port}/ajax/console?action=runcode&text=cmd("/install -ext ${fileType} -filename ${fileName} ${downloadUrl}")`
     await axios
       .post(paracraftBaseUrl)
       .then(() => {
