@@ -34,6 +34,8 @@ module.exports = app => {
   router.get('/vip', controller.vip.index)
   router.get('/wiki/pay', controller.wiki.index)
   router.post('/es/parser', controller.parser.parser)
+  router.get('/p', controller.paracraft.index)
+  router.get(/^\/p\//, controller.paracraft.index)
   router.redirect('/wiki/login', '/u/r/login', 302)
   router.redirect('/wiki/join', '/u/r/register', 302)
   router.redirect('/wiki/user_center', '/u/p/changePassword', 302)

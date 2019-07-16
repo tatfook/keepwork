@@ -3,7 +3,9 @@
     <div class="media-type-media-library">
       <div v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
         <div class="media-type-media-item-main" v-if="mediaItem.key" @click.prevent="selectItem(mediaItem)">
-          <video v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          <lazy-component v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" @show="lazyLoadShowHandler">
+            <video :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
+          </lazy-component>
           <img v-else-if="getMediaItemTypeByExt(mediaItem.ext) ==='image'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
           <div v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
@@ -51,6 +53,8 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import VueLazyload from 'vue-lazyload'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import FileDeleter from './FileDeleter'
@@ -58,6 +62,9 @@ import FileDownloader from './FileDownloader'
 import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
 import FileListEmpty from './FileListEmpty'
+Vue.use(VueLazyload, {
+  lazyComponent: true
+})
 const ExtIcons = {
   txt: 'icon-txt1',
   mp4: 'icon-mp4-1',
@@ -148,6 +155,7 @@ export default {
     ...mapActions({
       skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue'
     }),
+    lazyLoadShowHandler() {},
     getMediaItemTypeByExt(ext) {
       const ImageTypeExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp']
       const VideoTypeExts = ['mp4']
@@ -203,9 +211,7 @@ export default {
       this.$alert(
         `<div>
           <style>.el-message-box__wrapper{background: black;}</style>
-          <video id="${mediaItemVideoPreviewId}" src="${
-          mediaItem.downloadUrl
-        }" controls></video>
+          <video id="${mediaItemVideoPreviewId}" src="${mediaItem.downloadUrl}" controls></video>
         </div>`,
         {
           customClass: 'media-type-video-preview-dialog',

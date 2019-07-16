@@ -10,7 +10,7 @@
         <span class="history-list-item-version-sub">{{history.message | sourceVersionFilter}}</span>
       </div>
       <div class="history-list-item-username" :title="history.author_name | oldNameFilter">{{history.author_name | oldNameFilter}}</div>
-      <div class="history-list-item-date">{{history.authored_date | formatTime }}</div>
+      <div class="history-list-item-date">{{history.createdAt | formatTime }}</div>
     </div>
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="isBusy" infinite-scroll-distance="0"></div>
   </el-scrollbar>

@@ -6,7 +6,7 @@
       </el-col>
     </el-row>
     <div class="course-field-pages" v-if="lessonPackagesCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="lessonPackagesCount">
+      <el-pagination :current-page="page" background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="lessonPackagesCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -70,6 +70,7 @@ export default {
             this.lessonPackages = res
           })
           .catch(err => console.error(err))
+        this.page = targetPage
         this.loading = false
         this.$emit('getAmount', this.lessonPackagesCount)
       })

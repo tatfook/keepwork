@@ -6,7 +6,7 @@
       </el-col>
     </el-row>
     <div class="picked-projects-pages" v-if="pickedProjectsCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="pickedProjectsCount">
+      <el-pagination :current-page="page" background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="pickedProjectsCount">
       </el-pagination>
     </div>
     <transition name="fade">
@@ -87,6 +87,7 @@ export default {
             this.pickedProjects = res
           })
           .catch(err => console.error(err))
+        this.page = targetPage
         this.loading = false
         this.$emit('getAmount', this.pickedProjectsCount)
       })
