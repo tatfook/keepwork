@@ -18,7 +18,7 @@
       <p class="exhibition-hall-cabinet-hint" v-if="allProjectsDataOptimize.length == 0">暂无项目</p>
     </el-row>
     <div class="exhibition-hall-pages" v-if="projectsCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
+      <el-pagination background :current-page="page" @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
       </el-pagination>
     </div>
   </div>
