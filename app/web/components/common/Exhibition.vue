@@ -7,9 +7,9 @@
       </el-breadcrumb>
     </div>
     <div class="exhibition-hall-filter">
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameType" :options="gameTypeOptions" @change="_handleChange"></el-cascader>
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
-      <el-cascader class="exhibition-hall-filter-options" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" popper-class="exhibition-hall-filter-popper" v-model="selectedGameType" :options="gameTypeOptions" @change="_handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" popper-class="exhibition-hall-filter-popper" v-model="selectedGamePeriodical" :options="gamePeriodicalOptions" @change="handleChange"></el-cascader>
+      <el-cascader class="exhibition-hall-filter-options" popper-class="exhibition-hall-filter-popper" v-model="selectedGameTheme" :options="gameThemeOptions" @change="handleChange"></el-cascader>
     </div>
     <el-row class="exhibition-hall-cabinet" v-loading="cabinetLoading">
       <el-col :sm="12" :md="6" :xs="12" v-for="(project,index) in allProjectsDataOptimize" :key="index">
@@ -18,7 +18,7 @@
       <p class="exhibition-hall-cabinet-hint" v-if="allProjectsDataOptimize.length == 0">暂无项目</p>
     </el-row>
     <div class="exhibition-hall-pages" v-if="projectsCount > perPage">
-      <el-pagination background @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
+      <el-pagination background :current-page="page" @current-change="targetPage" layout="prev, pager, next" :page-size="perPage" :total="projectsCount">
       </el-pagination>
     </div>
   </div>
@@ -70,7 +70,7 @@ export default {
           }
         ]
       }))
-      selectList.push({ value: '', label: '全部' })
+      selectList.unshift({ value: '', label: '全部' })
       return selectList
     },
     gamePeriodicalOptions() {
@@ -82,7 +82,7 @@ export default {
             value: item.id
           })
         )
-        selectNoList.push({ value: '', label: '全部' })
+        selectNoList.unshift({ value: '', label: '全部' })
         return selectNoList
       }
       return []
@@ -91,6 +91,10 @@ export default {
       if (this.selectedGameType[0] === 'NPL大赛') {
         // NPL大赛
         return [
+          {
+            value: '',
+            label: '全部'
+          },
           {
             value: '动画',
             label: '动画'
@@ -102,10 +106,6 @@ export default {
           {
             value: '解谜',
             label: '解谜'
-          },
-          {
-            value: '',
-            label: '全部'
           }
         ]
       }
@@ -113,12 +113,12 @@ export default {
         // 全国青少年科技创新大赛
         return [
           {
-            value: '计算机科学',
-            label: '计算机科学'
-          },
-          {
             value: '',
             label: '全部'
+          },
+          {
+            value: '计算机科学',
+            label: '计算机科学'
           }
         ]
       }
@@ -126,18 +126,22 @@ export default {
         // 全国中小学科学影像节
         return [
           {
-            value: '科普动画',
-            label: '科普动画'
-          },
-          {
             value: '',
             label: '全部'
+          },
+          {
+            value: '科普动画',
+            label: '科普动画'
           }
         ]
       }
       if (this.selectedGameType[0] === '全国中小学信息技术创新与实践大赛') {
         // 全国中小学信息技术创新与实践大赛
         return [
+          {
+            value: '',
+            label: '全部'
+          },
           {
             value: '动画创作',
             label: '动画创作'
@@ -153,10 +157,6 @@ export default {
           {
             value: '3D智能作品创作',
             label: '3D智能作品创作'
-          },
-          {
-            value: '',
-            label: '全部'
           }
         ]
       }
@@ -260,4 +260,21 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.exhibition-hall-filter-popper {
+  .el-cascader-panel {
+    .el-scrollbar {
+      .el-cascader-menu__wrap {
+        height: unset;
+        min-height: 60px;
+        max-height: 220px;
+        .el-cascader-menu__list {
+          position: static;
+        }
+      }
+    }
+  }
+}
+</style>
+
 
