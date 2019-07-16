@@ -93,7 +93,7 @@ export default {
       return _.map(this.systemComps, compDetail => {
         return {
           ...compDetail,
-          id: 'E' + (1000 + compDetail.id)
+          formatedId: 'E' + (1000 + compDetail.id)
         }
       })
     },
