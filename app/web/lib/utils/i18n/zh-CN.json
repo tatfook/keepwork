@@ -1815,7 +1815,7 @@
     "Add": "添加",
     "continueAdd": "继续添加",
     "pleaseInput": "请输入",
-    "KeepworkUsername": "keepwork用户名",
+    "KeepworkUsername": "用户名/手机号/邮箱",
     "pleaseSelect": "请选择",
     "classNameCannotBeModifiedAfterSaved": "（注意：班级名称，一经设置，不得修改。）",
     "classInformationLabel": "班级信息",
