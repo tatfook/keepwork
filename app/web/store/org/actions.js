@@ -215,7 +215,7 @@ const actions = {
   async getUserOrgRoleByGraphql(context, { organizationId, username }) {
     let result = await keepwork.graphql.getQueryResult({
       query:
-        'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId} }}',
+        'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, user, organizationClassMembers{classId, roleId} }}',
       variables: {
         organizationId,
         username
@@ -229,7 +229,7 @@ const actions = {
     if (organizationClassMembers.length === 0) {
       return Promise.resolve()
     }
-    return Promise.reject(organizationClassMembers)
+    return Promise.resolve(organizationUser)
   },
   async createNewMember(
     context,

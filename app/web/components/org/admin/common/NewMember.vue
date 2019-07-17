@@ -39,6 +39,8 @@
 <script>
 import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
+const RE_CELLPHONE = /^1\d{10}$/
+const RE_EMAIL = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 export default {
   name: 'NewMember',
   props: {
@@ -170,25 +172,15 @@ export default {
         username
       })
         .then(result => {
-          callback()
-        })
-        .catch(error => {
-          if (error == 400) {
-            callback(
-              new Error(
-                this.$t('org.theUsername') +
-                  `[${username}]` +
-                  this.$t('org.wasNotFound')
-              )
-            )
-          }
+          const { user, organizationClassMembers } = result
+          this.converToAccount(user)
           let index
-          let memberLen = error.length
+          let memberLen = organizationClassMembers.length
           for (index = 0; index < memberLen; index++) {
-            let classId = error[index].classId
+            let classId = organizationClassMembers[index].classId
             let classes = this.filterOverDueClasses
             if (_.findIndex(classes, { id: classId }) == -1) continue
-            if ((error[index].roleId & this.memberTypeRoleId) > 0) break
+            if ((organizationClassMembers[index].roleId & this.memberTypeRoleId) > 0) break
           }
           if (index >= memberLen) {
             callback()
@@ -205,6 +197,29 @@ export default {
             )
           }
         })
+        .catch(error => {
+          if (error == 400) {
+            callback(
+              new Error(
+                this.$t('org.theUsername') +
+                  `[${username}]` +
+                  this.$t('org.wasNotFound')
+              )
+            )
+          }
+        })
+    },
+    converToAccount(user) {
+      this.newMembers.forEach(item => {
+        if (RE_CELLPHONE.test(item.memberName) && item.memberName == user.cellphone) {
+          item.memberName = user.username
+        }
+        if (
+          RE_EMAIL.test(item.memberName) && item.memberName == user.email
+        ) {
+          item.memberName = user.username
+        }
+      })
     },
     async saveNewMember(index) {
       await new Promise(async (resolve, reject) => {
