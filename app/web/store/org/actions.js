@@ -227,7 +227,7 @@ const actions = {
     }
     let organizationClassMembers = organizationUser.organizationClassMembers
     if (organizationClassMembers.length === 0) {
-      return Promise.resolve()
+      return Promise.resolve(organizationUser)
     }
     return Promise.resolve(organizationUser)
   },
