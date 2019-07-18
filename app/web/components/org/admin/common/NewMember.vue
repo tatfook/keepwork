@@ -16,7 +16,7 @@
           <el-input v-model="newMemberItem.realname" :placeholder="$t('org.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item class="new-member-item-form-item" :label="$t('org.usernameLabel')" prop="memberName" :rules="newMemberRules.memberName" :error="newMemberItem.error">
-          <el-input v-model="newMemberItem.memberName" :placeholder="$t('org.KeepworkUsername')"></el-input>
+          <el-input v-model="newMemberItem.memberName" @focus="onLastInput(index)" :placeholder="$t('org.KeepworkUsername')"></el-input>
         </el-form-item>
         <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')" :rules="newMemberRules.classIds" prop="classIds">
           <el-select v-model="newMemberItem.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import { locale } from '@/lib/utils/i18n'
+import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 const RE_CELLPHONE = /^1\d{10}$/
 const RE_EMAIL = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
@@ -54,8 +55,8 @@ export default {
     this.pushNewMemberData()
   },
   data() {
-    const checkMemberName = (rule, username, callback) => {
-      this.testUsername({ username, callback })
+    const checkMemberName = async (rule, username, callback) => {
+      await this.testUsername({ username, callback })
     }
     let classIdsValidate = (rule, value, callback) => {
       if (this.memberType == 'student' && value.length == 0) {
@@ -66,6 +67,7 @@ export default {
     }
     return {
       isLoading: false,
+      lastFormIndex: -1,
       newMembers: [],
       newMemberRules: {
         realname: [
@@ -136,6 +138,9 @@ export default {
       getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
       orgCreateNewMember: 'org/createNewMember'
     }),
+    onLastInput(index) {
+      this.lastFormIndex = index
+    },
     pushNewMemberData() {
       let waitingAddedLen = this.newMembers.length
       if (
@@ -180,7 +185,11 @@ export default {
             let classId = organizationClassMembers[index].classId
             let classes = this.filterOverDueClasses
             if (_.findIndex(classes, { id: classId }) == -1) continue
-            if ((organizationClassMembers[index].roleId & this.memberTypeRoleId) > 0) break
+            if (
+              (organizationClassMembers[index].roleId & this.memberTypeRoleId) >
+              0
+            )
+              break
           }
           if (index >= memberLen) {
             callback()
@@ -211,12 +220,13 @@ export default {
     },
     converToAccount(user) {
       this.newMembers.forEach(item => {
-        if (RE_CELLPHONE.test(item.memberName) && item.memberName == user.cellphone) {
+        if (
+          RE_CELLPHONE.test(item.memberName) &&
+          item.memberName == user.cellphone
+        ) {
           item.memberName = user.username
         }
-        if (
-          RE_EMAIL.test(item.memberName) && item.memberName == user.email
-        ) {
+        if (RE_EMAIL.test(item.memberName) && item.memberName == user.email) {
           item.memberName = user.username
         }
       })
@@ -276,6 +286,12 @@ export default {
       })
     },
     async saveNewMembers() {
+      if (this.lastFormIndex !== -1) {
+        const _form = this.$refs[`form-${this.lastFormIndex}`][0]
+        if (_form) {
+          await _form.validate()
+        }
+      }
       let newMembersLen = this.newMembers.length
       this.isLoading = true
       for (let i = newMembersLen - 1; i >= 0; i--) {
