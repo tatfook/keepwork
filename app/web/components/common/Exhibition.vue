@@ -260,22 +260,5 @@ export default {
   }
 }
 </style>
-<style lang="scss">
-.exhibition-hall-filter-popper {
-  .el-cascader-panel {
-    .el-scrollbar {
-      .el-cascader-menu__wrap {
-        height: unset;
-        min-height: 60px;
-        max-height: 220px;
-        overflow: auto;
-        .el-cascader-menu__list {
-          position: static;
-        }
-      }
-    }
-  }
-}
-</style>
 
 
