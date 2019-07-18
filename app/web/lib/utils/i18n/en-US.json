@@ -1825,7 +1825,7 @@
     "Add": "Add ",
     "continueAdd": "Add",
     "pleaseInput": "Please input",
-    "KeepworkUsername": "Keepwork username",
+    "KeepworkUsername": "username/cellphone/email",
     "pleaseSelect": "Please select",
     "classNameCannotBeModifiedAfterSaved": "(Class name cannot be modified after saved.)",
     "classInformationLabel": "Class Information",

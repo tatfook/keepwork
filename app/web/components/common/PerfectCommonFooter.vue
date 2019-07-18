@@ -17,7 +17,7 @@
           <h4 class="list-box-title">{{$t("footer.community")}}</h4>
           <ul class="list">
             <li><a href="https://keepwork.com/">{{$t("footer.createPersonalProject")}}</a></li>
-            <!-- <li><a>{{$t("footer.eventAnnouncements")}}</a></li> -->
+            <li><a href="https://keepwork.com/contests" target="_blank">{{$t("footer.eventAnnouncements")}}</a></li>
             <li><a href="https://keepwork.com/official/paracraft/feedback" target="_blank">{{$t("footer.studentFeedback")}}</a></li>
             <li><a href="https://keepwork.com/official/paracraft/blog" target="_blank">{{$t("footer.employeeBlogging")}}</a></li>
             <li><a href="https://keepwork.com/official/paracraft/parents-blog" target="_blank">{{$t("footer.parentsBlog")}}</a></li>
