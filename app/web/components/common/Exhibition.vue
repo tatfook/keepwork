@@ -268,6 +268,7 @@ export default {
         height: unset;
         min-height: 60px;
         max-height: 220px;
+        overflow: auto;
         .el-cascader-menu__list {
           position: static;
         }
