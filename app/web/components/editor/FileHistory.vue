@@ -94,7 +94,8 @@ export default {
       closeOpenedFile: 'closeOpenedFile',
       gitlabReadFileForOwnerWithCommitId: 'gitlab/readFileForOwnerWithCommitId',
       gitlabSaveFile: 'gitlab/saveFile',
-      toggleFileHistoryVisibility: 'toggleFileHistoryVisibility'
+      toggleFileHistoryVisibility: 'toggleFileHistoryVisibility',
+      broadcastTheRoom: 'broadcastTheRoom'
     }),
     switchViewShow(isPreviewShow, isCodeShow) {
       this.isPreviewShow = isPreviewShow
@@ -121,8 +122,14 @@ export default {
         content: this.activeCommitIdContent,
         source_version: this.activeVersion
       })
-        .then(async () => {
+        .then(async result => {
           this.closeOpenedFile({ path: this.activeFullPath })
+          this.broadcastTheRoom({
+            path: this.activeFullPath,
+            type: 'update',
+            content: this.activeCommitIdContent,
+            commit: result.commit
+          })
           window.location.reload()
         })
         .catch()
