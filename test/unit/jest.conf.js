@@ -2,11 +2,7 @@ const path = require('path')
 
 module.exports = {
   rootDir: path.resolve(__dirname, '../../'),
-  moduleFileExtensions: [
-    'js',
-    'json',
-    'vue'
-  ],
+  moduleFileExtensions: ['js', 'json', 'vue'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/app/web/$1'
   },
@@ -24,5 +20,6 @@ module.exports = {
     '!**/node_modules/**'
   ],
   testURL: 'http://localhost/',
+  modulePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/config/'],
   testResultsProcessor: 'jest-jenkins-reporter'
 }
