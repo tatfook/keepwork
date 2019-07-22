@@ -7,6 +7,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FileUrlGetter',
