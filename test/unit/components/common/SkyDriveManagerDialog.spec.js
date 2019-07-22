@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import { shallow, mount, createLocalVue } from 'vue-test-utils'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import SkyDriveManager from '@/components/common/SkyDriveManager'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -12,6 +13,9 @@ describe('SkyDriveManagerDialog Comp test', () => {
     },
     mocks: {
       $t: key => key,
+      $confirm: () => {
+        return Promise.resolve()
+      },
       $store: {
         getters: {
           'skydrive/uploadingFiles': () => [],
@@ -21,6 +25,8 @@ describe('SkyDriveManagerDialog Comp test', () => {
       }
     }
   })
+  const handleCloseSpy = jest.spyOn(wrapper.vm, 'handleClose')
+  const confirmSpy = jest.spyOn(wrapper.vm, '$confirm')
 
   it('dialog should show when show is true', () => {
     expect(wrapper.html()).not.toBe(undefined)
@@ -34,6 +40,9 @@ describe('SkyDriveManagerDialog Comp test', () => {
   })
 
   it('stateDoingFiles test', () => {
+    wrapper.setProps({
+      show: true
+    })
     wrapper.setComputed({
       uploadingFiles: [
         { filename: 'name1', state: 'doing' },
@@ -48,5 +57,25 @@ describe('SkyDriveManagerDialog Comp test', () => {
     ])
   })
 
-  it('handleClose method be called when close event is emitted', () => {})
+  it('handleClose method be called when close event is emitted', () => {
+    const childCompWrapper = wrapper.find(SkyDriveManager)
+    childCompWrapper.vm.$emit('close')
+    expect(handleCloseSpy).toBeCalled()
+  })
+
+  it('$confirm method be call if there exist uploading files', () => {
+    wrapper.setComputed({
+      stateDoingFiles: [{}, {}]
+    })
+    wrapper.vm.handleClose()
+    expect(confirmSpy).toBeCalled()
+  })
+
+  it('close event emit if there not exist uploading files', () => {
+    wrapper.setComputed({
+      stateDoingFiles: []
+    })
+    wrapper.vm.handleClose()
+    expect(wrapper.emitted().close).toBeTruthy()
+  })
 })
