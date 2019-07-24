@@ -4,7 +4,10 @@
     <el-table v-if="isFormExist" class="org-forms-table" :data="formsList" stripe>
       <el-table-column label="表单名称" class-name="org-forms-table-name-row">
         <template slot-scope="scope">
-          <div class="org-forms-table-name">{{scope.row.name}}</div>
+          <div class="org-forms-table-name">
+            <span>{{scope.row.name}}</span>
+            <i class="iconfont icon-edit1"></i>
+          </div>
           <div class="org-forms-table-url" v-if="scope.row.state !== FormStateCode.unPublished">{{scope.row.url}}</div>
         </template>
       </el-table-column>
@@ -198,10 +201,18 @@ export default {
       }
     }
     &-name {
-      max-width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      display: flex;
+      span {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .iconfont {
+        flex: 1;
+        color: #2397f3;
+        margin-left: 8px;
+      }
     }
     &-url {
       font-size: 12px;
