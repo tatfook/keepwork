@@ -5,7 +5,7 @@
       <el-table-column label="表单名称" class-name="org-forms-table-name-row">
         <template slot-scope="scope">
           <div class="org-forms-table-name">{{scope.row.name}}</div>
-          <div class="org-forms-table-url" v-if="scope.row.state !== 0">{{scope.row.url}}</div>
+          <div class="org-forms-table-url" v-if="scope.row.state !== FormStateCode.unPublished">{{scope.row.url}}</div>
         </template>
       </el-table-column>
       <el-table-column label="状态" width="175">
@@ -16,8 +16,8 @@
       <el-table-column label="反馈数" prop="callbackCount" width="120"></el-table-column>
       <el-table-column label="" class-name="org-forms-table-operate-row">
         <template slot-scope="scope">
-          <el-button size="small">编辑</el-button>
-          <el-button size="small">发布</el-button>
+          <el-button v-if="scope.row.state === FormStateCode.unPublished" size="small">编辑</el-button>
+          <el-button size="small">{{scope.row.buttonText}}</el-button>
           <el-dropdown trigger="click" @command="handleDropdownCommand">
             <span class="el-dropdown-link">
               <i class="iconfont icon-ellipsis"></i>
@@ -57,6 +57,11 @@ export default {
   name: 'OrgForms',
   data() {
     return {
+      FormStateCode: {
+        unPublished: 0,
+        doing: 1,
+        stop: 2
+      },
       formTemplates: [
         {
           thumb: require('@/assets/org/form_template1.png'),
@@ -101,6 +106,7 @@ export default {
           url: `${this.nowHost}/org/${this.orgLoginUrl}/${id}`,
           stateText: this.getStateText(state),
           stateColClass: this.getStateClass(state),
+          buttonText: this.getButtonText(state),
           callbackCount: _.isNumber(callbackCount) ? callbackCount : '-'
         }
       })
@@ -114,10 +120,25 @@ export default {
   },
   methods: {
     getStateText(state) {
-      return state === 1 ? '收集中' : state === 2 ? '停止' : '未发布'
+      return state === this.FormStateCode.doing
+        ? '收集中'
+        : state === this.FormStateCode.stop
+        ? '停止'
+        : '未发布'
     },
     getStateClass(state) {
-      return state === 1 ? 'is-doing' : state === 2 ? 'is-stop' : ''
+      return state === this.FormStateCode.doing
+        ? 'is-doing'
+        : state === this.FormStateCode.stop
+        ? 'is-stop'
+        : ''
+    },
+    getButtonText(state) {
+      return state === this.FormStateCode.doing
+        ? '停止收集'
+        : state === this.FormStateCode.stop
+        ? '开始收集'
+        : '发布'
     },
     copyForm(formDetail) {
       console.log('copyForm', formDetail)
