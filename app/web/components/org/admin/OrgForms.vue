@@ -15,17 +15,17 @@
       </el-table-column>
       <el-table-column label="反馈数" prop="callbackCount" width="120"></el-table-column>
       <el-table-column label="" class-name="org-forms-table-operate-row">
-        <template>
+        <template slot-scope="scope">
           <el-button size="small">编辑</el-button>
           <el-button size="small">发布</el-button>
-          <el-dropdown @command="handleCommand" @visible-change="handleVisibleChange">
+          <el-dropdown trigger="click" @command="handleDropdownCommand">
             <span class="el-dropdown-link">
               <i class="iconfont icon-ellipsis"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="copy">生成副本</el-dropdown-item>
-              <el-dropdown-item command="copy">打印</el-dropdown-item>
-              <el-dropdown-item command="copy">删除</el-dropdown-item>
+              <el-dropdown-item :command="{key: 'copy', detail: scope.row}">生成副本</el-dropdown-item>
+              <el-dropdown-item :command="{key: 'print', detail: scope.row}">打印</el-dropdown-item>
+              <el-dropdown-item :command="{key: 'delete', detail: scope.row}">删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -119,11 +119,30 @@ export default {
     getStateClass(state) {
       return state === 1 ? 'is-doing' : state === 2 ? 'is-stop' : ''
     },
-    handleCommand(command) {
-      console.log(command)
+    copyForm(formDetail) {
+      console.log('copyForm', formDetail)
     },
-    handleVisibleChange(visible) {
-      console.log(visible)
+    printForm(formDetail) {
+      console.log('printForm', formDetail)
+    },
+    deleteForm(formDetail) {
+      console.log('deleteForm', formDetail)
+    },
+    handleDropdownCommand(command) {
+      let { key, detail } = command
+      switch (key) {
+        case 'copy':
+          this.copyForm(detail)
+          break
+        case 'print':
+          this.printForm(detail)
+          break
+        case 'delete':
+          this.deleteForm(detail)
+          break
+        default:
+          break
+      }
     }
   }
 }
@@ -153,6 +172,7 @@ export default {
         border-radius: 8px;
       }
       .el-dropdown {
+        cursor: pointer;
         margin-left: 24px;
       }
     }
