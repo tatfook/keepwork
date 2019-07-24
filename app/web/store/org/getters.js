@@ -27,11 +27,16 @@ const getters = {
       jsrsasign.b64utoutf8(token.split('.')[1])
     )
   },
-  isCurrentOrgToken: (state, { currentOrgId, tokenOrgId }) => currentOrgId === tokenOrgId,
-  isOrgMember: (state, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && Boolean(roleId),
-  isAdmin: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 64) > 0, // eslint-disable-line no-bitwise
-  isTeacher: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 2) > 0, // eslint-disable-line no-bitwise
-  isStudent: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 1) > 0, // eslint-disable-line no-bitwise
+  isCurrentOrgToken: (state, { currentOrgId, tokenOrgId }) =>
+    currentOrgId === tokenOrgId,
+  isOrgMember: (state, { roleId, isCurrentOrgToken }) =>
+    isCurrentOrgToken && Boolean(roleId),
+  isAdmin: (sate, { roleId, isCurrentOrgToken }) =>
+    isCurrentOrgToken && (roleId & 64) > 0, // eslint-disable-line no-bitwise
+  isTeacher: (sate, { roleId, isCurrentOrgToken }) =>
+    isCurrentOrgToken && (roleId & 2) > 0, // eslint-disable-line no-bitwise
+  isStudent: (sate, { roleId, isCurrentOrgToken }) =>
+    isCurrentOrgToken && (roleId & 1) > 0, // eslint-disable-line no-bitwise
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
   getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
     _.get(state.orgsDetailForLoginUrl, loginUrl),
@@ -52,7 +57,8 @@ const getters = {
     const year = _endDate.getFullYear()
     const month = _endDate.getMonth() + 1
     const day = _endDate.getDate()
-    const endTime = +new Date(`${year}-${month}-${day}`) + 1000 * 60 * 60 * 24 - 1000
+    const endTime =
+      +new Date(`${year}-${month}-${day}`) + 1000 * 60 * 60 * 24 - 1000
     return endTime
   },
   currentOrg: state => state.currentOrg,
@@ -74,7 +80,27 @@ const getters = {
   expirationDialogVisible: state => state.expirationDialogVisible,
   isFirstView: (state, { currentOrg, userinfo: { id } }) => {
     return !_.includes(_.get(currentOrg, 'extra.visitedList', []), id)
-  }
+  },
+  formsList: state => [
+    {
+      id: 1,
+      name: '表单名称1',
+      state: 0,
+      callbackCount: null
+    },
+    {
+      id: 2,
+      name: '表单名称2',
+      state: 1,
+      callbackCount: 10
+    },
+    {
+      id: 3,
+      name: '表单名称3',
+      state: 2,
+      callbackCount: null
+    }
+  ]
 }
 
 export default getters

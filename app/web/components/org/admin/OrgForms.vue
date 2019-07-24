@@ -1,13 +1,43 @@
 <template>
   <div class="org-forms">
     <div class="org-forms-header">表单管理</div>
-    <div class="org-forms-empty">
+    <el-table v-if="isFormExist" class="org-forms-table" :data="formsList" stripe>
+      <el-table-column label="表单名称" class-name="org-forms-table-name-row">
+        <template slot-scope="scope">
+          <div class="org-forms-table-name">{{scope.row.name}}</div>
+          <div class="org-forms-table-url" v-if="scope.row.state !== 0">{{scope.row.url}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" width="175">
+        <template slot-scope="scope">
+          <span :class="scope.row.stateColClass">{{scope.row.stateText}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="反馈数" prop="callbackCount" width="120"></el-table-column>
+      <el-table-column label="" class-name="org-forms-table-operate-row">
+        <template>
+          <el-button size="small">编辑</el-button>
+          <el-button size="small">发布</el-button>
+          <el-dropdown @command="handleCommand" @visible-change="handleVisibleChange">
+            <span class="el-dropdown-link">
+              <i class="iconfont icon-ellipsis"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="copy">生成副本</el-dropdown-item>
+              <el-dropdown-item command="copy">打印</el-dropdown-item>
+              <el-dropdown-item command="copy">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div v-if="!isFormExist" class="org-forms-empty">
       <div class="org-forms-empty-container">
         <p>你还没有表单哦，点击下方按钮去创建你的第一份表单吧！</p>
         <el-button type="primary" size="medium">创建表单</el-button>
       </div>
     </div>
-    <div class="org-forms-templates">
+    <div v-if="!isFormExist" class="org-forms-templates">
       <div class="org-forms-templates-header">表单模板</div>
       <div class="org-forms-templates-list">
         <div class="org-forms-templates-item" v-for="(template, index) in formTemplates" :key="index">
@@ -22,6 +52,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'OrgForms',
   data() {
@@ -54,6 +85,46 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapGetters({
+      orgFormsList: 'org/formsList'
+    }),
+    isFormExist() {
+      return Boolean(this.orgFormsList.length)
+    },
+    formsList() {
+      return _.map(this.orgFormsList, form => {
+        let { id, state, callbackCount } = form
+        return {
+          ...form,
+          url: `${this.nowHost}/org/${this.orgLoginUrl}/${id}`,
+          stateText: this.getStateText(state),
+          stateColClass: this.getStateClass(state),
+          callbackCount: _.isNumber(callbackCount) ? callbackCount : '-'
+        }
+      })
+    },
+    orgLoginUrl() {
+      return _.get(this.$route, 'params.orgLoginUrl', '')
+    },
+    nowHost() {
+      return window.location.host
+    }
+  },
+  methods: {
+    getStateText(state) {
+      return state === 1 ? '收集中' : state === 2 ? '停止' : '未发布'
+    },
+    getStateClass(state) {
+      return state === 1 ? 'is-doing' : state === 2 ? 'is-stop' : ''
+    },
+    handleCommand(command) {
+      console.log(command)
+    },
+    handleVisibleChange(visible) {
+      console.log(visible)
+    }
   }
 }
 </script>
@@ -69,6 +140,53 @@ export default {
     line-height: 56px;
     border-bottom: 1px solid #e8e8e8;
     padding: 0 24px;
+  }
+  &-table {
+    margin-top: -1px;
+    /deep/ table tr &-name-row {
+      padding-left: 14px;
+    }
+    /deep/ &-operate-row {
+      padding-right: 14px;
+      text-align: right;
+      .el-button {
+        border-radius: 8px;
+      }
+      .el-dropdown {
+        margin-left: 24px;
+      }
+    }
+    &-name {
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &-url {
+      font-size: 12px;
+      color: #c0c4cc;
+    }
+    /deep/ thead tr,
+    /deep/ thead th {
+      background-color: #ebf4ff;
+    }
+    /deep/ td,
+    /deep/ th {
+      border: none;
+    }
+    /deep/ th {
+      padding: 0;
+      height: 36px;
+      line-height: 36px;
+      color: #303133;
+      font-weight: normal;
+    }
+    .is-doing {
+      color: #f39823;
+    }
+    .is-stop {
+      color: #f32d23;
+    }
   }
   &-empty {
     flex: 1;
