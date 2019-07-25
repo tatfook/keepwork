@@ -85,7 +85,7 @@ export default {
           text: this.$t('org.historicalData')
         },
         {
-          pageNames: ['OrgForms'],
+          pageNames: ['OrgForms', 'NewForm'],
           indexPageName: 'OrgForms',
           text: '表单管理'
         },
