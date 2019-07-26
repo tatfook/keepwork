@@ -92,7 +92,10 @@ const getters = {
       id: 2,
       name: '表单名称2',
       state: 1,
-      callbackCount: 10
+      callbackCount: 10,
+      title: '表单名称2的名称',
+      desc: '表单名称2的描述描述',
+      content: '<h1>1级标题</h1><br/>表单名称2的内容'
     },
     {
       id: 3,
@@ -100,7 +103,10 @@ const getters = {
       state: 2,
       callbackCount: null
     }
-  ]
+  ],
+  getFormDetailById: (state, { formsList }) => ({ id }) => {
+    return _.find(formsList, formDetail => _.toNumber(formDetail.id) === _.toNumber(id))
+  }
 }
 
 export default getters
