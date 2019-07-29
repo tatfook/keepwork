@@ -247,10 +247,12 @@ body {
         position: relative;
         z-index: 999;
         &.selected-item {
-          color: rgb(4, 62, 147);
+          // color: rgb(4, 62, 147);
           // background: url(../../assets/contests/head_selected.png) no-repeat
           //   center top;
-          border: 2px solid rgb(4, 62, 147);
+          // border: 2px solid rgb(4, 62, 147);
+          color: #fff;
+          background: rgb(4, 62, 147);
         }
       }
     }
