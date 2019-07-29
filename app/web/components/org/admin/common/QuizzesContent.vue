@@ -11,7 +11,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item :command="{key: 'prev', quiz}">在前添加</el-dropdown-item>
             <el-dropdown-item :command="{key: 'next', quiz}">在后添加</el-dropdown-item>
-            <el-dropdown-item :command="{key: 'edit', quiz}">编辑</el-dropdown-item>
+            <el-dropdown-item :command="{key: 'edit', quiz, index}">编辑</el-dropdown-item>
             <el-dropdown-item :command="{key: 'delete', quiz}">删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -28,7 +28,7 @@
     <div class="quizzes-content-add" @click="showQuizEditor">
       <i class="iconfont icon-add--"></i>添加信息项
     </div>
-    <quiz-editor :isVisible="isDialogVisible" @close="handleQuizEditorClose"></quiz-editor>
+    <quiz-editor :originQuiz="editingQuiz" :isVisible="isDialogVisible" @close="handleQuizEditorClose"></quiz-editor>
   </div>
 </template>
 <script>
@@ -37,6 +37,7 @@ export default {
   name: 'QuizzesContent',
   data() {
     return {
+      editingQuiz: undefined,
       isDialogVisible: false,
       quizzes: []
     }
@@ -47,14 +48,31 @@ export default {
     },
     handleQuizEditorClose(quiz) {
       this.isDialogVisible = false
-      console.log(quiz)
-      if (quiz) {
+      if (!quiz) return
+      if (!this.editingQuiz) {
         this.quizzes.push(quiz)
+        return
       }
+      let { index } = this.editingQuiz
+      this.quizzes[index] = quiz
+      this.editingQuiz = undefined
+    },
+    editQuiz(quiz, index) {
+      this.editingQuiz = {
+        ...quiz,
+        index
+      }
+      this.isDialogVisible = true
     },
     handleDropdownCommand(command) {
-      let { key, quiz } = command
-      console.log(key, quiz)
+      let { key, quiz, index } = command
+      switch (key) {
+        case 'edit':
+          this.editQuiz(quiz, index)
+          break
+        default:
+          break
+      }
     }
   },
   components: {
@@ -67,7 +85,9 @@ export default {
   font-size: 14px;
   background-color: #f5f5f5;
   padding: 20px;
+  border-radius: 8px;
   &-item {
+    border-radius: 8px;
     background-color: #fff;
     margin-bottom: 12px;
     padding: 12px;
@@ -93,7 +113,7 @@ export default {
       margin-right: 6px;
     }
   }
-  .el-textarea__inner {
+  /deep/.el-textarea__inner {
     resize: none;
     height: 100px;
   }

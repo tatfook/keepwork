@@ -48,6 +48,7 @@
 export default {
   name: 'QuizEditor',
   props: {
+    originQuiz: Object,
     isVisible: {
       type: Boolean,
       default: false
@@ -55,6 +56,10 @@ export default {
   },
   mounted() {
     this.isDialogVisible = this.isVisible
+    if (this.originQuiz) {
+      console.log(this.originQuiz)
+      this.quizData = _.cloneDeep(this.originQuiz)
+    }
   },
   data() {
     return {
@@ -71,9 +76,9 @@ export default {
   computed: {
     isDataValid() {
       let { title, options, type } = this.quizData
-      let optionLen = options.length
+      let optionLen = options && options.length
       if (!title) return false
-      if (type === 2) {
+      if (type != 2) {
         if (optionLen < 2) return false
         let index
         for (index = 0; index < optionLen; index++) {
@@ -100,16 +105,24 @@ export default {
       this.quizData.options.splice(index, 1)
     },
     initData() {
-      this.quizData = {
-        type: 0,
-        isRequired: true,
-        title: '',
-        remark: '',
-        options: []
+      let quiz = this.originQuiz
+      if (quiz) {
+        this.quizData = quiz
+      } else {
+        this.quizData = {
+          type: 0,
+          isRequired: true,
+          title: '',
+          remark: '',
+          options: []
+        }
       }
     }
   },
   watch: {
+    originQuiz() {
+      this.initData()
+    },
     isVisible(val) {
       this.isDialogVisible = this.isVisible
     }
