@@ -367,28 +367,26 @@ const actions = {
     }
     return isFirstView
   },
-  async getForms({ commit }, { organizationId }) {
+  async getForms({ commit, getters }, { organizationId }) {
+    let { currentOrgId } = getters
+    organizationId = organizationId || currentOrgId
     let forms = await keepwork.lessonOrganizationForms.getForms({
       organizationId
     })
     commit(GET_FORMS_SUCCESS, { organizationId, forms })
   },
-  async updateForm({ dispatch }, { organizationId, formId, formDetail }) {
+  async updateForm({ dispatch }, { formId, formDetail }) {
     await keepwork.lessonOrganizationForms.updateForm({
       formId,
-      formDetail: {
-        ...formDetail,
-        organizationId
-      }
+      formDetail
     })
-    dispatch('getForms', { organizationId })
+    dispatch('getForms', {})
   },
-  async deleteForm({ dispatch, getters }, { formId }) {
-    let { currentOrgId } = getters
+  async deleteForm({ dispatch }, { formId }) {
     await keepwork.lessonOrganizationForms.deleteForm({
       formId
     })
-    dispatch('getForms', { organizationId: currentOrgId })
+    dispatch('getForms', {})
   }
 }
 

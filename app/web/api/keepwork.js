@@ -383,7 +383,7 @@ export const lessonOrganizationClassMembers = {
 
 export const lessonOrganizationForms = {
   getForms: async ({ organizationId }) => post('lessonOrganizationForms/search', { organizationId }),
-  updateForm: async ({ formId, formDetail }) => post(`lessonOrganizationForms/${formId}`, formDetail),
+  updateForm: async ({ formId, formDetail }) => put(`lessonOrganizationForms/${formId}`, formDetail),
   deleteForm: async ({ formId }) => deleteMethod(`lessonOrganizationForms/${formId}`)
 }
 

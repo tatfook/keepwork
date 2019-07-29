@@ -8,7 +8,7 @@
         <template slot-scope="scope">
           <div class="org-forms-table-name">
             <span>{{scope.row.name}}</span>
-            <i class="iconfont icon-edit1"></i>
+            <i class="iconfont icon-edit1" @click="renameForm(scope.row.id)"></i>
           </div>
           <div class="org-forms-table-url" v-if="scope.row.state !== FormStateCode.unPublished">{{scope.row.url}}</div>
         </template>
@@ -22,7 +22,7 @@
       <el-table-column label="" class-name="org-forms-table-operate-row">
         <template slot-scope="scope">
           <el-button v-if="scope.row.state === FormStateCode.unPublished" size="small" @click="toEditPage(scope.row.id)">编辑</el-button>
-          <el-button size="small">{{scope.row.buttonText}}</el-button>
+          <el-button size="small" @click="changeFormState(scope.row.id, scope.row.state)">{{scope.row.buttonText}}</el-button>
           <el-dropdown trigger="click" @command="handleDropdownCommand">
             <span class="el-dropdown-link">
               <i class="iconfont icon-ellipsis"></i>
@@ -97,6 +97,7 @@ export default {
   methods: {
     ...mapActions({
       orgGetForms: 'org/getForms',
+      orgUpdateForms: 'org/updateForm',
       orgDeleteForms: 'org/deleteForm'
     }),
     toEditPage(id) {
@@ -135,6 +136,32 @@ export default {
     },
     printForm(formDetail) {
       console.log('printForm', formDetail)
+    },
+    async renameForm(formId) {
+      this.$prompt('请输入表单名称', '表单重命名', {
+        confirmButtonText: '保存',
+        cancelButtonText: '取消'
+      })
+        .then(async ({ value }) => {
+          this.isLoading = true
+          await this.orgUpdateForms({ formId, formDetail: { name: value } })
+          this.isLoading = false
+          this.updateSuccess()
+        })
+        .catch(() => {})
+    },
+    async changeFormState(formId, state) {
+      let targetState = state == 2 ? 1 : state + 1
+      this.isLoading = true
+      await this.orgUpdateForms({ formId, formDetail: { state: targetState } })
+      this.isLoading = false
+      this.updateSuccess()
+    },
+    updateSuccess() {
+      this.$message({
+        type: 'success',
+        message: '更新成功'
+      })
     },
     async deleteForm(formDetail) {
       this.isLoading = true
@@ -210,6 +237,7 @@ export default {
         flex: 1;
         color: #2397f3;
         margin-left: 8px;
+        cursor: pointer;
       }
     }
     &-url {
