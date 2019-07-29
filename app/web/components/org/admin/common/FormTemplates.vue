@@ -1,62 +1,80 @@
 <template>
-  <div class="form-templates">
+  <div class="form-templates" v-loading="isLoading">
     <div class="form-templates-item" v-for="(template, index) in formTemplates" :key="index">
       <el-popover :appendToBody="false" popper-class="form-templates-preview" placement="right" trigger="hover" width="500">
-        <img :src="template.preview" alt="template.name">
+        <img :src="template.preview" alt="template.title">
         <div class="form-templates-item-box" slot="reference">
-          <img class="form-templates-item-thumb" :src="template.thumb" :alt="template.name">
+          <img class="form-templates-item-thumb" :src="template.thumb" :alt="template.title">
           <el-button class="form-templates-item-create hover-show" type="primary" size="medium" @click="showNamePrompt(template)">创建</el-button>
         </div>
       </el-popover>
-      <div class="form-templates-item-name">{{template.name}}</div>
+      <div class="form-templates-item-name">{{template.title}}</div>
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'FormTemplates',
   data() {
     return {
-      selectedTemplate: {},
+      isLoading: false,
       formTemplates: [
         {
+          type: 0,
           thumb: require('@/assets/org/form_template1.png'),
           preview: require('@/assets/org/form_template1_preview.png'),
-          name: '空白模板'
+          title: '空白模板'
         },
         {
+          type: 1,
           thumb: require('@/assets/org/form_template2.png'),
           preview: require('@/assets/org/form_template2_preview.png'),
-          name: '招生通知'
+          title: '招生通知'
         },
         {
+          type: 2,
           thumb: require('@/assets/org/form_template3.png'),
           preview: require('@/assets/org/form_template3_preview.png'),
-          name: '入学作品提交通知'
+          title: '入学作品提交通知'
         },
         {
+          type: 3,
           thumb: require('@/assets/org/form_template4.png'),
           preview: require('@/assets/org/form_template4_preview.png'),
-          name: '报名表'
+          title: '报名表'
         },
         {
+          type: 4,
           thumb: require('@/assets/org/form_template5.png'),
           preview: require('@/assets/org/form_template5_preview.png'),
-          name: '入选学员通知'
+          title: '入选学员通知'
         }
       ]
     }
   },
   methods: {
+    ...mapActions({
+      orgCreateForm: 'org/createForm'
+    }),
     showNamePrompt(template) {
-      this.selectedTemplate = template
+      let { type, title } = template
       this.$prompt('名称', '创建表单', {
         confirmButtonText: '保存',
         cancelButtonText: '取消'
-      })
-        .then(({ value }) => {
-          console.log('formName: ' + value)
+      }).then(async ({ value }) => {
+        this.isLoading = true
+        await this.orgCreateForm({
+          type,
+          title,
+          name: value
         })
+        this.$message({ type: 'success', message: '创建成功' })
+        this.isLoading = false
+        this.$router.push({
+          name: 'OrgForms'
+        })
+      })
     }
   }
 }

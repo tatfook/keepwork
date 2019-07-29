@@ -367,6 +367,16 @@ const actions = {
     }
     return isFirstView
   },
+  async createForm({ dispatch, getters }, formDetail) {
+    let { currentOrgId } = getters
+    await keepwork.lessonOrganizationForms.createForm({
+      formDetail: {
+        ...formDetail,
+        organizationId: currentOrgId
+      }
+    })
+    dispatch('getForms', {})
+  },
   async getForms({ commit, getters }, { organizationId }) {
     let { currentOrgId } = getters
     organizationId = organizationId || currentOrgId
