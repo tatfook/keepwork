@@ -81,32 +81,13 @@ const getters = {
   isFirstView: (state, { currentOrg, userinfo: { id } }) => {
     return !_.includes(_.get(currentOrg, 'extra.visitedList', []), id)
   },
-  formsList: state => [
-    {
-      id: 1,
-      name: '表单名称1',
-      state: 0,
-      callbackCount: null
-    },
-    {
-      id: 2,
-      name: '表单名称2',
-      state: 1,
-      type: 3,
-      callbackCount: 10,
-      title: '表单名称2的名称',
-      desc: '表单名称2的描述描述',
-      content: '<h1>1级标题</h1><br/>表单名称2的内容'
-    },
-    {
-      id: 3,
-      name: '表单名称3',
-      state: 2,
-      callbackCount: null
-    }
-  ],
+  formsList: (state, { currentOrgId }) =>
+    _.get(state.orgForms, currentOrgId),
   getFormDetailById: (state, { formsList }) => ({ id }) => {
-    return _.find(formsList, formDetail => _.toNumber(formDetail.id) === _.toNumber(id))
+    return _.find(
+      formsList,
+      formDetail => _.toNumber(formDetail.id) === _.toNumber(id)
+    )
   }
 }
 
