@@ -9,10 +9,10 @@
             <i class="iconfont icon-ellipsis"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command="{key: 'prev', quiz}">在前添加</el-dropdown-item>
-            <el-dropdown-item :command="{key: 'next', quiz}">在后添加</el-dropdown-item>
+            <el-dropdown-item :command="{key: 'prev', quiz, index}">在前添加</el-dropdown-item>
+            <el-dropdown-item :command="{key: 'next', quiz, index}">在后添加</el-dropdown-item>
             <el-dropdown-item :command="{key: 'edit', quiz, index}">编辑</el-dropdown-item>
-            <el-dropdown-item :command="{key: 'delete', quiz}">删除</el-dropdown-item>
+            <el-dropdown-item :command="{key: 'delete', quiz, index}">删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -37,6 +37,7 @@ export default {
   name: 'QuizzesContent',
   data() {
     return {
+      insertIndex: undefined,
       editingQuiz: undefined,
       isDialogVisible: false,
       quizzes: []
@@ -48,9 +49,13 @@ export default {
     },
     handleQuizEditorClose(quiz) {
       this.isDialogVisible = false
+      let insertIndex = _.isNumber(this.insertIndex)
+        ? this.insertIndex
+        : this.quizzes.length
+      this.insertIndex = undefined
       if (!quiz) return
       if (!this.editingQuiz) {
-        this.quizzes.push(quiz)
+        this.quizzes.splice(insertIndex, 0, quiz)
         return
       }
       let { index } = this.editingQuiz
@@ -64,11 +69,25 @@ export default {
       }
       this.isDialogVisible = true
     },
+    deleteQuiz(index) {
+      this.quizzes.splice(index, 1)
+    },
     handleDropdownCommand(command) {
       let { key, quiz, index } = command
       switch (key) {
         case 'edit':
           this.editQuiz(quiz, index)
+          break
+        case 'prev':
+          this.showQuizEditor()
+          this.insertIndex = index
+          break
+        case 'next':
+          this.showQuizEditor()
+          this.insertIndex = index + 1
+          break
+        case 'delete':
+          this.deleteQuiz(index)
           break
         default:
           break
