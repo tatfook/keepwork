@@ -92,6 +92,7 @@ const getters = {
       id: 2,
       name: '表单名称2',
       state: 1,
+      type: 3,
       callbackCount: 10,
       title: '表单名称2的名称',
       desc: '表单名称2的描述描述',

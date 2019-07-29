@@ -27,7 +27,8 @@
         <label>
           <span>*</span>正文:
         </label>
-        <rich-text-content :originContent="formContent"></rich-text-content>
+        <quizzes-content v-if="formType === 3" :originQuizzes="formQuizzes"></quizzes-content>
+        <rich-text-content v-else :originContent="formContent"></rich-text-content>
       </div>
     </div>
   </div>
@@ -35,6 +36,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import RichTextContent from './common/RichTextContent'
+import QuizzesContent from './common/QuizzesContent'
 export default {
   name: 'EditForm',
   mounted() {
@@ -60,9 +62,16 @@ export default {
     },
     formContent() {
       return _.get(this.formDetail, 'content', '')
+    },
+    formQuizzes() {
+      return _.get(this.formDetail, 'quizzes', '')
+    },
+    formType() {
+      return _.get(this.formDetail, 'type')
     }
   },
   components: {
+    QuizzesContent,
     RichTextContent
   },
   watch: {
