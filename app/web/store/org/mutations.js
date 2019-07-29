@@ -19,6 +19,7 @@ const GET_ORG_ACTIVATE_CODE_SUCCESS = 'GET_ORG_ACTIVATE_CODE_SUCCESS'
 const SET_PRINT_CODE_LIST = 'SET_PRINT_CODE_LIST'
 const GET_HISTORY_CLASSES_SUCCESS = 'GET_HISTORY_CLASSES_SUCCESS'
 const TOGGLE_EXPIRATION_DIALOG = 'TOGGLE_EXPIRATION_DIALOG'
+const GET_FORMS_SUCCESS = 'GET_FORMS_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -37,7 +38,8 @@ export const props = {
   GET_ORG_ACTIVATE_CODE_SUCCESS,
   SET_PRINT_CODE_LIST,
   GET_HISTORY_CLASSES_SUCCESS,
-  TOGGLE_EXPIRATION_DIALOG
+  TOGGLE_EXPIRATION_DIALOG,
+  GET_FORMS_SUCCESS
 }
 
 const mutations = {
@@ -126,6 +128,12 @@ const mutations = {
   },
   [TOGGLE_EXPIRATION_DIALOG](state, status) {
     Vue.set(state, 'expirationDialogVisible', status)
+  },
+  [GET_FORMS_SUCCESS](state, { organizationId, forms }) {
+    Vue.set(state, 'orgForms', {
+      ...state.orgForms,
+      [organizationId]: forms
+    })
   }
 }
 

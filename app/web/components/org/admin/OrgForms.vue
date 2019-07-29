@@ -1,5 +1,5 @@
 <template>
-  <div class="org-forms">
+  <div class="org-forms" v-loading="isLoading">
     <div class="org-forms-header">表单管理
       <el-button v-if="isFormExist" type="primary" size="medium" @click="toNewFormPage">创建表单</el-button>
     </div>
@@ -21,7 +21,7 @@
       <el-table-column label="反馈数" prop="callbackCount" width="120"></el-table-column>
       <el-table-column label="" class-name="org-forms-table-operate-row">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.state === FormStateCode.unPublished" size="small">编辑</el-button>
+          <el-button v-if="scope.row.state === FormStateCode.unPublished" size="small" @click="toEditPage(scope.row.id)">编辑</el-button>
           <el-button size="small">{{scope.row.buttonText}}</el-button>
           <el-dropdown trigger="click" @command="handleDropdownCommand">
             <span class="el-dropdown-link">
@@ -49,12 +49,16 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import FormTemplates from './common/FormTemplates'
 export default {
   name: 'OrgForms',
+  async mounted() {
+    await this.orgGetForms({ organizationId: this.currentOrgId })
+  },
   data() {
     return {
+      isLoading: false,
       FormStateCode: {
         unPublished: 0,
         doing: 1,
@@ -64,10 +68,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgFormsList: 'org/formsList'
+      orgFormsList: 'org/formsList',
+      currentOrgId: 'org/currentOrgId'
     }),
     isFormExist() {
-      return Boolean(this.orgFormsList.length)
+      return Boolean(this.orgFormsList && this.orgFormsList.length)
     },
     formsList() {
       return _.map(this.orgFormsList, form => {
@@ -90,6 +95,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      orgGetForms: 'org/getForms',
+      orgDeleteForms: 'org/deleteForm'
+    }),
+    toEditPage(id) {
+      this.$router.push({
+        path: `forms/${id}/edit`
+      })
+    },
     toNewFormPage() {
       this.$router.push({
         name: 'NewForm'
@@ -122,8 +136,11 @@ export default {
     printForm(formDetail) {
       console.log('printForm', formDetail)
     },
-    deleteForm(formDetail) {
-      console.log('deleteForm', formDetail)
+    async deleteForm(formDetail) {
+      this.isLoading = true
+      let { id } = formDetail
+      await this.orgDeleteForms({ formId: id })
+      this.isLoading = false
     },
     handleDropdownCommand(command) {
       let { key, detail } = command
