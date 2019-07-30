@@ -29,10 +29,12 @@ export default {
       'redo' // 重复
     ]
     editor.customConfig.colors = this.colors
+    editor.customConfig.onchange = this.handleChange
     editor.create()
     this.originContent = _.get(this.formDetail, 'text', [])
     editor.txt.html(this.originContent)
     this.formEditor = editor
+    this.handleChange()
   },
   computed: {
     ...mapGetters({
@@ -43,10 +45,6 @@ export default {
     },
     formDetail() {
       return this.getFormDetailById({ id: this.formId }) || {}
-    },
-    htmlStr() {
-      if (!this.formEditor) return ''
-      return this.formEditor.txt.html()
     }
   },
   data() {
@@ -70,6 +68,17 @@ export default {
         '#f9963b',
         '#ffffff'
       ]
+    }
+  },
+  methods: {
+    handleChange() {
+      this.$emit('change')
+    },
+    getHtmlStr() {
+      return this.formEditor.txt.html()
+    },
+    getTextStr() {
+      return this.formEditor.txt.text()
     }
   }
 }
