@@ -32,9 +32,27 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import QuizEditor from './QuizEditor'
 export default {
   name: 'QuizzesContent',
+  mounted() {
+    this.quizzes = _.cloneDeep(this.formQuizzes)
+  },
+  computed: {
+    ...mapGetters({
+      getFormDetailById: 'org/getFormDetailById'
+    }),
+    formId() {
+      return _.get(this.$route, 'params.id')
+    },
+    formDetail() {
+      return this.getFormDetailById({ id: this.formId }) || {}
+    },
+    formQuizzes(){
+      return _.get(this.formDetail, 'quizzes', [])
+    }
+  },
   data() {
     return {
       insertIndex: undefined,

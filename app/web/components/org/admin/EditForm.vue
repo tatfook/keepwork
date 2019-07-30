@@ -21,25 +21,26 @@
       </div>
       <div class="edit-form-item">
         <label for="desc">描述:</label>
-        <el-input id="content" v-model="formDetailData.desc" placeholder="请输入..."></el-input>
+        <el-input id="desc" v-model="formDetailData.description" placeholder="请输入..."></el-input>
       </div>
       <div class="edit-form-item">
         <label>
           <span>*</span>正文:
         </label>
-        <quizzes-content v-if="formType === 3" :originQuizzes="formQuizzes"></quizzes-content>
-        <rich-text-content v-else :originContent="formContent"></rich-text-content>
+        <quizzes-content v-if="formType === 3"></quizzes-content>
+        <rich-text-content v-else></rich-text-content>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import RichTextContent from './common/RichTextContent'
 import QuizzesContent from './common/QuizzesContent'
 export default {
   name: 'EditForm',
-  mounted() {
+  async mounted() {
+    await this.orgGetForms({})
     this.formDetailData = _.cloneDeep(this.formDetail)
   },
   data() {
@@ -61,14 +62,19 @@ export default {
       return _.get(this.formDetail, 'name')
     },
     formContent() {
-      return _.get(this.formDetail, 'content', '')
+      return _.get(this.formDetail, 'text', '')
     },
     formQuizzes() {
-      return _.get(this.formDetail, 'quizzes', '')
+      return _.get(this.formDetail, 'quizzes', [])
     },
     formType() {
       return _.get(this.formDetail, 'type')
     }
+  },
+  methods: {
+    ...mapActions({
+      orgGetForms: 'org/getForms'
+    })
   },
   components: {
     QuizzesContent,
