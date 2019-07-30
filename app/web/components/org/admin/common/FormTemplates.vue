@@ -2,18 +2,27 @@
   <div class="form-templates" v-loading="isLoading">
     <div class="form-templates-item" v-for="(template, index) in formTemplates" :key="index">
       <el-popover :appendToBody="false" popper-class="form-templates-preview" placement="right" trigger="hover" width="500">
-        <img :src="template.preview" alt="template.title">
+        <img :src="template.preview" alt="template.name">
         <div class="form-templates-item-box" slot="reference">
-          <img class="form-templates-item-thumb" :src="template.thumb" :alt="template.title">
+          <img class="form-templates-item-thumb" :src="template.thumb" :alt="template.name">
           <el-button class="form-templates-item-create hover-show" type="primary" size="medium" @click="showNamePrompt(template)">创建</el-button>
         </div>
       </el-popover>
-      <div class="form-templates-item-name">{{template.title}}</div>
+      <div class="form-templates-item-name">{{template.name}}</div>
     </div>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
+import formTemplates from '@/lib/formTemplates'
+const {
+  empty,
+  admissionNotice,
+  workSubmitNotice,
+  applicationForm,
+  selectedNotice
+} = formTemplates
+
 export default {
   name: 'FormTemplates',
   data() {
@@ -24,31 +33,36 @@ export default {
           type: 0,
           thumb: require('@/assets/org/form_template1.png'),
           preview: require('@/assets/org/form_template1_preview.png'),
-          title: '空白模板'
+          name: '空白模板',
+          templateParam: empty
         },
         {
           type: 1,
           thumb: require('@/assets/org/form_template2.png'),
           preview: require('@/assets/org/form_template2_preview.png'),
-          title: '招生通知'
+          name: '招生通知',
+          templateParam: admissionNotice
         },
         {
           type: 2,
           thumb: require('@/assets/org/form_template3.png'),
           preview: require('@/assets/org/form_template3_preview.png'),
-          title: '入学作品提交通知'
+          name: '入学作品提交通知',
+          templateParam: workSubmitNotice
         },
         {
           type: 3,
           thumb: require('@/assets/org/form_template4.png'),
           preview: require('@/assets/org/form_template4_preview.png'),
-          title: '报名表'
+          name: '报名表',
+          templateParam: applicationForm
         },
         {
           type: 4,
           thumb: require('@/assets/org/form_template5.png'),
           preview: require('@/assets/org/form_template5_preview.png'),
-          title: '入选学员通知'
+          name: '入选学员通知',
+          templateParam: selectedNotice
         }
       ]
     }
@@ -58,7 +72,10 @@ export default {
       orgCreateForm: 'org/createForm'
     }),
     showNamePrompt(template) {
-      let { type, title } = template
+      let {
+        type,
+        templateParam: { title, description, text, quizzes }
+      } = template
       this.$prompt('名称', '创建表单', {
         confirmButtonText: '保存',
         cancelButtonText: '取消'
@@ -67,6 +84,9 @@ export default {
         await this.orgCreateForm({
           type,
           title,
+          text,
+          description,
+          quizzes,
           name: value
         })
         this.$message({ type: 'success', message: '创建成功' })

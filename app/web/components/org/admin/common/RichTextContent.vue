@@ -4,12 +4,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import E from 'wangeditor'
 export default {
   name: 'RichTextContent',
-  props: {
-    originContent: String
-  },
   mounted() {
     let editor = new E('#jsFormDescription')
     editor.customConfig.menus = [
@@ -30,12 +28,49 @@ export default {
       'undo', // 撤销
       'redo' // 重复
     ]
+    editor.customConfig.colors = this.colors
     editor.create()
+    this.originContent = _.get(this.formDetail, 'text', [])
     editor.txt.html(this.originContent)
     this.formEditor = editor
   },
+  computed: {
+    ...mapGetters({
+      getFormDetailById: 'org/getFormDetailById'
+    }),
+    formId() {
+      return _.get(this.$route, 'params.id')
+    },
+    formDetail() {
+      return this.getFormDetailById({ id: this.formId }) || {}
+    },
+    htmlStr() {
+      if (!this.formEditor) return ''
+      return this.formEditor.txt.html()
+    }
+  },
   data() {
-    return { formEditor: undefined }
+    return {
+      formEditor: undefined,
+      originContent: '',
+      colors: [
+        '#000000',
+        '#303133',
+        '#909399',
+        '#eeece0',
+        '#1144ac',
+        '#1c487f',
+        '#2397f3',
+        '#4d80bf',
+        '#c24f4a',
+        '#8baa4a',
+        '#7b5ba1',
+        '#46acc8',
+        '#f36823',
+        '#f9963b',
+        '#ffffff'
+      ]
+    }
   }
 }
 </script>
