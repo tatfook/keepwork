@@ -4,7 +4,7 @@
     <div class="contests-home-page-handpick">
       <p class="contests-home-page-handpick-hint">
         *精品赏析的作品不参加比赛
-        <a class="contests-home-page-handpick-hint-more" href="#">查看更多>></a>
+        <a class="contests-home-page-handpick-hint-more" href="/han/contestsDynamic/works">查看更多>></a>
       </p>
       <div class="contests-home-page-handpick-screen">
         <video-player class="contests-home-page-handpick-screen-video" width="100%" :src='currentHandpick.videoUrl' :poster="currentHandpick.coverUrl" />
