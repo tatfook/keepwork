@@ -8,7 +8,7 @@
       </div>
       <div class="edit-form-header-buttons">
         <el-button size="medium">保存</el-button>
-        <el-button size="medium">预览</el-button>
+        <el-button size="medium" @click="showPreview">预览</el-button>
         <el-button size="medium" type="primary">发布</el-button>
       </div>
     </div>
@@ -23,28 +23,35 @@
         <label for="desc">描述:</label>
         <el-input id="desc" v-model="formDetailData.description" placeholder="请输入..."></el-input>
       </div>
-      <div class="edit-form-item">
+      <div class="edit-form-item" v-if="!isLoadPerset">
         <label>
           <span>*</span>正文:
         </label>
-        <quizzes-content v-if="formType === 3"></quizzes-content>
-        <rich-text-content v-else></rich-text-content>
+        <quizzes-content class="edit-form-quizzes" v-if="formType === 3" ref="quizzesRef"></quizzes-content>
+        <rich-text-content v-else ref="richTextRef"></rich-text-content>
       </div>
     </div>
+    <el-dialog v-if="isDialogVisible" fullscreen visible :before-close="handlePreviewClose">
+      <form-preview :type="formType" :title="formDetailData.title" :description="formDetailData.description" :text="formDetailData.text" :quizzes="formDetailData.quizzes"></form-preview>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import RichTextContent from './common/RichTextContent'
 import QuizzesContent from './common/QuizzesContent'
+import FormPreview from './common/FormPreview'
 export default {
   name: 'EditForm',
   async mounted() {
     await this.orgGetForms({})
     this.formDetailData = _.cloneDeep(this.formDetail)
+    this.isLoadPerset = false
   },
   data() {
     return {
+      isDialogVisible: false,
+      isLoadPerset: true,
       formDetailData: {}
     }
   },
@@ -74,10 +81,31 @@ export default {
   methods: {
     ...mapActions({
       orgGetForms: 'org/getForms'
-    })
+    }),
+    showPreview() {
+      this.setFormContent()
+      this.isDialogVisible = true
+    },
+    handlePreviewClose() {
+      this.isDialogVisible = false
+    },
+    setFormContent() {
+      if (this.formType == 3) return this.setFormQuizzes()
+      return this.setFormText()
+    },
+    setFormText() {
+      let htmlStr = this.$refs.richTextRef.getHtmlStr()
+      this.formDetailData.text = htmlStr
+    },
+    setFormQuizzes() {
+      let quizzes = this.$refs.quizzesRef.quizzes
+      console.log(quizzes)
+      this.formDetailData.quizzes = quizzes
+    }
   },
   components: {
     QuizzesContent,
+    FormPreview,
     RichTextContent
   },
   watch: {
@@ -138,6 +166,17 @@ export default {
         vertical-align: sub;
       }
     }
+  }
+  &-quizzes {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  .el-dialog__wrapper {
+    z-index: 99999 !important;
+  }
+  /deep/ .el-dialog {
+    background-color: #f5f5f5;
   }
 }
 </style>

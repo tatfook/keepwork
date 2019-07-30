@@ -43,10 +43,6 @@ export default {
     },
     formDetail() {
       return this.getFormDetailById({ id: this.formId }) || {}
-    },
-    htmlStr() {
-      if (!this.formEditor) return ''
-      return this.formEditor.txt.html()
     }
   },
   data() {
@@ -70,6 +66,11 @@ export default {
         '#f9963b',
         '#ffffff'
       ]
+    }
+  },
+  methods: {
+    getHtmlStr() {
+      return this.formEditor.txt.html()
     }
   }
 }

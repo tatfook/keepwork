@@ -4,7 +4,7 @@
       <div class="quizzes-content-title">
         <span v-if="quiz.isRequired" class="quizzes-content-required">(必填)</span>
         {{quiz.title}}
-        <el-dropdown trigger="click" @command="handleDropdownCommand">
+        <el-dropdown v-if="isEditMode" trigger="click" @command="handleDropdownCommand">
           <span class="el-dropdown-link">
             <i class="iconfont icon-ellipsis"></i>
           </span>
@@ -18,14 +18,14 @@
       </div>
       <div class="quizzes-content-remark">{{quiz.remark}}</div>
       <el-radio-group v-if="quiz.type === 0">
-        <el-radio v-for="(option, index) in quiz.options" :key="index" :label="option.value" disabled></el-radio>
+        <el-radio v-for="(option, index) in quiz.options" :key="index" :label="option.value" :disabled="isEditMode"></el-radio>
       </el-radio-group>
       <el-checkbox-group v-else-if="quiz.type === 1">
-        <el-checkbox v-for="(option, index) in quiz.options" :key="index" :label="option.value" disabled></el-checkbox>
+        <el-checkbox v-for="(option, index) in quiz.options" :key="index" :label="option.value" :disabled="isEditMode"></el-checkbox>
       </el-checkbox-group>
-      <el-input v-else type="textarea" disabled=""></el-input>
+      <el-input v-else type="textarea" :disabled="isEditMode"></el-input>
     </div>
-    <div class="quizzes-content-add" @click="showQuizEditor">
+    <div v-if="isEditMode" class="quizzes-content-add" @click="showQuizEditor">
       <i class="iconfont icon-add--"></i>添加信息项
     </div>
     <quiz-editor :originQuiz="editingQuiz" :isVisible="isDialogVisible" @close="handleQuizEditorClose"></quiz-editor>
@@ -36,8 +36,17 @@ import { mapGetters } from 'vuex'
 import QuizEditor from './QuizEditor'
 export default {
   name: 'QuizzesContent',
+  props: {
+    originQuizzes: Array,
+    isEditMode: {
+      type: Boolean,
+      default: true
+    }
+  },
   mounted() {
-    this.quizzes = _.cloneDeep(this.formQuizzes)
+    this.quizzes = this.isEditMode
+      ? _.cloneDeep(this.formQuizzes)
+      : this.originQuizzes
   },
   computed: {
     ...mapGetters({
@@ -49,7 +58,7 @@ export default {
     formDetail() {
       return this.getFormDetailById({ id: this.formId }) || {}
     },
-    formQuizzes(){
+    formQuizzes() {
       return _.get(this.formDetail, 'quizzes', [])
     }
   },
@@ -120,9 +129,6 @@ export default {
 <style lang="scss" scoped>
 .quizzes-content {
   font-size: 14px;
-  background-color: #f5f5f5;
-  padding: 20px;
-  border-radius: 8px;
   &-item {
     border-radius: 8px;
     background-color: #fff;
