@@ -119,6 +119,7 @@ export default {
         default:
           break
       }
+      this.$emit('change')
     }
   },
   components: {
