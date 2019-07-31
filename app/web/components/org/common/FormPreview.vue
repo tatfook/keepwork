@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import QuizzesContent from './QuizzesContent'
+import QuizzesContent from '../common/QuizzesContent'
 export default {
   name: 'FormPreview',
   props: {

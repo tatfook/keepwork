@@ -76,18 +76,21 @@ const store = new Vuex.Store({
 })
 
 const OrgLoginPageName = 'OrgLogin'
+const OrgFormDetailPageName = 'OrgFormDetail'
 const OrgAdminPageName = 'OrgPackages'
 const OrgTeacherPageName = 'OrgTeacher'
 const OrgStudentPageName = 'OrgStudent'
 const OrgContactPageName = 'OrgContact'
 const OrgNotFoundPageName = 'OrgNotFound'
 const OrgIndexPageName = 'OrgIndex'
+const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName]
 
 const checkIsLogined = function(name, next, params) {
   let nowToken = Cookies.get('token')
   if (nowToken) return true
-  let isNowLoginPage = name == OrgLoginPageName
-  if (isNowLoginPage) {
+  let isIgnoreLoginPage =
+    _.findIndex(IgnoreLoginPageNames, pagename => pagename == name) != -1
+  if (isIgnoreLoginPage) {
     next()
     return false
   }
@@ -243,7 +246,7 @@ export default {
   i18n,
   data() {
     return {
-      loading: true,
+      loading: true
     }
   },
   async created() {

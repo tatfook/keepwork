@@ -114,7 +114,9 @@ export default {
     }),
     toFormDetail(form) {
       let { id } = form
-      console.log(id)
+      this.$router.push({
+        path: `form/${id}`
+      })
     },
     handleClose() {
       this.isRegisterForm = false

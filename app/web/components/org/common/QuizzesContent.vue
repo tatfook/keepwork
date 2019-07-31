@@ -33,7 +33,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import QuizEditor from './QuizEditor'
+import QuizEditor from '../admin/common/QuizEditor'
 export default {
   name: 'QuizzesContent',
   props: {

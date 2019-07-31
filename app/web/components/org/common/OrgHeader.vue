@@ -7,8 +7,11 @@
       <el-menu-item class="org-header-name" index='2'>
         {{currentOrg.name}}
       </el-menu-item>
-      <el-menu-item index='3' class="pull-right" @click="logout">
+      <el-menu-item v-if="isLogin" index='3' class="pull-right" @click="logout">
         {{$t('org.logout')}}
+      </el-menu-item>
+      <el-menu-item v-if="!isLogin" index='3-1' class="pull-right" @click="toLoginPage">
+        登录
       </el-menu-item>
       <el-menu-item index='4' class="pull-right">
         <a class="org-header-more-learn" href="/s" target="_blank">{{$t('org.moreStudy')}}</a>
@@ -22,10 +25,14 @@ export default {
   name: 'OrgHeader',
   computed: {
     ...mapGetters({
+      getToken: 'org/getToken',
       currentOrg: 'org/currentOrg'
     }),
     orgLogo() {
       return _.get(this.currentOrg, 'logo')
+    },
+    isLogin() {
+      return Boolean(this.getToken())
     }
   },
   methods: {
@@ -38,10 +45,15 @@ export default {
         cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
-      .then(() => {
-        this.userLogout().catch()
+        .then(() => {
+          this.userLogout().catch()
+        })
+        .catch(err => console.error(err))
+    },
+    toLoginPage() {
+      this.$router.push({
+        name: 'OrgLogin'
       })
-      .catch(err => console.error(err))
     }
   }
 }
