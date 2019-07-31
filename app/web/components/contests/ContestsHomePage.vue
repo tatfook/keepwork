@@ -498,10 +498,11 @@ export default {
     }
   }
   &-join {
-    width: 372px;
+    max-width: 372px;
     height: 292px;
     margin: 0 auto;
     background: url('../../assets/contests/button_2.png');
+    background-size: 100%;
     cursor: pointer;
     &-word {
       margin: 0;

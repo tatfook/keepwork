@@ -5,9 +5,7 @@
 </template>
 
 <script>
-// import videojs from 'video.js'
 import { videoPlayer } from 'vue-video-player'
-// import { setTimeout } from 'timers'
 
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
@@ -56,6 +54,11 @@ export default {
 <style lang="scss">
 .player {
   .vjs-custom-skin {
+    .video-js {
+      .vjs-poster {
+        background-size: 100%;
+      }
+    }
     &:hover {
       .vjs-control-bar {
         visibility: visible;

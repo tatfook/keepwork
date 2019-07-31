@@ -38,7 +38,7 @@ export default {
           author: 'HM',
           videoUrl:
             'https://api.keepwork.com/storage/v0/siteFiles/4607/raw#宇宙快递.mp4',
-          coverUrl: require('@/assets/contests/handpick/宇宙快递-400x230.jpg'),
+          coverUrl: require('@/assets/contests/handpick/宇宙快递-960x551.jpg'),
           currentIndex: 0
         },
         {
@@ -46,7 +46,7 @@ export default {
           author: '奇仔',
           videoUrl:
             'https://api.keepwork.com/storage/v0/siteFiles/4609/raw#致匠心.mp4',
-          coverUrl: require('@/assets/contests/handpick/致匠心-400x235.jpg'),
+          coverUrl: require('@/assets/contests/handpick/致匠心-960x564.jpg'),
           currentIndex: 1
         },
         {
@@ -54,7 +54,7 @@ export default {
           author: '阿杰',
           videoUrl:
             'https://api.keepwork.com/storage/v0/siteFiles/4596/raw#ToMars.mp4',
-          coverUrl: require('@/assets/contests/handpick/火星-海报-397x240.jpg'),
+          coverUrl: require('@/assets/contests/handpick/火星-海报-960x579.jpg'),
           currentIndex: 2
         },
         {
@@ -62,7 +62,7 @@ export default {
           author: '阿杰',
           videoUrl:
             'https://api.keepwork.com/storage/v0/siteFiles/4603/raw#山海闻录.mp4',
-          coverUrl: require('@/assets/contests/handpick/山海闻妖录-400x227.jpg'),
+          coverUrl: require('@/assets/contests/handpick/山海闻妖录-960x545.jpg'),
           currentIndex: 3
         }
       ],
@@ -71,7 +71,7 @@ export default {
         author: 'HM',
         videoUrl:
           'https://api.keepwork.com/storage/v0/siteFiles/4607/raw#宇宙快递.mp4',
-        coverUrl: require('@/assets/contests/handpick/宇宙快递-400x230.jpg'),
+        coverUrl: require('@/assets/contests/handpick/宇宙快递-960x551.jpg'),
         currentIndex: 0
       }
     }
@@ -216,13 +216,14 @@ export default {
     }
     &-handpick {
       &-screen {
+        padding: 12px 8px;
         &-video {
           height: auto;
         }
       }
       &-videos {
         &-box {
-          height: 60px;
+          height: 40px;
           margin: 0 4px;
         }
         &-left {
