@@ -215,6 +215,9 @@ export default {
       }
     }
     &-handpick {
+      &-hint {
+        font-size: 14px;
+      }
       &-screen {
         padding: 12px 8px;
         &-video {

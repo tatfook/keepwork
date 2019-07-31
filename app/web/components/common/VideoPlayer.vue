@@ -58,6 +58,20 @@ export default {
       .vjs-poster {
         background-size: 100%;
       }
+      .vjs-big-play-button {
+        font-family: 'iconfont' !important;
+        font-style: normal;
+        background-color: transparent;
+        border: none;
+        font-size: 70px;
+        color: #409eff;
+        width: auto !important;
+        height: auto !important;
+        line-height: 1 !important;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
     }
     &:hover {
       .vjs-control-bar {
@@ -72,18 +86,6 @@ export default {
       left: 0;
       visibility: hidden;
     }
-    .vjs-big-play-button {
-      font-family: 'iconfont' !important;
-      font-style: normal;
-      background-color: transparent;
-      border: none;
-      font-size: 70px;
-      color: #409eff;
-      width: auto !important;
-      height: auto !important;
-      line-height: 1 !important;
-      transform: translate(70px, 35px);
-    }
     .vjs-big-play-button:hover {
       text-shadow: 0 0 1em #fff;
     }
@@ -92,7 +94,6 @@ export default {
       display: block;
       width: 42px;
       height: 42px;
-      // background: url(../../assets/img/play_0.png);
       background: url(../../assets/contests/handpick/play.svg);
       background-size: 100%;
     }

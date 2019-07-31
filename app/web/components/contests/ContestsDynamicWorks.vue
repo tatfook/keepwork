@@ -157,16 +157,16 @@ export default {
 <style lang="scss" scoped>
 .contests-dynamic {
   &-works {
-    max-width: 1000px;
+    max-width: 1006px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
     &-box {
       width: 320px;
       cursor: pointer;
       background: #fff;
-      margin: 0 2px 20px 2px;
+      margin: 0 7px 18px;
       &-cover {
         position: relative;
         &-img {
@@ -227,6 +227,7 @@ export default {
 @media screen and (max-width: 768px) {
   .contests-dynamic {
     &-works {
+      justify-content: center;
       &-box {
         max-width: 44%;
         margin: 0 8px 10px 8px;
