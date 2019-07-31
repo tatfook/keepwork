@@ -397,6 +397,9 @@ const actions = {
       formId
     })
     dispatch('getForms', {})
+  },
+  async submitForm({ dispatch }, { formId, quizzes }) {
+    await keepwork.lessonOrganizationForms.submitForm({ formId, quizzes })
   }
 }
 

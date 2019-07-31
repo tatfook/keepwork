@@ -1,7 +1,7 @@
 <template>
   <div class="org-form-detail" v-loading="isLoading">
     <org-header></org-header>
-    <form-preview class="org-form-detail-form" :type="type" :title="title" :description="description" :text="text" :quizzes="quizzes"></form-preview>
+    <form-preview class="org-form-detail-form" :type="type" :title="title" :description="description" :text="text" :quizzes="quizzes" :isAnswerMode="true"></form-preview>
   </div>
 </template>
 <script>

@@ -5,7 +5,7 @@
       <p>{{description}}</p>
     </div>
     <div v-if="type == 3" class="form-preview-content">
-      <quizzes-content :originQuizzes="quizzes" :isEditMode="false"></quizzes-content>
+      <quizzes-content :originQuizzes="quizzes" :isEditMode="false" :isAnswerMode="isAnswerMode"></quizzes-content>
     </div>
     <div v-else class="form-preview-content" v-html="text"></div>
   </div>
@@ -19,7 +19,11 @@ export default {
     title: String,
     description: String,
     text: String,
-    quizzes: Array
+    quizzes: Array,
+    isAnswerMode: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     QuizzesContent

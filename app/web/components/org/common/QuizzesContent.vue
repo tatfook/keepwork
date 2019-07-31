@@ -1,5 +1,5 @@
 <template>
-  <div class="quizzes-content">
+  <div class="quizzes-content" v-loading="isLoading">
     <div class="quizzes-content-item" v-for="(quiz, index) in quizzes" :key="index">
       <div class="quizzes-content-title">
         <span v-if="quiz.isRequired" class="quizzes-content-required">(必填)</span>
@@ -17,35 +17,51 @@
         </el-dropdown>
       </div>
       <div class="quizzes-content-remark">{{quiz.remark}}</div>
-      <el-radio-group v-if="quiz.type === 0">
+      <el-radio-group v-if="quiz.type === 0" v-model="quiz.answer">
         <el-radio v-for="(option, index) in quiz.options" :key="index" :label="option.value" :disabled="isEditMode"></el-radio>
       </el-radio-group>
-      <el-checkbox-group v-else-if="quiz.type === 1">
+      <el-checkbox-group v-else-if="quiz.type === 1" v-model="quiz.answer">
         <el-checkbox v-for="(option, index) in quiz.options" :key="index" :label="option.value" :disabled="isEditMode"></el-checkbox>
       </el-checkbox-group>
-      <el-input v-else type="textarea" :disabled="isEditMode"></el-input>
+      <el-input v-else type="textarea" :disabled="isEditMode" v-model="quiz.answer"></el-input>
     </div>
     <div v-if="isEditMode" class="quizzes-content-add" @click="showQuizEditor">
       <i class="iconfont icon-add--"></i>添加信息项
+    </div>
+    <div class="quizzes-content-answer">
+      <el-button v-if="isAnswerMode" type="primary" size="medium" :disabled="!isFormDataValid" @click="submitFomData">我已填好，提交</el-button>
     </div>
     <quiz-editor :originQuiz="editingQuiz" :isVisible="isDialogVisible" @close="handleQuizEditorClose"></quiz-editor>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import QuizEditor from '../admin/common/QuizEditor'
 export default {
   name: 'QuizzesContent',
   props: {
     originQuizzes: Array,
+    isAnswerMode: {
+      type: Boolean,
+      default: false
+    },
     isEditMode: {
       type: Boolean,
       default: true
     }
   },
   mounted() {
-    this.quizzes = this.isEditMode
-      ? _.cloneDeep(this.formQuizzes)
+    let formQuizzes = _.cloneDeep(this.formQuizzes)
+    this.quizzes = this.isAnswerMode
+      ? _.map(formQuizzes, quiz => {
+          let { type } = quiz
+          return {
+            ...quiz,
+            answer: type != 2 ? quiz.options[0].value : ''
+          }
+        })
+      : this.isEditMode
+      ? formQuizzes
       : this.originQuizzes
   },
   computed: {
@@ -60,10 +76,21 @@ export default {
     },
     formQuizzes() {
       return _.get(this.formDetail, 'quizzes', [])
+    },
+    unAnsweredQuizzes() {
+      return (
+        _.filter(this.quizzes, quiz =>
+          Boolean(quiz.isRequired && !_.trim(quiz.answer, ' '))
+        ) || []
+      )
+    },
+    isFormDataValid() {
+      return this.unAnsweredQuizzes.length == 0
     }
   },
   data() {
     return {
+      isLoading: false,
       insertIndex: undefined,
       editingQuiz: undefined,
       isDialogVisible: false,
@@ -71,6 +98,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      orgSubmitForm: 'org/submitForm'
+    }),
     showQuizEditor() {
       this.isDialogVisible = true
     },
@@ -120,6 +150,19 @@ export default {
           break
       }
       this.$emit('change')
+    },
+    async submitFomData() {
+      this.isLoading = true
+      await this.orgSubmitForm({
+        formId: this.formId,
+        quizzes: this.quizzes
+      })
+      this.isLoading = false
+      this.$message({
+        type: 'success',
+        message: '提交成功'
+      })
+      this.$router.push({ name: 'OrgLogin' })
     }
   },
   components: {
@@ -156,6 +199,9 @@ export default {
       vertical-align: middle;
       margin-right: 6px;
     }
+  }
+  &-answer {
+    text-align: center;
   }
   /deep/.el-textarea__inner {
     resize: none;
