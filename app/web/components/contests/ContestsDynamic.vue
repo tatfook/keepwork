@@ -50,10 +50,12 @@ export default {
     &-btn {
       padding: 10px 20px;
       border-radius: 20px;
-      background: #999;
+      // background: #999;
+      color: rgb(129, 130, 132);
       cursor: pointer;
       &.selected {
-        background: #003f8d;
+        border: 2px solid #003f8d;
+        color: #333;
       }
     }
   }
