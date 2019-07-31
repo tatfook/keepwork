@@ -18,7 +18,8 @@
       <div class="contests-page-top-tab">
         <div class="contests-page-top-tab-phone-wrap">
           <span v-for="(item, index) in tabData" :key="index" :class="['contests-page-top-tab-item', {'selected-item': index == currentSelected}]" @click="selectTabItem(index)">{{item.name}}</span>
-          <span :class="['contests-page-top-tab-item', {'selected-item': 2 == currentSelected}]" @click="selectTabItem(2)">
+          <span :class="['contests-page-top-tab-item','contests-dynamic-menu-web-hidden', {'selected-item': 2 == currentSelected}]" @click="selectTabItem(2)">大赛动态</span>
+          <span :class="['contests-page-top-tab-item','contests-dynamic-menu-phone-hidden', {'selected-item': 2 == currentSelected}]" @click="selectTabItem(2)">
             <el-dropdown @command="handleCommand" trigger="hover" placement="bottom">
               <span class="el-dropdown-link" :class="['contests-page-top-tab-item', {'selected-item': 2 == currentSelected}]">
                 大赛动态
@@ -292,6 +293,7 @@ body {
         cursor: pointer;
         position: relative;
         z-index: 999;
+
         &.selected-item {
           // color: rgb(4, 62, 147);
           // background: url(../../assets/contests/head_selected.png) no-repeat
@@ -313,7 +315,10 @@ body {
   }
 }
 .contests-dynamic-menu {
-  .el-dropdown-menu__item{
+  &-web-hidden {
+    display: none;
+  }
+  .el-dropdown-menu__item {
     padding: 0 40px;
     font-size: 18px;
   }
@@ -350,19 +355,20 @@ body {
           width: auto;
           padding: 0 10px;
           font-size: 16px;
-          color: #212121;
-          opacity: 0.5;
+          color: #686565;
           height: 48px;
           line-height: 48px;
-          margin-top: 20px;
+          // margin-top: 20px;
           &.selected-item {
-            opacity: 1;
             color: #212121;
-            background: none;
+            color: #fff;
           }
         }
       }
     }
+  }
+  .contests-dynamic-menu-phone-hidden {
+    display: none;
   }
 }
 </style>
