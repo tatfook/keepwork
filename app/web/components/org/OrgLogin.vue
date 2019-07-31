@@ -28,11 +28,11 @@
         <password-reset-form v-show="isShowPasswordResetForm"></password-reset-form>
       </el-dialog>
     </div>
-    <div class="org-login-forms">
+    <div class="org-login-forms" v-if="publishedForms.length > 0">
       <div class="org-login-forms-title">请选择表单模板：</div>
       <div class="org-login-forms-container">
-        <div class="org-login-forms-item" v-for="(form, index) in formsList" :key="index">
-          <div class="org-login-forms-item-title">{{form.name}}</div>
+        <div class="org-login-forms-item" v-for="(form, index) in publishedForms" :key="index">
+          <div class="org-login-forms-item-title" @click="toFormDetail(form)">{{form.name}}</div>
           <el-button type="text" @click="toFormDetail(form)">详情</el-button>
         </div>
       </div>
@@ -87,6 +87,9 @@ export default {
       orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       isFirstView: 'org/isFirstView'
     }),
+    publishedForms() {
+      return _.filter(this.formsList, ({ state }) => state == 1) || []
+    },
     orgLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
     },
@@ -111,7 +114,7 @@ export default {
     }),
     toFormDetail(form) {
       let { id } = form
-      console.log(form)
+      console.log(id)
     },
     handleClose() {
       this.isRegisterForm = false
@@ -308,6 +311,13 @@ export default {
         justify-content: center;
         background-color: #f5f5f5;
         border-radius: 8px;
+        white-space: normal;
+        padding: 0 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+        &:hover {
+          border: 2px solid #4facf5;
+        }
       }
     }
   }
