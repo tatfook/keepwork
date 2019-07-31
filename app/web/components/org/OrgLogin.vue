@@ -27,7 +27,15 @@
         <i class="el-icon-close org-login-dialog-close" @click="isShowPasswordResetForm = false"></i>
         <password-reset-form v-show="isShowPasswordResetForm"></password-reset-form>
       </el-dialog>
-
+    </div>
+    <div class="org-login-forms">
+      <div class="org-login-forms-title">请选择表单模板：</div>
+      <div class="org-login-forms-container">
+        <div class="org-login-forms-item" v-for="(form, index) in formsList" :key="index">
+          <div class="org-login-forms-item-title">{{form.name}}</div>
+          <el-button type="text" @click="toFormDetail(form)">详情</el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +52,7 @@ export default {
       this.isOrgExist = false
       this.isLoading = false
     })
+    await this.orgGetForms({})
     this.isLoading = false
     this.setOrganizationName()
   },
@@ -74,6 +83,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      formsList: 'org/formsList',
       orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       isFirstView: 'org/isFirstView'
     }),
@@ -93,11 +103,16 @@ export default {
   },
   methods: {
     ...mapActions({
+      orgGetForms: 'org/getForms',
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgLogin: 'org/login',
       userLogin: 'user/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),
+    toFormDetail(form) {
+      let { id } = form
+      console.log(form)
+    },
     handleClose() {
       this.isRegisterForm = false
     },
@@ -262,6 +277,38 @@ export default {
     }
     .password-reset-form {
       padding-bottom: 20px;
+    }
+  }
+  &-forms {
+    width: 912px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 32px 24px;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin-top: 96px;
+    border-radius: 8px;
+    &-container {
+      margin-top: 20px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    &-item {
+      display: inline-block;
+      margin-right: 16px;
+      text-align: center;
+      &:last-child {
+        margin-right: 0;
+      }
+      &-title {
+        width: 160px;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+      }
     }
   }
 }
