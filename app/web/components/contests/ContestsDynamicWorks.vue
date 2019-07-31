@@ -163,10 +163,10 @@ export default {
     justify-content: space-between;
     flex-wrap: wrap;
     &-box {
-      max-width: 320px;
+      width: 320px;
       cursor: pointer;
       background: #fff;
-      margin: 0 2px 10px 2px;
+      margin: 0 2px 20px 2px;
       &-cover {
         position: relative;
         &-img {

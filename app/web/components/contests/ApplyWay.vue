@@ -67,8 +67,9 @@ export default {
   &-notice {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 12px;
+    padding: 0 12px 0 100px;
     font-size: 18px;
+    box-sizing: border-box;
     &-step {
       padding-left: 20px;
       position: relative;
@@ -118,6 +119,7 @@ export default {
     }
     &-notice {
       font-size: 14px;
+      padding-left: 20px;
     }
     &-time {
       font-size: 14px;

@@ -84,14 +84,17 @@ export default {
       this.currentHandpick = this.handpickVideoData[index]
     },
     priorVideo() {
-      if (this.currentHandpick.currentIndex === 0) return
-      let _index = this.currentHandpick.currentIndex - 1
+      let _index =
+        this.currentHandpick.currentIndex === 0
+          ? this.handpickVideoData.length - 1
+          : this.currentHandpick.currentIndex - 1
       this.currentHandpick = this.handpickVideoData[_index]
     },
     nextVideo() {
-      if (this.currentHandpick.currentIndex === this.handpickVideoData.length - 1)
-        return
-      let _index = this.currentHandpick.currentIndex + 1
+      let _index =
+        this.currentHandpick.currentIndex === this.handpickVideoData.length - 1
+          ? 0
+          : this.currentHandpick.currentIndex + 1
       this.currentHandpick = this.handpickVideoData[_index]
     }
   }
@@ -121,7 +124,7 @@ export default {
     }
     &-screen {
       max-width: 1000px;
-      padding: 24px;
+      padding: 24px 24px 16px;
       background: #fff;
       box-sizing: border-box;
       margin: 20px auto;
@@ -133,11 +136,11 @@ export default {
         &-title {
           font-size: 20px;
           color: #333;
-          margin: 6px;
+          margin: 16px 0 10px 0;
         }
         &-name {
           color: #999;
-          margin: 6px;
+          margin: 0;
           font-size: 16px;
         }
       }
@@ -153,7 +156,7 @@ export default {
         position: absolute;
         left: 0;
         top: 38%;
-        border: 5px solid rgb(150, 146, 146);
+        border: 5px solid rgb(71, 68, 68);
         border-top: 0px;
         border-right: 0px;
         display: inline-block;
@@ -161,13 +164,13 @@ export default {
         height: 22px;
         transform: rotate(45deg);
         margin: 10px;
-        cursor: not-allowed;
+        // cursor: not-allowed;
       }
       &-right {
         position: absolute;
         right: 0;
         top: 38%;
-        border: 5px solid rgb(150, 146, 146);
+        border: 5px solid rgb(71, 68, 68);
         border-top: 0px;
         border-right: 0px;
         display: inline-block;
@@ -175,7 +178,7 @@ export default {
         height: 22px;
         transform: rotate(-135deg);
         margin: 10px;
-        cursor: not-allowed;
+        // cursor: not-allowed;
       }
       &-more {
         border-color: rgb(71, 68, 68);
@@ -204,40 +207,41 @@ export default {
     }
   }
 }
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .contests-home-page {
     &-title {
       img {
         max-width: 84%;
       }
     }
-  &-handpick {
-    &-screen {
-      &-video {
-        height: auto;
+    &-handpick {
+      &-screen {
+        &-video {
+          height: auto;
+        }
       }
-    }
-    &-videos {
-      &-box {
-        height: 60px;
-        margin: 0 4px;
-      }
-      &-left {
-        left: 20px;
-      }
-      &-right {
-        right: 10px;
-      }
-      &-left, &-right {
-        margin: 0;
-        border-width: 3px;
-        top: 40%;
-        width: 12px;
-        height: 12px;
+      &-videos {
+        &-box {
+          height: 60px;
+          margin: 0 4px;
+        }
+        &-left {
+          left: 20px;
+        }
+        &-right {
+          right: 10px;
+        }
+        &-left,
+        &-right {
+          margin: 0;
+          border-width: 3px;
+          top: 40%;
+          width: 12px;
+          height: 12px;
+        }
       }
     }
   }
-  }  
 }
 </style>
 

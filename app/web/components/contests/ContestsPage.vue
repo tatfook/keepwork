@@ -23,7 +23,7 @@
               <span class="el-dropdown-link" :class="['contests-page-top-tab-item', {'selected-item': 2 == currentSelected}]">
                 大赛动态
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="contests-dynamic-menu">
                 <el-dropdown-item command="a">精品赏析</el-dropdown-item>
                 <el-dropdown-item command="b">新闻动态</el-dropdown-item>
               </el-dropdown-menu>
@@ -155,7 +155,7 @@ export default {
           this.$router.push({ name: 'ContestsRules' })
           break
         case 2:
-          this.$router.push({ name: 'ContestsDynamic' })
+          this.$router.push({ name: 'ContestsDynamicWorks' })
           break
         case 3:
           this.$router.push({ name: 'ApplyWay' })
@@ -310,6 +310,12 @@ body {
   }
   &-footer {
     display: table-row;
+  }
+}
+.contests-dynamic-menu {
+  .el-dropdown-menu__item{
+    padding: 0 40px;
+    font-size: 18px;
   }
 }
 @media screen and (max-width: 768px) {

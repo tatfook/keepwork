@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import videojs from 'video.js'
+// import videojs from 'video.js'
 import { videoPlayer } from 'vue-video-player'
-import { setTimeout } from 'timers'
+// import { setTimeout } from 'timers'
 
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
@@ -19,6 +19,7 @@ export default {
   },
   props: {
     src: String,
+    poster: String,
     autoplay: Boolean,
     playloop: Boolean,
     showRates: {
@@ -44,7 +45,8 @@ export default {
             type: 'video/mp4',
             src: this.src
           }
-        ]
+        ],
+        poster: this.poster
       }
     }
   }
@@ -87,7 +89,8 @@ export default {
       display: block;
       width: 42px;
       height: 42px;
-      background: url(../../assets/img/play_0.png);
+      // background: url(../../assets/img/play_0.png);
+      background: url(../../assets/contests/handpick/play.svg);
       background-size: 100%;
     }
     .vjs-big-play-button .vjs-icon-placeholder {
