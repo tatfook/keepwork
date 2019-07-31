@@ -385,7 +385,8 @@ export const lessonOrganizationForms = {
   createForm: async ({ formDetail }) => post('lessonOrganizationForms', formDetail),
   getForms: async ({ organizationId }) => post('lessonOrganizationForms/search', { organizationId }),
   updateForm: async ({ formId, formDetail }) => put(`lessonOrganizationForms/${formId}`, formDetail),
-  deleteForm: async ({ formId }) => deleteMethod(`lessonOrganizationForms/${formId}`)
+  deleteForm: async ({ formId }) => deleteMethod(`lessonOrganizationForms/${formId}`),
+  submitForm: async ({ formId, quizzes }) => post(`lessonOrganizationForms/${formId}/submit`, { quizzes })
 }
 
 export const graphql = {

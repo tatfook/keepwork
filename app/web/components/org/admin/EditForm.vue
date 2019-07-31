@@ -42,8 +42,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import RichTextContent from './common/RichTextContent'
-import QuizzesContent from './common/QuizzesContent'
-import FormPreview from './common/FormPreview'
+import QuizzesContent from '../common/QuizzesContent'
+import FormPreview from '../common/FormPreview'
 export default {
   name: 'EditForm',
   async mounted() {

@@ -45,6 +45,7 @@ const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditC
 const OrgForms = () => import('@/components/org/admin/OrgForms')
 const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
+const OrgFormDetail = () => import('@/components/org/OrgFormDetail')
 const OrgFirstView = () => import('@/components/org/admin/OrgFirstView')
 
 Vue.use(Router)
@@ -315,6 +316,11 @@ export default new Router({
           component: OrgSetting
         }
       ]
+    },
+    {
+      path: '/:orgLoginUrl/form/:id',
+      name: 'OrgFormDetail',
+      component: OrgFormDetail
     },
     {
       path: '/:orgLoginUrl/*',
