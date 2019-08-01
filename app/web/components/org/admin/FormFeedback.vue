@@ -9,7 +9,7 @@
     <div class="form-feedback-count-row">
       <div class="form-feedback-count">反馈数：{{formFeedbackCount}}</div>
       <div class="form-feedback-count-buttons">
-        <el-button size="medium">导出</el-button>
+        <el-button size="medium" @click="exportData">导出</el-button>
         <el-button size="medium" type="primary">打印</el-button>
       </div>
     </div>
@@ -19,22 +19,22 @@
         <el-option v-for="(option, index) in filterOptions" :key="index" :label="option.label" :value="option.value"></el-option>
       </el-select>
     </div>
-    <el-table class="form-feedback-table" :data="filteredFeedback" style="width: 100%">
+    <el-table class="form-feedback-table" :data="filteredFeedback" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed type="selection" width="50">
       </el-table-column>
       <el-table-column fixed type="index" label="序号" width="50" show-overflow-tooltip>
       </el-table-column>
       <el-table-column fixed label="提交时间" width="100" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{scope.row.createdAt | formatTime}}
+          {{getFormatTime(scope.row.createdAt)}}
         </template>
       </el-table-column>
       <el-table-column width="120" v-for="(quiz, index) in formQuizzes" :key="index" :render-header="renderTableHeader" show-overflow-tooltip>
-        <template slot-scope="scope">{{getAnswer(scope.row, quiz)}}</template>
+        <template slot-scope="scope">{{findAQuizAnswer(quiz, scope.row.quizzes)}}</template>
       </el-table-column>
       <el-table-column fixed="right" label="状态" width="80" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span class="form-feedback-table-state" :class="scope.row.state | stateClassFilter">{{scope.row.state | submitStateTextFilter}}</span>
+          <span class="form-feedback-table-state" :class="scope.row.state | stateClassFilter">{{getSubmitStateTextFilter(scope.row.state)}}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" prop="comment" label="备注" width="60" show-overflow-tooltip>
@@ -117,7 +117,8 @@ export default {
       ],
       filterType: 0,
       isDialogLoading: false,
-      isEditDialogVisible: false
+      isEditDialogVisible: false,
+      multipleSelection: []
     }
   },
   computed: {
@@ -194,28 +195,68 @@ export default {
         </span>
       )
     },
-    getAnswer(submit, quiz) {
-      let quizzesWithAnswer = submit.quizzes
+    exportData() {
+      if (this.multipleSelection.length === 0) {
+        this.$message(this.$t('org.exportData'))
+        return
+      }
+      import('@/components/common/Export2Excel').then(excel => {
+        excel.export_json_to_excel({
+          header: _.concat(['提交时间'], this.getQizzesTitleHeader(), [
+            '状态',
+            '备注'
+          ]),
+          data: this.getDataForExcel(),
+          filename: `${this.formName}的反馈表`
+        })
+      })
+    },
+    getQizzesTitleHeader() {
+      return _.map(this.formQuizzes, quiz => {
+        return quiz.title
+      })
+    },
+    findAQuizAnswer(quiz, quizzesWithAnswer) {
       let { title } = quiz
       let quizWithAnswer = _.find(
         quizzesWithAnswer,
         quizDetail => quizDetail.title == title
       )
       return quizWithAnswer.answer
+    },
+    getQuizzesAnswer(quizzesWithAnswer) {
+      const self = this
+      return _.map(this.formQuizzes, quiz => {
+        return self.findAQuizAnswer(quiz, quizzesWithAnswer)
+      })
+    },
+    getDataForExcel() {
+      const self = this
+      return _.map(this.multipleSelection, (data, index) => {
+        const { createdAt, state, comment, quizzes } = data
+        return _.concat(
+          [self.getFormatTime(createdAt)],
+          this.getQuizzesAnswer(quizzes),
+          [self.getSubmitStateTextFilter(state), comment]
+        )
+      })
+    },
+    getFormatTime(time) {
+      return moment(time).format('YYYY-MM-DD')
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    getSubmitStateTextFilter(state) {
+      return state == 0 ? '未处理' : state == 1 ? '通过' : '未通过'
     }
   },
   filters: {
     formStateTextFilter(state) {
       return state == 0 ? '未发布' : state == 1 ? '收集中' : '停止'
     },
-    submitStateTextFilter(state) {
-      return state == 0 ? '未处理' : state == 1 ? '通过' : '未通过'
-    },
     stateClassFilter(state) {
       return state == 0 ? '' : state == 1 ? 'is-success' : 'is-danger'
-    },
-    formatTime(time) {
-      return moment(time).format('YYYY-MM-DD')
     }
   }
 }
