@@ -1,6 +1,6 @@
 <template>
   <div class="contests-footer">
-    <p class="contests-footer-hint">本次比赛的解释权归国际智能创意大赛组委会所有。</p>
+    <p class="contests-footer-hint">本次比赛的解释权归国际智能创意大赛组委会所有</p>
     <div class="contests-footer-simple-list">
       <ul class="footer-container-list">
         <li class="footer-container-list-item">
@@ -114,7 +114,7 @@ export default {
 @media screen and (max-width: 768px) {
   .contests-footer {
     &-hint {
-      font-size: 14px;
+      font-size: 12px;
     }
     &-simple-list {
       .footer-container {

@@ -5,9 +5,7 @@
 </template>
 
 <script>
-import videojs from 'video.js'
 import { videoPlayer } from 'vue-video-player'
-import { setTimeout } from 'timers'
 
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
@@ -19,6 +17,7 @@ export default {
   },
   props: {
     src: String,
+    poster: String,
     autoplay: Boolean,
     playloop: Boolean,
     showRates: {
@@ -44,7 +43,8 @@ export default {
             type: 'video/mp4',
             src: this.src
           }
-        ]
+        ],
+        poster: this.poster
       }
     }
   }
@@ -54,6 +54,27 @@ export default {
 <style lang="scss">
 .player {
   .vjs-custom-skin {
+    .video-js {
+      position: relative;
+      .vjs-poster {
+        background-size: 100%;
+      }
+      .vjs-big-play-button {
+        font-family: 'iconfont' !important;
+        font-style: normal;
+        background-color: transparent;
+        border: none;
+        font-size: 70px;
+        color: #409eff;
+        width: auto !important;
+        height: auto !important;
+        line-height: 1 !important;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        margin: 0 !important;
+      }
+    }
     &:hover {
       .vjs-control-bar {
         visibility: visible;
@@ -67,18 +88,6 @@ export default {
       left: 0;
       visibility: hidden;
     }
-    .vjs-big-play-button {
-      font-family: 'iconfont' !important;
-      font-style: normal;
-      background-color: transparent;
-      border: none;
-      font-size: 70px;
-      color: #409eff;
-      width: auto !important;
-      height: auto !important;
-      line-height: 1 !important;
-      transform: translate(70px, 35px);
-    }
     .vjs-big-play-button:hover {
       text-shadow: 0 0 1em #fff;
     }
@@ -87,7 +96,7 @@ export default {
       display: block;
       width: 42px;
       height: 42px;
-      background: url(../../assets/img/play_0.png);
+      background: url(../../assets/contests/handpick/play.svg);
       background-size: 100%;
     }
     .vjs-big-play-button .vjs-icon-placeholder {

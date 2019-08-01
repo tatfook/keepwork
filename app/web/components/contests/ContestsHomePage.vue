@@ -12,6 +12,7 @@
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·创作内容：</span><span class="contests-home-page-brief-text-right">利用自主原创的3D动画、编程软件Paracraft创意空间围绕《百家姓》创作能够充分体现汉字姓氏文化的视频短片。</span></p>
       <p class="contests-home-page-brief-text"><span class="contests-home-page-brief-text-left">·指定创作工具：</span><span class="contests-home-page-brief-text-right">Paracraft创意空间<a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank" class="download-paracraft">下载Paracraft创意空间</a></span></p>
     </div>
+    <handpick></handpick>
     <h3 class="contests-home-page-title"><img src="@/assets/contests/title_2.png" alt=""></h3>
     <div class="contests-home-page-progress">
       <div class="contests-home-page-progress-item">
@@ -168,7 +169,7 @@
 <script>
 import ApplyWayDialog from './ApplyWayDialog'
 import { mapActions, mapGetters } from 'vuex'
-
+import Handpick from './Handpick'
 export default {
   name: 'ContestsHomePage',
   data() {
@@ -231,7 +232,8 @@ export default {
     })
   },
   components: {
-    ApplyWayDialog
+    ApplyWayDialog,
+    Handpick
   },
   methods: {
     ...mapActions({
@@ -496,10 +498,11 @@ export default {
     }
   }
   &-join {
-    width: 372px;
+    max-width: 372px;
     height: 292px;
     margin: 0 auto;
     background: url('../../assets/contests/button_2.png');
+    background-size: 100%;
     cursor: pointer;
     &-word {
       margin: 0;
