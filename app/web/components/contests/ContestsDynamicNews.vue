@@ -61,6 +61,7 @@ export default {
       &-img {
         width: 380px;
         object-fit: cover;
+        border-radius: 5px;
       }
     }
     &-right {
@@ -87,7 +88,6 @@ export default {
 @media screen and (max-width: 768px) {
   .contests-dynamic {
     &-part {
-      // display: block;
       margin: 16px;
       padding: 0;
       min-height: auto;
@@ -97,19 +97,21 @@ export default {
           width: 90%;
           max-width: 400px;
           height: 120px;
+          border-radius: 5px;
         }
       }
       &-right {
         padding: 0;
         &-notice {
-          font-size: 14px;
-          height: 56px;
+          font-size: 16px;
+          height: 63px;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
-          -webkit-line-clamp: 4;
-          line-height: 14px;
+          -webkit-line-clamp: 3;
+          line-height: 21px;
           -webkit-box-orient: vertical;
+          margin-top: 10px;
         }
         &-hint {
           font-size: 14px;
@@ -120,6 +122,7 @@ export default {
           &-right {
             img {
               width: 50px;
+              display: none;
             }
           }
         }
