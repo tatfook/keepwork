@@ -41,7 +41,7 @@ export default {
   padding-top: 40px;
   position: relative;
   max-width: 1920px;
-  margin: 0 auto 280px;
+  margin: 0 auto 100px;
   &-tab {
     text-align: center;
     color: #fff;

@@ -87,25 +87,41 @@ export default {
 @media screen and (max-width: 768px) {
   .contests-dynamic {
     &-part {
-      display: block;
+      // display: block;
       margin: 16px;
+      padding: 0;
+      min-height: auto;
       &-left {
+        width: 56%;
         &-img {
-          width: 100%;
+          width: 90%;
           max-width: 400px;
-          height: calc((100vw - 28px) / 317 * 179);
+          height: 120px;
         }
       }
       &-right {
         padding: 0;
         &-notice {
-          font-size: 16px;
+          font-size: 14px;
+          height: 56px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          line-height: 14px;
+          -webkit-box-orient: vertical;
         }
         &-hint {
           font-size: 14px;
+          display: none;
         }
         &-time {
           margin: 0;
+          &-right {
+            img {
+              width: 50px;
+            }
+          }
         }
       }
     }
