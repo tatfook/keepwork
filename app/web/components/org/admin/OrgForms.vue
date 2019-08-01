@@ -294,9 +294,6 @@ export default {
       font-size: 16px;
       padding: 16px 0;
     }
-    &-list {
-      margin: 0 -8px;
-    }
   }
 }
 </style>
