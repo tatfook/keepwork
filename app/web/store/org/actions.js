@@ -22,7 +22,8 @@ const {
   SET_PRINT_CODE_LIST,
   GET_HISTORY_CLASSES_SUCCESS,
   TOGGLE_EXPIRATION_DIALOG,
-  GET_FORMS_SUCCESS
+  GET_FORMS_SUCCESS,
+  GET_FEEDBACK_SUCCESS
 } = props
 
 const actions = {
@@ -400,6 +401,17 @@ const actions = {
   },
   async submitForm({ dispatch }, { formId, quizzes }) {
     await keepwork.lessonOrganizationForms.submitForm({ formId, quizzes })
+  },
+  async getSubmitList({ commit }, { formId }) {
+    let result = await keepwork.lessonOrganizationForms.getSubmitList({
+      formId
+    })
+    let submitList = result.rows
+    commit(GET_FEEDBACK_SUCCESS, { formId, submitList })
+  },
+  async updateSubmit({ dispatch }, { formId, submitId, submitData }) {
+    await keepwork.lessonOrganizationForms.updateSubmit({ formId, submitId, submitData })
+    dispatch('getSubmitList', { formId })
   }
 }
 
