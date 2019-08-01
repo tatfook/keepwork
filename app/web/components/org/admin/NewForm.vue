@@ -26,15 +26,13 @@ export default {
     border-bottom: 1px solid #e8e8e8;
     padding: 0 24px;
   }
-  &-content{
+  &-content {
     padding: 16px 24px;
   }
   &-info {
     font-size: 14px;
     color: #909399;
-  }
-  &-templates{
-    margin: 16px -8px;
+    margin-bottom: 16px;
   }
 }
 </style>
