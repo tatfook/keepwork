@@ -55,6 +55,7 @@ export default {
 .player {
   .vjs-custom-skin {
     .video-js {
+      position: relative;
       .vjs-poster {
         background-size: 100%;
       }
@@ -71,6 +72,7 @@ export default {
         transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
+        margin: 0 !important;
       }
     }
     &:hover {
