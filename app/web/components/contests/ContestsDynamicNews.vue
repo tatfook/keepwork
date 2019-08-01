@@ -91,6 +91,9 @@ export default {
       margin: 16px;
       padding: 0;
       min-height: auto;
+      &:hover {
+        border: none;
+      }
       &-left {
         width: 56%;
         &-img {
