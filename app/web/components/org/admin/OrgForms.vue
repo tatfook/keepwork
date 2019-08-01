@@ -18,7 +18,11 @@
           <span :class="scope.row.stateColClass">{{scope.row.stateText}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="反馈数" prop="callbackCount" width="120"></el-table-column>
+      <el-table-column label="反馈数" width="120">
+        <template slot-scope="scope">
+          <el-button type="text" @click="toFeedbackPage(scope.row.id)">{{scope.row.submitCount}}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="" class-name="org-forms-table-operate-row">
         <template slot-scope="scope">
           <el-button v-if="scope.row.state === FormStateCode.unPublished" size="small" @click="toEditPage(scope.row.id)">编辑</el-button>
@@ -76,14 +80,14 @@ export default {
     },
     formsList() {
       return _.map(this.orgFormsList, form => {
-        let { id, state, callbackCount } = form
+        let { id, state, submitCount, type } = form
         return {
           ...form,
           url: `${this.nowHost}/org/${this.orgLoginUrl}/${id}`,
           stateText: this.getStateText(state),
           stateColClass: this.getStateClass(state),
           buttonText: this.getButtonText(state),
-          callbackCount: _.isNumber(callbackCount) ? callbackCount : '-'
+          submitCount: type == 3 ? submitCount : '-'
         }
       })
     },
@@ -108,6 +112,11 @@ export default {
     toNewFormPage() {
       this.$router.push({
         name: 'NewForm'
+      })
+    },
+    toFeedbackPage(id) {
+      this.$router.push({
+        path: `forms/${id}/feedback`
       })
     },
     getStateText(state) {

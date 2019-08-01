@@ -45,6 +45,7 @@ const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditC
 const OrgForms = () => import('@/components/org/admin/OrgForms')
 const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
+const FormFeedback = () => import('@/components/org/admin/FormFeedback')
 const OrgFormDetail = () => import('@/components/org/OrgFormDetail')
 const OrgFirstView = () => import('@/components/org/admin/OrgFirstView')
 
@@ -309,6 +310,11 @@ export default new Router({
           path: 'forms/:id/edit',
           name: 'EditForm',
           component: EditForm
+        },
+        {
+          path: 'forms/:id/feedback',
+          name: 'FormFeedback',
+          component: FormFeedback
         },
         {
           path: 'setting',

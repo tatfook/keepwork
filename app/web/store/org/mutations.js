@@ -20,6 +20,7 @@ const SET_PRINT_CODE_LIST = 'SET_PRINT_CODE_LIST'
 const GET_HISTORY_CLASSES_SUCCESS = 'GET_HISTORY_CLASSES_SUCCESS'
 const TOGGLE_EXPIRATION_DIALOG = 'TOGGLE_EXPIRATION_DIALOG'
 const GET_FORMS_SUCCESS = 'GET_FORMS_SUCCESS'
+const GET_FEEDBACK_SUCCESS = 'GET_FEEDBACK_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -39,7 +40,8 @@ export const props = {
   SET_PRINT_CODE_LIST,
   GET_HISTORY_CLASSES_SUCCESS,
   TOGGLE_EXPIRATION_DIALOG,
-  GET_FORMS_SUCCESS
+  GET_FORMS_SUCCESS,
+  GET_FEEDBACK_SUCCESS
 }
 
 const mutations = {
@@ -133,6 +135,12 @@ const mutations = {
     Vue.set(state, 'orgForms', {
       ...state.orgForms,
       [organizationId]: forms
+    })
+  },
+  [GET_FEEDBACK_SUCCESS](state, { formId, submitList }) {
+    Vue.set(state, 'formsFeedback', {
+      ...state.formsFeedback,
+      [formId]: submitList
     })
   }
 }
