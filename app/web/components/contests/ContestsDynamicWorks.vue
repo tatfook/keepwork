@@ -160,7 +160,7 @@ export default {
     max-width: 1006px;
     margin: 0 auto;
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     flex-wrap: wrap;
     &-box {
       width: 320px;
@@ -227,9 +227,11 @@ export default {
 @media screen and (max-width: 768px) {
   .contests-dynamic {
     &-works {
-      justify-content: center;
+      // justify-content: start;
+      flex-wrap: wrap;
       &-box {
-        max-width: 44%;
+        max-width: calc(50vw - 16px);
+        // border: 1px solid red;
         margin: 0 8px 10px 8px;
         &-cover {
           &-img {
