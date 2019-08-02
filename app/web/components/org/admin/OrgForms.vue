@@ -61,6 +61,7 @@
         <el-button type="primary" @click="openPreview">打开</el-button>
       </span>
     </el-dialog>
+    <form-preview ref="formPreviewRef" :type="activeForm.type" :title="activeForm.title" :description="activeForm.description" :text="activeForm.text" :quizzes="activeForm.quizzes"></form-preview>
   </div>
 </template>
 <script>
@@ -69,6 +70,7 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import { mapGetters, mapActions } from 'vuex'
 import FormTemplates from './common/FormTemplates'
+import FormPreview from '../common/FormPreview'
 export default {
   name: 'OrgForms',
   async mounted() {
@@ -170,7 +172,17 @@ export default {
       this.$message({ type: 'success', message: '生成副本成功' })
     },
     printForm(formDetail) {
-      console.log('printForm', formDetail)
+      this.activeForm = _.cloneDeep(formDetail)
+      this.$nextTick(() => {
+        const newWindow = window.open('', '标题')
+        const bodyHtml = this.$refs.formPreviewRef.$el.innerHTML
+        let headHtml = document.head.innerHTML
+        headHtml = headHtml.replace('screen', 'screen,print')
+        newWindow.document.write(
+          `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`
+        )
+        this.activeForm = {}
+      })
     },
     async renameForm(formId) {
       this.$prompt('请输入表单名称', '表单重命名', {
@@ -254,6 +266,7 @@ export default {
     }
   },
   components: {
+    FormPreview,
     FormTemplates
   }
 }
