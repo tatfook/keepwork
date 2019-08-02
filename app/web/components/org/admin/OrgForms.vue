@@ -90,9 +90,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgFormsList: 'org/formsList',
+      formsListGetter: 'org/formsList',
       currentOrgId: 'org/currentOrgId'
     }),
+    orgFormsList() {
+      return this.formsListGetter({ id: this.currentOrgId })
+    },
     isFormExist() {
       return Boolean(this.orgFormsList && this.orgFormsList.length)
     },

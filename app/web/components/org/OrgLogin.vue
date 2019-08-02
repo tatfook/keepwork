@@ -52,7 +52,7 @@ export default {
       this.isOrgExist = false
       this.isLoading = false
     })
-    await this.orgGetForms({})
+    await this.orgGetForms({ organizationId: this.orgId })
     this.isLoading = false
     this.setOrganizationName()
   },
@@ -83,10 +83,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      formsList: 'org/formsList',
+      orgFormsList: 'org/formsList',
       orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       isFirstView: 'org/isFirstView'
     }),
+    formsList() {
+      return this.orgFormsList({ id: this.orgId })
+    },
     publishedForms() {
       return _.filter(this.formsList, ({ state }) => state == 1) || []
     },
@@ -102,6 +105,9 @@ export default {
     orgLogo() {
       let logo = _.get(this.orgDetail, 'logo')
       return logo
+    },
+    orgId() {
+      return _.get(this.orgDetail, 'id')
     }
   },
   methods: {
