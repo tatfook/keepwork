@@ -21,13 +21,24 @@ export default {
   name: 'OrgFormDetail',
   async mounted() {
     this.isLoading = true
-    await this.orgGetForms({})
+    await this.getOrgDetailByLoginUrl({ orgLoginUrl: this.orgLoginUrl })
+    await this.orgGetForms({ organizationId: this.orgId })
     this.isLoading = false
   },
   computed: {
     ...mapGetters({
+      orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       getFormDetailById: 'org/getFormDetailById'
     }),
+    orgLoginUrl() {
+      return _.get(this.$route, 'params.orgLoginUrl')
+    },
+    orgDetail() {
+      return this.orgGetOrgDetailByLoginUrl({ loginUrl: this.orgLoginUrl })
+    },
+    orgId() {
+      return _.get(this.orgDetail, 'id')
+    },
     nowPageLink() {
       return window.location.href
     },
@@ -35,7 +46,7 @@ export default {
       return _.get(this.$route, 'params.id')
     },
     formDetail() {
-      return this.getFormDetailById({ id: this.formId })
+      return this.getFormDetailById({ id: this.formId, orgId: this.orgId })
     },
     title() {
       return _.get(this.formDetail, 'title')
@@ -60,6 +71,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgGetForms: 'org/getForms'
     })
   },

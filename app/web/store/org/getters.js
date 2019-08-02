@@ -81,10 +81,11 @@ const getters = {
   isFirstView: (state, { currentOrg, userinfo: { id } }) => {
     return !_.includes(_.get(currentOrg, 'extra.visitedList', []), id)
   },
-  formsList: (state, { currentOrgId }) => _.get(state.orgForms, currentOrgId),
-  getFormDetailById: (state, { formsList }) => ({ id }) => {
+  formsList: state => ({ id }) => _.get(state.orgForms, id),
+  getFormDetailById: (state, { formsList, currentOrgId }) => ({ id, orgId }) => {
+    orgId = orgId || currentOrgId
     return _.find(
-      formsList,
+      formsList({ id: orgId }),
       formDetail => _.toNumber(formDetail.id) === _.toNumber(id)
     )
   },
