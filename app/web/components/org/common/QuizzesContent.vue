@@ -110,7 +110,10 @@ export default {
         ? this.insertIndex
         : this.quizzes.length
       this.insertIndex = undefined
-      if (!quiz) return
+      if (!quiz) {
+        this.editingQuiz = undefined
+        return
+      }
       if (!this.editingQuiz) {
         this.quizzes.splice(insertIndex, 0, quiz)
         return

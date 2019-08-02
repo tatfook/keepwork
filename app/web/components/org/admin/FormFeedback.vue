@@ -10,7 +10,7 @@
       <div class="form-feedback-count">反馈数：{{formFeedbackCount}}</div>
       <div class="form-feedback-count-buttons">
         <el-button size="medium" @click="exportData">导出</el-button>
-        <el-button size="medium" type="primary">打印</el-button>
+        <!-- <el-button size="medium" type="primary">打印</el-button> -->
       </div>
     </div>
     <div class="form-feedback-search">
