@@ -10,7 +10,7 @@
             <span>{{scope.row.name}}</span>
             <i class="iconfont icon-edit1" @click="renameForm(scope.row.id)"></i>
           </div>
-          <div class="org-forms-table-url" v-if="scope.row.state !== FormStateCode.unPublished">{{scope.row.url}}</div>
+          <a class="org-forms-table-url" v-if="scope.row.state !== FormStateCode.unPublished" :href="scope.row.url" target="_blank">{{scope.row.url}}</a>
         </template>
       </el-table-column>
       <el-table-column label="状态" width="175">
@@ -26,7 +26,7 @@
       <el-table-column label="" class-name="org-forms-table-operate-row">
         <template slot-scope="scope">
           <el-button v-if="scope.row.state === FormStateCode.unPublished" size="small" @click="toEditPage(scope.row.id)">编辑</el-button>
-          <el-button size="small" @click="changeFormState(scope.row.id, scope.row.state)">{{scope.row.buttonText}}</el-button>
+          <el-button size="small" @click="changeFormState(scope.row)">{{scope.row.buttonText}}</el-button>
           <el-dropdown trigger="click" @command="handleDropdownCommand">
             <span class="el-dropdown-link">
               <i class="iconfont icon-ellipsis"></i>
@@ -50,9 +50,23 @@
       <div class="org-forms-templates-header">表单模板</div>
       <form-templates class="org-forms-templates-list" />
     </div>
+    <el-dialog :visible.sync="isSuccessDialogShow" custom-class="org-form-dialog" center width="400px" :before-close="handleClose">
+      <span slot="title">
+        <i class="el-icon-success"></i> 表单发布成功！
+      </span>
+      <div class="org-form-dialog-name">{{activeForm.name}}</div>
+      <p class="org-form-dialog-info">{{activeForm.url}}</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="copyUrl">复制链接</el-button>
+        <el-button type="primary" @click="openPreview">打开</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 import { mapGetters, mapActions } from 'vuex'
 import FormTemplates from './common/FormTemplates'
 export default {
@@ -63,6 +77,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      activeForm: {},
+      isSuccessDialogShow: false,
       FormStateCode: {
         unPublished: 0,
         doing: 1,
@@ -81,9 +97,10 @@ export default {
     formsList() {
       return _.map(this.orgFormsList, form => {
         let { id, state, submitCount, type } = form
+        const { host, protocol } = window.location
         return {
           ...form,
-          url: `${this.nowHost}/org/${this.orgLoginUrl}/${id}`,
+          url: `${protocol}//${host}/org/${this.orgLoginUrl}/form/${id}`,
           stateText: this.getStateText(state),
           stateColClass: this.getStateClass(state),
           buttonText: this.getButtonText(state),
@@ -93,9 +110,6 @@ export default {
     },
     orgLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl', '')
-    },
-    nowHost() {
-      return window.location.host
     }
   },
   methods: {
@@ -171,11 +185,20 @@ export default {
         })
         .catch(() => {})
     },
-    async changeFormState(formId, state) {
+    async changeFormState(formDetail) {
+      let { state } = formDetail
       let targetState = state == 2 ? 1 : state + 1
       this.isLoading = true
-      await this.orgUpdateForms({ formId, formDetail: { state: targetState } })
+      await this.orgUpdateForms({
+        formId: formDetail.id,
+        formDetail: { state: targetState }
+      })
       this.isLoading = false
+      if (state == 0) {
+        this.activeForm = _.cloneDeep(formDetail)
+        this.isSuccessDialogShow = true
+        return
+      }
       this.updateSuccess()
     },
     updateSuccess() {
@@ -205,6 +228,29 @@ export default {
         default:
           break
       }
+    },
+    handleClose() {
+      this.isSuccessDialogShow = false
+      this.activeForm = {}
+    },
+    openPreview() {
+      window.open(this.activeForm.url, '_blank')
+      this.handleClose()
+    },
+    copyUrl() {
+      const self = this
+      this.$copyText(this.activeForm.url)
+        .then(() => {
+          self.handleClose()
+          this.$message({ type: 'success', message: '复制成功' })
+        })
+        .catch(e => {
+          this.$message({
+            showClose: true,
+            message: this.$t('editor.copyFail'),
+            type: 'error'
+          })
+        })
     }
   },
   components: {
@@ -264,6 +310,10 @@ export default {
     &-url {
       font-size: 12px;
       color: #c0c4cc;
+      text-decoration: none;
+      &:hover {
+        color: #2397f3;
+      }
     }
     /deep/ thead tr,
     /deep/ thead th {
@@ -305,6 +355,23 @@ export default {
     &-header {
       font-size: 16px;
       padding: 16px 0;
+    }
+  }
+  /deep/ .org-form-dialog {
+    font-size: 16px;
+    &-name {
+      color: #303133;
+      text-align: center;
+      font-size: 16px;
+    }
+    &-info {
+      text-align: center;
+      color: #909399;
+    }
+    .el-icon-success {
+      font-size: 22px;
+      vertical-align: middle;
+      color: #1afa29;
     }
   }
 }
