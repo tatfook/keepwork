@@ -20,7 +20,8 @@
       </el-table-column>
       <el-table-column label="反馈数" width="120">
         <template slot-scope="scope">
-          <el-button type="text" @click="toFeedbackPage(scope.row.id)">{{scope.row.submitCount}}</el-button>
+          <el-button v-if="scope.row.type == 3" type="text" @click="toFeedbackPage(scope.row.id)">{{scope.row.submitCount}}</el-button>
+          <span v-else>-</span>
         </template>
       </el-table-column>
       <el-table-column label="" class-name="org-forms-table-operate-row">
@@ -109,7 +110,7 @@ export default {
           stateText: this.getStateText(state),
           stateColClass: this.getStateClass(state),
           buttonText: this.getButtonText(state),
-          submitCount: type == 3 ? submitCount : '-'
+          submitCount
         }
       })
     },
