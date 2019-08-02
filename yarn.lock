@@ -12090,6 +12090,11 @@ qiniu-js@^2.2.2:
   resolved "http://registry.npm.taobao.org/qiniu-js/download/qiniu-js-2.5.4.tgz#9d708bbdb9b5c326a42b59900eacd6d4497c81e4"
   integrity sha1-nXCLvbm1wyakK1mQDqzW1El8geQ=
 
+qrcode.vue@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.npm.taobao.org/qrcode.vue/download/qrcode.vue-1.6.2.tgz#56446818a4103fac652180fa4a761ff2f39cd0a9"
+  integrity sha1-VkRoGKQQP6xlIYD6SnYf8vOc0Kk=
+
 qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "http://registry.npm.taobao.org/qs/download/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
