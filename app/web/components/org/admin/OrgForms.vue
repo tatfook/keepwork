@@ -102,6 +102,7 @@ export default {
     ...mapActions({
       orgGetForms: 'org/getForms',
       orgUpdateForms: 'org/updateForm',
+      orgCreateForm: 'org/createForm',
       orgDeleteForms: 'org/deleteForm'
     }),
     toEditPage(id) {
@@ -140,8 +141,19 @@ export default {
         ? '开始收集'
         : '发布'
     },
-    copyForm(formDetail) {
-      console.log('copyForm', formDetail)
+    async copyForm(formDetail) {
+      let { description, name, title, text, type, quizzes } = formDetail
+      this.isLoading = true
+      await this.orgCreateForm({
+        type,
+        title,
+        text,
+        description,
+        quizzes,
+        name: name + '-副本'
+      })
+      this.isLoading = false
+      this.$message({ type: 'success', message: '生成副本成功' })
     },
     printForm(formDetail) {
       console.log('printForm', formDetail)
