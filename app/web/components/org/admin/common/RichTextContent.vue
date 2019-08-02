@@ -1,9 +1,14 @@
 <template>
-  <div id="jsFormDescription" class="rich-text-content">
+  <div class="rich-text-content">
+    <div id="jsFormDescription">
+    </div>
+    <el-button type="primary" class="rich-text-insert" @click="showSkydrive">插入文件</el-button>
+    <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="false" :isNoMediaFileShow="true" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 
 <script>
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters } from 'vuex'
 import E from 'wangeditor'
 export default {
@@ -30,6 +35,7 @@ export default {
     ]
     editor.customConfig.colors = this.colors
     editor.customConfig.onchange = this.handleChange
+    editor.customConfig.zIndex = 100
     editor.create()
     this.originContent = _.get(this.formDetail, 'text', [])
     editor.txt.html(this.originContent)
@@ -49,6 +55,7 @@ export default {
   },
   data() {
     return {
+      isMediaSkyDriveDialogShow: false,
       formEditor: undefined,
       originContent: '',
       colors: [
@@ -71,6 +78,9 @@ export default {
     }
   },
   methods: {
+    showSkydrive() {
+      this.isMediaSkyDriveDialogShow = true
+    },
     handleChange() {
       this.$emit('change')
     },
@@ -79,12 +89,24 @@ export default {
     },
     getTextStr() {
       return this.formEditor.txt.text()
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isMediaSkyDriveDialogShow = false
+      if (url) {
+        this.formEditor.txt.append(
+          `<br/><a href="${url}" target="_blank">${file.filename}</a>`
+        )
+      }
     }
+  },
+  components: {
+    SkyDriveManagerDialog
   }
 }
 </script>
 <style lang="scss" scoped>
 .rich-text-content {
+  position: relative;
   /deep/ .w-e-text-container {
     height: 290px !important;
     border-color: #e0e4ee !important;
@@ -92,6 +114,15 @@ export default {
   /deep/ .w-e-toolbar {
     border-color: #e0e4ee !important;
     background-color: #efefef !important;
+  }
+  .el-button {
+    position: absolute;
+    top: -32px;
+    left: 55px;
+    padding: 0;
+    height: 24px;
+    line-height: 24px;
+    width: 100px;
   }
 }
 </style>
