@@ -53,8 +53,7 @@ export default {
     p {
       font-size: 14px;
       color: #5bf5ff;
-      width: 468px;
-      max-width: 100%;
+      max-width: 468px;
       text-align: center;
       margin: 8px 0 0 0;
     }
