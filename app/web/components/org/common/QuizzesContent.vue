@@ -202,6 +202,7 @@ export default {
   &-title {
     margin-bottom: 10px;
     position: relative;
+    word-break: break-word;
   }
   &-required {
     color: #e21b45;

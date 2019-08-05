@@ -98,6 +98,8 @@ export default {
         templateParam: { title, description, text, quizzes }
       } = this.selectedTemplate
       this.$prompt('名称', '创建表单', {
+        inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+        inputErrorMessage: '表单名称不能为空',
         confirmButtonText: '保存',
         cancelButtonText: '取消'
       }).then(async ({ value }) => {
