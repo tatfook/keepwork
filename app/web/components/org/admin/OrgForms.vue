@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column label="反馈数" width="120">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.type == 3" type="text" @click="toFeedbackPage(scope.row.id)">{{scope.row.submitCount}}</el-button>
+          <el-button v-if="scope.row.type == 3 && scope.row.submitCount > 0" type="text" @click="toFeedbackPage(scope.row.id)">{{scope.row.submitCount}}</el-button>
           <span v-else>-</span>
         </template>
       </el-table-column>
