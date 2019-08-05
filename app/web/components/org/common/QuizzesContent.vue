@@ -50,7 +50,8 @@ export default {
       default: true
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getOrgDetailByLoginUrl({ orgLoginUrl:this.orgLoginUrl })
     let formQuizzes = _.cloneDeep(this.formQuizzes)
     this.quizzes = this.isAnswerMode
       ? _.map(formQuizzes, quiz => {
@@ -66,13 +67,23 @@ export default {
   },
   computed: {
     ...mapGetters({
+      orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       getFormDetailById: 'org/getFormDetailById'
     }),
+    orgLoginUrl() {
+      return _.get(this.$route, 'params.orgLoginUrl')
+    },
+    orgDetail() {
+      return this.orgGetOrgDetailByLoginUrl({ loginUrl: this.orgLoginUrl })
+    },
+    orgId() {
+      return _.get(this.orgDetail, 'id')
+    },
     formId() {
       return _.get(this.$route, 'params.id')
     },
     formDetail() {
-      return this.getFormDetailById({ id: this.formId }) || {}
+      return this.getFormDetailById({ id: this.formId, orgId:this.orgId }) || {}
     },
     formQuizzes() {
       return _.get(this.formDetail, 'quizzes', [])
@@ -99,6 +110,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgSubmitForm: 'org/submitForm'
     }),
     showQuizEditor() {
