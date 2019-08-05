@@ -1,8 +1,8 @@
 <template>
   <div class="form-preview">
     <div class="form-preview-header">
-      <h1>{{title}}</h1>
-      <p>{{description}}</p>
+      <h1 :title="title">{{title}}</h1>
+      <p :title="description">{{description}}</p>
     </div>
     <div v-if="type == 3" class="form-preview-content">
       <quizzes-content :originQuizzes="quizzes" :isEditMode="false" :isAnswerMode="isAnswerMode"></quizzes-content>
@@ -49,6 +49,10 @@ export default {
       color: #fff;
       margin: 0;
       font-weight: normal;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
     }
     p {
       font-size: 14px;
@@ -56,6 +60,12 @@ export default {
       max-width: 468px;
       text-align: center;
       margin: 8px 0 0 0;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
     }
   }
   &-content {
