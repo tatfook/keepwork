@@ -8,7 +8,7 @@
         <template slot-scope="scope">
           <div class="org-forms-table-name">
             <span>{{scope.row.name}}</span>
-            <i class="iconfont icon-edit1" @click="renameForm(scope.row.id)"></i>
+            <i class="iconfont icon-edit1" @click="renameForm(scope.row.id, scope.row.name)"></i>
           </div>
           <a class="org-forms-table-url" v-if="scope.row.state !== FormStateCode.unPublished" :href="scope.row.url" target="_blank">{{scope.row.url}}</a>
         </template>
@@ -188,8 +188,11 @@ export default {
         this.activeForm = {}
       })
     },
-    async renameForm(formId) {
+    async renameForm(formId, formName) {
       this.$prompt('请输入表单名称', '表单重命名', {
+        inputValue: formName,
+        inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+        inputErrorMessage: '表单名称不能为空',
         confirmButtonText: '保存',
         cancelButtonText: '取消'
       })
