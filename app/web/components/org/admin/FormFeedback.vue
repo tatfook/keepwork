@@ -29,8 +29,10 @@
           {{getFormatTime(scope.row.createdAt)}}
         </template>
       </el-table-column>
-      <el-table-column width="120" v-for="(quiz, index) in formQuizzes" :key="index" :render-header="renderTableHeader" show-overflow-tooltip>
-        <template slot-scope="scope">{{findAQuizAnswer(quiz, scope.row.quizzes)}}</template>
+      <el-table-column width="120" v-for="(quiz, index) in formQuizzes" :key="index" :render-header="renderTableHeader">
+        <template slot-scope="scope">
+          <span class="form-feedback-table-answer" :title="findAQuizAnswer(quiz, scope.row.quizzes)">{{findAQuizAnswer(quiz, scope.row.quizzes)}}</span>
+        </template>
       </el-table-column>
       <el-table-column fixed="right" label="状态" width="80" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -318,6 +320,12 @@ export default {
       &.is-danger {
         color: #f3234f;
       }
+    }
+    &-answer{
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     /deep/ .table-title {
       white-space: nowrap;
