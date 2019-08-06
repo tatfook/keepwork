@@ -381,6 +381,16 @@ export const lessonOrganizationClassMembers = {
   removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
 
+export const lessonOrganizationForms = {
+  createForm: async ({ formDetail }) => post('lessonOrganizationForms', formDetail),
+  getForms: async ({ organizationId }) => post('lessonOrganizationForms/search', { organizationId }),
+  updateForm: async ({ formId, formDetail }) => put(`lessonOrganizationForms/${formId}`, formDetail),
+  deleteForm: async ({ formId }) => deleteMethod(`lessonOrganizationForms/${formId}`),
+  submitForm: async ({ formId, quizzes }) => post(`lessonOrganizationForms/${formId}/submit`, { quizzes }),
+  getSubmitList: async ({ formId }) => get(`lessonOrganizationForms/${formId}/submit`),
+  updateSubmit: async ({ formId, submitId, submitData }) => put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
+}
+
 export const graphql = {
   getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
 }
@@ -427,6 +437,7 @@ export const keepwork = {
   lessonOrganizations,
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
+  lessonOrganizationForms,
   graphql,
   message,
   feedbacks,

@@ -27,7 +27,15 @@
         <i class="el-icon-close org-login-dialog-close" @click="isShowPasswordResetForm = false"></i>
         <password-reset-form v-show="isShowPasswordResetForm"></password-reset-form>
       </el-dialog>
-
+    </div>
+    <div class="org-login-forms" v-if="publishedForms.length > 0">
+      <div class="org-login-forms-title">请选择表单模板：</div>
+      <div class="org-login-forms-container">
+        <div class="org-login-forms-item" v-for="(form, index) in publishedForms" :key="index">
+          <div class="org-login-forms-item-title" @click="toFormDetail(form)">{{form.name}}</div>
+          <el-button type="text" @click="toFormDetail(form)">详情</el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +52,7 @@ export default {
       this.isOrgExist = false
       this.isLoading = false
     })
+    await this.orgGetForms({ organizationId: this.orgId })
     this.isLoading = false
     this.setOrganizationName()
   },
@@ -74,9 +83,16 @@ export default {
   },
   computed: {
     ...mapGetters({
+      orgFormsList: 'org/formsList',
       orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       isFirstView: 'org/isFirstView'
     }),
+    formsList() {
+      return this.orgFormsList({ id: this.orgId })
+    },
+    publishedForms() {
+      return _.filter(this.formsList, ({ state }) => state == 1) || []
+    },
     orgLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
     },
@@ -89,15 +105,25 @@ export default {
     orgLogo() {
       let logo = _.get(this.orgDetail, 'logo')
       return logo
+    },
+    orgId() {
+      return _.get(this.orgDetail, 'id')
     }
   },
   methods: {
     ...mapActions({
+      orgGetForms: 'org/getForms',
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgLogin: 'org/login',
       userLogin: 'user/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),
+    toFormDetail(form) {
+      let { id } = form
+      this.$router.push({
+        path: `form/${id}`
+      })
+    },
     handleClose() {
       this.isRegisterForm = false
     },
@@ -262,6 +288,45 @@ export default {
     }
     .password-reset-form {
       padding-bottom: 20px;
+    }
+  }
+  &-forms {
+    width: 912px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 32px 24px;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin-top: 96px;
+    border-radius: 8px;
+    &-container {
+      margin-top: 20px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    &-item {
+      display: inline-block;
+      margin-right: 16px;
+      text-align: center;
+      &:last-child {
+        margin-right: 0;
+      }
+      &-title {
+        width: 160px;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        white-space: normal;
+        padding: 0 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+        &:hover {
+          border: 2px solid #4facf5;
+        }
+      }
     }
   }
 }
