@@ -9,6 +9,15 @@ import createEndpoint from './common/endpoint'
 import { event } from 'vue-analytics'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { Base64 } from 'js-base64'
+import _ from 'lodash'
+
+
+const encodeFunc = payload => {
+  const userID = Base64.encode(JSON.stringify(payload))
+  const encodeData = `${_.random(10, 99)}${userID}`
+  return encodeData
+}
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -43,9 +52,9 @@ export const user = {
   getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
-  getDetailById: async ({ userId }) => get(`users/${userId}`),
-  getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
-  getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
+  getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
+  getDetailWithRankById: async ({ userId }) => get(`users/${encodeFunc({ userId })}/detail`),
+  getDetailWithRankByUsername: async ({ username }) => get(`users/${encodeFunc({ username })}/detail`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
