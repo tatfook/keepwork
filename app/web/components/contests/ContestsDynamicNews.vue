@@ -103,7 +103,7 @@ export default {
       padding-left: 20px;
       flex: 1;
       &-text {
-        min-height: 188px;
+        min-height: 190px;
         border: 1px solid transparent;
         &-notice {
           font-size: 22px;
