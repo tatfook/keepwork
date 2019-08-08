@@ -12090,6 +12090,11 @@ qiniu-js@^2.2.2:
   resolved "http://registry.npm.taobao.org/qiniu-js/download/qiniu-js-2.5.4.tgz#9d708bbdb9b5c326a42b59900eacd6d4497c81e4"
   integrity sha1-nXCLvbm1wyakK1mQDqzW1El8geQ=
 
+qrcode.vue@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.npm.taobao.org/qrcode.vue/download/qrcode.vue-1.6.2.tgz#56446818a4103fac652180fa4a761ff2f39cd0a9"
+  integrity sha1-VkRoGKQQP6xlIYD6SnYf8vOc0Kk=
+
 qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "http://registry.npm.taobao.org/qs/download/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
@@ -15286,10 +15291,10 @@ wrappy@1:
   resolved "http://registry.npm.taobao.org/wrappy/download/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
-write-file-atomic@^2.0.0, write-file-atomic@^2.1.0, write-file-atomic@^2.4.2:
-  version "2.4.2"
-  resolved "http://registry.npm.taobao.org/write-file-atomic/download/write-file-atomic-2.4.2.tgz#a7181706dfba17855d221140a9c06e15fcdd87b9"
-  integrity sha1-pxgXBt+6F4VdIhFAqcBuFfzdh7k=
+write-file-atomic@2.4.1, write-file-atomic@^2.0.0, write-file-atomic@^2.1.0, write-file-atomic@^2.4.2:
+  version "2.4.1"
+  resolved "https://registry.npm.taobao.org/write-file-atomic/download/write-file-atomic-2.4.1.tgz#d0b05463c188ae804396fd5ab2a370062af87529"
+  integrity sha1-0LBUY8GIroBDlv1asqNwBir4dSk=
   dependencies:
     graceful-fs "^4.1.11"
     imurmurhash "^0.1.4"

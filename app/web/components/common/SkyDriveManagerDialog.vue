@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import SkyDriveManager from './SkyDriveManager'
 import { mapGetters, mapActions } from 'vuex'
 

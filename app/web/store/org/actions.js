@@ -21,7 +21,9 @@ const {
   GET_ORG_ACTIVATE_CODE_SUCCESS,
   SET_PRINT_CODE_LIST,
   GET_HISTORY_CLASSES_SUCCESS,
-  TOGGLE_EXPIRATION_DIALOG
+  TOGGLE_EXPIRATION_DIALOG,
+  GET_FORMS_SUCCESS,
+  GET_FEEDBACK_SUCCESS
 } = props
 
 const actions = {
@@ -131,7 +133,10 @@ const actions = {
     })
     return classPackages
   },
-  async getOrgPackageDetail({ commit }, { packageId, classId = 0, roleId = 64 }) {
+  async getOrgPackageDetail(
+    { commit },
+    { packageId, classId = 0, roleId = 64 }
+  ) {
     const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail(
       { packageId, classId, roleId }
     )
@@ -312,20 +317,38 @@ const actions = {
         console.error(err)
       })
   },
-  async getHistoryClasses({ commit, getters: { orgHistoricalClasses } }, { cache = false, params } = {}) {
+  async getHistoryClasses(
+    {
+      commit,
+      getters: { orgHistoricalClasses }
+    },
+    { cache = false, params } = {}
+  ) {
     if (!(cache && !_.isEmpty(orgHistoricalClasses))) {
-      await keepwork.lessonOrganizationClasses.getHistoryClasses(params).then(res => {
-        commit(GET_HISTORY_CLASSES_SUCCESS, res)
-      }).catch(err => {
-        console.error(err)
-      })
+      await keepwork.lessonOrganizationClasses
+        .getHistoryClasses(params)
+        .then(res => {
+          commit(GET_HISTORY_CLASSES_SUCCESS, res)
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   },
   toggleExpirationDialogVisible({ commit }, status) {
     commit(TOGGLE_EXPIRATION_DIALOG, status)
   },
-  checkCurrentOrgExpire({ dispatch, getters: { currentOrgToExpire, currentOrgHaveExpired } }, { haveExpired = true, toExpire = true } = {}) {
-    if ((haveExpired && currentOrgHaveExpired) || (toExpire && currentOrgToExpire)) {
+  checkCurrentOrgExpire(
+    {
+      dispatch,
+      getters: { currentOrgToExpire, currentOrgHaveExpired }
+    },
+    { haveExpired = true, toExpire = true } = {}
+  ) {
+    if (
+      (haveExpired && currentOrgHaveExpired) ||
+      (toExpire && currentOrgToExpire)
+    ) {
       dispatch('toggleExpirationDialogVisible', true)
       return true
     }
@@ -338,9 +361,57 @@ const actions = {
     const isFirstView = !_.includes(visitedList, userID)
     const newVisitedList = _.uniq([...visitedList, userID])
     if (isFirstView) {
-      keepwork.lessonOrganizations.updateOrg({ orgId, orgData: { extra: { ...extra, visitedList: newVisitedList } } })
+      keepwork.lessonOrganizations.updateOrg({
+        orgId,
+        orgData: { extra: { ...extra, visitedList: newVisitedList } }
+      })
     }
     return isFirstView
+  },
+  async createForm({ dispatch, getters }, formDetail) {
+    let { currentOrgId } = getters
+    await keepwork.lessonOrganizationForms.createForm({
+      formDetail: {
+        ...formDetail,
+        organizationId: currentOrgId
+      }
+    })
+    dispatch('getForms', {})
+  },
+  async getForms({ commit, getters }, { organizationId }) {
+    let { currentOrgId } = getters
+    organizationId = organizationId || currentOrgId
+    let forms = await keepwork.lessonOrganizationForms.getForms({
+      organizationId
+    })
+    commit(GET_FORMS_SUCCESS, { organizationId, forms })
+  },
+  async updateForm({ dispatch }, { formId, formDetail }) {
+    await keepwork.lessonOrganizationForms.updateForm({
+      formId,
+      formDetail
+    })
+    dispatch('getForms', {})
+  },
+  async deleteForm({ dispatch }, { formId }) {
+    await keepwork.lessonOrganizationForms.deleteForm({
+      formId
+    })
+    dispatch('getForms', {})
+  },
+  async submitForm({ dispatch }, { formId, quizzes }) {
+    await keepwork.lessonOrganizationForms.submitForm({ formId, quizzes })
+  },
+  async getSubmitList({ commit }, { formId }) {
+    let result = await keepwork.lessonOrganizationForms.getSubmitList({
+      formId
+    })
+    let submitList = result.rows
+    commit(GET_FEEDBACK_SUCCESS, { formId, submitList })
+  },
+  async updateSubmit({ dispatch }, { formId, submitId, submitData }) {
+    await keepwork.lessonOrganizationForms.updateSubmit({ formId, submitId, submitData })
+    dispatch('getSubmitList', { formId })
   }
 }
 

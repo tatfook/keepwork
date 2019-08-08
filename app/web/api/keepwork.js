@@ -9,6 +9,25 @@ import createEndpoint from './common/endpoint'
 import { event } from 'vue-analytics'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { Base64 } from 'js-base64'
+
+const randomString = (L = 2) => {
+  let s = ''
+  const randomChar = () => {
+    let n = Math.floor(Math.random() * 62)
+    if (n < 10) return n
+    if (n < 36) return String.fromCharCode(n + 55)
+    return String.fromCharCode(n + 61)
+  }
+  while (s.length < L) s += randomChar()
+  return s
+}
+
+const encodeFunc = payload => {
+  const userID = Base64.encode(JSON.stringify(payload))
+  const encodeData = `${randomString(2)}${userID}`
+  return encodeData
+}
 
 export const keepworkEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
@@ -43,9 +62,9 @@ export const user = {
   getUser: async username => get(`users/${username}`),
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
-  getDetailById: async ({ userId }) => get(`users/${userId}`),
-  getDetailWithRankById: async ({ userId }) => get(`users/${userId}/detail`),
-  getDetailWithRankByUsername: async ({ username }) => get(`users/${username}/detail?username=${username}`),
+  getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
+  getDetailWithRankById: async ({ userId }) => get(`users/${encodeFunc({ userId })}/detail`),
+  getDetailWithRankByUsername: async ({ username }) => get(`users/${encodeFunc({ username })}/detail`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
@@ -381,6 +400,16 @@ export const lessonOrganizationClassMembers = {
   removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
 
+export const lessonOrganizationForms = {
+  createForm: async ({ formDetail }) => post('lessonOrganizationForms', formDetail),
+  getForms: async ({ organizationId }) => post('lessonOrganizationForms/search', { organizationId }),
+  updateForm: async ({ formId, formDetail }) => put(`lessonOrganizationForms/${formId}`, formDetail),
+  deleteForm: async ({ formId }) => deleteMethod(`lessonOrganizationForms/${formId}`),
+  submitForm: async ({ formId, quizzes }) => post(`lessonOrganizationForms/${formId}/submit`, { quizzes }),
+  getSubmitList: async ({ formId }) => get(`lessonOrganizationForms/${formId}/submit`),
+  updateSubmit: async ({ formId, submitId, submitData }) => put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
+}
+
 export const graphql = {
   getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
 }
@@ -427,6 +456,7 @@ export const keepwork = {
   lessonOrganizations,
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
+  lessonOrganizationForms,
   graphql,
   message,
   feedbacks,

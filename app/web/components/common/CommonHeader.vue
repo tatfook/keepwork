@@ -179,7 +179,7 @@ export default {
     },
     allMessages() {
       return _.map(_.get(this.messagesBox, 'rows', []), item => {
-        const html = item.messages.msg.text
+        const html = _.get(item, 'messages.msg.text', '')
         const content = html
           .replace(/&lt;/g, '<')
           .replace(/&gt;/g, '>')

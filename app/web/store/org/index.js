@@ -21,7 +21,9 @@ const state = {
   orgActiveCodeList: {},
   printCodeList: {},
   orgHistoricalClasses: {},
-  expirationDialogVisible: false
+  expirationDialogVisible: false,
+  orgForms: {},
+  formsFeedback: {}
 }
 export default {
   namespaced: true,

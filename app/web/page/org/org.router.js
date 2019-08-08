@@ -42,6 +42,11 @@ const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitation
 const HistoricalData = () => import('@/components/org/admin/HistoricalData')
 const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
 const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
+const OrgForms = () => import('@/components/org/admin/OrgForms')
+const NewForm = () => import('@/components/org/admin/NewForm')
+const EditForm = () => import('@/components/org/admin/EditForm')
+const FormFeedback = () => import('@/components/org/admin/FormFeedback')
+const OrgFormDetail = () => import('@/components/org/OrgFormDetail')
 const OrgFirstView = () => import('@/components/org/admin/OrgFirstView')
 
 Vue.use(Router)
@@ -292,11 +297,36 @@ export default new Router({
           component: OrgHistoryEditClass
         },
         {
+          path: 'forms',
+          name: 'OrgForms',
+          component: OrgForms
+        },
+        {
+          path: 'forms/new',
+          name: 'NewForm',
+          component: NewForm
+        },
+        {
+          path: 'forms/:id/edit',
+          name: 'EditForm',
+          component: EditForm
+        },
+        {
+          path: 'forms/:id/feedback',
+          name: 'FormFeedback',
+          component: FormFeedback
+        },
+        {
           path: 'setting',
           name: 'OrgSetting',
           component: OrgSetting
         }
       ]
+    },
+    {
+      path: '/:orgLoginUrl/form/:id',
+      name: 'OrgFormDetail',
+      component: OrgFormDetail
     },
     {
       path: '/:orgLoginUrl/*',
