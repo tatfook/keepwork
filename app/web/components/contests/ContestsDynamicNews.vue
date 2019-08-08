@@ -103,7 +103,7 @@ export default {
       padding-left: 20px;
       flex: 1;
       &-text {
-        min-height: 190px;
+        min-height: 170px;
         border: 1px solid transparent;
         &-notice {
           font-size: 22px;
@@ -144,27 +144,30 @@ export default {
       }
       &-right {
         padding: 0;
-        &-notice {
-          font-size: 16px;
-          height: 63px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          line-height: 21px;
-          -webkit-box-orient: vertical;
-          margin-top: 10px;
-        }
-        &-hint {
-          font-size: 14px;
-          display: none;
-        }
-        &-time {
-          margin: 0;
-          &-right {
-            img {
-              width: 50px;
-              display: none;
+        &-text {
+          min-height: auto;
+          &-notice {
+            font-size: 16px;
+            height: 63px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-height: 21px;
+            -webkit-box-orient: vertical;
+            margin-top: 10px;
+          }
+          &-hint {
+            font-size: 14px;
+            display: none;
+          }
+          &-time {
+            margin: 0;
+            &-right {
+              img {
+                width: 50px;
+                display: none;
+              }
             }
           }
         }
