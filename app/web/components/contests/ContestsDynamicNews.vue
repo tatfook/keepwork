@@ -23,7 +23,7 @@ export default {
         {
           title: '为未知而教，为未来而学',
           desc: '汉字大赛走进淅川，让科技为文化传承赋能。',
-          date: '2019/8/6',
+          date: '2019 / 8 / 6',
           cover: require('@/assets/contests/newsImg/为未知而教，为未来而学0806.jpg'),
           url:
             'https://mp.weixin.qq.com/s?__biz=MzU5MDU1MzM0Ng==&mid=2247484402&idx=1&sn=823973ff9373a5916e08db650a7f72dd&chksm=fe3dcb9fc94a42893668ab73e1f346b4e74f1298c9ec8c8d765c476b96e715a3c00e4bb7cc2e&token=360524135&lang=zh_CN#rd'
@@ -31,7 +31,7 @@ export default {
         {
           title: '汉字大赛 | 作品赏析 -“孙”姓',
           desc: '记得在视频中找亮点喔~',
-          date: '2019/8/2',
+          date: '2019 / 8 / 2',
           cover: require('@/assets/contests/newsImg/汉字大赛-作品赏析 -“孙”姓.jpg'),
           url:
             'https://mp.weixin.qq.com/s?__biz=MzU5MDU1MzM0Ng==&mid=2247484392&idx=1&sn=32eebff8520458b60508e99a0413b96a&chksm=fe3dcb85c94a42931aff5c66c713949e244a9957b459318f92a643482895f12f28977092d954&token=44448191&lang=zh_CN#rd'
