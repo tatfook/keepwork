@@ -12,7 +12,7 @@
     <div class="apply-way-time">
       <p class="apply-way-time-part"><span class="apply-way-time-part-name">大赛时间</span><span class="apply-way-time-part-time">2019年4月-12月</span></p>
       <p class="apply-way-time-part"><span class="apply-way-time-part-name">作品提交截止时间</span><span class="apply-way-time-part-time">2019年11月30日</span></p>
-      <p class="apply-way-time-hint">◆请各位参赛者务必注意报名时间，要是不小心错过了一网乾坤可是会为你伤心的哦！</p>
+      <!-- <p class="apply-way-time-hint">◆请各位参赛者务必注意报名时间，要是不小心错过了一网乾坤可是会为你伤心的哦！</p> -->
     </div>
     <img class="apply-way-bgpic element_text_1" src="@/assets/contests/element_text_1.png" alt="">
     <!-- <img class="apply-way-bgpic element_text_2" src="@/assets/contests/element_text_2.png" alt=""> -->
@@ -67,8 +67,9 @@ export default {
   &-notice {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 12px;
+    padding: 0 12px 0 100px;
     font-size: 18px;
+    box-sizing: border-box;
     &-step {
       padding-left: 20px;
       position: relative;
@@ -91,6 +92,7 @@ export default {
     &-part {
       display: flex;
       justify-content: center;
+      text-align: center;
       &-name {
         width: 188px;
       }
@@ -118,6 +120,7 @@ export default {
     }
     &-notice {
       font-size: 14px;
+      padding-left: 20px;
     }
     &-time {
       font-size: 14px;

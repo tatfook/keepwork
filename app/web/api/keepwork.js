@@ -10,12 +10,22 @@ import { event } from 'vue-analytics'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Base64 } from 'js-base64'
-import _ from 'lodash'
 
+const randomString = (L = 2) => {
+  let s = ''
+  const randomChar = () => {
+    let n = Math.floor(Math.random() * 62)
+    if (n < 10) return n
+    if (n < 36) return String.fromCharCode(n + 55)
+    return String.fromCharCode(n + 61)
+  }
+  while (s.length < L) s += randomChar()
+  return s
+}
 
 const encodeFunc = payload => {
   const userID = Base64.encode(JSON.stringify(payload))
-  const encodeData = `${_.random(10, 99)}${userID}`
+  const encodeData = `${randomString(2)}${userID}`
   return encodeData
 }
 

@@ -5,6 +5,8 @@ const ContestsPage = () => import('@/components/contests/ContestsPage')
 const ContestsHomePage = () => import('@/components/contests/ContestsHomePage')
 const ContestsRules = () => import('@/components/contests/ContestsRules')
 const ContestsDynamic = () => import('@/components/contests/ContestsDynamic')
+const ContestsDynamicWorks = () => import('@/components/contests/ContestsDynamicWorks')
+const ContestsDynamicNews = () => import('@/components/contests/ContestsDynamicNews')
 const ApplyWay = () => import('@/components/contests/ApplyWay')
 
 Vue.use(Router)
@@ -36,7 +38,19 @@ export default new Router({
         {
           path: 'contestsDynamic',
           name: 'ContestsDynamic',
-          component: ContestsDynamic
+          component: ContestsDynamic,
+          children: [
+            {
+              path: 'works',
+              name: 'ContestsDynamicWorks',
+              component: ContestsDynamicWorks
+            },
+            {
+              path: 'news',
+              name: 'ContestsDynamicNews',
+              component: ContestsDynamicNews
+            }
+          ]
         },
         {
           path: 'applyWay',

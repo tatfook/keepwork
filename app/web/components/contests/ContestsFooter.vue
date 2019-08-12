@@ -1,13 +1,16 @@
 <template>
   <div class="contests-footer">
-    <p class="contests-footer-hint">本次比赛的解释权归国际智能创意大赛组委会所有。</p>
+    <p class="contests-footer-hint">本次比赛的解释权归国际智能创意大赛组委会所有</p>
     <div class="contests-footer-simple-list">
       <ul class="footer-container-list">
         <li class="footer-container-list-item">
           <span class="footer-container-list-item-keepwork">Keepwork</span>
         </li>
         <li class="footer-container-list-item">
-          <a class="footer-container-list-item-icp" href="http://beian.miit.gov.cn/publish/query/indexFirst.action" target="_blank">粤ICP备14002196号-2 © Tatfook</a>
+          <span class="footer-container-list-item-keepwork">© Tatfook</span>
+        </li>
+        <li class="footer-container-list-item">
+          <a class="footer-container-list-item-icp" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030602002093" target="_blank">粤ICP备14002196号-2</a>
         </li>
         <li class="footer-container-list-item">
           <a class="footer-container-list-item-icp" href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">Powered by NPL</a>
@@ -114,7 +117,7 @@ export default {
 @media screen and (max-width: 768px) {
   .contests-footer {
     &-hint {
-      font-size: 14px;
+      font-size: 12px;
     }
     &-simple-list {
       .footer-container {

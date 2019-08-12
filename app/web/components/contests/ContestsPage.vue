@@ -18,6 +18,20 @@
       <div class="contests-page-top-tab">
         <div class="contests-page-top-tab-phone-wrap">
           <span v-for="(item, index) in tabData" :key="index" :class="['contests-page-top-tab-item', {'selected-item': index == currentSelected}]" @click="selectTabItem(index)">{{item.name}}</span>
+          <span :class="['contests-page-top-tab-item','contests-dynamic-menu-web-hidden', {'selected-item': 2 == currentSelected}]" @click="selectTabItem(2)">大赛动态</span>
+          <span :class="['contests-page-top-tab-item','contests-dynamic-menu-phone-hidden', {'selected-item': 2 == currentSelected}]" @click="selectTabItem(2)">
+            <el-dropdown @command="handleCommand" trigger="hover" placement="bottom">
+              <span class="el-dropdown-link" :class="['contests-page-top-tab-item', {'selected-item': 2 == currentSelected}]">
+                大赛动态
+              </span>
+              <el-dropdown-menu slot="dropdown" class="contests-dynamic-menu">
+                <el-dropdown-item command="a">精品赏析</el-dropdown-item>
+                <el-dropdown-item command="b">新闻动态</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </span>
+          <span :class="['contests-page-top-tab-item', {'selected-item': 3 == currentSelected}]" @click="selectTabItem(3)">报名方式</span>
+          <span :class="['contests-page-top-tab-item', {'selected-item': 4 == currentSelected}]" @click="selectTabItem(4)">了解Paracraft</span>
         </div>
       </div>
     </div>
@@ -46,16 +60,16 @@ export default {
         },
         {
           name: '大赛规则'
-        },
-        {
-          name: '大赛动态'
-        },
-        {
-          name: '报名方式'
-        },
-        {
-          name: '了解Paracraft'
         }
+        // {
+        //   name: '大赛动态'
+        // },
+        // {
+        //   name: '报名方式'
+        // },
+        // {
+        //   name: '了解Paracraft'
+        // }
       ],
       currentSelected: 0,
       topTextTimer: null,
@@ -74,12 +88,45 @@ export default {
   },
   mounted() {
     this.topTextAnimation()
-    this.selectTabItem(this.currentSelected)
+    this.highlightTab()
+  },
+  watch: {
+    $route(route) {
+      this.highlightTab()
+    }
   },
   methods: {
     ...mapActions({
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
+    highlightTab() {
+      switch (this.$route.name) {
+        case 'ContestsHomePage':
+          this.currentSelected = 0
+          break
+        case 'ContestsRules':
+          this.currentSelected = 1
+          break
+        case 'ContestsDynamic':
+        case 'ContestsDynamicWorks':
+        case 'ContestsDynamicNews':
+          this.currentSelected = 2
+          break
+        case 'ApplyWay':
+          this.currentSelected = 3
+          break
+        default:
+          this.currentSelected = 0
+          break
+      }
+    },
+    handleCommand(command) {
+      if (command == 'a') {
+        this.$router.push({ name: 'ContestsDynamicWorks' })
+      } else {
+        this.$router.push({ name: 'ContestsDynamicNews' })
+      }
+    },
     topTextAnimation() {
       this.topTextTimer = setInterval(() => {
         let leftLen = this.$refs['topHintText'].style['left'].replace(/px/, '')
@@ -109,7 +156,7 @@ export default {
           this.$router.push({ name: 'ContestsRules' })
           break
         case 2:
-          this.$router.push({ name: 'ContestsDynamic' })
+          this.$router.push({ name: 'ContestsDynamicWorks' })
           break
         case 3:
           this.$router.push({ name: 'ApplyWay' })
@@ -246,11 +293,14 @@ body {
         cursor: pointer;
         position: relative;
         z-index: 999;
+
         &.selected-item {
-          color: rgb(4, 62, 147);
+          // color: rgb(4, 62, 147);
           // background: url(../../assets/contests/head_selected.png) no-repeat
           //   center top;
-          border: 2px solid rgb(4, 62, 147);
+          // border: 2px solid rgb(4, 62, 147);
+          color: #fff;
+          background: rgb(4, 62, 147);
         }
       }
     }
@@ -262,6 +312,15 @@ body {
   }
   &-footer {
     display: table-row;
+  }
+}
+.contests-dynamic-menu {
+  &-web-hidden {
+    display: none;
+  }
+  .el-dropdown-menu__item {
+    padding: 0 40px;
+    font-size: 18px;
   }
 }
 @media screen and (max-width: 768px) {
@@ -296,19 +355,20 @@ body {
           width: auto;
           padding: 0 10px;
           font-size: 16px;
-          color: #212121;
-          opacity: 0.5;
+          color: #686565;
           height: 48px;
           line-height: 48px;
-          margin-top: 20px;
+          // margin-top: 20px;
           &.selected-item {
-            opacity: 1;
             color: #212121;
-            background: none;
+            color: #fff;
           }
         }
       }
     }
+  }
+  .contests-dynamic-menu-phone-hidden {
+    display: none;
   }
 }
 </style>
