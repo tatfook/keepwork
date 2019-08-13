@@ -35,6 +35,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import QuizEditor from '../admin/common/QuizEditor'
 export default {
@@ -58,7 +59,7 @@ export default {
           let { type } = quiz
           return {
             ...quiz,
-            answer: type != 2 ? quiz.options[0].value : ''
+            answer: type == 0 ? quiz.options[0].value : type == 1 ? [] : ''
           }
         })
       : this.isEditMode
