@@ -15,6 +15,7 @@
     <el-form-item prop="password">
       <el-input type="password" v-model.trim="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
     </el-form-item>
+    <h3 class="register-title">实名认证（推荐）</h3>
     <el-form-item prop="phoneNumber">
       <el-input v-model.trim="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
     </el-form-item>
@@ -53,6 +54,14 @@ export default {
     let validateUsername = (rule, value, callback) => {
       if (/^[0-9]/.test(value)) {
         callback(new Error(this.$t('common.usernameCannotWithNumber')))
+      } else {
+        callback()
+      }
+    }
+    let validateAuthCode = (rule, value, callback) => {
+      let { phoneNumber } = this.ruleForm
+      if (phoneNumber && !value) {
+        callback(new Error(this.$t('user.inputVerificationCode')))
       } else {
         callback()
       }
@@ -103,7 +112,6 @@ export default {
         ],
         phoneNumber: [
           {
-            required: true,
             message: this.$t('user.inputPhoneNumber'),
             trigger: 'blur'
           },
@@ -111,8 +119,7 @@ export default {
         ],
         authCode: [
           {
-            required: true,
-            message: this.$t('user.inputVerificationCode'),
+            validator: validateAuthCode,
             trigger: 'blur'
           }
         ]
@@ -173,11 +180,12 @@ export default {
       if (this.usernameError) return
       this.$refs[formName].validate(async valid => {
         if (valid && !this.usernameError) {
+          let { username, password, phoneNumber, authCode } = this.ruleForm
           let payload = {
-            username: this.ruleForm.username.toLowerCase(),
-            password: this.ruleForm.password.toLowerCase(),
-            cellphone: this.ruleForm.phoneNumber,
-            captcha: this.ruleForm.authCode
+            username: username.toLowerCase(),
+            password: password.toLowerCase(),
+            cellphone: phoneNumber ? phoneNumber : null,
+            captcha: phoneNumber ? authCode : null
           }
           this.registerLoading = true
           await this.userRegister(payload)
@@ -201,7 +209,10 @@ export default {
               } else if (e.response.data.code == 2) {
                 this.showMessage('error', this.$t('common.notValidAccount'))
               } else if (e.response.data.code == 8) {
-                this.showMessage('error', this.$t('common.containsSensitiveWords'))
+                this.showMessage(
+                  'error',
+                  this.$t('common.containsSensitiveWords')
+                )
               } else {
                 this.showMessage('error', this.$t('common.registerFailed'))
               }
@@ -262,7 +273,7 @@ export default {
       padding: 0;
     }
     max-width: 352px;
-    padding: 40px 0 10px 0;
+    padding: 1px 0 10px 0;
   }
   &-form {
     max-width: 352px;
@@ -273,7 +284,7 @@ export default {
     box-sizing: border-box;
     .register-title {
       padding: 20px 0 0;
-      margin: 0 auto 30px;
+      margin: 32px 0 20px 0;
       font-size: 18px;
       color: #303133;
     }
