@@ -103,6 +103,12 @@ const actions = {
       await dispatch('gitlab/createFile', { path: filePath, content, refreshRepositoryTree: false }, { root: true })
     }
   },
+  async getSvgCaptcha(context) {
+    return await keepwork.keepworks.getSvgCaptcha()
+  },
+  async verifySvgCaptcha(context, { key, captcha }) {
+    return await keepwork.keepworks.verifySvgCaptcha({ key, captcha })
+  },
   async register({ dispatch }, payload) {
     let registerInfo = await keepwork.user.register(payload)
     let { username, password } = payload

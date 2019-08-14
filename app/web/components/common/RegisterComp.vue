@@ -15,6 +15,16 @@
     <el-form-item prop="password">
       <el-input type="password" v-model.trim="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
     </el-form-item>
+    <el-form-item prop="svgCaptcha">
+      <el-row class="send-auth">
+        <el-col class="send-auth-code">
+          <el-input v-model.trim="ruleForm.svgCaptcha" placeholder="请输入验证码"></el-input>
+        </el-col>
+        <el-col class="send-auth-send-code">
+          <div v-loading="isSvgCaptchaLoading" v-html="captchaSvg.captcha" @click="changeSvgCaptcha"></div>
+        </el-col>
+      </el-row>
+    </el-form-item>
     <h3 class="register-title">实名认证（推荐）</h3>
     <el-form-item prop="phoneNumber">
       <el-input v-model.trim="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
@@ -50,6 +60,9 @@ export default {
   props: {
     show: Boolean
   },
+  mounted() {
+    this.changeSvgCaptcha()
+  },
   data() {
     let validateUsername = (rule, value, callback) => {
       if (/^[0-9]/.test(value)) {
@@ -66,7 +79,17 @@ export default {
         callback()
       }
     }
+    let validateSvgCaptcha = async (rule, value, callback) => {
+      let isSvgCaptchaCorrect = await this.verifySvgCaptcha()
+      if (!isSvgCaptchaCorrect) {
+        callback(new Error('图形验证码错误'))
+      } else {
+        callback()
+      }
+    }
     return {
+      captchaSvg: {},
+      isSvgCaptchaLoading: false,
       usernameError: '',
       visible: false,
       envIsForDevelopment: process.env.NODE_ENV === 'development',
@@ -79,6 +102,7 @@ export default {
       smsId: '',
       checkedAgreement: false,
       ruleForm: {
+        svgCaptcha: '',
         username: '',
         password: '',
         phoneNumber: '',
@@ -110,6 +134,17 @@ export default {
             message: this.$t('common.maxPassword')
           }
         ],
+        svgCaptcha: [
+          {
+            required: true,
+            message: this.$t('user.inputVerificationCode'),
+            trigger: 'blur'
+          },
+          {
+            validator: validateSvgCaptcha,
+            trigger: 'blur'
+          }
+        ],
         phoneNumber: [
           {
             message: this.$t('user.inputPhoneNumber'),
@@ -133,12 +168,19 @@ export default {
   },
   methods: {
     ...mapActions({
+      getSvgCaptcha: 'user/getSvgCaptcha',
+      userVerifySvgCaptcha: 'user/verifySvgCaptcha',
       userLogin: 'user/login',
       userThirdLogin: 'user/thirdLogin',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       userRegister: 'user/register',
       verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
+    async changeSvgCaptcha() {
+      this.isSvgCaptchaLoading = true
+      this.captchaSvg = await this.getSvgCaptcha()
+      this.isSvgCaptchaLoading = false
+    },
     handleClose() {
       this.$emit('close')
     },
@@ -175,6 +217,12 @@ export default {
         .catch(e => {
           this.usernameError = ''
         })
+    },
+    async verifySvgCaptcha() {
+      return await this.userVerifySvgCaptcha({
+        key: this.captchaSvg.key,
+        captcha: this.ruleForm.svgCaptcha
+      })
     },
     async register(formName) {
       if (this.usernameError) return
@@ -392,6 +440,14 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
+    }
+    svg {
+      height: 40px;
+      background-color: #e9f4ff;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
     }
   }
 }
