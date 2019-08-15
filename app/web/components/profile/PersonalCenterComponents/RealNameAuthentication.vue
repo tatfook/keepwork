@@ -2,13 +2,13 @@
   <div class="real-name-auth">
     <div class="real-name-auth-title">{{$t('common.realNameAuthentication')}}</div>
     <div class="real-name-auth-content">
-      <el-form v-if="hasVerified" :label-width="localeLableWidth">
+      <el-form v-if="isRealNamed" :label-width="localeLableWidth">
         <el-form-item :label='$t("user.certificationStatus")' class="real-name-status">
           <span>{{$t('user.certified')}}<i class="iconfont icon-yanzhengma"></i></span>
         </el-form-item>
         <el-row>
           <el-form-item :label='$t("user.certifiedPhoneNumber")'>
-            <span>{{verifiedPhoneNumber}}</span>
+            <span>{{userRealname}}</span>
           </el-form-item>
         </el-row>
       </el-form>
@@ -21,7 +21,7 @@
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { locale } from '@/lib/utils/i18n'
-import RealName from '../common/RealName'
+import RealName from '@/components/common/RealName'
 
 export default {
   name: 'realNameAuthentication',
@@ -33,14 +33,9 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       userRealname: 'user/realname'
     }),
-    hasVerified() {
-      return Boolean(this.userRealname)
-    },
-    verifiedPhoneNumber() {
-      return this.userRealname
-    },
     localeLableWidth() {
       return locale === 'en-US' ? '190px' : '110px'
     }

@@ -12,6 +12,7 @@ import ThemeHelper from '@/lib/theme'
 
 const getters = {
   isShowLoginDialog: state => state.isShowLoginDialog,
+  isShowRealName: state => state.isShowRealName,
   tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
   token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
@@ -35,6 +36,7 @@ const getters = {
   userId: (state, { profile: { id: userId } }) => userId,
   vipInfo: (state, { profile: { vipInfo } }) => vipInfo,
   realname: (state, { profile }) => _.get(profile, 'realname', {}),
+  isRealNamed: (state, { realname }) => Boolean(realname),
   cellphone: (state, { profile }) => _.get(profile, 'cellphone', ''),
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,

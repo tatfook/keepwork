@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="real-name" :visible.sync="isRealNameVisible" width="352px" :before-close="handleClose">
+  <el-dialog class="real-name" :visible.sync="isShowRealName" width="352px" :before-close="handleClose">
     <div class="real-name-title">实名认证</div>
     <div class="real-name-title">您的账号尚未进行实名认证，部分功能将会受限：</div>
     <el-form ref="realnameForm" :rules="phoneNumberRules" :model="realNameData" v-loading="isLoading">
@@ -27,12 +27,6 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'RealName',
-  props: {
-    isRealNameVisible: {
-      type: Boolean,
-      required: true
-    }
-  },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
       if (!/^1\d{10}$/.test(value)) {
@@ -75,6 +69,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isShowRealName: 'user/isShowRealName',
       authCodeInfo: 'user/authCodeInfo',
       sendCodeInfo: 'user/sendCodeInfo'
     }),
@@ -84,11 +79,12 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
     handleClose() {
-      this.$emit('close')
+      this.toggleRealName(false)
     },
     showMessage(type, message) {
       this.$message({ message, type })

@@ -10,6 +10,7 @@
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
+    <real-name />
   </div>
 </template>
 
@@ -38,6 +39,7 @@ import '@/components/common/thirdAuth'
 import messageModule from '@/store/message'
 import { socket, socketMixin } from '@/socket'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -94,6 +96,7 @@ export default {
     await this.loadProfilePresets()
   },
   components: {
+    RealName,
     LoginDialog,
     CommonHeader,
     PerfectCommonFooter

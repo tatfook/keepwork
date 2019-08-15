@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   name: 'UserExperiences',
@@ -94,6 +94,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isRealNamed: 'user/isRealNamed'
+    }),
     isEditMode() {
       return !_.isUndefined(this.editingIndex)
     },
@@ -125,9 +128,13 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     showAddingDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isAddingDialogVisible = true
       this.updatingExperiences = _.cloneDeep(this.userExperiences)
     },

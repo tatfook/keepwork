@@ -12,6 +12,7 @@ import siteContent from '@/assets/source/site.md'
 
 const {
   TOGGLE_LOGIN_DIALOG,
+  TOGGLE_REAL_NAME,
   LOGIN_SUCCESS,
   LOGOUT,
   GET_PROFILE_SUCCESS,
@@ -64,8 +65,11 @@ const USER_PROFILE_PAGES_CONTENTS = [
 ]
 
 const actions = {
-  async toggleLoginDialog({ commit }, status) {
+  toggleLoginDialog({ commit }, status) {
     commit(TOGGLE_LOGIN_DIALOG, status)
+  },
+  toggleRealName({ commit }, status) {
+    commit(TOGGLE_REAL_NAME, status)
   },
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
