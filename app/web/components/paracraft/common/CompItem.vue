@@ -2,7 +2,7 @@
   <div class="comp-item">
     <div class="comp-item-cover" :style="{background:bgColor}">
       <span class="comp-item-badge">{{compDetail.formatedId}}</span>
-      <img class="comp-item-preview" :src="compDetail.gifUrl" alt="">
+      <img class="comp-item-preview" :src="compressedCover" alt="">
       <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
     <div class="comp-item-info">
@@ -64,6 +64,10 @@ export default {
     },
     previewUrl() {
       return _.get(this.compDetail, 'previewUrl')
+    },
+    compressedCover() {
+      let gifUrl = _.get(this.compDetail, 'gifUrl')
+      return gifUrl + '?imageView2/5/w/250/h/128'
     }
   },
   methods: {
