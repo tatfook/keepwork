@@ -1,14 +1,10 @@
 <template>
   <div class="comp-lib" v-loading="isLoading">
-    <el-row type="flex" class="comp-lib-header" align="middle">
-      <el-col class="comp-lib-header-left">元件库</el-col>
-      <el-col class="comp-lib-header-right">
-        <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent" clearable @blur="search" @keyup.enter.native="search">
-          <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
-        </el-input>
-        <i class="el-icon-close" @click="closeCompsLib"></i>
-      </el-col>
-    </el-row>
+    <div class="comp-lib-header">
+      <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent" clearable @blur="search" @keyup.enter.native="search">
+        <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
+      </el-input>
+    </div>
     <el-row type="flex" class="comp-lib-main">
       <el-col class="comp-lib-sidebar">
         <el-tree :data="compsClassList" node-key="id" :props="defaultProps" :indent="12" @node-click="handleNodeClick">
@@ -108,8 +104,8 @@ export default {
           }) || []
     },
     compsListSearched() {
-      return _.filter(this.compsList, ({ id, name }) => {
-        return (id + name).indexOf(this.searchWord) >= 0
+      return _.filter(this.compsList, ({ formatedId, name }) => {
+        return (formatedId + name).indexOf(this.searchWord) >= 0
       })
     }
   },
@@ -118,9 +114,6 @@ export default {
       getSystemClassifies: 'paracraft/getSystemClassifies',
       getSystemComps: 'paracraft/getSystemComps'
     }),
-    closeCompsLib() {
-      alert('closeCompsLib')
-    },
     handleNodeClick(data) {
       if (!data.children) {
         this.activeClassId = data.id
@@ -148,15 +141,10 @@ export default {
     z-index: 1;
     background-color: #fff;
     border-bottom: 1px solid #e5e5e5;
-    height: 60px;
-    padding: 0 16px 0 36px;
+    padding: 14px 36px;
     font-weight: bold;
-    &-right {
-      white-space: nowrap;
-      width: auto;
-      .el-icon-search {
-        cursor: pointer;
-      }
+    .el-icon-search {
+      cursor: pointer;
     }
     .el-input {
       width: 240px;
