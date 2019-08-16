@@ -12,6 +12,7 @@
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
+    <real-name />
   </el-container>
 </template>
 
@@ -42,6 +43,7 @@ import LoginDialog from '@/components/common/LoginDialog'
 import messageModule from '@/store/message'
 import { socket, socketMixin } from '@/socket'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
@@ -106,6 +108,7 @@ export default {
     this.presetLoaded = true
   },
   components: {
+    RealName,
     CommonHeader,
     ToolHeader,
     PerfectCommonFooter,

@@ -25,7 +25,7 @@
 </template>
 <script>
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ProjectIntro',
   props: {
@@ -60,6 +60,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
+    }),
     originInfoSiteData() {
       return _.get(this.originProjectDetail, 'extra.infoSite', {
         displayName: '',
@@ -98,9 +101,13 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       pblUpdateProject: 'pbl/updateProject'
     }),
     showEditInfoSiteDataDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isEditInfoSiteDialogShow = true
     },
     async checkSensitive(checkedWords) {

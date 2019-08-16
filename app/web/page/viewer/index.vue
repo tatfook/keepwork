@@ -11,6 +11,10 @@
     <el-footer height='auto' class="index-page-footer" v-if="!isSystemCompShow.isSystemFooterHide">
       <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
+    <div @click.stop v-if="isShowLoginDialog">
+      <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
+    </div>
+    <real-name />
   </el-container>
 </template>
 
@@ -39,6 +43,8 @@ import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 import { socket, socketMixin } from '@/socket'
 import messageModule from '@/store/message'
 import ba from 'vue-ba'
+import LoginDialog from '@/components/common/LoginDialog'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
@@ -102,17 +108,23 @@ export default {
     $route: 'updateActivePage'
   },
   components: {
+    LoginDialog,
+    RealName,
     CommonHeader,
     ToolHeader,
     PerfectCommonFooter
   },
   methods: {
     ...mapActions({
+      toggleLoginDialog: 'user/toggleLoginDialog',
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
       gitlabGetRepositoryTree: 'gitlab/getRepositoryTree',
       getAllPersonalAndContributedSite: 'user/getAllPersonalAndContributedSite'
     }),
+    handleLoginDialogClose() {
+      this.toggleLoginDialog(false)
+    },
     async getPathWithPagename(path) {
       let originPath = path
       path = path
@@ -171,6 +183,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isShowLoginDialog: 'user/isShowLoginDialog',
       activePageUrl: 'activePageUrl',
       username: 'user/username',
       userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',

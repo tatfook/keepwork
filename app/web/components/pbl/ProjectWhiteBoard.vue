@@ -97,6 +97,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       issuesList: 'pbl/issuesList',
       projectDetail: 'pbl/projectDetail',
       isLogined: 'user/isLogined'
@@ -166,6 +167,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       getProjectIssues: 'pbl/getProjectIssues',
       getProjectMember: 'pbl/getProjectMember',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
@@ -190,6 +192,9 @@ export default {
     goNewIssue() {
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
       }
       if (!this.isProhibitEdit) {
         this.isNewIssueRendered = true
