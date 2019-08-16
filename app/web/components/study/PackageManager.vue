@@ -143,6 +143,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
       lessonSubjects: 'lesson/subjects',
@@ -193,6 +194,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonAuditPackage: 'lesson/teacher/auditPackage',
       lessonReleasePackage: 'lesson/teacher/releasePackage',
@@ -437,6 +439,9 @@ export default {
         })
     },
     toNewPackagePage() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.$router.push({ path: '/createPackage/newPackage' })
     },
     handleClose(continueFnNameAfterEnsure) {

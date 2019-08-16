@@ -78,6 +78,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userIsLogined: 'user/isLogined',
+      isRealNamed: 'user/isRealNamed',
       activePageCommentList: 'user/activePageCommentList'
     }),
     getStyleId() {
@@ -106,6 +108,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleLoginDialog: 'user/toggleLoginDialog',
+      toggleRealName: 'user/toggleRealName',
       setActiveProperty: 'setActiveProperty',
       setActivePropertyData: 'setActivePropertyData',
       getActivePageComments: 'user/getActivePageComments',
@@ -119,7 +123,12 @@ export default {
       if (typeof content === 'string') {
         checkContent = content.replace(/ /g, '')
       }
-
+      if (!this.userIsLogined) {
+        this.toggleLoginDialog(true)
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       if (!checkContent) {
         return false
       }

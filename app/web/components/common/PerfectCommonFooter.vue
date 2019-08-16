@@ -99,6 +99,7 @@
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import ComplainDialog from './ComplainDialog'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'PerfectCommonFooter',
@@ -114,12 +115,23 @@ export default {
       currentOrigin: window.location.origin
     }
   },
+  computed: {
+    ...mapGetters({
+      isRealNamed: 'user/isRealNamed'
+    })
+  },
   methods: {
+    ...mapActions({
+      toggleRealName: 'user/toggleRealName'
+    }),
     switchLanguage(language) {
       window.localStorage.setItem('keepwork-language-locale', language)
       window.location.reload()
     },
     showComplainDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isComplainDialogVisible = true
     },
     hideComplainDialog() {

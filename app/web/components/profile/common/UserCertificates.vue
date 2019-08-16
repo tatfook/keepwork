@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   name: 'UserCertificates',
@@ -77,6 +77,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isRealNamed: 'user/isRealNamed'
+    }),
     isEditMode() {
       return !_.isUndefined(this.editingIndex)
     },
@@ -89,18 +92,23 @@ export default {
       return _.cloneDeep(_.get(this.nowUserDetail, 'extra'))
     },
     updatingExtra() {
-      return _.mergeWith(this.originExtra, {
-        certificates: this.updatingCertifications
-      }, (objValue, srcValue) => {
-        return srcValue
-      })
+      return _.mergeWith(
+        this.originExtra,
+        {
+          certificates: this.updatingCertifications
+        },
+        (objValue, srcValue) => {
+          return srcValue
+        }
+      )
     },
     updatingUserInfo() {
       return _.mergeWith(
         this.nowUserDetail,
         {
           extra: this.updatingExtra
-        }, (objValue, srcValue) => {
+        },
+        (objValue, srcValue) => {
           return srcValue
         }
       )
@@ -108,9 +116,13 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     showAddingDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isAddingDialogVisible = true
       this.updatingCertifications = _.cloneDeep(this.userCertifications)
     },

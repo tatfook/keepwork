@@ -10,8 +10,8 @@
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose" :forceLogin="true"></login-dialog>
     </div>
+    <real-name />
   </div>
-
 </template>
 
 <script>
@@ -35,6 +35,7 @@ import LoginDialog from '@/components/common/LoginDialog'
 import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -91,6 +92,7 @@ export default {
     await this.loadAccountPresets()
   },
   components: {
+    RealName,
     LoginDialog,
     CommonHeader,
     PerfectCommonFooter

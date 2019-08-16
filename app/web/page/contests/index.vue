@@ -10,6 +10,7 @@
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
     <quick-to-top></quick-to-top>
+    <real-name />
   </div>
 </template>
 <script>
@@ -28,6 +29,7 @@ import { socket, socketMixin } from '@/socket'
 import LoginDialog from '@/components/common/LoginDialog'
 import QuickToTop from '@/components/common/QuickToTop'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -65,6 +67,7 @@ export default {
     })
   },
   components: {
+    RealName,
     CommonHeader,
     LoginDialog,
     QuickToTop

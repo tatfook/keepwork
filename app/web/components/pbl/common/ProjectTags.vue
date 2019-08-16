@@ -20,7 +20,7 @@
 </template>
 <script>
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ProjectTags',
   props: {
@@ -53,6 +53,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
+    }),
     isModified() {
       return this.formatTagsToBackEndStyle !== this.originTagsToBackageEndStyl
     },
@@ -70,6 +73,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       pblUpdateProject: 'pbl/updateProject'
     }),
     handleClose(tag) {
@@ -118,6 +122,9 @@ export default {
       this.inputValue = ''
     },
     async toggleIsTagEditing() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       if (this.isTagEditing) {
         if (!this.isModified) {
           this.isTagEditing = !this.isTagEditing

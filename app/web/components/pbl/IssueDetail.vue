@@ -211,6 +211,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       username: 'user/username',
       userId: 'user/userId',
       userProfile: 'user/profile',
@@ -243,6 +244,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       getProjectIssues: 'pbl/getProjectIssues',
       getProjectMember: 'pbl/getProjectMember',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
@@ -265,6 +267,9 @@ export default {
     editIssueTitle() {
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
       }
       if (this.isProhibitEdit) {
         return this.prohibitEditWarning()
@@ -314,6 +319,9 @@ export default {
     async updateTag() {
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
       }
       if (this.isProhibitEdit) {
         return this.prohibitEditWarning()
@@ -407,6 +415,9 @@ export default {
         .catch(err => console.error(err))
     },
     async createComment() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.createCommentLoading = true
       if (!this.myComment) {
         this.createCommentLoading = false
@@ -470,6 +481,9 @@ export default {
       this.getCommentsList()
     },
     async closeIssue() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       if (this.currIssue.state == 0) {
         await this.updateIssueItem({ state: 1 })
         this.handleClose()
@@ -490,6 +504,9 @@ export default {
     async handleCommand(userId) {
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
       }
       if (this.isProhibitEdit) {
         return this.prohibitEditWarning()

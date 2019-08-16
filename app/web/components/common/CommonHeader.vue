@@ -69,8 +69,12 @@
             <span class="hidden-xs-only">{{$t('common.tools')}}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="/ed" target="_blank"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</a></el-dropdown-item>
-            <el-dropdown-item><a href="#" @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</a></el-dropdown-item>
+            <el-dropdown-item>
+              <span @click="toEditPage"><i class="iconfont icon-brush"></i>{{$t('common.websiteEditor')}}</span>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <span @click.stop.prevent="openSkyDriveManagerDialog"><i class="iconfont icon-save3"></i>{{$t('common.myWebDisk')}}</span>
+            </el-dropdown-item>
             <el-dropdown-item><a href="http://paracraft.keepwork.com/download?lang=zh" target="_blank"><i class="iconfont icon-video2"></i>{{$t('common.paracraft')}}</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -156,6 +160,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       userProfile: 'user/profile',
       userIsLogined: 'user/isLogined',
       username: 'user/username',
@@ -219,10 +224,17 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       userGetProfile: 'user/getProfile',
       userLogout: 'user/logout',
       loadMessages: 'message/loadMessages'
     }),
+    toEditPage() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
+      window.open('/ed', '_blank')
+    },
     async initScroll() {
       this.$nextTick(() => {
         this.msgScroll = document.querySelector('.user-message-main')
@@ -254,9 +266,7 @@ export default {
       const msgIndex =
         _.findIndex(this.allMessages, item => item.id === id) || 1
       const msgPageIndex = _.ceil(_.divide(msgIndex + 1, this.perPage))
-      const msgUrl = `${
-        window.location.origin
-      }/msg?id=${id}&page=${msgPageIndex}`
+      const msgUrl = `${window.location.origin}/msg?id=${id}&page=${msgPageIndex}`
       window.location.href = msgUrl
     },
     checkCurrentTab() {
@@ -303,9 +313,7 @@ export default {
       }
     },
     goUserProfilePage() {
-      return (window.location.href = `${this.locationOrigin}/u/${
-        this.username
-      }`)
+      return (window.location.href = `${this.locationOrigin}/u/${this.username}`)
     },
     goPersonalCenter() {
       this.isPersonalCenterShow = true
@@ -314,6 +322,9 @@ export default {
       this.isPersonalCenterShow = false
     },
     openSkyDriveManagerDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isSkyDriveManagerDialogShow = true
     },
     closeSkyDriveManagerDialog({ file, url }) {
@@ -645,6 +656,12 @@ export default {
 .el-dropdown-menu__item a {
   padding: 0 20px;
   width: 100%;
+}
+.el-dropdown-menu__item span {
+  display: inline-block;
+  padding: 0 20px;
+  width: 100%;
+  cursor: pointer;
 }
 .greeting {
   padding: 0 20px;

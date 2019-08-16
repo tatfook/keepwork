@@ -67,6 +67,7 @@ export default {
       pblProjectCommentList: 'pbl/projectCommentList',
       userProfile: 'user/profile',
       loginUserId: 'user/userId',
+      isRealNamed: 'user/isRealNamed',
       isLogined: 'user/isLogined'
     }),
     projectCommentList() {
@@ -78,6 +79,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       pblGetComments: 'pbl/getComments',
       pblCreateComment: 'pbl/createComment',
       pblDeleteComment: 'pbl/deleteComment',
@@ -116,6 +118,9 @@ export default {
     async sendComment() {
       if (!this.isLogined) {
         return this.toLogin()
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
       }
       this.isAddingComment = true
       let sensitiveResult = await checkSensitiveWords({

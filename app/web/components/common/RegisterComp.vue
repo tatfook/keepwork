@@ -1,53 +1,68 @@
 <template>
-  <el-form class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
-    <h3 class="register-title">{{$t('common.register')}}</h3>
-    <el-form-item prop="username" :error="usernameError">
-      <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
-        <el-input slot="reference" @focus="handleUsernameInputFocus" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
-        <div class="register-dialog-form-tip">
-          {{$t('common.accountNoChange')}}<br>
-          {{$t('common.useLettersOrNumber')}}<br>
-          {{$t('common.defaultAddress')}}<br>
-          <span class="defaultAddress">{{nowOrigin}}/{{ruleForm.username}}</span>
+  <div class="register-comp">
+    <account-encrypt :refreshAfterFinish="true" />
+    <el-form v-show="isRegisterDialogShow" class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
+      <h3 class="register-title">{{$t('common.register')}}</h3>
+      <el-form-item prop="username" :error="usernameError">
+        <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
+          <el-input slot="reference" @focus="handleUsernameInputFocus" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+          <div class="register-dialog-form-tip">
+            {{$t('common.accountNoChange')}}<br>
+            {{$t('common.useLettersOrNumber')}}<br>
+            {{$t('common.defaultAddress')}}<br>
+            <span class="defaultAddress">{{nowOrigin}}/{{ruleForm.username}}</span>
+          </div>
+        </el-popover>
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input type="password" v-model.trim="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
+      </el-form-item>
+      <el-form-item prop="svgCaptcha">
+        <el-row class="send-auth">
+          <el-col class="send-auth-code">
+            <el-input v-model.trim="ruleForm.svgCaptcha" placeholder="请输入验证码"></el-input>
+          </el-col>
+          <el-col class="send-auth-send-code">
+            <div v-loading="isSvgCaptchaLoading" v-html="captchaSvg.captcha" @click="changeSvgCaptcha"></div>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <h3 class="register-title">实名认证（推荐）</h3>
+      <el-form-item prop="phoneNumber">
+        <el-input v-model.trim="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
+      </el-form-item>
+      <el-form-item prop="authCode">
+        <el-row class="send-auth">
+          <el-col class="send-auth-code">
+            <el-input v-model.trim="ruleForm.authCode" :placeholder="$t('common.authCode')"></el-input>
+          </el-col>
+          <el-col class="send-auth-send-code">
+            <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !this.isCellphoneVerify" type="primary" class="send-code-button" @click.stop="sendAuthCode">
+              <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
+              <span v-else>{{$t('user.sendCodes')}}</span>
+            </el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-form-item>
+        <div class="agreement">
+          <el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox>
         </div>
-      </el-popover>
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input type="password" v-model.trim="ruleForm.password" :placeholder="$t('common.password')" @keyup.enter.native="register('ruleForm')"></el-input>
-    </el-form-item>
-    <el-form-item prop="phoneNumber">
-      <el-input v-model.trim="ruleForm.phoneNumber" :placeholder="$t('user.inputPhoneNumber')"></el-input>
-    </el-form-item>
-    <el-form-item prop="authCode">
-      <el-row class="send-auth">
-        <el-col class="send-auth-code">
-          <el-input v-model.trim="ruleForm.authCode" :placeholder="$t('common.authCode')"></el-input>
-        </el-col>
-        <el-col class="send-auth-send-code">
-          <el-button :loading="sendCodeLoading" :disabled="sendCodeDisabled || !this.isCellphoneVerify" type="primary" class="send-code-button" @click.stop="sendAuthCode">
-            <span v-if="sendCodeDisabled">{{$t('user.resend')}}({{count}}s)</span>
-            <span v-else>{{$t('user.sendCodes')}}</span>
-          </el-button>
-        </el-col>
-      </el-row>
-    </el-form-item>
-    <el-form-item>
-      <div class="agreement">
-        <el-checkbox v-model="checkedAgreement">{{$t('common.regardAsAgreed')}}<a href="/agreement" target="_blank">{{$t('common.userAgreement')}}</a></el-checkbox>
-      </div>
-      <el-button class="login-btn" :disabled="!checkedAgreement" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
-    </el-form-item>
-  </el-form>
+        <el-button class="login-btn" :disabled="!checkedAgreement" :loading='registerLoading' type="primary" @click="register('ruleForm')">{{$t('common.register')}}</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork } from '@/api'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
+import AccountEncrypt from '@/components/common/AccountEncrypt'
 
 export default {
   name: 'RegisterDialog',
-  props: {
-    show: Boolean
+  mounted() {
+    this.changeSvgCaptcha()
   },
   data() {
     let validateUsername = (rule, value, callback) => {
@@ -57,7 +72,26 @@ export default {
         callback()
       }
     }
+    let validateAuthCode = (rule, value, callback) => {
+      let { phoneNumber } = this.ruleForm
+      if (phoneNumber && !value) {
+        callback(new Error(this.$t('user.inputVerificationCode')))
+      } else {
+        callback()
+      }
+    }
+    let validateSvgCaptcha = async (rule, value, callback) => {
+      let isSvgCaptchaCorrect = await this.verifySvgCaptcha()
+      if (!isSvgCaptchaCorrect) {
+        callback(new Error('图形验证码错误'))
+      } else {
+        callback()
+      }
+    }
     return {
+      isRegisterDialogShow: true,
+      captchaSvg: {},
+      isSvgCaptchaLoading: false,
       usernameError: '',
       visible: false,
       envIsForDevelopment: process.env.NODE_ENV === 'development',
@@ -70,6 +104,7 @@ export default {
       smsId: '',
       checkedAgreement: false,
       ruleForm: {
+        svgCaptcha: '',
         username: '',
         password: '',
         phoneNumber: '',
@@ -101,9 +136,19 @@ export default {
             message: this.$t('common.maxPassword')
           }
         ],
-        phoneNumber: [
+        svgCaptcha: [
           {
             required: true,
+            message: this.$t('user.inputVerificationCode'),
+            trigger: 'blur'
+          },
+          {
+            validator: validateSvgCaptcha,
+            trigger: 'blur'
+          }
+        ],
+        phoneNumber: [
+          {
             message: this.$t('user.inputPhoneNumber'),
             trigger: 'blur'
           },
@@ -111,8 +156,7 @@ export default {
         ],
         authCode: [
           {
-            required: true,
-            message: this.$t('user.inputVerificationCode'),
+            validator: validateAuthCode,
             trigger: 'blur'
           }
         ]
@@ -126,14 +170,19 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleAccountEncrypt: 'user/toggleAccountEncrypt',
+      getSvgCaptcha: 'user/getSvgCaptcha',
+      userVerifySvgCaptcha: 'user/verifySvgCaptcha',
       userLogin: 'user/login',
       userThirdLogin: 'user/thirdLogin',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       userRegister: 'user/register',
       verifyCellphoneTwo: 'user/verifyCellphoneTwo'
     }),
-    handleClose() {
-      this.$emit('close')
+    async changeSvgCaptcha() {
+      this.isSvgCaptchaLoading = true
+      this.captchaSvg = await this.getSvgCaptcha()
+      this.isSvgCaptchaLoading = false
     },
     showMessage(type, message) {
       this.$message({
@@ -169,26 +218,32 @@ export default {
           this.usernameError = ''
         })
     },
+    async verifySvgCaptcha() {
+      return await this.userVerifySvgCaptcha({
+        key: this.captchaSvg.key,
+        captcha: this.ruleForm.svgCaptcha
+      })
+    },
+    showAccountEncrypt() {
+      this.isRegisterDialogShow = false
+      this.toggleAccountEncrypt(true)
+    },
     async register(formName) {
       if (this.usernameError) return
       this.$refs[formName].validate(async valid => {
         if (valid && !this.usernameError) {
+          let { username, password, phoneNumber, authCode } = this.ruleForm
           let payload = {
-            username: this.ruleForm.username.toLowerCase(),
-            password: this.ruleForm.password.toLowerCase(),
-            cellphone: this.ruleForm.phoneNumber,
-            captcha: this.ruleForm.authCode
+            username: username.toLowerCase(),
+            password: password.toLowerCase(),
+            cellphone: phoneNumber ? phoneNumber : null,
+            captcha: phoneNumber ? authCode : null
           }
           this.registerLoading = true
           await this.userRegister(payload)
             .then(res => {
               this.registerLoading = false
-              this.handleClose()
-              if (this.$route.name == 'Register') {
-                window.location.href = '/'
-              } else {
-                window.location.reload()
-              }
+              this.showAccountEncrypt()
             })
             .catch(e => {
               if (e.response.data.code == 4) {
@@ -201,7 +256,10 @@ export default {
               } else if (e.response.data.code == 2) {
                 this.showMessage('error', this.$t('common.notValidAccount'))
               } else if (e.response.data.code == 8) {
-                this.showMessage('error', this.$t('common.containsSensitiveWords'))
+                this.showMessage(
+                  'error',
+                  this.$t('common.containsSensitiveWords')
+                )
               } else {
                 this.showMessage('error', this.$t('common.registerFailed'))
               }
@@ -244,6 +302,9 @@ export default {
         }
       }
     }
+  },
+  components: {
+    AccountEncrypt
   }
 }
 </script>
@@ -262,7 +323,7 @@ export default {
       padding: 0;
     }
     max-width: 352px;
-    padding: 40px 0 10px 0;
+    padding: 1px 0 10px 0;
   }
   &-form {
     max-width: 352px;
@@ -273,7 +334,7 @@ export default {
     box-sizing: border-box;
     .register-title {
       padding: 20px 0 0;
-      margin: 0 auto 30px;
+      margin: 32px 0 20px 0;
       font-size: 18px;
       color: #303133;
     }
@@ -381,6 +442,14 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
+    }
+    svg {
+      height: 40px;
+      background-color: #e9f4ff;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
     }
   }
 }
