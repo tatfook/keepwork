@@ -45,7 +45,6 @@ export default {
     let self = this
     this.$nextTick(() => {
       this.bindFormRef = self.$refs['bindFormRef']
-      console.log(this.bindFormRef)
     })
   },
   data() {
@@ -169,6 +168,16 @@ export default {
   components: {
     GetCaptcha,
     VerifyCaptcha
+  },
+  watch: {
+    isShowAccountEncrypt(isShow) {
+      let self = this
+      if (isShow && !this.bindFormRef) {
+        this.$nextTick(() => {
+          this.bindFormRef = self.$refs['bindFormRef']
+        })
+      }
+    }
   }
 }
 </script>
