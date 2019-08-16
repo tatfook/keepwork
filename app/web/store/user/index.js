@@ -5,6 +5,7 @@ import mutations from './mutations'
 const state = () => ({
   isShowLoginDialog: false,
   isShowRealName: false,
+  isShowAccountEncrypt: false,
   profile: {},
   website: {},
   userSitePrivilege: {},

@@ -13,6 +13,7 @@ import siteContent from '@/assets/source/site.md'
 const {
   TOGGLE_LOGIN_DIALOG,
   TOGGLE_REAL_NAME,
+  TOGGLE_ACCOUNT_ENCRYPT,
   LOGIN_SUCCESS,
   LOGOUT,
   GET_PROFILE_SUCCESS,
@@ -70,6 +71,9 @@ const actions = {
   },
   toggleRealName({ commit }, status) {
     commit(TOGGLE_REAL_NAME, status)
+  },
+  toggleAccountEncrypt({ commit }, status) {
+    commit(TOGGLE_ACCOUNT_ENCRYPT, status)
   },
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)

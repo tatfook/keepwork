@@ -149,6 +149,8 @@ export default {
           await this.userLogin(payload)
             .then(res => {
               this.$emit('close')
+              let { cellphone, email } = res
+              if (!cellphone && !email) return
               if (this.$route.name == 'Login') {
                 window.location.href = '/'
               } else {

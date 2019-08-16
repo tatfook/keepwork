@@ -3,6 +3,7 @@ import Vue from 'vue'
 
 const TOGGLE_LOGIN_DIALOG = 'TOGGLE_LOGIN_DIALOG'
 const TOGGLE_REAL_NAME = 'TOGGLE_REAL_NAME'
+const TOGGLE_ACCOUNT_ENCRYPT = 'TOGGLE_ACCOUNT_ENCRYPT'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGOUT = 'LOGOUT'
 const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS'
@@ -41,6 +42,7 @@ const SET_AUTH_CODE_INFO = 'SET_AUTH_CODE_INFO'
 export const props = {
   TOGGLE_LOGIN_DIALOG,
   TOGGLE_REAL_NAME,
+  TOGGLE_ACCOUNT_ENCRYPT,
   LOGIN_SUCCESS,
   LOGOUT,
   GET_PROFILE_SUCCESS,
@@ -87,6 +89,9 @@ const mutations = {
   },
   [TOGGLE_REAL_NAME](state, status) {
     Vue.set(state, 'isShowRealName', status)
+  },
+  [TOGGLE_ACCOUNT_ENCRYPT](state, status) {
+    Vue.set(state, 'isShowAccountEncrypt', status)
   },
   [LOGIN_SUCCESS](state, profile) {
     // Vue.set(state, 'profile', { ...profile, token })

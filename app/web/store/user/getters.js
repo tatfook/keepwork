@@ -13,6 +13,7 @@ import ThemeHelper from '@/lib/theme'
 const getters = {
   isShowLoginDialog: state => state.isShowLoginDialog,
   isShowRealName: state => state.isShowRealName,
+  isShowAccountEncrypt: state => state.isShowAccountEncrypt,
   tokenUpdateAt: state => state.tokenUpdateAt, // to prevent the cache on token getting
   getToken: state => () => Cookies.get('token'),
   token: (state, { tokenUpdateAt, getToken }) => getToken(tokenUpdateAt),
