@@ -96,6 +96,7 @@ export default new Router({
       name: 'CreatePackage',
       component: CreatePackage,
       redirect: { name: 'LessonManager' },
+      meta: { requireAuth: true },
       children: [
         {
           path: 'lessonManager',
