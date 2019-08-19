@@ -1553,7 +1553,9 @@
     "CommentsLabel": "评论",
     "commentAfterLogin": "登录后才能评论",
     "deleteProject": "删除项目",
-    "createByAt": "创建于"
+    "createByAt": "创建于",
+    "verifiedTips": "很抱歉的通知您:",
+    "verifiedContent": "访问内容的拥有者并未进行实名认真，内容暂时无法访问。"
   },
   "footer": {
     "lettersTo": "教育理念",
