@@ -1,7 +1,7 @@
 <template>
   <div class="project-detail-page">
     <div v-if="isProjectExist && isLoginUserVisible">
-      <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner' :isProhibitView="isProhibitView" ></project-header>
+      <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner' :isProhibitView="isProhibitView"></project-header>
       <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner' :projectApplyState='projectApplyState' :isLoginUsercommentable='isLoginUsercommentable' :isCommentClosed='isCommentClosed' :isProjectStopRecruit='isProjectStopRecruit' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></router-view>
     </div>
     <div class="project-detail-page-not-found" v-if="!isProjectExist || !isLoginUserVisible">
@@ -110,7 +110,7 @@ export default {
       pblGetProjectDetail: 'pbl/getProjectDetail',
       getUserDetailByUserId: 'user/getUserDetailByUserId',
       getFavoriteState: 'pbl/getFavoriteState',
-      getStarState: 'pbl/getStarState',
+      getStarState: 'pbl/getStarState'
     }),
     async initProjectDetail() {
       this.isFirstGettingData = true
@@ -145,13 +145,17 @@ export default {
         this.getFavoriteState({ objectId, objectType }),
         this.getStarState({ projectId: objectId })
       ]
-      await Promise.all(
+      const [userInfo] = await Promise.all(
         _.map(promiseArray, promiseItem => {
-          return promiseItem.catch(error => {
+          return promiseItem
+          .catch(error => {
             return error
           })
         })
       )
+      if (!userInfo.isRealname) {
+        this.$router.push({ name: 'NotVerifiedPage'})
+      }
     }
   },
   components: {

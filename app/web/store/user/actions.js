@@ -156,6 +156,7 @@ const actions = {
     userDetail = await keepwork.user.getDetailById({ userId })
     let { username } = userDetail
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
+    return userDetail
   },
   async getUserDetailWithRankByUserIdOrUsername(context, { userId, username }) {
     let { commit } = context
