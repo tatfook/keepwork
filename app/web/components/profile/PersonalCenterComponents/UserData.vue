@@ -150,6 +150,9 @@ export default {
       return result && result.length > 0
     },
     showMediaSkyDriveDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isMediaSkyDriveDialogShow = true
     },
     async closeSkyDriveManagerDialog({ file, url }) {
