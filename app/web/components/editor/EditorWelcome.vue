@@ -23,7 +23,7 @@
 
 <script>
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import { mdToJson, jsonToMd } from '@/lib/mod/parser/mdParser/yaml'
 
@@ -37,7 +37,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      toggleRealName: 'user/toggleRealName'
+    }),
     openNewWebsiteDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isNewWebsiteDialogShow = true
     },
     closeNewWebsiteDialog() {
@@ -76,6 +82,7 @@ export default {
   },
   computed:{
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       recentOpenedList: 'recentOpenedList',
       showOpenedFiles: 'showOpenedFiles',
     }),

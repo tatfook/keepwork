@@ -17,7 +17,7 @@
     <div @click.stop v-if="showLoginDialog">
       <login-dialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose" />
     </div>
-    <real-name />
+    <real-name :isForce="true" />
   </el-container>
 </template>
 
@@ -135,6 +135,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       activePageInfo: 'activePageInfo',
       userIsLogined: 'user/isLogined',
       openedFiles: 'openedFiles'
@@ -145,6 +146,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       initSocket: 'initSocket',
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
@@ -155,6 +157,9 @@ export default {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       await this.getAllPersonalAndContributedSite({ useCache: false }).catch(
         err => {
           console.error(err)

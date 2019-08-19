@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="real-name" :visible.sync="isShowRealName" width="352px" :before-close="handleClose">
+  <el-dialog class="real-name" :visible.sync="isShowRealName" width="352px" :before-close="handleClose" :close-on-click-modal="!isForce" :show-close="!isForce">
     <div class="real-name-title">实名认证</div>
     <div class="real-name-title">您的账号尚未进行实名认证，部分功能将会受限：</div>
     <el-form ref="realnameForm" :rules="phoneNumberRules" :model="realNameData" v-loading="isLoading">
@@ -17,7 +17,7 @@
         </el-input>
       </el-form-item>
       <el-form-item class="real-name-operate">
-        <el-button size="medium" @click="handleClose">取消</el-button>
+        <el-button v-if="!isForce" size="medium" @click="handleClose">取消</el-button>
         <el-button type="primary" size="medium" @click="realNamePhoneNumber">确定</el-button>
       </el-form-item>
     </el-form>
@@ -27,6 +27,12 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'RealName',
+  props: {
+    isForce: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     let validatePhoneNumber = (rule, value, callback) => {
       if (!/^1\d{10}$/.test(value)) {
