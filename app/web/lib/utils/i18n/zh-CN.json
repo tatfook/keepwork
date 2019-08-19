@@ -1914,7 +1914,8 @@
     "haveExpired": "已到期",
     "contactUs": "如需咨询，请联系",
     "validity": "有效期",
-    "toExpire": "即将到期"
+    "toExpire": "即将到期",
+    "name": "名字"
   },
   "message": {
     "messageCenter": "消息中心",
