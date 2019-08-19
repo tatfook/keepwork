@@ -166,6 +166,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       userProfile: 'user/profile',
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonUserLessons: 'lesson/teacher/userLessons',
@@ -227,6 +228,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
@@ -310,6 +312,9 @@ export default {
       return this.isEditable(lessonDetail)
     },
     toNewLessonPage() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.$router.push({ path: '/createPackage/lesson/new' })
     },
     toEdit(lessonDetail) {

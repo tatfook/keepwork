@@ -97,6 +97,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       excellentProjects: 'pbl/excellentProjects',
       myProjects: 'pbl/myProjects',
       myContributeProjects: 'pbl/myContributeProjects',
@@ -136,6 +137,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       getExcellentProjects: 'pbl/getExcellentProjects',
       getMyAllProjects: 'pbl/getMyAllProjects',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
@@ -143,6 +145,9 @@ export default {
     createMyProject() {
       if (!this.isLogined) {
         return this.toggleLoginDialog(true)
+      }
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
       }
       window.location.href = '/pbl/project/new'
     },

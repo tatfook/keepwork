@@ -82,6 +82,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       pblProjectMemberList: 'pbl/projectMemberList'
     }),
     isEn() {
@@ -100,6 +101,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       getProjectIssues: 'pbl/getProjectIssues',
       getProjectMember: 'pbl/getProjectMember'
     }),
@@ -172,6 +174,9 @@ export default {
       }
     },
     async finishedCreateIssue() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.cretateIssueLoading = true
       const sensitiveResult = await checkSensitiveWords({checkedWords:[
         this.issueTitle,

@@ -1,10 +1,15 @@
 <template>
-  <el-dialog :visible.sync="show" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleClose">
-    <login @close='handleClose'/>
-  </el-dialog>
+  <div v-if="show">
+    <account-encrypt :refreshAfterFinish="true" />
+    <el-dialog :visible="isLoginShow" class="login-dialog" :class="{'force-login': forceLogin}" :before-close="handleLoginClose" append-to-body>
+      <login @close='handleLoginClose' />
+    </el-dialog>
+  </div>
 </template>
 <script>
+import AccountEncrypt from '@/components/common/AccountEncrypt'
 import Login from '@/components/common/LoginComp'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'LoginDialog',
@@ -16,20 +21,54 @@ export default {
       type: Boolean
     }
   },
+  mounted() {
+    this.isLoginShow = this.show
+  },
+  data() {
+    return {
+      // show: true,
+      isLoginShow: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/profile',
+      userIsLogined: 'user/isLogined'
+    })
+  },
   methods: {
+    ...mapActions({
+      toggleAccountEncrypt: 'user/toggleAccountEncrypt'
+    }),
     handleClose() {
       !this.forceLogin && this.$emit('close')
     },
+    handleLoginClose() {
+      let { cellphone, email } = this.userProfile
+      if (!this.userIsLogined) return this.handleClose()
+      if (!cellphone && !email) {
+        this.isLoginShow = false
+        this.toggleAccountEncrypt(true)
+      } else {
+        this.handleClose()
+      }
+    }
   },
   components: {
+    AccountEncrypt,
     Login
+  },
+  watch: {
+    show(isShow) {
+      if (isShow) this.isLoginShow = true
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .login-dialog {
-  .login-page{
+  .login-page {
     box-shadow: none;
     margin: 0;
     .login-title {
@@ -38,12 +77,12 @@ export default {
       font-size: 18px;
       color: #303133;
     }
-    .register-dialog-form{
-      .register-title{
+    .register-dialog-form {
+      .register-title {
         padding-top: 0;
       }
-    } 
-    .password-reset-form-title{
+    }
+    .password-reset-form-title {
       padding-top: 0;
     }
   }

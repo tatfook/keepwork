@@ -1,5 +1,8 @@
 <template>
-  <editor-viewport> </editor-viewport>
+  <div>
+    <editor-viewport> </editor-viewport>
+    <real-name />
+  </div>
 </template>
 
 <script>
@@ -19,6 +22,7 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import EditorViewport from '@/components/editor/EditorViewport'
 import '@/components/common/thirdAuth'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
@@ -43,9 +47,7 @@ const store = new Vuex.Store({
     editor: editorModule,
     pbl: pblModule
   },
-  plugins: [
-    transfer()
-  ]
+  plugins: [transfer()]
 })
 
 export default {
@@ -53,6 +55,7 @@ export default {
   store,
   i18n,
   components: {
+    RealName,
     EditorViewport
   }
 }

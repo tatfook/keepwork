@@ -17,6 +17,7 @@
     <div @click.stop v-if="showLoginDialog">
       <login-dialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose" />
     </div>
+    <real-name />
   </el-container>
 </template>
 
@@ -49,6 +50,7 @@ import PageViewer from '@/components/viewer/MdPageViewer'
 import LoginDialog from '@/components/common/LoginDialog'
 import EditorHeader from '@/components/editor/EditorHeader'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(fullscreen)
@@ -202,6 +204,7 @@ export default {
     }
   },
   components: {
+    RealName,
     PageViewer,
     EditorHeader,
     LoginDialog

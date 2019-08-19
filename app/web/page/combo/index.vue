@@ -1,5 +1,8 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <router-view></router-view>
+    <real-name />
+  </div>
 </template>
 
 <script>
@@ -18,6 +21,7 @@ import EditorViewport from '@/components/editor/EditorViewport'
 import ComboBoxView from '@/components/combo/ComboBoxView'
 import { transfer } from 'vuex-iframe-sync'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
@@ -40,9 +44,7 @@ const store = new Vuex.Store({
     editor: editorModule,
     combo: comboModule
   },
-  plugins: [
-    transfer()
-  ]
+  plugins: [transfer()]
 })
 
 export default {
@@ -51,6 +53,7 @@ export default {
   store,
   i18n,
   components: {
+    RealName,
     ComboBoxView
   }
 }
