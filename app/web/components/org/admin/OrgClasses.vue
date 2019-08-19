@@ -51,7 +51,7 @@ export default {
           text: this.$t('org.TeachersLabel')
         },
         {
-          pageNames: ['OrgStudentList', 'OrgNewStudent', 'OrgEditStudent'],
+          pageNames: ['OrgStudentList', 'OrgEditStudent'],
           indexPageName: 'OrgStudentList',
           text: this.$t('org.StudentsLabel')
         }
