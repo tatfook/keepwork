@@ -2,7 +2,7 @@
   "common": {
     "login": "登 录",
     "register": "注 册",
-    "account": "账户",
+    "account": "账号名",
     "existAccount": "用户名已存在",
     "notValidAccount": "用户名不合法",
     "usernameCannotWithNumber": "用户名不能以数字开头",
