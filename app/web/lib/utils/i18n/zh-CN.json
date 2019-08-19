@@ -1823,7 +1823,7 @@
     "addFirstClass": "立即创建",
     "noTeaches": "暂未添加教师信息，",
     "addTeachersImmediately": "立即添加",
-    "noStudents": "暂未添加学生信息，",
+    "noStudents": "暂未添加学生信息",
     "addStudentsImmediately": "立即添加",
     "usernameIsRequired": "请输入用户名",
     "pleaseSelectClasses": "请选择班级",
