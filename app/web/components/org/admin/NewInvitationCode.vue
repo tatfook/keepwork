@@ -9,19 +9,27 @@
       </div>
       <div class="new-invitation-code-top-operation">
         <el-button class="new-invitation-code-top-operation-button new-invitation-code-top-operation-button-export" @click="cancelCreateActiveCode()">{{$t('common.Cancel')}}</el-button>
-        <el-button :disabled="!codeAssociateInfo.quantity || !codeAssociateInfo.classId" type="primary" class="new-invitation-code-top-operation-button" @click="createActiveCode()">{{$t('common.Sure')}}</el-button>
+        <el-button :disabled="disabledCreate" type="primary" class="new-invitation-code-top-operation-button" @click="createActiveCode()">{{$t('common.Sure')}}</el-button>
       </div>
     </div>
     <div class="new-invitation-code-content">
-      <el-form ref="form" :model="codeAssociateInfo" :rules="codeAssociateInfoRules" label-width="80px" :hide-required-asterisk="true">
-        <el-form-item :label="$t('org.codeCount')" prop="quantity">
-          <el-input v-model="codeAssociateInfo.quantity" size="medium"></el-input>
-        </el-form-item>
+      <el-form ref="form" :model="codeAssociateInfo" :rules="codeAssociateInfoRules" label-width="120px" :hide-required-asterisk="true">
         <el-form-item :label="$t('org.classLabel')" prop="classId">
           <el-select v-model="codeAssociateInfo.classId" :placeholder="$t('org.pleaseSelect')" size="medium">
             <el-option v-for="(classItem, index) in orgClassesFilter" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
+        <el-radio class="new-invitation-code-content-radio" v-model="radioValue" label="1">
+          <el-form-item label="生成指定数量" prop="quantity">
+            <el-input type="number" placeholder="1 ~ 100之间" :disabled="radioValue !== '1'" v-model="codeAssociateInfo.quantity" size="medium"></el-input>
+          </el-form-item>
+        </el-radio>
+        <div></div>
+        <el-radio class="new-invitation-code-content-radio" v-model="radioValue" label="2">
+          <el-form-item label="输入学生姓名" prop="studentNames">
+            <el-input class="new-invitation-code-content-textarea" placeholder="每行一位" type="textarea" :autosize="{ minRows: 3, maxRows: 20 }" :disabled="radioValue !== '2'" v-model="codeAssociateInfo.studentNames" size="medium"></el-input>
+          </el-form-item>
+        </el-radio>
       </el-form>
     </div>
   </div>
@@ -32,15 +40,28 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'NewInvitationCode',
   data() {
+    const checkQuantity = (rule, value, callback) => {
+      if (this.radioValue === '1' && !value) {
+        return callback(new Error('请填写生成数量'))
+      }
+    }
+
+    const checkStudentName = (rule, value, callback) => {
+      if (this.radioValue === '2' && !value.trim()) {
+        callback(new Error('请填写学生姓名'))
+      }
+    }
+
     return {
+      radioValue: '1',
       codeAssociateInfo: {
-        quantity: 1,
-        classId: ''
+        quantity: '',
+        classId: '',
+        studentNames: ''
       },
       codeAssociateInfoRules: {
-        quantity: [
-          { required: true, message: '请填写生成数量', trigger: 'blur' }
-        ]
+        quantity: [{ validator: checkQuantity, trigger: 'blur' }],
+        studentNames: [{ validator: checkStudentName, trigger: 'blur' }]
       }
     }
   },
@@ -49,6 +70,20 @@ export default {
       currentOrg: 'org/currentOrg',
       getOrgClassesById: 'org/getOrgClassesById'
     }),
+    disabledCreate() {
+      if (this.radioValue === '1') {
+        return (
+          !this.codeAssociateInfo.quantity || !this.codeAssociateInfo.classId
+        )
+      }
+      if (this.radioValue === '2') {
+        return (
+          !this.codeAssociateInfo.studentNames.trim() ||
+          !this.codeAssociateInfo.classId
+        )
+      }
+      return true
+    },
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
@@ -140,6 +175,15 @@ export default {
           }
         }
       }
+    }
+    &-radio {
+      /deep/ .el-radio__input {
+        position: absolute;
+        top: 26px;
+      }
+    }
+    &-textarea {
+      width: 280px;
     }
   }
 }
