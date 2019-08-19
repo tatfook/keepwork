@@ -1924,7 +1924,8 @@
     "haveExpired": " have expired",
     "contactUs": "For more information, please contact us ",
     "validity": "validity",
-    "toExpire": "to expire"
+    "toExpire": "to expire",
+    "name": "name"
   },
   "message": {
     "messageCenter": "message center",
