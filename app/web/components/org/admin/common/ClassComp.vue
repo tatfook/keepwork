@@ -204,12 +204,12 @@ export default {
         this.classData.end = null
       } else {
         let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 1000
-        this.classData.end = endTime
+        this.classData.end = new Date(endTime)
       }
     },
     async save() {
       this.setSelectedPackages()
-      await this.setSelectedTime()
+      this.setSelectedTime()
       if (
         this.beginClassTime < this.startDate ||
         this.endClassTime > this.endDate ||
