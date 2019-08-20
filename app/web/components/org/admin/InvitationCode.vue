@@ -39,7 +39,7 @@
         <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
         <el-table-column :label="$t('org.activateTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
         <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
-        <el-table-column :label="$t('org.nameLabel')" width="125" prop="realname"></el-table-column>
+        <el-table-column :label="$t('org.nameLabel')" width="125"><template slot-scope="scope">{{scope.row.realname || scope.row.extra.name}}</template></el-table-column>
         <el-table-column :label="$t('org.classLabel')" width="" prop="lessonOrganizationClasses.name"></el-table-column>
       </el-table>
     </div>
@@ -57,6 +57,19 @@
       <div class="print-invitation-code-print-content">
         <div class="print-invitation-code-print-row" v-for="(item,index) in printCodeListDataRow" :key="index">
           <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key">
+            <div class="print-invitation-code-print-content-box-header">
+              <div class="header-left">
+                <div class="header-left-org">
+                  {{currentOrg.name}}
+                </div>
+                <div class="header-left-class">
+                  {{className}}
+                </div>
+              </div>
+              <div class="header-right">
+                {{i.realname || i.extra.name || ''}}
+              </div>
+            </div>
             <div class="print-invitation-code-print-content-box-top">
               <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key}}</p>
               <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
@@ -346,7 +359,7 @@ export default {
     margin: 40px;
   }
   &-table {
-    margin:0 24px;
+    margin: 0 24px;
   }
 }
 .clearfix::after {
@@ -419,6 +432,25 @@ export default {
         display: inline-block;
         width: 50%;
         padding: 12px 12px 0;
+        &-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          padding: 0 5px 10px;
+          .header-left {
+            &-org {
+              font-weight: bold;
+              font-size: 14px;
+            }
+            &-class {
+              font-size: 12px;
+              margin-top: 5px;
+            }
+          }
+          .header-right {
+            font-size: 14px;
+          }
+        }
         &-top {
           min-height: 56px;
           position: relative;
