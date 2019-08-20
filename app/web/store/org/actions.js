@@ -185,6 +185,12 @@ const actions = {
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
+  async getCurrentOrgClassList({ commit, getters: { currentOrgId: organizationId } }) {
+    const orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
+      organizationId
+    })
+    commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
+  },
   async createNewClass(
     { dispatch },
     { organizationId, name, begin, end, packages }

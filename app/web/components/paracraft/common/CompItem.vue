@@ -83,12 +83,13 @@ export default {
       requestAnimationFrame(this.rotate)
     },
     async useComp() {
-      let { filetype, name, fileUrl, id } = this.compDetail
+      let { filetype, name, fileUrl, id, extra = {} } = this.compDetail
+      let { fileName, enName } = extra || {}
       this.isUseLoading = true
       await this.useCompToParacraft({
         port: this.paracraftPort,
         fileType: filetype,
-        fileName: name,
+        fileName: fileName || enName || name,
         downloadUrl: fileUrl,
         id
       }).catch(error => {

@@ -14,20 +14,17 @@
       </el-form>
       <el-button class="real-name-auth-button" v-else type="primary" @click="showRealName">马上认证</el-button>
     </div>
-    <real-name :isRealNameVisible="isRealNameVisible" @close="hideRealName"></real-name>
   </div>
 </template>
 <script>
 import _ from 'lodash'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { locale } from '@/lib/utils/i18n'
-import RealName from '@/components/common/RealName'
 
 export default {
   name: 'realNameAuthentication',
   data() {
     return {
-      isRealNameVisible: false,
       isLoading: false
     }
   },
@@ -41,11 +38,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      toggleRealName: 'user/toggleRealName'
+    }),
     showRealName() {
-      this.isRealNameVisible = true
-    },
-    hideRealName() {
-      this.isRealNameVisible = false
+      this.toggleRealName(true)
     },
     showMessage(type, message) {
       this.$message({
@@ -57,9 +54,6 @@ export default {
     handleClose() {
       this.$emit('close')
     }
-  },
-  components: {
-    RealName
   }
 }
 </script>
