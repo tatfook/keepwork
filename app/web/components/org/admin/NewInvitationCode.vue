@@ -21,7 +21,8 @@
         </el-form-item>
         <el-radio class="new-invitation-code-content-radio" v-model="radioValue" label="byCount">
           <el-form-item label="生成指定数量" prop="quantity">
-            <el-input type="number" placeholder="1 ~ 100之间" :disabled="radioValue !== 'byCount'" v-model="codeAssociateInfo.quantity" size="medium"></el-input>
+            <el-input-number placeholder="1 ~ 100之间" :min="1" :max="100" :disabled="radioValue !== 'byCount'" v-model="codeAssociateInfo.quantity" size="medium"></el-input-number>
+            <div class="new-invitation-code-content-radio-tips">数量在1 ~ 100之间</div>
           </el-form-item>
         </el-radio>
         <div></div>
@@ -197,6 +198,9 @@ export default {
     /deep/ .el-form {
       .el-form-item {
         .el-form-item__content {
+          .el-input-number--medium {
+            width: 280px;
+          }
           .el-input {
             .el-input__inner {
               width: 280px;
@@ -209,6 +213,10 @@ export default {
       /deep/ .el-radio__input {
         position: absolute;
         top: 26px;
+      }
+      &-tips {
+        font-size: 12px;
+        text-align: center;
       }
     }
     &-textarea {
