@@ -254,13 +254,14 @@ export default {
         const dataList = []
         _.map(this.multipleSelection, (data, index) => {
           let tempArr = []
+          let realname = data.realname || data.extra.name
           tempArr.push(index + 1)
           tempArr.push(data.key)
           tempArr.push(this.stateFilter(data.state))
           tempArr.push(this.formatTime(data.createdAt))
           tempArr.push(this.formatTime(data.activateTime))
           tempArr.push(data.username)
-          tempArr.push(data.realname)
+          tempArr.push(realname)
           tempArr.push(data.lessonOrganizationClasses.name)
           dataList.push(tempArr)
         })
