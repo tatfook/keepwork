@@ -34,7 +34,7 @@
     <div class="edit-form-empty" v-if="formState != 0">
       该表单已经发布过，不能编辑
     </div>
-    <el-dialog v-if="isDialogVisible" fullscreen visible :before-close="handlePreviewClose">
+    <el-dialog v-if="isDialogVisible" custom-class="edit-form-preview" fullscreen visible :before-close="handlePreviewClose">
       <form-preview :type="formType" :title="formDetailData.title" :description="formDetailData.description" :text="formDetailData.text" :quizzes="formDetailData.quizzes"></form-preview>
     </el-dialog>
   </div>
@@ -159,6 +159,11 @@ export default {
 <style lang="scss" scoped>
 .edit-form {
   background-color: #fff;
+  /deep/ &-preview {
+    .el-dialog__close {
+      font-size: 80px;
+    }
+  }
   &-header {
     font-size: 16px;
     height: 56px;
