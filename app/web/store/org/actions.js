@@ -214,14 +214,17 @@ const actions = {
       })
     await dispatch('getOrgClassList', { organizationId })
   },
-  async getOrgTeacherList(context, { organizationId }) {
+  async getOrgTeacherList(context, { organizationId, classId }) {
     let { commit } = context
-    let orgTeachers = await keepwork.lessonOrganizationClassMembers.getTeachers(
+    let orgTeachers = classId ? await keepwork.lessonOrganizationClassMembers.getTeacherssByClassId({
+      organizationId,
+      classId
+    }) : await keepwork.lessonOrganizationClassMembers.getTeachers(
       {
         organizationId
       }
     )
-    commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers })
+    commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers, classId })
   },
   async getUserOrgRoleByGraphql(context, { organizationId, username }) {
     let result = await keepwork.graphql.getQueryResult({

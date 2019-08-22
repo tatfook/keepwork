@@ -52,7 +52,9 @@ export default {
       return _.get(this.currentOrg, 'id')
     },
     orgTeachers() {
-      return this.getOrgTeachersById({ id: this.orgId }) || []
+      return (
+        this.getOrgTeachersById({ orgId: this.orgId }) || []
+      )
     },
     orgTeachersLength() {
       return this.orgTeachers.length

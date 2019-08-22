@@ -400,6 +400,7 @@ export const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
   getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
   getStudentsByClassId: async ({ organizationId, classId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`),
+  getTeacherssByClassId: async ({ organizationId, classId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`),
   createClassMember: async ({ organizationId, classId, classIds, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, classIds, memberName, realname, roleId }),
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)

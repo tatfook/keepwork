@@ -30,6 +30,7 @@ const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 const ClassList = () => import('@/components/org/admin/ClassList')
 const NewClass = () => import('@/components/org/admin/NewClass')
 const EditClass = () => import('@/components/org/admin/EditClass')
+const ClassMembers = () => import('@/components/org/admin/ClassMembers')
 const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
@@ -227,6 +228,11 @@ export default new Router({
               path: 'class/edit',
               name: 'OrgEditClass',
               component: EditClass
+            },
+            {
+              path: 'class/members',
+              name: 'OrgClassMembers',
+              component: ClassMembers
             },
             {
               path: 'class/detail',
