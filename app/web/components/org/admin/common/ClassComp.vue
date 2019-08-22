@@ -151,7 +151,8 @@ export default {
         this.endClassTime = new Date(day)
       } else {
         this.beginClassTime = this.startDate
-        this.endClassTime = this.endDate
+        const day = moment(this.endDate).format('YYYY MM DD')
+        this.endClassTime = new Date(day)
       }
     },
     async initTreeData() {
