@@ -28,7 +28,7 @@
 </template>
 <script>
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import WebsiteBinder from './common/WebsiteBinder'
 import { keepwork } from '@/api'
 
@@ -66,6 +66,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isRealNamed: 'user/isRealNamed'
+    }),
     isNameEmpty() {
       let { name } = this.newProjectData
       return !name || name.length == 0
@@ -85,6 +88,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       pblCreateNewProject: 'pbl/createNewProject'
     }),
     selectProjectType(type) {
@@ -121,6 +125,9 @@ export default {
       return true
     },
     async createNewProject() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       if (!(await this.checkProjectName())) {
         return
       }
@@ -148,6 +155,9 @@ export default {
       this.nowStep--
     },
     async goNextStep() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       if (this.nowStep === 0) {
         let isNameValid = await this.checkProjectName()
         if (!isNameValid) {

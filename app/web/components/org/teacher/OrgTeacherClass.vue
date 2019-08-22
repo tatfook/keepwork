@@ -33,7 +33,6 @@
       <div class="students-table-header">
         开班时间: <span class="students-table-header-date"> {{orgClassesDate}} </span>
         {{$t("org.IncludeStudents") + selectedClassStudentsCount + $t("org.studentCountUnit")}}
-        <span v-if="isCanEdit" class="add-student-button pull-right" @click="handleAddStudent"><i class="el-icon-circle-plus-outline"></i> {{$t("org.addStudents")}}</span>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
         <el-table-column prop="realname" :label="$t('org.nameLabel')">
@@ -149,11 +148,6 @@ export default {
       } catch (error) {
         this.$message.error(error)
       }
-    },
-    handleAddStudent() {
-      this.isShowAddStudentForm = true
-      this.isEditType = false
-      this.studentsFormData = [{ name: '', account: '' }]
     },
     handleCancel() {
       this.isShowAddStudentForm = false

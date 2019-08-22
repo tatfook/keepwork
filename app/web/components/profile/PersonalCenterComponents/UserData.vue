@@ -110,6 +110,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       loginUserProfile: 'user/profile'
     }),
     portrait() {
@@ -134,6 +135,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     getUserInfo() {
@@ -148,6 +150,9 @@ export default {
       return result && result.length > 0
     },
     showMediaSkyDriveDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isMediaSkyDriveDialogShow = true
     },
     async closeSkyDriveManagerDialog({ file, url }) {
@@ -164,6 +169,9 @@ export default {
       })
     },
     async saveUserData() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.$refs.form.validate(async valid => {
         if (valid) {
           let userInfo = this.userInfo

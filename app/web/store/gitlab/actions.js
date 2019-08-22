@@ -125,8 +125,8 @@ const actions = {
     })
     commit(GET_REPOSITORY_TREE_SUCCESS, { path, list })
   },
-  async getFileDetail(context, { projectPath, fullPath, useCache = false }) {
-    let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token: ' ' })
+  async getFileDetail(context, { projectPath, fullPath, useCache = false, token = ' ' }) {
+    let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token })
     let result = await gitlab.getFile({ projectPath, fullPath, useCache })
     return result
   },

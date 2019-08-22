@@ -17,6 +17,7 @@
     <div @click.stop v-if="showLoginDialog">
       <login-dialog :show="showLoginDialog" :forceLogin="true" @close="handleLoginDialogClose" />
     </div>
+    <real-name :isForce="true" />
   </el-container>
 </template>
 
@@ -49,6 +50,7 @@ import PageViewer from '@/components/viewer/MdPageViewer'
 import LoginDialog from '@/components/common/LoginDialog'
 import EditorHeader from '@/components/editor/EditorHeader'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(fullscreen)
@@ -133,6 +135,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       activePageInfo: 'activePageInfo',
       userIsLogined: 'user/isLogined',
       openedFiles: 'openedFiles'
@@ -143,6 +146,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       initSocket: 'initSocket',
       setActivePage: 'setActivePage',
       userGetProfile: 'user/getProfile',
@@ -153,6 +157,9 @@ export default {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       await this.getAllPersonalAndContributedSite({ useCache: false }).catch(
         err => {
           console.error(err)
@@ -202,6 +209,7 @@ export default {
     }
   },
   components: {
+    RealName,
     PageViewer,
     EditorHeader,
     LoginDialog

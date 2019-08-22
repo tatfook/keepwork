@@ -8,6 +8,7 @@ const ProjectIndex = () => import('@/components/pbl/ProjectIndex')
 const EditProject = () => import('@/components/pbl/EditProject')
 const ProjectWhiteBoard = () => import('@/components/pbl/ProjectWhiteBoard')
 const DeleteProject = () => import('@/components/pbl/DeleteProject')
+const NotVerifiedPage = () => import('@/components/pbl/NotVerifiedPage')
 
 Vue.use(Router)
 
@@ -19,6 +20,11 @@ export default new Router({
       path: '*',
       name: 'PBLIndexPage',
       component: PblIndex
+    },
+    {
+      path: '/notVerifiedPage',
+      name: 'NotVerifiedPage',
+      component: NotVerifiedPage
     },
     {
       path: '/project',

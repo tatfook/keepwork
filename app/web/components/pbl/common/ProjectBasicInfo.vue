@@ -124,16 +124,14 @@ export default {
       'extra.videoUrl',
       undefined
     )
+    this.getWebsiteDetailBySiteId({
+      siteId: this.projectSiteId
+    })
     this.isLogined &&
-      Promise.all([
-        this.userGetUserPrivilege({
-          siteId: this.projectSiteId,
-          userId: this.loginUserId
-        }),
-        this.getWebsiteDetailBySiteId({
-          siteId: this.projectSiteId
-        })
-      ])
+      this.userGetUserPrivilege({
+        siteId: this.projectSiteId,
+        userId: this.loginUserId
+      })
   },
   data() {
     return {

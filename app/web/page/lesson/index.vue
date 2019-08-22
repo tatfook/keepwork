@@ -9,6 +9,7 @@
     <div @click.stop v-if="isShowLoginDialog.show">
       <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
     </div>
+    <real-name />
   </div>
 </template>
 
@@ -43,6 +44,7 @@ import { broadcast } from 'vuex-iframe-sync'
 import { MessageBox } from 'element-ui'
 import { lesson } from '@/api'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -138,6 +140,7 @@ export default {
     await this.loadLessonPresets()
   },
   components: {
+    RealName,
     LessonHeader,
     CommonHeader,
     LoginDialog,

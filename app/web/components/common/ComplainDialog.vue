@@ -39,9 +39,9 @@ export default {
       type: Boolean
     }
   },
-  mounted() {},
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       userUsername: 'user/username',
       userIsLogined: 'user/isLogined'
     }),
@@ -62,12 +62,16 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       userCreateFeedback: 'user/createFeedback'
     }),
     closeDialog() {
       this.$emit('close')
     },
     async submitFeedback() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isLoading = true
       await this.userCreateFeedback(this.feedbackData)
         .then(res => {
@@ -96,7 +100,7 @@ export default {
         _hmt.push([
           '_setUserTag',
           '7562',
-          `username: ${userUsername}, url: ${window.location.href}`
+          `username: ${this.userUsername}, url: ${window.location.href}`
         ])
       }
     },

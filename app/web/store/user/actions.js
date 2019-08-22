@@ -12,6 +12,8 @@ import siteContent from '@/assets/source/site.md'
 
 const {
   TOGGLE_LOGIN_DIALOG,
+  TOGGLE_REAL_NAME,
+  TOGGLE_ACCOUNT_ENCRYPT,
   LOGIN_SUCCESS,
   LOGOUT,
   GET_PROFILE_SUCCESS,
@@ -64,8 +66,14 @@ const USER_PROFILE_PAGES_CONTENTS = [
 ]
 
 const actions = {
-  async toggleLoginDialog({ commit }, status) {
+  toggleLoginDialog({ commit }, status) {
     commit(TOGGLE_LOGIN_DIALOG, status)
+  },
+  toggleRealName({ commit }, status) {
+    commit(TOGGLE_REAL_NAME, status)
+  },
+  toggleAccountEncrypt({ commit }, status) {
+    commit(TOGGLE_ACCOUNT_ENCRYPT, status)
   },
   async login({ commit, dispatch }, payload) {
     let info = await keepwork.user.login(payload, null, true)
@@ -102,6 +110,12 @@ const actions = {
       let filePath = encodeURI(`${username}_datas/${fileName}.md`)
       await dispatch('gitlab/createFile', { path: filePath, content, refreshRepositoryTree: false }, { root: true })
     }
+  },
+  async getSvgCaptcha(context) {
+    return await keepwork.keepworks.getSvgCaptcha()
+  },
+  async verifySvgCaptcha(context, { key, captcha }) {
+    return await keepwork.keepworks.verifySvgCaptcha({ key, captcha })
   },
   async register({ dispatch }, payload) {
     let registerInfo = await keepwork.user.register(payload)
@@ -142,6 +156,7 @@ const actions = {
     userDetail = await keepwork.user.getDetailById({ userId })
     let { username } = userDetail
     commit(GET_USER_DETAIL_SUCCESS, { userId, username, userDetail })
+    return userDetail
   },
   async getUserDetailWithRankByUserIdOrUsername(context, { userId, username }) {
     let { commit } = context

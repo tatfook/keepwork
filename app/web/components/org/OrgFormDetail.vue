@@ -93,7 +93,6 @@ export default {
     max-width: 100%;
     margin: 0 auto;
     position: relative;
-    display: table-cell;
   }
   &-qrcode {
     position: absolute;

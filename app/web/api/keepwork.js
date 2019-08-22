@@ -57,6 +57,11 @@ const haqi = axios.create({
 
 const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
+export const keepworks = {
+  getSvgCaptcha: async () => get('keepworks/svg_captcha'),
+  verifySvgCaptcha: async ({ key, captcha }) => post('keepworks/svg_captcha', { key, captcha })
+}
+
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
   getUser: async username => get(`users/${username}`),
@@ -434,6 +439,7 @@ export const editorSocket = {
 }
 
 export const keepwork = {
+  keepworks,
   user,
   website,
   siteUser,

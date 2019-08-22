@@ -2,7 +2,7 @@
   "common": {
     "login": "登 录",
     "register": "注 册",
-    "account": "账户",
+    "account": "账号名",
     "existAccount": "用户名已存在",
     "notValidAccount": "用户名不合法",
     "usernameCannotWithNumber": "用户名不能以数字开头",
@@ -1553,7 +1553,9 @@
     "CommentsLabel": "评论",
     "commentAfterLogin": "登录后才能评论",
     "deleteProject": "删除项目",
-    "createByAt": "创建于"
+    "createByAt": "创建于",
+    "verifiedTips": "很抱歉的通知您:",
+    "verifiedContent": "访问内容的拥有者并未进行实名认真，内容暂时无法访问。"
   },
   "footer": {
     "lettersTo": "教育理念",
@@ -1823,7 +1825,7 @@
     "addFirstClass": "立即创建",
     "noTeaches": "暂未添加教师信息，",
     "addTeachersImmediately": "立即添加",
-    "noStudents": "暂未添加学生信息，",
+    "noStudents": "暂未添加学生信息",
     "addStudentsImmediately": "立即添加",
     "usernameIsRequired": "请输入用户名",
     "pleaseSelectClasses": "请选择班级",
@@ -1914,7 +1916,8 @@
     "haveExpired": "已到期",
     "contactUs": "如需咨询，请联系",
     "validity": "有效期",
-    "toExpire": "即将到期"
+    "toExpire": "即将到期",
+    "name": "名字"
   },
   "message": {
     "messageCenter": "消息中心",

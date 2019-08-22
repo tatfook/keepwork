@@ -112,6 +112,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       personalSiteList: 'user/personalSiteList',
       personalSitePaths: 'user/personalSitePathMap',
       contributedSiteList: 'user/contributedSiteList',
@@ -181,6 +182,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       getAllPersonalWebsite: 'user/getAllPersonalWebsite',
       getAllContributedWebsite: 'user/getAllContributedWebsite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
@@ -376,6 +378,9 @@ export default {
       return path && this.openedFiles[path] && this.openedFiles[path].timestamp
     },
     openNewWebsiteDialog() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.isNewWebsiteDialogShow = true
     },
     closeNewWebsiteDialog() {

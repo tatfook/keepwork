@@ -7,6 +7,7 @@
       <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
     <expiration-dialog :isExpirationVisible="expirationDialogVisible" @close="handleCloseExpirationDialog"></expiration-dialog>
+    <real-name />
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import PerfectCommonFooter from '../../components/common/PerfectCommonFooter'
 import { keepwork } from '@/api'
 import ExpirationDialog from '@/components/org/common/ExpirationDialog'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -297,6 +299,7 @@ export default {
     }
   },
   components: {
+    RealName,
     PerfectCommonFooter,
     ExpirationDialog
   },

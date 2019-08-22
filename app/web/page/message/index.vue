@@ -9,6 +9,7 @@
     <div class="message-page-footer">
       <perfect-common-footer></perfect-common-footer>
     </div>
+    <real-name />
   </div>
 </template>
 
@@ -32,6 +33,7 @@ import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import { socket, socketMixin } from '@/socket'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -61,6 +63,7 @@ export default {
   store,
   i18n,
   components: {
+    RealName,
     CommonHeader,
     PerfectCommonFooter,
     LoginDialog

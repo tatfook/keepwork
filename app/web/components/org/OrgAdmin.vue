@@ -60,7 +60,6 @@ export default {
             'OrgNewTeacher',
             'OrgEditTeacher',
             'OrgStudentList',
-            'OrgNewStudent',
             'OrgEditStudent'
           ],
           indexPageName: 'OrgClassList',

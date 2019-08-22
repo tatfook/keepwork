@@ -10,7 +10,6 @@
           </el-option>
         </el-select>
       </div>
-      <div class="student-list-header-new" @click="toNewStudentPage"><i class="el-icon-circle-plus-outline"></i>{{$t('org.addStudents')}}</div>
     </div>
     <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
     <el-table v-if="orgStudentsCount > 0" class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
@@ -32,8 +31,7 @@
       </el-table-column>
     </el-table>
     <div class="student-list-empty" v-if="orgStudentsCount == 0">
-      <p class="student-list-empty-info">{{$t('org.noStudents')}} <span @click="toNewStudentPage" class="student-list-empty-cursor">{{$t('org.addStudentsImmediately')}}</span>
-      </p>
+      <p class="student-list-empty-info">{{$t('org.noStudents')}}</p>
     </div>
   </div>
 </template>
@@ -58,7 +56,6 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgRestCount: 'org/getOrgRestCount',
       getOrgUserCountById: 'org/getOrgUserCountById',
       getOrgClassesById: 'org/getOrgClassesById',
       getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
@@ -81,9 +78,6 @@ export default {
           student.lessonOrganizationClasses.length > 0
         )
       })
-    },
-    orgRestUserCount() {
-      return this.getOrgRestCount({ id: this.orgId })
     },
     orgStudentsCount() {
       return _.get(
@@ -117,19 +111,6 @@ export default {
       getOrgStudentList: 'org/getOrgStudentList',
       orgCreateNewMember: 'org/createNewMember'
     }),
-    toNewStudentPage() {
-      if (this.orgRestUserCount == 0) {
-        this.$alert(
-          this.$t('org.cannotAddMoreMember'),
-          this.$t('org.warningTitle'),
-          {
-            type: 'warning'
-          }
-        )
-        return
-      }
-      this.$router.push({ name: 'OrgNewStudent' })
-    },
     async handleChangeSelectClass() {
       this.isLoading = true
       await this.getOrgStudentList({

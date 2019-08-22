@@ -1563,7 +1563,9 @@
     "CommentsLabel": "Comments",
     "commentAfterLogin": "Sign in to comment",
     "deleteProject": "Delete Project",
-    "createByAt": "create at"
+    "createByAt": "create at",
+    "verifiedTips": "I'm sorry to inform you:",
+    "verifiedContent": "The owner of the access content did not make a real name seriously, the content temporarily unable to access."
   },
   "footer": {
     "lettersTo": "Educational ideas",
@@ -1924,7 +1926,8 @@
     "haveExpired": " have expired",
     "contactUs": "For more information, please contact us ",
     "validity": "validity",
-    "toExpire": "to expire"
+    "toExpire": "to expire",
+    "name": "name"
   },
   "message": {
     "messageCenter": "message center",

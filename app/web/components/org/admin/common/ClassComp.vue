@@ -35,6 +35,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'ClassComp',
@@ -43,6 +44,11 @@ export default {
   },
   mounted() {
     this.initClassData()
+  },
+  watch: {
+    $route() {
+      this.initClassData()
+    }
   },
   data() {
     return {
@@ -141,11 +147,12 @@ export default {
         let classDetail = this.classDetail
         this.classData = classDetail
         this.beginClassTime = classDetail.begin
-        this.endClassTime =
-          +new Date(classDetail.end) - 24 * 60 * 60 * 1000 + 1000
+        const day = moment(classDetail.end).format('YYYY MM DD')
+        this.endClassTime = new Date(day)
       } else {
         this.beginClassTime = this.startDate
-        this.endClassTime = this.endDate
+        const day = moment(this.endDate).format('YYYY MM DD')
+        this.endClassTime = new Date(day)
       }
     },
     async initTreeData() {
@@ -203,13 +210,13 @@ export default {
       if (_.isNull(this.endClassTime)) {
         this.classData.end = null
       } else {
-        let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 1000
-        this.classData.end = endTime
+        let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 5000
+        this.classData.end = new Date(endTime)
       }
     },
     async save() {
       this.setSelectedPackages()
-      await this.setSelectedTime()
+      this.setSelectedTime()
       if (
         this.beginClassTime < this.startDate ||
         this.endClassTime > this.endDate ||
@@ -219,11 +226,6 @@ export default {
         return
       }
       this.$emit('save', this.classData)
-    }
-  },
-  watch: {
-    $route() {
-      this.initClassData()
     }
   }
 }

@@ -34,7 +34,6 @@ const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
-const NewStudent = () => import('@/components/org/admin/NewStudent')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
 const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
@@ -253,11 +252,6 @@ export default new Router({
               path: 'student',
               name: 'OrgStudentList',
               component: StudentList
-            },
-            {
-              path: 'student/new',
-              name: 'OrgNewStudent',
-              component: NewStudent
             },
             {
               path: 'student/edit',

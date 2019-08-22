@@ -2,7 +2,7 @@
   <div class="comp-item">
     <div class="comp-item-cover" :style="{background:bgColor}">
       <span class="comp-item-badge">{{compDetail.formatedId}}</span>
-      <img class="comp-item-preview" :src="compDetail.gifUrl" alt="">
+      <img class="comp-item-preview" :src="compressedCover" alt="">
       <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
     <div class="comp-item-info">
@@ -64,6 +64,10 @@ export default {
     },
     previewUrl() {
       return _.get(this.compDetail, 'previewUrl')
+    },
+    compressedCover() {
+      let gifUrl = _.get(this.compDetail, 'gifUrl')
+      return gifUrl + '?imageView2/5/w/250/h/128'
     }
   },
   methods: {
@@ -79,12 +83,13 @@ export default {
       requestAnimationFrame(this.rotate)
     },
     async useComp() {
-      let { filetype, name, fileUrl, id } = this.compDetail
+      let { filetype, name, fileUrl, id, extra = {} } = this.compDetail
+      let { fileName, enName } = extra || {}
       this.isUseLoading = true
       await this.useCompToParacraft({
         port: this.paracraftPort,
         fileType: filetype,
-        fileName: name,
+        fileName: fileName || enName || name,
         downloadUrl: fileUrl,
         id
       }).catch(error => {

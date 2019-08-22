@@ -11,6 +11,7 @@
     <div @click.stop v-if="isShowLoginDialog">
       <login-dialog :show="isShowLoginDialog" @close="handleLoginDialogClose"></login-dialog>
     </div>
+    <real-name />
   </div>
 </template>
 
@@ -46,6 +47,7 @@ import { MessageBox } from 'element-ui'
 import { socket, socketMixin } from '@/socket'
 import comboModule from '@/store/combo'
 import ba from 'vue-ba'
+import RealName from '@/components/common/RealName'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -255,6 +257,7 @@ export default {
     })
   },
   components: {
+    RealName,
     CommonHeader,
     StudyHeader,
     PerfectCommonFooter,
@@ -311,5 +314,3 @@ body {
   }
 }
 </style>
-
-

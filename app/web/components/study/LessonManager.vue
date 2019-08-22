@@ -104,6 +104,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import Cookies from 'js-cookie'
 import { mapActions, mapGetters } from 'vuex'
 import colI18n from '@/lib/utils/i18n/column'
 import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
@@ -166,6 +167,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       userProfile: 'user/profile',
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonUserLessons: 'lesson/teacher/userLessons',
@@ -227,6 +229,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       lessonGetUserPackages: 'lesson/teacher/getUserPackages',
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
@@ -310,6 +313,9 @@ export default {
       return this.isEditable(lessonDetail)
     },
     toNewLessonPage() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       this.$router.push({ path: '/createPackage/lesson/new' })
     },
     toEdit(lessonDetail) {
@@ -366,7 +372,8 @@ export default {
       let sitename = removedPrefixUrl.split('/')[0]
       let result = await this.gitlabGetFileDetail({
         projectPath: `${username}/${sitename}`,
-        fullPath: `${username}/${removedPrefixUrl}.md`
+        fullPath: `${username}/${removedPrefixUrl}.md`,
+        token: 'Bearer ' + Cookies.get('token')
       })
         .then(() => {
           return Promise.resolve()

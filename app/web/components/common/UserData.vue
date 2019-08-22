@@ -62,6 +62,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isRealNamed: 'user/isRealNamed',
       loginUserProfile: 'user/profile'
     }),
     portrait() {
@@ -86,6 +87,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      toggleRealName: 'user/toggleRealName',
       userUpdateUserInfo: 'user/updateUserInfo'
     }),
     async checkSensitive(checkedWords) {
@@ -109,6 +111,9 @@ export default {
       })
     },
     async saveUserData() {
+      if (!this.isRealNamed) {
+        return this.toggleRealName(true)
+      }
       let userInfo = this.userInfo
       if (this.isModified) {
         this.loading = true
