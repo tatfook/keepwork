@@ -29,7 +29,7 @@
       <i class="iconfont icon-add--"></i>添加信息项
     </div>
     <div class="quizzes-content-answer">
-      <el-button v-if="isAnswerMode && formState == 1" type="primary" size="medium" :disabled="!isFormDataValid" @click="submitFomData">我已填好，提交</el-button>
+      <el-button v-if="isAnswerMode" type="primary" size="medium" :disabled="!isFormDataValid" @click="submitFomData">我已填好，提交</el-button>
     </div>
     <quiz-editor :originQuiz="editingQuiz" :isVisible="isDialogVisible" @close="handleQuizEditorClose"></quiz-editor>
   </div>
@@ -53,6 +53,7 @@ export default {
   },
   async mounted() {
     await this.getOrgDetailByLoginUrl({ orgLoginUrl: this.orgLoginUrl })
+    this.tips()
     let formQuizzes = _.cloneDeep(this.formQuizzes)
     this.quizzes = this.isAnswerMode
       ? _.map(formQuizzes, quiz => {
@@ -119,6 +120,14 @@ export default {
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgSubmitForm: 'org/submitForm'
     }),
+    tips() {
+      if (this.formState === 2) {
+        this.$alert('该表单已停止收集。', '提醒', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+      }
+    },
     showQuizEditor() {
       this.isDialogVisible = true
     },
@@ -173,6 +182,10 @@ export default {
       this.$emit('change')
     },
     async submitFomData() {
+      if (this.formState === 2) {
+        this.$message.error('该表单已停止收集。')
+        return
+      }
       this.isLoading = true
       await this.orgSubmitForm({
         formId: this.formId,
