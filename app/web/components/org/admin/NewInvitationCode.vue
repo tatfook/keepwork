@@ -19,18 +19,23 @@
             <el-option v-for="(classItem, index) in orgClassesFilter" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-radio class="new-invitation-code-content-radio" v-model="radioValue" label="byCount">
-          <el-form-item label="生成指定数量" prop="quantity">
-            <el-input-number placeholder="1 ~ 100之间" :min="1" :max="100" :disabled="radioValue !== 'byCount'" v-model="codeAssociateInfo.quantity" size="medium"></el-input-number>
-            <div class="new-invitation-code-content-radio-tips">数量在1 ~ 100之间</div>
-          </el-form-item>
-        </el-radio>
-        <div></div>
-        <el-radio class="new-invitation-code-content-radio" v-model="radioValue" label="byName">
-          <el-form-item label="输入学生姓名" prop="studentNames">
-            <el-input class="new-invitation-code-content-textarea" placeholder="每行一位" type="textarea" :autosize="{ minRows: 3, maxRows: 20 }" :disabled="radioValue !== 'byName'" v-model="codeAssociateInfo.studentNames" size="medium"></el-input>
-          </el-form-item>
-        </el-radio>
+        <el-form-item prop="quantity">
+          <template slot="label">
+            <el-radio v-model="radioValue" label="byCount">
+              <span>生成指定数量</span>
+            </el-radio>
+          </template>
+          <el-input-number placeholder="1 ~ 100之间" :min="1" :max="100" :disabled="radioValue !== 'byCount'" v-model="codeAssociateInfo.quantity" size="medium"></el-input-number>
+          <div class="new-invitation-code-content-tips">数量在1 ~ 100之间</div>
+        </el-form-item>
+        <el-form-item prop="studentNames">
+          <template slot="label">
+            <el-radio v-model="radioValue" label="byName">
+              <span>输入学生姓名</span>
+            </el-radio>
+          </template>
+          <el-input class="new-invitation-code-content-textarea" placeholder="每行一位" type="textarea" :autosize="{ minRows: 3, maxRows: 20 }" :disabled="radioValue !== 'byName'" v-model="codeAssociateInfo.studentNames" size="medium"></el-input>
+        </el-form-item>
       </el-form>
     </div>
   </div>
@@ -209,15 +214,9 @@ export default {
         }
       }
     }
-    &-radio {
-      /deep/ .el-radio__input {
-        position: absolute;
-        top: 26px;
-      }
-      &-tips {
-        font-size: 12px;
-        text-align: center;
-      }
+    &-tips {
+      font-size: 12px;
+      color: #909399;
     }
     &-textarea {
       width: 280px;
