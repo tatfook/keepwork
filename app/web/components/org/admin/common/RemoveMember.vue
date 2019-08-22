@@ -40,6 +40,7 @@ export default {
         organizationId: this.currentOrgId
       }).catch(() => {})
       this.isLoading = false
+      this.$emit('finish')
     },
     confirmRemoveMember() {
       let memberDetail = this.memberDetail

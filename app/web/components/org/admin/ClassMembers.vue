@@ -7,7 +7,7 @@
     <div class="class-members-item">
       <div class="class-members-item-header">
         <i class="iconfont icon-jiaoshi"></i>教师
-        <div class="class-members-item-operate">
+        <div class="class-members-item-operate" @click="isNewDialogVisible = true">
           <i class="el-icon-circle-plus-outline"></i>添加教师
         </div>
       </div>
@@ -20,7 +20,7 @@
           <template slot-scope="scope">
             <div class="class-members-table-operations">
               <div class="class-members-table-button class-members-table-button-primary" @click="toEditPage(scope.row, 'teacher')">{{$t('org.Edit')}}</div>
-              <remove-member class="class-members-table-button" :memberDetail="scope.row" />
+              <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
             </div>
           </template>
         </el-table-column>
@@ -40,32 +40,28 @@
           <template slot-scope="scope">
             <div class="class-members-table-operations">
               <div class="class-members-table-button class-members-table-button-primary" @click="toEditPage(scope.row, 'student')">{{$t('org.Edit')}}</div>
-              <remove-member class="class-members-table-button" :memberDetail="scope.row" />
+              <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
               <div class="class-members-table-button">修改密码</div>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <new-teacher-dialog :isNewDialogVisible="isNewDialogVisible" @close="isNewDialogVisible = false"></new-teacher-dialog>
   </div>
 </template>
 <script>
+import NewTeacherDialog from './common/NewTeacherDialog'
 import RemoveMember from './common/RemoveMember'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ClassMembers',
-  async mounted() {
-    this.isLoading = true
-    let organizationId = this.currentOrgId
-    let classId = this.classId
-    await Promise.all([
-      this.getOrgTeacherList({ organizationId, classId }),
-      this.getOrgStudentList({ organizationId, classId })
-    ])
-    this.isLoading = false
+  mounted() {
+    this.initData()
   },
   data() {
     return {
+      isNewDialogVisible: false,
       isLoading: false
     }
   },
@@ -96,6 +92,16 @@ export default {
       getOrgTeacherList: 'org/getOrgTeacherList',
       getOrgStudentList: 'org/getOrgStudentList'
     }),
+    async initData() {
+      this.isLoading = true
+      let organizationId = this.currentOrgId
+      let classId = this.classId
+      await Promise.all([
+        this.getOrgTeacherList({ organizationId, classId }),
+        this.getOrgStudentList({ organizationId, classId })
+      ])
+      this.isLoading = false
+    },
     toEditPage(memberDetail, type) {
       let { realname, username, classes } = memberDetail
       this.$router.push({
@@ -110,6 +116,7 @@ export default {
     }
   },
   components: {
+    NewTeacherDialog,
     RemoveMember
   }
 }

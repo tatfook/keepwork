@@ -46,14 +46,14 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgTeachersById: 'org/getOrgTeachersById'
+      getOrgTeachersByClassId: 'org/getOrgTeachersByClassId'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
     orgTeachers() {
       return (
-        this.getOrgTeachersById({ orgId: this.orgId }) || []
+        this.getOrgTeachersByClassId({ orgId: this.orgId, classId: undefined }) || []
       )
     },
     orgTeachersLength() {

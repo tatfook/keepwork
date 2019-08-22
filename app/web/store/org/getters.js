@@ -68,8 +68,7 @@ const getters = {
     _.get(state.orgPackagesGraphql, id),
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
-  getOrgTeachersByClassId: state => ({ orgId, classId }) =>
-    _.get(state.orgTeachers, `${orgId}.${classId}`),
+  getOrgTeachersByClassId: state => ({ orgId, classId }) => _.get(state.orgTeachers, `${orgId}.${classId}`),
   getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
   getOrgStudentsByClassId: state => ({ orgId, classId }) =>
     _.get(state.orgStudents, `${orgId}.${classId}`),
