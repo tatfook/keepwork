@@ -12,8 +12,8 @@
       <el-table-column :label="$t('org.beginClassTime')" width="240"><template slot-scope="scope">{{scope.row.begin | formatTime}} - {{scope.row.end | formatTime}}</template></el-table-column>
       <el-table-column :label="$t('common.action')">
         <template slot-scope="scope">
-          <router-link class='class-list-table-link' :to='{name: "OrgClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
-          <router-link class='class-list-table-link' :to='{name: "OrgEditClass", query: scope.row}'>{{$t('org.Edit')}}</router-link>
+          <router-link class='class-list-table-link' :to='{name: "OrgEditClass", query: scope.row}'>课程</router-link>
+          <router-link class='class-list-table-link' :to='{name: "OrgClassMembers", query: {id:scope.row.id}}'>成员</router-link>
         </template>
       </el-table-column>
     </el-table>

@@ -101,10 +101,13 @@ const mutations = {
       [organizationId]: orgClasses
     })
   },
-  [GET_ORG_TEACHERS_SUCCESS](state, { organizationId, orgTeachers }) {
+  [GET_ORG_TEACHERS_SUCCESS](state, { organizationId, orgTeachers, classId }) {
     Vue.set(state, 'orgTeachers', {
       ...state.orgTeachers,
-      [organizationId]: orgTeachers
+      [organizationId]: {
+        ..._.get(state, `orgTeachers.${organizationId}`),
+        [classId]: orgTeachers
+      }
     })
   },
   [GET_ORG_STUDENTS_SUCCESS](state, { organizationId, orgStudents, classId }) {
