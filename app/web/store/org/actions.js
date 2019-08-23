@@ -185,7 +185,10 @@ const actions = {
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
-  async getCurrentOrgClassList({ commit, getters: { currentOrgId: organizationId } }) {
+  async getCurrentOrgClassList({
+    commit,
+    getters: { currentOrgId: organizationId }
+  }) {
     const orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
       organizationId
     })
@@ -216,14 +219,14 @@ const actions = {
   },
   async getOrgTeacherList(context, { organizationId, classId }) {
     let { commit } = context
-    let orgTeachers = classId ? await keepwork.lessonOrganizationClassMembers.getTeacherssByClassId({
-      organizationId,
-      classId
-    }) : await keepwork.lessonOrganizationClassMembers.getTeachers(
-      {
+    let orgTeachers = classId
+      ? await keepwork.lessonOrganizationClassMembers.getTeacherssByClassId({
+        organizationId,
+        classId
+      })
+      : await keepwork.lessonOrganizationClassMembers.getTeachers({
         organizationId
-      }
-    )
+      })
     commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers, classId })
   },
   async getUserOrgRoleByGraphql(context, { organizationId, username }) {
@@ -419,8 +422,22 @@ const actions = {
     commit(GET_FEEDBACK_SUCCESS, { formId, submitList })
   },
   async updateSubmit({ dispatch }, { formId, submitId, submitData }) {
-    await keepwork.lessonOrganizationForms.updateSubmit({ formId, submitId, submitData })
+    await keepwork.lessonOrganizationForms.updateSubmit({
+      formId,
+      submitId,
+      submitData
+    })
     dispatch('getSubmitList', { formId })
+  },
+  async changePwd(context, { classId, memberId, password }) {
+    await keepwork.organizations
+      .changePwd({ classId, memberId, password })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
 }
 

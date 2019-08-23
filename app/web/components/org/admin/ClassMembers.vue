@@ -41,21 +41,23 @@
             <div class="class-members-table-operations">
               <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'student')">{{$t('org.Edit')}}</div>
               <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
-              <div class="class-members-table-button">修改密码</div>
+              <div class="class-members-table-button" @click="showChangeDialog(scope.row)">修改密码</div>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <new-teacher-dialog :isNewDialogVisible="isNewDialogVisible" @close="isNewDialogVisible = false"></new-teacher-dialog>
-    <el-dialog :visible="isEditVisible">
+    <el-dialog :visible="isEditVisible" :before-close="closeEditMemberDialog">
       <template slot="title">编辑{{editingMember.roleId==1?'学生':'教师'}}</template>
       <edit-member v-if="isEditVisible" :editingMember="editingMember" :isDialog="true" @close="closeEditMemberDialog"></edit-member>
     </el-dialog>
+    <change-password-dialog :isChangeDialogVisible="isChangeDialogVisible" :changingMember="changingMember" @close="isChangeDialogVisible = false" />
   </div>
 </template>
 <script>
 import NewTeacherDialog from './common/NewTeacherDialog'
+import ChangePasswordDialog from './common/ChangePasswordDialog'
 import EditMember from './EditMember'
 import RemoveMember from './common/RemoveMember'
 import { mapGetters, mapActions } from 'vuex'
@@ -66,8 +68,10 @@ export default {
   },
   data() {
     return {
+      isChangeDialogVisible: false,
       isEditVisible: false,
       editingMember: {},
+      changingMember: {},
       isNewDialogVisible: false,
       isLoading: false
     }
@@ -122,10 +126,26 @@ export default {
     closeEditMemberDialog() {
       this.isEditVisible = false
       this.initData()
+    },
+    showChangeDialog(studentDetail) {
+      let {
+        realname,
+        users: { username: memberName },
+        classId,
+        memberId
+      } = studentDetail
+      this.changingMember = {
+        realname,
+        memberName,
+        classId,
+        memberId
+      }
+      this.isChangeDialogVisible = true
     }
   },
   components: {
     NewTeacherDialog,
+    ChangePasswordDialog,
     EditMember,
     RemoveMember
   }

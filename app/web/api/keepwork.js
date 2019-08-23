@@ -416,6 +416,10 @@ export const lessonOrganizationForms = {
   updateSubmit: async ({ formId, submitId, submitData }) => put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
 }
 
+export const organizations = {
+  changePwd: async ({ classId, memberId, password }) => post('organizations/changepwd', { classId, memberId, password })
+}
+
 export const graphql = {
   getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
 }
@@ -464,6 +468,7 @@ export const keepwork = {
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
   lessonOrganizationForms,
+  organizations,
   graphql,
   message,
   feedbacks,
