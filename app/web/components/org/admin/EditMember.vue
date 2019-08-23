@@ -74,7 +74,10 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgClassesById: 'org/getOrgClassesById'
+      currentOrgId: 'org/currentOrgId',
+      getOrgClassesById: 'org/getOrgClassesById',
+      getOrgTeachersByClassId: 'org/getOrgTeachersByClassId',
+      getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
     }),
     isEn() {
       return locale === 'en-US'
@@ -96,8 +99,11 @@ export default {
     queryData() {
       return _.get(this.$route, 'query')
     },
+    memberId() {
+      return _.get(this.$route, 'query.id')
+    },
     memberRoleId() {
-      return _.get(this.queryData, 'roleId')
+      return _.get(this.$route, 'query.roleId')
     },
     memberTypeText() {
       return this.memberRoleId === 1
@@ -120,16 +126,55 @@ export default {
   },
   methods: {
     ...mapActions({
-      orgCreateNewMember: 'org/createNewMember'
+      orgCreateNewMember: 'org/createNewMember',
+      getOrgTeacherList: 'org/getOrgTeacherList',
+      getOrgStudentList: 'org/getOrgStudentList'
     }),
     toMemberListPage() {
       this.$router.push({
         name: this.memberTypeListPageName
       })
     },
-    initMemberData() {
-      let { realname, memberName, classIds } = this.queryData
-      this.memberData = { realname, memberName, classIds: JSON.parse(classIds) }
+    async getStudentDetail() {
+      await this.getOrgStudentList({
+        organizationId: this.currentOrgId,
+        classId: undefined
+      })
+      let memberList = this.getOrgStudentsByClassId({
+        orgId: this.currentOrgId
+      })
+      let {
+        classes = [],
+        users: { username: memberName },
+        realname
+      } = _.find(memberList, member => member.id == this.memberId)
+      let classIds = _.map(classes, classDetail => classDetail.id)
+      return { realname, memberName, classIds }
+    },
+    async getTeacherDetail() {
+      await this.getOrgTeacherList({
+        organizationId: this.currentOrgId,
+        classId: undefined
+      })
+      let memberList = this.getOrgTeachersByClassId({
+        orgId: this.currentOrgId
+      })
+      let { classes = [], username: memberName, realname } = _.find(
+        memberList,
+        member => member.id == this.memberId
+      )
+      let classIds = _.map(classes, classDetail => classDetail.id)
+      return { realname, memberName, classIds }
+    },
+    async initMemberData() {
+      let detail
+      if (this.memberRoleId == 1) {
+        detail = await this.getStudentDetail()
+      } else {
+        detail = await this.getTeacherDetail()
+      }
+      let { realname, memberName, classIds } = detail
+      this.memberData = { realname, memberName, classIds }
     },
     updateMember() {
       let form = this.$refs['memberForm']

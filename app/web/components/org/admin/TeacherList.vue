@@ -53,7 +53,10 @@ export default {
     },
     orgTeachers() {
       return (
-        this.getOrgTeachersByClassId({ orgId: this.orgId, classId: undefined }) || []
+        this.getOrgTeachersByClassId({
+          orgId: this.orgId,
+          classId: undefined
+        }) || []
       )
     },
     orgTeachersLength() {
@@ -106,14 +109,11 @@ export default {
       })
     },
     toEditPage(teacherDetail) {
-      let { realname, username, classes } = teacherDetail
       this.$router.push({
         name: 'OrgEditTeacher',
         query: {
           roleId: 2,
-          realname,
-          memberName: username,
-          classIds: JSON.stringify(_.map(classes, classObj => classObj.id))
+          id: teacherDetail.id
         }
       })
     }
