@@ -19,7 +19,7 @@
         <el-table-column prop="id" :label="$t('org.operationLabel')" width="240">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
-              <div class="class-members-table-button class-members-table-button-primary" @click="toEditPage(scope.row, 'teacher')">{{$t('org.Edit')}}</div>
+              <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'teacher')">{{$t('org.Edit')}}</div>
               <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
             </div>
           </template>
@@ -39,7 +39,7 @@
         <el-table-column prop="id" :label="$t('org.operationLabel')" width="240">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
-              <div class="class-members-table-button class-members-table-button-primary" @click="toEditPage(scope.row, 'student')">{{$t('org.Edit')}}</div>
+              <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'student')">{{$t('org.Edit')}}</div>
               <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
               <div class="class-members-table-button">修改密码</div>
             </div>
@@ -48,10 +48,15 @@
       </el-table>
     </div>
     <new-teacher-dialog :isNewDialogVisible="isNewDialogVisible" @close="isNewDialogVisible = false"></new-teacher-dialog>
+    <el-dialog :visible="isEditVisible">
+      <template slot="title">编辑{{editingMember.roleId==1?'学生':'教师'}}</template>
+      <edit-member v-if="isEditVisible" :editingMember="editingMember" :isDialog="true" @close="closeEditMemberDialog"></edit-member>
+    </el-dialog>
   </div>
 </template>
 <script>
 import NewTeacherDialog from './common/NewTeacherDialog'
+import EditMember from './EditMember'
 import RemoveMember from './common/RemoveMember'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -61,6 +66,8 @@ export default {
   },
   data() {
     return {
+      isEditVisible: false,
+      editingMember: {},
       isNewDialogVisible: false,
       isLoading: false
     }
@@ -102,21 +109,24 @@ export default {
       ])
       this.isLoading = false
     },
-    toEditPage(memberDetail, type) {
-      let { realname, username, classes } = memberDetail
-      this.$router.push({
-        name: type == 'teacher' ? 'OrgEditTeacher' : 'OrgEditStudent',
-        query: {
-          roleId: type == 'teacher' ? 2 : 1,
-          realname,
-          memberName: username,
-          classIds: JSON.stringify(_.map(classes, classObj => classObj.id))
-        }
-      })
+    showEditDailog(memberDetail, type) {
+      let { realname, username, users, classes } = memberDetail
+      this.editingMember = {
+        roleId: type == 'teacher' ? 2 : 1,
+        realname,
+        memberName: username || users.username,
+        classIds: _.map(classes, classObj => classObj.id)
+      }
+      this.isEditVisible = true
+    },
+    closeEditMemberDialog() {
+      this.isEditVisible = false
+      this.initData()
     }
   },
   components: {
     NewTeacherDialog,
+    EditMember,
     RemoveMember
   }
 }

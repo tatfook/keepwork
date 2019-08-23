@@ -1,6 +1,6 @@
 <template>
   <div class="edit-member">
-    <div class="edit-member-header">
+    <div v-if="!isDialog" class="edit-member-header">
       <el-breadcrumb class="edit-member-header-breadcrumb" separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ name: memberTypeListPageName }">{{memberTypeText}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{editMemberTypeText}}</el-breadcrumb-item>
@@ -24,6 +24,10 @@
         </el-select>
       </el-form-item>
     </el-form>
+    <div class="edit-member-footer" v-if="isDialog">
+      <el-button size="medium" @click="closeDialog">{{$t('common.Cancel')}}</el-button>
+      <el-button v-loading="isLoading" size="medium" @click="updateMember" type="primary">{{$t('common.Save')}}</el-button>
+    </div>
   </div>
 </template>
 
@@ -32,6 +36,13 @@ import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'EditMember',
+  props: {
+    isDialog: {
+      type: Boolean,
+      default: false
+    },
+    editingMember: Object
+  },
   async mounted() {
     this.initMemberData()
   },
@@ -96,14 +107,13 @@ export default {
         return classEnd >= nowDate
       })
     },
-    queryData() {
-      return _.get(this.$route, 'query')
-    },
     memberId() {
       return _.get(this.$route, 'query.id')
     },
     memberRoleId() {
-      return _.get(this.$route, 'query.roleId')
+      return this.isDialog
+        ? this.editingMember.roleId
+        : _.get(this.$route, 'query.roleId')
     },
     memberTypeText() {
       return this.memberRoleId === 1
@@ -130,6 +140,9 @@ export default {
       getOrgTeacherList: 'org/getOrgTeacherList',
       getOrgStudentList: 'org/getOrgStudentList'
     }),
+    closeDialog() {
+      this.$emit('close')
+    },
     toMemberListPage() {
       this.$router.push({
         name: this.memberTypeListPageName
@@ -167,6 +180,9 @@ export default {
       return { realname, memberName, classIds }
     },
     async initMemberData() {
+      if (this.isDialog) {
+        return (this.memberData = this.editingMember)
+      }
       let detail
       if (this.memberRoleId == 1) {
         detail = await this.getStudentDetail()
@@ -195,7 +211,8 @@ export default {
                 type: 'success',
                 message: this.$t('org.successfullyUpdated')
               })
-              this.toMemberListPage()
+              if (this.isDialog) return this.closeDialog()
+              return this.toMemberListPage()
             })
             .catch(error => {
               this.isLoading = false
@@ -214,6 +231,12 @@ export default {
   },
   watch: {
     $route(value) {
+      this.initMemberData()
+    },
+    editingMember() {
+      this.initMemberData()
+    },
+    isDialog() {
       this.initMemberData()
     }
   },
@@ -259,6 +282,9 @@ $borderColor: #e8e8e8;
         color: #c0c4cc;
       }
     }
+  }
+  &-footer{
+    text-align: right;
   }
   .el-select {
     width: 100%;
