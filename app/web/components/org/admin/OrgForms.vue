@@ -227,10 +227,16 @@ export default {
       })
     },
     async deleteForm(formDetail) {
-      this.isLoading = true
-      let { id } = formDetail
-      await this.orgDeleteForms({ formId: id })
-      this.isLoading = false
+      this.$confirm('确定删除该表单?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        this.isLoading = true
+        let { id } = formDetail
+        await this.orgDeleteForms({ formId: id })
+        this.isLoading = false
+      }).catch(e => console.error(e))
     },
     handleDropdownCommand(command) {
       let { key, detail } = command

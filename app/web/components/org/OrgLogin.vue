@@ -29,7 +29,7 @@
       </el-dialog>
     </div>
     <div class="org-login-forms" v-if="publishedForms.length > 0">
-      <div class="org-login-forms-title">请选择表单模板：</div>
+      <div class="org-login-forms-title">相关文档查看：</div>
       <div class="org-login-forms-container">
         <div class="org-login-forms-item" v-for="(form, index) in publishedForms" :key="index">
           <div class="org-login-forms-item-title" @click="toFormDetail(form)">{{form.name}}</div>
