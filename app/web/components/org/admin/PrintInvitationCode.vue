@@ -73,7 +73,6 @@ export default {
   name: 'PrintInvitationCode',
   data() {
     return {
-      className: this.$route.query.className,
       beginClassTime: this.$route.query.begin,
       endClassTime: this.$route.query.end,
       currentRouteName: this.$route.name
