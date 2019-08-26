@@ -21,6 +21,7 @@ const GET_HISTORY_CLASSES_SUCCESS = 'GET_HISTORY_CLASSES_SUCCESS'
 const TOGGLE_EXPIRATION_DIALOG = 'TOGGLE_EXPIRATION_DIALOG'
 const GET_FORMS_SUCCESS = 'GET_FORMS_SUCCESS'
 const GET_FEEDBACK_SUCCESS = 'GET_FEEDBACK_SUCCESS'
+const GET_LOGS_SUCCESS = 'GET_LOGS_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -41,7 +42,8 @@ export const props = {
   GET_HISTORY_CLASSES_SUCCESS,
   TOGGLE_EXPIRATION_DIALOG,
   GET_FORMS_SUCCESS,
-  GET_FEEDBACK_SUCCESS
+  GET_FEEDBACK_SUCCESS,
+  GET_LOGS_SUCCESS
 }
 
 const mutations = {
@@ -144,6 +146,12 @@ const mutations = {
     Vue.set(state, 'formsFeedback', {
       ...state.formsFeedback,
       [formId]: submitList
+    })
+  },
+  [GET_LOGS_SUCCESS](state, { orgId, result }) {
+    Vue.set(state, 'orgLogs', {
+      ...state.orgLogs,
+      [orgId]: result
     })
   }
 }

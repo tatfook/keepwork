@@ -59,7 +59,8 @@ const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
 export const keepworks = {
   getSvgCaptcha: async () => get('keepworks/svg_captcha'),
-  verifySvgCaptcha: async ({ key, captcha }) => post('keepworks/svg_captcha', { key, captcha })
+  verifySvgCaptcha: async ({ key, captcha }) =>
+    post('keepworks/svg_captcha', { key, captcha })
 }
 
 export const user = {
@@ -68,8 +69,10 @@ export const user = {
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
-  getDetailWithRankById: async ({ userId }) => get(`users/${encodeFunc({ userId })}/detail`),
-  getDetailWithRankByUsername: async ({ username }) => get(`users/${encodeFunc({ username })}/detail`),
+  getDetailWithRankById: async ({ userId }) =>
+    get(`users/${encodeFunc({ userId })}/detail`),
+  getDetailWithRankByUsername: async ({ username }) =>
+    get(`users/${encodeFunc({ username })}/detail`),
   getDetailByName: async args => get(`/users/${args.username}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
@@ -77,15 +80,19 @@ export const user = {
   changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async args => get(`/users?email=${args.email}`),
   getByCellphone: async args => get(`/users?cellphone=${args.cellphone}`),
-  getResetCodeByEmail: async args => get(`/users/email_captcha?email=${args.email}`),
-  getResetCodeByCellphone: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  getResetCodeByEmail: async args =>
+    get(`/users/email_captcha?email=${args.email}`),
+  getResetCodeByCellphone: async args =>
+    get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
   passwordReset: async args => post('/users/reset_password', args),
   // getUserByEmail: async args => get(`/users/?email=${args.email}`),
   verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
   verifyEmailTwo: async args => post('/users/email_captcha', args),
   // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
-  verifyCellphoneOne: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
-  verifyCellphoneTwo: async (...args) => post('/users/cellphone_captcha', ...args),
+  verifyCellphoneOne: async args =>
+    get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  verifyCellphoneTwo: async (...args) =>
+    post('/users/cellphone_captcha', ...args),
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
   register: async args => {
@@ -93,8 +100,10 @@ export const user = {
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
-  bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
-  searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
+  bindThreeService: async (...args) =>
+    post(`oauth_users/${args.serviceName}`, ...args),
+  searchUsersByUsernames: async ({ username }) =>
+    post('users/search', { username }),
   searchByField: async args => post('users/search', args)
 }
 
@@ -107,7 +116,8 @@ export const account = {
   getRechargeOrderState: async args => get(`/orders/${args.id}`),
   createTradeOrder: async args => post('/trades', args),
   getGoods: async args => get('/goods'),
-  getDigitalAccounts: async args => haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
+  getDigitalAccounts: async args =>
+    haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
 }
 
 /*doc
@@ -158,11 +168,14 @@ export const website = {
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
   getSiteGroups: async ({ siteId }) => get(`sites/${siteId}/groups`),
-  createSiteGroup: async ({ siteId, groupId, level }) => post(`sites/${siteId}/groups`, { groupId, level }),
-  deleteSiteGroup: async ({ siteId, groupId }) => deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
+  createSiteGroup: async ({ siteId, groupId, level }) =>
+    post(`sites/${siteId}/groups`, { groupId, level }),
+  deleteSiteGroup: async ({ siteId, groupId }) =>
+    deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
   getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
-  getDetailInfo: async args => get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
+  getDetailInfo: async args =>
+    get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
   // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args),
   updateById: async args => put(`sites/${args.id}`, args),
@@ -201,12 +214,14 @@ export const pages = {
 }
 
 export const siteUser = {
-  getSiteListByMemberName: async (...args) => post('site_user/getSiteListByMemberName', ...args),
+  getSiteListByMemberName: async (...args) =>
+    post('site_user/getSiteListByMemberName', ...args),
   getContributeSites: async () => get('sites?owned=false&membership=true')
 }
 
 export const siteDataSource = {
-  getByUsername: async (...args) => post('site_data_source/getByUsername', ...args)
+  getByUsername: async (...args) =>
+    post('site_data_source/getByUsername', ...args)
 }
 
 /*doc
@@ -250,13 +265,16 @@ export const sensitiveWords = {
 export const bigfile = {
   upload: async (...args) => post('bigfile/upload', ...args),
   getByUsername: async (...args) => post('bigfile/getByUsername', ...args),
-  getUserStoreInfo: async (...args) => post('bigfile/getUserStoreInfo', ...args),
+  getUserStoreInfo: async (...args) =>
+    post('bigfile/getUserStoreInfo', ...args),
   deleteById: async (...args) => post('bigfile/deleteById', ...args),
   updateById: async (...args) => post('bigfile/updateById', ...args),
   getByFilenameList: async (...args) => post('bigfile/getByFilenameList', args),
   changeFilename: async (...args) => post('bigfile/changeFilename', ...args),
-  getDownloadUrlById: async (...args) => post('bigfile/getDownloadUrlById', ...args),
-  getDownloadUrlByKey: async (...args) => post('bigfile/getDownloadUrlByKey', ...args)
+  getDownloadUrlById: async (...args) =>
+    post('bigfile/getDownloadUrlById', ...args),
+  getDownloadUrlByKey: async (...args) =>
+    post('bigfile/getDownloadUrlByKey', ...args)
 }
 
 export const qiniu = {
@@ -270,16 +288,19 @@ export const userThreeService = {
   // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
   // unbind: async (...args) => post('user_three_service/unbind', ...args)
-  unbind: async args => deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
+  unbind: async args =>
+    deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
 }
 
 export const favorites = {
   existFavorite: async ({ objectId, objectType }) =>
     get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
-  favoriteObject: async ({ objectId, objectType }) => post('favorites', { objectId, objectType }),
+  favoriteObject: async ({ objectId, objectType }) =>
+    post('favorites', { objectId, objectType }),
   unFavoriteObject: async ({ objectId, objectType }) =>
     deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
-  getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
+  getUserFavorites: async ({ objectType, userId }) =>
+    get('favorites', { params: { objectType, userId } }),
   getUserFollows: async ({ objectType, objectId }) =>
     get(`favorites/follows?objectId=${objectId}&objectType=${objectType}`),
   getUserSearchAllFavorites: async args => post('favorites/search', args)
@@ -287,11 +308,21 @@ export const favorites = {
 
 export const projects = {
   getProjects: async args => post('projects/search', args),
-  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
-  updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
+  getProjectDetail: async ({ projectId }) =>
+    get(`projects/${projectId}/detail`),
+  updateProject: async ({ projectId, updatingProjectData }) =>
+    put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
   getUserProjectsByName: async ({ name }) => post('projects/search', { name }),
-  createProject: async ({ description, name, privilege, type, visibility, siteId, tags }) =>
+  createProject: async ({
+    description,
+    name,
+    privilege,
+    type,
+    visibility,
+    siteId,
+    tags
+  }) =>
     post('projects', {
       description,
       name,
@@ -304,7 +335,8 @@ export const projects = {
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),
-  getPersonalProjectsByUserId: async ({ userId }) => get(`projects?userId=${userId}`),
+  getPersonalProjectsByUserId: async ({ userId }) =>
+    get(`projects?userId=${userId}`),
   getContributeProjects: async () => get('projects/join'),
   getContributeProjectsByUserId: async ({ userId, exclude }) =>
     get(`projects/join?userId=${userId}&exclude=${exclude}`),
@@ -316,11 +348,23 @@ export const projects = {
 
 export const applies = {
   getApplyList: async ({ objectId, objectType, applyType }) =>
-    get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
-  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state }),
+    get(
+      `applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`
+    ),
+  updateApplyState: async ({ id, state }) =>
+    put(`applies/${id}`, { id, state }),
   getApplyState: async ({ objectType, objectId, applyType, applyId }) =>
-    get(`applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`),
-  applyProjectMember: async ({ objectType, objectId, applyType, applyId, legend, extra }) =>
+    get(
+      `applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`
+    ),
+  applyProjectMember: async ({
+    objectType,
+    objectId,
+    applyType,
+    applyId,
+    legend,
+    extra
+  }) =>
     post('applies', { objectType, objectId, applyType, applyId, legend, extra })
 }
 
@@ -329,37 +373,51 @@ export const members = {
     get(`members?objectId=${objectId}&objectType=${objectType}`),
   deleteMember: async ({ id }) => deleteMethod(`members/${id}`),
   isMemberExist: async ({ objectId, objectType, memberId }) =>
-    get(`members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`)
+    get(
+      `members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`
+    )
 }
 
 export const comments = {
-  getComments: async ({ objectType, objectId, xPage = 1, xPerPage = 200, xOrder = 'updatedAt-desc' }) =>
+  getComments: async ({
+    objectType,
+    objectId,
+    xPage = 1,
+    xPerPage = 200,
+    xOrder = 'updatedAt-desc'
+  }) =>
     get(
       `comments?objectType=${objectType}&objectId=${objectId}&x-per-page=${xPerPage}&x-page=${xPage}&x-order=${xOrder}`
     ),
-  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content }),
+  createComment: async ({ objectType, objectId, content }) =>
+    post('comments', { objectType, objectId, content }),
   deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`),
-  updateComment: async ({ commentId, content }) => put(`comments/${commentId}`, { content })
+  updateComment: async ({ commentId, content }) =>
+    put(`comments/${commentId}`, { content })
 }
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
   getSingleProjectIssues: async params => post('issues/search', params),
-  updateIssue: async ({ objectId, params }) => put(`issues/${objectId}`, { ...params }),
+  updateIssue: async ({ objectId, params }) =>
+    put(`issues/${objectId}`, { ...params }),
   getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
 }
 
 export const groups = {
   getAllGroups: async () => get('groups'),
-  createGroup: async ({ groupname, members, description }) => post('groups', { groupname, members, description }),
-  updateGroup: async ({ id, members, description }) => put(`groups/${id}`, { members, description }),
+  createGroup: async ({ groupname, members, description }) =>
+    post('groups', { groupname, members, description }),
+  updateGroup: async ({ id, members, description }) =>
+    put(`groups/${id}`, { members, description }),
   deleteGroup: async ({ id }) => deleteMethod(`groups/${id}`),
-  addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName })
+  addMemberToGroup: async ({ groupId, memberName }) =>
+    post(`groups/${groupId}/members`, { memberName })
 }
 
 export const games = {
   getGamesList: async () => post('games/search'),
-  getWorksByGameId: async (params) => post('gameWorks/search', params),
+  getWorksByGameId: async params => post('gameWorks/search', params),
   getLegalGamesProjects: async () => get('games/projects'),
   submitGameWorks: async (...args) => post('gameWorks', ...args),
   getGameWorksStatistics: async () => get('gameWorks/statistics')
@@ -368,60 +426,139 @@ export const games = {
 export const lessonOrganizations = {
   login: async ({ organizationName, username, password }) =>
     post('lessonOrganizations/login', { organizationName, username, password }),
-  getOrgToken: async ({ orgId }) => get(`lessonOrganizations/token?organizationId=${orgId}`),
-  updateOrg: async ({ orgId, orgData }) => put(`lessonOrganizations/${orgId}`, orgData),
-  getByName: async ({ name }) => get(`lessonOrganizations/getByName?name=${name}`),
-  getOrgPackages: async ({ organizationId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}`),
-  getOrgClassPackages: async ({ organizationId, classId }) => get(`lessonOrganizations/packages?organizationId=${organizationId}&classId=${classId}`),
+  getOrgToken: async ({ orgId }) =>
+    get(`lessonOrganizations/token?organizationId=${orgId}`),
+  updateOrg: async ({ orgId, orgData }) =>
+    put(`lessonOrganizations/${orgId}`, orgData),
+  getByName: async ({ name }) =>
+    get(`lessonOrganizations/getByName?name=${name}`),
+  getOrgPackages: async ({ organizationId }) =>
+    get(`lessonOrganizations/packages?organizationId=${organizationId}`),
+  getOrgClassPackages: async ({ organizationId, classId }) =>
+    get(
+      `lessonOrganizations/packages?organizationId=${organizationId}&classId=${classId}`
+    ),
   getOrgClasses: async params => get('lessonOrganizationClasses', { params }),
   getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
-  getClassPackagesById: async params => get('lessonOrganizations/packages', { params }),
-  getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
-  addStudentToClass: async params => post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
-  getOrgStudentPackages: async () => get('lessonOrganizations/packages?roleId=1'),
-  getOrgStudentPackageDetail: async params => get('lessonOrganizations/packageDetail', { params }),
+  getClassPackagesById: async params =>
+    get('lessonOrganizations/packages', { params }),
+  getClassStudentsById: async params =>
+    get('lessonOrganizationClassMembers/student', { params }),
+  addStudentToClass: async params =>
+    post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
+  getOrgStudentPackages: async () =>
+    get('lessonOrganizations/packages?roleId=1'),
+  getOrgStudentPackageDetail: async params =>
+    get('lessonOrganizations/packageDetail', { params }),
   getUserOrganizations: async () => get('lessonOrganizations'),
-  searchOrganizations: async params => post('lessonOrganizations/search', params),
-  createBatchCode: async params => post('lessonOrganizationActivateCodes', params),
-  getOrgActivateCodes: async params => post('lessonOrganizationActivateCodes/search', params),
-  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params),
+  searchOrganizations: async params =>
+    post('lessonOrganizations/search', params),
+  createBatchCode: async params =>
+    post('lessonOrganizationActivateCodes', params),
+  getOrgActivateCodes: async params =>
+    post('lessonOrganizationActivateCodes/search', params),
+  joinOrganization: async params =>
+    post('lessonOrganizationActivateCodes/activate', params),
   sendSocketMessage: async params => socketMessage.post('app/msg', params)
 }
 
 export const lessonOrganizationClasses = {
-  getClasses: async ({ organizationId }) => get(`lessonOrganizationClasses?organizationId=${organizationId}`),
-  createClasses: async ({ organizationId, name, begin, end, packages }) => post('lessonOrganizationClasses', { organizationId, name, begin, end, packages }),
-  getClassPackageDetail: async params => get('lessonOrganizations/packageDetail', { params }),
-  updateClass: async ({ organizationId, classId, name, begin, end, packages }) => put(`lessonOrganizationClasses/${classId}`, { organizationId, name, begin, end, packages }),
-  getHistoryClasses: async (params) => get('lessonOrganizationClasses/history', { params })
+  getClasses: async ({ organizationId }) =>
+    get(`lessonOrganizationClasses?organizationId=${organizationId}`),
+  createClasses: async ({ organizationId, name, begin, end, packages }) =>
+    post('lessonOrganizationClasses', {
+      organizationId,
+      name,
+      begin,
+      end,
+      packages
+    }),
+  getClassPackageDetail: async params =>
+    get('lessonOrganizations/packageDetail', { params }),
+  updateClass: async ({
+    organizationId,
+    classId,
+    name,
+    begin,
+    end,
+    packages
+  }) =>
+    put(`lessonOrganizationClasses/${classId}`, {
+      organizationId,
+      name,
+      begin,
+      end,
+      packages
+    }),
+  getHistoryClasses: async params =>
+    get('lessonOrganizationClasses/history', { params })
 }
 
 export const lessonOrganizationClassMembers = {
-  getTeachers: async ({ organizationId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
-  getStudents: async ({ organizationId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
-  getStudentsByClassId: async ({ organizationId, classId }) => get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`),
-  getTeacherssByClassId: async ({ organizationId, classId }) => get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`),
-  createClassMember: async ({ organizationId, classId, classIds, memberName, realname, roleId }) => post('lessonOrganizationClassMembers', { organizationId, classId, classIds, memberName, realname, roleId }),
-  getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
-  removeMemberFromClass: async id => deleteMethod(`lessonOrganizationClassMembers/${id}`)
+  getTeachers: async ({ organizationId }) =>
+    get(
+      `lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`
+    ),
+  getStudents: async ({ organizationId }) =>
+    get(
+      `lessonOrganizationClassMembers/student?organizationId=${organizationId}`
+    ),
+  getStudentsByClassId: async ({ organizationId, classId }) =>
+    get(
+      `lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`
+    ),
+  getTeacherssByClassId: async ({ organizationId, classId }) =>
+    get(
+      `lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`
+    ),
+  createClassMember: async ({
+    organizationId,
+    classId,
+    classIds,
+    memberName,
+    realname,
+    roleId
+  }) =>
+    post('lessonOrganizationClassMembers', {
+      organizationId,
+      classId,
+      classIds,
+      memberName,
+      realname,
+      roleId
+    }),
+  getClassStudentsById: async params =>
+    get('lessonOrganizationClassMembers/student', { params }),
+  removeMemberFromClass: async id =>
+    deleteMethod(`lessonOrganizationClassMembers/${id}`)
 }
 
 export const lessonOrganizationForms = {
-  createForm: async ({ formDetail }) => post('lessonOrganizationForms', formDetail),
-  getForms: async ({ organizationId }) => post('lessonOrganizationForms/search', { organizationId }),
-  updateForm: async ({ formId, formDetail }) => put(`lessonOrganizationForms/${formId}`, formDetail),
-  deleteForm: async ({ formId }) => deleteMethod(`lessonOrganizationForms/${formId}`),
-  submitForm: async ({ formId, quizzes }) => post(`lessonOrganizationForms/${formId}/submit`, { quizzes }),
-  getSubmitList: async ({ formId }) => get(`lessonOrganizationForms/${formId}/submit`),
-  updateSubmit: async ({ formId, submitId, submitData }) => put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
+  createForm: async ({ formDetail }) =>
+    post('lessonOrganizationForms', formDetail),
+  getForms: async ({ organizationId }) =>
+    post('lessonOrganizationForms/search', { organizationId }),
+  updateForm: async ({ formId, formDetail }) =>
+    put(`lessonOrganizationForms/${formId}`, formDetail),
+  deleteForm: async ({ formId }) =>
+    deleteMethod(`lessonOrganizationForms/${formId}`),
+  submitForm: async ({ formId, quizzes }) =>
+    post(`lessonOrganizationForms/${formId}/submit`, { quizzes }),
+  getSubmitList: async ({ formId }) =>
+    get(`lessonOrganizationForms/${formId}/submit`),
+  updateSubmit: async ({ formId, submitId, submitData }) =>
+    put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
 }
 
 export const organizations = {
-  changePwd: async ({ classId, memberId, password }) => post('organizations/changepwd', { classId, memberId, password })
+  changePwd: async ({ classId, memberId, password }) =>
+    post('organizations/changepwd', { classId, memberId, password }),
+  getLogs: async searchParams => post('organizations/log', searchParams)
 }
 
 export const graphql = {
-  getQueryResult: async ({ query, variables }) => post('graphql', { query, variables })
+  getQueryResult: async ({ query, variables }) =>
+    post('graphql', { query, variables })
 }
 
 export const feedbacks = {
@@ -429,12 +566,12 @@ export const feedbacks = {
 }
 
 export const systemTags = {
-  getSystemTags: async (type) => get(`systemTags?classify=${type}`)
+  getSystemTags: async type => get(`systemTags?classify=${type}`)
 }
 
 export const message = {
   getMessages: async (params = {}) => get('userMessages', { params }),
-  signMessages: async ids => post('userMessages/state', { state: 1, ids }),
+  signMessages: async ids => post('userMessages/state', { state: 1, ids })
 }
 
 export const editorSocket = {
