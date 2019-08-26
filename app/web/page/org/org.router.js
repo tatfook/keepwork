@@ -47,6 +47,7 @@ const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
 const FormFeedback = () => import('@/components/org/admin/FormFeedback')
 const OrgFormDetail = () => import('@/components/org/OrgFormDetail')
+const OrgLogs = () => import('@/components/org/common/OrgLogs')
 const OrgFirstView = () => import('@/components/org/admin/OrgFirstView')
 
 Vue.use(Router)
@@ -140,6 +141,11 @@ export default new Router({
               path: 'classes',
               name: 'OrgTeacherClass',
               component: OrgTeacherClass
+            },
+            {
+              path: 'logs',
+              name: 'OrgTeacherLogs',
+              component: OrgLogs
             }
           ]
         },
@@ -320,6 +326,11 @@ export default new Router({
           path: 'setting',
           name: 'OrgSetting',
           component: OrgSetting
+        },
+        {
+          path: 'logs',
+          name: 'OrgAdminLogs',
+          component: OrgLogs
         }
       ]
     },

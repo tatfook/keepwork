@@ -23,7 +23,8 @@ const {
   GET_HISTORY_CLASSES_SUCCESS,
   TOGGLE_EXPIRATION_DIALOG,
   GET_FORMS_SUCCESS,
-  GET_FEEDBACK_SUCCESS
+  GET_FEEDBACK_SUCCESS,
+  GET_LOGS_SUCCESS
 } = props
 
 const actions = {
@@ -438,6 +439,23 @@ const actions = {
       .catch(err => {
         return Promise.reject(err)
       })
+  },
+  async getSearchedLogs(
+    {
+      commit,
+      getters: { currentOrgId }
+    },
+    { username, type, description, xPage, xPerPage, xOrder }
+  ) {
+    let params = {}
+    if (username) params['username'] = username
+    if (type) params['type'] = type
+    if (description) params['description'] = description
+    if (xPage) params['x-page'] = xPage
+    if (xPerPage) params['x-per-page'] = xPerPage
+    if (xOrder) params['x-order'] = xOrder
+    let result = await keepwork.organizations.getLogs(params)
+    commit(GET_LOGS_SUCCESS, { orgId: currentOrgId, result })
   }
 }
 
