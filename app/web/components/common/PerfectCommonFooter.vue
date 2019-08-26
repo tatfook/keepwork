@@ -64,24 +64,24 @@
     <div class="perfect-common-footer-simple-list">
       <ul class="footer-container-list">
         <li class="footer-container-list-item">
-          <a class="footer-container-list-item-keepwork" href="/">Keepwork</a>
+          <a class="footer-container-list-item-keepwork hover-blue" href="/">Keepwork</a>
         </li>
         <li class="footer-container-list-item">
           <span class="footer-container-list-item-icp">© Tatfook</span>
         </li>
         <li class="footer-container-list-item">
-          <a class="footer-container-list-item-icp" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030602002093" target="_blank">粤ICP备14002196号-2</a>
+          <a class="footer-container-list-item-icp hover-blue" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030602002093" target="_blank">粤ICP备14002196号-2</a>
         </li>
         <li class="footer-container-list-item">
-          <a class="footer-container-list-item-icp" href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">Powered by NPL</a>
+          <a class="footer-container-list-item-icp hover-blue" href="https://github.com/LiXizhi/NPLRuntime/wiki" target="_blank">Powered by NPL</a>
         </li>
         <li class="footer-container-list-item">
-          <span class="footer-container-list-item-inform" @click="showComplainDialog">{{$t('common.complaintReporting')}}</span>
+          <span class="footer-container-list-item-inform hover-blue" @click="showComplainDialog">{{$t('common.complaintReporting')}}</span>
         </li>
         <li class="footer-container-list-item">
           <span>
             <el-dropdown @command='switchLanguage' trigger="click" placement="top">
-              <span class="el-dropdown-link">
+              <span class="el-dropdown-link hover-blue">
                 {{$t('common.simplifiedChinese')}}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot='dropdown' class="footer-container-list-item-select">
@@ -172,6 +172,9 @@ export default {
             a {
               color: #666;
               text-decoration: none;
+              &:hover {
+                color: #fff;
+              }
             }
           }
         }
@@ -205,6 +208,11 @@ export default {
           &-icp {
             color: #fff;
             text-decoration: none;
+          }
+          .hover-blue {
+            &:hover {
+              color: #69b4f1;
+            }
           }
           & + .footer-container-list-item {
             border-left: 1px solid #666;
