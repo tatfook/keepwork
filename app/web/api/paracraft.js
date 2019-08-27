@@ -9,10 +9,16 @@ const { get, post } = paracraftEndpoint
 export const pBlocks = {
   getClassifies: async () => get('pBlocks/systemClassifies'),
   getCopms: async () => get('pBlocks/system'),
-  updateUsedCount: async ({ id }) => post(`pBlocks/${id}/use`)
+  updateUsedCount: async ({ id }) => post(`pBlocks/${id}/use`),
+}
+
+export const org = {
+  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params),
+  getOrganizationList: async () => get('lessonOrganizations')
 }
 
 export const paracraft = {
-  pBlocks
+  pBlocks,
+  org
 }
 export default paracraft

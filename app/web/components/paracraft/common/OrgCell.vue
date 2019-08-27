@@ -1,27 +1,51 @@
 <template>
-  <div class="org-cell">
+  <div class="org-cell" @click="handleOpenLink">
     <img class="org-cell-img" :src="orgLogo" alt="机构logo">
     <div class="org-cell-info">
-      <div class="org-cell-info-name">Paracraft试学体验馆</div>
+      <div class="org-cell-info-name">{{name}}</div>
       <div class="org-cell-info-row">
         <i class="iconfont icon-phone-fill"></i>
-        <span>0755-56895231</span>
+        <span>{{phone}}</span>
       </div>
       <div class="org-cell-info-row">
         <i class="iconfont icon-location-fill"></i>
-        <span class="address-fix">广东省深圳市宝安区福永镇广东省深圳市宝安区福永镇广东省深圳市宝安区福永镇广东省深圳市宝安区福永镇
-          凤凰村</span>
+        <span class="address-fix">{{address}}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'OrgCell',
+  props: {
+    orgData: {}
+  },
+  methods: {
+    ...mapActions({
+       openLink: 'paracraft/openLink'
+    }),
+    handleOpenLink() {
+      const link = `https://keepwork.com/org/${this.loginUrl}`
+      this.openLink(link)
+    }
+  },
   computed: {
     orgLogo() {
-      return 'http://git.keepwork.com/gitlab_rls_kevinxft/keepworkdatasource/raw/master/kevinxft_images/profile_1539254819668.jpeg'
+      return this.orgData.logo || require('@/assets/paracraft/default-logo.png')
+    },
+    phone() {
+      return this.orgData.cellphone || '暂无'
+    },
+    address() {
+      return this.orgData.location || '未知'
+    },
+    name() {
+      return this.orgData.name
+    },
+    loginUrl() {
+      return this.orgData.loginUrl
     }
   }
 }
@@ -40,12 +64,12 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   &:hover {
-    box-shadow: 0px 0px 24px #fff;
+    box-shadow: 0px 0px 16px #fff;
   }
   &-img {
     width: 170px;
     height: 100px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 10px;
   }
   &-info {
