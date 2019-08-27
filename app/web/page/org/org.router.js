@@ -30,6 +30,7 @@ const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 const ClassList = () => import('@/components/org/admin/ClassList')
 const NewClass = () => import('@/components/org/admin/NewClass')
 const EditClass = () => import('@/components/org/admin/EditClass')
+const ClassMembers = () => import('@/components/org/admin/ClassMembers')
 const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
@@ -46,6 +47,7 @@ const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
 const FormFeedback = () => import('@/components/org/admin/FormFeedback')
 const OrgFormDetail = () => import('@/components/org/OrgFormDetail')
+const OrgLogs = () => import('@/components/org/common/OrgLogs')
 const OrgFirstView = () => import('@/components/org/admin/OrgFirstView')
 
 Vue.use(Router)
@@ -139,6 +141,11 @@ export default new Router({
               path: 'classes',
               name: 'OrgTeacherClass',
               component: OrgTeacherClass
+            },
+            {
+              path: 'logs',
+              name: 'OrgTeacherLogs',
+              component: OrgLogs
             }
           ]
         },
@@ -229,6 +236,11 @@ export default new Router({
               component: EditClass
             },
             {
+              path: 'class/members',
+              name: 'OrgClassMembers',
+              component: ClassMembers
+            },
+            {
               path: 'class/detail',
               name: 'OrgClassDetail',
               component: ClassDetail
@@ -314,6 +326,11 @@ export default new Router({
           path: 'setting',
           name: 'OrgSetting',
           component: OrgSetting
+        },
+        {
+          path: 'logs',
+          name: 'OrgAdminLogs',
+          component: OrgLogs
         }
       ]
     },

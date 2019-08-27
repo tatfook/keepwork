@@ -23,7 +23,8 @@ const state = {
   orgHistoricalClasses: {},
   expirationDialogVisible: false,
   orgForms: {},
-  formsFeedback: {}
+  formsFeedback: {},
+  orgLogs: {}
 }
 export default {
   namespaced: true,

@@ -66,6 +66,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import Vue from 'vue'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
@@ -204,8 +205,22 @@ export default {
         })
         .catch(() => {})
     },
+    isFormDataValid(formDetail) {
+      let { type, quizzes, title, text, state } = formDetail
+      return Boolean(
+        state != 0 ||
+        (title && type === 3 ? quizzes && quizzes.length > 0 : text)
+      )
+    },
     async changeFormState(formDetail) {
       let { state } = formDetail
+      if (!this.isFormDataValid(formDetail)) {
+        this.$message({
+          type: 'error',
+          message: '表单信息不完整，请完善后发布！'
+        })
+        return
+      }
       let targetState = state == 2 ? 1 : state + 1
       this.isLoading = true
       await this.orgUpdateForms({
@@ -231,12 +246,14 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async () => {
-        this.isLoading = true
-        let { id } = formDetail
-        await this.orgDeleteForms({ formId: id })
-        this.isLoading = false
-      }).catch(e => console.error(e))
+      })
+        .then(async () => {
+          this.isLoading = true
+          let { id } = formDetail
+          await this.orgDeleteForms({ formId: id })
+          this.isLoading = false
+        })
+        .catch(e => console.error(e))
     },
     handleDropdownCommand(command) {
       let { key, detail } = command
