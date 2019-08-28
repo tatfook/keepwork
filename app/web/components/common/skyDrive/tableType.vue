@@ -1,6 +1,6 @@
 <template>
   <div class="table-type" v-loading='loading' droppable="true">
-    <el-table v-if="fileListWithUploading.length" ref="skyDriveTable" :data="fileListWithUploading" :row-key="getRowKey" height="500" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%" @sort-change="handleSortChange">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
       <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
@@ -10,7 +10,7 @@
       <el-table-column prop="size" sortable :label="$t('skydrive.filesize')" width="85" show-overflow-tooltip>
         <template slot-scope="scope">{{ scope.row.displaySize }}</template>
       </el-table-column>
-      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="158">
+      <el-table-column prop="updatedAt" sortable :label="$t('skydrive.updateDate')" width="160">
         <template slot-scope="scope">
           <span v-if="scope.row.percent >= 0 && scope.row.state !== 'success'">
             <el-progress :stroke-width="10" :color="scope.row.state === 'doing' ? '#13ce67' : '#f56c6c'" :show-text=false :percentage="scope.row.percent"></el-progress>
@@ -55,8 +55,10 @@
           </span>
         </template>
       </el-table-column>
+      <infinite-loading slot="append" :identifier="identifier" @infinite="load" force-use-infinite-wrapper=".el-table__body-wrapper">
+      </infinite-loading>
     </el-table>
-    <file-list-empty v-if="!fileListWithUploading.length" :uploadText="uploadText" viewType="table" :uploadType="mediaFilterType"></file-list-empty>
+    <file-list-empty v-if="!tableDataWithUploading.length" :uploadText="uploadText" viewType="table" :uploadType="mediaFilterType"></file-list-empty>
   </div>
 </template>
 <script>
@@ -68,19 +70,29 @@ import FileDeleter from './FileDeleter'
 import FileRenamer from './FileRenamer'
 import FileUrlGetter from './FileUrlGetter'
 import FileListEmpty from './FileListEmpty'
+import Vue from 'vue'
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload, {
+  lazyComponent: true
+})
+import InfiniteLoading from 'vue-infinite-loading'
 export default {
   name: 'tableType',
   props: {
+    uploadingFiles: Array,
+    fileListFilteredSearched: Array,
     isInsertable: Boolean,
-    fileListWithUploading: {
-      type: Array,
-      required: true
-    },
     uploadText: String,
     mediaFilterType: String
   },
   data() {
     return {
+      identifier: new Date(),
+      isScrollDataLoading: false,
+      tableData: [],
+      fileListChunk: [],
+      nowPage: 0,
+      perPage: 15,
       loading: false,
       searchWord: '',
       multipleSelectionResults: []
@@ -101,8 +113,12 @@ export default {
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
       return (
-        selectedCount > 0 && selectedCount == this.fileListWithUploading.length
+        selectedCount > 0 &&
+        selectedCount == this.fileListFilteredSearched.length
       )
+    },
+    tableDataWithUploading() {
+      return _.concat(this.uploadingFiles, this.tableData)
     }
   },
   methods: {
@@ -110,12 +126,42 @@ export default {
       skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue',
       userUseFileInSite: 'user/useFileInSite'
     }),
+    handleSortChange({ prop, order }) {
+      this.initData(prop, order)
+    },
+    initData(prop, order) {
+      let fileList = _.cloneDeep(this.fileListFilteredSearched)
+      if (prop && order) {
+        fileList = _.sortBy(fileList, function(o) {
+          if (order == 'descending') return -o[prop]
+          return o[prop]
+        })
+      }
+      this.fileListChunk = _.chunk(fileList, this.perPage)
+      this.identifier = new Date()
+      this.nowPage = 0
+      this.tableData = []
+      this.load()
+    },
+    load($state) {
+      this.tableData = _.concat(
+        this.tableData,
+        this.fileListChunk[this.nowPage]
+      ).filter(fileDetail => {
+        return Boolean(fileDetail)
+      })
+      this.nowPage++
+      if (this.nowPage == this.fileListChunk.length) {
+        return $state && $state.complete()
+      }
+      $state && $state.loaded()
+    },
     handleClose({ file, url }) {
       this.$emit('close', { file, url })
     },
     selectAll() {
       let selected = this.isAllSelected ? false : true
-      _.forEach(this.fileListWithUploading, row => {
+      _.forEach(this.fileListFilteredSearched, row => {
         this.$refs.skyDriveTable.toggleRowSelection(row, selected)
       })
     },
@@ -146,9 +192,13 @@ export default {
   watch: {
     isAllSelected(val) {
       this.$emit('selectAllStateChange', val)
+    },
+    fileListFilteredSearched() {
+      this.initData()
     }
   },
   components: {
+    InfiniteLoading,
     FileListEmpty,
     FileDownloader,
     FileDeleter,

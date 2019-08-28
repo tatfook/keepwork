@@ -1,11 +1,9 @@
 <template>
   <div class="media-type" v-loading='loading'>
     <div class="media-type-media-library">
-      <div v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
+      <lazy-component v-for='(mediaItem, index) in sortedSkyDriveMediaLibraryData' :key='mediaItem.key || index' class='media-type-media-item'>
         <div class="media-type-media-item-main" v-if="mediaItem.key" @click.prevent="selectItem(mediaItem)">
-          <lazy-component v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" @show="lazyLoadShowHandler">
-            <video :src="mediaItem.downloadUrl" width="100%" height="100%"></video>
-          </lazy-component>
+          <img v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" @show="lazyLoadShowHandler" v-lazy="videoCover" class="media-type-media-item-img" />
           <img v-else-if="getMediaItemTypeByExt(mediaItem.ext) ==='image'" v-lazy="mediaItem.downloadUrl + qiniuImgThumbnail" class="media-type-media-item-img" />
           <span v-else class="media-type-media-item-ext-cover iconfont" :class="getExtClass(mediaItem)"></span>
           <div v-if="getMediaItemTypeByExt(mediaItem.ext) ==='video'" class='media-type-media-item-play' @click.stop="handlePlay(mediaItem)">
@@ -44,7 +42,7 @@
           </div>
         </div>
         <div class="media-type-media-item-name" :title="mediaItem.filename">{{mediaItem.filename}}</div>
-      </div>
+      </lazy-component>
       <file-list-empty v-if="!sortedSkyDriveMediaLibraryData.length && !uploadingFiles.length" :uploadText="uploadText" viewType="thumb" :uploadType="mediaFilterType"></file-list-empty>
     </div>
     <el-row class="media-type-footer" v-if="isApplicable">
@@ -112,6 +110,7 @@ export default {
   },
   data() {
     return {
+      videoCover: require('@/assets/img/video_cover.jpg'),
       fileList: [],
       selectedMediaItem: null,
       loading: false,
