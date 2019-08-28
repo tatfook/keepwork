@@ -1,6 +1,6 @@
 <template>
   <div class="table-type" v-loading='loading' droppable="true">
-    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%" @sort-change="handleSortChange">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
       <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
@@ -55,7 +55,7 @@
           </span>
         </template>
       </el-table-column>
-      <infinite-loading slot="append" @infinite="load" force-use-infinite-wrapper=".el-table__body-wrapper">
+      <infinite-loading slot="append" :identifier="identifier" @infinite="load" force-use-infinite-wrapper=".el-table__body-wrapper">
       </infinite-loading>
     </el-table>
     <file-list-empty v-if="!tableDataWithUploading.length" :uploadText="uploadText" viewType="table" :uploadType="mediaFilterType"></file-list-empty>
@@ -87,6 +87,7 @@ export default {
   },
   data() {
     return {
+      identifier: new Date(),
       isScrollDataLoading: false,
       tableData: [],
       fileListChunk: [],
@@ -112,10 +113,11 @@ export default {
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
       return (
-        selectedCount > 0 && selectedCount == this.fileListFilteredSearched.length
+        selectedCount > 0 &&
+        selectedCount == this.fileListFilteredSearched.length
       )
     },
-    tableDataWithUploading(){
+    tableDataWithUploading() {
       return _.concat(this.uploadingFiles, this.tableData)
     }
   },
@@ -124,8 +126,19 @@ export default {
       skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue',
       userUseFileInSite: 'user/useFileInSite'
     }),
-    initData() {
-      this.fileListChunk = _.chunk(this.fileListFilteredSearched, this.perPage)
+    handleSortChange({ prop, order }) {
+      this.initData(prop, order)
+    },
+    initData(prop, order) {
+      let fileList = _.cloneDeep(this.fileListFilteredSearched)
+      if (prop && order) {
+        fileList = _.sortBy(fileList, function(o) {
+          if (order == 'descending') return -o[prop]
+          return o[prop]
+        })
+      }
+      this.fileListChunk = _.chunk(fileList, this.perPage)
+      this.identifier = new Date()
       this.nowPage = 0
       this.tableData = []
       this.load()
@@ -180,7 +193,7 @@ export default {
     isAllSelected(val) {
       this.$emit('selectAllStateChange', val)
     },
-    fileListFilteredSearched(){
+    fileListFilteredSearched() {
       this.initData()
     }
   },
