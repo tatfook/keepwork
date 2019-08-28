@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = {
   systemClassifies: [],
-  systemComps: []
+  systemComps: [],
+  userOrgList: []
 }
 export default {
   namespaced: true,

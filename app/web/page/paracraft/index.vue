@@ -11,7 +11,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import router from './paracraft.router'
 import ba from 'vue-ba'
-import _ from 'lodash'
+import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 Vue.use(ElementUI)
@@ -27,6 +27,15 @@ export default {
   router,
   store
 }
+
+router.beforeEach((to, from, next) => {
+  const { token = '', port = '8099' } = to.query
+  if (token) {
+    Cookies.set('token', token)
+  }
+  Cookies.set('port', port)
+  next()
+})
 </script>
 <style lang="scss">
 body {
