@@ -11,17 +11,21 @@
             <el-button @click="handleJoinOrg" :loading="isLoading" class="org-home-header-code-button">提交</el-button>
           </div>
           <div class="org-home-header-back">
-            <el-button @click="handleBack" class="org-home-header-back-button" icon="iconfont icon-recall">返回</el-button>
+            <!-- <el-button @click="handleBack" class="org-home-header-back-button" icon="iconfont icon-recall">返回</el-button> -->
           </div>
         </div>
       </div>
       <div class="org-home-joined">
         <div class="org-home-joined-title">已加入的机构</div>
-        <el-row class="org-home-joined-list" type="flex">
+        <el-row v-if="isHasOrg" class="org-home-joined-list" type="flex">
           <el-col class="org-home-joined-list-item" :span="12" v-for="item in userOrgList" :key="item.id">
             <Org-Cell :orgData="item"></Org-Cell>
           </el-col>
         </el-row>
+        <div class="org-home-empty" v-else>
+          <div class="org-home-empty-tips">成为机构学员，学习keepwork在线课程</div>
+          <div @click="handleToOrgList" class="org-home-empty-more" round="">了解更多机构信息</div>
+        </div>
       </div>
       <div class="org-home-more">
         <div class="org-home-more-title">
@@ -80,6 +84,9 @@ export default {
     handleToMore(link) {
       this.openLink(link)
     },
+    handleToOrgList() {
+      this.openLink('https://keepwork.com/s/lesson/organizationCooperation')
+    },
     handleBack() {
       this.$notify({
         title: '返回',
@@ -116,6 +123,9 @@ export default {
       userOrgList: 'paracraft/userOrgList',
       paracraftPORT: 'paracraft/paracraftPORT'
     }),
+    isHasOrg() {
+      return this.userOrgList.length > 0
+    },
     moreList() {
       return [
         {
@@ -234,6 +244,29 @@ $width: 820px;
       &-item {
         text-align: center;
         margin-bottom: 26px;
+      }
+    }
+  }
+
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    &-tips {
+      color: #999;
+    }
+    &-more {
+      display: inline-block;
+      border: 1px solid #fff;
+      padding: 4px 16px;
+      margin-top: 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      &:hover {
+        color: #232223;
+        background: #fff;
       }
     }
   }
