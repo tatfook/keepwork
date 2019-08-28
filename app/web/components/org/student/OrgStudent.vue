@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="org-student-sidebar-bottom">
+        <!-- <div class="org-student-sidebar-bottom">
           <div class="org-student-operation">
             <span>我的老师</span>
           </div>
@@ -68,7 +68,7 @@
           <div v-else class="org-student-class-empty">
             暂无同学
           </div>
-        </div>
+        </div> -->
 
       </div>
       <template v-if="!isLoading">
