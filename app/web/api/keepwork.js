@@ -69,11 +69,17 @@ export const user = {
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
+<<<<<<< HEAD
   getDetailWithRankById: async ({ userId }) =>
     get(`users/${encodeFunc({ userId })}/detail`),
   getDetailWithRankByUsername: async ({ username }) =>
     get(`users/${encodeFunc({ username })}/detail`),
   getDetailByName: async args => get(`/users/${args.username}`),
+=======
+  getDetailWithRankById: async ({ userId }) => get(`users/${encodeFunc({ userId })}/detail`),
+  getDetailWithRankByUsername: async ({ username }) => get(`users/${encodeFunc({ username })}/detail`),
+  getDetailByName: async ({ username }) => get(`/users/${encodeFunc({ username })}`),
+>>>>>>> 682f8b62fcfb75a07a2bd6aa249ee2b179b8e28c
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
   changepw: async (...args) => post('/user/changepw', ...args),
