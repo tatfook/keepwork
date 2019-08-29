@@ -121,6 +121,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
       orgGetForms: 'org/getForms',
       orgUpdateForms: 'org/updateForm',
       orgCreateForm: 'org/createForm',
@@ -209,7 +210,7 @@ export default {
       let { type, quizzes, title, text, state } = formDetail
       return Boolean(
         state != 0 ||
-        (title && type === 3 ? quizzes && quizzes.length > 0 : text)
+          (title && type === 3 ? quizzes && quizzes.length > 0 : text)
       )
     },
     async changeFormState(formDetail) {
@@ -223,6 +224,12 @@ export default {
       }
       let targetState = state == 2 ? 1 : state + 1
       this.isLoading = true
+      let isOrgExpired = false
+      if (targetState === 1) isOrgExpired = await this.checkCurrentOrgExpire()
+      if (isOrgExpired) {
+        this.isLoading = false
+        return
+      }
       await this.orgUpdateForms({
         formId: formDetail.id,
         formDetail: { state: targetState }

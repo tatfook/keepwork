@@ -89,6 +89,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
       orgUpdateForm: 'org/updateForm',
       orgGetForms: 'org/getForms'
     }),
@@ -133,6 +134,7 @@ export default {
       this.$router.push({ name: 'OrgForms' })
     },
     async publishForm() {
+      if (await this.checkCurrentOrgExpire()) return
       let { title, description, text, quizzes } = this.formDetailData
       this.isLoading = true
       await this.orgUpdateForm({
