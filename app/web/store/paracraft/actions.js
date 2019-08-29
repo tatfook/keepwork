@@ -46,8 +46,7 @@ const actions = {
   },
   async getUserOrgList({ commit }) {
     const orgList = await paracraft.org.getOrganizationList()
-    const _visibleOrgList = _.filter(orgList, item => item.visibility === 0)
-    commit(GET_ORG_LIST_SUCCESS, _visibleOrgList)
+    commit(GET_ORG_LIST_SUCCESS, orgList)
   },
   async runParacraftCMD({ getters: { paracraftPORT } }, cmd) {
     const paracraftBaseUrl = `http://127.0.0.1:${paracraftPORT}/ajax/console?action=runcode`
