@@ -234,6 +234,10 @@ export default {
   }
   &-cell-actions,
   &-cell-actions-menu {
+    .el-dropdown-menu__item span {
+      width: auto;
+      padding: 0;
+    }
     [class*='icon'] {
       display: inline-block;
       margin-right: 10px;
