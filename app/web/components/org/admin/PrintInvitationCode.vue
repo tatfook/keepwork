@@ -73,7 +73,6 @@ export default {
   name: 'PrintInvitationCode',
   data() {
     return {
-      className: this.$route.query.className,
       beginClassTime: this.$route.query.begin,
       endClassTime: this.$route.query.end,
       currentRouteName: this.$route.name
@@ -102,7 +101,7 @@ export default {
       return _.chunk(this.printCodeListData, 2)
     },
     className() {
-      return _.get(this.$router.query.className, '')
+      return _.get(this.$route.query.className, '')
     }
   },
   methods: {

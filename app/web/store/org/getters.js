@@ -68,6 +68,8 @@ const getters = {
     _.get(state.orgPackagesGraphql, id),
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
+  getOrgTeachersByClassId: state => ({ orgId, classId }) =>
+    _.get(state.orgTeachers, `${orgId}.${classId}`),
   getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
   getOrgStudentsByClassId: state => ({ orgId, classId }) =>
     _.get(state.orgStudents, `${orgId}.${classId}`),
@@ -82,14 +84,19 @@ const getters = {
     return !_.includes(_.get(currentOrg, 'extra.visitedList', []), id)
   },
   formsList: state => ({ id }) => _.get(state.orgForms, id),
-  getFormDetailById: (state, { formsList, currentOrgId }) => ({ id, orgId }) => {
+  getFormDetailById: (state, { formsList, currentOrgId }) => ({
+    id,
+    orgId
+  }) => {
     orgId = orgId || currentOrgId
     return _.find(
       formsList({ id: orgId }),
       formDetail => _.toNumber(formDetail.id) === _.toNumber(id)
     )
   },
-  getFormFeedbackById: state => ({ id }) => state.formsFeedback[id]
+  getFormFeedbackById: state => ({ id }) => state.formsFeedback[id],
+  currentOrgLogs: (state, { currentOrgId }) =>
+    _.get(state.orgLogs, currentOrgId, [])
 }
 
 export default getters

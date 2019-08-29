@@ -45,6 +45,10 @@ export default {
         {
           pageName: 'OrgTeacherClass',
           text: this.$t('org.MyClassLabel')
+        },
+        {
+          pageName: 'OrgTeacherLogs',
+          text: '机构日志'
         }
       ]
     }
@@ -91,6 +95,7 @@ $borderColor: #e8e8e8;
     width: 270px;
     overflow: hidden;
     margin-right: 24px;
+    min-width: 0;
   }
   &-main {
     flex: 1;

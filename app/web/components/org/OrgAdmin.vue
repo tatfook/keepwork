@@ -92,6 +92,11 @@ export default {
           pageNames: ['OrgSetting'],
           indexPageName: 'OrgSetting',
           text: this.$t('org.settings')
+        },
+        {
+          pageNames: ['OrgAdminLogs'],
+          indexPageName: 'OrgAdminLogs',
+          text: '机构日志'
         }
       ]
     }

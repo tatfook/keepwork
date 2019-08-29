@@ -46,13 +46,18 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgTeachersById: 'org/getOrgTeachersById'
+      getOrgTeachersByClassId: 'org/getOrgTeachersByClassId'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
     orgTeachers() {
-      return this.getOrgTeachersById({ id: this.orgId }) || []
+      return (
+        this.getOrgTeachersByClassId({
+          orgId: this.orgId,
+          classId: undefined
+        }) || []
+      )
     },
     orgTeachersLength() {
       return this.orgTeachers.length
@@ -104,14 +109,11 @@ export default {
       })
     },
     toEditPage(teacherDetail) {
-      let { realname, username, classes } = teacherDetail
       this.$router.push({
         name: 'OrgEditTeacher',
         query: {
           roleId: 2,
-          realname,
-          memberName: username,
-          classIds: JSON.stringify(_.map(classes, classObj => classObj.id))
+          id: teacherDetail.id
         }
       })
     }

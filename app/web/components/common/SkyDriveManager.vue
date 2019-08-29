@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :uploadText="uploadText" :mediaFilterType="mediaFilterType" :isInsertable="isInsertable" :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @close="handleClose"></table-type>
+    <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :uploadText="uploadText" :mediaFilterType="mediaFilterType" :isInsertable="isInsertable" :uploadingFiles='filterTypeUploadingFile' :fileListFilteredSearched='fileListFilteredSearched'  :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @close="handleClose"></table-type>
     <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='filterTypeUploadingFile' :uploadText="uploadText" :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
   </div>
 </template>

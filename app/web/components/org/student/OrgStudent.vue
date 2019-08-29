@@ -41,6 +41,35 @@
             暂无班级信息
           </div>
         </div>
+
+        <!-- <div class="org-student-sidebar-bottom">
+          <div class="org-student-operation">
+            <span>我的老师</span>
+          </div>
+          <div v-if="hasOrgClasses" class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
+              <i class="iconfont icon-team"></i> {{item.name}}
+            </span>
+          </div>
+          <div v-else class="org-student-class-empty">
+            暂无老师
+          </div>
+        </div>
+
+        <div class="org-student-sidebar-bottom">
+          <div class="org-student-operation">
+            <span>我的同学</span>
+          </div>
+          <div v-if="hasOrgClasses" class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
+              <i class="iconfont icon-team"></i> {{item.name}}
+            </span>
+          </div>
+          <div v-else class="org-student-class-empty">
+            暂无同学
+          </div>
+        </div> -->
+
       </div>
       <template v-if="!isLoading">
         <router-view v-if="OrgIsStudent" class="org-student-main"></router-view>
@@ -295,10 +324,9 @@ $borderColor: #e8e8e8;
       padding-bottom: 22px;
     }
     &-bottom {
-      margin-top: 22px;
+      margin-top: 20px;
       background: #fff;
       border-radius: 8px;
-      margin-bottom: 40px;
     }
   }
   &-main {

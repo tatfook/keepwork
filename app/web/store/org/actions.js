@@ -23,7 +23,8 @@ const {
   GET_HISTORY_CLASSES_SUCCESS,
   TOGGLE_EXPIRATION_DIALOG,
   GET_FORMS_SUCCESS,
-  GET_FEEDBACK_SUCCESS
+  GET_FEEDBACK_SUCCESS,
+  GET_LOGS_SUCCESS
 } = props
 
 const actions = {
@@ -185,7 +186,10 @@ const actions = {
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
-  async getCurrentOrgClassList({ commit, getters: { currentOrgId: organizationId } }) {
+  async getCurrentOrgClassList({
+    commit,
+    getters: { currentOrgId: organizationId }
+  }) {
     const orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
       organizationId
     })
@@ -214,14 +218,17 @@ const actions = {
       })
     await dispatch('getOrgClassList', { organizationId })
   },
-  async getOrgTeacherList(context, { organizationId }) {
+  async getOrgTeacherList(context, { organizationId, classId }) {
     let { commit } = context
-    let orgTeachers = await keepwork.lessonOrganizationClassMembers.getTeachers(
-      {
+    let orgTeachers = classId
+      ? await keepwork.lessonOrganizationClassMembers.getTeacherssByClassId({
+        organizationId,
+        classId
+      })
+      : await keepwork.lessonOrganizationClassMembers.getTeachers({
         organizationId
-      }
-    )
-    commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers })
+      })
+    commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers, classId })
   },
   async getUserOrgRoleByGraphql(context, { organizationId, username }) {
     let result = await keepwork.graphql.getQueryResult({
@@ -416,8 +423,39 @@ const actions = {
     commit(GET_FEEDBACK_SUCCESS, { formId, submitList })
   },
   async updateSubmit({ dispatch }, { formId, submitId, submitData }) {
-    await keepwork.lessonOrganizationForms.updateSubmit({ formId, submitId, submitData })
+    await keepwork.lessonOrganizationForms.updateSubmit({
+      formId,
+      submitId,
+      submitData
+    })
     dispatch('getSubmitList', { formId })
+  },
+  async changePwd(context, { classId, memberId, password }) {
+    await keepwork.organizations
+      .changePwd({ classId, memberId, password })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  async getSearchedLogs(
+    {
+      commit,
+      getters: { currentOrgId }
+    },
+    { username, type, description, xPage, xPerPage, xOrder }
+  ) {
+    let params = {}
+    if (username) params['username'] = username
+    if (type) params['type'] = type
+    if (description) params['description'] = description
+    if (xPage) params['x-page'] = xPage
+    if (xPerPage) params['x-per-page'] = xPerPage
+    if (xOrder) params['x-order'] = xOrder
+    let result = await keepwork.organizations.getLogs(params)
+    commit(GET_LOGS_SUCCESS, { orgId: currentOrgId, result })
   }
 }
 
