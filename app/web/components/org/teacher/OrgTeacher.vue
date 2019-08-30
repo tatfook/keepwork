@@ -46,10 +46,10 @@ export default {
           pageName: 'OrgTeacherClass',
           text: this.$t('org.MyClassLabel')
         },
-        // {
-        //   pageName: 'OrgTeacherLogs',
-        //   text: '机构日志'
-        // }
+        {
+          pageName: 'OrgTeacherLogs',
+          text: '机构日志'
+        }
       ]
     }
   },
