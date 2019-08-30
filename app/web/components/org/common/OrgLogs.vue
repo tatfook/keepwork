@@ -65,7 +65,7 @@ export default {
         let { createdAt } = log
         return {
           ...log,
-          logTime: moment(createdAt).format('YYYY/MM/DD hh:mm')
+          logTime: moment(createdAt).format('YYYY/MM/DD HH:mm')
         }
       })
     }
