@@ -151,7 +151,7 @@ export default {
         return Boolean(fileDetail)
       })
       this.nowPage++
-      if (this.nowPage == this.fileListChunk.length) {
+      if (this.nowPage >= this.fileListChunk.length) {
         return $state && $state.complete()
       }
       $state && $state.loaded()
