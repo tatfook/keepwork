@@ -52,6 +52,7 @@ export default {
         },
         {
           pageNames: [
+            'OrgClassMembers',
             'OrgClassList',
             'OrgNewClass',
             'OrgEditClass',

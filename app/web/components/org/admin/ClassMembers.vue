@@ -8,7 +8,7 @@
       <div class="class-members-item-header">
         <i class="iconfont icon-jiaoshi"></i>教师
         <div class="class-members-item-operate" @click="isNewDialogVisible = true">
-          <i class="el-icon-circle-plus-outline"></i>添加教师
+          <i class="el-icon-circle-plus-outline"></i>配置老师
         </div>
       </div>
       <el-table border :data="teacherList">
