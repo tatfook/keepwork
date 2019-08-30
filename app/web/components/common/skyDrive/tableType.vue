@@ -1,6 +1,6 @@
 <template>
   <div class="table-type" v-loading='loading' droppable="true">
-    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" :default-sort="{prop: 'updatedAt', order: 'descending'}" @selection-change="handleSelectionChange" style="width: 100%" @sort-change="handleSortChange">
+    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" @selection-change="handleSelectionChange" style="width: 100%" @sort-change="handleSortChange">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
       <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
@@ -129,14 +129,23 @@ export default {
     handleSortChange({ prop, order }) {
       this.initData(prop, order)
     },
+    setSort() {
+      this.$nextTick(() => {
+        let tableRef = this.$refs.skyDriveTable
+        tableRef && tableRef.clearSort()
+        tableRef && tableRef.sort('updatedAt', 'descending')
+        this.initData('updatedAt', 'descending')
+      })
+    },
     initData(prop, order) {
       let fileList = _.cloneDeep(this.fileListFilteredSearched)
-      if (prop && order) {
-        fileList = _.sortBy(fileList, function(o) {
-          if (order == 'descending') return -o[prop]
-          return o[prop]
-        })
+      if (!prop || !order) {
+        prop = prop || 'updatedAt'
+        order = order || 'descending'
+        this.setSort()
       }
+      let orderStr = order == 'descending' ? 'desc' : 'asc'
+      fileList = _.orderBy(fileList, [prop], [orderStr])
       this.fileListChunk = _.chunk(fileList, this.perPage)
       this.identifier = new Date()
       this.nowPage = 0
@@ -151,7 +160,7 @@ export default {
         return Boolean(fileDetail)
       })
       this.nowPage++
-      if (this.nowPage == this.fileListChunk.length) {
+      if (this.nowPage >= this.fileListChunk.length) {
         return $state && $state.complete()
       }
       $state && $state.loaded()
