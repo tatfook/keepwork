@@ -22,8 +22,8 @@ export default {
       type: Boolean,
       default: false
     },
-    selectFile: {
-      type: Object,
+    selectFiles: {
+      type: Array,
       required: true
     },
     operateType: {
@@ -50,37 +50,43 @@ export default {
       userUseFileInSite: 'user/useFileInSite',
       userGetFileRawUrl: 'user/getFileRawUrl'
     }),
-    async getSiteFileUrl() {
+    async getSiteFileUrl(file) {
       let { sitepath: sitePath } = this.activePageInfo
-      let fileId = this.selectFile.id
+      let fileId = file.id
       await this.userUseFileInSite({ fileId, sitePath }).catch()
       return this.userSiteFileBySitePathAndFileId({ fileId, sitePath })
     },
-    async getFileRawUrl() {
-      let fileId = this.selectFile.id
+    async getFileRawUrl(file) {
+      let fileId = file.id
       await this.userGetFileRawUrl({ fileId })
       return this.userRawUrlByFileId({ fileId })
     },
-    async handleGetUrl() {
+    async handleGetUrl(file) {
       return this.isSiteMode
-        ? await this.getSiteFileUrl()
-        : await this.getFileRawUrl()
+        ? await this.getSiteFileUrl(file)
+        : await this.getFileRawUrl(file)
+    },
+    async getFileLink(file) {
+      let linkPrefix = await this.handleGetUrl(file)
+      return `${linkPrefix}#${file.filename ? file.filename : ''}`
     },
     async handleClick() {
-      let file = this.selectFile
-      let linkPrefix = await this.handleGetUrl()
-      let link = `${linkPrefix}#${file.filename ? file.filename : ''}`
+      let filesWithUrl = []
+      for (let index = 0; index < this.selectFiles.length; index++) {
+        const file = this.selectFiles[index];
+        filesWithUrl.push({
+          ...file,
+          url: await this.getFileLink(file)
+        })
+      }
       if (this.operateType == 'copy') {
-        this.handleCopy(link)
+        this.handleCopy(filesWithUrl[0].url)
         return
       }
-      this.handleInsert(link)
+      this.handleInsert(filesWithUrl)
     },
-    handleInsert(link) {
-      this.$emit('close', {
-        file: this.selectFile,
-        url: link
-      })
+    handleInsert(filesWithUrl) {
+      this.$emit('close', filesWithUrl)
     },
     async handleCopy(link) {
       await this.$confirm(link, {
@@ -89,7 +95,6 @@ export default {
         cancelButtonText: this.$t('common.Cancel')
       })
       this.$copyText(link).catch(e => {
-        console.error(e)
         this.$message({
           showClose: true,
           message: this.$t('editor.copyFail'),
