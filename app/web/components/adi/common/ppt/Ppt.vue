@@ -4,9 +4,9 @@
     <div class="data">
       <div class="reveal">
         <div class="slides">
-          <section v-for="item in getData" :key="item.key">
+          <!-- <section v-for="item in getData" :key="item.key">
             <div data-template>{{ item.val }}</div>
-          </section>
+          </section> -->
         </div>
       </div>
     </div>
