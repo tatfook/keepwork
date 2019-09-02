@@ -37,6 +37,7 @@ export default {
       menuData: [
         {
           pageNames: [
+            'OrgClassMembers',
             'OrgClassList',
             'OrgNewClass',
             'OrgEditClass',
