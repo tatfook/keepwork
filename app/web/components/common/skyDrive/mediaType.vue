@@ -10,13 +10,13 @@
             <i class="el-icon-caret-right"></i>
           </div>
           <div class='media-type-media-item-cover' :class="{'media-type-media-item-cover-checked': mediaItem.isChecked}">
-            <el-checkbox v-model="mediaItem.isChecked" @change="handleItemSelectChange(mediaItem)"></el-checkbox>
+            <el-checkbox v-model="mediaItem.isChecked"></el-checkbox>
             <div class="media-type-media-item-operations" @click.stop>
               <el-tooltip content="复制链接">
-                <file-url-getter :isDisabled="!mediaItem.checkPassed" :selectFile="mediaItem" operateType="copy"></file-url-getter>
+                <file-url-getter :isDisabled="!mediaItem.checkPassed" :selectFiles="[mediaItem]" operateType="copy"></file-url-getter>
               </el-tooltip>
               <el-tooltip content="插入">
-                <file-url-getter v-if="isInsertable" :selectFile="mediaItem" operateType="insert" @close="handleClose"></file-url-getter>
+                <file-url-getter v-if="isInsertable" :selectFiles="[mediaItem]" operateType="insert" @close="handleClose"></file-url-getter>
               </el-tooltip>
               <el-tooltip content="下载">
                 <file-downloader :isTextShow="false" :selectedFiles="[mediaItem]"></file-downloader>
@@ -46,7 +46,7 @@
       <file-list-empty v-if="!sortedSkyDriveMediaLibraryData.length && !uploadingFiles.length" :uploadText="uploadText" viewType="thumb" :uploadType="mediaFilterType"></file-list-empty>
     </div>
     <el-row class="media-type-footer" v-if="isApplicable">
-      <file-url-getter class="media-type-footer-button" :isDisabled="!isHaveSelected" :selectFile="approvedMultipleSelectionResults[0] || {}" :isApplyButtonType="true" operateType="insert" @close="handleClose"></file-url-getter>
+      <file-url-getter class="media-type-footer-button" :isDisabled="!isHaveSelected" :selectFiles="approvedMultipleSelectionResults || {}" :isApplyButtonType="true" operateType="insert" @close="handleClose"></file-url-getter>
     </el-row>
   </div>
 </template>
@@ -102,6 +102,7 @@ export default {
     fileListFilteredSearched: Array,
     isInsertable: Boolean,
     isApplicable: Boolean,
+    isMultipleSelectMode: Boolean,
     uploadText: String
   },
   mounted() {
@@ -173,18 +174,13 @@ export default {
       })
     },
     handleItemSelectChange(file) {
-      if (
-        this.isApplicable &&
-        file.isChecked &&
-        this.approvedMultipleSelectionResults.length > 1
-      ) {
-        this.fileList = _.map(this.fileList, mediaItem => {
-          return {
-            ...mediaItem,
-            isChecked: mediaItem.filename == file.filename ? true : false
-          }
-        })
-      }
+      if (this.isMultipleSelectMode) return
+      this.fileList = _.map(this.fileList, mediaItem => {
+        return {
+          ...mediaItem,
+          isChecked: mediaItem.filename == file.filename ? true : false
+        }
+      })
     },
     getExtClass(file) {
       let { ext } = file
@@ -202,8 +198,8 @@ export default {
       this.$emit('uploadFile', e)
       this.$refs.fileInput && (this.$refs.fileInput.value = '')
     },
-    handleClose({ file, url }) {
-      this.$emit('close', { file, url })
+    handleClose(filesWithUrl) {
+      this.$emit('close', filesWithUrl)
     },
     handlePlay(mediaItem) {
       let mediaItemVideoPreviewId = `mediaItemVideoPreview_${Date.now()}`
@@ -231,6 +227,7 @@ export default {
     },
     selectItem(mediaItem) {
       this.$set(mediaItem, 'isChecked', !mediaItem.isChecked)
+      this.handleItemSelectChange(mediaItem)
     }
   },
   filters: {
