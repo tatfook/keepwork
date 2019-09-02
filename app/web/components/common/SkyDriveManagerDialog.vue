@@ -66,12 +66,12 @@ export default {
             _.map(this.stateDoingFiles, file => this.removeFromUploadQue(file))
             if (this.isMultipleSelectMode)
               return that.$emit('close', filesWithUrl)
-            that.$emit('close', filesWithUrl[0])
+            that.$emit('close', filesWithUrl[0] || {})
           })
           .catch(() => {})
       } else {
         if (this.isMultipleSelectMode) return this.$emit('close', filesWithUrl)
-        this.$emit('close', filesWithUrl[0])
+        this.$emit('close', filesWithUrl[0] || {})
       }
     }
   },

@@ -21,6 +21,38 @@ export default {
     return {
       newsData: [
         {
+          title: '汉字大赛 | 作品赏析 -“李”姓',
+          desc: '你想get的技能乾坤侠给你送来了，快来签收~~',
+          date: '2019 / 8 / 28',
+          cover: require('@/assets/contests/newsImg/1汉字大赛-作品赏析-“李”姓.jpg'),
+          url:
+            'https://mp.weixin.qq.com/s/bnCiUSxa7KQUur1RV2u-dg'
+        },
+        {
+          title: '作品分享 | 哪吒：我命由我不由天，唯一做不了主的竟是……',
+          desc: '在这件事上，吒爷不认都不行~~~',
+          date: '2019 / 8 / 21',
+          cover: require('@/assets/contests/newsImg/2作品分享-哪吒：我命由我不由天，唯一做不了主的竟是…….jpg'),
+          url:
+            'https://mp.weixin.qq.com/s/FTil-A5Mi_7JCsSdWP1Ciw'
+        },
+        {
+          title: '原创编程课程走进淅川获媒体报道，楚汉文化传承焕新姿',
+          desc: '科技+教育+文化跨界融合新模式',
+          date: '2019 / 8 / 15',
+          cover: require('@/assets/contests/newsImg/3原创编程课程走进淅川获媒体报道，楚汉文化传承焕新姿.jpg'),
+          url:
+            'https://mp.weixin.qq.com/s/akI0opgIuMjKcdDLAS6NNQ'
+        },
+        {
+          title: '汉字大赛 | 人物骨骼系统+关键帧=让人物动起来',
+          desc: '摆pose的阶段过去了，让我们开始为演员设置动态效果吧~',
+          date: '2019 / 8 / 14',
+          cover: require('@/assets/contests/newsImg/4汉字大赛-人物骨骼系统+关键帧=让人物动起来.jpg'),
+          url:
+            'https://mp.weixin.qq.com/s/nzbsyjFlXmJOQaXiAFSeZQ'
+        },
+        {
           title: '为未知而教，为未来而学',
           desc: '汉字大赛走进淅川，让科技为文化传承赋能。',
           date: '2019 / 8 / 6',
