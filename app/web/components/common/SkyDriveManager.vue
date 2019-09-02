@@ -35,7 +35,7 @@
       </div>
     </div>
     <table-type v-if="!isApplicable" class="skydrive-manager-table" ref="tableTypeComp" v-show="viewType=='table'" :uploadText="uploadText" :mediaFilterType="mediaFilterType" :isInsertable="isInsertable" :uploadingFiles='filterTypeUploadingFile' :fileListFilteredSearched='fileListFilteredSearched'  :fileListWithUploading='fileListWithUploading' @selectAllStateChange='changeSelectAllState' @close="handleClose"></table-type>
-    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='filterTypeUploadingFile' :uploadText="uploadText" :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
+    <media-type ref="mediaTypeComp" v-show="viewType=='thumb'" :isInsertable="isInsertable" :isApplicable="isApplicable" :uploadingFiles='filterTypeUploadingFile' :uploadText="uploadText" :fileListFilteredSearched='fileListFilteredSearched' :mediaFilterType="mediaFilterType" :isMultipleSelectMode="isMultipleSelectMode" @selectAllStateChange='changeSelectAllState' @close="handleClose"></media-type>
   </div>
 </template>
 <script>
@@ -57,6 +57,7 @@ const VideoTypeExts = ['mp4']
 export default {
   name: 'SkyDriveManager',
   props: {
+    isMultipleSelectMode: Boolean,
     isInsertable: Boolean,
     isApplicable: Boolean,
     isImageShow: Boolean,
@@ -219,8 +220,8 @@ export default {
       let filenameLowerCase = (filename || '').toLowerCase()
       return filenameLowerCase.indexOf(searchWord) >= 0
     },
-    handleClose({ file, url }) {
-      this.$emit('close', { file, url })
+    handleClose(filesWithUrl) {
+      this.$emit('close', filesWithUrl)
     }
   },
   components: {

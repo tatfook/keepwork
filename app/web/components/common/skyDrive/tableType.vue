@@ -31,10 +31,10 @@
           </span>
           <span v-else>
             <el-tooltip :content="$t('common.copyURI')">
-              <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFile="scope.row" operateType="copy"></file-url-getter>
+              <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFiles="[scope.row]" operateType="copy"></file-url-getter>
             </el-tooltip>
             <el-tooltip v-if="isInsertable" :content="$t('common.insert')">
-              <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFile="scope.row" operateType="insert" @close="handleClose"></file-url-getter>
+              <file-url-getter :isDisabled="!scope.row.checkPassed" :selectFiles="[scope.row]" operateType="insert" @close="handleClose"></file-url-getter>
             </el-tooltip>
             <el-tooltip :content="$t('common.download')">
               <file-downloader :selectedFiles="[scope.row]" :isTextShow="false"></file-downloader>
@@ -165,8 +165,8 @@ export default {
       }
       $state && $state.loaded()
     },
-    handleClose({ file, url }) {
-      this.$emit('close', { file, url })
+    handleClose(filesWithUrl) {
+      this.$emit('close', filesWithUrl)
     },
     selectAll() {
       let selected = this.isAllSelected ? false : true
