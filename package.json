@@ -58,7 +58,6 @@
     "qrcode.vue": "^1.6.2",
     "raw-loader": "^0.5.1",
     "remove-markdown": "^0.3.0",
-    "reveal.js": "github:NPLFoshan/reveal.js#master",
     "script-loader": "^0.7.2",
     "scroll-into-view-if-needed": "^2.2.16",
     "smooth-scroll-into-view-if-needed": "^1.1.10",
