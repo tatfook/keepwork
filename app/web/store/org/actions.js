@@ -271,13 +271,13 @@ const actions = {
     })
     return Promise.resolve(result)
   },
-  async removeMemberFromClass(context, { id }) {
+  async removeMemberFromClass(context, { id, roleId }) {
     let {
       dispatch,
       getters: { currentOrg }
     } = context
     await keepwork.lessonOrganizationClassMembers
-      .removeMemberFromClass(id)
+      .removeMemberFromClass({ id, roleId })
       .catch(error => {
         return Promise.reject(error.response)
       })

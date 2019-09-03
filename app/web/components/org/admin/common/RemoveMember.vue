@@ -9,6 +9,12 @@ export default {
     memberDetail: {
       required: true,
       type: Object
+    },
+    classId: Number,
+    roleId: {
+      validator: function(value) {
+        return [1, 2].indexOf(value) !== -1
+      }
     }
   },
   data() {
@@ -24,10 +30,16 @@ export default {
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      orgCreateNewMember: 'org/createNewMember'
+      orgCreateNewMember: 'org/createNewMember',
+      orgRemoveMemberFromClass: 'org/removeMemberFromClass'
     }),
-    async removeMember() {
-      this.isLoading = true
+    async removeMemberFromClass() {
+      await this.orgRemoveMemberFromClass({
+        id: this.memberDetail.id,
+        roleId: this.roleId
+      }).catch(() => {})
+    },
+    async removeMemberFromAllClass() {
       let memberDetail = this.memberDetail
       await this.orgCreateNewMember({
         organizationId: this.currentOrgId,
@@ -36,6 +48,14 @@ export default {
         realname: memberDetail.realname,
         roleId: memberDetail.roleId
       }).catch(() => {})
+    },
+    async removeMember() {
+      this.isLoading = true
+      if (this.classId && this.roleId) {
+        await this.removeMemberFromClass()
+      } else {
+        await this.removeMemberFromAllClass()
+      }
       await this.getOrgTeacherList({
         organizationId: this.currentOrgId
       }).catch(() => {})
