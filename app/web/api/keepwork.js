@@ -69,9 +69,12 @@ export const user = {
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
-  getDetailWithRankById: async ({ userId }) => get(`users/${encodeFunc({ userId })}/detail`),
-  getDetailWithRankByUsername: async ({ username }) => get(`users/${encodeFunc({ username })}/detail`),
-  getDetailByName: async ({ username }) => get(`/users/${encodeFunc({ username })}`),
+  getDetailWithRankById: async ({ userId }) =>
+    get(`users/${encodeFunc({ userId })}/detail`),
+  getDetailWithRankByUsername: async ({ username }) =>
+    get(`users/${encodeFunc({ username })}/detail`),
+  getDetailByName: async ({ username }) =>
+    get(`/users/${encodeFunc({ username })}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
   changepw: async (...args) => post('/user/changepw', ...args),
@@ -527,8 +530,8 @@ export const lessonOrganizationClassMembers = {
     }),
   getClassStudentsById: async params =>
     get('lessonOrganizationClassMembers/student', { params }),
-  removeMemberFromClass: async id =>
-    deleteMethod(`lessonOrganizationClassMembers/${id}`)
+  removeMemberFromClass: async ({ studentId, roleId }) =>
+    deleteMethod(`lessonOrganizationClassMembers/${studentId}?roleId=${roleId}`)
 }
 
 export const lessonOrganizationForms = {
