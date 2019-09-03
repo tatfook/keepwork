@@ -65,7 +65,7 @@ export const keepworks = {
 
 export const user = {
   login: async (...args) => withoutParseEndpoint.post('/users/login', ...args),
-  getUser: async username => get(`users/${username}`),
+  getUser: async username => get(`users/${encodeFunc({ username })}`),
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
