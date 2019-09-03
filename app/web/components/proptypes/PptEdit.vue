@@ -7,15 +7,18 @@
       </span>
     </div>
     <div class="ppt-edit-list">
-      <div class="ppt-edit-list-item" v-for="(item, index) in pptList" :key="index">
-        <div class="ppt-edit-list-item-wrap">
-          <img class="ppt-edit-list-item-wrap-img" :src="item.downloadUrl | miniPic" :alt="item.filename">
+      <draggable v-model="pptList" @change="handleDrag">
+        <div class="ppt-edit-list-item" v-for="(item, index) in pptList" :key="index">
+          <div class="ppt-edit-list-item-wrap">
+            <img v-if="item.type === 'images'" class="ppt-edit-list-item-wrap-img" :src="item.downloadUrl | miniPic" :alt="item.filename">
+            <video-player v-else-if="item.type === 'videos'" :autoplay="false" class="ppt-edit-list-item-wrap-video" :src="item.downloadUrl" />
+          </div>
+          <div class="ppt-edit-list-item-operation hidden-operation">
+            <el-button @click="handleChange(item.page)" size="mini" round>{{$t('common.change')}}</el-button>
+            <el-button @click="handleDeletePic(item.page)" size="mini" round icon="iconfont icon-delete"></el-button>
+          </div>
         </div>
-        <div class="ppt-edit-list-item-operation hidden-operation">
-          <el-button @click="handleChange(item.page)" size="mini" round>{{$t('common.change')}}</el-button>
-          <el-button @click="handleDeletePic(item.page)" size="mini" round icon="iconfont icon-delete"></el-button>
-        </div>
-      </div>
+      </draggable>
     </div>
     <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="true" :isNoMediaFileShow="false" :isMultipleSelectMode="isMultipleSelectMode" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
@@ -24,12 +27,19 @@
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import protypesBaseMixin from './protypes.base.mixin'
+import draggable from 'vuedraggable'
+import videoPlayer from '@/components/common/VideoPlayer'
 import _ from 'lodash'
 export default {
   name: 'PptEdit',
   mixins: [protypesBaseMixin],
   components: {
-    SkyDriveManagerDialog
+    SkyDriveManagerDialog,
+    draggable,
+    videoPlayer
+  },
+  props: {
+    orginValue: Array
   },
   filters: {
     miniPic(url) {
@@ -37,6 +47,9 @@ export default {
     }
   },
   methods: {
+    handleDrag(evt) {
+      this.updateMarkdown(this.pptList)
+    },
     handleAdd() {
       this.isMultipleSelectMode = true
       this.changePageIndex = 0
@@ -48,7 +61,6 @@ export default {
       this.isMediaSkyDriveDialogShow = true
     },
     closeSkyDriveManagerDialog(fileList) {
-      console.log(fileList)
       if (_.isArray(fileList)) {
         this.addPic(fileList)
       } else if (this.changePageIndex > 0) {
@@ -100,6 +112,10 @@ export default {
       })
     },
     updateMarkdown(data) {
+      data = _.map(data, (item, index) => {
+        const { page, ...rest } = item
+        return { page: index + 1, ...rest }
+      })
       this.$emit('onPropertyChange', { data })
     }
   },
@@ -150,7 +166,7 @@ export default {
   &-list {
     &-item {
       position: relative;
-      cursor: pointer;
+      cursor: move;
       margin-bottom: 20px;
       &:hover {
         .hidden-operation {
@@ -162,13 +178,18 @@ export default {
         padding-bottom: 56%;
         position: relative;
         background: #000000;
-        &-img {
+        &-img,
+        &-video {
           width: 100%;
           height: 100%;
           position: absolute;
           object-fit: contain;
           top: 0;
           left: 0;
+          box-sizing: border-box;
+          /deep/.vjs-control-bar {
+            display: none;
+          }
         }
       }
       &-operation {
