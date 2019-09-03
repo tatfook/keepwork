@@ -136,7 +136,7 @@ const actions = {
   async removeStudentFromClass({ dispatch }, { classId, studentId }) {
     try {
       await lessonOrganizationClassMembers.removeMemberFromClass({
-        studentId,
+        id: studentId,
         roleId: 1
       })
       await dispatch('getOrgClassStudentsById', { classId })

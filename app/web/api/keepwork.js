@@ -530,8 +530,8 @@ export const lessonOrganizationClassMembers = {
     }),
   getClassStudentsById: async params =>
     get('lessonOrganizationClassMembers/student', { params }),
-  removeMemberFromClass: async ({ studentId, roleId }) =>
-    deleteMethod(`lessonOrganizationClassMembers/${studentId}?roleId=${roleId}`)
+  removeMemberFromClass: async ({ id, roleId }) =>
+    deleteMethod(`lessonOrganizationClassMembers/${id}?roleId=${roleId}`)
 }
 
 export const lessonOrganizationForms = {
