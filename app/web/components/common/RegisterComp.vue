@@ -243,23 +243,20 @@ export default {
               this.showAccountEncrypt()
             })
             .catch(e => {
-              if (e.response.data.code == 4) {
-                this.showMessage(
-                  'error',
-                  this.$t('user.verificationCodeExpiration')
-                )
-              } else if (e.response.data.code == 5) {
-                this.showMessage('error', this.$t('user.verificationCodeError'))
-              } else if (e.response.data.code == 2) {
-                this.showMessage('error', this.$t('common.notValidAccount'))
-              } else if (e.response.data.code == 8) {
-                this.showMessage(
-                  'error',
-                  this.$t('common.containsSensitiveWords')
-                )
-              } else {
-                this.showMessage('error', this.$t('common.registerFailed'))
+              let code = _.get(e.response, 'data.code')
+              const registerCodeMsgObj = {
+                code0: '服务器繁忙,请稍后重试…',
+                code1: '用户名或密码错误',
+                code2: this.$t('common.notValidAccount'),
+                code3: this.$t('common.existAccount'),
+                code4: this.$t('user.verificationCodeExpiration'),
+                code5: this.$t('user.verificationCodeError'),
+                code5: '创建git用户失败',
+                code8: this.$t('common.containsSensitiveWords')
               }
+              let errorMsg =
+                registerCodeMsgObj[`code${code}`] || this.$t('common.registerFailed')
+              this.showMessage('error', errorMsg)
               this.registerLoading = false
             })
         } else {
