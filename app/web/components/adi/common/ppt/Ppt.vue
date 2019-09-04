@@ -4,10 +4,10 @@
       <img v-if="isImg" class="preview-img" :src="URL" :alt="filename">
       <video-player v-else-if="isVideo" :autoplay="false" class="preview-video" :src="URL" />
       <div class="preview-operation">
-        <i @click="handleFullScreen" class="preview-operation-icon iconfont icon-full-screen"></i> <span @click="handleFullScreen" class="preview-operation-name">全屏播放</span>
+        <i @click="handleFullScreen" class="preview-operation-icon iconfont icon-full-screen"></i> <span @click="handleFullScreen" class="preview-operation-name">{{$t('adi.ppt.fullScreen')}}</span>
       </div>
     </div>
-    <el-dialog custom-class="fullscreen-dialog" :show-close="false" :visible.sync="isFullsreen" :append-to-body="true" :fullscreen="true">
+    <el-dialog custom-class="fullscreen-dialog" :show-close="false" :visible.sync="isFullsreen" :fullscreen="true">
       <fullscreen-PPT :pptList="pptList" v-if="isFullsreen" :visible="isFullsreen" @exitFullscreen="handelCloseFullscreen"></fullscreen-PPT>
     </el-dialog>
   </div>
