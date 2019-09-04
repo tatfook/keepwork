@@ -52,6 +52,7 @@ export default {
     }),
     handleClose(filesWithUrl) {
       let that = this
+      filesWithUrl = _.isFunction(filesWithUrl) ? [] : filesWithUrl
       if (this.stateDoingFiles.length > 0) {
         this.$confirm(
           this.$t('skydrive.fileUploading'),

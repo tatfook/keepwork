@@ -18,6 +18,7 @@ import iframeLink from './IframeLink'
 import subMod from './SubModType'
 import list from './ListType'
 import bigFileSizeInput from './BigFileSizeInput'
+import PptEdit from './PptEdit'
 
 export default {
   input,
@@ -39,5 +40,6 @@ export default {
   iframeLink,
   subMod,
   list,
-  bigFileSizeInput
+  bigFileSizeInput,
+  PptEdit
 }
