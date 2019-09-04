@@ -20,7 +20,7 @@
       </div>
       <div class="package-basic-detail-skills">
         <div class="package-basic-detail-label">{{$t('lesson.intro')}}:</div>
-        <el-scrollbar class="package-basic-detail-skills-detail" :class="{'package-basic-detail-skills-detail-isSubscribe': false }">{{packageDetail.intro}}</el-scrollbar>
+        <div class="package-basic-detail-skills-detail" :class="{'package-basic-detail-skills-detail-isSubscribe': false }">{{packageDetail.intro}}</div>
       </div>
     </div>
   </div>
@@ -129,7 +129,6 @@ $dangerColor: #e4461f;
   }
   &-skills-detail {
     margin: 0;
-    height: 70px;
     white-space: pre-line;
     font-size: 16px;
     line-height: 30px;
