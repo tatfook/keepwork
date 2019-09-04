@@ -20,7 +20,7 @@
         </div>
       </draggable>
     </div>
-    <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="true" :isNoMediaFileShow="false" :isMultipleSelectMode="isMultipleSelectMode" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
+    <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="true" :isMultipleSelectMode="isMultipleSelectMode" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 
