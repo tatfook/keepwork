@@ -446,7 +446,8 @@
     "lessonPackage": "Lesson Package",
     "hint": "Hint",
 
-    "project": "Project"
+    "project": "Project",
+    "ppt": "PPT"
   },
   "adi": {
     "hint": {
@@ -539,6 +540,12 @@
       "notice": "Inbound links may not be able to load successfully in the iframe. Continue?",
       "pleaseInput": "Begin with http or https",
       "formatError": "Please enter a link beginning with http or https."
+    },
+    "ppt": {
+      "deleteConfirm": "Are you sure you want to remove this page?",
+      "add": "Add",
+      "type": "images and videos",
+      "fullScreen": "Full Screen"
     }
   },
   "card": {
@@ -674,7 +681,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "back": "Back",
-    "projectForbidden": "Unable to display content"
+    "projectForbidden": "Unable to display content",
+    "ppt": "PPT"
   },
   "field": {
     "fileId": "file Id",
