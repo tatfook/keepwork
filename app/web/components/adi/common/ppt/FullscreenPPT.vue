@@ -13,6 +13,9 @@ import videoPlayer from '@/components/common/VideoPlayer'
 import PPTPage from './PPTPage'
 const RIGHT_CODE = 39
 const LEFT_CODE = 37
+const SPACE_CODE = 32
+const ENTER_CODE = 13
+const NEXT_PAGE = [RIGHT_CODE, SPACE_CODE, ENTER_CODE]
 export default {
   name: 'FullscreenPPT',
   components: {
@@ -37,10 +40,11 @@ export default {
   },
   methods: {
     onKeydown(evt) {
-      if (evt.keyCode === RIGHT_CODE) {
+      const keyCode = evt.keyCode
+      if (NEXT_PAGE.includes(keyCode)) {
         this.fakerClickRight()
       }
-      if (evt.keyCode === LEFT_CODE) {
+      if (keyCode === LEFT_CODE) {
         this.fakerClickLeft()
       }
     },
