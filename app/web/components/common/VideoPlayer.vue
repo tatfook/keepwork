@@ -20,6 +20,10 @@ export default {
     poster: String,
     autoplay: Boolean,
     playloop: Boolean,
+    autoSize: {
+      type: Boolean,
+      default: false
+    },
     showRates: {
       type: Boolean,
       default: true
@@ -31,7 +35,7 @@ export default {
     },
     playerOptions() {
       // videojs options
-      return {
+      const options = {
         playbackRates: this.showRates ? [0.7, 1.0, 1.5, 2.0] : [],
         aspectRatio: '16:9',
         muted: false,
@@ -46,6 +50,11 @@ export default {
         ],
         poster: this.poster
       }
+      if (this.autoSize) {
+        const { aspectRatio, ...rest } = options
+        return rest
+      }
+      return options
     }
   }
 }
