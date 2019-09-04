@@ -290,6 +290,7 @@ export default {
               this.count = 60
             }
           }, 1000)
+          this.sendCodeLoading = false
           return
         } else {
           this.$message.error(this.$t('user.smsCodeSentFailed'))
@@ -367,6 +368,7 @@ export default {
         margin-left: 8px;
         .send-code-button {
           width: 100%;
+          padding: 12px 0;
         }
       }
     }
