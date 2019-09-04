@@ -4,7 +4,7 @@
       <el-col>
         {{$t("card." + cardKey)}}
       </el-col>
-      <el-tooltip v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq'" :content="tipTool()" popper-class="prop-header-tooltip-class" placement="top">
+      <el-tooltip v-if="cardKey == 'menu' || cardKey == 'board' || cardKey == 'comment' || cardKey == 'qq' || cardKey == 'ppt'" :content="tipTool()" popper-class="prop-header-tooltip-class" placement="top">
         <i class="iconfont icon-help"></i>
       </el-tooltip>
       <el-tooltip v-if="cardKey == 'md'" popper-class="prop-header-tooltip-class" placement="top">

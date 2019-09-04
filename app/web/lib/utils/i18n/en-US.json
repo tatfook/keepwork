@@ -395,7 +395,8 @@
     "board": "Adding graphics to the page, supporting basic graphics, various charts, engineering diagrams, flowcharts, network topologies, UML, Venn, etc.",
     "comment": "Add comments to the page to facilitate your participation in the discussion.",
     "qq": "Add QQ chat function to the page to facilitate the visitor to contact the specified QQ.",
-    "md": "Markdown is a simple and lightweight markup language.<br> Common examples:<br> Font<br> **<b>Bold</b>** <br> *<i>&nbsp;Italics&nbsp;</i>* <br> ***<i><b>Bold italics</b></i>*** <br> ~~<s>Strikethrough text</s>~~  <br> Quote <br> >This is a quote. <br> <br> Heading <br> # First level heading <br> ## Second level heading <br> Note: Include a space between # and headings. <br>Unordered list: Add one symbol (- + *) before the content.<br> + Content <br> - Content <br> * Content <br> Note: Include a space between symbols (- + *) and the content. <br><br><a style='text-decoration: none;color: red;' target='_blank' href='https://keepwork.com/official/help/yufa'>View More></a>"
+    "md": "Markdown is a simple and lightweight markup language.<br> Common examples:<br> Font<br> **<b>Bold</b>** <br> *<i>&nbsp;Italics&nbsp;</i>* <br> ***<i><b>Bold italics</b></i>*** <br> ~~<s>Strikethrough text</s>~~  <br> Quote <br> >This is a quote. <br> <br> Heading <br> # First level heading <br> ## Second level heading <br> Note: Include a space between # and headings. <br>Unordered list: Add one symbol (- + *) before the content.<br> + Content <br> - Content <br> * Content <br> Note: Include a space between symbols (- + *) and the content. <br><br><a style='text-decoration: none;color: red;' target='_blank' href='https://keepwork.com/official/help/yufa'>View More></a>",
+    "ppt": "ppt mod"
   },
   "modList": {
     "recent": "Commonly used",
