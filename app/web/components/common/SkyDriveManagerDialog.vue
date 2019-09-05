@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-if='show' :title="this.$t('skydrive.skyDrive')" class="skydrive-manager-dialog" :close-on-click-modal="false" :visible.sync="show" width="960px" :before-close="handleClose" :append-to-body='true'>
-    <sky-drive ref='skyDriveManager' :isInsertable="isInsertable" :isApplicable="isApplicable" :isImageShow="isImageShow" :isVideoShow="isVideoShow" :isNoMediaFileShow="isNoMediaFileShow" @close='handleClose'></sky-drive>
+    <sky-drive ref='skyDriveManager' :isInsertable="isInsertable" :isApplicable="isApplicable" :isImageShow="isImageShow" :isVideoShow="isVideoShow" :isMultipleSelectMode="isMultipleSelectMode" :isNoMediaFileShow="isNoMediaFileShow" @close='handleClose'></sky-drive>
   </el-dialog>
 </template>
 
@@ -13,6 +13,10 @@ export default {
   name: 'SkyDriveManagerDialog',
   props: {
     show: Boolean,
+    isMultipleSelectMode: {
+      type: Boolean,
+      default: false
+    },
     isInsertable: {
       type: Boolean,
       default: false
@@ -46,8 +50,9 @@ export default {
     ...mapActions({
       removeFromUploadQue: 'skydrive/removeFromUploadQue'
     }),
-    handleClose(event) {
+    handleClose(filesWithUrl) {
       let that = this
+      filesWithUrl = _.isFunction(filesWithUrl) ? [] : filesWithUrl
       if (this.stateDoingFiles.length > 0) {
         this.$confirm(
           this.$t('skydrive.fileUploading'),
@@ -60,11 +65,14 @@ export default {
         )
           .then(() => {
             _.map(this.stateDoingFiles, file => this.removeFromUploadQue(file))
-            that.$emit('close', event)
+            if (this.isMultipleSelectMode)
+              return that.$emit('close', filesWithUrl)
+            that.$emit('close', filesWithUrl[0] || {})
           })
           .catch(() => {})
       } else {
-        this.$emit('close', event)
+        if (this.isMultipleSelectMode) return this.$emit('close', filesWithUrl)
+        this.$emit('close', filesWithUrl[0] || {})
       }
     }
   },

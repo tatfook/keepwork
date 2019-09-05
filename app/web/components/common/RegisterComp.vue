@@ -5,7 +5,7 @@
       <h3 class="register-title">{{$t('common.register')}}</h3>
       <el-form-item prop="username" :error="usernameError">
         <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
-          <el-input slot="reference" @focus="handleUsernameInputFocus" @blur="isExist" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
+          <el-input slot="reference" @focus="handleUsernameInputFocus" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
           <div class="register-dialog-form-tip">
             {{$t('common.accountNoChange')}}<br>
             {{$t('common.useLettersOrNumber')}}<br>
@@ -65,12 +65,27 @@ export default {
     this.changeSvgCaptcha()
   },
   data() {
-    let validateUsername = (rule, value, callback) => {
-      if (/^[0-9]/.test(value)) {
-        callback(new Error(this.$t('common.usernameCannotWithNumber')))
-      } else {
-        callback()
+    let validateUsername = async (rule, value, callback) => {
+      if (!/^[A-Za-z]/.test(value)) {
+        return callback(new Error('用户名必须以字母开头'))
       }
+      if (value.length > 20) {
+        return callback(new Error('用户名不能超过20位'))
+      }
+      if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{1,20}$/.test(value)) {
+        return callback(new Error('用户名必须是英文字母、数字组合'))
+      }
+      let isSensitive = await this.checkSensitive([value])
+      if (isSensitive) {
+        return callback(new Error(this.$t('common.containsSensitiveWords')))
+      }
+      let res = await keepwork.user.getUser(value.toLowerCase()).catch(err => {
+        return callback()
+      })
+      if (res) {
+        return callback(new Error(this.$t('common.existAccount')))
+      }
+      return callback()
     }
     let validateAuthCode = (rule, value, callback) => {
       let { phoneNumber } = this.ruleForm
@@ -118,7 +133,8 @@ export default {
             trigger: 'blur'
           },
           {
-            validator: validateUsername
+            validator: validateUsername,
+            trigger: 'blur'
           }
         ],
         password: [
@@ -199,25 +215,6 @@ export default {
       let result = await checkSensitiveWords({ checkedWords }).catch()
       return result && result.length > 0
     },
-    async isExist() {
-      this.visible = false
-      if (!this.ruleForm.username) return
-      let isSensitive = await this.checkSensitive([this.ruleForm.username])
-      if (isSensitive) {
-        this.usernameError = this.$t('common.containsSensitiveWords')
-        return
-      }
-      keepwork.user
-        .getUser(this.ruleForm.username.toLowerCase())
-        .then(res => {
-          if (res) {
-            this.usernameError = this.$t('common.existAccount')
-          }
-        })
-        .catch(e => {
-          this.usernameError = ''
-        })
-    },
     async verifySvgCaptcha() {
       return await this.userVerifySvgCaptcha({
         key: this.captchaSvg.key,
@@ -246,23 +243,20 @@ export default {
               this.showAccountEncrypt()
             })
             .catch(e => {
-              if (e.response.data.code == 4) {
-                this.showMessage(
-                  'error',
-                  this.$t('user.verificationCodeExpiration')
-                )
-              } else if (e.response.data.code == 5) {
-                this.showMessage('error', this.$t('user.verificationCodeError'))
-              } else if (e.response.data.code == 2) {
-                this.showMessage('error', this.$t('common.notValidAccount'))
-              } else if (e.response.data.code == 8) {
-                this.showMessage(
-                  'error',
-                  this.$t('common.containsSensitiveWords')
-                )
-              } else {
-                this.showMessage('error', this.$t('common.registerFailed'))
+              let code = _.get(e.response, 'data.code')
+              const registerCodeMsgObj = {
+                code0: '服务器繁忙,请稍后重试…',
+                code1: '用户名或密码错误',
+                code2: this.$t('common.notValidAccount'),
+                code3: this.$t('common.existAccount'),
+                code4: this.$t('user.verificationCodeExpiration'),
+                code5: this.$t('user.verificationCodeError'),
+                code5: '创建git用户失败',
+                code8: this.$t('common.containsSensitiveWords')
               }
+              let errorMsg =
+                registerCodeMsgObj[`code${code}`] || this.$t('common.registerFailed')
+              this.showMessage('error', errorMsg)
               this.registerLoading = false
             })
         } else {

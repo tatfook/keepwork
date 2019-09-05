@@ -395,7 +395,8 @@
     "board": "Adding graphics to the page, supporting basic graphics, various charts, engineering diagrams, flowcharts, network topologies, UML, Venn, etc.",
     "comment": "Add comments to the page to facilitate your participation in the discussion.",
     "qq": "Add QQ chat function to the page to facilitate the visitor to contact the specified QQ.",
-    "md": "Markdown is a simple and lightweight markup language.<br> Common examples:<br> Font<br> **<b>Bold</b>** <br> *<i>&nbsp;Italics&nbsp;</i>* <br> ***<i><b>Bold italics</b></i>*** <br> ~~<s>Strikethrough text</s>~~  <br> Quote <br> >This is a quote. <br> <br> Heading <br> # First level heading <br> ## Second level heading <br> Note: Include a space between # and headings. <br>Unordered list: Add one symbol (- + *) before the content.<br> + Content <br> - Content <br> * Content <br> Note: Include a space between symbols (- + *) and the content. <br><br><a style='text-decoration: none;color: red;' target='_blank' href='https://keepwork.com/official/help/yufa'>View More></a>"
+    "md": "Markdown is a simple and lightweight markup language.<br> Common examples:<br> Font<br> **<b>Bold</b>** <br> *<i>&nbsp;Italics&nbsp;</i>* <br> ***<i><b>Bold italics</b></i>*** <br> ~~<s>Strikethrough text</s>~~  <br> Quote <br> >This is a quote. <br> <br> Heading <br> # First level heading <br> ## Second level heading <br> Note: Include a space between # and headings. <br>Unordered list: Add one symbol (- + *) before the content.<br> + Content <br> - Content <br> * Content <br> Note: Include a space between symbols (- + *) and the content. <br><br><a style='text-decoration: none;color: red;' target='_blank' href='https://keepwork.com/official/help/yufa'>View More></a>",
+    "ppt": "ppt mod"
   },
   "modList": {
     "recent": "Commonly used",
@@ -445,7 +446,8 @@
     "lessonPackage": "Lesson Package",
     "hint": "Hint",
 
-    "project": "Project"
+    "project": "Project",
+    "ppt": "PPT"
   },
   "adi": {
     "hint": {
@@ -538,6 +540,12 @@
       "notice": "Inbound links may not be able to load successfully in the iframe. Continue?",
       "pleaseInput": "Begin with http or https",
       "formatError": "Please enter a link beginning with http or https."
+    },
+    "ppt": {
+      "deleteConfirm": "Are you sure you want to remove this page?",
+      "add": "Add",
+      "type": "images and videos",
+      "fullScreen": "Full Screen"
     }
   },
   "card": {
@@ -673,7 +681,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "back": "Back",
-    "projectForbidden": "Unable to display content"
+    "projectForbidden": "Unable to display content",
+    "ppt": "PPT"
   },
   "field": {
     "fileId": "file Id",

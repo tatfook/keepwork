@@ -20,7 +20,7 @@
           <template slot-scope="scope">
             <div class="class-members-table-operations">
               <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'teacher')">{{$t('org.Edit')}}</div>
-              <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
+              <remove-member class="class-members-table-button" :memberDetail="scope.row" :roleId="2" :classId="classId" @finish="initData" />
             </div>
           </template>
         </el-table-column>
@@ -40,7 +40,7 @@
           <template slot-scope="scope">
             <div class="class-members-table-operations">
               <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'student')">{{$t('org.Edit')}}</div>
-              <remove-member class="class-members-table-button" :memberDetail="scope.row" @finish="initData" />
+              <remove-member class="class-members-table-button" :memberDetail="scope.row" :classId="classId" :roleId="1" @finish="initData" />
               <div class="class-members-table-button" @click="showChangeDialog(scope.row)">修改密码</div>
             </div>
           </template>
@@ -83,7 +83,7 @@ export default {
       getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
     }),
     classId() {
-      return _.get(this.$route, 'query.id')
+      return _.toNumber(_.get(this.$route, 'query.id'))
     },
     teacherList() {
       return this.getOrgTeachersByClassId({

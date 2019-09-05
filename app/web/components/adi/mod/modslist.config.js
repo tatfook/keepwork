@@ -17,6 +17,7 @@ import ModIframe from './common/iframe'
 import ModLesson from './web/lesson'
 import ModQuiz from './web/quiz'
 import ModHint from './web/hint'
+import ModPpt from './web/ppt'
 
 import ModProject from './web/project'
 import ModMixLayerList from './list/mixLayerList'
@@ -178,6 +179,10 @@ let modsList = [
         id: '7-3',
         label: 'modList.hint',
         mods: [ModHint]
+      }, {
+        id: '7-4',
+        label: 'modList.ppt',
+        mods: [ModPpt]
       }
     ]
   },
