@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     maxPage() {
-      return Math.max(this.pptList.length, 0)
+      return this.pptList.length
     },
     showList() {
       const prevLoadSize = 3
