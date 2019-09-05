@@ -63,6 +63,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import uuidV1 from 'uuid/v1'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
@@ -133,8 +134,8 @@ export default {
     setSort() {
       this.$nextTick(() => {
         let tableRef = this.$refs.skyDriveTable
-        tableRef && tableRef.clearSort()
-        tableRef && tableRef.sort('updatedAt', 'descending')
+        tableRef && tableRef.clearSort && tableRef.clearSort()
+        tableRef && tableRef.sort && tableRef.sort('updatedAt', 'descending')
         this.initData('updatedAt', 'descending')
       })
     },
@@ -160,6 +161,7 @@ export default {
       ).filter(fileDetail => {
         return Boolean(fileDetail)
       })
+      console.log(this.tableData)
       this.nowPage++
       $state && $state.loaded()
       if (this.nowPage >= this.fileListChunk.length) {
