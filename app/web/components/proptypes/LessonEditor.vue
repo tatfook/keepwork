@@ -1,20 +1,32 @@
 <template>
   <div class="lesson-menu" v-if="canEdit">
-    <div width="460px" center="">
-      <div class="select-title">{{$t('lesson.linkThePage')}}</div>
-      <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
-        <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
-        </el-option>
-      </el-select>
+    <div width="460px">
+      <div class="lesson-menu-item">
+        <span>{{$t('lesson.theme')}}</span>
+        <el-select v-model="selectTheme" class="select-options" :disabled="isLinked" :placeholder="$t('lesson.pleaseSelect')">
+          <el-option v-for="item in themeList" :key="item.key" :label="item.name" :value="item.key">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="lesson-menu-item">
+        <span>{{$t('lesson.linkThePage')}}</span>
+        <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
+          <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
       <div class="button-wrap">
         <el-button type="primary" @click="showEditorDialog" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
-        <transition name="el-zoom-in-top">
+        <transition name="el-fade-in-linear">
           <el-button v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
+        </transition>
+        <transition name="el-fade-in-linear">
+          <el-button v-show="isLinked" @click.stop="handleUnbind">解绑</el-button>
         </transition>
       </div>
     </div>
     <el-dialog :visible.sync="dialogVisible" width="800px" :append-to-body="true" top="0">
-      <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
+      <edit-lesson v-if="dialogVisible" :isEditorMod="true" :lessonId="selectValue" :bindType="selectTheme" @cancel="hideDialog" @refresh="this.checkMarkdownIsLinked"></edit-lesson>
     </el-dialog>
   </div>
   <div class="lesson-menu" v-else>
@@ -29,9 +41,6 @@
 import EditLesson from '@/components/study/EditLesson'
 import moment from 'moment'
 import protypesBaseMixin from './protypes.base.mixin'
-import Parser from '@/lib/mod/parser'
-import BlockHelper from '@/lib/mod/parser/blockHelper'
-import uuid from 'uuid/v1'
 import { lesson } from '@/api'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
@@ -44,8 +53,7 @@ export default {
     EditLesson
   },
   async mounted() {
-    await this.getUserLessons()
-    await this.checkMarkdownIsLinked()
+    await this.initUserData()
   },
   data() {
     return {
@@ -53,6 +61,7 @@ export default {
       isLoading: false,
       lessonId: '',
       selectValue: '',
+      selectTheme: 'url',
       selectLesson: {},
       userLessons: []
     }
@@ -62,6 +71,18 @@ export default {
       activePage: 'activePage',
       activePageUrl: 'activePageUrl'
     }),
+    themeList() {
+      return [
+        {
+          name: '教案',
+          key: 'url'
+        },
+        {
+          name: '课件',
+          key: 'coursewareUrl'
+        }
+      ]
+    },
     userLessonsFilter() {
       return _.filter(this.userLessons, ({ url }) => !url)
     },
@@ -73,6 +94,29 @@ export default {
     },
     canEdit() {
       return !this.lessonId || this.isLinked
+    },
+    linkedLesson() {
+      return _.find(this.userLessons, item => item.id === this.lessonId) || {}
+    },
+    linkedLessonName() {
+      return _.get(this.linkedLesson, 'lessonName', '')
+    },
+    linkedTheme() {
+      if (!this.isLinked) {
+        return ''
+      }
+      const { url, coursewareUrl } = this.linkedLesson
+      if (url && url === this.currentURL) {
+        return 'url'
+      }
+      if (coursewareUrl && coursewareUrl === this.currentURL) {
+        return 'coursewareUrl'
+      }
+    },
+    currentURL() {
+      const origin = window.location.origin
+      const currentURL = `${origin}${this.activePageUrl}`
+      return currentURL
     }
   },
   methods: {
@@ -81,32 +125,49 @@ export default {
       this.userLessons = _.get(lessons, 'rows')
     },
     async checkMarkdownIsLinked() {
-      let origin = window.location.origin
-      await lesson.lessons
-        .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
-        .then(res => {
-          this.lessonId = res.id
-          this.selectValue = res.id
-          this.isShow = true
+      try {
+        const { id } = await lesson.lessons.lessonDetailByUrl({
+          url: this.currentURL
         })
-        .catch(e => {
-          console.error(e)
+        this.lessonId = id
+        this.selectValue = id
+      } catch (error) {
+        console.error(error)
+        this.lessonId = ''
+        this.selectValue = ''
+      }
+    },
+    async initUserData() {
+      await this.getUserLessons()
+      await this.checkMarkdownIsLinked()
+      if (this.linkedTheme) {
+        this.selectTheme = this.linkedTheme
+      } else {
+        this.selectTheme = 'url'
+      }
+    },
+    async handleUnbind() {
+      if (!this.isLinked) {
+        return
+      }
+      console.log(this.linkedLesson)
+      console.log(this.linkedTheme)
+      this.$confirm(`确定取消关联到课程: ${this.linkedLessonName} ?`, '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(async () => {
+          await lesson.lessons.update({
+            updatingData: { id: this.linkedLesson.id, [this.linkedTheme]: null }
+          })
+          await this.initUserData()
         })
+        .catch(e => console.error(e))
     },
     async handleRelease() {
       const {
         file: { content }
       } = this.activePage
-
-      // let modList = Parser.buildBlockList(content)
-      // let newModList = [...modList]
-      // newModList.forEach(item => {
-      //   if (item.cmd === 'Quiz') {
-      //     item.data.quiz.data[0].id = uuid()
-      //     BlockHelper.buildMarkdown(item)
-      //   }
-      // })
-      // let md = Parser.buildMarkdown(newModList)
       await lesson.lessons
         .release({ id: this.selectValue, content })
         .then(res =>
@@ -117,7 +178,7 @@ export default {
         )
         .catch(e => {
           console.error(e)
-          this.$message.error(this.$t('common.success'))
+          this.$message.error(this.$t('common.failure'))
         })
     },
     showDialog() {
@@ -125,7 +186,7 @@ export default {
     },
     hideDialog() {
       this.dialogVisible = false
-      this.updateMarkdown({ updated: moment().format('YYYY/MM/DD HH:mm:ss')})
+      this.updateMarkdown({ updated: moment().format('YYYY/MM/DD HH:mm:ss') })
     },
     async showEditorDialog() {
       if (!this.selectValue) {
@@ -144,6 +205,9 @@ export default {
 <style lang="scss">
 .lesson-menu {
   margin-top: 20px;
+  &-item {
+    margin-bottom: 20px;
+  }
   .select-title {
     text-align: center;
     color: #303133;

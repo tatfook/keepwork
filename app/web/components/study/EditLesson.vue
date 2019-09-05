@@ -36,7 +36,11 @@ export default {
       type: Boolean,
       default: false
     },
-    lessonId: ''
+    bindType: {
+      type: String,
+      default: 'url'
+    },
+    lessonId: Number
   },
   data() {
     return {
@@ -208,6 +212,11 @@ export default {
       }
       let updatingData = this.updatingLessonData
       this.isLoading = true
+      if (this.isEditorMod) {
+        const { url, ...rest } = updatingData
+        rest[this.bindType] = url
+        updatingData = rest
+      }
       await this.teacherUpdateLesson({
         updatingData
       })
