@@ -71,15 +71,15 @@ export const lessons = {
   },
   update: async ({ updatingData }) =>
     put(`lessons/${updatingData.id}`, updatingData),
-  release: async ({ id, content }) => {
-    const res = await post(`lessons/${id}/contents`, { content })
+  release: async ({ id, content = '', courseware = '' }) => {
+    const res = await post(`lessons/${id}/contents`, { content, courseware })
     event('lesson', 'release_lesson', 'keepwork', id)
     return res
   },
   getUserLessons: async () => get('lessons'),
   lessonContent: async ({ lessonId }) => get(`lessons/${lessonId}/contents`),
   lessonDetail: async ({ lessonId }) => get(`lessons/${lessonId}/detail`),
-  lessonDetailByUrl: async params => get('lessons/detail', { params }),
+  lessonDetailByUrl: async params => get('lessons', { params }),
   rewardCoin: async ({ id }) => post(`learnRecords/${id}/reward`),
   isReward: async ({ packageId, lessonId }) =>
     get(`learnRecords/reward?packageId=${packageId}&lessonId=${lessonId}`),

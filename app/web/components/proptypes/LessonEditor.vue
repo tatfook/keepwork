@@ -3,14 +3,14 @@
     <div width="460px">
       <div class="lesson-menu-item">
         <span>{{$t('lesson.theme')}}</span>
-        <el-select v-model="selectTheme" class="select-options" :disabled="isLinked" :placeholder="$t('lesson.pleaseSelect')">
+        <el-select v-model="selectTheme" class="select-options" @change="handleSelectTheme" :disabled="isLinked" :placeholder="$t('lesson.pleaseSelect')">
           <el-option v-for="item in themeList" :key="item.key" :label="item.name" :value="item.key">
           </el-option>
         </el-select>
       </div>
       <div class="lesson-menu-item">
         <span>{{$t('lesson.linkThePage')}}</span>
-        <el-select v-model="selectValue" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
+        <el-select v-model="selectValue" @change="handleSelectLesson" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
           <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
           </el-option>
         </el-select>
@@ -18,10 +18,10 @@
       <div class="button-wrap">
         <el-button type="primary" @click="showEditorDialog" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
         <transition name="el-fade-in-linear">
-          <el-button v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
+          <el-button type="success" v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
         </transition>
         <transition name="el-fade-in-linear">
-          <el-button v-show="isLinked" @click.stop="handleUnbind">解绑</el-button>
+          <el-button type="warning" v-show="isLinked" @click.stop="handleUnbind">解绑</el-button>
         </transition>
       </div>
     </div>
@@ -62,7 +62,6 @@ export default {
       lessonId: '',
       selectValue: '',
       selectTheme: 'url',
-      selectLesson: {},
       userLessons: []
     }
   },
@@ -83,11 +82,16 @@ export default {
         }
       ]
     },
-    userLessonsFilter() {
-      return _.filter(this.userLessons, ({ url }) => !url)
+    selectLesson() {
+      return (
+        _.find(this.userLessons, item => item.id === this.selectValue) || {}
+      )
     },
     selectList() {
-      return this.isLinked ? this.userLessons : this.userLessonsFilter
+      return _.filter(
+        this.userLessons,
+        item => !item.url || !item.coursewareUrl
+      )
     },
     isLinked() {
       return !!_.find(this.userLessons, ({ id }) => id === this.lessonId)
@@ -101,75 +105,103 @@ export default {
     linkedLessonName() {
       return _.get(this.linkedLesson, 'lessonName', '')
     },
-    linkedTheme() {
-      if (!this.isLinked) {
-        return ''
-      }
-      const { url, coursewareUrl } = this.linkedLesson
-      if (url && url === this.currentURL) {
-        return 'url'
-      }
-      if (coursewareUrl && coursewareUrl === this.currentURL) {
-        return 'coursewareUrl'
-      }
-    },
     currentURL() {
       const origin = window.location.origin
       const currentURL = `${origin}${this.activePageUrl}`
       return currentURL
+    },
+    releaseKeyDict() {
+      return {
+        url: 'content',
+        coursewareUrl: 'courseware'
+      }
     }
   },
   methods: {
+    ...mapActions({
+      saveActivePage: 'saveActivePage'
+    }),
+    handleSelectLesson(id) {
+      const flag = _.get(this.selectLesson, [this.selectTheme], '')
+      if (flag) {
+        this.selectValue = ''
+        this.$message.error('该课程当前主题已经被绑定')
+      }
+    },
+    handleSelectTheme(key) {
+      if (this.selectLesson[key]) {
+        this.selectTheme = ''
+        this.$message.error('该课程当前主题已经被绑定')
+      }
+    },
     async getUserLessons() {
-      let lessons = await lesson.lessons.getUserLessons()
-      this.userLessons = _.get(lessons, 'rows')
+      const lessons = await lesson.lessons.getUserLessons()
+      this.userLessons = _.get(lessons, 'rows', [])
     },
     async checkMarkdownIsLinked() {
       try {
-        const { id } = await lesson.lessons.lessonDetailByUrl({
-          url: this.currentURL
-        })
-        this.lessonId = id
-        this.selectValue = id
+        const [teachingPlan, courseware] = await Promise.all([
+          lesson.lessons.lessonDetailByUrl({
+            url: this.currentURL
+          }),
+          lesson.lessons.lessonDetailByUrl({
+            coursewareUrl: this.currentURL
+          })
+        ])
+        if (teachingPlan.count > 0) {
+          const id = _.get(teachingPlan, 'rows[0].id', '')
+          this.setLinkValue(id, 'url')
+          return
+        }
+        if (courseware.count > 0) {
+          const id = _.get(courseware, 'rows[0].id', '')
+          this.setLinkValue(id, 'coursewareUrl')
+          return
+        }
+        this.setDefaultValue()
       } catch (error) {
+        this.setDefaultValue()
         console.error(error)
-        this.lessonId = ''
-        this.selectValue = ''
       }
+    },
+    setLinkValue(id, theme) {
+      this.lessonId = id
+      this.selectValue = id
+      this.selectTheme = theme
+    },
+    setDefaultValue() {
+      this.lessonId = ''
+      this.selectValue = ''
+      this.selectTheme = 'url'
     },
     async initUserData() {
       await this.getUserLessons()
       await this.checkMarkdownIsLinked()
-      if (this.linkedTheme) {
-        this.selectTheme = this.linkedTheme
-      } else {
-        this.selectTheme = 'url'
-      }
     },
     async handleUnbind() {
       if (!this.isLinked) {
         return
       }
-      console.log(this.linkedLesson)
-      console.log(this.linkedTheme)
       this.$confirm(`确定取消关联到课程: ${this.linkedLessonName} ?`, '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       })
         .then(async () => {
           await lesson.lessons.update({
-            updatingData: { id: this.linkedLesson.id, [this.linkedTheme]: null }
+            updatingData: { id: this.linkedLesson.id, [this.selectTheme]: null }
           })
           await this.initUserData()
         })
         .catch(e => console.error(e))
     },
     async handleRelease() {
+      await this.saveActivePage()
+      const KEY = this.releaseKeyDict[this.selectTheme] || 'content'
       const {
         file: { content }
       } = this.activePage
       await lesson.lessons
-        .release({ id: this.selectValue, content })
+        .release({ id: this.selectValue, [KEY]: content })
         .then(res =>
           this.$message({
             type: 'success',
@@ -189,7 +221,7 @@ export default {
       this.updateMarkdown({ updated: moment().format('YYYY/MM/DD HH:mm:ss') })
     },
     async showEditorDialog() {
-      if (!this.selectValue) {
+      if (!this.selectValue || !this.selectTheme) {
         return this.$message.error(this.$t('lesson.pleaseSelect'))
       }
       this.dialogVisible = true
