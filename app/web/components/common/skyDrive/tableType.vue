@@ -287,6 +287,7 @@ export default {
   &-no-more {
     color: #999;
     font-size: 12px;
+    padding: 16px 0;
   }
 }
 </style>
