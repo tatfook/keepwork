@@ -535,7 +535,8 @@
     "ppt": {
       "deleteConfirm": "确定删除该页PPT吗?",
       "add": "添加",
-      "type": "图片/视频"
+      "type": "图片/视频",
+      "fullScreen": "全屏播放"
     }
   },
   "card": {
