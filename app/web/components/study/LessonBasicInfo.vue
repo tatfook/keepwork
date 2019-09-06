@@ -206,7 +206,9 @@ export default {
       return isValid
     },
     checkUrlValid(url) {
-      const ValidPageLinkReg = new RegExp(/^[a-zA-Z0-9_][a-zA-Z0-9_\/]*$/)
+      const ValidPageLinkReg = new RegExp(
+        /^[^/\\:@&*=#"*?<>|\s][^\\:@&*=#"*?<>|\s]+$/
+      )
       if (url == '' || ValidPageLinkReg.test(url)) {
         return {
           isValid: true,
@@ -215,7 +217,7 @@ export default {
       } else {
         return {
           isValid: false,
-          msg: this.$t('lesson.lessonManage.pageLinkInvalidInfo')
+          msg: '不能包含 \\/:@&*=#"*?<>| 不能以 / 开头'
         }
       }
     },
