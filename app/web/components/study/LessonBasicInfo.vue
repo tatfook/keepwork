@@ -2,12 +2,25 @@
   <div class="lesson-basic-info">
     <div class="lesson-basic-info-row">
       <div class="lesson-basic-info-link-url" v-show="!isEditorMod">
-        <label class="lesson-basic-info-label lesson-basic-info-link-label" for="linkUrlInput">{{$t('lesson.lessonManage.linkPageLabel')}}</label>
+        <label class="lesson-basic-info-label lesson-basic-info-link-url-label" for="linkUrlInput">
+          <span class="lesson-basic-info-sub">(可选)</span>教案链接页面是
+        </label>
         <div class="lesson-basic-info-url-box">
           <el-input id="linkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempUrl" @input='checkTempUrlValid' @blur='setUrl'>
             <template slot="prepend">{{linkPagePrefix}}</template>
           </el-input>
           <div class="lesson-basic-info-url-box-error">{{urlInvalidInfo}}</div>
+        </div>
+      </div>
+      <div class="lesson-basic-info-link-url" v-show="!isEditorMod">
+        <label class="lesson-basic-info-label lesson-basic-info-link-url-label" for="coursewarelinkUrlInput">
+          <span class="lesson-basic-info-sub">(可选)</span>课件链接页面是
+        </label>
+        <div class="lesson-basic-info-url-box">
+          <el-input id="coursewarelinkUrlInput" :placeholder="$t('lesson.pleaseInput')" :disabled="isEditorMod" v-model="tempCoursewareUrl" @input='checkTempCoursewareUrlValid' @blur='setCoursewareUrl'>
+            <template slot="prepend">{{linkPagePrefix}}</template>
+          </el-input>
+          <div class="lesson-basic-info-url-box-error">{{coursewareUrlInvalidInfo}}</div>
         </div>
       </div>
       <div class="lesson-basic-info-subject-packages">
@@ -68,7 +81,13 @@ export default {
     await this.lessonGetAllSubjects({})
     if (this.isEditing) {
       let editingLessonDetailProp = this.editingLessonDetailProp
-      let { url, subjectId, lessonName, packages } = editingLessonDetailProp
+      let {
+        url,
+        coursewareUrl,
+        subjectId,
+        lessonName,
+        packages
+      } = editingLessonDetailProp
       _.forEach(packages, packageDetail => {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
@@ -76,8 +95,17 @@ export default {
       this.tempUrl = this.isEditorMod
         ? this.activePageUrl.replace(`/${this.username}/`, '')
         : url && this.getTemplateUrl(url)
-      this.editingLessonDetail = { url: this.tempUrl, subjectId, lessonName }
+      this.tempCoursewareUrl = this.isEditorMod
+        ? this.activePageUrl.replace(`/${this.username}/`, '')
+        : coursewareUrl && this.getTemplateUrl(coursewareUrl)
+      this.editingLessonDetail = {
+        url: this.tempUrl,
+        coursewareUrl: this.tempCoursewareUrl,
+        subjectId,
+        lessonName
+      }
       this.setUrl()
+      this.setCoursewareUrl()
     }
     let defaultSubjectId = this.lessonSubjects[0].id
     this.defaultSubjectId = defaultSubjectId
@@ -91,7 +119,9 @@ export default {
       isPackageZoneLoading: false,
       isNewPackageSelected: true,
       tempUrl: '',
+      tempCoursewareUrl: '',
       urlInvalidInfo: '',
+      coursewareUrlInvalidInfo: '',
       defaultSubjectId: undefined,
       defaultMinAge: 0,
       defaultMaxAge: 0,
@@ -112,6 +142,9 @@ export default {
     }),
     isLinkPageUrlValid() {
       return this.urlInvalidInfo.length == 0
+    },
+    isCoursewareUrlValid() {
+      return this.coursewareUrlInvalidInfo.length === 0
     },
     username() {
       return _.get(this.userProfile, 'username')
@@ -163,14 +196,27 @@ export default {
       this.isPackageZoneLoading = false
     },
     checkTempUrlValid() {
-      let tempUrl = this.tempUrl
+      let { isValid, msg } = this.checkUrlValid(this.tempUrl)
+      this.urlInvalidInfo = msg
+      return isValid
+    },
+    checkTempCoursewareUrlValid() {
+      let { isValid, msg } = this.checkUrlValid(this.tempCoursewareUrl)
+      this.coursewareUrlInvalidInfo = msg
+      return isValid
+    },
+    checkUrlValid(url) {
       const ValidPageLinkReg = new RegExp(/^[a-zA-Z0-9_][a-zA-Z0-9_\/]*$/)
-      if (tempUrl == '' || ValidPageLinkReg.test(tempUrl)) {
-        this.urlInvalidInfo = ''
-        return true
+      if (url == '' || ValidPageLinkReg.test(url)) {
+        return {
+          isValid: true,
+          msg: ''
+        }
       } else {
-        this.urlInvalidInfo = this.$t('lesson.lessonManage.pageLinkInvalidInfo')
-        return false
+        return {
+          isValid: false,
+          msg: this.$t('lesson.lessonManage.pageLinkInvalidInfo')
+        }
       }
     },
     setUrl() {
@@ -182,6 +228,18 @@ export default {
         return
       }
       this.editingLessonDetail.url = this.linkPagePrefix + this.tempUrl
+    },
+    setCoursewareUrl() {
+      if (!this.checkTempCoursewareUrlValid()) {
+        return
+      }
+      let coursewareUrl = this.tempCoursewareUrl
+      if (coursewareUrl == '' || _.isNull(coursewareUrl)) {
+        this.editingLessonDetail.coursewareUrl = null
+        return
+      }
+      this.editingLessonDetail.coursewareUrl =
+        this.linkPagePrefix + coursewareUrl
     },
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
@@ -209,12 +267,20 @@ export default {
     display: inline-block;
     line-height: 24px;
   }
+  &-sub {
+    font-weight: normal;
+    color: #409efe;
+    margin-right: 3px;
+  }
   &-link-url {
     display: flex;
     align-items: center;
-    margin-bottom: 46px;
+    margin-bottom: 48px;
+    &:first-child {
+      margin-bottom: 24px;
+    }
     &-label {
-      margin: 0;
+      margin-bottom: 0;
     }
     .el-input-group {
       margin-left: 10px;

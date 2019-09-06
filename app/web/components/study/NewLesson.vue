@@ -1,6 +1,6 @@
 <template>
   <div class="new-lesson" v-loading='isLoading'>
-    <lesson-editor-header :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
+    <lesson-editor-header :isLinkPageUrlValid='isLinkPageUrlValid' :isCoursewareUrlValid="isCoursewareUrlValid" :isLessonNameEmpty='isLessonNameEmpty' @saveLesson='saveNewLesson'></lesson-editor-header>
     <div class="new-lesson-container">
       <lesson-basic-info ref="basicInfoComponent"></lesson-basic-info>
       <cover-media-setter class="new-lesson-cover" ref="coverUrlComponent"></cover-media-setter>
@@ -11,7 +11,6 @@
         </div>
         <lesson-more-info-settting v-show="isMoreInfoShow" ref="moreInfoComponent"></lesson-more-info-settting>
       </div>
-
     </div>
   </div>
 </template>
@@ -53,6 +52,12 @@ export default {
       }
       return this.$refs.basicInfoComponent.isLinkPageUrlValid
     },
+    isCoursewareUrlValid() {
+      if (!this.isMounted) {
+        return true
+      }
+      return this.$refs.basicInfoComponent.isCoursewareUrlValid
+    },
     isLessonNameEmpty() {
       if (!this.isMounted) {
         return true
@@ -63,9 +68,17 @@ export default {
     newLessonData() {
       return _.assign(
         this.newLessonBasicInfo,
-        _.omit(this.newLessonMoreInfo, ['videoUrl']),
+        _.omit(this.newLessonMoreInfo, [
+          'videoUrl',
+          'teacherVideoUrl',
+          'studentVideoUrl',
+          'duration'
+        ]),
         {
           extra: {
+            duration: this.newLessonMoreInfo.duration,
+            teacherVideoUrl: this.newLessonMoreInfo.teacherVideoUrl,
+            studentVideoUrl: this.newLessonMoreInfo.studentVideoUrl,
             coverUrl: this.newLessonCoverUrl,
             videoUrl: this.newLessonMoreInfo.videoUrl
           }
@@ -95,25 +108,14 @@ export default {
           lessonId,
           isLastOne
         })
-          .then(() => {
-            // this.$notify({
-            //   title: '成功',
-            //   message: '这是一条成功的提示消息' + packageId,
-            //   type: 'success'
-            // })
-          })
+          .then(() => {})
           .catch(err => {
             console.error(err)
-            // this.$notify({
-            //   title: '失败',
-            //   message: '这是一条失败的提示消息' + packageId,
-            //   type: 'error'
-            // })
           })
       }
     },
     async saveNewLesson() {
-      if (!this.isLinkPageUrlValid) {
+      if (!this.isLinkPageUrlValid || !this.isCoursewareUrlValid) {
         return
       }
       if (this.isLessonNameEmpty) {
