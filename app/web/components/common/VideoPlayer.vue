@@ -91,9 +91,7 @@ export default {
     }
     .vjs-control-bar {
       overflow: hidden;
-      position: inherit;
       display: flex;
-      bottom: 42px;
       left: 0;
       visibility: hidden;
     }

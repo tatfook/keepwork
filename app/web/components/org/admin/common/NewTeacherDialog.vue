@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="new-teacher-dialog" title="添加教师" :visible.sync="isNewDialogVisible" width="906px" :before-close="handleClose" v-loading="isLoading">
+  <el-dialog custom-class="new-teacher-dialog" title="配置老师" :visible.sync="isNewDialogVisible" width="906px" :before-close="handleClose" v-loading="isLoading">
     <el-table border :data="teacherList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="268">
       </el-table-column>
@@ -7,6 +7,9 @@
       </el-table-column>
       <el-table-column prop="username" :label="$t('org.usernameLabel')">
       </el-table-column>
+      <template slot="empty">
+        <router-link class="new-teacher-dialog-empty" :to="{ name: 'OrgNewTeacher' }">请去 教师管理界面为组织添加任课教师，点击跳转...</router-link>
+      </template>
     </el-table>
     <span slot="footer" class="new-teacher-dialog-footer">
       <el-button @click="handleClose">取 消</el-button>
@@ -107,3 +110,14 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.new-teacher-dialog {
+  &-empty {
+    text-decoration: none;
+    color: #909399;
+    &:hover {
+      color: #2397f3;
+    }
+  }
+}
+</style>

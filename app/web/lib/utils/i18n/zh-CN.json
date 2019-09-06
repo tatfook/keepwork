@@ -531,6 +531,12 @@
       "notice": "输入的站外链接将可能无法在iframe中加载成功, 是否继续?",
       "pleaseInput": "请输入https或者http的链接",
       "formatError": "请输入带https/http的链接"
+    },
+    "ppt": {
+      "deleteConfirm": "确定删除该页PPT吗?",
+      "add": "添加",
+      "type": "图片/视频",
+      "fullScreen": "全屏播放"
     }
   },
   "card": {

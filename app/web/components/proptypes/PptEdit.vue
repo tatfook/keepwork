@@ -1,9 +1,9 @@
 <template>
   <div class="ppt-edit">
     <div class="ppt-edit-header">
-      <el-button @click="handleAdd" class="ppt-edit-header-add" type="text" icon="el-icon-plus">添加</el-button>
+      <el-button @click="handleAdd" class="ppt-edit-header-add" type="text" icon="el-icon-plus">{{$t('adi.ppt.add')}}</el-button>
       <span class="ppt-edit-header-type">
-        图片/视频
+        {{$t('adi.ppt.type')}}
       </span>
     </div>
     <div class="ppt-edit-list">
@@ -74,9 +74,9 @@ export default {
         const { page, ...rest } = item
         return { page: index + 1, ...rest }
       })
-      this.$confirm('确定删除该页PPT吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('adi.ppt.deleteConfirm'), {
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel'),
         type: 'warning'
       })
         .then(() => {
