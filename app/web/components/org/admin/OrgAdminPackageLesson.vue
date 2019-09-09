@@ -19,14 +19,13 @@
       </div>
     </div>
     <org-lesson-header :lesson="lessonHeader" :isTeacher="true" :isInCurrentClass="false"></org-lesson-header>
-    <org-admin-lesson-content></org-admin-lesson-content>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import OrgLessonHeader from '../common/OrgLessonHeader'
-import OrgAdminLessonContent from './OrgAdminLessonContent'
 import { lesson } from '@/api'
 import _ from 'lodash'
 
@@ -34,7 +33,6 @@ export default {
   name: 'OrgAdminPackageLesson',
   components: {
     OrgLessonHeader,
-    OrgAdminLessonContent
   },
   data() {
     return {
