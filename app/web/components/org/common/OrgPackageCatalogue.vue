@@ -1,19 +1,9 @@
 <template>
   <div class="package-catalogue">
-    <div class="package-catalogue-progress" v-show="isStudent">
-      <div class="package-catalogue-progress-detail">
-        <el-progress :show-text='false' :stroke-width="18" :percentage="lessonProgressPercent"></el-progress>
-        <el-button type="primary" :disabled="lessonProgressPercent === 100 || isClassCompleted" :class="['package-catalogue-progress-button', { 'complete-button': isClassCompleted }]" @click="continueToLearn">{{buttonText}}</el-button>
-      </div>
-      <p>{{lessonProgressInfo}}</p>
-    </div>
     <div class="package-catalogue-title">{{$t('lesson.catalogue')}}</div>
     <div class="package-catalogue-box">
       <div :class="['package-catalogue-item', { 'package-is-teached': isTeacher && lesson.isTeached }]" v-for="(lesson, index) in lessonsListSorted" :key='index'>
         <div class="package-catalogue-item-cover-box">
-          <div class="package-catalogue-item-mark" v-show="isStudent && lesson.isLearned">
-            <i class="el-icon-check"></i>
-          </div>
           <div class="package-catalogue-item-cover">
             <div class="package-catalogue-item-cover-wrap">
               <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
@@ -31,10 +21,7 @@
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>{{getLessonDuration(lesson)}}</span>
           </div>
-          <lesson-operations :lesson="lesson" />
-          <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
-          <el-button v-show="lesson.isLearned && isStudent" :disabled="isClassCompleted" plain size="small" :class="['package-catalogue-item-button', 'learn-again', { 'complete-button': isClassCompleted }]" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
-          <el-button v-show="!lesson.isLearned && isStudent" :disabled="isClassCompleted" type="primary" size="small" :class="['package-catalogue-item-button', 'start-button', { 'complete-button': isClassCompleted }]" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
+          <lesson-operations :lesson="lesson" :isStudent="isStudent" />
         </div>
       </div>
     </div>
@@ -282,26 +269,6 @@ export default {
       border-color: #c8c9cc;
     }
   }
-  &-progress {
-    padding: 13px 20px;
-    color: #818181;
-    font-size: 14px;
-    &-detail {
-      .el-progress {
-        width: 760px;
-        max-width: 86%;
-        display: inline-block;
-        vertical-align: bottom;
-      }
-    }
-    &-button {
-      padding: 10px 14px;
-      margin-left: 22px;
-    }
-    p {
-      margin: 5px 0 0;
-    }
-  }
   &-title {
     font-size: 16px;
     color: #333;
@@ -372,28 +339,6 @@ export default {
     }
     &-duration {
       margin: 25px 0 15px;
-    }
-    &-mark {
-      position: absolute;
-      top: -4px;
-      left: 0;
-      font-size: 14px;
-      color: #67c23a;
-      z-index: 1;
-      .el-icon-check {
-        font-weight: bold;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background-color: #67c23a;
-        color: #fff;
-        text-align: center;
-        line-height: 38px;
-        font-size: 24px;
-        margin-left: 4px;
-        vertical-align: middle;
-        border: 2px solid #fff;
-      }
     }
     &-button {
       margin-bottom: 16px;
