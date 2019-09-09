@@ -7,7 +7,7 @@
       </div>
       <el-row>
         <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in selectedClassPackgesSort" :key="index">
-          <org-package-cell-by-time :packageData="packageData" @package-click="handleToClassPackagePage"></org-package-cell-by-time>
+          <org-package-cell class="org-pacakge-list-item" :packageData="packageData" @package-click="handleToClassPackagePage"></org-package-cell>
         </el-col>
       </el-row>
     </template>
@@ -15,14 +15,14 @@
 </template>
 
 <script>
-import OrgPackageCellByTime from '../common/OrgPackageCellByTime'
+import OrgPackageCell from '@/components/org/common/OrgPackageCell'
 import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'OrgTeacherTeach',
   components: {
-    OrgPackageCellByTime,
+    OrgPackageCell,
     OrgClassesTabbar
   },
   data() {
@@ -96,6 +96,9 @@ export default {
 
 <style lang="scss">
 .org-teacher-teach {
+  .org-pacakge-list-item {
+    margin-top: 20px;
+  }
   .package-count {
     color: #909399;
     margin-top: 20px;
