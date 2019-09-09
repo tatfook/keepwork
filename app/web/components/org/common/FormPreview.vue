@@ -72,4 +72,15 @@ export default {
     padding: 32px 56px;
   }
 }
+@media screen and (max-width: 768px) {
+  .form-preview {
+    border-radius: 0;
+    &-header {
+      padding: 0 16px;
+    }
+    &-content {
+      padding: 8px 16px;
+    }
+  }
+}
 </style>

@@ -59,7 +59,7 @@ describe('SkyDriveManagerDialog Comp test', () => {
 
   it('handleClose method be called when close event is emitted', () => {
     const childCompWrapper = wrapper.find(SkyDriveManager)
-    childCompWrapper.vm.$emit('close')
+    childCompWrapper.vm.$emit('close', [])
     expect(handleCloseSpy).toBeCalled()
   })
 
@@ -67,7 +67,7 @@ describe('SkyDriveManagerDialog Comp test', () => {
     wrapper.setComputed({
       stateDoingFiles: [{}, {}]
     })
-    wrapper.vm.handleClose()
+    wrapper.vm.handleClose([])
     expect(confirmSpy).toBeCalled()
   })
 
@@ -75,7 +75,7 @@ describe('SkyDriveManagerDialog Comp test', () => {
     wrapper.setComputed({
       stateDoingFiles: []
     })
-    wrapper.vm.handleClose()
+    wrapper.vm.handleClose([])
     expect(wrapper.emitted().close).toBeTruthy()
   })
 })

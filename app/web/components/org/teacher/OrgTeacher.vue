@@ -39,10 +39,6 @@ export default {
           text: this.$t('org.TeachLabel')
         },
         {
-          pageName: 'OrgTeacherStatistics',
-          text: this.$t('org.DataStaticsLabel')
-        },
-        {
           pageName: 'OrgTeacherClass',
           text: this.$t('org.MyClassLabel')
         },

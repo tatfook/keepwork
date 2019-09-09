@@ -56,12 +56,14 @@
         </template>
       </el-table-column>
       <infinite-loading slot="append" :identifier="identifier" @infinite="load" force-use-infinite-wrapper=".el-table__body-wrapper">
+        <div slot="no-more" class="table-type-no-more">没有更多了</div>
       </infinite-loading>
     </el-table>
     <file-list-empty v-if="!tableDataWithUploading.length" :uploadText="uploadText" viewType="table" :uploadType="mediaFilterType"></file-list-empty>
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import uuidV1 from 'uuid/v1'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
@@ -132,8 +134,8 @@ export default {
     setSort() {
       this.$nextTick(() => {
         let tableRef = this.$refs.skyDriveTable
-        tableRef && tableRef.clearSort()
-        tableRef && tableRef.sort('updatedAt', 'descending')
+        tableRef && tableRef.clearSort && tableRef.clearSort()
+        tableRef && tableRef.sort && tableRef.sort('updatedAt', 'descending')
         this.initData('updatedAt', 'descending')
       })
     },
@@ -159,11 +161,12 @@ export default {
       ).filter(fileDetail => {
         return Boolean(fileDetail)
       })
+      console.log(this.tableData)
       this.nowPage++
+      $state && $state.loaded()
       if (this.nowPage >= this.fileListChunk.length) {
         return $state && $state.complete()
       }
-      $state && $state.loaded()
     },
     handleClose(filesWithUrl) {
       this.$emit('close', filesWithUrl)
@@ -282,6 +285,11 @@ export default {
     [class*='icon'] {
       margin-right: 0;
     }
+  }
+  &-no-more {
+    color: #999;
+    font-size: 12px;
+    padding: 16px 0;
   }
 }
 </style>

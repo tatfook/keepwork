@@ -13,7 +13,7 @@
     </div>
     <el-row>
       <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in orgStudentPackageList" :key="index">
-        <org-package-cell-for-student :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell-for-student>
+        <org-package-cell class="org-pacakge-list-item" :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell>
       </el-col>
     </el-row>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
@@ -29,13 +29,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import OrgPackageCellForStudent from '../common/OrgPackageCellForStudent'
+import OrgPackageCell from '@/components/org/common/OrgPackageCell'
 import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
   name: 'OrgStudentClass',
   components: {
-    OrgPackageCellForStudent
+    OrgPackageCell
   },
   data() {
     return {
@@ -49,8 +49,9 @@ export default {
       await this.getOrgPackages()
     } catch (error) {
       console.error(error)
+    } finally {
+      this.isLoading = false
     }
-    this.isLoading = false
   },
   methods: {
     ...mapActions({
@@ -144,19 +145,6 @@ export default {
           }
           return
         }
-        // join the classroom
-        const _key = _.trim(key.replace('c', ''))
-        if (this.isBeInClassroom && this.currentClassroomKey == _key) {
-          const { packageId, lessonId } = this.classroom
-          return this.$router.push({
-            name: 'OrgStudentPackageLesson',
-            params: { packageId, lessonId }
-          })
-        }
-        if (this.isBeInClassroom && this.currentClassroomKey != _key) {
-          return (this.beInClassDialog = true)
-        }
-        this.enterNewClass(this.classroomkey)
       } catch (error) {
         console.error(error)
       }
@@ -279,6 +267,9 @@ export default {
 
 <style lang="scss" scoped>
 .org-student-class {
+  .org-pacakge-list-item {
+    margin-top: 20px;
+  }
   &-header {
     height: 64px;
     display: flex;
