@@ -14,14 +14,14 @@
           <div class="package-catalogue-item-mark" v-show="isStudent && lesson.isLearned">
             <i class="el-icon-check"></i>
           </div>
-          <div class="package-catalogue-item-cover" @click="toLessonDetail(lesson)">
+          <div class="package-catalogue-item-cover">
             <div class="package-catalogue-item-cover-wrap">
               <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
             </div>
           </div>
         </div>
         <div class="package-catalogue-item-detail">
-          <div class="package-catalogue-item-title" @click="toLessonDetail(lesson)">
+          <div class="package-catalogue-item-title">
             <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>({{$t('lesson.lessonId')}} {{packageId}}x{{lesson.id}} )</span></span>
           </div>
           <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
@@ -31,10 +31,10 @@
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>{{getLessonDuration(lesson)}}</span>
           </div>
+          <lesson-operations :lesson="lesson" />
           <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button" @click="toViewSummary(lesson)">{{$t('lesson.viewLearnSummary')}}</el-button>
           <el-button v-show="lesson.isLearned && isStudent" :disabled="isClassCompleted" plain size="small" :class="['package-catalogue-item-button', 'learn-again', { 'complete-button': isClassCompleted }]" @click="toLearnAgain(lesson)">{{$t('lesson.learnAgain')}}</el-button>
           <el-button v-show="!lesson.isLearned && isStudent" :disabled="isClassCompleted" type="primary" size="small" :class="['package-catalogue-item-button', 'start-button', { 'complete-button': isClassCompleted }]" @click="toLessonDetail(lesson)">{{$t('card.startToLearn')}}</el-button>
-          <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> {{$t('org.chapterIsFinished')}}</span>
         </div>
       </div>
     </div>
@@ -44,6 +44,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
+import LessonOperations from './LessonOperations'
 export default {
   name: 'OrgPackageCatalogue',
   props: {
@@ -262,6 +263,9 @@ export default {
         .then(() => this.$router.push(routerObject))
         .catch(e => console.error(e))
     }
+  },
+  components: {
+    LessonOperations
   }
 }
 </script>
@@ -329,7 +333,6 @@ export default {
     }
     &-cover {
       width: 234px;
-      cursor: pointer;
       &-wrap {
         padding-bottom: 56.25%;
         position: relative;
@@ -355,7 +358,6 @@ export default {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      cursor: pointer;
     }
     &-disabled {
       background-color: #bfbfbf;
