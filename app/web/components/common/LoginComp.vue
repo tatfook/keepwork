@@ -38,7 +38,7 @@
         </div>
       </el-form>
     </div>
-    <div v-show="isRegisterForm">
+    <div v-if="isRegisterForm">
       <register-dialog @close="handleClose"></register-dialog>
       <div class="register-oprate">
         <div @click="backHome" class="back-home-page">{{$t('editor.backHomePage')}}</div>
