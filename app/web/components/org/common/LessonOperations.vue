@@ -1,16 +1,20 @@
 <template>
   <div class="lesson-operations">
-    <a v-if="url" class="lesson-operations-item" :href="url" target="_blank">教案</a>
+    <a v-if="url && !isStudent" class="lesson-operations-item" :href="url" target="_blank">教案</a>
     <a v-if="coursewareUrl" class="lesson-operations-item" :href="coursewareUrl" target="_blank">课件</a>
-    <a v-if="teacherVideoUrl" class="lesson-operations-item" :href="teacherVideoUrl" target="_blank">教师视频</a>
-    <a v-if="studentVideoUrl" class="lesson-operations-item" :href="studentVideoUrl" target="_blank">学生视频</a>
+    <a v-if="teacherVideoUrl && !isStudent" class="lesson-operations-item" :href="teacherVideoUrl" target="_blank">教师视频</a>
+    <a v-if="studentVideoUrl" class="lesson-operations-item" :href="studentVideoUrl" target="_blank">{{isStudent?'':'学生'}}视频</a>
   </div>
 </template>
 <script>
 export default {
   name: 'LessonOperations',
   props: {
-    lesson: Object
+    lesson: Object,
+    isStudent: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     url() {
