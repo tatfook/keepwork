@@ -121,9 +121,13 @@ export default {
       return _.get(this.$route, 'name')
     },
     isSidebarShow() {
-      return !['OrgAdminPackageDetail', 'OrgAdminPackageLesson'].includes(
-        this.nowPageName
-      )
+      return ![
+        'OrgAdminPackageDetail',
+        'OrgAdminPackageLesson',
+        'OrgAdminPackageLesson',
+        'OrgAdminLessonPlan',
+        'OrgAdminCourseware'
+      ].includes(this.nowPageName)
     },
     startDate() {
       return moment(this.currentOrg.startDate).format('YYYY/M/D')
@@ -161,7 +165,7 @@ $borderColor: #e8e8e8;
     margin-top: 10px;
   }
   .expire-tips {
-    color:#f56c6c;
+    color: #f56c6c;
   }
   &-container {
     max-width: 1200px;

@@ -159,8 +159,9 @@ const actions = {
       item => item.lessonId === _.toNumber(lessonId)
     )
     detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
-    let modList = Parser.buildBlockList(res.content)
-    let quiz = modList
+    const modList = Parser.buildBlockList(res.content)
+    const courseware = Parser.buildBlockList(res.courseware)
+    const quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
       .map(({ data: { quiz: { data } } }) => ({
         key: data[0].id,
@@ -176,7 +177,8 @@ const actions = {
       lessonId,
       lesson: detail,
       quiz,
-      modList
+      modList,
+      courseware
     })
   },
   async getOrgClassList(context, { organizationId }) {

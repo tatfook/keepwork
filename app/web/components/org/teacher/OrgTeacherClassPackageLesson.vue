@@ -62,9 +62,6 @@ export default {
           name,
           params: { classId, packageId, lessonId }
         } = this.$route
-        if (!this.isBeInClass && name !== 'OrgTeacherLessonPlan') {
-          this.$router.push({ name: 'OrgTeacherLessonPlan' })
-        }
         await Promise.all([
           this.getLessonDetail({ classId, packageId, lessonId }),
           this.getOrgClasses({ cache: true })
@@ -77,11 +74,11 @@ export default {
       this.isLoading = false
     },
     handleSelectLesson(_lessonId) {
-      const { packageId, lessonId } = this.$route.params
+      const { name, params: { packageId, lessonId }} = this.$route
       if (lessonId != _lessonId) {
         this.leaveTheClassroom()
         this.$router.push({
-          name: 'OrgTeacherLessonPlan',
+          name,
           params: { packageId, lessonId: _lessonId }
         })
       }
@@ -148,16 +145,6 @@ export default {
       return _.get(this.userinfo, 'id', '')
     }
   },
-  beforeRouteUpdate({ name }, from, next) {
-    if (name === 'LessonTeacherSummary' && !this.isClassIsOver) {
-      return this.$router.push({ name: 'plan' })
-    }
-    if (name === 'LessonTeacherPerformance' && !this.isBeInClass) {
-      this.intervalUpdateLearnRecords()
-      return this.$router.push({ name: 'plan' })
-    }
-    next()
-  }
 }
 </script>
 

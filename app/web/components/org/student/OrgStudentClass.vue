@@ -13,7 +13,7 @@
     </div>
     <el-row>
       <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in orgStudentPackageList" :key="index">
-        <org-package-cell :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell>
+        <org-package-cell class="org-pacakge-list-item" :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell>
       </el-col>
     </el-row>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
@@ -267,6 +267,9 @@ export default {
 
 <style lang="scss" scoped>
 .org-student-class {
+  .org-pacakge-list-item {
+    margin-top: 20px;
+  }
   &-header {
     height: 64px;
     display: flex;
