@@ -326,6 +326,7 @@ body {
   background: #f5f5f5;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   display: table;
+  table-layout: fixed;
   &-main-content {
     display: table-row;
     height: 100%;
