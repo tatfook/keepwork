@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import videoPlayer from '@/components/common/VideoPlayer'
 import PPTPage from './PPTPage'
 const RIGHT_CODE = 39
 const LEFT_CODE = 37
@@ -19,7 +18,6 @@ const NEXT_PAGE = [RIGHT_CODE, SPACE_CODE, ENTER_CODE]
 export default {
   name: 'FullscreenPPT',
   components: {
-    videoPlayer,
     PPTPage
   },
   data() {
