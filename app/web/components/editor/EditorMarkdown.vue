@@ -6,7 +6,6 @@
 
 <script>
 import _ from 'lodash'
-import uuid from 'uuid/v1'
 import Parser from '@/lib/mod/parser'
 import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
