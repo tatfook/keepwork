@@ -23,17 +23,6 @@
               </el-scrollbar>
             </div>
             <div class="lesson-info duration">{{$t('lesson.duration')}}: {{lessonDuration}}</div>
-            <div class="lesson-info skills">
-              <div class="skills-title">
-                {{$t('lesson.skillPoints')}}:
-              </div>
-              <el-scrollbar :class="['skills-list']" :native="false">
-                <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
-              </el-scrollbar>
-            </div>
-            <el-row class="lesson-button adi-lesson-button">
-              <el-button type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
-            </el-row>
           </div>
         </el-col>
       </el-row>
