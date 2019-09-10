@@ -273,6 +273,10 @@ export default {
   border-color: #e4e7ed;
   max-height: 380px;
   overflow: auto;
+  .list-content {
+    display: initial;
+    padding: 0;
+  }
   .file-list-item {
     max-width: 180px;
     overflow: hidden;
