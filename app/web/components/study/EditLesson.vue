@@ -59,6 +59,9 @@ export default {
       lessonDetail: 'lesson/lessonDetail'
     }),
     isEditable() {
+      if (this.isEditorMod) {
+        return true
+      }
       let { packages } = this.editingLessonDetail
       let pendingReviewPackageIndex = _.findIndex(packages, { state: 1 })
       return pendingReviewPackageIndex === -1

@@ -10,10 +10,12 @@
       </div>
       <div class="lesson-menu-item">
         <span>{{$t('lesson.linkThePage')}}</span>
-        <el-select v-model="selectValue" @change="handleSelectLesson" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
+        <el-select v-if="!isLinked" v-model="selectValue" @change="handleSelectLesson" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
           <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
           </el-option>
         </el-select>
+        <el-input class="select-options" v-else :disabled="true" :value="linkedLessonName">
+        </el-input>
       </div>
       <div class="button-wrap">
         <el-button type="primary" @click="showEditorDialog" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
