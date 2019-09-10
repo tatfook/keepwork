@@ -6,6 +6,7 @@
 
 <script>
 import _ from 'lodash'
+import uuid from 'uuid/v1'
 import Parser from '@/lib/mod/parser'
 import CmdHelper from '@/lib/mod/parser/cmdHelper'
 import BlockHelper from '@/lib/mod/parser/blockHelper'
@@ -146,7 +147,7 @@ export default {
     activeCursorLine() {
       const cursor = this.editor.getCursor()
       if (_.isNumber(cursor.line)) {
-         return cursor.line ? cursor.line : -1
+        return cursor.line ? cursor.line : -1
       }
       return this.editor.lastLine()
     }
@@ -177,8 +178,8 @@ export default {
     },
     clearHighlight() {
       let lineCount = this.editor.lineCount()
-      while(lineCount--) {
-          this.editor.removeLineClass(lineCount, 'background', 'mark-text')
+      while (lineCount--) {
+        this.editor.removeLineClass(lineCount, 'background', 'mark-text')
       }
     },
     handleClick(codeMirror) {
@@ -397,8 +398,7 @@ export default {
       } else {
         this.replaceLine(lineNo, this.$t('editor.readFileFromLocal'))
       }
-      let filename = `${file.name}`
-
+      let filename = new Date().valueOf() + `${file.name}`
       await this.userUploadFileAndUseInSite({
         file,
         filename,
