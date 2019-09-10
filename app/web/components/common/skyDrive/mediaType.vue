@@ -134,11 +134,11 @@ export default {
       )
     },
     approvedMultipleSelectionResults() {
-      return (
+      let selectedList =
         this.sortedSkyDriveMediaLibraryData.filter(
           ({ isChecked }) => Number(isChecked) === 1
         ) || []
-      )
+      return _.orderBy(selectedList, ['checkedTime'], ['asc'])
     },
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
@@ -227,6 +227,7 @@ export default {
     },
     selectItem(mediaItem) {
       this.$set(mediaItem, 'isChecked', !mediaItem.isChecked)
+      this.$set(mediaItem, 'checkedTime', new Date().valueOf())
       this.handleItemSelectChange(mediaItem)
     }
   },
