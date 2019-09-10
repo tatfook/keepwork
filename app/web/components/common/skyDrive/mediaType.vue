@@ -178,7 +178,7 @@ export default {
       this.fileList = _.map(this.fileList, mediaItem => {
         return {
           ...mediaItem,
-          isChecked: mediaItem.filename == file.filename ? true : false
+          isChecked: mediaItem.id == file.id ? true : false
         }
       })
     },
