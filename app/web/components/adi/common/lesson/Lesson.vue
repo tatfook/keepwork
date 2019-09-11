@@ -92,8 +92,9 @@ export default {
       await lesson.lessons
         .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
         .then(res => {
-          this.lessonData = res
-          this.isLinked = true
+          if (res.rows.length) {
+            this.lessonData = _.get(res, 'rows[0]', {})
+          }
         })
         .catch(e => console.error(e))
     },

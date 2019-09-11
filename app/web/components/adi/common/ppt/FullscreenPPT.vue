@@ -16,8 +16,8 @@ const UP_CODE = 38
 const DOWN_CODE = 40
 const SPACE_CODE = 32
 const ENTER_CODE = 13
-const NEXT_PAGE = [RIGHT_CODE, SPACE_CODE, ENTER_CODE, UP_CODE]
-const PREV_PAGE = [LEFT_CODE, DOWN_CODE]
+const NEXT_PAGE = [RIGHT_CODE, SPACE_CODE, ENTER_CODE, DOWN_CODE]
+const PREV_PAGE = [LEFT_CODE, UP_CODE]
 export default {
   name: 'FullscreenPPT',
   components: {
