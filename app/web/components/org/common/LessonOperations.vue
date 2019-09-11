@@ -79,14 +79,6 @@ export default {
         })
         return
       }
-
-      if (this.isStudentRouter) {
-        this.$router.push({
-          name: 'OrgStudentPackageLesson',
-          params: this.nextRouteParams
-        })
-        return
-      }
       if (this.isTeacherRouter) {
         this.$router.push({
           name: 'OrgTeacherLessonPlan',
@@ -110,9 +102,15 @@ export default {
         })
         return
       }
+      if (this.isStudentRouter) {
+        this.$router.push({
+          name: 'OrgStudentPackageLesson',
+          params: this.nextRouteParams
+        })
+        return
+      }
     },
     onShowTeacherVideo() {
-      console.log('onShowTeacherVideo')
       this.isShowTeacherVideo = true
     },
     onShowStudentVideo() {
