@@ -116,34 +116,31 @@ export default {
     async handleEnterClassroom() {
       try {
         const key = _.lowerCase(this.classroomkey)
-        if (_.includes(key, 'x')) {
-          if (this.isBeInClassroom) {
-            return this.$message.error(this.$t('lesson.beInClass'))
-          }
-          const [packageId, lessonId] = key.split('x').map(_.toNumber)
-          const OrgHasTheLesson = _.get(
-            this.orgPackagesDict,
-            [packageId],
-            []
-          ).includes(lessonId)
-          const res = await lesson.classrooms.isValidLessonId({
-            packageId,
-            lessonId
+        if (!_.includes(key, 'x')) {
+          return this.$message.error(this.$t('org.lessonIdNotExist'))
+        }
+        const [packageId, lessonId] = key.split('x').map(_.toNumber)
+        const OrgHasTheLesson = _.get(
+          this.orgPackagesDict,
+          [packageId],
+          []
+        ).includes(lessonId)
+        const res = await lesson.classrooms.isValidLessonId({
+          packageId,
+          lessonId
+        })
+        const isHasTheLesson = res.count > 0
+        if (isHasTheLesson && OrgHasTheLesson) {
+          this.$router.push({
+            name: 'OrgStudentPackageLesson',
+            params: { packageId, lessonId }
           })
-          const isHasTheLesson = res.count > 0
-          if (isHasTheLesson && OrgHasTheLesson) {
-            this.$router.push({
-              name: 'OrgStudentPackageLesson',
-              params: { packageId, lessonId }
-            })
-          }
-          if (isHasTheLesson && !OrgHasTheLesson) {
-            this.$message.error(this.$t('org.haveNotBoughtLesson'))
-          }
-          if (!isHasTheLesson) {
-            this.$message.error(this.$t('org.classIdNotExist'))
-          }
-          return
+        }
+        if (isHasTheLesson && !OrgHasTheLesson) {
+          this.$message.error(this.$t('org.haveNotBoughtLesson'))
+        }
+        if (!isHasTheLesson) {
+          this.$message.error(this.$t('org.lessonIdNotExist'))
         }
       } catch (error) {
         console.error(error)

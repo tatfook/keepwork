@@ -1,10 +1,10 @@
 <template>
   <div class="org-student">
-    <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
+    <!-- <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
       <span class="org-student-tips-icon"></span>
       <span class="org-student-tips-text">{{$t('org.classBegins') + item.lessonName}},{{$t('lesson.curentClassId')}} C{{item.key}}</span>
       <span @click="handleJoinClassroom(item)" class="org-student-tips-button">{{$t("org.enterClass")}}</span>
-    </div>
+    </div> -->
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-sidebar-top">
