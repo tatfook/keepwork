@@ -35,25 +35,27 @@
         {{$t("org.IncludeStudents") + selectedClassStudentsCount + $t("org.studentCountUnit")}}
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
-        <el-table-column prop="realname" :label="$t('org.nameLabel')">
+        <el-table-column prop="realname" :label="$t('org.nameLabel')" width="162">
         </el-table-column>
-        <el-table-column prop="username" :label="$t('org.usernameLabel')">
+        <el-table-column prop="username" :label="$t('org.usernameLabel')" width="162">
         </el-table-column>
-        <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')">
+        <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="162">
         </el-table-column>
         <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
           <template slot-scope="scope">
             <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
             <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
+            <el-button @click="showChangeDialog(scope.row)" size="mini">修改密码</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-
+    <change-password-dialog :isChangeDialogVisible="isChangeDialogVisible" :changingMember="changingMember" @close="isChangeDialogVisible = false" />
   </div>
 </template>
 
 <script>
+import ChangePasswordDialog from '@/components/org/admin/common/ChangePasswordDialog'
 import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import { keepwork } from '@/api'
 const { lessonOrganizations: orgApi } = keepwork
@@ -63,7 +65,8 @@ import moment from 'moment'
 export default {
   name: 'OrgTeacherClass',
   components: {
-    OrgClassesTabbar
+    OrgClassesTabbar,
+    ChangePasswordDialog
   },
   data() {
     const checkMemberName = (rule, username, callback) => {
@@ -76,6 +79,8 @@ export default {
     return {
       selectedClassId: '',
       isShowAddStudentForm: false,
+      isChangeDialogVisible: false,
+      changingMember: {},
       isLoading: true,
       rules: {
         name: [
@@ -119,6 +124,21 @@ export default {
       getOrgStudents: 'org/teacher/getOrgStudents',
       getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql'
     }),
+    showChangeDialog(studentDetail) {
+      let {
+        realname,
+        users: { username: memberName },
+        classId,
+        memberId
+      } = studentDetail
+      this.changingMember = {
+        realname,
+        memberName,
+        classId,
+        memberId
+      }
+      this.isChangeDialogVisible = true
+    },
     async handleSwitchClass(classId) {
       if (this.isShowAddStudentForm && classId !== this.selectedClassId) {
         return this.$message.error('请先保存学生信息')
