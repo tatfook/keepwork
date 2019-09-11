@@ -53,9 +53,7 @@
                 </el-tooltip>
               </td>
               <td colspan="1" class="lesson-manager-table-lessonName have-tooltip">
-                <el-tooltip effect="dark" :content="$t('lesson.lessonManage.toKpEditorInfo')" placement="top-start">
-                  <span @click='toEditor(lesson)'>{{lesson.lessonName}}</span>
-                </el-tooltip>
+                <span>{{lesson.lessonName}}</span>
               </td>
               <td colspan="1" class="lesson-manager-table-source have-tooltip">
                 <el-tooltip effect="dark" :content="lesson.url" placement="top-start">
