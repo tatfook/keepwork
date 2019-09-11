@@ -89,14 +89,17 @@ export default {
   methods: {
     async getLessonData() {
       let origin = window.location.origin
-      await lesson.lessons
-        .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
-        .then(res => {
-          if (res.rows.length) {
-            this.lessonData = _.get(res, 'rows[0]', {})
-          }
-        })
-        .catch(e => console.error(e))
+      const url = `${origin}${this.activePageUrl}`
+      const [urls, coursewares] = await Promise.all([
+        lesson.lessons.lessonDetailByUrl({ url }),
+        lesson.lessons.lessonDetailByUrl({ coursewareUrl: url })
+      ])
+      if (urls.rows.length) {
+        this.lessonData = _.get(urls, 'rows[0]', {})
+      }
+      if (coursewares.rows.length) {
+        this.lessonData = _.get(coursewares, 'rows[0]', {})
+      }
     },
     loadCover() {
       return this.generateStyleString({
