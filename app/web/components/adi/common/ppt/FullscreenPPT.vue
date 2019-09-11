@@ -12,9 +12,12 @@
 import PPTPage from './PPTPage'
 const RIGHT_CODE = 39
 const LEFT_CODE = 37
+const UP_CODE = 38
+const DOWN_CODE = 40
 const SPACE_CODE = 32
 const ENTER_CODE = 13
-const NEXT_PAGE = [RIGHT_CODE, SPACE_CODE, ENTER_CODE]
+const NEXT_PAGE = [RIGHT_CODE, SPACE_CODE, ENTER_CODE, UP_CODE]
+const PREV_PAGE = [LEFT_CODE, DOWN_CODE]
 export default {
   name: 'FullscreenPPT',
   components: {
@@ -42,7 +45,7 @@ export default {
       if (NEXT_PAGE.includes(keyCode)) {
         this.fakerClickRight()
       }
-      if (keyCode === LEFT_CODE) {
+      if (PREV_PAGE.includes(keyCode)) {
         this.fakerClickLeft()
       }
     },

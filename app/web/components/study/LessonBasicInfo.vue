@@ -92,12 +92,8 @@ export default {
         let { id } = packageDetail
         this.belongToPackageIds.push(id)
       })
-      this.tempUrl = this.isEditorMod
-        ? this.activePageUrl.replace(`/${this.username}/`, '')
-        : url && this.getTemplateUrl(url)
-      this.tempCoursewareUrl = this.isEditorMod
-        ? this.activePageUrl.replace(`/${this.username}/`, '')
-        : coursewareUrl && this.getTemplateUrl(coursewareUrl)
+      this.tempUrl = url && this.getTemplateUrl(url)
+      this.tempCoursewareUrl = coursewareUrl && this.getTemplateUrl(coursewareUrl)
       this.editingLessonDetail = {
         url: this.tempUrl,
         coursewareUrl: this.tempCoursewareUrl,
