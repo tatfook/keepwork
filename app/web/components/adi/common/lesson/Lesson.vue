@@ -33,7 +33,6 @@
 <script>
 import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
-import colI18n from '@/lib/utils/i18n/column'
 import { mapGetters } from 'vuex'
 import { lesson } from '@/api'
 export default {
@@ -69,12 +68,6 @@ export default {
       let durationKey = _.get(this.lessonData, 'extra.duration', '45min')
       return this.$t(`lesson.${durationKey}`)
     },
-    lessonSkills() {
-      return _.map(
-        _.get(this.lessonData, 'skills', []),
-        skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
-      )
-    },
     lessonExtra() {
       return this.lessonData.extra || {}
     },
@@ -96,9 +89,6 @@ export default {
   methods: {
     async getLessonData() {
       let origin = window.location.origin
-      // if (origin === 'http://localhost:8080') {
-      //   origin = 'https://release.keepwork.com'
-      // }
       await lesson.lessons
         .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
         .then(res => {
