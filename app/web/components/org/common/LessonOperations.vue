@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-operations">
-    <span v-if="url && !isStudent" @click="onToLessonCourseware" class="lesson-operations-item">教案</span>
-    <span v-if="coursewareUrl" @click="onToLessonPlan" class="lesson-operations-item">课件</span>
+    <span v-if="url && !isStudent" @click="onToLessonPlan" class="lesson-operations-item">教案</span>
+    <span v-if="coursewareUrl" @click="onToLessonCourseware" class="lesson-operations-item">课件</span>
     <span v-if="teacherVideoUrl && !isStudent" @click="onShowTeacherVideo" class="lesson-operations-item">教师视频</span>
     <span v-if="studentVideoUrl" @click="onShowStudentVideo" class="lesson-operations-item">{{isStudent?'':'学生'}}视频</span>
     <el-dialog custom-class="lesson-operations-dialog" :visible.sync="isShowTeacherVideo">
