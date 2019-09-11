@@ -43,6 +43,9 @@ export default {
   },
   filters: {
     miniPic(url) {
+      if (/#/.test(url)) {
+        return `${url.replace(/#.+/, '')}?imageView2/2/w/400`
+      }
       return `${url}&imageView2/2/w/400`
     }
   },
@@ -62,8 +65,12 @@ export default {
     },
     closeSkyDriveManagerDialog(fileList) {
       if (_.isArray(fileList)) {
+        fileList = fileList.map(item => {
+          return { ...item, downloadUrl: item.url }
+        })
         this.addPic(fileList)
       } else if (this.changePageIndex > 0) {
+        fileList['downloadUrl'] = fileList['url']
         this.changePic(fileList, this.changePageIndex)
       }
       this.isMediaSkyDriveDialogShow = false
