@@ -104,7 +104,7 @@ const actions = {
       item => item.lessonId === _.toNumber(lessonId)
     )
     detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
-    let modList = Parser.buildBlockList(res.content)
+    let modList = Parser.buildBlockList(res.courseware)
     let quiz = modList
       .filter(item => item.cmd === 'Quiz' && !_.isEmpty(item.data))
       .map(({ data: { quiz: { data } } }) => ({
