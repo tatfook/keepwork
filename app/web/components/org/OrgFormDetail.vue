@@ -1,6 +1,6 @@
 <template>
   <div class="org-form-detail" v-loading="isLoading">
-    <org-header></org-header>
+    <org-header class="org-form-detail-header"></org-header>
     <div class="org-form-detail-container">
       <form-preview class="org-form-detail-form" :type="type" :title="title" :description="description" :text="text" :quizzes="quizzes" :isAnswerMode="true"></form-preview>
       <div class="org-form-detail-qrcode">
@@ -113,6 +113,13 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+@media screen and (max-width: 768px) {
+  .org-form-detail {
+    &-header {
+      display: none;
+    }
+  }
+}
 @media screen and (max-width: 1016px) {
   .org-form-detail {
     &-form {
