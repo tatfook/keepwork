@@ -18,12 +18,12 @@
         </el-select>
       </div>
       <div class="button-wrap">
-        <el-button type="primary" @click="showEditorDialog" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
+        <el-button type="primary" @click="showEditorDialog" size="small" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
         <transition name="el-fade-in-linear">
-          <el-button type="success" v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
+          <el-button type="success" size="small" v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
         </transition>
         <transition name="el-fade-in-linear">
-          <el-button type="warning" v-show="isLinked" @click.stop="handleUnbind">解绑</el-button>
+          <el-button type="warning" size="small" v-show="isLinked" @click.stop="handleUnbind">取消关联</el-button>
         </transition>
       </div>
     </div>
