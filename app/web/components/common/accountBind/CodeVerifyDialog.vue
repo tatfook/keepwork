@@ -118,44 +118,59 @@ export default {
       }
     },
     async verifyEmailCode() {
-      let message = await this.userVerifyEmailTwo({
+      let result
+      await this.userVerifyEmailTwo({
         captcha: this.code,
         email: this.codeDialogDatas.value,
         isBind: this.codeDialogDatas.bind
       })
-      if (message == true) {
-        this.showMessage(
-          'success',
-          `${this.codeDialogDatas.bind ? this.$t('user.bindingSuccess') : this.$t('user.unbundingSuccess')}`
-        )
-      } else {
-        this.codeError = message
-        this.showMessage(
-          'error',
-          `${this.codeDialogDatas.bind ? this.$t('user.bindingFailed') : this.$t('user.unBundingFailure')}`
-        )
-      }
-      return message
+        .then(() => {
+          result = true
+          this.showMessage(
+            'success',
+            `${
+              this.codeDialogDatas.bind
+                ? this.$t('user.bindingSuccess')
+                : this.$t('user.unbundingSuccess')
+            }`
+          )
+        })
+        .catch(() => {
+          let errorMessage = this.codeDialogDatas.bind
+            ? this.$t('user.bindingFailed')
+            : this.$t('user.unBundingFailure')
+          this.codeError = errorMessage
+          this.showMessage('error', errorMessage)
+          result = false
+        })
+      return result
     },
     async verifyPhoneCode() {
-      let result = await this.userVerifyCellphoneTwo({
+      let result
+      await this.userVerifyCellphoneTwo({
         isBind: this.codeDialogDatas.bind,
         captcha: this.code,
         cellphone: this.codeDialogDatas.value
       })
-      if (result == 'OK') {
-        this.showMessage(
-          'success',
-          `${this.codeDialogDatas.bind ? this.$t('user.bindingSuccess') : this.$t('user.unbundingSuccess')}`
-        )
-        result = true
-      } else {
-        this.codeError = result.error.message
-        this.showMessage(
-          'error',
-          `${this.codeDialogDatas.bind ? this.$t('user.bindingFailed') : this.$t('user.unBundingFailure')}`
-        )
-      }
+        .then(() => {
+          this.showMessage(
+            'success',
+            `${
+              this.codeDialogDatas.bind
+                ? this.$t('user.bindingSuccess')
+                : this.$t('user.unbundingSuccess')
+            }`
+          )
+          result = true
+        })
+        .catch(error => {
+          let message = this.codeDialogDatas.bind
+            ? this.$t('user.bindingFailed')
+            : this.$t('user.unBundingFailure')
+          this.codeError = message
+          this.showMessage('error', message)
+          result = false
+        })
       return result
     },
     async sendCode() {
@@ -173,21 +188,21 @@ export default {
           break
         case 'cellphone':
           this.isSendingCode = true
-          let phoneResult = await this.userVerifyCellphoneOne({
+          await this.userVerifyCellphoneOne({
             bind: this.codeDialogDatas.bind,
             cellphone: this.codeDialogDatas.value
           })
+            .then(() => {
+              this.isSendingCode = false
+              this.isCodeSent = true
+              this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
+              this.startTimer()
+            })
+            .catch(() => {
+              this.codeError = this.$t('user.smsCodeSentFailed')
+              this.showMessage('error', this.$t('user.smsCodeSentFailed'))
+            })
           this.isSendingCode = false
-          // let smsId = _.get(phoneResult, 'data.smsId')
-          if (phoneResult === 'OK') {
-            // this.smsId = smsId
-            this.isCodeSent = true
-            this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
-            this.startTimer()
-          } else {
-            this.codeError = phoneResult
-            this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-          }
           break
         default:
           break
