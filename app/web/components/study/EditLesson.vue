@@ -56,8 +56,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonDetail: 'lesson/lessonDetail'
+      lessonDetail: 'lesson/lessonDetail',
+      activePageUrl: 'activePageUrl'
     }),
+    currentURL() {
+      const origin = window.location.origin
+      const currentURL = `${origin}${this.activePageUrl}`
+      return currentURL
+    },
     isEditable() {
       if (this.isEditorMod) {
         return true
@@ -207,9 +213,7 @@ export default {
       let updatingData = this.updatingLessonData
       this.isLoading = true
       if (this.isEditorMod) {
-        const { url, ...rest } = updatingData
-        rest[this.bindType] = url
-        updatingData = rest
+        updatingData = { ...updatingData, [this.bindType]: this.currentURL }
       }
       await this.teacherUpdateLesson({
         updatingData
