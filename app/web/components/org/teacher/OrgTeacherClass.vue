@@ -3,7 +3,7 @@
     <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
     <div v-if="isShowAddStudentForm" class="org-teacher-classes-add">
       <div class="students-add-header">
-        {{selectedClassName}}>{{$t("org.addStudents")}} <span class="pull-right">
+        {{selectedClassName}} > {{$t("org.editStudents")}} <span class="pull-right">
           <el-button class="students-add-header-button" @click="handleCancel">{{$t("common.Cancel")}}</el-button>
           <el-button class="students-add-header-button" @click="handleSave" type="primary">{{$t("common.Save")}}</el-button>
         </span>

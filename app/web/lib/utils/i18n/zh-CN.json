@@ -1815,7 +1815,7 @@
     "Remove": "移出",
     "IncludeStudents": "学生数：",
     "studentCountUnit": "",
-    "addStudents": "添加学生",
+    "editStudents": "编辑学生",
     "IncludeClasses": "班级数：",
     "classesCountUnit": "",
     "NewClass": "新建班级",
