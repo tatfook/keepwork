@@ -53,7 +53,9 @@
                 </el-tooltip>
               </td>
               <td colspan="1" class="lesson-manager-table-lessonName have-tooltip">
-                <span>{{lesson.lessonName}}</span>
+                <el-tooltip effect="dark" :content="lesson.lessonName" placement="top-start">
+                  <span>{{lesson.lessonName}}</span>
+                </el-tooltip>
               </td>
               <td colspan="1" class="lesson-manager-table-source have-tooltip">
                 <el-tooltip effect="dark" :content="lesson.url" placement="top-start">
@@ -580,14 +582,6 @@ export default {
     }
     .iconfont:last-child {
       margin-right: 0;
-    }
-    &-lessonName {
-      .el-tooltip {
-        cursor: pointer;
-      }
-      .el-tooltip:hover {
-        font-weight: bold;
-      }
     }
     &-source {
       a {
