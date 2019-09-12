@@ -49,8 +49,6 @@ export default {
     await this.userGetWebsiteDetailInfoByPath({
       path: this.activePageInfo.sitepath
     }).catch(e => console.error(e))
-
-    this.isLoginDialogShow = !this.userIsLogined && this.isSitePrivate
   },
   computed: {
     ...mapGetters({
