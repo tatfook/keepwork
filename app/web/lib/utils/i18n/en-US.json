@@ -117,6 +117,7 @@
     "link": "Link",
     "back": "back",
     "NoPages": "I'm sorry! The page you visited does not exist!",
+    "NoRights": "I'm sorry! The page you visited does not exist!",
     "loginToStarPage": "You must login before star this page!",
     "confirmButtonText": "Confirm",
     "quickToTop": "Quick to top",
