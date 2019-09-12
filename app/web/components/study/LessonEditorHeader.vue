@@ -6,7 +6,7 @@
     </el-breadcrumb>
     <div class="lesson-editor-header-operations" v-if="isEditable">
       <el-button round @click="cancel" class="lesson-editor-header-cancel-button">{{$t('common.Cancel')}}</el-button>
-      <el-button round @click="saveLesson" class="lesson-editor-header-save-button" :class="{'is-disabled': isLessonNameEmpty || !isLinkPageUrlValid}">{{$t('common.Save')}}</el-button>
+      <el-button round @click="saveLesson" class="lesson-editor-header-save-button" :class="{'is-disabled': isLessonNameEmpty || !isLinkPageUrlValid || !isCoursewareUrlValid}">{{$t('common.Save')}}</el-button>
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@ export default {
     editingLessonDetailProp: Object,
     isEditing: Boolean,
     isLinkPageUrlValid: Boolean,
+    isCoursewareUrlValid: Boolean,
     isLessonNameEmpty: Boolean,
     isEditable: {
       type: Boolean,

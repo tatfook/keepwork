@@ -39,7 +39,7 @@
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 
-const BigfileUrlReg = new RegExp('keepwork.com')
+const BigfileUrlReg = new RegExp('api.(keepwork.com)|(dev.kp)|(rls.kp)')
 export default {
   name: 'CoverMediaSetter',
   props: {

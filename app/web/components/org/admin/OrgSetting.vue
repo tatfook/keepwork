@@ -10,6 +10,10 @@
             <el-radio :label="0">{{$t('common.No')}}</el-radio>
           </el-radio-group>
         </div>
+        <div class="org-setting-item">
+          <div class="org-setting-item-label">招生信息</div>
+          <el-input class="org-setting-item-input" v-model="admissionMsg" label="机构招生老师的联系方式"></el-input>
+        </div>
       </div>
       <el-button v-loading="isSaving" class="org-setting-operation" :disabled='isSavable' type="primary" @click="savePrivilege">{{$t('common.Save')}}</el-button>
     </div>
@@ -22,13 +26,17 @@ export default {
   mounted() {
     this.teacherPrivilege = this.orgPriviledge & this.teacherPrivilegeVal
     this.originTeacherPrivilege = this.teacherPrivilege
+    this.admissionMsg = this.orgAdmissionMsg
+    this.originAdmissionMsg = this.admissionMsg
   },
   data() {
     return {
       teacherPrivilegeVal: 3,
       isSaving: false,
       teacherPrivilege: undefined,
-      originTeacherPrivilege: undefined
+      originTeacherPrivilege: undefined,
+      admissionMsg: '',
+      originAdmissionMsg: ''
     }
   },
   computed: {
@@ -38,8 +46,17 @@ export default {
     orgPriviledge() {
       return _.get(this.currentOrg, 'privilege')
     },
+    originExtra() {
+      return _.get(this.currentOrg, 'extra', {})
+    },
+    orgAdmissionMsg() {
+      return _.get(this.currentOrg, 'extra.admissionMsg')
+    },
     isSavable() {
-      return this.originTeacherPrivilege === this.teacherPrivilege
+      return (
+        this.originTeacherPrivilege === this.teacherPrivilege &&
+        this.originAdmissionMsg === this.admissionMsg
+      )
     }
   },
   methods: {
@@ -52,12 +69,17 @@ export default {
         orgLoginUrl: _.get(this.currentOrg, 'loginUrl'),
         orgId: _.get(this.currentOrg, 'id'),
         orgData: {
-          privilege: this.teacherPrivilege
+          privilege: this.teacherPrivilege,
+          extra: {
+            ...this.originExtra,
+            admissionMsg: this.admissionMsg
+          }
         }
       })
         .then(() => {
           this.isSaving = false
           this.originTeacherPrivilege = this.teacherPrivilege
+          this.originAdmissionMsg = this.admissionMsg
           this.$message({
             type: 'success',
             message: this.$t('common.saveSuccess')
@@ -75,6 +97,9 @@ export default {
   watch: {
     orgPriviledge(privilege) {
       this.teacherPrivilege = privilege & this.teacherPrivilegeVal
+    },
+    orgAdmissionMsg(admissionMsg) {
+      this.admissionMsg = admissionMsg
     }
   }
 }
@@ -98,15 +123,23 @@ export default {
     padding: 24px 0 48px;
   }
   &-item {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
     &-label {
       display: inline-block;
       font-size: 14px;
       color: #909399;
       margin-right: 24px;
+      width: 200px;
+    }
+    &-input {
+      width: 200px;
     }
   }
   &-operation {
-    margin-left: 220px;
+    margin-left: 228px;
     width: 88px;
     height: 36px;
     line-height: 36px;

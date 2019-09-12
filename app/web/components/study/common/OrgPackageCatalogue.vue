@@ -34,7 +34,6 @@
           <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button">{{$t('lesson.viewLearnSummary')}}</el-button>
           <el-button v-show="lesson.isLearned && isStudent" plain size="small" class="package-catalogue-item-button learn-again">{{$t('lesson.learnAgain')}}</el-button>
           <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button">{{$t('card.startToLearn')}}</el-button>
-          <span class="package-catalogue-item-status" v-show="isTeacher && lesson.isTeached"> <i class="el-icon-circle-check"></i> {{$t('org.chapterIsFinished')}}</span>
         </div>
       </div>
     </div>

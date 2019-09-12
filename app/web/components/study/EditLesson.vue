@@ -1,6 +1,6 @@
 <template>
   <div class="edit-lesson" v-loading='isLoading'>
-    <lesson-editor-header v-if="!isGettingData" :isEditable='isEditable' :isEditing='true' :isLinkPageUrlValid='isLinkPageUrlValid' :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson' @resetCancel="resetCancel"></lesson-editor-header>
+    <lesson-editor-header v-if="!isGettingData" :isEditable='isEditable' :isEditing='true' :isLinkPageUrlValid='isLinkPageUrlValid' :isCoursewareUrlValid="isCoursewareUrlValid" :isLessonNameEmpty='isLessonNameEmpty' :editingLessonDetailProp='editingLessonDetail' :isEditorMod="isEditorMod" @saveLesson='updateLesson' @resetCancel="resetCancel"></lesson-editor-header>
     <div class="edit-lesson-container">
       <lesson-basic-info v-if="!isGettingData" ref="basicInfoComponent" :isEditable='isEditable' :editingLessonDetailProp='editingLessonDetail' :isEditing='true' :isEditorMod="isEditorMod"></lesson-basic-info>
       <cover-media-setter v-if="!isGettingData" :isEditable='isEditable' class="edit-lesson-cover" ref="coverUrlComponent" :editingCoverUrl='editingCoverUrl' :isEditing='true'></cover-media-setter>
@@ -36,7 +36,11 @@ export default {
       type: Boolean,
       default: false
     },
-    lessonId: ''
+    bindType: {
+      type: String,
+      default: 'url'
+    },
+    lessonId: Number
   },
   data() {
     return {
@@ -52,9 +56,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lessonDetail: 'lesson/lessonDetail'
+      lessonDetail: 'lesson/lessonDetail',
+      activePageUrl: 'activePageUrl'
     }),
+    currentURL() {
+      const origin = window.location.origin
+      const currentURL = `${origin}${this.activePageUrl}`
+      return currentURL
+    },
     isEditable() {
+      if (this.isEditorMod) {
+        return true
+      }
       let { packages } = this.editingLessonDetail
       let pendingReviewPackageIndex = _.findIndex(packages, { state: 1 })
       return pendingReviewPackageIndex === -1
@@ -90,6 +103,12 @@ export default {
       }
       return this.$refs.basicInfoComponent.isLinkPageUrlValid
     },
+    isCoursewareUrlValid() {
+      if (!this.isMounted) {
+        return true
+      }
+      return this.$refs.basicInfoComponent.isCoursewareUrlValid
+    },
     isLessonNameEmpty() {
       if (!this.isMounted) {
         return true
@@ -104,12 +123,19 @@ export default {
           id: this.editingLessonId
         },
         this.updatingBasicInfo,
-        _.omit(this.updatingMoreInfo, ['videoUrl', 'duration']),
+        _.omit(this.updatingMoreInfo, [
+          'videoUrl',
+          'teacherVideoUrl',
+          'studentVideoUrl',
+          'duration'
+        ]),
         {
           extra: {
             duration: this.updatingMoreInfo.duration,
             coverUrl: this.updatingCoverUrl,
-            videoUrl: this.updatingMoreInfo.videoUrl
+            videoUrl: this.updatingMoreInfo.videoUrl,
+            teacherVideoUrl: this.updatingMoreInfo.teacherVideoUrl,
+            studentVideoUrl: this.updatingMoreInfo.studentVideoUrl
           }
         }
       )
@@ -147,20 +173,9 @@ export default {
           lessonId,
           isLastOne
         })
-          .then(() => {
-            // this.$notify({
-            //   title: '成功',
-            //   message: '这是一条成功的提示消息' + packageId,
-            //   type: 'success'
-            // })
-          })
+          .then(() => {})
           .catch(err => {
             console.error(err)
-            // this.$notify({
-            //   title: '失败',
-            //   message: '这是一条失败的提示消息' + packageId,
-            //   type: 'error'
-            // })
           })
       }
     },
@@ -178,25 +193,14 @@ export default {
           lessonId,
           isLastOne
         })
-          .then(() => {
-            // this.$notify({
-            //   title: '成功',
-            //   message: '这是一条成功的提示消息' + packageId,
-            //   type: 'success'
-            // })
-          })
+          .then(() => {})
           .catch(err => {
             console.error(err)
-            // this.$notify({
-            //   title: '失败',
-            //   message: '这是一条失败的提示消息' + packageId,
-            //   type: 'error'
-            // })
           })
       }
     },
     async updateLesson() {
-      if (!this.isLinkPageUrlValid) {
+      if (!this.isLinkPageUrlValid || !this.isCoursewareUrlValid) {
         return
       }
       if (this.isLessonNameEmpty) {
@@ -208,6 +212,9 @@ export default {
       }
       let updatingData = this.updatingLessonData
       this.isLoading = true
+      if (this.isEditorMod) {
+        updatingData = { ...updatingData, [this.bindType]: this.currentURL }
+      }
       await this.teacherUpdateLesson({
         updatingData
       })
@@ -277,7 +284,8 @@ export default {
 <style lang="scss">
 @media (max-width: 768px) {
   .edit-lesson {
-    &-cover, &-more-info {
+    &-cover,
+    &-more-info {
       padding: 16px;
     }
   }

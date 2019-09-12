@@ -1,10 +1,10 @@
 <template>
   <div class="org-student">
-    <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
+    <!-- <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
       <span class="org-student-tips-icon"></span>
       <span class="org-student-tips-text">{{$t('org.classBegins') + item.lessonName}},{{$t('lesson.curentClassId')}} C{{item.key}}</span>
       <span @click="handleJoinClassroom(item)" class="org-student-tips-button">{{$t("org.enterClass")}}</span>
-    </div>
+    </div> -->
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-sidebar-top">
@@ -22,9 +22,6 @@
             </el-dropdown>
             <img :src="userPortrait" class="org-student-profile" />
             <div class="org-student-username">{{username}}</div>
-          </div>
-          <div class="org-student-skill">
-            <div>{{skillpointsCount}} {{$t('lesson.skillPoints')}}<span class="org-student-skill-detail" @click="isSkillDetailShow = true">{{$t('lesson.packageManage.detailLabel')}}<i class="el-icon-back"></i></span></div>
           </div>
         </div>
         <div class="org-student-sidebar-bottom">
@@ -86,14 +83,6 @@
         <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
       </span>
     </el-dialog>
-    <el-dialog class="org-student-skill-dialog" :class="{'org-student-skill-dialog-en': isEn}" :title="$t('lesson.skillPointDetails')" :visible.sync="isSkillDetailShow">
-      <div class="org-student-skill-dialog-info">{{skillpointsCount}} {{$t('lesson.skillPoints')}}:</div>
-      <ul class="org-student-skill-dialog-skills">
-        <li class="org-student-skill-dialog-skills-item" v-for="(skill,index) in skillsList" :key="index">
-          {{skillName(skill)}}：<span class="org-student-skill-dialog-skills-count">{{skill.score}}</span>
-        </li>
-      </ul>
-    </el-dialog>
     <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
@@ -119,7 +108,6 @@ export default {
       beInClassDialog: false,
       joinKey: '',
       skillsList: [],
-      isSkillDetailShow: false,
       isLoading: true,
       isShowJoinClassDialog: false
     }
@@ -180,11 +168,7 @@ export default {
   },
   async created() {
     try {
-      await Promise.all([
-        this.getTeachingLesson(),
-        this.getUserInfo(),
-        this.getSkills()
-      ])
+      await Promise.all([this.getTeachingLesson(), this.getUserInfo()])
     } catch (error) {
       console.error(error)
     }
@@ -196,17 +180,6 @@ export default {
       enterClassroom: 'org/student/enterClassroom',
       getUserInfo: 'org/student/getUserInfo'
     }),
-    getSkills() {
-      lesson.users
-        .userSkills({ userId: this.userId })
-        .then(res => {
-          this.skillsList = res
-        })
-        .catch(() => {})
-    },
-    skillName(skill) {
-      return colI18n.getLangValue(skill, 'skillName')
-    },
     toRolePage(pageName) {
       this.$router.push({
         name: pageName

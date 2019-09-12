@@ -23,17 +23,6 @@
               </el-scrollbar>
             </div>
             <div class="lesson-info duration">{{$t('lesson.duration')}}: {{lessonDuration}}</div>
-            <div class="lesson-info skills">
-              <div class="skills-title">
-                {{$t('lesson.skillPoints')}}:
-              </div>
-              <el-scrollbar :class="['skills-list']" :native="false">
-                <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
-              </el-scrollbar>
-            </div>
-            <el-row class="lesson-button adi-lesson-button">
-              <el-button type="primary" id="btnPreview" v-if="properties">{{$t('lesson.begin')}}</el-button>
-            </el-row>
           </div>
         </el-col>
       </el-row>
@@ -44,7 +33,6 @@
 <script>
 import _ from 'lodash'
 import compBaseMixin from '../comp.base.mixin'
-import colI18n from '@/lib/utils/i18n/column'
 import { mapGetters } from 'vuex'
 import { lesson } from '@/api'
 export default {
@@ -80,12 +68,6 @@ export default {
       let durationKey = _.get(this.lessonData, 'extra.duration', '45min')
       return this.$t(`lesson.${durationKey}`)
     },
-    lessonSkills() {
-      return _.map(
-        _.get(this.lessonData, 'skills', []),
-        skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
-      )
-    },
     lessonExtra() {
       return this.lessonData.extra || {}
     },
@@ -107,16 +89,17 @@ export default {
   methods: {
     async getLessonData() {
       let origin = window.location.origin
-      // if (origin === 'http://localhost:8080') {
-      //   origin = 'https://release.keepwork.com'
-      // }
-      await lesson.lessons
-        .lessonDetailByUrl({ url: `${origin}${this.activePageUrl}` })
-        .then(res => {
-          this.lessonData = res
-          this.isLinked = true
-        })
-        .catch(e => console.error(e))
+      const url = `${origin}${this.activePageUrl}`
+      const [urls, coursewares] = await Promise.all([
+        lesson.lessons.lessonDetailByUrl({ url }),
+        lesson.lessons.lessonDetailByUrl({ coursewareUrl: url })
+      ])
+      if (urls.rows.length) {
+        this.lessonData = _.get(urls, 'rows[0]', {})
+      }
+      if (coursewares.rows.length) {
+        this.lessonData = _.get(coursewares, 'rows[0]', {})
+      }
     },
     loadCover() {
       return this.generateStyleString({

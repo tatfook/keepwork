@@ -146,7 +146,7 @@ export default {
       this.isError = !result
       this.isRight = result
       this.isDone = true
-      this.submit(result, answer)
+      // this.submit(result, answer)
     },
     async submit(result, answer) {
       this.doQuiz({ key: this.key, question: this.question, result, answer })

@@ -115,6 +115,9 @@ export default {
 <style lang="scss" scoped>
 @media screen and (max-width: 1016px) {
   .org-form-detail {
+    &-form {
+      margin: 0;
+    }
     &-qrcode {
       display: none;
     }

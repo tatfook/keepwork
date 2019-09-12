@@ -37,7 +37,7 @@
             <span class="question-mark-icon"></span>
           </el-tooltip>
         </div>
-        <div v-if="isSelfLearning" class="class-id-sign-wrap">
+        <div class="class-id-sign-wrap">
           <div class="class-id-sign"> {{$t('lesson.lessonId')}} {{haqiCode}}</div>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
@@ -62,51 +62,8 @@
           <div class="duration-title">{{$t('lesson.duration')}}: </div>
           <div>{{lessonDuration}}</div>
         </div>
-        <div class="lesson-info skills">
-          <div class="skills-title">
-            {{$t('lesson.skillPoints')}}:
-          </div>
-          <el-scrollbar :class="['skills-list',{'reset-height': isTeacher}]" :native="false">
-            <div v-for="(item, index) in lessonSkills" :key="index">{{item}}</div>
-          </el-scrollbar>
-        </div>
-        <div v-if="isTeacher" class="lesson-button-wrap">
-          <template v-if="isTeacherBeInClasroom && isInCurrentClass">
-            <el-button @click="handleDismissTheClass" :disabled="isClassIsOver" :loading="isLoading" type="primary" :class="['lesson-button',{'class-is-over': isClassIsOver}]" size="medium">{{$t('lesson.dismiss')}}</el-button>
-            <span class="lesson-button-tips">{{$t('lesson.dismissTips')}}</span>
-          </template>
-          <template v-else>
-            <el-tooltip v-if="isNotStated" placement="top" content="本学期还未开始">
-              <el-button type="primary" @click="handleNoStatedTips" class="lesson-button no-started">{{$t('lesson.begin')}}</el-button>
-            </el-tooltip>
-            <el-button v-else  @click="handleBeginTheClass" :loading="isLoading" :disabled="!isInCurrentClass || isNotStated" type="primary" class="lesson-button" size="medium">{{$t('lesson.begin')}}</el-button>
-            <span class="lesson-button-tips">{{$t('lesson.beginTips')}}</span>
-          </template>
-        </div>
       </el-col>
     </el-row>
-    <keep-work-sticky>
-      <el-row v-if="isTeacher" :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="20" :sm="20">
-          <lesson-teacher-progress :reset="!isInCurrentClass" />
-        </el-col>
-        <el-col :span="4" :sm="4" class="lesson-references">
-          <!-- <lesson-references /> -->
-        </el-col>
-      </el-row>
-      <el-row v-else :gutter="20" class="lesson-progress-wrap">
-        <el-col :span="2" :sm="2" class="lesson-award">
-          <!-- <lesson-jewel-box /> -->
-        </el-col>
-        <el-col :span="18" :sm="18">
-          <lesson-student-progress />
-        </el-col>
-        <el-col :span="4" :sm="4" class="lesson-references">
-          <!-- <lesson-references /> -->
-        </el-col>
-      </el-row>
-    </keep-work-sticky>
-
   </el-row>
 </template>
 
@@ -114,7 +71,6 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
-// import LessonJewelBox from './LessonJewelBox'
 import LessonStudentProgress from './LessonStudentProgress'
 import LessonTeacherProgress from './LessonTeacherProgress'
 import LessonReferences from './LessonReferences'
@@ -122,7 +78,6 @@ import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
   components: {
-    // LessonJewelBox,
     LessonStudentProgress,
     LessonTeacherProgress,
     KeepWorkSticky,
@@ -354,7 +309,7 @@ export default {
 <style lang="scss">
 .lesson-header-container {
   max-width: 1229px;
-  margin: 50px auto 0;
+  margin: 50px auto;
   $green: #66cd2e;
   $grey: #d2d2d2;
   .class-id-dialog {

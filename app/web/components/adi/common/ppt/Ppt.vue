@@ -33,7 +33,10 @@ export default {
   },
   methods: {
     handleFullScreen() {
-      this.isFullsreen = !this.isFullsreen
+      if (this.editMode) {
+        return
+      }
+      this.isFullsreen = true
     },
     handelCloseFullscreen() {
       this.isFullsreen = false

@@ -56,16 +56,10 @@ export default {
     this.tips()
     let formQuizzes = _.cloneDeep(this.formQuizzes)
     this.quizzes = this.isAnswerMode
-      ? _.map(formQuizzes, quiz => {
-          let { type } = quiz
-          return {
-            ...quiz,
-            answer: type == 0 ? quiz.options[0].value : type == 1 ? [] : ''
-          }
-        })
+      ? this.formatFormWithAnswer(formQuizzes)
       : this.isEditMode
       ? formQuizzes
-      : this.originQuizzes
+      : this.formatFormWithAnswer(this.originQuizzes)
   },
   computed: {
     ...mapGetters({
@@ -120,6 +114,15 @@ export default {
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgSubmitForm: 'org/submitForm'
     }),
+    formatFormWithAnswer(quizzes) {
+      return _.map(quizzes, quiz => {
+        let { type } = quiz
+        return {
+          ...quiz,
+          answer: type == 0 ? quiz.options[0].value : type == 1 ? [] : ''
+        }
+      })
+    },
     tips() {
       if (this.formState === 2) {
         this.$alert('该表单已停止收集。', '提醒', {

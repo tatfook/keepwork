@@ -35,6 +35,10 @@
             <th class="lesson-manager-table-index">{{$t('lesson.serialNumber')}}</th>
             <th class="lesson-manager-table-toggle"></th>
             <th class="lesson-manager-table-lessonName">{{$t('lesson.nameLabel')}}</th>
+            <th class="lesson-manager-table-source">教案</th>
+            <th class="lesson-manager-table-source">课件</th>
+            <th class="lesson-manager-table-source">教师视频</th>
+            <th class="lesson-manager-table-source">学生视频</th>
             <th class="lesson-manager-table-subject">{{$t('lesson.subjectLabel')}}</th>
             <th class="lesson-manager-table-operations"></th>
           </tr>
@@ -48,12 +52,36 @@
                   <i class="el-icon el-icon-arrow-right" :class="{'lesson-manager-table-rotate': lesson.isPackageShow}" @click="toggleLessonPackageShow(lesson.id)"></i>
                 </el-tooltip>
               </td>
-              <td colspan="1" class="lesson-manager-table-lessonName">
-                <el-tooltip effect="dark" :content="$t('lesson.lessonManage.toKpEditorInfo')" placement="top-start">
-                  <span @click='toEditor(lesson)'>{{lesson.lessonName}}</span>
+              <td colspan="1" class="lesson-manager-table-lessonName have-tooltip">
+                <el-tooltip effect="dark" :content="lesson.lessonName" placement="top-start">
+                  <span>{{lesson.lessonName}}</span>
                 </el-tooltip>
               </td>
-              <td colspan="1" class="lesson-manager-table-subject">{{subjectName(lesson.subjectDetail)}}</td>
+              <td colspan="1" class="lesson-manager-table-source have-tooltip">
+                <el-tooltip effect="dark" :content="lesson.url" placement="top-start">
+                  <a :href="lesson.url" target="_blank">{{lesson.url}}</a>
+                </el-tooltip>
+              </td>
+              <td colspan="1" class="lesson-manager-table-source have-tooltip">
+                <el-tooltip effect="dark" :content="lesson.coursewareUrl" placement="top-start">
+                  <a :href="lesson.coursewareUrl" target="_blank">{{lesson.coursewareUrl}}</a>
+                </el-tooltip>
+              </td>
+              <td colspan="1" class="lesson-manager-table-source have-tooltip">
+                <el-tooltip effect="dark" :content="lesson.extra.teacherVideoUrl" placement="top-start">
+                  <a :href="lesson.extra.teacherVideoUrl" target="_blank">{{lesson.extra.teacherVideoUrl}}</a>
+                </el-tooltip>
+              </td>
+              <td colspan="1" class="lesson-manager-table-source have-tooltip">
+                <el-tooltip effect="dark" :content="lesson.extra.studentVideoUrl" placement="top-start">
+                  <a :href="lesson.extra.studentVideoUrl" target="_blank">{{lesson.extra.studentVideoUrl}}</a>
+                </el-tooltip>
+              </td>
+              <td colspan="1" class="lesson-manager-table-subject have-tooltip">
+                <el-tooltip effect="dark" :content="subjectName(lesson.subjectDetail)" placement="top-start">
+                  <span>{{subjectName(lesson.subjectDetail)}}</span>
+                </el-tooltip>
+              </td>
               <td colspan="1" class="lesson-manager-table-operations">
                 <el-tooltip v-if="isEditable(lesson)" effect="dark" :content="$t('lesson.edit')" placement="top">
                   <i class="iconfont icon-edit--" @click="toEdit(lesson)"></i>
@@ -526,7 +554,7 @@ export default {
       cursor: pointer;
       transition: transform 0.5s;
     }
-    &-empty{
+    &-empty {
       text-align: center;
       color: #909399;
     }
@@ -549,26 +577,23 @@ export default {
     .iconfont {
       font-size: 20px;
       color: #b3b3b3;
-      margin-right: 30px;
+      margin-right: 8px;
       cursor: pointer;
     }
     .iconfont:last-child {
       margin-right: 0;
     }
-    &-lessonName {
-      white-space: nowrap;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      .el-tooltip {
-        cursor: pointer;
-      }
-      .el-tooltip:hover {
-        font-weight: bold;
+    &-source {
+      a {
+        color: inherit;
+        text-decoration: none;
+        &:hover {
+          font-weight: bold;
+        }
       }
     }
     &-operations {
-      width: 180px;
+      width: 70px;
       text-align: left;
       .cell {
         padding: 0 30px 0 20px;
@@ -583,7 +608,7 @@ export default {
       text-align: center;
     }
     &-subject {
-      width: 190px;
+      width: 80px;
       text-align: left;
     }
     &-expand {
@@ -664,6 +689,13 @@ export default {
     .el-table__expanded-cell[class*='cell'] {
       background-color: #f7f7f7 !important;
       padding: 0;
+    }
+    .have-tooltip {
+      white-space: nowrap;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 11px 4px;
     }
   }
   &-confirm-dialog {
