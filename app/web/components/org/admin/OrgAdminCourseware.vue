@@ -7,12 +7,16 @@
 <script>
 import LessonWrap from '@/components/org/common/LessonWrap'
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
 export default {
   name: 'OrgAdminCourseware',
   components: {
     LessonWrap
   },
   computed: {
+    ...mapGetters({
+      orgLessonDetail: 'org/orgLessonDetail'
+    }),
     modList() {
       return _.get(this.orgLessonDetail, 'courseware', [])
     },
