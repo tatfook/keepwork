@@ -10,8 +10,9 @@
       <mod-list-viewer :modList='mainModList' :theme='theme' />
     </component>
     <div v-if="show404" class="img404">
-      <img src="@/assets/img/no_right_to_access.png" alt="">
-      <p>{{$t('common.NoPages')}}</p>
+      <img v-if="activePageStatus === 404" src="@/assets/img/404.png" alt="">
+      <img v-else src="@/assets/img/no_right_to_access.png" alt="">
+      <p>{{activePageStatus === 404 ? $t('common.NoPages') : $t('common.NoRights')}}</p>
       <!-- <el-button type="primary" round onclick="window.history.back()">{{$t('common.back')}}</el-button> -->
       <el-button v-if="!userIsLogined" type="primary" round @click="toLogin">{{$t('common.login')}}</el-button>
     </div>
@@ -55,6 +56,7 @@ export default {
       activePageInfo: 'activePageInfo',
       activePage: 'activePage',
       code: 'code',
+      activePageStatus: 'activePageStatus',
       layout: 'layout',
       modList: 'modList',
       headerModList: 'headerModList',
