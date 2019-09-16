@@ -10,18 +10,20 @@
       </div>
       <div class="lesson-menu-item">
         <span>{{$t('lesson.linkThePage')}}</span>
-        <el-select v-model="selectValue" @change="handleSelectLesson" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
+        <el-input class="select-options" v-if="isLinked" :disabled="true" :value="linkedLessonName">
+        </el-input>
+        <el-select v-else v-model="selectValue" @change="handleSelectLesson" class="select-options" :disabled="isLinked" filterable :placeholder="$t('lesson.pleaseSelect')">
           <el-option v-for="item in selectList" :key="item.id" :label="item.lessonName" :value="item.id">
           </el-option>
         </el-select>
       </div>
       <div class="button-wrap">
-        <el-button type="primary" @click="showEditorDialog" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
+        <el-button type="primary" @click="showEditorDialog" size="small" :loading="isLoading">{{$t('lesson.edit')}}</el-button>
         <transition name="el-fade-in-linear">
-          <el-button type="success" v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
+          <el-button type="success" size="small" v-show="isLinked" @click.stop="handleRelease">{{$t('lesson.release')}}</el-button>
         </transition>
         <transition name="el-fade-in-linear">
-          <el-button type="warning" v-show="isLinked" @click.stop="handleUnbind">解绑</el-button>
+          <el-button type="warning" size="small" v-show="isLinked" @click.stop="handleUnbind">取消关联</el-button>
         </transition>
       </div>
     </div>

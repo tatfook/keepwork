@@ -134,11 +134,11 @@ export default {
       )
     },
     approvedMultipleSelectionResults() {
-      return (
+      let selectedList =
         this.sortedSkyDriveMediaLibraryData.filter(
           ({ isChecked }) => Number(isChecked) === 1
         ) || []
-      )
+      return _.orderBy(selectedList, ['checkedTime'], ['asc'])
     },
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
@@ -178,7 +178,7 @@ export default {
       this.fileList = _.map(this.fileList, mediaItem => {
         return {
           ...mediaItem,
-          isChecked: mediaItem.filename == file.filename ? true : false
+          isChecked: mediaItem.id == file.id ? true : false
         }
       })
     },
@@ -227,6 +227,7 @@ export default {
     },
     selectItem(mediaItem) {
       this.$set(mediaItem, 'isChecked', !mediaItem.isChecked)
+      this.$set(mediaItem, 'checkedTime', new Date().valueOf())
       this.handleItemSelectChange(mediaItem)
     }
   },

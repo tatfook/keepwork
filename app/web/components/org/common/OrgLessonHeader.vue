@@ -37,7 +37,7 @@
             <span class="question-mark-icon"></span>
           </el-tooltip>
         </div>
-        <div v-if="isSelfLearning" class="class-id-sign-wrap">
+        <div class="class-id-sign-wrap">
           <div class="class-id-sign"> {{$t('lesson.lessonId')}} {{haqiCode}}</div>
           <el-tooltip placement="bottom">
             <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">

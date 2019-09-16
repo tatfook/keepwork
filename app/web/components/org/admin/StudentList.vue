@@ -13,19 +13,20 @@
     </div>
     <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
     <el-table v-if="orgStudentsCount > 0" class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
-      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="172">
+      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="152">
       </el-table-column>
-      <el-table-column prop="users.username" :label="$t('org.usernameLabel')" width="172">
+      <el-table-column prop="users.username" :label="$t('org.usernameLabel')" width="152">
       </el-table-column>
-      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="172" :show-overflow-tooltip="true">
+      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="152" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="172" :show-overflow-tooltip="true">
+      <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="152" :show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column prop="id" :label="$t('org.operationLabel')">
         <template slot-scope="scope">
           <div class="student-list-table-operations">
             <div class="student-list-table-button student-list-table-button-primary" @click="toEditPage(scope.row)">{{$t('org.Edit')}}</div>
             <div class="student-list-table-button" @click="confirmRemoveStudent(scope.row)">{{$t('org.Remove')}}</div>
+            <div class="student-list-table-button" @click="showChangeDialog(scope.row)">修改密码</div>
           </div>
         </template>
       </el-table-column>
@@ -33,13 +34,18 @@
     <div class="student-list-empty" v-if="orgStudentsCount == 0">
       <p class="student-list-empty-info">{{$t('org.noStudents')}}</p>
     </div>
+    <change-password-dialog :isChangeDialogVisible="isChangeDialogVisible" :changingMember="changingMember" @close="isChangeDialogVisible = false" />
   </div>
 </template>
 <script>
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
+import ChangePasswordDialog from '@/components/org/admin/common/ChangePasswordDialog'
 export default {
   name: 'StudentList',
+  components: {
+    ChangePasswordDialog
+  },
   async mounted() {
     this.isLoading = true
     await this.getOrgStudentList({
@@ -50,7 +56,9 @@ export default {
   data() {
     return {
       selectedClassId: undefined,
-      isLoading: false
+      isLoading: false,
+      isChangeDialogVisible: false,
+      changingMember: {}
     }
   },
   computed: {
@@ -111,6 +119,21 @@ export default {
       getOrgStudentList: 'org/getOrgStudentList',
       orgCreateNewMember: 'org/createNewMember'
     }),
+    showChangeDialog(studentDetail) {
+      let {
+        realname,
+        users: { username: memberName },
+        classId,
+        memberId
+      } = studentDetail
+      this.changingMember = {
+        realname,
+        memberName,
+        classId,
+        memberId
+      }
+      this.isChangeDialogVisible = true
+    },
     async handleChangeSelectClass() {
       this.isLoading = true
       await this.getOrgStudentList({
