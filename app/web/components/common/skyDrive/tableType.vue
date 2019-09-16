@@ -161,7 +161,6 @@ export default {
       ).filter(fileDetail => {
         return Boolean(fileDetail)
       })
-      console.log(this.tableData)
       this.nowPage++
       $state && $state.loaded()
       if (this.nowPage >= this.fileListChunk.length) {
