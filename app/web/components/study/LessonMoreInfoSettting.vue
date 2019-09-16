@@ -56,7 +56,7 @@ export default {
         teacherVideoUrl,
         studentVideoUrl,
         skills: formatedSkills,
-        duration: duration || '45min'
+        duration: duration || '90min'
       }
     }
     this.isMounted = true
@@ -72,7 +72,7 @@ export default {
       editingStudentVideoUrl: undefined,
       isGetData: true,
       moreInfoData: {
-        duration: '45min',
+        duration: '90min',
         goals: '',
         videoUrl: '',
         skills: []
