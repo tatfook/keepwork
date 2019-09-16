@@ -1,9 +1,9 @@
 <template>
   <div class="table-type" v-loading='loading' droppable="true">
-    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" @selection-change="handleSelectionChange" style="width: 100%" @sort-change="handleSortChange">
+    <el-table v-if="tableDataWithUploading.length" ref="skyDriveTable" :data="tableDataWithUploading" height="500" :row-key="getRowKey" tooltip-effect="dark" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" sortable width="44">
       </el-table-column>
-      <el-table-column prop="filename" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
+      <el-table-column prop="filename" width="260" :label="$t('skydrive.filename')" class-name="table-type-cell-filename" show-overflow-tooltip sortable>
       </el-table-column>
       <el-table-column prop="ext" sortable :label="$t('skydrive.filetype')" width="80">
       </el-table-column>
