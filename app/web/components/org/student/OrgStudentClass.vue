@@ -12,7 +12,7 @@
     <div class="org-student-class-main">
     </div>
     <el-row>
-      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in orgStudentPackageList" :key="index">
+      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in classPackageList" :key="index">
         <org-package-cell class="org-pacakge-list-item" :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell>
       </el-col>
     </el-row>
@@ -46,20 +46,41 @@ export default {
   },
   async created() {
     try {
-      await this.getOrgPackages()
+      await this.getClassData(this.currentClassID)
+      console.log(this.classPackages)
     } catch (error) {
       console.error(error)
     } finally {
       this.isLoading = false
     }
   },
+  watch: {
+    async $route(route) {
+      const classID = _.get(route, 'params.classId')
+      await this.getClassData(classID)
+    }
+  },
   methods: {
     ...mapActions({
-      getOrgPackages: 'org/student/getOrgPackages',
+      getClassPackages: 'org/student/getClassPackages',
       enterClassroom: 'org/student/enterClassroom',
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
-      getNextLesson: 'org/student/getNextLesson'
+      getNextLesson: 'org/student/getNextLesson',
+      getMyTeacher: 'org/student/getMyTeacher',
+      getMyClassmate: 'org/student/getMyClassmate'
     }),
+    async getClassData(classID) {
+      await Promise.all([
+        this.getClassPackages(classID),
+        this.getTeacherAndClassmate(classID)
+      ])
+    },
+    async getTeacherAndClassmate(classID) {
+      await Promise.all([
+        this.getMyTeacher(classID),
+        this.getMyClassmate(classID)
+      ])
+    },
     handleToPackagePage(packageId) {
       this.$router.push({
         name: 'OrgStudentPackage',
@@ -195,9 +216,22 @@ export default {
   computed: {
     ...mapGetters({
       orgPackages: 'org/student/orgPackages',
+      classPackages: 'org/student/classPackages',
       isBeInClassroom: 'org/student/isBeInClassroom',
       classroom: 'org/student/classroom'
     }),
+    currentClassID() {
+      return _.get(this.$route, 'params.classId')
+    },
+    firstClassID() {
+      return _.get(this.orgClasses, '[0].id')
+    },
+    currentRouteName() {
+      return _.get(this.$route, 'name')
+    },
+    classPackageList() {
+      return _.map(this.classPackages, item => ({ ...item, ...item.package }))
+    },
     orgPackageList() {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))
     },

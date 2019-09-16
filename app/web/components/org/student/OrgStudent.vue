@@ -1,10 +1,5 @@
 <template>
   <div class="org-student">
-    <!-- <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
-      <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">{{$t('org.classBegins') + item.lessonName}},{{$t('lesson.curentClassId')}} C{{item.key}}</span>
-      <span @click="handleJoinClassroom(item)" class="org-student-tips-button">{{$t("org.enterClass")}}</span>
-    </div> -->
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-sidebar-top">
@@ -22,6 +17,15 @@
             </el-dropdown>
             <img :src="userPortrait" class="org-student-profile" />
             <div class="org-student-username">{{username}}</div>
+            <div>
+              <el-dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item v-for="item in orgClasses" :key="item.id">
+                    {{item.name}}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
           </div>
         </div>
         <div class="org-student-sidebar-bottom">
@@ -39,13 +43,13 @@
           </div>
         </div>
 
-        <!-- <div class="org-student-sidebar-bottom">
+        <div class="org-student-sidebar-bottom">
           <div class="org-student-operation">
             <span>我的老师</span>
           </div>
-          <div v-if="hasOrgClasses" class="org-student-menu">
-            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
-              <i class="iconfont icon-team"></i> {{item.name}}
+          <div v-if="hasTeacher" class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
+              <i class="iconfont icon-team"></i> {{item.realname}}
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -57,15 +61,15 @@
           <div class="org-student-operation">
             <span>我的同学</span>
           </div>
-          <div v-if="hasOrgClasses" class="org-student-menu">
-            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
-              <i class="iconfont icon-team"></i> {{item.name}}
+          <div v-if="hasClassmate" class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
+              <i class="iconfont icon-team"></i> {{item.realname}}
             </span>
           </div>
           <div v-else class="org-student-class-empty">
             暂无同学
           </div>
-        </div> -->
+        </div>
 
       </div>
       <template v-if="!isLoading">
@@ -121,13 +125,21 @@ export default {
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson',
       OrgIsStudent: 'org/isStudent',
-      isCurrentOrgToken: 'org/isCurrentOrgToken'
+      isCurrentOrgToken: 'org/isCurrentOrgToken',
+      myClassmate: 'org/student/myClassmate',
+      myTeacher: 'org/student/myTeacher',
     }),
     isJustStudent() {
       return !this.orgIsAdmin && !this.orgIsTeacher
     },
     hasOrgClasses() {
       return this.isCurrentOrgToken && _.get(this.orgClasses, 'length', 0) > 0
+    },
+    hasClassmate() {
+      return this.myClassmate.length > 0
+    },
+    hasTeacher() {
+      return this.myTeacher.length > 0
     },
     isEn() {
       return locale === 'en-US' ? true : false
@@ -157,22 +169,47 @@ export default {
       return _.get(this.$route, 'name')
     },
     isShowSidebar() {
-      return ['OrgStudentClass'].includes(this.nowPageName)
+      return [
+        'OrgStudent',
+        'OrgStudentClass',
+        'orgStudentClassDetail'
+      ].includes(this.nowPageName)
     },
     userPortrait() {
       return _.get(this.userinfo, 'portrait') || this.defaultPortrait
     },
     organizationId() {
       return _.get(this.userinfo, 'organizationId', '')
+    },
+    routeName() {
+      return _.get(this.$route, 'name')
+    },
+    isOrgStudentClassRoute() {
+      return ['OrgStudent', 'OrgStudentClass'].includes(this.routeName)
+    },
+    isNeedRedirect() {
+      return this.isOrgStudentClassRoute && this.firstClassID
+    },
+    currentClassID() {
+      return _.get(this.$route, 'params.classId')
+    },
+    firstClassID() {
+      return _.get(this.orgClasses, '[0].id')
     }
   },
   async created() {
     try {
-      await Promise.all([this.getTeachingLesson(), this.getUserInfo()])
+      if (this.isNeedRedirect) {
+        this.$router.push({
+          name: 'orgStudentClassDetail',
+          params: { classId: this.firstClassID }
+        })
+      }
     } catch (error) {
       console.error(error)
+    } finally {
+      this.isLoading = false
     }
-    this.isLoading = false
   },
   methods: {
     ...mapActions({

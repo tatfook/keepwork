@@ -223,7 +223,7 @@ const actions = {
   async getOrgTeacherList(context, { organizationId, classId }) {
     let { commit } = context
     let orgTeachers = classId
-      ? await keepwork.lessonOrganizationClassMembers.getTeacherssByClassId({
+      ? await keepwork.lessonOrganizationClassMembers.getTeachersByClassId({
         organizationId,
         classId
       })

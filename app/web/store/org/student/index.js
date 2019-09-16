@@ -17,7 +17,10 @@ const state = {
   teachingLesson: [],
   userInfo: {},
   isShowSummary: false,
-  orgRealName: ''
+  orgRealName: '',
+  myClassmate: [],
+  myTeacher: [],
+  classPackages: []
 }
 
 export default {

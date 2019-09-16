@@ -1,6 +1,6 @@
 import { props } from './mutations'
 import { keepwork, lesson } from '@/api'
-const { graphql, lessonOrganizations } = keepwork
+const { graphql, lessonOrganizations, lessonOrganizationClassMembers } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 import { Message } from 'element-ui'
@@ -20,7 +20,10 @@ const {
   GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
   SWITCH_SUMMARY,
-  GET_ORG_REAL_NAME_SUCCESS
+  GET_ORG_REAL_NAME_SUCCESS,
+  GET_MY_TEACHER_SUCCESS,
+  GET_MY_CLASSMATE_SUCCESS,
+  GET_CLASS_PACKAGES_SUCCESS
 } = props
 
 const errMsg = {
@@ -35,6 +38,21 @@ const errMsg = {
 }
 
 const actions = {
+  async getMyTeacher({ commit, rootGetters: { 'org/currentOrgId': currentOrgId } }, classId) {
+    const payload = await lessonOrganizationClassMembers.getTeachersByClassId({ organizationId: currentOrgId, classId })
+    commit(GET_MY_TEACHER_SUCCESS, payload)
+  },
+  async getMyClassmate({ commit, getters: { userInfo: { id } }, rootGetters: { 'org/currentOrgId': currentOrgId } }, classId) {
+    const res = await lessonOrganizationClassMembers.getStudentsByClassId({ organizationId: currentOrgId, classId })
+    const list = _.get(res, 'rows', [])
+    const payload = _.filter(list, item => item.memberId !== id)
+    commit(GET_MY_CLASSMATE_SUCCESS, payload)
+  },
+  async getClassPackages({ commit }, classId) {
+    const res = await lessonOrganizations.getOrgStudentPackages({ classId })
+    console.log(res)
+    commit(GET_CLASS_PACKAGES_SUCCESS, res)
+  },
   async getOrgClasses({ commit, getters: { orgClasses } }, { cache = false } = {}) {
     if (!(cache && !_.isEmpty(orgClasses))) {
       const classes = await lessonOrganizations.getOrgClasses({ roleId: 1 })
@@ -183,7 +201,7 @@ const actions = {
   },
   async enterClassroom({ commit }, { key }) {
     try {
-      const [ classInfo, classroom ] = await Promise.all([
+      const [classInfo, classroom] = await Promise.all([
         lesson.classrooms.join({ key }),
         lesson.classrooms.getClassroomInfo(key)
       ])

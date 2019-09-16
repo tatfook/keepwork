@@ -92,11 +92,14 @@ export default new Router({
           path: '/',
           name: 'OrgStudent',
           component: OrgStudent,
-          redirect: { name: 'OrgStudentClass' },
           children: [
             {
               path: 'OrgStudentClass',
               name: 'OrgStudentClass',
+            },
+            {
+              path: 'OrgStudentClass/:classId',
+              name: 'orgStudentClassDetail',
               component: OrgStudentClass
             }
           ]
