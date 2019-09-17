@@ -19,6 +19,8 @@ const OrgTeacherLessonStudentRecord = () => import('@/components/org/teacher/Org
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
+const OrgStudentClassSelect = () => import('@/components/org/student/OrgStudentClassSelect')
+const OrgStudentClassLastUpdate = () => import('@/components/org/student/OrgStudentClassLastUpdate')
 const OrgStudentPackage = () => import('@/components/org/student/OrgStudentPackage')
 const OrgStudentPackageLesson = () => import('@/components/org/student/OrgStudentPackageLesson')
 const LearnSummary = () => import('@/components/org/student/LearnSummary')
@@ -94,13 +96,19 @@ export default new Router({
           component: OrgStudent,
           children: [
             {
-              path: 'OrgStudentClass',
-              name: 'OrgStudentClass',
+              path: 'OrgStudentClassSelect',
+              name: 'OrgStudentClassSelect',
+              component: OrgStudentClassSelect
             },
             {
               path: 'OrgStudentClass/:classId',
-              name: 'orgStudentClassDetail',
+              name: 'OrgStudentClassDetail',
               component: OrgStudentClass
+            },
+            {
+              path: 'orgClassLastUpdate/:classId',
+              name: 'OrgStudentClassLastUpdate',
+              component: OrgStudentClassLastUpdate
             }
           ]
         },

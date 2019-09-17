@@ -4,7 +4,7 @@
     <div class="recharge-success-title">{{$t('account.rechargeSuccessfully')}}</div>
     <div class="recharge-success-cost">{{rechargeMoney}}</div>
     <div class="recharge-success-message">
-      <sapn v-if="discountMessage">{{discountMessage}}</sapn>
+      <span v-if="discountMessage">{{discountMessage}}</span>
       <router-link class="recharge-success-message-link" :to="{ name: 'MyAccount'}">{{$t('account.backMyAccount')}}</router-link>
     </div>
   </div>

@@ -492,7 +492,8 @@ export const lessonOrganizationClasses = {
       packages
     }),
   getHistoryClasses: async params =>
-    get('lessonOrganizationClasses/history', { params })
+    get('lessonOrganizationClasses/history', { params }),
+  getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`)
 }
 
 export const lessonOrganizationClassMembers = {

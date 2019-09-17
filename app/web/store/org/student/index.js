@@ -20,7 +20,9 @@ const state = {
   orgRealName: '',
   myClassmate: [],
   myTeacher: [],
-  classPackages: []
+  classPackages: [],
+  lastUpdateProjects: [],
+  moreLastUpdateProjects: []
 }
 
 export default {
