@@ -27,6 +27,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
         window.localStorage.removeItem('satellizer_token')
         window.location.reload()
       }
+      return Promise.reject(error)
     }
   )
 
@@ -77,7 +78,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
             const url = `projects/${projectPath}/files/${fullPath}${showVersion ? '?commit=true' : ''}`
-            let res = await instance.get(url)
+            let res = await instance.get(url).catch(error => Promise.reject(error))
             return res.data
           },
           async showWithCommitId({

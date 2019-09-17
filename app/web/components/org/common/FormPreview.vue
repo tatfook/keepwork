@@ -76,10 +76,20 @@ export default {
   .form-preview {
     border-radius: 0;
     &-header {
-      padding: 0 16px;
+      padding: 16px;
+      height: auto;
+      h1 {
+        white-space: initial;
+      }
+      p {
+        display: initial;
+        text-align: left;
+        width: 100%;
+      }
     }
     &-content {
-      padding: 8px 16px;
+      padding: 8px 16px 24px 16px;
+      font-size: 14px;
     }
   }
 }
