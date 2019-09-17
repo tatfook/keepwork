@@ -24,8 +24,8 @@
           <div class="package-catalogue-item-title">
             <span>{{$t('lesson.lessonIndexLabel') + (index + 1) + ": " + lesson.lessonName}} <span>({{$t('lesson.lessonId')}} {{packageId}}x{{lesson.id}} )</span></span>
           </div>
-          <div class="package-catalogue-item-info">{{$t('lesson.intro')}}:</div>
-          <div class="package-catalogue-item-goals">
+          <div class="package-catalogue-item-info" v-if="lesson.goals">{{$t('lesson.intro')}}:</div>
+          <div class="package-catalogue-item-goals" v-if="lesson.goals">
             <p class="package-catalogue-item-goals-item">{{lesson.goals}}</p>
           </div>
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
