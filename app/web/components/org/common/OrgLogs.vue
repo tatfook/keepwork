@@ -3,7 +3,7 @@
     <div class="org-logs-header">机构日志</div>
     <div class="org-logs-container">
       <div class="org-logs-search">
-        <el-date-picker size="medium" class="org-logs-search-item" v-model="searchParams.startTime" type="datetime" placeholder="开始时间" @change="searchLogs">
+        <el-date-picker size="medium" class="org-logs-search-item" v-model="serachedBeginTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="开始时间" @change="searchLogs">
         </el-date-picker>
         <el-select class="org-logs-search-item" clearable size="medium" v-model="searchParams.type" placeholder="事件类型" @change="searchLogs">
           <el-option v-for="item in typeOptions" :key="item.value" :label="item" :value="item">
@@ -43,8 +43,9 @@ export default {
       isLoading: false,
       searchedUsername: '',
       searchedDesc: '',
+      serachedBeginTime: undefined,
       searchParams: {
-        startTime: '',
+        createdAt: '',
         type: '',
         description: '',
         username: '',
@@ -80,6 +81,11 @@ export default {
       this.isLoading = true
       this.searchParams = {
         ...this.searchParams,
+        createdAt: this.serachedBeginTime
+          ? {
+              $gte: `%${this.serachedBeginTime}%`
+            }
+          : '',
         username: this.searchedUsername
           ? {
               $like: `%${this.searchedUsername}%`
