@@ -79,6 +79,29 @@ const lessonOrganizationClasses = {
     get('lessonOrganizationClasses/history', { params })
 }
 
+const lessonOrganizationForms = {
+  createForm: async ({ formDetail }) =>
+    post('lessonOrganizationForms', formDetail),
+  getForms: async ({ organizationId }) =>
+    post('lessonOrganizationForms/search', { organizationId }),
+  updateForm: async ({ formId, formDetail }) =>
+    put(`lessonOrganizationForms/${formId}`, formDetail),
+  deleteForm: async ({ formId }) =>
+    deleteMethod(`lessonOrganizationForms/${formId}`),
+  submitForm: async ({ formId, quizzes }) =>
+    post(`lessonOrganizationForms/${formId}/submit`, { quizzes }),
+  getSubmitList: async ({ formId }) =>
+    get(`lessonOrganizationForms/${formId}/submit`),
+  updateSubmit: async ({ formId, submitId, submitData }) =>
+    put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
+}
+
+const organizations = {
+  changePwd: async ({ classId, memberId, password }) =>
+    post('organizations/changepwd', { classId, memberId, password }),
+  getLogs: async searchParams => post('organizations/log', searchParams)
+}
+
 const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) =>
     get(
@@ -92,7 +115,7 @@ const lessonOrganizationClassMembers = {
     get(
       `lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`
     ),
-  getTeachersByClassId: async ({ organizationId, classId }) =>
+  getTeacherssByClassId: async ({ organizationId, classId }) =>
     get(
       `lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`
     ),
@@ -116,29 +139,6 @@ const lessonOrganizationClassMembers = {
     get('lessonOrganizationClassMembers/student', { params }),
   removeMemberFromClass: async ({ id, roleId }) =>
     deleteMethod(`lessonOrganizationClassMembers/${id}?roleId=${roleId}`)
-}
-
-const lessonOrganizationForms = {
-  createForm: async ({ formDetail }) =>
-    post('lessonOrganizationForms', formDetail),
-  getForms: async ({ organizationId }) =>
-    post('lessonOrganizationForms/search', { organizationId }),
-  updateForm: async ({ formId, formDetail }) =>
-    put(`lessonOrganizationForms/${formId}`, formDetail),
-  deleteForm: async ({ formId }) =>
-    deleteMethod(`lessonOrganizationForms/${formId}`),
-  submitForm: async ({ formId, quizzes }) =>
-    post(`lessonOrganizationForms/${formId}/submit`, { quizzes }),
-  getSubmitList: async ({ formId }) =>
-    get(`lessonOrganizationForms/${formId}/submit`),
-  updateSubmit: async ({ formId, submitId, submitData }) =>
-    put(`lessonOrganizationForms/${formId}/submit/${submitId}`, submitData)
-}
-
-const organizations = {
-  changePwd: async ({ classId, memberId, password }) =>
-    post('organizations/changepwd', { classId, memberId, password }),
-  getLogs: async searchParams => post('organizations/log', searchParams)
 }
 
 export default {
