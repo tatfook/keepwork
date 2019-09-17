@@ -1749,7 +1749,7 @@
     "exchangeMall": "兑换商城",
     "rechargeAccount": "充值账号:",
     "rechargeMoney": "充值金额:",
-    "rechargeTips": "充值金额必须为正整数，单次最多不超过100万元。",
+    "rechargeTips": "充值金额必须为正整数",
     "wechat": "微信支付",
     "alipay": "支付宝",
     "proceedToCheckout": "立即充值",
