@@ -16,10 +16,10 @@
         </el-table-column>
         <el-table-column prop="username" :label="$t('org.usernameLabel')">
         </el-table-column>
-        <el-table-column prop="id" :label="$t('org.operationLabel')" width="240">
+        <el-table-column prop="id" :label="$t('org.operationLabel')" width="160">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
-              <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'teacher')">{{$t('org.Edit')}}</div>
+              <!-- <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'teacher')">{{$t('org.Edit')}}</div> -->
               <remove-member class="class-members-table-button" :memberDetail="scope.row" :roleId="2" :classId="classId" @finish="initData" />
             </div>
           </template>
@@ -36,10 +36,9 @@
         <el-table-column :label="$t('org.usernameLabel')">
           <template slot-scope="scope">{{scope.row.users.username}}</template>
         </el-table-column>
-        <el-table-column prop="id" :label="$t('org.operationLabel')" width="240">
+        <el-table-column prop="id" :label="$t('org.operationLabel')" width="160">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
-              <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'student')">{{$t('org.Edit')}}</div>
               <remove-member class="class-members-table-button" :memberDetail="scope.row" :classId="classId" :roleId="1" @finish="initData" />
               <div class="class-members-table-button" @click="showChangeDialog(scope.row)">修改密码</div>
             </div>
@@ -48,17 +47,12 @@
       </el-table>
     </div>
     <new-teacher-dialog :isNewDialogVisible="isNewDialogVisible" @close="isNewDialogVisible = false"></new-teacher-dialog>
-    <el-dialog :visible="isEditVisible" :before-close="closeEditMemberDialog">
-      <template slot="title">编辑{{editingMember.roleId==1?'学生':'教师'}}</template>
-      <edit-member v-if="isEditVisible" :editingMember="editingMember" :isDialog="true" @close="closeEditMemberDialog"></edit-member>
-    </el-dialog>
     <change-password-dialog :isChangeDialogVisible="isChangeDialogVisible" :changingMember="changingMember" @close="isChangeDialogVisible = false" />
   </div>
 </template>
 <script>
 import NewTeacherDialog from './common/NewTeacherDialog'
 import ChangePasswordDialog from './common/ChangePasswordDialog'
-import EditMember from './EditMember'
 import RemoveMember from './common/RemoveMember'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -69,7 +63,6 @@ export default {
   data() {
     return {
       isChangeDialogVisible: false,
-      isEditVisible: false,
       editingMember: {},
       changingMember: {},
       isNewDialogVisible: false,
@@ -113,20 +106,6 @@ export default {
       ])
       this.isLoading = false
     },
-    showEditDailog(memberDetail, type) {
-      let { realname, username, users, classes } = memberDetail
-      this.editingMember = {
-        roleId: type == 'teacher' ? 2 : 1,
-        realname,
-        memberName: username || users.username,
-        classIds: _.map(classes, classObj => classObj.id)
-      }
-      this.isEditVisible = true
-    },
-    closeEditMemberDialog() {
-      this.isEditVisible = false
-      this.initData()
-    },
     showChangeDialog(studentDetail) {
       let {
         realname,
@@ -146,7 +125,6 @@ export default {
   components: {
     NewTeacherDialog,
     ChangePasswordDialog,
-    EditMember,
     RemoveMember
   }
 }
