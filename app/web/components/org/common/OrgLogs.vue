@@ -14,7 +14,7 @@
         <el-button class="org-logs-search-button" type="primary" icon="el-icon-search" @click="searchLogs">搜索</el-button>
       </div>
       <el-table :default-sort="{ order:'descending', prop: 'logTime'}" size="small" :data="logsList" border class="org-logs-table">
-        <el-table-column prop="logTime" label="时间" width="172">
+        <el-table-column sortable="custom" prop="logTime" label="时间" width="172">
         </el-table-column>
         <el-table-column prop="type" label="事件类型" width="172">
         </el-table-column>
