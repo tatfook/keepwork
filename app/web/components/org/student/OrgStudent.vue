@@ -1,14 +1,9 @@
 <template>
   <div class="org-student">
-    <!-- <div class="org-student-tips" v-for="item in teachingLesson" :key="item.id">
-      <span class="org-student-tips-icon"></span>
-      <span class="org-student-tips-text">{{$t('org.classBegins') + item.lessonName}},{{$t('lesson.curentClassId')}} C{{item.key}}</span>
-      <span @click="handleJoinClassroom(item)" class="org-student-tips-button">{{$t("org.enterClass")}}</span>
-    </div> -->
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-sidebar-top">
-          <div class="org-student-message">
+          <div class="org-student-message fix-bottom">
             <div v-if="isJustStudent" class="org-student-role-label">{{$t("org.studentRole")}}</div>
             <el-dropdown v-else class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
               <span class="el-dropdown-link">
@@ -23,29 +18,36 @@
             <img :src="userPortrait" class="org-student-profile" />
             <div class="org-student-username">{{username}}</div>
           </div>
-        </div>
-        <div class="org-student-sidebar-bottom">
-          <div class="org-student-operation">
-            <span>我的班级</span>
-            <span class="org-student-operation-add" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
-          </div>
-          <div v-if="hasOrgClasses" class="org-student-menu">
-            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
-              <i class="iconfont icon-team"></i> {{item.name}}
+          <div class="class-select" v-if="isClassDetailPage">
+            <el-dropdown v-if="isMutiClasses" class="class-select-dropdown" @command="onDropdown">
+              <span class="el-dropdown-link">
+                <i class="iconfont icon-team class-select-dropdown-icon"></i>
+                <span class="class-select-dropdown-selected">
+                  {{currentClassName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="item in orgClasses" :key="item.id" :command="item.id">{{item.name}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <span v-else class="class-select-onlyone">
+              <i class="iconfont icon-team icon"></i>
+              <span class="class-name">
+                {{currentClassName}}
+              </span>
             </span>
           </div>
-          <div v-else class="org-student-class-empty">
-            暂无班级信息
+          <div class="class-join" v-if="isClassDetailPage">
+            <span class="class-join-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
           </div>
         </div>
-
-        <!-- <div class="org-student-sidebar-bottom">
+        <div class="org-student-sidebar-bottom" v-if="isClassDetailPage">
           <div class="org-student-operation">
             <span>我的老师</span>
           </div>
-          <div v-if="hasOrgClasses" class="org-student-menu">
-            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
-              <i class="iconfont icon-team"></i> {{item.name}}
+          <div v-if="hasTeacher" class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
+              <i class="iconfont icon-jiaoshi1"></i> {{item.realname}}
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -53,19 +55,19 @@
           </div>
         </div>
 
-        <div class="org-student-sidebar-bottom">
+        <div class="org-student-sidebar-bottom" v-if="isClassDetailPage">
           <div class="org-student-operation">
             <span>我的同学</span>
           </div>
-          <div v-if="hasOrgClasses" class="org-student-menu">
-            <span class="org-student-menu-item" v-for="item in orgClasses" :key="item.id" :title="item.name">
-              <i class="iconfont icon-team"></i> {{item.name}}
+          <div v-if="hasClassmate" class="org-student-menu">
+            <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
+              <i class="iconfont icon-tongxue"></i> {{item.realname}}
             </span>
           </div>
           <div v-else class="org-student-class-empty">
             暂无同学
           </div>
-        </div> -->
+        </div>
 
       </div>
       <template v-if="!isLoading">
@@ -121,13 +123,36 @@ export default {
       classroom: 'org/student/classroom',
       teachingLesson: 'org/student/teachingLesson',
       OrgIsStudent: 'org/isStudent',
-      isCurrentOrgToken: 'org/isCurrentOrgToken'
+      isCurrentOrgToken: 'org/isCurrentOrgToken',
+      myClassmate: 'org/student/myClassmate',
+      myTeacher: 'org/student/myTeacher'
     }),
+    isClassDetailPage() {
+      return (
+        this.OrgIsStudent &&
+        ['OrgStudentClassDetail', 'OrgStudentClassLastUpdate'].includes(
+          this.nowPageName
+        )
+      )
+    },
+    currentClassName() {
+      return _.get(
+        _.find(this.orgClasses, item => item.id === this.currentClassID),
+        'name',
+        ''
+      )
+    },
     isJustStudent() {
       return !this.orgIsAdmin && !this.orgIsTeacher
     },
     hasOrgClasses() {
       return this.isCurrentOrgToken && _.get(this.orgClasses, 'length', 0) > 0
+    },
+    hasClassmate() {
+      return this.myClassmate.length > 0
+    },
+    hasTeacher() {
+      return this.myTeacher.length > 0
     },
     isEn() {
       return locale === 'en-US' ? true : false
@@ -157,22 +182,60 @@ export default {
       return _.get(this.$route, 'name')
     },
     isShowSidebar() {
-      return ['OrgStudentClass'].includes(this.nowPageName)
+      return [
+        'OrgStudent',
+        'OrgStudentClass',
+        'OrgStudentClassSelect',
+        'OrgStudentClassDetail',
+        'OrgStudentClassLastUpdate'
+      ].includes(this.nowPageName)
     },
     userPortrait() {
       return _.get(this.userinfo, 'portrait') || this.defaultPortrait
     },
     organizationId() {
       return _.get(this.userinfo, 'organizationId', '')
+    },
+    routeName() {
+      return _.get(this.$route, 'name')
+    },
+    isOrgStudentClassRoute() {
+      return ['OrgStudent'].includes(this.routeName)
+    },
+    isNeedRedirect() {
+      return this.isOrgStudentClassRoute
+    },
+    isOnlyOneClass() {
+      return this.orgClasses.length === 1
+    },
+    isMutiClasses() {
+      return this.orgClasses.length > 1
+    },
+    currentClassID() {
+      return _.toNumber(_.get(this.$route, 'params.classId'))
+    },
+    firstClassID() {
+      return _.get(this.orgClasses, '[0].id')
     }
   },
   async created() {
     try {
-      await Promise.all([this.getTeachingLesson(), this.getUserInfo()])
+      if (this.isNeedRedirect && this.isOnlyOneClass) {
+        this.$router.push({
+          name: 'OrgStudentClassDetail',
+          params: { classId: this.firstClassID }
+        })
+      }
+      if (this.isNeedRedirect && this.isMutiClasses) {
+        this.$router.push({
+          name: 'OrgStudentClassSelect'
+        })
+      }
     } catch (error) {
       console.error(error)
+    } finally {
+      this.isLoading = false
     }
-    this.isLoading = false
   },
   methods: {
     ...mapActions({
@@ -183,6 +246,14 @@ export default {
     toRolePage(pageName) {
       this.$router.push({
         name: pageName
+      })
+    },
+    onDropdown(classId) {
+      this.$router.push({
+        name: 'OrgStudentClassDetail',
+        params: {
+          classId
+        }
       })
     },
     async handleJoinClassroom({ key, packageId, lessonId }) {
@@ -294,7 +365,45 @@ $borderColor: #e8e8e8;
     &-top {
       border-radius: 8px;
       background: #fff;
-      padding-bottom: 22px;
+      .class-select {
+        border-top: 1px solid #e8e8e8;
+        margin: 10px;
+        padding: 6px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-dropdown {
+          cursor: pointer;
+          font-size: 14px;
+          &-icon {
+            font-size: 26px;
+          }
+          &-selected {
+            color: #2397f3;
+          }
+        }
+        &-onlyone {
+          margin-top: 10px;
+          font-size: 14px;
+          .icon {
+            font-size: 26px;
+          }
+          .class-name {
+            color: #2397f3;
+          }
+        }
+      }
+      .class-join {
+        border-top: 1px solid #e8e8e8;
+        text-align: center;
+        height: 34px;
+        line-height: 34px;
+        font-size: 14px;
+        color: #2397f3;
+        &-button {
+          cursor: pointer;
+        }
+      }
     }
     &-bottom {
       margin-top: 20px;
@@ -309,6 +418,9 @@ $borderColor: #e8e8e8;
     padding: 32px 16px 0;
     position: relative;
     text-align: center;
+    &.fix-bottom {
+      padding-bottom: 10px;
+    }
   }
   &-skill {
     text-align: center;
@@ -363,8 +475,10 @@ $borderColor: #e8e8e8;
     border-bottom: 1px solid $borderColor;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 20px;
+    .iconfont {
+      margin-right: 6px;
+    }
     &-add {
       color: #409efe;
       cursor: pointer;

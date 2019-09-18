@@ -32,8 +32,8 @@ export default {
         this.getUserInfo(),
         this.getOrgClasses()
       ])
-      await this.resumeClassroom()
-      this.checkIsInClassroom(this.$route)
+      // await this.resumeClassroom()
+      // this.checkIsInClassroom(this.$route)
       this.initSocket()
       // this.intervalCheckClass()
     } catch (error) {

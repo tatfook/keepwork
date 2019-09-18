@@ -41,7 +41,12 @@ const getters = {
     username,
     portrait,
     howManyDays
-  })
+  }),
+  myClassmate: state => state.myClassmate,
+  myTeacher: state => state.myTeacher,
+  classPackages: state => state.classPackages,
+  lastUpdateProjects: state => state.lastUpdateProjects,
+  moreLastUpdateProjects: state => state.moreLastUpdateProjects
 }
 
 export default getters

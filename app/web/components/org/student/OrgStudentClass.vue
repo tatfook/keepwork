@@ -7,13 +7,24 @@
       <el-button @click="handleEnterClassroom" size="small" type="primary" :disabled="!isCanEnterClassroom">{{$t("lesson.enter")}}</el-button>
     </div>
     <div class="org-student-class-count">
-      {{$t('lesson.include')}}: <span class="org-student-class-count-number">{{orgPackageCount + $t('lesson.packagesCount')}}</span>
-    </div>
-    <div class="org-student-class-main">
+      {{$t('lesson.include')}}: <span class="org-student-class-count-number">{{classPackageCount + $t('lesson.packagesCount')}}</span>
     </div>
     <el-row>
-      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in orgStudentPackageList" :key="index">
+      <el-col class="org-pacakge-list" :sm="12" :md="8" :xs="24" v-for="(packageData,index) in classPackageList" :key="index">
         <org-package-cell class="org-pacakge-list-item" :packageData="packageData" @package-click="handleToPackagePage" @start-click="handleStartLearn" @continue-click="handleContinueLearn"></org-package-cell>
+      </el-col>
+    </el-row>
+    <div class="org-student-class-last-update">
+      <span class="org-student-class-last-update-title">
+        最新更新
+      </span>
+      <span class="org-student-class-last-update-more" @click="onMoreLastUpdate">
+        全部更新 >
+      </span>
+    </div>
+    <el-row>
+      <el-col :sm="12" :md="8" :xs="24" v-for="(project,index) in lastUpdateProjects" :key="index">
+        <project-cell :project="project" :showProjectRate="false"></project-cell>
       </el-col>
     </el-row>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
@@ -30,12 +41,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import OrgPackageCell from '@/components/org/common/OrgPackageCell'
+import ProjectCell from '@/components/common/ProjectCell'
 import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
   name: 'OrgStudentClass',
   components: {
-    OrgPackageCell
+    OrgPackageCell,
+    ProjectCell
   },
   data() {
     return {
@@ -46,20 +59,65 @@ export default {
   },
   async created() {
     try {
-      await this.getOrgPackages()
+      await this.getClassData(this.currentClassID)
     } catch (error) {
       console.error(error)
     } finally {
       this.isLoading = false
     }
   },
+  watch: {
+    async $route(route) {
+      const classID = _.toNumber(_.get(route, 'params.classId'))
+      await this.getClassData(classID)
+    }
+  },
   methods: {
     ...mapActions({
-      getOrgPackages: 'org/student/getOrgPackages',
+      getClassPackages: 'org/student/getClassPackages',
       enterClassroom: 'org/student/enterClassroom',
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
-      getNextLesson: 'org/student/getNextLesson'
+      getNextLesson: 'org/student/getNextLesson',
+      getMyTeacher: 'org/student/getMyTeacher',
+      getMyClassmate: 'org/student/getMyClassmate',
+      getOrgClasses: 'org/student/getOrgClasses',
+      getLastUpdateProjects: 'org/student/getLastUpdateProjects'
     }),
+    async onMoreLastUpdate() {
+      this.$router.push({
+        name: 'OrgStudentClassLastUpdate',
+        params: {
+          classId: this.currentClassID
+        }
+      })
+    },
+    async getClassData(classID) {
+      const classes = await this.getOrgClasses()
+      const classIDs = _.map(classes, item => item.id)
+      const hasTheClass = _.includes(classIDs, classID)
+      if (hasTheClass) {
+        await Promise.all([
+          this.getClassPackages(classID),
+          this.getTeacherAndClassmate(classID)
+        ])
+        await this.getLastUpdateProjects()
+        return
+      }
+      if (this.firstClassID) {
+        this.$router.push({
+          name: 'OrgStudentClassDetail',
+          params: {
+            classId: this.firstClassID
+          }
+        })
+      }
+    },
+    async getTeacherAndClassmate(classID) {
+      await Promise.all([
+        this.getMyTeacher(classID),
+        this.getMyClassmate(classID)
+      ])
+    },
     handleToPackagePage(packageId) {
       this.$router.push({
         name: 'OrgStudentPackage',
@@ -195,9 +253,27 @@ export default {
   computed: {
     ...mapGetters({
       orgPackages: 'org/student/orgPackages',
+      classPackages: 'org/student/classPackages',
       isBeInClassroom: 'org/student/isBeInClassroom',
-      classroom: 'org/student/classroom'
+      classroom: 'org/student/classroom',
+      orgClasses: 'org/student/orgClasses',
+      lastUpdateProjects: 'org/student/lastUpdateProjects'
     }),
+    currentClassID() {
+      return _.toNumber(_.get(this.$route, 'params.classId'))
+    },
+    firstClassID() {
+      return _.get(this.orgClasses, '[0].id')
+    },
+    currentRouteName() {
+      return _.get(this.$route, 'name')
+    },
+    classPackageCount() {
+      return this.classPackageList.length
+    },
+    classPackageList() {
+      return _.map(this.classPackages, item => ({ ...item, ...item.package }))
+    },
     orgPackageList() {
       return _.map(this.orgPackages, item => ({ ...item, ...item.package }))
     },
@@ -303,6 +379,23 @@ export default {
     font-size: 14px;
     &-number {
       color: #303133;
+    }
+  }
+
+  &-last-update {
+    height: 70px;
+    line-height: 70px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    &-title {
+      font-size: 18px;
+      color: #333;
+    }
+    &-more {
+      color: #999;
+      font-size: 14px;
+      cursor: pointer;
     }
   }
 }

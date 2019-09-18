@@ -1,6 +1,6 @@
 import { props } from './mutations'
 import { keepwork, lesson } from '@/api'
-const { graphql, lessonOrganizations } = keepwork
+const { graphql, lessonOrganizations, lessonOrganizationClassMembers, lessonOrganizationClasses } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 import { Message } from 'element-ui'
@@ -20,7 +20,12 @@ const {
   GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
   SWITCH_SUMMARY,
-  GET_ORG_REAL_NAME_SUCCESS
+  GET_ORG_REAL_NAME_SUCCESS,
+  GET_MY_TEACHER_SUCCESS,
+  GET_MY_CLASSMATE_SUCCESS,
+  GET_CLASS_PACKAGES_SUCCESS,
+  GET_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS
 } = props
 
 const errMsg = {
@@ -35,24 +40,62 @@ const errMsg = {
 }
 
 const actions = {
+  async getMyTeacher({ commit, rootGetters: { 'org/currentOrgId': currentOrgId } }, classId) {
+    const payload = await lessonOrganizationClassMembers.getTeachersByClassId({ organizationId: currentOrgId, classId })
+    commit(GET_MY_TEACHER_SUCCESS, payload)
+  },
+  async getMyClassmate({ commit, getters: { userInfo: { id } }, rootGetters: { 'org/currentOrgId': currentOrgId } }, classId) {
+    const res = await lessonOrganizationClassMembers.getStudentsByClassId({ organizationId: currentOrgId, classId })
+    const list = _.get(res, 'rows', [])
+    const payload = _.filter(list, item => item.memberId !== id)
+    commit(GET_MY_CLASSMATE_SUCCESS, payload)
+  },
+  async getClassPackages({ commit }, classId) {
+    const res = await lessonOrganizations.getOrgStudentPackages({ classId })
+    commit(GET_CLASS_PACKAGES_SUCCESS, res)
+  },
   async getOrgClasses({ commit, getters: { orgClasses } }, { cache = false } = {}) {
     if (!(cache && !_.isEmpty(orgClasses))) {
       const classes = await lessonOrganizations.getOrgClasses({ roleId: 1 })
       commit(GET_ORG_CLASSES_SUCCESS, classes)
+      return classes
     }
+    return orgClasses
   },
-  async joinOrgClass({ dispatch, rootGetters: { 'org/currentOrg': currentOrg } }, payload) {
+  async getLastUpdateProjects({ commit, getters: { myClassmate, userInfo: { id } } }, params) {
+    params = params || {
+      'x-order': 'updatedAt-desc',
+      'x-per-page': 6,
+      'x-page': 1
+    }
+    const studentIDs = _.concat(_.map(myClassmate, item => item.memberId), id)
+    console.log(studentIDs)
+    const res = await keepwork.projects.getProjects({
+      ...params,
+      'userId': {
+        '$in': studentIDs
+      }
+    })
+    commit(GET_LAST_UPDATE_PROJECTS_SUCCESS, res.rows)
+    return res
+  },
+  async getMoreLastUpdateProjects({ commit }, classId) {
+    const list = await lessonOrganizationClasses.getClassLastUpdateProjects(classId)
+    commit(GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS, list)
+    return list
+  },
+  async joinOrgClass({ dispatch }, payload) {
     try {
       const { refreshToken = true, ...rest } = payload
       rest.key = rest.key.replace(/ /g, '')
-      await lessonOrganizations.joinOrganization(rest)
+      const res = await lessonOrganizations.joinOrganization(rest)
       await dispatch('org/refreshToken', {}, { root: true })
-      await Promise.all([
-        dispatch('getOrgPackages'),
-        dispatch('getOrgClasses')
-      ])
+      // await Promise.all([
+      //   dispatch('getOrgPackages'),
+      //   dispatch('getOrgClasses')
+      // ])
       Message({ type: 'success', message: '加入成功！' })
-      return true
+      return res
     } catch (err) {
       const code = _.get(err, 'response.data.code', 0)
       const message = _.get(errMsg, code, '')
@@ -183,7 +226,7 @@ const actions = {
   },
   async enterClassroom({ commit }, { key }) {
     try {
-      const [ classInfo, classroom ] = await Promise.all([
+      const [classInfo, classroom] = await Promise.all([
         lesson.classrooms.join({ key }),
         lesson.classrooms.getClassroomInfo(key)
       ])
