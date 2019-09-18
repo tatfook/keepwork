@@ -54,11 +54,7 @@ export default {
       moreLastUpdateProjects: 'org/student/moreLastUpdateProjects'
     }),
     lastUpdateList() {
-      const arr = _.filter(
-        this.moreLastUpdateProjects,
-        item => item.projects.length > 0
-      )
-      return arr
+      return this.moreLastUpdateProjects
     },
     classId() {
       return _.get(this.$route, 'params.classId')

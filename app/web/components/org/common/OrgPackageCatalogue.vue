@@ -21,7 +21,7 @@
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>{{getLessonDuration(lesson)}}</span>
           </div>
-          <lesson-operations :isPreview="isPreview" :lesson="lesson" :isStudent="isStudent" />
+          <lesson-operations :isPreview="isPreview" :lesson="lesson" :isStudent="isStudent" :previewToken="previewToken" />
         </div>
       </div>
     </div>
@@ -45,6 +45,7 @@ export default {
       type: Boolean,
       default: false
     },
+    previewToken: String,
     actorType: String
   },
   computed: {
