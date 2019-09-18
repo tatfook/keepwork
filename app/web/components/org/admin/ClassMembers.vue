@@ -19,7 +19,6 @@
         <el-table-column prop="id" :label="$t('org.operationLabel')" width="160">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
-              <!-- <div class="class-members-table-button class-members-table-button-primary" @click="showEditDailog(scope.row, 'teacher')">{{$t('org.Edit')}}</div> -->
               <remove-member class="class-members-table-button" :memberDetail="scope.row" :roleId="2" :classId="classId" @finish="initData" />
             </div>
           </template>
