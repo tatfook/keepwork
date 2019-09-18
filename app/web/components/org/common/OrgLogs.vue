@@ -9,12 +9,12 @@
           <el-option v-for="item in typeOptions" :key="item.value" :label="item" :value="item">
           </el-option>
         </el-select>
-        <el-input class="org-logs-search-content" size="medium" v-model.trim="searchedDesc" placeholder="包含内容" @keyup.enter.native="searchLogs"></el-input>
-        <el-input class="org-logs-search-operator" size="medium" v-model.trim="searchedUsername" placeholder="操作者" @keyup.enter.native="searchLogs"></el-input>
+        <el-input class="org-logs-search-content" size="medium" v-model.trim="searchedDesc" placeholder="包含内容" clearable  @change="searchLogs" @keyup.enter.native="searchLogs"></el-input>
+        <el-input class="org-logs-search-operator" size="medium" v-model.trim="searchedUsername" placeholder="操作者" clearable @change="searchLogs" @keyup.enter.native="searchLogs"></el-input>
         <el-button class="org-logs-search-button" type="primary" icon="el-icon-search" @click="searchLogs"></el-button>
       </div>
-      <el-table :default-sort="{ order:'descending', prop: 'logTime'}" size="small" :data="logsList" border class="org-logs-table">
-        <el-table-column sortable="custom" prop="logTime" label="时间" width="172">
+      <el-table size="small" :data="logsList" border class="org-logs-table">
+        <el-table-column prop="logTime" label="时间" width="172">
         </el-table-column>
         <el-table-column prop="type" label="事件类型" width="172">
         </el-table-column>
