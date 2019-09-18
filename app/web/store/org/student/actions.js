@@ -50,6 +50,12 @@ const actions = {
     const payload = _.filter(list, item => item.memberId !== id)
     commit(GET_MY_CLASSMATE_SUCCESS, payload)
   },
+  async getTeacherAndClassmate({ dispatch }, classId) {
+    await Promise.all([
+      dispatch('getMyTeacher', classId),
+      dispatch('getMyClassmate', classId)
+    ])
+  },
   async getClassPackages({ commit }, classId) {
     const res = await lessonOrganizations.getOrgStudentPackages({ classId })
     commit(GET_CLASS_PACKAGES_SUCCESS, res)

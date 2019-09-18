@@ -32,15 +32,12 @@ export default {
       defaultPortrait: require('@/assets/img/default_portrait.png')
     }
   },
-  mounted() {
-    console.log(this.userData)
-  },
   computed: {
     realName() {
       return _.get(this.userData, 'realname')
     },
     portrait() {
-      return _.get(this.userData, 'users.portrait') || this.this.defaultPortrait
+      return _.get(this.userData, 'users.portrait') || this.defaultPortrait
     },
     projects() {
       return _.get(this.userData, 'projects', [])

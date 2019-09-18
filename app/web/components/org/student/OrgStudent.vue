@@ -71,7 +71,7 @@
 
       </div>
       <template v-if="!isLoading">
-        <router-view v-if="OrgIsStudent" class="org-student-main"></router-view>
+        <router-view v-if="OrgIsStudent && hasOrgClasses" class="org-student-main"></router-view>
         <div v-else class="org-student-main">
           <join-org></join-org>
         </div>
