@@ -78,8 +78,7 @@ export default {
       enterClassroom: 'org/student/enterClassroom',
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
       getNextLesson: 'org/student/getNextLesson',
-      getMyTeacher: 'org/student/getMyTeacher',
-      getMyClassmate: 'org/student/getMyClassmate',
+      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
       getOrgClasses: 'org/student/getOrgClasses',
       getLastUpdateProjects: 'org/student/getLastUpdateProjects'
     }),
@@ -111,12 +110,6 @@ export default {
           }
         })
       }
-    },
-    async getTeacherAndClassmate(classID) {
-      await Promise.all([
-        this.getMyTeacher(classID),
-        this.getMyClassmate(classID)
-      ])
     },
     handleToPackagePage(packageId) {
       this.$router.push({
