@@ -75,7 +75,6 @@ const actions = {
       'x-page': 1
     }
     const studentIDs = _.concat(_.map(myClassmate, item => item.memberId), id)
-    console.log(studentIDs)
     const res = await keepwork.projects.getProjects({
       ...params,
       'userId': {
