@@ -1,14 +1,16 @@
 
 <template>
-  <div class="package-detail-page" v-if="!isLoading">
-    <package-basic-detail :packageDetail='packageDetail' :actorType='actorType' :isPreview="true"></package-basic-detail>
-    <package-catalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType' :isPreview="true" :previewToken="previewToken"></package-catalogue>
+  <div class="package-detail-page" v-loading.fullscreen.lock="isLoading" element-loading-text="拼命加载中" element-loading-background="#fff">
+    <template v-if="!isLoading">
+      <package-basic-detail :packageDetail='packageDetail' :actorType='actorType' :isPreview="true"></package-basic-detail>
+      <package-catalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType' :isPreview="true" :previewToken="previewToken"></package-catalogue>
+    </template>
   </div>
 </template>
 
 <script>
-import PackageBasicDetail from '@/components/lesson/common/PackageBasicDetail'
-import PackageCatalogue from '@/components/lesson/common/PackageCatalogue'
+import PackageBasicDetail from '@/components/org/common/OrgPackageBasicDetail'
+import PackageCatalogue from '@/components/org/common/OrgPackageCatalogue'
 import { requestWithoutToken } from '@/api/lesson'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -35,13 +37,13 @@ export default {
         token: token
       })
     } else {
-      const { timeStamp = '', token = ''} = this.previewFlag
+      const { timeStamp = '', token = '' } = this.previewFlag
       const timeDiff = Date.now() - timeStamp
       if (token && timeDiff < 20 * 60 * 1000) {
-          this.previewToken = token
-        } else {
-          this.setPreviewFlag({})
-        }
+        this.previewToken = token
+      } else {
+        this.setPreviewFlag({})
+      }
     }
     if (!packageId) {
       return this.$router.push('/')
@@ -49,12 +51,14 @@ export default {
     try {
       const { href } = this.$router.resolve({ path: this.$route.path })
       history.replaceState('', '', href)
-      const res = await requestWithoutToken.get(`packages/${packageId}/detail`)
-      this.packageDetail = res.data
-      this.isLoading = false
+      const { data } = await requestWithoutToken.get(
+        `packages/${packageId}/detail`
+      )
+      this.packageDetail = { ...data, packageId: data.id }
     } catch (error) {
-      this.isLoading = false
       console.error(error)
+    } finally {
+      this.isLoading = false
     }
   },
   methods: {

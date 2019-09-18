@@ -1,15 +1,10 @@
 <template>
   <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
-    <div v-if="!isPreview" class="lesson-page-header">
+    <!-- <div v-if="!isPreview" class="lesson-page-header">
       <common-header class="container" @callback="resetPage"></common-header>
-    </div>
-    <lesson-header v-if="!isPreview"></lesson-header>
+    </div> -->
     <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
-    <perfect-common-footer v-if="!isPreview"></perfect-common-footer>
-    <div @click.stop v-if="isShowLoginDialog.show">
-      <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
-    </div>
-    <real-name />
+    <!-- <perfect-common-footer v-if="!isPreview"></perfect-common-footer> -->
   </div>
 </template>
 
