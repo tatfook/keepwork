@@ -54,8 +54,7 @@ export default {
         this.moreLastUpdateProjects,
         item => item.projects.length > 0
       )
-      let ll = arr[0]
-      return [ll, ll, ll]
+      return arr
     },
     classId() {
       return _.get(this.$route, 'params.classId')
