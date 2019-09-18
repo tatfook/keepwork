@@ -15,8 +15,8 @@
             </div>
           </div>
         </div>
-        <div class="style-cover box-items-item" v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name'>
-          <img class="style-cover-image" :src="style.cover" alt="" @click='newMod(mod.name, index)'>
+        <div class="style-cover box-items-item" v-if='style.useImage' v-for='(style, index) in mod.styles' :key='style.name' @click='newMod(mod.name, index)'>
+          <img class="style-cover-image" :src="style.cover" alt="">
           <div class="style-mask">
             <span>{{$t('tips.clickToAdd')}}</span>
           </div>
