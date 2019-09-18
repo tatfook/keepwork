@@ -1,10 +1,8 @@
 
 <template>
   <div class="package-detail-page" v-loading.fullscreen.lock="isLoading" element-loading-text="拼命加载中" element-loading-background="#fff">
-    <template v-if="!isLoading">
-      <package-basic-detail :packageDetail='packageDetail' :actorType='actorType' :isPreview="true"></package-basic-detail>
-      <package-catalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType' :isPreview="true" :previewToken="previewToken"></package-catalogue>
-    </template>
+    <package-basic-detail :packageDetail='packageDetail' :actorType='actorType' :isPreview="true"></package-basic-detail>
+    <package-catalogue class="package-detail-page-catalogue" :packageDetail='packageDetail' :actorType='actorType' :isPreview="true" :previewToken="previewToken"></package-catalogue>
   </div>
 </template>
 

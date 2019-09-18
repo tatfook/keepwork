@@ -28,7 +28,8 @@ export default {
     isPreview: {
       type: Boolean,
       default: false
-    }
+    },
+    previewToken: String
   },
   data() {
     return {
@@ -76,19 +77,14 @@ export default {
   },
   methods: {
     onToLessonPlan() {
-      console.log(
-        this.$router.resolve({
-          name: 'LessonPreview',
-          params: {
-            lessonId: this.lessonID
-          }
-        })
-      )
       if (this.isPreview) {
         this.$router.push({
           name: 'LessonPreview',
           params: {
             lessonId: this.lessonID
+          },
+          query: {
+            token: this.previewToken
           }
         })
         return
@@ -114,6 +110,9 @@ export default {
           name: 'LessonPreviewCourseware',
           params: {
             lessonId: this.lessonID
+          },
+          query: {
+            token: this.previewToken
           }
         })
         return
