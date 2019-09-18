@@ -24,6 +24,10 @@ export default {
     isStudent: {
       type: Boolean,
       default: false
+    },
+    isPreview: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -72,6 +76,23 @@ export default {
   },
   methods: {
     onToLessonPlan() {
+      console.log(
+        this.$router.resolve({
+          name: 'LessonPreview',
+          params: {
+            lessonId: this.lessonID
+          }
+        })
+      )
+      if (this.isPreview) {
+        this.$router.push({
+          name: 'LessonPreview',
+          params: {
+            lessonId: this.lessonID
+          }
+        })
+        return
+      }
       if (this.isAdminRouter) {
         this.$router.push({
           name: 'OrgAdminLessonPlan',
@@ -88,6 +109,16 @@ export default {
       }
     },
     onToLessonCourseware() {
+      if (this.isPreview) {
+        this.$router.push({
+          name: 'LessonPreviewCourseware',
+          params: {
+            lessonId: this.lessonID
+          }
+        })
+        return
+      }
+
       if (this.isTeacherRouter) {
         this.$router.push({
           name: 'OrgTeacherCourseware',
