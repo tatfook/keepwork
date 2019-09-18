@@ -18,7 +18,7 @@
           <span class="package-basic-detail-info">{{packageSuitableAge}}</span>
         </div>
       </div>
-      <div class="package-basic-detail-skills">
+      <div class="package-basic-detail-skills" v-if="packageDetail.intro">
         <div class="package-basic-detail-label">{{$t('lesson.intro')}}:</div>
         <div class="package-basic-detail-skills-detail" :class="{'package-basic-detail-skills-detail-isSubscribe': false }">{{packageDetail.intro}}</div>
       </div>

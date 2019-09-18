@@ -10,11 +10,12 @@
       <el-radio label="url">{{$t('lesson.packageManage.inputUrl')}}</el-radio>
     </el-radio-group>
     <div class="cover-media-setter-from-bigfile" v-show="imageSourceType === 'bigfile'">
-      <div v-if="bigfileTypeUrl" class="cover-media-setter-bigfile" @click="showSkyDriveManagerDialog">
-        <img v-if='isImageTabShow' class="cover-media-setter-bigfile-preview" :src="bigfileTypeUrl" alt="">
-        <video v-else class="cover-media-setter-bigfile-video" :src='bigfileTypeUrl'></video>
+      <div v-if="bigfileTypeUrl" class="cover-media-setter-bigfile">
+        <img @click="showSkyDriveManagerDialog" v-if='isImageTabShow' class="cover-media-setter-bigfile-preview" :src="bigfileTypeUrl" alt="">
+        <video @click="showSkyDriveManagerDialog" v-else class="cover-media-setter-bigfile-video" :src='bigfileTypeUrl'></video>
         <div class="cover-media-setter-bigfile-edit">
-          <i class="el-icon-edit-outline"></i>
+          <el-button @click="showSkyDriveManagerDialog" size="mini" round>{{$t('common.change')}}</el-button>
+          <el-button @click="deleteMedia" size="mini" round icon="iconfont icon-delete"></el-button>
         </div>
       </div>
       <div v-else class="cover-media-setter-add-button" @click="showSkyDriveManagerDialog">
@@ -113,6 +114,9 @@ export default {
     closeSkyDriveManagerDialog({ file, url }) {
       this.isSkyDriveShow = false
       url && (this.bigfileTypeUrl = url)
+    },
+    deleteMedia() {
+      this.bigfileTypeUrl = ''
     }
   },
   components: {

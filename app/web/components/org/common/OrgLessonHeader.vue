@@ -50,7 +50,7 @@
         <div class="lesson-info title">
           {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
         </div>
-        <div class="lesson-info intro">
+        <div class="lesson-info intro" v-if="lessonGoals">
           <div class="intro-title">
             {{$t('lesson.intro')}}:
           </div>

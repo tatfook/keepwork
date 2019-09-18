@@ -3,14 +3,14 @@
     <div class="org-logs-header">机构日志</div>
     <div class="org-logs-container">
       <div class="org-logs-search">
-        <el-date-picker size="medium" class="org-logs-search-item" v-model="searchParams.startTime" type="datetime" placeholder="开始时间">
+        <el-date-picker size="medium" class="org-logs-search-item" v-model="serachedBeginTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="开始时间" @change="searchLogs">
         </el-date-picker>
-        <el-select class="org-logs-search-item" clearable size="medium" v-model="searchParams.type" placeholder="事件类型">
+        <el-select class="org-logs-search-item" clearable size="medium" v-model="searchParams.type" placeholder="事件类型" @change="searchLogs">
           <el-option v-for="item in typeOptions" :key="item.value" :label="item" :value="item">
           </el-option>
         </el-select>
-        <el-input class="org-logs-search-item" size="medium" v-model="searchParams.description" placeholder="包含内容"></el-input>
-        <el-input class="org-logs-search-item" size="medium" v-model="searchParams.username" placeholder="操作者"></el-input>
+        <el-input class="org-logs-search-item" size="medium" v-model.trim="searchedDesc" placeholder="包含内容" @keyup.enter.native="searchLogs"></el-input>
+        <el-input class="org-logs-search-item" size="medium" v-model.trim="searchedUsername" placeholder="操作者" @keyup.enter.native="searchLogs"></el-input>
         <el-button class="org-logs-search-button" type="primary" icon="el-icon-search" @click="searchLogs">搜索</el-button>
       </div>
       <el-table :default-sort="{ order:'descending', prop: 'logTime'}" size="small" :data="logsList" border class="org-logs-table">
@@ -41,8 +41,11 @@ export default {
   data() {
     return {
       isLoading: false,
+      searchedUsername: '',
+      searchedDesc: '',
+      serachedBeginTime: undefined,
       searchParams: {
-        startTime: '',
+        createdAt: '',
         type: '',
         description: '',
         username: '',
@@ -76,6 +79,24 @@ export default {
     }),
     async searchLogs() {
       this.isLoading = true
+      this.searchParams = {
+        ...this.searchParams,
+        createdAt: this.serachedBeginTime
+          ? {
+              $gte: `%${this.serachedBeginTime}%`
+            }
+          : '',
+        username: this.searchedUsername
+          ? {
+              $like: `%${this.searchedUsername}%`
+            }
+          : '',
+        description: this.searchedDesc
+          ? {
+              $like: `%${this.searchedDesc}%`
+            }
+          : ''
+      }
       await this.orgGetSearchedLogs(this.searchParams).catch(() => {})
       this.isLoading = false
     },

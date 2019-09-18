@@ -1761,7 +1761,7 @@
     "exchangeMall": "Exchange items",
     "rechargeAccount": "Account",
     "rechargeMoney": "Amount:",
-    "rechargeTips": "The amount could only be a postive integer, no more than 1 million yuan at a time.",
+    "rechargeTips": "The amount could only be a postive integer.",
     "wechat": "Wechat",
     "alipay": "Alipay",
     "proceedToCheckout": "Proceed to checkout",

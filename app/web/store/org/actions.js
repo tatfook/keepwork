@@ -447,12 +447,13 @@ const actions = {
       commit,
       getters: { currentOrgId }
     },
-    { username, type, description, xPage, xPerPage, xOrder }
+    { username, type, description, createdAt, xPage, xPerPage, xOrder }
   ) {
     let params = {}
     if (username) params['username'] = username
     if (type) params['type'] = type
     if (description) params['description'] = description
+    if (createdAt) params['createdAt'] = createdAt
     if (xPage) params['x-page'] = xPage
     if (xPerPage) params['x-per-page'] = xPerPage
     if (xOrder) params['x-order'] = xOrder
