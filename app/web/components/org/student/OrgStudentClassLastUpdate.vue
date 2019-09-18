@@ -17,6 +17,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import LastUpdateRow from './LastUpdateRow'
+import _ from 'lodash'
 export default {
   name: 'OrgStudentClassLastUpdate',
   components: {
@@ -47,6 +48,12 @@ export default {
         name: 'OrgStudentClassDetail',
         classId: this.classId
       })
+    },
+    sortByUpdate(arr) {
+      return _.sortBy(
+        arr,
+        item => -+new Date(_.get(item, 'projects[0].updatedAt', ''))
+      )
     }
   },
   computed: {
@@ -54,7 +61,18 @@ export default {
       moreLastUpdateProjects: 'org/student/moreLastUpdateProjects'
     }),
     lastUpdateList() {
-      return this.moreLastUpdateProjects
+      const studentList = _.filter(
+        this.moreLastUpdateProjects,
+        item => item.roleId & 1
+      )
+      const groups = _.groupBy(studentList, item =>
+        item.projects.length ? 1 : 0
+      )
+      const SORT = [1, 0]
+      const arr = _.map(SORT, i => {
+        return this.sortByUpdate(_.get(groups, [i], []))
+      })
+      return _.flatten(arr)
     },
     classId() {
       return _.get(this.$route, 'params.classId')
