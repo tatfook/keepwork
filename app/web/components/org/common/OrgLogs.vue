@@ -3,15 +3,15 @@
     <div class="org-logs-header">机构日志</div>
     <div class="org-logs-container">
       <div class="org-logs-search">
-        <el-date-picker size="medium" class="org-logs-search-item" v-model="serachedBeginTime" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="开始时间" @change="searchLogs">
+        <el-date-picker range-separator="至" unlink-panels size="medium" class="org-logs-search-date" v-model="serachedDateRange" type="daterange" format="yyyy-MM-dd" start-placeholder="开始日期" end-placeholder="结束日期" @change="searchLogs">
         </el-date-picker>
-        <el-select class="org-logs-search-item" clearable size="medium" v-model="searchParams.type" placeholder="事件类型" @change="searchLogs">
+        <el-select class="org-logs-search-select" clearable size="medium" v-model="searchParams.type" placeholder="事件类型" @change="searchLogs">
           <el-option v-for="item in typeOptions" :key="item.value" :label="item" :value="item">
           </el-option>
         </el-select>
-        <el-input class="org-logs-search-item" size="medium" v-model.trim="searchedDesc" placeholder="包含内容" @keyup.enter.native="searchLogs"></el-input>
-        <el-input class="org-logs-search-item" size="medium" v-model.trim="searchedUsername" placeholder="操作者" @keyup.enter.native="searchLogs"></el-input>
-        <el-button class="org-logs-search-button" type="primary" icon="el-icon-search" @click="searchLogs">搜索</el-button>
+        <el-input class="org-logs-search-content" size="medium" v-model.trim="searchedDesc" placeholder="包含内容" @keyup.enter.native="searchLogs"></el-input>
+        <el-input class="org-logs-search-operator" size="medium" v-model.trim="searchedUsername" placeholder="操作者" @keyup.enter.native="searchLogs"></el-input>
+        <el-button class="org-logs-search-button" type="primary" icon="el-icon-search" @click="searchLogs"></el-button>
       </div>
       <el-table :default-sort="{ order:'descending', prop: 'logTime'}" size="small" :data="logsList" border class="org-logs-table">
         <el-table-column sortable="custom" prop="logTime" label="时间" width="172">
@@ -43,7 +43,7 @@ export default {
       isLoading: false,
       searchedUsername: '',
       searchedDesc: '',
-      serachedBeginTime: undefined,
+      serachedDateRange: [],
       searchParams: {
         createdAt: '',
         type: '',
@@ -81,11 +81,13 @@ export default {
       this.isLoading = true
       this.searchParams = {
         ...this.searchParams,
-        createdAt: this.serachedBeginTime
-          ? {
-              $gte: `%${this.serachedBeginTime}%`
-            }
-          : '',
+        createdAt:
+          this.serachedDateRange && this.serachedDateRange.length > 0
+            ? {
+                $gte: `%${this.serachedDateRange[0]}%`,
+                $lte: `%${this.serachedDateRange[1]}%`
+              }
+            : '',
         username: this.searchedUsername
           ? {
               $like: `%${this.searchedUsername}%`
@@ -125,15 +127,30 @@ export default {
   &-search {
     display: flex;
     margin-bottom: 34px;
-    &-item {
-      flex: 1;
-      margin-right: 8px;
+    &-date {
+      flex: 0 0 254px;
+      /deep/ .el-range-separator {
+        font-size: 12px;
+        line-height: 36px;
+      }
+    }
+    &-select {
+      flex: 0 0 94px;
+      margin: 0 8px;
+    }
+    &-operator {
+      flex: 0 0 100px;
+      margin: 0 8px;
     }
     &-button {
       width: 78px;
       padding: 0;
       height: 36px;
       line-height: 36px;
+    }
+    /deep/ .el-input__inner {
+      font-size: 12px;
+      padding: 0 8px;
     }
   }
   &-table {
