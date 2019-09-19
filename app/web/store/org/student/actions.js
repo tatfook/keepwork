@@ -72,7 +72,8 @@ const actions = {
     params = params || {
       'x-order': 'updatedAt-desc',
       'x-per-page': 6,
-      'x-page': 1
+      'x-page': 1,
+      'visibility': 0,
     }
     const studentIDs = _.concat(_.map(myClassmate, item => item.memberId), id)
     const res = await keepwork.projects.getProjects({
