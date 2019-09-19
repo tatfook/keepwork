@@ -72,9 +72,6 @@
       </div>
       <template v-if="!isLoading">
         <router-view class="org-student-main"></router-view>
-        <!-- <div v-else class="org-student-main">
-          <join-org></join-org>
-        </div> -->
       </template>
     </div>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
