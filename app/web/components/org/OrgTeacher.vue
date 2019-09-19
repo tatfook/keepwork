@@ -1,5 +1,5 @@
 <template>
-  <div class="org-teacher-router">
+  <div class="org-teacher-router" v-loading.fullscreen.lock="isLoading" element-loading-text="loading..." element-loading-background="#fff">
     <org-header></org-header>
     <router-view v-if="!isLoading"></router-view>
   </div>
@@ -17,72 +17,24 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
-      _notify: null
+      isLoading: false
     }
   },
   async created() {
     try {
-      await Promise.all([this.getCurrentClass(), this.getOrgClasses()])
-      this.checkIsInClassroom(this.$route)
+      this.isLoading = true
+      await this.getOrgClasses()
     } catch (error) {
       console.error(error)
+    } finally {
+      this.isLoading = false
     }
-    this.isLoading = false
     lesson.users.getUserDetail()
   },
   methods: {
     ...mapActions({
-      getCurrentClass: 'org/teacher/getCurrentClass',
       getOrgClasses: 'org/teacher/getOrgClasses'
-    }),
-    backToClassroom() {
-      const { classId, packageId, lessonId } = this.classroom
-      if (packageId && lessonId) {
-        this.$router.push({
-          name: 'OrgTeacherClassPackageLesson',
-          params: { classId, packageId, lessonId }
-        })
-      }
-    },
-    checkIsInClassroom(route) {
-      const { params: { classId, packageId, lessonId } } = route
-      const { classId: cid, packageId: pid, lessonId: lid } = this.classroom
-      if (this.isBeInClassroom && this.isTeaching && !(classId == cid && packageId == pid && lessonId == lid)) {
-        if (!this._notify) {
-          this._notify = this.$notify({
-            customClass: 'back-to-classroom-notify',
-            iconClass: 'el-icon-warning',
-            dangerouslyUseHTMLString: true,
-            message: this.$t('lesson.notifyTipsStudent', {
-              spanStart: '<span class="back-to-classroom">',
-              spanEnd: '</span>'
-            }),
-            duration: 0,
-            position: 'top-left',
-            onClick: this.backToClassroom,
-            onClose: () => (this._notify = null)
-          })
-        }
-      } else {
-        this._notify && this._notify.close()
-        this._notify = null
-      }
-    }
-  },
-  computed: {
-    ...mapGetters({
-      classroom: 'org/teacher/classroom',
-      isBeInClassroom: 'org/teacher/isBeInClassroom',
-      isTeaching: 'org/teacher/isTeaching'
     })
-  },
-  destroyed() {
-    this._notify && this._notify.close()
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.checkIsInClassroom(to)
-    next()
   }
 }
 </script>

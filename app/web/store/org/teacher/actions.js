@@ -40,6 +40,9 @@ const actions = {
     }
   },
   async getOrgClassPackagesById({ commit }, { classId }) {
+    if (!classId) {
+      return
+    }
     const classPackages = await lessonOrganizations.getClassPackagesById({
       classId
     })
@@ -52,6 +55,9 @@ const actions = {
     },
     { classId }
   ) {
+    if (!classId) {
+      return
+    }
     const classStudents = await lessonOrganizationClassMembers.getClassStudentsById(
       { classId }
     )

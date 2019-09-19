@@ -19,7 +19,7 @@
         </el-breadcrumb>
       </div>
     </div>
-    <lesson-header class='lesson-header' :lesson="lessonHeader" :isTeacher="true" :isInCurrentClass="isInCurrentClass" />
+    <lesson-header class='lesson-header' :lesson="lessonHeader" :isTeacher="true" />
     <router-view></router-view>
   </div>
 </template>
@@ -35,7 +35,6 @@ export default {
   },
   data() {
     return {
-      _interval: null,
       isLoading: true
     }
   },
@@ -47,14 +46,10 @@ export default {
   async created() {
     await this.getLessonData()
   },
-  async destroyed() {
-    this.leaveTheClassroom()
-  },
   methods: {
     ...mapActions({
       getLessonDetail: 'org/teacher/getLessonDetail',
       getOrgClasses: 'org/teacher/getOrgClasses',
-      leaveTheClassroom: 'org/teacher/leaveTheClassroom'
     }),
     async getLessonData() {
       try {
@@ -70,13 +65,16 @@ export default {
         window.document.title = this.currentLessonName
       } catch (error) {
         console.error(error)
+      } finally {
+        this.isLoading = false
       }
-      this.isLoading = false
     },
     handleSelectLesson(_lessonId) {
-      const { name, params: { packageId, lessonId }} = this.$route
+      const {
+        name,
+        params: { packageId, lessonId }
+      } = this.$route
       if (lessonId != _lessonId) {
-        this.leaveTheClassroom()
         this.$router.push({
           name,
           params: { packageId, lessonId: _lessonId }
@@ -89,9 +87,6 @@ export default {
       lessonDetail: 'org/teacher/orgLessonDetail',
       orgClassPackagesDetail: 'org/teacher/orgClassPackagesDetail',
       orgClasses: 'org/teacher/orgClasses',
-      isBeInClass: 'org/teacher/isBeInClass',
-      isClassIsOver: 'org/teacher/isClassIsOver',
-      classroom: 'org/teacher/classroom',
       userinfo: 'org/userinfo'
     }),
     currentClassName() {
@@ -106,12 +101,6 @@ export default {
         ...item,
         ...item.lesson
       }))
-    },
-    isInCurrentClass() {
-      const { classId: cid, packageId: pid, lessonId: lid } = this.$route.params
-      const { classId, packageId, lessonId } = this.classroom
-      let flag = classId == cid && packageId == pid && lessonId == lid
-      return this.isBeInClass ? flag : true
     },
     packageName() {
       return _.get(this.packageDetail, ['package', 'packageName'], '')
@@ -144,7 +133,7 @@ export default {
     userId() {
       return _.get(this.userinfo, 'id', '')
     }
-  },
+  }
 }
 </script>
 

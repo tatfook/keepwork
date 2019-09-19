@@ -44,18 +44,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
-import LessonStudentProgress from './LessonStudentProgress'
-import LessonTeacherProgress from './LessonTeacherProgress'
-import LessonReferences from './LessonReferences'
-import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
-  components: {
-    LessonStudentProgress,
-    LessonTeacherProgress,
-    KeepWorkSticky,
-    LessonReferences
-  },
   filters: {
     idPretty(value) {
       return _.map(_.chunk(value.toString().split(''), 3), i =>
@@ -69,14 +59,6 @@ export default {
       default() {
         return {}
       }
-    },
-    isTeacher: {
-      type: Boolean,
-      default: false
-    },
-    isInCurrentClass: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
