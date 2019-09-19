@@ -60,11 +60,18 @@ export default {
     onSubmit() {
       this.$refs['form'].validate(async valid => {
         if (valid) {
-          const flag = await this.joinOrg({
+          const { classId = '' } = await this.joinOrg({
             ...this.form,
             organizationId: this.organizationId
           })
-          return flag
+          if (classId) {
+            this.$router.push({
+              name: 'OrgStudentClassDetail',
+              params: {
+                classId
+              }
+            })
+          }
         } else {
           return false
         }

@@ -447,8 +447,8 @@ export const lessonOrganizations = {
     get('lessonOrganizationClassMembers/student', { params }),
   addStudentToClass: async params =>
     post('lessonOrganizationClassMembers', { ...params, roleId: 1 }),
-  getOrgStudentPackages: async () =>
-    get('lessonOrganizations/packages?roleId=1'),
+  getOrgStudentPackages: async params =>
+    get('lessonOrganizations/packages', { params: { ...params, roleId: 1 } }),
   getOrgStudentPackageDetail: async params =>
     get('lessonOrganizations/packageDetail', { params }),
   getUserOrganizations: async () => get('lessonOrganizations'),
@@ -492,7 +492,8 @@ export const lessonOrganizationClasses = {
       packages
     }),
   getHistoryClasses: async params =>
-    get('lessonOrganizationClasses/history', { params })
+    get('lessonOrganizationClasses/history', { params }),
+  getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`)
 }
 
 export const lessonOrganizationClassMembers = {
@@ -508,7 +509,7 @@ export const lessonOrganizationClassMembers = {
     get(
       `lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`
     ),
-  getTeacherssByClassId: async ({ organizationId, classId }) =>
+  getTeachersByClassId: async ({ organizationId, classId }) =>
     get(
       `lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`
     ),

@@ -18,6 +18,7 @@ const initSiteState = () => {
   return {
     siteLayoutConfig: {},
     pages: {},
+    activePageStatus: undefined,
     theme: {
       name: 'classic',
       colorID: 0,
@@ -79,7 +80,8 @@ const getters = {
   headerModList: (state, { header }) => header && header.modList,
   footerModList: (state, { footer }) => footer && footer.modList,
   sidebarModList: (state, { sidebar }) => sidebar && sidebar.modList,
-  code: (state) => state && state.code
+  code: (state) => state && state.code,
+  activePageStatus: (state) => state && state.activePageStatus,
 }
 
 const actions = {
@@ -91,9 +93,15 @@ const actions = {
     if (path === '/') return
     await dispatch('loadLayout', { path })
     await dispatch('gitlab/readFile', { path, editorMode: false }, { root: true })
-    let { content } = rootGetters['gitlab/getFileByPath'](path)
-    let payload = { code: content, historyDisabled: true }
-    content && dispatch('updateMarkDown', payload)
+      .then(() => {
+        let { content } = rootGetters['gitlab/getFileByPath'](path)
+        let payload = { code: content, historyDisabled: true }
+        content && dispatch('updateMarkDown', payload)
+      })
+      .catch(error => {
+        let { status } = error.response
+        commit('UPDATE_ACTIVEPAGE_STATUS', status)
+      })
   },
   // rebuild all mods, will takes a little bit more time
   updateMarkDown({ commit }, payload) {
@@ -141,6 +149,9 @@ const actions = {
 const mutations = {
   SET_ACTIVE_PAGE(state, path) {
     Vue.set(state, 'activePageUrl', path)
+  },
+  UPDATE_ACTIVEPAGE_STATUS(state, status) {
+    Vue.set(state, 'activePageStatus', status)
   },
   UPDATE_MODS(state, code) {
     Vue.set(state, 'code', code)

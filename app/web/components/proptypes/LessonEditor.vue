@@ -123,17 +123,20 @@ export default {
     ...mapActions({
       saveActivePage: 'saveActivePage'
     }),
-    handleSelectLesson(id) {
+    async handleSelectLesson(id) {
       const flag = _.get(this.selectLesson, [this.selectTheme], '')
       if (flag) {
         this.selectValue = ''
         this.$message.error('该课程当前主题已经被绑定')
+        return
       }
+      await this.bindLesson(id)
     },
-    handleSelectTheme(key) {
+    async handleSelectTheme(key) {
       if (this.selectLesson[key]) {
         this.selectTheme = ''
         this.$message.error('该课程当前主题已经被绑定')
+        return
       }
     },
     async getUserLessons() {
@@ -195,6 +198,15 @@ export default {
           await this.initUserData()
         })
         .catch(e => console.error(e))
+    },
+    async bindLesson(id) {
+      await lesson.lessons.update({
+        updatingData: {
+          id,
+          [this.selectTheme]: this.currentURL
+        }
+      })
+      await this.initUserData()
     },
     async handleRelease() {
       await this.saveActivePage()

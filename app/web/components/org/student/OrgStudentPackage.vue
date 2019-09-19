@@ -86,11 +86,7 @@ export default {
       }))
     },
     currentPackageDetail() {
-      return _.get(
-        this.orgPackagesDetail,
-        [this.packageId],
-        {}
-      )
+      return _.get(this.orgPackagesDetail, [this.packageId], {})
     },
     currentPackageName() {
       return _.get(this.packageDetail, 'packageName', '')
