@@ -61,10 +61,15 @@ export default {
       moreLastUpdateProjects: 'org/student/moreLastUpdateProjects'
     }),
     lastUpdateList() {
-      const studentList = _.filter(
+      let studentList = _.filter(
         this.moreLastUpdateProjects,
         item => item.roleId & 1
       )
+      studentList = _.map(studentList, item => {
+        const users = item.users
+        item.projects = _.map(item.projects, item => ({ ...item, user: users }))
+        return item
+      })
       const groups = _.groupBy(studentList, item =>
         item.projects.length ? 1 : 0
       )
