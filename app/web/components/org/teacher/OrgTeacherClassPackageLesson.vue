@@ -58,6 +58,7 @@ export default {
     }),
     async getLessonData() {
       try {
+        this.isLoading = true
         const {
           name,
           params: { classId, packageId, lessonId }
@@ -70,11 +71,15 @@ export default {
         window.document.title = this.currentLessonName
       } catch (error) {
         console.error(error)
+      } finally {
+        this.isLoading = false
       }
-      this.isLoading = false
     },
     handleSelectLesson(_lessonId) {
-      const { name, params: { packageId, lessonId }} = this.$route
+      const {
+        name,
+        params: { packageId, lessonId }
+      } = this.$route
       if (lessonId != _lessonId) {
         this.leaveTheClassroom()
         this.$router.push({
@@ -144,7 +149,7 @@ export default {
     userId() {
       return _.get(this.userinfo, 'id', '')
     }
-  },
+  }
 }
 </script>
 

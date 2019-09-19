@@ -19,10 +19,7 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
-      _notify: null,
-      _interval: null,
-      isFirstCheck: true
+      isLoading: true
     }
   },
   async created() {
@@ -32,126 +29,19 @@ export default {
         this.getUserInfo(),
         this.getOrgClasses()
       ])
-      // await this.resumeClassroom()
-      // this.checkIsInClassroom(this.$route)
-      this.initSocket()
-      // this.intervalCheckClass()
     } catch (error) {
       console.error(error)
+    } finally {
+      this.isLoading = false
     }
-    this.isLoading = false
     lesson.users.getUserDetail()
   },
   methods: {
     ...mapActions({
-      resumeClassroom: 'org/student/resumeClassroom',
-      checkClassroom: 'org/student/checkClassroom',
       getUserInfo: 'org/student/getUserInfo',
       getUserOrgRealName: 'org/student/getUserOrgRealName',
-      getOrgClasses: 'org/student/getOrgClasses',
-      getTeachingLesson: 'org/student/getTeachingLesson'
-    }),
-    backToClassroom() {
-      const { packageId, lessonId } = this.classroom
-      if (packageId && lessonId) {
-        this.$router.push({
-          name: 'OrgStudentPackageLesson',
-          params: { packageId, lessonId }
-        })
-      }
-    },
-    initSocket() {
-      const socket = io(process.env.SOCKET_API_PREFIX, {
-        query: {
-          userId: this.userId,
-          token: this.token
-        },
-        transports: ['websocket']
-      })
-      socket.on('msg', data => {
-        const { payload = {} } = data
-        if (payload.type === 1 && (payload.beginClass || payload.classOver)) {
-          this.getTeachingLesson()
-          if (this.isBeInClassroom) {
-            this.checkClassroom().catch(e => {
-              this._notify && this._notify.close()
-              this._notify = null
-              if (this.$route.name === 'OrgStudentPackageLesson') {
-                this.$message({
-                  message: this.$t('lesson.classIsOver'),
-                  type: 'warning',
-                  duration: 10000
-                })
-              }
-            })
-          }
-        }
-      })
-    },
-    checkIsInClassroom(route) {
-      const {
-        params: { packageId, lessonId }
-      } = route
-      const { packageId: pid, lessonId: lid } = this.classroom
-
-      if (
-        this.isBeInClassroom &&
-        this.isTeaching &&
-        !(packageId == pid && lessonId == lid)
-      ) {
-        if (!this._notify) {
-          this._notify = this.$notify({
-            customClass: 'back-to-classroom-notify',
-            iconClass: 'el-icon-warning',
-            dangerouslyUseHTMLString: true,
-            message: this.$t('lesson.notifyTipsStudent', {
-              spanStart: '<span class="back-to-classroom">',
-              spanEnd: '</span>'
-            }),
-            duration: 0,
-            position: 'top-left',
-            onClick: this.backToClassroom,
-            onClose: () => (this._notify = null)
-          })
-        }
-      } else {
-        this._notify && this._notify.close()
-        this._notify = null
-      }
-    },
-    async intervalCheckClass(delay = 30) {
-      if (this.isFirstCheck) {
-        this.isFirstCheck = false
-      } else {
-        await this.checkClassroom()
-      }
-      clearTimeout(this._interval)
-      this._interval = setTimeout(async () => {
-        await this.intervalCheckClass().catch(e => {
-          this._notify && this._notify.close()
-          this._notify = null
-        })
-      }, delay * 1000)
-    }
-  },
-  computed: {
-    ...mapGetters({
-      isBeInClassroom: 'org/student/isBeInClassroom',
-      classroom: 'org/student/classroom',
-      isTeaching: 'org/student/isTeaching',
-      userinfo: 'org/userinfo',
-      token: 'org/token'
-    }),
-    userId() {
-      return this.userinfo.id
-    }
-  },
-  destroyed() {
-    this._notify && this._notify.close()
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.checkIsInClassroom(to)
-    next()
+      getOrgClasses: 'org/student/getOrgClasses'
+    })
   }
 }
 </script>
