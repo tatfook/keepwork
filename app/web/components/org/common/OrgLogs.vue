@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column prop="description" label="内容" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="username" label="姓名" width="172">
+        <el-table-column prop="username" label="操作者" width="172">
         </el-table-column>
       </el-table>
       <div class="org-logs-pagination">
