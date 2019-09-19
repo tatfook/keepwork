@@ -71,10 +71,7 @@
 
       </div>
       <template v-if="!isLoading">
-        <router-view v-if="OrgIsStudent && hasOrgClasses" class="org-student-main"></router-view>
-        <div v-else class="org-student-main">
-          <join-org></join-org>
-        </div>
+        <router-view class="org-student-main"></router-view>
       </template>
     </div>
     <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
@@ -183,6 +180,7 @@ export default {
     },
     isShowSidebar() {
       return [
+        'JoinOrg',
         'OrgStudent',
         'OrgStudentClass',
         'OrgStudentClassSelect',
@@ -220,6 +218,12 @@ export default {
   },
   async created() {
     try {
+      if (!(this.hasOrgClasses)) {
+        this.$router.push({
+          name: 'JoinOrg'
+        })
+        return
+      }
       if (this.isNeedRedirect && this.isOnlyOneClass) {
         this.$router.push({
           name: 'OrgStudentClassDetail',
