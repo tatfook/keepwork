@@ -130,14 +130,8 @@ export default {
     toRolePage({ roleId }) {
       let roleName = ''
       if ((roleId & 64) > 0) {
-        if (this.isFirstView) {
-          return this.$router.push({
-            name: 'OrgFirstView'
-          })
-        }
         return this.$router.push({
-          name: 'OrgPackages',
-          query: { firstLogin: true }
+          name: 'OrgFirstView'
         })
       }
       if ((roleId & 2) > 0) {

@@ -202,13 +202,9 @@ const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
 }
 
 const checkIsIgnore = (name, next, params) => {
-  const ignoreName = ['OrgLogin', 'OrgStudent', 'OrgStudentClass']
+  const ignoreName = ['OrgLogin', 'OrgStudent', 'OrgStudentClass', 'JoinOrg']
   if (ignoreName.includes(name)) {
-    if (name != 'OrgStudentClass') {
-      next({ name: 'OrgStudent', params })
-    } else {
-      next()
-    }
+    next()
     return true
   }
   return false

@@ -40,13 +40,7 @@ export default {
     videoPlayer
   },
   async created() {
-    const isFirstView = await this.checkFirstView()
-    if (!isFirstView) {
-      this.removeHistory()
-      this.$router.push({ name: 'OrgPackages', query: { firstLogin: true } })
-    } else {
-      this.checkCurrentOrgExpire()
-    }
+    this.checkCurrentOrgExpire()
   },
   methods: {
     ...mapActions({

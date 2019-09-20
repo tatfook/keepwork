@@ -1,15 +1,10 @@
 <template>
   <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
-    <div v-if="!isPreview" class="lesson-page-header">
+    <!-- <div v-if="!isPreview" class="lesson-page-header">
       <common-header class="container" @callback="resetPage"></common-header>
-    </div>
-    <lesson-header v-if="!isPreview"></lesson-header>
+    </div> -->
     <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
-    <perfect-common-footer v-if="!isPreview"></perfect-common-footer>
-    <div @click.stop v-if="isShowLoginDialog.show">
-      <login-dialog :show="isShowLoginDialog.show" :to="isShowLoginDialog.to" @close="handleLoginDialogClose"></login-dialog>
-    </div>
-    <real-name />
+    <!-- <perfect-common-footer v-if="!isPreview"></perfect-common-footer> -->
   </div>
 </template>
 
@@ -94,7 +89,9 @@ router.beforeEach(async (to, from, next) => {
     const params = { ...to.params, ...to.query }
     const { packageId, lessonId, key = '', token = '' } = params
     if (token) {
-      const res = await lesson.users.verifyToken({ token }).catch(e => console.error(e))
+      const res = await lesson.users
+        .verifyToken({ token })
+        .catch(e => console.error(e))
       if (res) {
         Cookies.remove('token')
         Cookies.remove('token', { path: '/' })
@@ -105,20 +102,17 @@ router.beforeEach(async (to, from, next) => {
           message: '无效的token',
           showClose: false,
           confirmButtonText: '前往学习页',
-          beforeClose: () => window.location.href = `${window.location.origin}/s`
+          beforeClose: () =>
+            (window.location.href = `${window.location.origin}/s`)
         })
         next(false)
         return
       }
     }
     if (Number(key)) {
-      window.location.href = `${
-        window.location.origin
-      }/s/lesson/package/${packageId}/lesson/${lessonId}?key=${key}&token=${token}`
+      window.location.href = `${window.location.origin}/s/lesson/package/${packageId}/lesson/${lessonId}?key=${key}&token=${token}`
     } else {
-      window.location.href = `${
-        window.location.origin
-      }/s/lesson/package/${packageId}/lesson/${lessonId}?token=${token}`
+      window.location.href = `${window.location.origin}/s/lesson/package/${packageId}/lesson/${lessonId}?token=${token}`
     }
     next(false)
   }
@@ -181,18 +175,10 @@ export default {
         console.error(err)
       )
       await this.getUserDetail().catch(err => console.error(err))
-      await this.resumeClassData().catch(err => console.error(err))
       this.loading = false
     },
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
-    },
-    async resetPage() {
-      const { name } = this.$route
-      const rules = ['TeacherColumn', 'StudentColumn']
-      if (rules.some(i => i === name)) {
-        this.$router.push({ name: 'StudentCenter' })
-      }
     }
   }
 }
