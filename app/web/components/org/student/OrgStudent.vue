@@ -21,7 +21,7 @@
           <div class="class-select" v-if="isClassDetailPage">
             <el-dropdown v-if="isMutiClasses" class="class-select-dropdown" @command="onDropdown">
               <span class="el-dropdown-link">
-                <i class="iconfont icon-team class-select-dropdown-icon"></i>
+                <i class="iconfont icon-team class-select-dropdown-icon class-select-icon"></i>
                 <span class="class-select-dropdown-selected">
                   {{currentClassName}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -31,7 +31,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <span v-else class="class-select-onlyone">
-              <i class="iconfont icon-team icon"></i>
+              <i class="iconfont icon-team class-select-icon"></i>
               <span class="class-name">
                 {{currentClassName}}
               </span>
@@ -47,7 +47,7 @@
           </div>
           <div v-if="hasTeacher" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-jiaoshi1"></i> {{item.realname}}
+              <i class="iconfont icon-jiaoshi1 org-student-menu-item-icon"></i> {{item.realname}}
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -61,7 +61,7 @@
           </div>
           <div v-if="hasClassmate" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-tongxue"></i> {{item.realname}}
+              <i class="iconfont icon-tongxue org-student-menu-item-icon"></i> {{item.realname}}
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -218,7 +218,7 @@ export default {
   },
   async created() {
     try {
-      if (!(this.hasOrgClasses)) {
+      if (!this.hasOrgClasses) {
         this.$router.push({
           name: 'JoinOrg'
         })
@@ -376,12 +376,13 @@ $borderColor: #e8e8e8;
         display: flex;
         justify-content: center;
         align-items: center;
+        &-icon {
+          font-size: 22px;
+          color: #030313;
+        }
         &-dropdown {
           cursor: pointer;
           font-size: 14px;
-          &-icon {
-            font-size: 26px;
-          }
           &-selected {
             color: #2397f3;
           }
@@ -505,6 +506,9 @@ $borderColor: #e8e8e8;
       display: inline-block;
       color: #030313;
       font-size: 14px;
+      &-icon {
+        margin-right: 6px;
+      }
     }
   }
   &-class-empty {

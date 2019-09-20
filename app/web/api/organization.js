@@ -115,7 +115,7 @@ const lessonOrganizationClassMembers = {
     get(
       `lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`
     ),
-  getTeacherssByClassId: async ({ organizationId, classId }) =>
+  getTeachersByClassId: async ({ organizationId, classId }) =>
     get(
       `lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`
     ),
