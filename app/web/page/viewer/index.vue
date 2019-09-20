@@ -45,6 +45,7 @@ import messageModule from '@/store/message'
 import ba from 'vue-ba'
 import LoginDialog from '@/components/common/LoginDialog'
 import RealName from '@/components/common/RealName'
+import { language } from '@/lib/utils'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
@@ -218,6 +219,12 @@ export default {
     }
   }
 }
+
+router.beforeEach((to, from, next) => {
+  const { lang = '' } = to.query
+  language.switchTo(lang)
+  next()
+})
 </script>
 
 <style lang="scss">
