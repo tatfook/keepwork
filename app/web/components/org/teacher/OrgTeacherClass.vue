@@ -152,6 +152,16 @@ export default {
       this.studentsFormData = [{ name: row.realname, account: row.username }]
     },
     async handleRemoveStudent({ row }) {
+      let { realname, username } = row
+      this.$confirm(`${this.$t('org.delConfirm')} ${realname}?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        toRemoveStudent({ row })
+      })
+    },
+    async toRemoveStudent({ row }) {
       try {
         await this.removeStudentFromClass({
           classId: this.selectedClassId,

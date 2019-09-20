@@ -5,38 +5,11 @@
         <source :src="videoUrl" type="video/mp4">
       </video>
     </el-dialog>
-    <el-dialog :visible.sync="classIdDialogVisible" center custom-class="class-id-dialog" width="600px">
-      <div>{{$t('lesson.curentClassId')}}
-        <span class="class-id">C{{classroomKey}}</span>
-      </div>
-      <div v-html="$t('lesson.studentEnterClassId',{studentsPerformance:`<span class='performance'>${$t('lesson.studentsPerformance')}</span>`})">
-      </div>
-      <div class="tips" v-html="$t('lesson.studentAttention',{Attention:`<span class='attention'>${$t('lesson.attention')}</span>`})">
-      </div>
-      <span slot="footer">
-        <el-button @click="classIdDialogVisible = false" class="lesson-confirm-button" type="primary">{{$t('common.Sure')}}</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog :visible.sync="classIdFullScreen" :fullscreen="true" custom-class="class-id-full-page" top="0">
-      <div class="full-font">C {{classroomKey | idPretty}}</div>
-    </el-dialog>
     <el-row>
       <el-col :sm="12" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
         <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
       </el-col>
       <el-col :sm="12" :xm="24" class="lesson-desc">
-        <div v-if="isTeacher && isTeaching && isInCurrentClass && !isClassIsOver" class="class-id-sign-wrap">
-          <el-tooltip placement="bottom">
-            <div slot="content">{{$t('lesson.fullPage')}}</div>
-            <div class="class-id-sign" @click="classIdToFullScreen"> {{$t('lesson.class')}} ID: C{{classroomKey}}</div>
-          </el-tooltip>
-          <el-tooltip placement="bottom">
-            <div slot="content" style="max-width: 400px; font-size: 14px; line-height: 18px; padding:10px 20px;">
-              <div v-html="$t('lesson.classIdExplain',{ classId: `<span style='color:red'> ${$t('lesson.class')} ID</span>` })"></div>
-            </div>
-            <span class="question-mark-icon"></span>
-          </el-tooltip>
-        </div>
         <div class="class-id-sign-wrap">
           <div class="class-id-sign"> {{$t('lesson.lessonId')}} {{haqiCode}}</div>
           <el-tooltip placement="bottom">
@@ -50,7 +23,7 @@
         <div class="lesson-info title">
           {{$t('card.lesson')}} {{lessonNo}}: {{lessonName}}
         </div>
-        <div class="lesson-info intro">
+        <div class="lesson-info intro" v-if="lessonGoals">
           <div class="intro-title">
             {{$t('lesson.intro')}}:
           </div>
@@ -71,18 +44,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
-import LessonStudentProgress from './LessonStudentProgress'
-import LessonTeacherProgress from './LessonTeacherProgress'
-import LessonReferences from './LessonReferences'
-import KeepWorkSticky from './KeepWorkSticky'
 export default {
   name: 'LessonHeader',
-  components: {
-    LessonStudentProgress,
-    LessonTeacherProgress,
-    KeepWorkSticky,
-    LessonReferences
-  },
   filters: {
     idPretty(value) {
       return _.map(_.chunk(value.toString().split(''), 3), i =>
@@ -96,14 +59,6 @@ export default {
       default() {
         return {}
       }
-    },
-    isTeacher: {
-      type: Boolean,
-      default: false
-    },
-    isInCurrentClass: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
@@ -116,12 +71,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      beginTheClass: 'org/teacher/beginTheClass',
-      copyClassroomQuiz: 'org/teacher/copyClassroomQuiz',
-      dismissTheClass: 'org/teacher/dismissTheClass',
-      updateLearnRecords: 'org/teacher/updateLearnRecords'
-    }),
     generateStyleString(style) {
       let string = ''
       _.forEach(style, (value, key) => {
@@ -145,68 +94,6 @@ export default {
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
-    async handleBeginTheClass() {
-      if (!this.isInCurrentClass) return
-      const {
-        name,
-        params: { classId, packageId, lessonId }
-      } = this.$route
-      this.isLoading = true
-      await this.beginTheClass({
-        classId: Number(classId),
-        packageId: Number(packageId),
-        lessonId: Number(lessonId)
-      })
-        .then(res => {
-          if (name !== 'OrgTeacherLessonPlan') {
-            this.$router.push({ name: 'OrgTeacherLessonPlan' })
-          }
-          this.classIdDialogVisible = true
-          this.copyClassroomQuiz()
-          this.isLoading = false
-        })
-        .catch(e => {
-          this.$message.error(this.$t('lesson.beginTheClassFail'))
-          this.isLoading = false
-          console.error(e)
-        })
-    },
-    async handleDismissTheClass() {
-      await this.$confirm(
-        this.$t('lesson.dismissConfirm'),
-        this.$t('lesson.dismiss'),
-        {
-          type: 'warning',
-          distinguishCancelAndClose: true,
-          confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel'),
-          customClass: 'dismiss-class'
-        }
-      )
-        .then(async () => {
-          this.isLoading = true
-          await this.dismissTheClass()
-            .then(res => {
-              const { lessonId, id } = this.classroom
-              this.isLoading = false
-              this.$router.push({
-                name: 'OrgTeacherLessonSummary',
-                params: {
-                  classroomId: id
-                },
-                query: {
-                  className: this.className
-                }
-              })
-            })
-            .catch(e => {
-              this.isLoading = false
-              this.$message.error(this.$t('common.failure'))
-              console.error(e)
-            })
-        })
-        .catch(e => console.error(e))
-    },
     handleExplanHaqiCode() {
       let helpUrl = 'https://keepwork.com/lesson9527/lessons/help_lessonID '
       window.open(helpUrl)
@@ -220,12 +107,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isTeaching: 'org/teacher/isTeaching',
-      classroomKey: 'org/teacher/classroomKey',
-      isClassIsOver: 'org/teacher/isClassIsOver',
-      classroom: 'org/teacher/classroom',
-      isTeacherBeInClasroom: 'org/teacher/isBeInClass',
-      isStudentBeInClassroom: 'org/student/isBeInClassroom',
       userIsTeacher: 'org/isTeacher',
       orgClasses: 'org/teacher/orgClasses'
     }),
@@ -243,12 +124,6 @@ export default {
     },
     lessonNo() {
       return _.get(this.lesson, 'packageIndex', '')
-    },
-    lessonSkills() {
-      return _.map(
-        _.get(this.lesson, 'skills', []),
-        skill => `${colI18n.getLangValue(skill, 'skillName')} +${skill.score}`
-      )
     },
     lessonGoals() {
       return _.get(this.lesson, 'goals', '')
@@ -269,9 +144,6 @@ export default {
     videoUrl() {
       return _.get(this.lesson, 'extra.videoUrl', '')
     },
-    isSelfLearning() {
-      return !this.isTeacher && !this.isStudentBeInClassroom
-    },
     haqiCode() {
       const { packageId = 0, lessonId = 0 } = this.$route.params
       return `${packageId}x${lessonId}`
@@ -285,21 +157,6 @@ export default {
         'name',
         ''
       )
-    },
-    isNotStated() {
-      const { classId = '' } = this.$route.params
-      const timeStamp = Date.now()
-      const classBeginTimeStamp = +new Date(
-        _.get(
-          _.find(
-            this.orgClasses,
-            item => item.id === _.toNumber(_.get(this.$route, 'params.classId'))
-          ),
-          'begin',
-          ''
-        )
-      )
-      return timeStamp < classBeginTimeStamp
     }
   }
 }

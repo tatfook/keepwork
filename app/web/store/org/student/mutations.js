@@ -16,6 +16,11 @@ const GET_TEACHING_LESSON_SUCCESS = 'GET_TEACHING_LESSON_SUCCESS'
 const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS'
 const SWITCH_SUMMARY = 'SWITCH_SUMMARY'
 const GET_ORG_REAL_NAME_SUCCESS = 'GET_ORG_REAL_NAME_SUCCESS'
+const GET_MY_TEACHER_SUCCESS = 'GET_MY_TEACHER_SUCCESS'
+const GET_MY_CLASSMATE_SUCCESS = 'GET_MY_CLASSMATE_SUCCESS'
+const GET_CLASS_PACKAGES_SUCCESS = 'GET_CLASS_PACKAGES_SUCCESS'
+const GET_LAST_UPDATE_PROJECTS_SUCCESS = 'GET_LAST_UPDATE_PROJECTS_SUCCESS'
+const GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS = 'GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -33,7 +38,12 @@ export const props = {
   GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
   SWITCH_SUMMARY,
-  GET_ORG_REAL_NAME_SUCCESS
+  GET_ORG_REAL_NAME_SUCCESS,
+  GET_MY_TEACHER_SUCCESS,
+  GET_MY_CLASSMATE_SUCCESS,
+  GET_CLASS_PACKAGES_SUCCESS,
+  GET_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS
 }
 
 const mutations = {
@@ -87,6 +97,21 @@ const mutations = {
   },
   [GET_ORG_REAL_NAME_SUCCESS](state, realName) {
     Vue.set(state, 'orgRealName', realName)
+  },
+  [GET_MY_TEACHER_SUCCESS](state, payload) {
+    Vue.set(state, 'myTeacher', payload)
+  },
+  [GET_MY_CLASSMATE_SUCCESS](state, payload) {
+    Vue.set(state, 'myClassmate', payload)
+  },
+  [GET_CLASS_PACKAGES_SUCCESS](state, payload) {
+    Vue.set(state, 'classPackages', payload)
+  },
+  [GET_LAST_UPDATE_PROJECTS_SUCCESS](state, payload) {
+    Vue.set(state, 'lastUpdateProjects', payload)
+  },
+  [GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS](state, payload) {
+    Vue.set(state, 'moreLastUpdateProjects', payload)
   }
 }
 
