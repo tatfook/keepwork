@@ -1,5 +1,4 @@
 import { locale } from '@/lib/utils/i18n'
-import { RGBADepthPacking } from 'three'
 
 const LANG_DICT = {
   'zh': 'zh-cn',
