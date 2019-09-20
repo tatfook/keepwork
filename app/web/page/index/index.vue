@@ -1,6 +1,6 @@
 <template>
   <el-container id='app' class="index-page-container">
-    <el-header height='61px' class="index-page-header" >
+    <el-header height='61px' class="index-page-header">
       <common-header class="container"></common-header>
     </el-header>
     <el-main class="index-page-main">
@@ -44,6 +44,7 @@ import messageModule from '@/store/message'
 import { socket, socketMixin } from '@/socket'
 import ba from 'vue-ba'
 import RealName from '@/components/common/RealName'
+import { language } from '@/lib/utils'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.config.productionTip = false
@@ -127,7 +128,7 @@ export default {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
-    },
+    }
   },
   computed: {
     ...mapGetters({
@@ -135,9 +136,15 @@ export default {
       userSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       gitlabChildrenByPath: 'gitlab/childrenByPath',
       isShowLoginDialog: 'pbl/isShowLoginDialog'
-    }),
+    })
   }
 }
+
+router.beforeEach((to, from, next) => {
+  const { lang = '' } = to.query
+  language.switchTo(lang)
+  next()
+})
 </script>
 
 <style>
