@@ -1,10 +1,6 @@
 <template>
   <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
-    <!-- <div v-if="!isPreview" class="lesson-page-header">
-      <common-header class="container" @callback="resetPage"></common-header>
-    </div> -->
     <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
-    <!-- <perfect-common-footer v-if="!isPreview"></perfect-common-footer> -->
   </div>
 </template>
 
@@ -30,8 +26,6 @@ import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import VueClipboard from 'vue-clipboard2'
 import { mapActions, mapGetters } from 'vuex'
-import CommonHeader from '@/components/common/CommonHeader'
-import LessonHeader from '@/components/lesson/common/Header'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'

@@ -135,11 +135,6 @@ export default {
   &-tab {
     max-width: 1200px;
     margin: 0 auto 24px;
-    &-packages {
-    // /deep/  .lesson-package-cell .lesson {
-    //     border: none !important;
-    //   }
-    }
   }
 }
 </style>

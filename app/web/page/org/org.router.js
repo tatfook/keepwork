@@ -12,8 +12,6 @@ const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacher
 const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
 const OrgTeacherCourseware = () => import('@/components/org/teacher/OrgTeacherCourseware')
-// const OrgTeacherLessonPerformance = () => import('@/components/org/teacher/OrgTeacherLessonPerformance')
-// const OrgTeacherLessonSummary = () => import('@/components/org/teacher/OrgTeacherLessonSummary')
 const OrgTeacherLessonSummaryPage = () => import('@/components/org/teacher/OrgTeacherLessonSummaryPage')
 const OrgTeacherLessonStudentRecord = () => import('@/components/org/teacher/OrgTeacherLessonStudentRecord')
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
