@@ -12,8 +12,6 @@ const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacher
 const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
 const OrgTeacherCourseware = () => import('@/components/org/teacher/OrgTeacherCourseware')
-const OrgTeacherLessonSummaryPage = () => import('@/components/org/teacher/OrgTeacherLessonSummaryPage')
-const OrgTeacherLessonStudentRecord = () => import('@/components/org/teacher/OrgTeacherLessonStudentRecord')
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
@@ -166,17 +164,6 @@ export default new Router({
               component: OrgLogs
             }
           ]
-        },
-        {
-          path: 'package/:packageId/lesson/:lessonId/classroom/:classroomId/summary',
-          name: 'OrgTeacherLessonSummaryPage',
-          component: OrgTeacherLessonSummaryPage
-        },
-        {
-          path:
-            '/:orgLoginUrl/teacher/student/:userId/classId/:classId/lessonNo/:lessonNo/lessonName/:lessonName/record',
-          name: 'OrgTeacherLessonStudentRecord',
-          component: OrgTeacherLessonStudentRecord
         },
         {
           path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId',
