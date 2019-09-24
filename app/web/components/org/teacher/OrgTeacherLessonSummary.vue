@@ -107,8 +107,8 @@
   </div>
 </template>
 <script>
-import AccuracyRateChart from '@/components/lesson/teacher/AccuracyRateChart'
-import NumberOfStudentsChart from '@/components/lesson/teacher/NumberOfStudentsChart'
+// import AccuracyRateChart from '@/components/lesson/teacher/AccuracyRateChart'
+// import NumberOfStudentsChart from '@/components/lesson/teacher/NumberOfStudentsChart'
 import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import html2canvas from 'html2canvas'
 import { lesson } from '@/api'
@@ -117,7 +117,7 @@ import _ from 'lodash'
 import { locale } from '@/lib/utils/i18n'
 import { mapActions, mapGetters } from 'vuex'
 import Vue from 'vue'
-import LessonWrap from '@/components/lesson/common/LessonWrap'
+import LessonWrap from '@/components/org/common/LessonWrap'
 import Parser from '@/lib/mod/parser'
 import colI18n from '@/lib/utils/i18n/column'
 import avatar from '@/assets/lessonImg/default_avatar.png'
@@ -542,8 +542,6 @@ export default {
   },
   components: {
     LessonWrap,
-    AccuracyRateChart,
-    NumberOfStudentsChart,
     OrgClassesTabbar
   }
 }

@@ -31,7 +31,7 @@
 <script>
 import moment from 'moment'
 import avatar from '@/assets/img/default_portrait.png'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ActivatedTeacherRole',
