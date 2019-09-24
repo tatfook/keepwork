@@ -20,7 +20,6 @@ const JoinOrg = () => import('@/components/org/student/JoinOrg')
 const OrgStudentClassLastUpdate = () => import('@/components/org/student/OrgStudentClassLastUpdate')
 const OrgStudentPackage = () => import('@/components/org/student/OrgStudentPackage')
 const OrgStudentPackageLesson = () => import('@/components/org/student/OrgStudentPackageLesson')
-const LearnSummary = () => import('@/components/org/student/LearnSummary')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const PackageDetail = () => import('@/components/org/admin/PackageDetail')
@@ -123,11 +122,6 @@ export default new Router({
           path: 'package/:packageId/lesson/:lessonId',
           name: 'OrgStudentPackageLesson',
           component: OrgStudentPackageLesson
-        },
-        {
-          path: 'learnSummary/package/:packageId/lesson/:lessonId',
-          name: 'OrgStudentLearnSummary',
-          component: LearnSummary
         }
       ]
     },
