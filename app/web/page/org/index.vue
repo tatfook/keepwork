@@ -66,7 +66,7 @@ const store = new Vuex.Store({
     skydrive: skydriveModule,
     app: appModule,
     user: userModule,
-    lesson: lessonModule,
+    // lesson: lessonModule,
     org: orgModule,
     pbl: pblModule
   },

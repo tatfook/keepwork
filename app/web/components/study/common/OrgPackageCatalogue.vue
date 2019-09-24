@@ -54,9 +54,6 @@ export default {
     },
     actorType: String
   },
-  mounted() {
-    console.log(this.packageDetail)
-  },
   computed: {
     ...mapGetters({
       classroom: 'org/student/classroom',

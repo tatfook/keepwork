@@ -1,4 +1,3 @@
-import student from './student'
 import teacher from './teacher'
 import getters from './getters'
 import actions from './actions'
@@ -23,7 +22,6 @@ export default {
   mutations,
 
   modules: {
-    student,
     teacher
   }
 }

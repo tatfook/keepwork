@@ -13,7 +13,6 @@
 
 <script>
 import OrgPackageDetail from './common/OrgPackageDetail'
-import { mapActions, mapGetters } from 'vuex'
 import { lesson } from '@/api'
 import _ from 'lodash'
 export default {
