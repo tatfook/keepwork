@@ -56,7 +56,7 @@ const actions = {
     commit(SET_TOKEN_UPDATE_AT)
   },
   async getOrgToken(context, { orgId }) {
-    let { token } = await keepwork.lessonOrganizations
+    let token = await keepwork.lessonOrganizations
       .getOrgToken({ orgId })
       .catch()
     return token
