@@ -158,7 +158,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        toRemoveStudent({ row })
+        this.toRemoveStudent({ row })
       })
     },
     async toRemoveStudent({ row }) {
