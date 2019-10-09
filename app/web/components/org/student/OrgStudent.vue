@@ -52,7 +52,7 @@
           <div v-if="hasTeacher" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
               <i class="iconfont icon-jiaoshi1 org-student-menu-item-icon"></i>
-              <span @click="handleToUserPage(item.username)" class="org-student-menu-item-username">{{item.realname}}</span>
+              <span @click="toUserPage(item.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -67,7 +67,7 @@
           <div v-if="hasClassmate" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
               <i class="iconfont icon-tongxue org-student-menu-item-icon"></i>
-              <span @click="handleToUserPage(item.users.username)" class="org-student-menu-item-username">{{item.realname}}</span>
+              <span @click="toUserPage(item.users.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -278,7 +278,7 @@ export default {
         }
       })
     },
-    handleToUserPage(username) {
+    toUserPage(username) {
       window.open(`${window.location.origin}/u/${username}`)
     },
     toRolePage(pageName) {
