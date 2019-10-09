@@ -13,7 +13,7 @@
       <el-table-column :label="$t('common.action')">
         <template slot-scope="scope">
           <router-link class='class-list-table-link' :to='{name: "OrgEditClass", query: scope.row}'>课程</router-link>
-          <router-link class='class-list-table-link' :to='{name: "OrgClassMembers", query: {id:scope.row.id}}'>成员</router-link>
+          <router-link class='class-list-table-link' :to='{name: "OrgClassMembers", query: {id:scope.row.id, className: scope.row.name}}'>成员</router-link>
         </template>
       </el-table-column>
     </el-table>

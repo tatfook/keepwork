@@ -2,7 +2,7 @@
   <div class="class-members">
     <el-breadcrumb class="class-members-header" separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ name: 'OrgClassList' }">{{$t('org.ClassesLabel')}}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{classId}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{className}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="class-members-item">
       <div class="class-members-item-header">
@@ -76,6 +76,9 @@ export default {
     }),
     classId() {
       return _.toNumber(_.get(this.$route, 'query.id'))
+    },
+    className() {
+      return this.$route.query.className || ''
     },
     teacherList() {
       return this.getOrgTeachersByClassId({
