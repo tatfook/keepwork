@@ -47,7 +47,8 @@
           </div>
           <div v-if="hasTeacher" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-jiaoshi1"></i> {{item.realname}}
+              <i class="iconfont icon-jiaoshi1"></i>
+              <span @click="handleToUserPage(item.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -61,7 +62,8 @@
           </div>
           <div v-if="hasClassmate" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-tongxue"></i> {{item.realname}}
+              <i class="iconfont icon-tongxue"></i>
+              <span @click="handleToUserPage(item.users.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -218,7 +220,7 @@ export default {
   },
   async created() {
     try {
-      if (!(this.hasOrgClasses)) {
+      if (!this.hasOrgClasses) {
         this.$router.push({
           name: 'JoinOrg'
         })
@@ -247,6 +249,9 @@ export default {
       enterClassroom: 'org/student/enterClassroom',
       getUserInfo: 'org/student/getUserInfo'
     }),
+    handleToUserPage(username) {
+      window.open(`${window.location.origin}/u/${username}`)
+    },
     toRolePage(pageName) {
       this.$router.push({
         name: pageName
@@ -505,6 +510,9 @@ $borderColor: #e8e8e8;
       display: inline-block;
       color: #030313;
       font-size: 14px;
+      &-username {
+        cursor: pointer;
+      }
     }
   }
   &-class-empty {
