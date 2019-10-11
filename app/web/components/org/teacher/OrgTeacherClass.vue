@@ -29,10 +29,21 @@
         <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>{{$t("org.continueAdd")}}</span>
       </div>
     </div>
-    <div v-else class="org-teacher-classes-students">
-      <div class="students-table-header">
-        开班时间: <span class="students-table-header-date"> {{orgClassesDate}} </span>
-        {{$t("org.IncludeStudents") + selectedClassStudentsCount + $t("org.studentCountUnit")}}
+    <div v-else class="org-teacher-classes-member">
+      <div class="member-header">
+        <i class="iconfont icon-shijian"></i> 开班时间: <span class="member-header-date"> {{orgClassesDate}} </span>
+      </div>
+      <div class="member-divide">
+        班级成员
+      </div>
+      <div class="member-banner">
+        <div> <i class="iconfont icon-jiaoshi member-banner-icon"></i> 教师</div>
+        <div class="member-banner-count">教师数: </div>
+      </div>
+
+      <div class="member-banner">
+        <div> <i class="iconfont icon-xuesheng member-banner-icon"></i>学生</div>
+        <div class="member-banner-count">学生数: </div>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
         <el-table-column prop="realname" :label="$t('org.nameLabel')" width="162">
@@ -109,8 +120,12 @@ export default {
       this.getOrgStudents(),
       this.getOrgClasses({ cache: true })
     ])
-    await this.getOrgClassStudentsById({ classId: this.firstOrgClassId })
-    this.selectedClassId = this.firstOrgClassId
+    const classId = _.defaultTo(
+      _.toNumber(this.$route.query.classId),
+      this.firstOrgClassId
+    )
+    await this.getOrgClassStudentsById({ classId })
+    this.selectedClassId = classId
     this.isLoading = false
     this.getCurrentOrgUserCounts()
   },
@@ -143,6 +158,7 @@ export default {
       if (this.isShowAddStudentForm && classId !== this.selectedClassId) {
         return this.$message.error('请先保存学生信息')
       }
+      this.$router.push({ query: { classId } })
       await this.getOrgClassStudentsById({ classId, cache: true })
       this.selectedClassId = classId
     },
@@ -320,8 +336,8 @@ export default {
         this.orgClasses,
         cls => cls.id === this.selectedClassId
       )
-      return `${moment(begin).format('YYYY-MM-DD')} 至 ${moment(end).format(
-        'YYYY-MM-DD'
+      return `${moment(begin).format('YYYY/MM/DD')} - ${moment(end).format(
+        'YYYY/MM/DD'
       )}`
     },
     selectedClassStudentsCount() {
@@ -362,17 +378,23 @@ export default {
     float: right;
     right: 0;
   }
-  &-students {
+  &-member {
     border-top: solid 1px #e8e8e8;
     background: #fff;
-    padding: 0 24px 24px;
+    padding: 18px 25px;
     box-sizing: border-box;
     border-radius: 0 0 8px 8px;
-    .students-table-header {
-      height: 50px;
-      line-height: 50px;
-      font-size: 14px;
+    .member-header {  
+      height: 71px;
+      line-height: 71px;
       color: #333;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      text-align: center;
+      .icon-shijian {
+        color: #818181;
+        font-size: 20px;
+      }
       .add-student-button {
         color: #2397f3;
         cursor: pointer;
@@ -380,6 +402,28 @@ export default {
       &-date {
         display: inline-block;
         margin-right: 40px;
+      }
+    }
+    .member-divide {
+      border-bottom: solid 2px #e8e8e8;
+      height: 60px;
+      line-height: 60px;
+      color: #333;
+      font-weight: bold;
+    }
+    .member-banner {
+      font-size: 16px;
+      color: #333;
+      margin-top: 24px;
+      &-icon {
+        color: #2397f3;
+        font-size: 20px;
+        margin-right: 4px;
+      }
+      &-count {
+        font-size: 14px;
+        color: #909399;
+        margin-top: 8px;
       }
     }
   }
