@@ -78,7 +78,6 @@ export default {
       enterClassroom: 'org/student/enterClassroom',
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
       getNextLesson: 'org/student/getNextLesson',
-      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
       getOrgClasses: 'org/student/getOrgClasses',
       getLastUpdateProjects: 'org/student/getLastUpdateProjects'
     }),
@@ -95,10 +94,7 @@ export default {
       const classIDs = _.map(classes, item => item.id)
       const hasTheClass = _.includes(classIDs, classID)
       if (hasTheClass) {
-        await Promise.all([
-          this.getClassPackages(classID),
-          this.getTeacherAndClassmate(classID)
-        ])
+        await this.getClassPackages(classID)
         await this.getLastUpdateProjects()
         return
       }

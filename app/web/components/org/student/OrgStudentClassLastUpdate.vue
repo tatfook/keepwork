@@ -30,18 +30,14 @@ export default {
   },
   async created() {
     try {
-      await Promise.all([
-        this.getMoreLastUpdateProjects(this.classId),
-        this.getTeacherAndClassmate(this.classId)
-      ])
+      await this.getMoreLastUpdateProjects(this.classId)
     } catch (error) {
       console.error(error)
     }
   },
   methods: {
     ...mapActions({
-      getMoreLastUpdateProjects: 'org/student/getMoreLastUpdateProjects',
-      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate'
+      getMoreLastUpdateProjects: 'org/student/getMoreLastUpdateProjects'
     }),
     onBack() {
       this.$router.push({
