@@ -17,7 +17,7 @@
           <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">
-          <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.pageName === nowPageName}" :key="index">
+          <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.match.includes(nowPageName)}" :key="index">
             <router-link class="org-teacher-menu-link" :to="{name: menuItem.pageName}"><i class="iconfont icon-class" v-show="index == 0"></i>{{menuItem.text}}</router-link>
           </li>
         </ul>
@@ -36,15 +36,18 @@ export default {
       teacherMenu: [
         {
           pageName: 'OrgTeacherTeach',
-          text: this.$t('org.TeachLabel')
+          text: this.$t('org.TeachLabel'),
+          match: ['OrgTeacherTeach']
         },
         {
           pageName: 'OrgTeacherClass',
-          text: this.$t('org.MyClassLabel')
+          text: this.$t('org.MyClassLabel'),
+          match: ['OrgTeacherClass', 'OrgTeacherLastUpdate']
         },
         {
           pageName: 'OrgTeacherLogs',
-          text: '机构日志'
+          text: '机构日志',
+          match: ['OrgTeacherLogs']
         }
       ]
     }

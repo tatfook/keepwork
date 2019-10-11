@@ -16,6 +16,7 @@ const getters = {
   orgStudentLimit: (state, { orgUserCounts }) => _.get(orgUserCounts, 'count', 0),
   orgClassPackages: state => state.orgClassPackages,
   orgClassStudents: state => state.orgClassStudents,
+  orgClassTeachers: state => state.orgClassTeachers,
   classroomCoursesData: state => state.classroomCoursesData,
   orgClassPackagesDetail: state => state.orgClassPackagesDetail,
   orgLessonData: state => state.lessonData,

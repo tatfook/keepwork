@@ -3,6 +3,7 @@ import Vue from 'vue'
 const GET_ORG_CLASSES_SUCCESS = 'GET_ORG_CLASSES_SUCCESS'
 const GET_CLASS_PACKAGES_SUCCESS = 'GET_CLASS_PACKAGES_SUCCESS'
 const GET_CLASS_STUDENTS_SUCCESS = 'GET_CLASS_STUDENTS_SUCCESS'
+const GET_CLASS_TEACHERS_SUCCESS = 'GET_CLASS_TEACHERS_SUCCESS'
 const GET_CLASS_PACKAGE_DETAIL_SUCCESS = 'GET_CLASS_PACKAGE_DETAIL_SUCCESS'
 const GET_CLASS_LESSON_CONTENT_SUCCESS = 'GET_CLASS_LESSON_CONTENT_SUCCESS'
 const SAVE_CLASS_LESSON_DETAIL = 'SAVE_CLASS_LESSON_DETAIL'
@@ -21,6 +22,7 @@ export const props = {
   GET_ORG_CLASSES_SUCCESS,
   GET_CLASS_PACKAGES_SUCCESS,
   GET_CLASS_STUDENTS_SUCCESS,
+  GET_CLASS_TEACHERS_SUCCESS,
   GET_CLASS_PACKAGE_DETAIL_SUCCESS,
   GET_CLASS_LESSON_CONTENT_SUCCESS,
   SAVE_CLASS_LESSON_DETAIL,
@@ -53,6 +55,12 @@ const mutations = {
     Vue.set(state, 'orgClassStudents', {
       ...state.orgClassStudents,
       [classId]: classStudents
+    })
+  },
+  [GET_CLASS_TEACHERS_SUCCESS](state, { classId, classTeachers }) {
+    Vue.set(state, 'orgClassTeachers', {
+      ...state.orgClassTeachers,
+      [classId]: classTeachers
     })
   },
   [GET_TAUGHT_CLASSROOM_COURSES_SUCCESS](state, { classId, classroomCourses }) {

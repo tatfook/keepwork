@@ -12,6 +12,7 @@ const {
   GET_ORG_CLASSES_SUCCESS,
   GET_CLASS_PACKAGES_SUCCESS,
   GET_CLASS_STUDENTS_SUCCESS,
+  GET_CLASS_TEACHERS_SUCCESS,
   GET_CLASS_PACKAGE_DETAIL_SUCCESS,
   GET_CLASS_LESSON_CONTENT_SUCCESS,
   SAVE_CLASS_LESSON_DETAIL,
@@ -62,6 +63,13 @@ const actions = {
       { classId }
     )
     commit(GET_CLASS_STUDENTS_SUCCESS, { classId, classStudents })
+  },
+  async getOrgClassTeachersById({ commit, rootGetters: { 'org/currentOrg': { id: organizationId } } }, { classId }) {
+    const classTeachers = await lessonOrganizationClassMembers.getTeachersByClassId({ organizationId, classId })
+    commit(GET_CLASS_TEACHERS_SUCCESS, { classId, classTeachers })
+  },
+  async getClassLastUpdateProjects({ commit }, classId) {
+    const res = await lessonOrganizationClasses.getClassLastUpdateProjects(classId)
   },
   async getOrgStudents({
     commit,

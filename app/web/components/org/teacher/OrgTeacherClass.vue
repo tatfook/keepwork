@@ -38,12 +38,18 @@
       </div>
       <div class="member-banner">
         <div> <i class="iconfont icon-jiaoshi member-banner-icon"></i> 教师</div>
-        <div class="member-banner-count">教师数: </div>
+        <div class="member-banner-count">教师数: {{selectedClassTeachersCount}}</div>
       </div>
+      <el-table :data="orgClasssTeacheresTable" border style="width: 324px;">
+        <el-table-column prop="realname" :label="$t('org.nameLabel')">
+        </el-table-column>
+        <el-table-column prop="username" :label="$t('org.usernameLabel')">
+        </el-table-column>
+      </el-table>
 
       <div class="member-banner">
         <div> <i class="iconfont icon-xuesheng member-banner-icon"></i>学生</div>
-        <div class="member-banner-count">学生数: </div>
+        <div class="member-banner-count">学生数: {{selectedClassStudentsCount}}</div>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
         <el-table-column prop="realname" :label="$t('org.nameLabel')" width="162">
@@ -116,29 +122,32 @@ export default {
     }
   },
   async created() {
-    await Promise.all([
-      this.getOrgStudents(),
-      this.getOrgClasses({ cache: true })
-    ])
+    await this.getOrgClasses({ cache: true })
     const classId = _.defaultTo(
       _.toNumber(this.$route.query.classId),
       this.firstOrgClassId
     )
-    await this.getOrgClassStudentsById({ classId })
+    await this.getClassMembers(classId)
     this.selectedClassId = classId
     this.isLoading = false
-    this.getCurrentOrgUserCounts()
   },
   methods: {
     ...mapActions({
       getCurrentOrgUserCounts: 'org/getCurrentOrgUserCounts',
       getOrgClasses: 'org/teacher/getOrgClasses',
       getOrgClassStudentsById: 'org/teacher/getOrgClassStudentsById',
+      getOrgClassTeachersById: 'org/teacher/getOrgClassTeachersById',
       addStudentToClass: 'org/teacher/addStudentToClass',
       removeStudentFromClass: 'org/teacher/removeStudentFromClass',
       getOrgStudents: 'org/teacher/getOrgStudents',
       getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql'
     }),
+    async getClassMembers(classId) {
+      await Promise.all([
+        this.getOrgClassStudentsById({ classId }),
+        this.getOrgClassTeachersById({ classId })
+      ])
+    },
     showChangeDialog(studentDetail) {
       let {
         realname,
@@ -159,8 +168,9 @@ export default {
         return this.$message.error('请先保存学生信息')
       }
       this.$router.push({ query: { classId } })
-      await this.getOrgClassStudentsById({ classId, cache: true })
+      await this.getClassMembers(classId)
       this.selectedClassId = classId
+      console.log(this.orgClassTeachers)
     },
     handleEditStudent({ row }) {
       this.isShowAddStudentForm = true
@@ -183,10 +193,6 @@ export default {
           classId: this.selectedClassId,
           studentId: row.id
         })
-        await Promise.all([
-          this.getCurrentOrgUserCounts(),
-          this.getOrgStudents()
-        ])
         this.$message({
           type: 'success',
           message: this.$t('org.removeSuccessfully')
@@ -253,7 +259,6 @@ export default {
           })
         })
       }
-      await Promise.all([this.getCurrentOrgUserCounts(), this.getOrgStudents()])
       sucessfullItems
         .reverse()
         .forEach(index => this.handleRemoveFormItem(index))
@@ -317,6 +322,7 @@ export default {
     ...mapGetters({
       orgClasses: 'org/teacher/orgClasses',
       orgClassStudents: 'org/teacher/orgClassStudents',
+      orgClassTeachers: 'org/teacher/orgClassTeachers',
       currentOrg: 'org/currentOrg',
       orgRestCount: 'org/teacher/orgRestCount',
       orgStudents: 'org/teacher/orgStudents',
@@ -342,6 +348,12 @@ export default {
     },
     selectedClassStudentsCount() {
       return this.selectedClassStudents.length
+    },
+    orgClasssTeacheresTable() {
+      return _.get(this.orgClassTeachers, [this.selectedClassId], [])
+    },
+    selectedClassTeachersCount() {
+      return this.orgClasssTeacheresTable.length
     },
     orgClassStudentsTable() {
       return _.map(this.selectedClassStudents, item => ({
@@ -384,7 +396,7 @@ export default {
     padding: 18px 25px;
     box-sizing: border-box;
     border-radius: 0 0 8px 8px;
-    .member-header {  
+    .member-header {
       height: 71px;
       line-height: 71px;
       color: #333;
@@ -414,7 +426,7 @@ export default {
     .member-banner {
       font-size: 16px;
       color: #333;
-      margin-top: 24px;
+      margin: 24px 0 10px;
       &-icon {
         color: #2397f3;
         font-size: 20px;

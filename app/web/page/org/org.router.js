@@ -8,6 +8,7 @@ const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
 const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
+const OrgTeacherClassLastUpdate = () => import('@/components/org/teacher/OrgTeacherClassLastUpdate')
 const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
 const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
@@ -151,6 +152,11 @@ export default new Router({
               path: 'classes',
               name: 'OrgTeacherClass',
               component: OrgTeacherClass
+            },
+            {
+              path: 'lastUpdate',
+              name: 'OrgTeacherLastUpdate',
+              component: OrgTeacherClassLastUpdate
             },
             {
               path: 'logs',
