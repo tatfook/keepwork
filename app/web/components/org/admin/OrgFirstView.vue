@@ -14,7 +14,7 @@
           <video-player :showRates="false" width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/3777/raw#如何使用《keepwork课程系统》.mp4' />
         </div>
         <div class="step-item-footer">
-          点击了解更多 <a class="step-link" href="https://keepwork.com/official/docs/teach/index">使用帮助</a>
+          点击了解更多 <a class="step-link" target="_blank" href="https://keepwork.com/official/docs/teach/index">使用帮助</a>
         </div>
       </div>
       <div class="step-item">

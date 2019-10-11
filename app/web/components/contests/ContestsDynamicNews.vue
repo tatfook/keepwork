@@ -21,6 +21,22 @@ export default {
     return {
       newsData: [
         {
+          title: '汉字大赛 | 作品赏析 --“无中生有”教程篇',
+          desc: '“无中生有”的神操作你Get到了吗~',
+          date: '2019 / 9 / 18',
+          cover: require('@/assets/contests/newsImg/汉字大赛-作品赏析 --“无中生有”教程篇.jpg'),
+          url:
+            'https://mp.weixin.qq.com/s/mNGDvwW6vCxfkbCs9Ocrsw'
+        },
+        {
+          title: '汉字大赛 | 作品赏析 --“无中生有”分镜头脚本篇',
+          desc: '你所理解的“无中生有”都是错的~',
+          date: '2019 / 9 / 6',
+          cover: require('@/assets/contests/newsImg/汉字大赛-作品赏析 --“无中生有”分镜头脚本篇.jpg'),
+          url:
+            'https://mp.weixin.qq.com/s/sJjS0KUMiiEq8OBx8rhpAA'
+        },
+        {
           title: '汉字大赛 | 作品赏析 -“李”姓',
           desc: '你想get的技能乾坤侠给你送来了，快来签收~~',
           date: '2019 / 8 / 28',

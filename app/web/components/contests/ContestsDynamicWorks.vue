@@ -24,6 +24,34 @@ export default {
       currentToPlayerVideo: '',
       worksData: [
         {
+          title: '孙姓',
+          author: '墨鱼',
+          videoUrl:
+            'https://api.keepwork.com/storage/v0/siteFiles/7727/raw#视频1-孙姓.mp4',
+          coverUrl: require('@/assets/contests/handpickWorksCover/1-孙姓.png')
+        },
+        {
+          title: '龙姓',
+          author: '墨鱼',
+          videoUrl:
+            'https://api.keepwork.com/storage/v0/siteFiles/7728/raw#视频2-龙姓.mp4',
+          coverUrl: require('@/assets/contests/handpickWorksCover/2-龙姓.png')
+        },
+        {
+          title: '李姓',
+          author: '小星',
+          videoUrl:
+            'https://api.keepwork.com/storage/v0/siteFiles/7729/raw#视频3-李姓.mp4',
+          coverUrl: require('@/assets/contests/handpickWorksCover/3-李姓.png')
+        },
+        {
+          title: '无中生有',
+          author: '西瓜籽',
+          videoUrl:
+            'https://api.keepwork.com/storage/v0/siteFiles/7730/raw#视频4-无中生有.mp4',
+          coverUrl: require('@/assets/contests/handpickWorksCover/4-无中生有.png')
+        },
+        {
           title: 'I had a black dog',
           author: '奇仔',
           videoUrl:
