@@ -16,6 +16,7 @@ const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
 const OrgStudentClassSelect = () => import('@/components/org/student/OrgStudentClassSelect')
+const StudentEvaluations = () => import('@/components/org/student/StudentEvaluations')
 const JoinOrg = () => import('@/components/org/student/JoinOrg')
 const OrgStudentClassLastUpdate = () => import('@/components/org/student/OrgStudentClassLastUpdate')
 const OrgStudentPackage = () => import('@/components/org/student/OrgStudentPackage')
@@ -105,6 +106,11 @@ export default new Router({
               path: 'orgClassLastUpdate/:classId',
               name: 'OrgStudentClassLastUpdate',
               component: OrgStudentClassLastUpdate
+            },
+            {
+              path: 'evaluations/:classId',
+              name: 'OrgStudentEvaluations',
+              component: StudentEvaluations
             },
             {
               path: 'joinOrg',
