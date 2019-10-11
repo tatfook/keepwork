@@ -3,7 +3,7 @@
     <div class="org-logs-header">机构日志</div>
     <div class="org-logs-container">
       <div class="org-logs-search">
-        <el-date-picker range-separator="至" unlink-panels size="medium" class="org-logs-search-date" v-model="serachedDateRange" type="daterange" format="yyyy-MM-dd" start-placeholder="开始日期" end-placeholder="结束日期" @change="searchLogs">
+        <el-date-picker range-separator="至" unlink-panels size="medium" class="org-logs-search-date" v-model="serachedDateRange" type="daterange" format="yyyy-MM-dd" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" @change="searchLogs">
         </el-date-picker>
         <el-select class="org-logs-search-select" clearable size="medium" v-model="searchParams.type" placeholder="事件类型" @change="searchLogs">
           <el-option v-for="item in typeOptions" :key="item.value" :label="item" :value="item">
