@@ -9,6 +9,10 @@ const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
 const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
 const OrgTeacherClassLastUpdate = () => import('@/components/org/teacher/OrgTeacherClassLastUpdate')
+const OrgTeacherReports = () => import('@/components/org/teacher/OrgTeacherReports')
+const OrgTeacherReportEvaluation = () => import('@/components/org/teacher/OrgTeacherReportEvaluation')
+const OrgTeacherReportEmpty = () => import('@/components/org/teacher/OrgTeacherReportEmpty')
+const OrgTeacherReportComment = () => import('@/components/org/teacher/OrgTeacherReportComment')
 const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
 const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
@@ -157,6 +161,28 @@ export default new Router({
               path: 'lastUpdate',
               name: 'OrgTeacherLastUpdate',
               component: OrgTeacherClassLastUpdate
+            },
+            {
+              path: 'reports',
+              name: 'OrgTeacherReports',
+              component: OrgTeacherReports,
+              children: [
+                {
+                  path: 'evaluation',
+                  name: 'OrgTeacherReportEvaluation',
+                  component: OrgTeacherReportEvaluation,
+                },
+                {
+                  path: 'empty',
+                  name: 'OrgTeacherReportEmpty',
+                  component: OrgTeacherReportEmpty
+                },
+                {
+                  path: 'comment',
+                  name: 'OrgTeacherReportComment',
+                  component: OrgTeacherReportComment
+                }
+              ]
             },
             {
               path: 'logs',

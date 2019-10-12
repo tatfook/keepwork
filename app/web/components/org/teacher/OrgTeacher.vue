@@ -17,7 +17,7 @@
           <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">
-          <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.match.includes(nowPageName)}" :key="index">
+          <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.match.includes(nowPageName), 'big-button': menuItem.size === 'big'}" :key="index">
             <router-link class="org-teacher-menu-link" :to="{name: menuItem.pageName}"><i class="iconfont icon-class" v-show="index == 0"></i>{{menuItem.text}}</router-link>
           </li>
         </ul>
@@ -37,12 +37,23 @@ export default {
         {
           pageName: 'OrgTeacherTeach',
           text: this.$t('org.TeachLabel'),
-          match: ['OrgTeacherTeach']
+          match: ['OrgTeacherTeach'],
+          size: 'big'
         },
         {
           pageName: 'OrgTeacherClass',
           text: this.$t('org.MyClassLabel'),
           match: ['OrgTeacherClass', 'OrgTeacherLastUpdate']
+        },
+        {
+          pageName: 'OrgTeacherReports',
+          text: '评估报告',
+          match: [
+            'OrgTeacherReports',
+            'OrgTeacherReportEvaluation',
+            'OrgTeacherReportEmpty',
+            'OrgTeacherReportComment',
+          ]
         },
         {
           pageName: 'OrgTeacherLogs',
@@ -150,9 +161,27 @@ $borderColor: #e8e8e8;
       background-color: #f5f5f5;
       border: 1px solid $borderColor;
       border-radius: 4px;
+      &.big-button {
+        height: 56px;
+        line-height: 56px;
+        font-size: 20px;
+        .icon-class {
+          font-size: 32px;
+          color: #333;
+          opacity: 0.6;
+        }
+        .org-teacher-menu-link {
+          height: inherit;
+          line-height: inherit;
+        }
+      }
       &-active {
         background-color: #2397f3;
         color: #fff;
+        .iconfont.icon-class {
+          opacity: 1;
+          color: #fff;
+        }
       }
     }
     &-link {
