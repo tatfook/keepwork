@@ -1,27 +1,61 @@
 <template>
   <div class="parent-phone-binder">
-    <p class="parent-phone-binder-info"><span>(选填)</span>(家长手机号用于接收老师发送的评价报告等信息，请确保手机号畅通)</p>
+    <p v-if="isInfoInTopShow" class="parent-phone-binder-info"><span>(选填)</span>({{staticInfo}})</p>
     <div class="parent-phone-binder-item">
-      <label for="parentPhone">家长手机号</label>
-      <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.phone"></el-input>
+      <label :style="{width: labelWidth}" for="parentPhone">{{phoneLabel}}</label>
+      <div v-if="isEditable" class="parent-phone-binder-item-content">
+        <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.phone"></el-input>
+        <p class="parent-phone-binder-item-info">{{staticInfo}}</p>
+      </div>
+      <span class="parent-phone-binder-item-phone" v-else>{{oldPhone}}</span>
     </div>
     <div class="parent-phone-binder-item">
-      <label for="parentPhone">验证码</label>
-      <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.verifCode">
-        <span slot="suffix">发送验证码</span>
-      </el-input>
+      <label :style="{width: labelWidth}" for="parentPhone">验证码</label>
+      <div class="parent-phone-binder-item-content">
+        <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.verifCode">
+          <span slot="suffix">发送验证码</span>
+        </el-input>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: 'ParentPhoneBinder',
+  props: {
+    oldPhone: String,
+    phoneLabel: {
+      type: String,
+      default: '家长手机号'
+    },
+    isInfoInTopShow: {
+      type: Boolean,
+      default: true
+    }
+  },
+  mounted() {
+    if (this.oldPhone) this.isEditable = true
+  },
   data() {
     return {
+      staticInfo:
+        '家长手机号用于接收老师发送的评价报告等信息，请确保手机号畅通',
+      isEditable: true,
       parentPhone: {
         phone: '',
         verifCode: ''
       }
+    }
+  },
+  computed: {
+    labelWidth() {
+      return this.phoneLabel.length + 'em'
+    }
+  },
+  watch: {
+    oldPhone(val) {
+      console.log(val)
+      if (this.oldPhone) this.isEditable = true
     }
   }
 }
@@ -38,17 +72,29 @@ export default {
     }
   }
   &-item {
-    margin-top: 20px;
+    margin-bottom: 20px;
     label {
       display: inline-block;
-      width: 70px;
+      vertical-align: top;
+      position: relative;
+      top: 8px;
       text-align: right;
+    }
+    &-phone {
+      margin-left: 24px;
+    }
+    &-content {
+      margin-left: 16px;
+      display: inline-block;
+    }
+    &-info {
+      font-size: 12px;
+      color: #999;
+      margin: 16px 0 4px;
     }
   }
   /deep/.el-input {
-    display: inline-block;
     width: 280px;
-    margin-left: 16px;
   }
   /deep/.el-input__suffix {
     line-height: 36px;

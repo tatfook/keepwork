@@ -1,17 +1,17 @@
 <template>
   <el-dialog title="个人信息" :visible.sync="isDialogVisible" width="1018px" custom-class="edit-student-dialog" :before-close="handleClose">
     <div class="edit-student-dialog-sidebar">
-      <div class="edit-student-dialog-sidebar-item" :class="{active:activeComp=='StudentBasic'}">基本信息</div>
-      <div class="edit-student-dialog-sidebar-item">修改家长手机号</div>
+      <div class="edit-student-dialog-sidebar-item" v-for="(item, index) in menuData" :key="index" :class="{active:activeComp==item.compName}" @click="setActiveComp(item)">{{item.text}}</div>
     </div>
     <div class="edit-student-dialog-content">
-      <student-basic />
+      <component :is="activeComp"></component>
     </div>
   </el-dialog>
 
 </template>
 <script>
 import StudentBasic from './common/StudentBasic'
+import ParentPhoneModifier from './common/ParentPhoneModifier'
 export default {
   name: 'EditStudentDialog',
   props: {
@@ -22,16 +22,33 @@ export default {
   },
   data() {
     return {
-      activeComp: 'StudentBasic'
+      menuData: [
+        {
+          text: '基本信息',
+          compName: 'StudentBasic'
+        },
+        {
+          text: '修改家长手机号',
+          compName: 'ParentPhoneModifier'
+        }
+      ],
+      activeComp: ''
     }
+  },
+  mounted() {
+    this.activeComp = this.menuData[0].compName
   },
   methods: {
     handleClose() {
       this.$emit('close')
+    },
+    setActiveComp(item) {
+      this.activeComp = item.compName
     }
   },
   components: {
-    StudentBasic
+    StudentBasic,
+    ParentPhoneModifier
   }
 }
 </script>
