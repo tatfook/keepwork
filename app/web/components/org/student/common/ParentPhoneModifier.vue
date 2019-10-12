@@ -6,7 +6,7 @@
     </div>
     <div class="parent-phone-modifier-main">
       <parent-phone-binder class="parent-phone-modifier-binder" v-if="step==1" oldPhone="18012345678" phoneLabel="原手机号" :isInfoInTopShow="false"></parent-phone-binder>
-      <parent-phone-binder class="parent-phone-modifier-binder" v-if="step==2" phoneLabel="新手机号"></parent-phone-binder>
+      <parent-phone-binder class="parent-phone-modifier-binder" v-if="step==2" phoneLabel="新手机号" :isInfoAfterInputShow="true" :isInfoInTopShow="false"></parent-phone-binder>
     </div>
     <div class="parent-phone-modifier-footer">
       <el-button size="medium">取消</el-button>

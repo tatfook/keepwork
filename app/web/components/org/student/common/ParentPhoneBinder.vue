@@ -5,7 +5,7 @@
       <label :style="{width: labelWidth}" for="parentPhone">{{phoneLabel}}</label>
       <div v-if="isEditable" class="parent-phone-binder-item-content">
         <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.phone"></el-input>
-        <p class="parent-phone-binder-item-info">{{staticInfo}}</p>
+        <p v-if="isInfoAfterInputShow" class="parent-phone-binder-item-info">{{staticInfo}}</p>
       </div>
       <span class="parent-phone-binder-item-phone" v-else>{{oldPhone}}</span>
     </div>
@@ -31,6 +31,10 @@ export default {
     isInfoInTopShow: {
       type: Boolean,
       default: true
+    },
+    isInfoAfterInputShow: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
