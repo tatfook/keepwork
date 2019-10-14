@@ -4,22 +4,25 @@
     <div class="parent-phone-binder-item">
       <label :style="{width: labelWidth}" for="parentPhone">{{phoneLabel}}</label>
       <div v-if="isEditable" class="parent-phone-binder-item-content">
-        <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.phone"></el-input>
+        <el-input id="parentPhone" size="medium" placeholder="请输入" v-model.trim="parentPhone.phone"></el-input>
         <p v-if="isInfoAfterInputShow" class="parent-phone-binder-item-info">{{staticInfo}}</p>
+        <div class="el-form-item__error">{{phoneErrorMsg}}</div>
       </div>
       <span class="parent-phone-binder-item-phone" v-else>{{oldPhone}}</span>
     </div>
     <div class="parent-phone-binder-item">
       <label :style="{width: labelWidth}" for="parentPhone">验证码</label>
       <div class="parent-phone-binder-item-content">
-        <el-input id="parentPhone" size="medium" placeholder="请输入" v-model="parentPhone.verifCode">
-          <span slot="suffix">发送验证码</span>
+        <el-input id="parentPhone" size="medium" placeholder="请输入" v-model.trim="parentPhone.verifCode">
+          <span v-loading="isLoading" slot="suffix" :class="{'disabled': !isPhoneValid || isLoading}" @click="sendCode">发送验证码</span>
         </el-input>
+        <div class="el-form-item__error">{{codeErrorMsg}}</div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'ParentPhoneBinder',
   props: {
@@ -42,6 +45,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       staticInfo:
         '家长手机号用于接收老师发送的评价报告等信息，请确保手机号畅通',
       isEditable: true,
@@ -54,6 +58,40 @@ export default {
   computed: {
     labelWidth() {
       return this.phoneLabel.length + 'em'
+    },
+    isPhoneValid() {
+      return /^1\d{10}$/.test(this.parentPhone.phone)
+    },
+    phoneErrorMsg() {
+      return this.parentPhone.phone
+        ? this.isPhoneValid
+          ? ''
+          : '请输入正确的手机号'
+        : ''
+    },
+    codeErrorMsg() {
+      return this.isPhoneValid
+        ? this.parentPhone.verifCode
+          ? ''
+          : '请输入验证码'
+        : ''
+    },
+    isPhoneDataValid() {
+      return Boolean(!this.phoneErrorMsg && !this.codeErrorMsg)
+    }
+  },
+  methods: {
+    ...mapActions({
+      orgSendSms: 'org/sendSms'
+    }),
+    async sendCode() {
+      this.isLoading = true
+      try {
+        await this.orgSendSms({ cellphone: this.parentPhone.phone })
+      } catch (error) {
+        console.error(error)
+      }
+      this.isLoading = false
     }
   },
   watch: {
@@ -90,6 +128,7 @@ export default {
     &-content {
       margin-left: 16px;
       display: inline-block;
+      position: relative;
     }
     &-info {
       font-size: 12px;
@@ -106,6 +145,13 @@ export default {
     font-size: 12px;
     color: #74a6c9;
     cursor: pointer;
+    &:hover {
+      color: #2397f3;
+    }
+    & .disabled {
+      cursor: not-allowed;
+      color: #dadada;
+    }
   }
 }
 </style>
