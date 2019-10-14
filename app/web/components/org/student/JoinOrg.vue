@@ -7,23 +7,25 @@
       请联系{{admissionMsg}}，获得邀请码。
     </div>
     <div class="join-org-form">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="5em" :hide-required-asterisk="true">
         <el-form-item label="邀请码" prop="key">
           <el-input placeholder="请输入邀请码" v-model.trim="form.key"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="realname">
           <el-input placeholder="请输入姓名" v-model.trim="form.realname"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">确定</el-button>
-        </el-form-item>
       </el-form>
+      <parent-phone-binder ref="parentPhoneBinderRef" class="join-org-form-binder"></parent-phone-binder>
+      <div class="join-org-form-operate">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ParentPhoneBinder from './common/ParentPhoneBinder'
 export default {
   name: 'JoinOrg',
   data() {
@@ -59,11 +61,21 @@ export default {
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
-        if (valid) {
-          const { classId = '' } = await this.joinOrg({
-            ...this.form,
-            organizationId: this.organizationId
-          })
+        let parentPhoneBinderRef = this.$refs.parentPhoneBinderRef
+        let isPhoneDataValid = parentPhoneBinderRef.isPhoneDataValid
+        if (valid && isPhoneDataValid) {
+          let { phone, verifCode } = parentPhoneBinderRef.parentPhone
+          const { classId = '' } = await this.joinOrg(
+            _.omitBy(
+              {
+                ...this.form,
+                organizationId: this.organizationId,
+                parentPhoneNum: phone ? phone : null,
+                verifCode: verifCode ? verifCode : null
+              },
+              _.isNull
+            )
+          )
           if (classId) {
             this.$router.push({
               name: 'OrgStudentClassDetail',
@@ -98,6 +110,9 @@ export default {
     admissionMsg() {
       return this.orgAdmissionMsg || this.orgCellphone || '老师'
     }
+  },
+  components: {
+    ParentPhoneBinder
   }
 }
 </script>
@@ -108,7 +123,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 500px;
+  min-height: 730px;
   background: #fff;
   .join-org {
     &-title {
@@ -121,8 +136,25 @@ export default {
       color: #2397f3;
     }
     &-form {
-      width: 330px;
-      margin: 34px auto;
+      &-binder {
+        border: 1px solid #e8e8e8;
+        width: 526px;
+        padding: 32px 16px;
+        box-sizing: border-box;
+        text-align: center;
+        /deep/ .parent-phone-binder-item {
+          text-align: left;
+          padding-left: 48px;
+        }
+      }
+      &-operate {
+        text-align: center;
+        margin-top: 32px;
+      }
+      /deep/ .el-form {
+        width: 360px;
+        margin: 34px auto;
+      }
       /deep/ .el-button {
         padding: 10px 34px;
       }

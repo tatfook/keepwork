@@ -459,6 +459,9 @@ const actions = {
     if (xOrder) params['x-order'] = xOrder
     let result = await keepwork.organizations.getLogs(params)
     commit(GET_LOGS_SUCCESS, { orgId: currentOrgId, result })
+  },
+  async sendSms(context, { cellphone }) {
+    return await keepwork.evaluationReports.sendSms({ cellphone })
   }
 }
 

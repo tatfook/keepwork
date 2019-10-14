@@ -17,7 +17,7 @@
             </el-dropdown>
             <img :src="userPortrait" class="org-student-profile" />
             <div class="org-student-username">{{username}}</div>
-            <div class="org-student-edit-btn" @click="showEditStudentDialog">编辑个人信息</div>
+            <div class="org-student-edit-btn" v-if="isClassDetailPage" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
           <div class="class-select" v-if="isClassDetailPage">
             <el-dropdown v-if="isMutiClasses" class="class-select-dropdown" @command="onDropdown">
@@ -42,7 +42,7 @@
             <span class="class-join-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
           </div>
         </div>
-        <div class="org-student-sidebar-bottom org-student-sidebar-evaluations" @click="toEvaluationsPage">
+        <div v-if="isClassDetailPage" class="org-student-sidebar-bottom org-student-sidebar-evaluations" @click="toEvaluationsPage">
           <i class="iconfont icon-pinggubaogao"></i> 我的评估报告
         </div>
         <div class="org-student-sidebar-bottom" v-if="isClassDetailPage">

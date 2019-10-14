@@ -141,10 +141,16 @@ const lessonOrganizationClassMembers = {
     deleteMethod(`lessonOrganizationClassMembers/${id}?roleId=${roleId}`)
 }
 
+const evaluationReports = {
+  sendSms: async ({ cellphone }) =>
+    post('evaluationReports/sendSms', { cellphone })
+}
+
 export default {
   organizations,
   lessonOrganizations,
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
-  lessonOrganizationForms
+  lessonOrganizationForms,
+  evaluationReports
 }
