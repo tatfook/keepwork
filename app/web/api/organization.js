@@ -143,7 +143,9 @@ const lessonOrganizationClassMembers = {
 
 const evaluationReports = {
   sendSms: async ({ cellphone }) =>
-    post('evaluationReports/sendSms', { cellphone })
+    post('evaluationReports/sendSms', { cellphone }),
+  getEvaluationCommentList: async ({ classId }) =>
+    get(`evaluationReports/evaluationCommentList?classId=${classId}`)
 }
 
 export default {
