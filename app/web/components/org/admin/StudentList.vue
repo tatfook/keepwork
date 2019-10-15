@@ -13,15 +13,17 @@
     </div>
     <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
     <el-table v-if="orgStudentsCount > 0" class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
-      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="152">
+      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="124">
       </el-table-column>
-      <el-table-column prop="users.username" :label="$t('org.usernameLabel')" width="152">
+      <el-table-column prop="users.username" :label="$t('org.usernameLabel')">
       </el-table-column>
-      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="152" :show-overflow-tooltip="true">
+      <el-table-column prop="parentPhoneNum" label="家长手机号" width="122">
       </el-table-column>
-      <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="152" :show-overflow-tooltip="true">
+      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="122" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="id" :label="$t('org.operationLabel')">
+      <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="129" :show-overflow-tooltip="true">
+      </el-table-column>
+      <el-table-column prop="id" :label="$t('org.operationLabel')" width="244">
         <template slot-scope="scope">
           <div class="student-list-table-operations">
             <div class="student-list-table-button student-list-table-button-primary" @click="toEditPage(scope.row)">{{$t('org.Edit')}}</div>
@@ -226,7 +228,7 @@ export default {
     }
     &-button {
       display: inline-block;
-      padding: 0 20px;
+      width: 64px;
       height: 20px;
       line-height: 18px;
       font-size: 12px;
