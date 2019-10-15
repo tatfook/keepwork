@@ -16,7 +16,7 @@
         </div>
         <div class="org-setting-item">
           <div class="org-setting-item-label">机构宣传信息设置
-            <el-popover popper-class="org-setting-popover" placement="right-start" width="875" trigger="click">
+            <el-popover popper-class="org-setting-popover" :append-to-body="false" placement="right-start" trigger="hover">
               <p>机构宣传信息将显示在学生的点评报告中，如下图：</p>
               <img src="@/assets/org/evaluation_demo.png" alt="">
               <span slot="reference" class="org-setting-item-label-help">?</span>
@@ -299,6 +299,20 @@ export default {
     line-height: 36px;
     padding: 0;
     font-size: 14px;
+  }
+  /deep/.el-popper {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 16px;
+    max-height: 100vh;
+    overflow: auto;
+    padding: 32px 24px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 0;
+    p {
+      margin: 0 0 24px;
+    }
   }
 }
 </style>
