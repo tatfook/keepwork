@@ -53,6 +53,8 @@ export default {
             'OrgTeacherReportEvaluation',
             'OrgTeacherReportEmpty',
             'OrgTeacherReportComment',
+            'OrgTeacherReportList',
+            'OrgTeacherReportDetail'
           ]
         },
         {

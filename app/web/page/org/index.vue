@@ -220,20 +220,21 @@ router.beforeEach(async (to, from, next) => {
   isContinue = checkIsLogined(name, next, params)
   if (!isContinue) return
 
-  let orgLoginUrl = params.orgLoginUrl
-  result = await checkIsOrgExist(name, next, params, orgLoginUrl, nowPageRole)
-  if (!result.isContinue) return
+  if (from.params.orgLoginUrl !== to.params.orgLoginUrl) {
+    let orgLoginUrl = params.orgLoginUrl
+    result = await checkIsOrgExist(name, next, params, orgLoginUrl, nowPageRole)
+    if (!result.isContinue) return
 
-  let orgId = result.orgId
-  result = await checkIsOrgMember(name, next, params, orgId, nowPageRole)
-  if (!result.isContinue) return
-
-  let orgToken = result.orgToken
-  let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
-    jsrsasign.b64utoutf8(orgToken.split('.')[1])
-  )
-  let { roleId = 1 } = tokenParams
-  handleDifferentRole(name, next, params, roleId, nowPageRole)
+    let orgId = result.orgId
+    result = await checkIsOrgMember(name, next, params, orgId, nowPageRole)
+    if (!result.isContinue) return
+    let orgToken = result.orgToken
+    let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+      jsrsasign.b64utoutf8(orgToken.split('.')[1])
+    )
+    let { roleId = 1 } = tokenParams
+    handleDifferentRole(name, next, params, roleId, nowPageRole)
+  }
 
   next()
 })

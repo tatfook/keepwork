@@ -24,30 +24,18 @@ export default {
       _.toNumber(this.$route.query.classId),
       this.firstClassId
     )
-    this.$router.push({
-      name: 'OrgTeacherReportComment',
-      query: { classId: this.selectedClassId }
-    })
-  },
-  watch: {
-    $route(route) {
-      const classId = _.toNumber(route.query.classId)
-      this.initClassData(classId)
+    if (this.isNeedRedirect) {
+      await this.handleSwitchClass(this.selectedClassId)
     }
   },
   methods: {
     ...mapActions({
-      getOrgClasses: 'org/teacher/getOrgClasses'
+      getOrgClasses: 'org/teacher/getOrgClasses',
+      getClassEvaluationReportList: 'org/teacher/getClassEvaluationReportList'
     }),
-    handleSwitchClass(classId) {
+    async handleSwitchClass(classId) {
       this.selectedClassId = classId
-      this.$router.push({ name: 'OrgTeacherReportEmpty', query: { classId } })
-    },
-    handleEvaluationReport() {
-      this.$message.info('evaluationReports ')
-    },
-    initClassData(classId) {
-      console.log(classId)
+      this.$router.push({ name: 'OrgTeacherReportList', query: { classId } })
     }
   },
   computed: {
@@ -59,6 +47,9 @@ export default {
     },
     disabledTabbar() {
       return ['OrgTeacherReportComment'].includes(this.$route.name)
+    },
+    isNeedRedirect() {
+      return ['OrgTeacherReports'].includes(this.$route.name)
     }
   }
 }

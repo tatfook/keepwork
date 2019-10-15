@@ -77,7 +77,12 @@ const lessonOrganizationClasses = {
     }),
   getHistoryClasses: async params =>
     get('lessonOrganizationClasses/history', { params }),
-  getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`)
+  getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`),
+  getClassEvaluationReport: async params => get('evaluationReports', { params }),
+  createClassEvaluationReport: async params => post('evaluationReports', params),
+  deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
+  getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
+  commentEvaluationReport: async params => post('evaluationReports/userReport', params)
 }
 
 const lessonOrganizationForms = {

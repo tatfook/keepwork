@@ -2,9 +2,9 @@
   <div class="teacher-report-comment">
     <div class="teacher-report-comment-header">
       <span>
-        报告名称
+        {{reportName}}
         <i class="el-icon-arrow-right"></i>
-        学生姓名
+        点评学生
       </span>
       <span>
         <el-button @click="handleCancel" size="mini">取消</el-button>
@@ -41,7 +41,7 @@
         </div>
         <el-form class="comment-form" ref="form" :model="form" :rules="rules">
           <el-form-item prop="comment">
-            <el-input v-model.trim="form.comment" placeholder="请输入..." type="textarea" :rows="4"></el-input>
+            <el-input v-model.trim="form.comment" placeholder="请输入..." type="textarea" :rows="4" maxlength="256" show-word-limit></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -52,20 +52,11 @@
           图片/视频:
         </div>
         <div class="teacher-report-comment-main-append-preview">
-          <img class="teacher-report-comment-main-append-preview-img" v-if="appendInfo.type === 'images'" :src="appendInfo.url | miniPic">
-          <div class="teacher-report-comment-main-append-preview-video" v-else-if="appendInfo.type === 'videos'">
-            <img class="video-logo" :src="defaultVideoLogo">
-            <span class="play-icon">
-              <i class="el-icon-caret-right"></i>
-            </span>
+          <attachment-type v-for="(item, index) in attachmentList" :data="item" :index="index" :key="index" @remove="handleRemoveAttachment"></attachment-type>
+          <div class="teacher-report-comment-main-append-upload" @click="handleShowSkydriver">
+            <i class="el-icon-circle-plus upload-icon"></i>
+            <span class="upload-text">添加文件</span>
           </div>
-          <span class="delete-button">
-            <div @click="handleRemoveAppend" class="el-icon-close"></div>
-          </span>
-        </div>
-        <div  class="teacher-report-comment-main-append-upload" @click="handleShowSkydriver">
-          <i class="el-icon-circle-plus upload-icon"></i>
-          <span class="upload-text">添加文件</span>
         </div>
       </div>
     </div>
@@ -75,10 +66,13 @@
 
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import AttachmentType from './AttachmentType'
+import { mapActions } from 'vuex'
 export default {
   name: 'OrgTeacherReportComment',
   components: {
-    SkyDriveManagerDialog
+    SkyDriveManagerDialog,
+    AttachmentType
   },
   filters: {
     miniPic(url) {
@@ -90,13 +84,11 @@ export default {
   },
   data() {
     return {
+      loading: false,
       defaultVideoLogo: require('@/assets/img/video_cover.jpg'),
       isMediaSkyDriveDialogShow: false,
       star: 0,
-      appendInfo: {
-        type: 'videos',
-        url: '212'
-      },
+      attachmentList: [],
       form: {
         comment: ''
       },
@@ -139,7 +131,7 @@ export default {
           {
             required: true,
             message: '请输入评价',
-            trigger: 'blur'
+            trigger: 'change'
           }
         ]
       }
@@ -151,16 +143,65 @@ export default {
     },
     validType() {
       return ['images', 'videos']
+    },
+    reportName() {
+      return _.get(this.$route, 'query.reportName', '')
+    },
+    reportId() {
+      return _.get(this.$route, 'query.reportId', '')
+    },
+    realname() {
+      return _.get(this.$route, 'query.realname', '')
+    },
+    userId() {
+      return _.get(this.$route, 'query.userId', '')
+    },
+    params() {
+      const params = {
+        studentId: this.userId,
+        reportId: this.reportId,
+        star: this.star,
+        comment: this.form.comment,
+        mediaUrl: this.attachmentList
+      }
+      this.abilityListLeft.forEach(item => (params[item.key] = item.value))
+      this.abilityListRight.forEach(item => (params[item.key] = item.value))
+      return params
     }
   },
   methods: {
-    handleSaveComment() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          console.log(this.abilityListLeft)
-          console.log(this.abilityListRight)
+    ...mapActions({
+      commentEvaluationReport: 'org/teacher/commentEvaluationReport'
+    }),
+    async validateRate() {
+      return new Promise((resolve, reject) => {
+        if (!this.star) {
+          return reject('缺少评分')
         }
+        if (this.abilityListRight.some(item => item.value === 0)) {
+          return reject('缺少评分')
+        }
+        if (this.abilityListLeft.some(item => item.value === 0)) {
+          return reject('缺少评分')
+        }
+        return resolve()
       })
+    },
+    async handleSaveComment() {
+      try {
+        await this.validateRate()
+        this.$refs.form.validate(async valid => {
+          if (valid) {
+            this.loading = true
+            await this.commentEvaluationReport(this.params)
+          }
+        })
+      } catch (error) {
+        this.$message.error(error)
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
     },
     handleCancel() {
       this.$router.back(-1)
@@ -168,14 +209,15 @@ export default {
     handleShowSkydriver() {
       this.isMediaSkyDriveDialogShow = true
     },
-    closeSkyDriveManagerDialog(file) {
+    closeSkyDriveManagerDialog(fileList) {
+      console.log(fileList)
       this.isMediaSkyDriveDialogShow = false
-      console.log(file)
-      const { url = '', type = '' } = file
-      this.appendInfo = { url, type }
+      this.attachmentList = [...this.attachmentList, ...fileList]
     },
-    handleRemoveAppend() {
-      this.appendInfo = { url: '', type: '' }
+    handleRemoveAttachment(removeIndex) {
+      this.attachmentList = this.attachmentList.filter(
+        (item, index) => index !== removeIndex
+      )
     }
   }
 }
@@ -256,7 +298,6 @@ export default {
       &-upload {
         width: 140px;
         height: 140px;
-        margin-top: 15px;
         background: #eeeded;
         display: flex;
         flex-direction: column;
@@ -273,60 +314,10 @@ export default {
           margin-top: 6px;
         }
       }
-
       &-preview {
-        margin-top: 15px;
-        height: 140px;
-        width: 140px;
-        position: relative;
-        &-img {
-          width: 140px;
-          height: 140px;
-          object-fit: cover;
-        }
-        &-video {
-          position: relative;
-          .video-logo {
-            width: 140px;
-            height: 140px;
-            object-fit: cover;
-          }
-          .play-icon {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: block;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            font-size: 22px;
-            text-align: center;
-            line-height: 32px;
-          }
-        }
-        &:hover {
-          .delete-button {
-            display: block;
-          }
-        }
-        .delete-button {
-          display: none;
-          width: 21px;
-          height: 21px;
-          line-height: 21px;
-          text-align: center;
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          right: 0;
-          background: #f60e0e;
-          color: #fff;
-        }
+        padding-top: 15px;
+        display: flex;
+        flex-wrap: wrap;
       }
     }
   }
