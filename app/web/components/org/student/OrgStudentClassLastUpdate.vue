@@ -16,7 +16,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import LastUpdateRow from './LastUpdateRow'
+import LastUpdateRow from '@/components/org/common/LastUpdateRow'
 import _ from 'lodash'
 export default {
   name: 'OrgStudentClassLastUpdate',

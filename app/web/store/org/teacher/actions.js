@@ -12,6 +12,7 @@ const {
   GET_ORG_CLASSES_SUCCESS,
   GET_CLASS_PACKAGES_SUCCESS,
   GET_CLASS_STUDENTS_SUCCESS,
+  GET_CLASS_TEACHERS_SUCCESS,
   GET_CLASS_PACKAGE_DETAIL_SUCCESS,
   GET_CLASS_LESSON_CONTENT_SUCCESS,
   SAVE_CLASS_LESSON_DETAIL,
@@ -23,10 +24,42 @@ const {
   LEAVE_THE_CLASSROOM,
   COPY_CLASSROOM_QUIZ,
   GET_TAUGHT_CLASSROOM_COURSES_SUCCESS,
-  GET_ORG_STUDENTS_SUCCESS
+  GET_ORG_STUDENTS_SUCCESS,
+  GET_CLASS_EVALUATION_REPORTS_SUCCESS,
+  SET_CLASS_EVALUATION_REPORT_COUNT,
+  GET_EVALUATION_REPORT_DETAIL_SUCCESS
 } = props
 
 const actions = {
+  async createClassEvaluationReport({ dispatch }, params) {
+    const res = await lessonOrganizationClasses.createClassEvaluationReport(params)
+    const { classId } = params
+    await dispatch('getClassEvaluationReportList', { classId })
+    return res
+  },
+  async getClassEvaluationReportList({ commit }, params) {
+    const reports = await lessonOrganizationClasses.getClassEvaluationReport({ roleId: 2, ...params })
+    commit(GET_CLASS_EVALUATION_REPORTS_SUCCESS, { ...params, reports })
+    const { roleId, classId, ...rest } = params
+    if (Object.keys(rest).length === 0) {
+      commit(SET_CLASS_EVALUATION_REPORT_COUNT, { ...params, count: reports.length })
+    }
+    return reports
+  },
+  async deleteClassEvaluationReport({ dispatch, commit, getters: { orgClassEvaluationReportCount } }, { classId, id }) {
+    await lessonOrganizationClasses.deleteClassEvaluationReport(id)
+    const count = Math.max(orgClassEvaluationReportCount[classId] - 1, 0)
+    commit(SET_CLASS_EVALUATION_REPORT_COUNT, { count, classId })
+  },
+  async getEvaluationReportDetail({ commit }, { reportId, params = { status: 1 } }) {
+    const { status } = params
+    const payload = await lessonOrganizationClasses.getEvaluationReportDetail({ reportId, params })
+    commit(GET_EVALUATION_REPORT_DETAIL_SUCCESS, { status, payload })
+    return payload
+  },
+  async commentEvaluationReport(context, params) {
+    await lessonOrganizationClasses.commentEvaluationReport(params)
+  },
   async getOrgClasses(
     {
       commit,
@@ -62,6 +95,13 @@ const actions = {
       { classId }
     )
     commit(GET_CLASS_STUDENTS_SUCCESS, { classId, classStudents })
+  },
+  async getOrgClassTeachersById({ commit, rootGetters: { 'org/currentOrg': { id: organizationId } } }, { classId }) {
+    const classTeachers = await lessonOrganizationClassMembers.getTeachersByClassId({ organizationId, classId })
+    commit(GET_CLASS_TEACHERS_SUCCESS, { classId, classTeachers })
+  },
+  async getClassLastUpdateProjects({ commit }, classId) {
+    const res = await lessonOrganizationClasses.getClassLastUpdateProjects(classId)
   },
   async getOrgStudents({
     commit,
