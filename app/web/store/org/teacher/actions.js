@@ -164,16 +164,16 @@ const actions = {
         'org/currentOrg': { id: organizationId }
       }
     },
-    { classIds, currentClassId, memberName, realname }
+    params
   ) {
     try {
       await lessonOrganizationClassMembers.createClassMember({
         organizationId,
-        classIds,
-        realname,
-        memberName,
-        roleId: 1
+        roleId: 1,
+        ...params,
       })
+      console.log(params)
+      const { currentClassId } = params
       await dispatch('getOrgClassStudentsById', { classId: currentClassId })
     } catch (error) {
       return Promise.reject(error.response)

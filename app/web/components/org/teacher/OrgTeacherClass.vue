@@ -9,24 +9,17 @@
         </span>
       </div>
       <div class="students-add-main">
-        <div class="add-form-header">
-          <span class="add-form-header-label">{{$t("org.nameLabel")}}</span>
-          <span class="add-form-header-label">{{$t("org.usernameLabel")}}</span>
-        </div>
-        <el-form :ref="`form-${index}`" :inline="true" v-for="(item, index) in studentsFormData" :key="index" :model="item">
-          <el-form-item prop="name" :rules="rules.name">
-            <el-input v-model="item.name"></el-input>
+        <el-form ref="form" label-width="80px" :model="studentFormData">
+          <el-form-item prop="name" :label="$t('org.nameLabel')" :rules="rules.name">
+            <el-input v-model="studentFormData.name"></el-input>
           </el-form-item>
-          <el-form-item prop="account" :rules="rules.account">
-            <el-input :disabled="isEditType" v-model="item.account"></el-input>
+          <el-form-item prop="account" :label="$t('org.usernameLabel')">
+            <el-input :disabled="isEditType" v-model="studentFormData.account"></el-input>
           </el-form-item>
-          <el-form-item class="add-form-item" v-if="!isEditType">
-            <i class="el-icon-error" @click="handleRemoveFormItem(index)"></i>
+          <el-form-item prop="parentPhoneNum" label="家长电话" :rules="rules.parentPhoneNum">
+            <el-input v-model="studentFormData.parentPhoneNum"></el-input>
           </el-form-item>
         </el-form>
-      </div>
-      <div class="students-add-bottom" v-if="!isEditType">
-        <span @click="handleAddFormItem"><i class="el-icon-circle-plus-outline"></i>{{$t("org.continueAdd")}}</span>
       </div>
     </div>
     <div v-else class="org-teacher-classes-member">
@@ -52,9 +45,11 @@
         <div class="member-banner-count">学生数: {{selectedClassStudentsCount}}</div>
       </div>
       <el-table :data="orgClassStudentsTable" border style="width: 100%">
-        <el-table-column prop="realname" :label="$t('org.nameLabel')" width="162">
+        <el-table-column prop="realname" :label="$t('org.nameLabel')" width="120">
         </el-table-column>
-        <el-table-column prop="username" :label="$t('org.usernameLabel')" width="162">
+        <el-table-column prop="username" :label="$t('org.usernameLabel')" width="120">
+        </el-table-column>
+        <el-table-column prop="parentPhoneNum" label="家长手机号" width="162">
         </el-table-column>
         <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="162">
         </el-table-column>
@@ -78,6 +73,7 @@ import { keepwork } from '@/api'
 const { lessonOrganizations: orgApi } = keepwork
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
+const PhoneReg = /[0-9]{11}/
 
 export default {
   name: 'OrgTeacherClass',
@@ -86,11 +82,15 @@ export default {
     ChangePasswordDialog
   },
   data() {
-    const checkMemberName = (rule, username, callback) => {
-      if (!username) {
-        return callback(new Error(`${this.$t('org.usernameIsRequired')}`))
+    let phoneValidater = (rule, value, callback) => {
+      this.phoneError = ''
+      if (value == '') {
+        return
+      }
+      if (!PhoneReg.test(value)) {
+        callback(new Error(this.$t('user.wrongNumberFormat')))
       } else {
-        this.testUsername({ username, callback })
+        callback()
       }
     }
     return {
@@ -106,23 +106,21 @@ export default {
             message: '请输入学生姓名'
           }
         ],
-        account: [
+        parentPhoneNum: [
           {
-            validator: checkMemberName,
+            validator: phoneValidater,
             trigger: 'blur'
           }
         ]
       },
-      studentsFormData: [
-        {
-          name: '',
-          account: ''
-        }
-      ]
+      studentFormData: {}
     }
   },
   async created() {
-    await this.getOrgClasses({ cache: true })
+    await Promise.all([
+      this.getOrgClasses({ cache: true }),
+      this.getOrgStudents()
+    ])
     const classId = _.defaultTo(
       _.toNumber(this.$route.query.classId),
       this.firstOrgClassId
@@ -170,12 +168,15 @@ export default {
       this.$router.push({ query: { classId } })
       await this.getClassMembers(classId)
       this.selectedClassId = classId
-      console.log(this.orgClassTeachers)
     },
     handleEditStudent({ row }) {
       this.isShowAddStudentForm = true
       this.isEditType = true
-      this.studentsFormData = [{ name: row.realname, account: row.username }]
+      this.studentFormData = {
+        name: row.realname,
+        account: row.username,
+        parentPhoneNum: row.parentPhoneNum
+      }
     },
     async handleRemoveStudent({ row }) {
       let { realname, username } = row
@@ -203,119 +204,29 @@ export default {
     },
     handleCancel() {
       this.isShowAddStudentForm = false
-      this.studentsFormData = [{ name: '', account: '' }]
+      this.studentFormData = {}
     },
     async handleSave() {
-      const sucessfullItems = []
-      if (this.studentsFormData.length === 0) {
-        return (this.isShowAddStudentForm = false)
-      }
-      if (this.orgRestCount === 0) {
-        const flag = _.every(
-          _.filter(this.studentsFormData, v => v.account),
-          item => Boolean(this.orgStudents[item.account])
-        )
-        if (!flag) {
-          return this.alertCountError()
-        }
-      }
-      for (let index = 0; index < this.studentsFormData.length; index++) {
-        await new Promise(async (resolve, reject) => {
-          const forms = this.$refs[`form-${index}`][0]
-          const form = Array.isArray(forms) ? forms[0] : forms
-          const student = this.studentsFormData[index]
-          form.validate(async valid => {
-            if (valid) {
-              try {
-                const res = await this.addStudentToClass({
-                  currentClassId: this.selectedClassId,
-                  classIds: [
-                    ..._.get(this.orgStudents, [student.account], []),
-                    this.selectedClassId
-                  ],
-                  memberName: student.account,
-                  realname: student.name
-                })
-                sucessfullItems.push(index)
-              } catch (error) {
-                if (error.data.indexOf('无权限') !== -1) {
-                  this.$message.error('无权限')
-                  reject()
-                }
-                if (error.data.indexOf('成员不存在') !== -1) {
-                  this.$message.error(
-                    `${this.$t('org.theUsername')}[${student.account}]${this.$t(
-                      'org.wasNotFound'
-                    )}`
-                  )
-                  sucessfullItems
-                    .reverse()
-                    .forEach(index => this.handleRemoveFormItem(index))
-                  reject()
-                }
-              }
-            }
-            resolve()
-          })
-        })
-      }
-      sucessfullItems
-        .reverse()
-        .forEach(index => this.handleRemoveFormItem(index))
-      if (this.studentsFormData.length === 0) {
-        this.$message({
-          type: 'success',
-          message: this.$t('org.successfullyAdd')
-        })
-        this.isShowAddStudentForm = false
-      }
-    },
-    async testUsername({ username, callback }) {
-      await this.getUserOrgRoleByGraphql({
-        organizationId: this.orgId,
-        username
-      })
-        .then(result => {
-          callback()
-        })
-        .catch(error => {
-          if (error == 400) {
-            callback(
-              new Error(
-                this.$t('org.theUsername') +
-                  `[${username}]` +
-                  this.$t('org.wasNotFound')
-              )
-            )
-          } else {
-            callback()
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          try {
+            await this.addStudentToClass({
+              currentClassId: this.selectedClassId,
+              classIds: [
+                ..._.get(this.orgStudents, [this.studentFormData.account], []),
+                this.selectedClassId
+              ],
+              memberName: this.studentFormData.account,
+              realname: this.studentFormData.name,
+              parentPhoneNum: this.studentFormData.parentPhoneNum
+            })
+            this.isShowAddStudentForm = false
+          } catch (error) {
+            this.$message.error('编辑失败')
+            console.error(error)
           }
-        })
-    },
-    handleAddFormItem() {
-      if (
-        this.selectedClassStudents.length + this.studentsFormData.length >=
-        this.orgStudentLimit
-      ) {
-        return this.alertCountError()
-      }
-      this.studentsFormData.push({
-        name: '',
-        account: ''
-      })
-    },
-    handleRemoveFormItem(index) {
-      this.studentsFormData.splice(index, 1)
-    },
-    alertCountError() {
-      this.$alert(
-        this.$t('org.cannotAddMoreMember'),
-        this.$t('org.warningTitle'),
-        {
-          type: 'warning',
-          showClose: false
         }
-      )
+      })
     }
   },
   computed: {
@@ -324,9 +235,7 @@ export default {
       orgClassStudents: 'org/teacher/orgClassStudents',
       orgClassTeachers: 'org/teacher/orgClassTeachers',
       currentOrg: 'org/currentOrg',
-      orgRestCount: 'org/teacher/orgRestCount',
       orgStudents: 'org/teacher/orgStudents',
-      orgStudentLimit: 'org/teacher/orgStudentLimit'
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')

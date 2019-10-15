@@ -125,24 +125,8 @@ const lessonOrganizationClassMembers = {
     get(
       `lessonOrganizationClassMembers/teacher?organizationId=${organizationId}&classId=${classId}`
     ),
-  createClassMember: async ({
-    organizationId,
-    classId,
-    classIds,
-    memberName,
-    parentPhoneNum,
-    realname,
-    roleId
-  }) =>
-    post('lessonOrganizationClassMembers', {
-      organizationId,
-      classId,
-      classIds,
-      memberName,
-      parentPhoneNum,
-      realname,
-      roleId
-    }),
+  createClassMember: async params =>
+    post('lessonOrganizationClassMembers', params),
   getClassStudentsById: async params =>
     get('lessonOrganizationClassMembers/student', { params }),
   removeMemberFromClass: async ({ id, roleId }) =>
