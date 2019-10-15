@@ -35,6 +35,8 @@
         <el-table-column :label="$t('org.usernameLabel')">
           <template slot-scope="scope">{{scope.row.users.username}}</template>
         </el-table-column>
+        <el-table-column prop="parentPhoneNum" label="家长手机号" width="200">
+        </el-table-column>
         <el-table-column prop="id" :label="$t('org.operationLabel')" width="160">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
