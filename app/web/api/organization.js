@@ -130,6 +130,7 @@ const lessonOrganizationClassMembers = {
     classId,
     classIds,
     memberName,
+    parentPhoneNum,
     realname,
     roleId
   }) =>
@@ -138,6 +139,7 @@ const lessonOrganizationClassMembers = {
       classId,
       classIds,
       memberName,
+      parentPhoneNum,
       realname,
       roleId
     }),
