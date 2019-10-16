@@ -82,31 +82,27 @@ export default {
       this.isLoading = true
       try {
         let { portrait, realname } = this.userInfo
-        let parentPhoneBinderRef = this.$refs.parentPhoneBinderRef
-        let isPhoneDataValid = parentPhoneBinderRef.isPhoneDataValid
-
-        let { phone, verifCode } = parentPhoneBinderRef.parentPhone
+        let phone, verifCode
+        if (!this.isParentPhoneExist) {
+          let parentPhoneBinderRef = this.$refs.parentPhoneBinderRef
+          let isPhoneDataValid = parentPhoneBinderRef.isPhoneDataValid
+          phone = parentPhoneBinderRef.parentPhone.phone
+          verifCode = parentPhoneBinderRef.parentPhone.verifCode
+        }
         await this.orgUpdateStudentInfo(
           _.omitBy(
             {
               portrait,
               realname,
-              parentPhoneNum: this.isParentPhoneExist
-                ? null
-                : phone
-                ? phone
-                : null,
-              verifCode: this.isParentPhoneExist
-                ? null
-                : verifCode
-                ? verifCode
-                : null
+              parentPhoneNum: phone ? phone : null,
+              verifCode: verifCode ? verifCode : null
             },
             _.isNull
           )
         )
         this.$message({ type: 'success', message: '修改成功' })
       } catch (error) {
+        console.log(error)
         this.$message({ type: 'danger', message: '修改失败' })
       }
       this.isLoading = false
