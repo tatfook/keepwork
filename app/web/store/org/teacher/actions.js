@@ -5,7 +5,8 @@ import Parser from '@/lib/mod/parser'
 const {
   lessonOrganizations,
   lessonOrganizationClassMembers,
-  lessonOrganizationClasses
+  lessonOrganizationClasses,
+  evaluationReports
 } = keepwork
 
 const {
@@ -27,18 +28,20 @@ const {
   GET_ORG_STUDENTS_SUCCESS,
   GET_CLASS_EVALUATION_REPORTS_SUCCESS,
   SET_CLASS_EVALUATION_REPORT_COUNT,
-  GET_EVALUATION_REPORT_DETAIL_SUCCESS
+  GET_EVALUATION_REPORT_DETAIL_SUCCESS,
+  GET_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS
 } = props
 
 const actions = {
   async createClassEvaluationReport({ dispatch }, params) {
-    const res = await lessonOrganizationClasses.createClassEvaluationReport(params)
+    const res = await evaluationReports.createClassEvaluationReport(params)
     const { classId } = params
     await dispatch('getClassEvaluationReportList', { classId })
     return res
   },
   async getClassEvaluationReportList({ commit }, params) {
-    const reports = await lessonOrganizationClasses.getClassEvaluationReport({ roleId: 2, ...params })
+    const reports = await evaluationReports.getClassEvaluationReport({ roleId: 2, ...params })
     commit(GET_CLASS_EVALUATION_REPORTS_SUCCESS, { ...params, reports })
     const { roleId, classId, ...rest } = params
     if (Object.keys(rest).length === 0) {
@@ -47,18 +50,50 @@ const actions = {
     return reports
   },
   async deleteClassEvaluationReport({ dispatch, commit, getters: { orgClassEvaluationReportCount } }, { classId, id }) {
-    await lessonOrganizationClasses.deleteClassEvaluationReport(id)
+    await evaluationReports.deleteClassEvaluationReport(id)
     const count = Math.max(orgClassEvaluationReportCount[classId] - 1, 0)
     commit(SET_CLASS_EVALUATION_REPORT_COUNT, { count, classId })
   },
   async getEvaluationReportDetail({ commit }, { reportId, params = { status: 1 } }) {
     const { status } = params
-    const payload = await lessonOrganizationClasses.getEvaluationReportDetail({ reportId, params })
+    const payload = await evaluationReports.getEvaluationReportDetail({ reportId, params })
     commit(GET_EVALUATION_REPORT_DETAIL_SUCCESS, { status, payload })
     return payload
   },
   async commentEvaluationReport(context, params) {
-    await lessonOrganizationClasses.commentEvaluationReport(params)
+    await evaluationReports.commentEvaluationReport(params)
+  },
+  async getLastUpdateProjects(
+    {
+      commit,
+      getters: {
+        orgClassStudents
+      }
+    },
+    { classId }
+  ) {
+    const params = {
+      'x-order': 'updatedAt-desc',
+      'x-per-page': 6,
+      'x-page': 1,
+      visibility: 0
+    }
+    const studentIDs = _.map(_.get(orgClassStudents, [classId, 'rows'], []), item => item.memberId)
+    const res = await keepwork.projects.getProjects({
+      ...params,
+      userId: {
+        $in: studentIDs
+      }
+    })
+    commit(GET_LAST_UPDATE_PROJECTS_SUCCESS, res.rows)
+    return res
+  },
+  async getMoreLastUpdateProjects({ commit }, classId) {
+    const list = await lessonOrganizationClasses.getClassLastUpdateProjects(
+      classId
+    )
+    commit(GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS, list)
+    return list
   },
   async getOrgClasses(
     {
@@ -99,9 +134,6 @@ const actions = {
   async getOrgClassTeachersById({ commit, rootGetters: { 'org/currentOrg': { id: organizationId } } }, { classId }) {
     const classTeachers = await lessonOrganizationClassMembers.getTeachersByClassId({ organizationId, classId })
     commit(GET_CLASS_TEACHERS_SUCCESS, { classId, classTeachers })
-  },
-  async getClassLastUpdateProjects({ commit }, classId) {
-    const res = await lessonOrganizationClasses.getClassLastUpdateProjects(classId)
   },
   async getOrgStudents({
     commit,
