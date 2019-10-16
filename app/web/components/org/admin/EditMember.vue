@@ -70,6 +70,7 @@ export default {
       memberData: {
         realname: '',
         memberName: '',
+        parentPhoneNum: '',
         classIds: []
       },
       memberRules: {
@@ -122,9 +123,11 @@ export default {
       return _.get(this.$route, 'query.id')
     },
     memberRoleId() {
-      return this.isDialog
-        ? this.editingMember.roleId
-        : _.get(this.$route, 'query.roleId')
+      return _.toNumber(
+        this.isDialog
+          ? this.editingMember.roleId
+          : _.get(this.$route, 'query.roleId')
+      )
     },
     memberTypeText() {
       return this.memberRoleId === 1
@@ -170,10 +173,11 @@ export default {
       let {
         classes = [],
         users: { username: memberName },
-        realname
+        realname,
+        parentPhoneNum
       } = _.find(memberList, member => member.id == this.memberId)
       let classIds = _.map(classes, classDetail => classDetail.id)
-      return { realname, memberName, classIds }
+      return { realname, memberName, classIds, parentPhoneNum }
     },
     async getTeacherDetail() {
       await this.getOrgTeacherList({
@@ -200,8 +204,8 @@ export default {
       } else {
         detail = await this.getTeacherDetail()
       }
-      let { realname, memberName, classIds } = detail
-      this.memberData = { realname, memberName, classIds }
+      let { realname, memberName, classIds, parentPhoneNum } = detail
+      this.memberData = { realname, memberName, classIds, parentPhoneNum }
     },
     updateMember() {
       let form = this.$refs['memberForm']

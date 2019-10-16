@@ -77,7 +77,8 @@ const lessonOrganizationClasses = {
     }),
   getHistoryClasses: async params =>
     get('lessonOrganizationClasses/history', { params }),
-  getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`),
+  getClassLastUpdateProjects: async classId =>
+    get(`lessonOrganizationClasses/${classId}/project`)
 }
 
 const lessonOrganizationForms = {
@@ -138,7 +139,23 @@ const evaluationReports = {
   deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
   getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
   commentEvaluationReport: async params => post('evaluationReports/userReport', params),
-  updateEvaluationReport: async ({ reportId, ...rest }) => put(`evaluationReports/${reportId}`, rest)
+  updateEvaluationReport: async ({ reportId, ...rest }) => put(`evaluationReports/${reportId}`, rest),
+  getUserinfo: async () => get('evaluationReports/userInfo'),
+  updateUserinfo: async userinfo => put('evaluationReports/userInfo', userinfo),
+  verifyCode: async ({ cellphone, verifCode }) =>
+    post('evaluationReports/verifyCode', { cellphone, verifCode }),
+  updateParentPhoneNum: async ({
+    parentPhoneNum,
+    verifCode,
+    newParentPhoneNum,
+    newVerifCode
+  }) =>
+    put('evaluationReports/parentPhoneNum', {
+      parentPhoneNum,
+      verifCode,
+      newParentPhoneNum,
+      newVerifCode
+    })
 }
 
 export default {
