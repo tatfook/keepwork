@@ -41,7 +41,10 @@ export default {
     }
   },
   mounted() {
-    if (this.oldPhone) this.isEditable = true
+    if (this.oldPhone) {
+      this.parentPhone.phone = this.oldPhone
+      this.isEditable = false
+    }
   },
   data() {
     return {
@@ -96,8 +99,8 @@ export default {
   },
   watch: {
     oldPhone(val) {
-      console.log(val)
-      if (this.oldPhone) this.isEditable = true
+      if (this.oldPhone) this.isEditable = false
+      else this.isEditable = true
     }
   }
 }
@@ -124,6 +127,7 @@ export default {
     }
     &-phone {
       margin-left: 24px;
+      line-height: 36px;
     }
     &-content {
       margin-left: 16px;
