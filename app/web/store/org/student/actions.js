@@ -523,6 +523,20 @@ const actions = {
   },
   async updateStudentInfo(context, userinfo) {
     return await keepwork.evaluationReports.updateUserinfo(userinfo)
+  },
+  async verifyCode(context, { cellphone, verifCode }) {
+    return await keepwork.evaluationReports.verifyCode({ cellphone, verifCode })
+  },
+  async updateParentPhoneNum(
+    context,
+    { parentPhoneNum, verifCode, newParentPhoneNum, newVerifCode }
+  ) {
+    return await keepwork.evaluationReports.updateParentPhoneNum({
+      parentPhoneNum,
+      verifCode,
+      newParentPhoneNum,
+      newVerifCode
+    })
   }
 }
 
