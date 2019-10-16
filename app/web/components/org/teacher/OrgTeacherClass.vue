@@ -16,52 +16,70 @@
           <el-form-item prop="account" :label="$t('org.usernameLabel')">
             <el-input :disabled="isEditType" v-model="studentFormData.account"></el-input>
           </el-form-item>
-          <el-form-item prop="parentPhoneNum" label="家长电话" :rules="rules.parentPhoneNum">
-            <el-input v-model="studentFormData.parentPhoneNum"></el-input>
+          <el-form-item prop="parentPhoneNum" label="家长手机号" :rules="rules.parentPhoneNum">
+            <el-input placeholder="家长手机号" v-model="studentFormData.parentPhoneNum"></el-input>
           </el-form-item>
         </el-form>
       </div>
     </div>
-    <div v-else class="org-teacher-classes-member">
-      <div class="member-header">
-        <i class="iconfont icon-shijian"></i> 开班时间: <span class="member-header-date"> {{orgClassesDate}} </span>
-      </div>
-      <div class="member-divide">
-        班级成员
-      </div>
-      <div class="member-banner">
-        <div> <i class="iconfont icon-jiaoshi member-banner-icon"></i> 教师</div>
-        <div class="member-banner-count">教师数: {{selectedClassTeachersCount}}</div>
-      </div>
-      <el-table :data="orgClasssTeacheresTable" border style="width: 324px;">
-        <el-table-column prop="realname" :label="$t('org.nameLabel')">
-        </el-table-column>
-        <el-table-column prop="username" :label="$t('org.usernameLabel')">
-        </el-table-column>
-      </el-table>
+    <template v-else>
+      <div class="org-teacher-classes-member">
+        <div class="member-header">
+          <i class="iconfont icon-shijian"></i> 开班时间: <span class="member-header-date"> {{orgClassesDate}} </span>
+        </div>
+        <div class="member-divide">
+          班级成员
+        </div>
+        <div class="member-banner">
+          <div> <i class="iconfont icon-jiaoshi member-banner-icon"></i> 教师</div>
+          <div class="member-banner-count">教师数: {{selectedClassTeachersCount}}</div>
+        </div>
+        <el-table :data="orgClasssTeacheresTable" border style="width: 324px;">
+          <el-table-column prop="realname" :label="$t('org.nameLabel')">
+          </el-table-column>
+          <el-table-column prop="username" :label="$t('org.usernameLabel')">
+          </el-table-column>
+        </el-table>
 
-      <div class="member-banner">
-        <div> <i class="iconfont icon-xuesheng member-banner-icon"></i>学生</div>
-        <div class="member-banner-count">学生数: {{selectedClassStudentsCount}}</div>
+        <div class="member-banner">
+          <div> <i class="iconfont icon-xuesheng member-banner-icon"></i>学生</div>
+          <div class="member-banner-count">学生数: {{selectedClassStudentsCount}}</div>
+        </div>
+        <el-table :data="orgClassStudentsTable" border style="width: 100%">
+          <el-table-column prop="realname" :label="$t('org.nameLabel')" width="120">
+          </el-table-column>
+          <el-table-column prop="username" :label="$t('org.usernameLabel')" width="120">
+          </el-table-column>
+          <el-table-column prop="parentPhoneNum" label="家长手机号" width="162">
+          </el-table-column>
+          <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="162">
+          </el-table-column>
+          <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
+            <template slot-scope="scope">
+              <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
+              <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
+              <el-button @click="showChangeDialog(scope.row)" size="mini">修改密码</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-      <el-table :data="orgClassStudentsTable" border style="width: 100%">
-        <el-table-column prop="realname" :label="$t('org.nameLabel')" width="120">
-        </el-table-column>
-        <el-table-column prop="username" :label="$t('org.usernameLabel')" width="120">
-        </el-table-column>
-        <el-table-column prop="parentPhoneNum" label="家长手机号" width="162">
-        </el-table-column>
-        <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="162">
-        </el-table-column>
-        <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
-          <template slot-scope="scope">
-            <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
-            <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
-            <el-button @click="showChangeDialog(scope.row)" size="mini">修改密码</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+      <div class="org-teacher-classes-last-update">
+        <div class="org-teacher-classes-last-update-header">
+          <span class="org-teacher-classes-last-update-header-title">
+            最新更新
+          </span>
+          <router-link class="org-teacher-classes-last-update-header-more" :to="{ name: 'OrgTeacherLastUpdate', query: { classId: selectedClassId } }">
+            全部更新 >
+          </router-link>
+        </div>
+        <el-row>
+          <el-col :sm="12" :md="8" :xs="24" v-for="(project,index) in lastUpdateProjects" :key="index">
+            <project-cell :project="project" :showProjectRate="false"></project-cell>
+          </el-col>
+        </el-row>
+      </div>
+    </template>
+
     <change-password-dialog :isChangeDialogVisible="isChangeDialogVisible" :changingMember="changingMember" @close="isChangeDialogVisible = false" />
   </div>
 </template>
@@ -72,6 +90,7 @@ import OrgClassesTabbar from '../common/OrgClassesTabbar'
 import { keepwork } from '@/api'
 const { lessonOrganizations: orgApi } = keepwork
 import { mapActions, mapGetters } from 'vuex'
+import ProjectCell from '@/components/common/ProjectCell'
 import moment from 'moment'
 const PhoneReg = /[0-9]{11}/
 
@@ -79,16 +98,13 @@ export default {
   name: 'OrgTeacherClass',
   components: {
     OrgClassesTabbar,
-    ChangePasswordDialog
+    ChangePasswordDialog,
+    ProjectCell
   },
   data() {
     let phoneValidater = (rule, value, callback) => {
-      this.phoneError = ''
-      if (value == '') {
-        return
-      }
-      if (!PhoneReg.test(value)) {
-        callback(new Error(this.$t('user.wrongNumberFormat')))
+      if (value && !PhoneReg.test(value)) {
+        callback(new Error('电话号码格式不正确'))
       } else {
         callback()
       }
@@ -117,17 +133,12 @@ export default {
     }
   },
   async created() {
-    await Promise.all([
-      this.getOrgClasses({ cache: true }),
-      this.getOrgStudents()
-    ])
-    const classId = _.defaultTo(
-      _.toNumber(this.$route.query.classId),
-      this.firstOrgClassId
-    )
-    await this.getClassMembers(classId)
-    this.selectedClassId = classId
-    this.isLoading = false
+    this.initClassData()
+  },
+  watch: {
+    async $route(rotue) {
+      this.initClassData()
+    }
   },
   methods: {
     ...mapActions({
@@ -138,8 +149,23 @@ export default {
       addStudentToClass: 'org/teacher/addStudentToClass',
       removeStudentFromClass: 'org/teacher/removeStudentFromClass',
       getOrgStudents: 'org/teacher/getOrgStudents',
-      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql'
+      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
+      getLastUpdateProjects: 'org/teacher/getLastUpdateProjects'
     }),
+    async initClassData() {
+      await Promise.all([
+        this.getOrgClasses({ cache: true }),
+        this.getOrgStudents()
+      ])
+      const classId = _.defaultTo(
+        _.toNumber(this.$route.query.classId),
+        this.firstOrgClassId
+      )
+      await this.getClassMembers(classId)
+      await this.getLastUpdateProjects({ classId })
+      this.selectedClassId = classId
+      this.isLoading = false
+    },
     async getClassMembers(classId) {
       await Promise.all([
         this.getOrgClassStudentsById({ classId }),
@@ -236,6 +262,7 @@ export default {
       orgClassTeachers: 'org/teacher/orgClassTeachers',
       currentOrg: 'org/currentOrg',
       orgStudents: 'org/teacher/orgStudents',
+      lastUpdateProjects: 'org/teacher/lastUpdateProjects'
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')
@@ -403,6 +430,26 @@ export default {
         text-align: center;
         color: #2397f3;
         cursor: pointer;
+      }
+    }
+  }
+
+  &-last-update {
+    background: #fff;
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+    &-header {
+      height: 57px;
+      margin: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e8e8e8;
+      color: #333;
+      &-more {
+        font-size: 14px;
+        color: #999;
+        text-decoration: none;
       }
     }
   }

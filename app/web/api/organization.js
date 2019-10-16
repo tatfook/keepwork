@@ -78,11 +78,6 @@ const lessonOrganizationClasses = {
   getHistoryClasses: async params =>
     get('lessonOrganizationClasses/history', { params }),
   getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`),
-  getClassEvaluationReport: async params => get('evaluationReports', { params }),
-  createClassEvaluationReport: async params => post('evaluationReports', params),
-  deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
-  getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
-  commentEvaluationReport: async params => post('evaluationReports/userReport', params)
 }
 
 const lessonOrganizationForms = {
@@ -137,7 +132,12 @@ const evaluationReports = {
   sendSms: async ({ cellphone }) =>
     post('evaluationReports/sendSms', { cellphone }),
   getEvaluationCommentList: async ({ classId }) =>
-    get(`evaluationReports/evaluationCommentList?classId=${classId}`)
+    get(`evaluationReports/evaluationCommentList?classId=${classId}`),
+  getClassEvaluationReport: async params => get('evaluationReports', { params }),
+  createClassEvaluationReport: async params => post('evaluationReports', params),
+  deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
+  getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
+  commentEvaluationReport: async params => post('evaluationReports/userReport', params)
 }
 
 export default {

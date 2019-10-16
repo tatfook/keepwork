@@ -5,9 +5,12 @@
       <span>
         {{ currentClassName }} <i class="el-icon-arrow-right"></i> <span class="org-teacher-last-update-separator-bold">最新更新</span>
       </span>
-      <router-link class="org-teacher-last-update-separator-back" :to="{ name: 'OrgTeacherClass' }">
+      <router-link class="org-teacher-last-update-separator-back" :to="{ name: 'OrgTeacherClass', query: { classId: selectedClassId } }">
         返回 <i class="el-icon-arrow-right"></i>
       </router-link>
+    </div>
+    <div class="org-teacher-last-update-proejcts">
+      <last-update-row class="org-teacher-last-update-proejcts-item" v-for="item in lastUpdateList" :key="item.memberId" :userData="item"></last-update-row>
     </div>
   </div>
 </template>
@@ -28,27 +31,61 @@ export default {
     }
   },
   async created() {
-    await this.getOrgClasses()
-    this.selectedClassId = _.defaultTo(
-      _.toNumber(this.$route.query.classId),
-      this.firstClassId
-    )
-    // await this.getClassLastUpdateProjects(this.selectedClassId)
+    this.initData()
+  },
+  watch: {
+    async $route(route) {
+      this.initData()
+    }
   },
   methods: {
     ...mapActions({
       getOrgClasses: 'org/teacher/getOrgClasses',
-      getClassLastUpdateProjects: 'org/teacher/getClassLastUpdateProjects'
+      getMoreLastUpdateProjects: 'org/teacher/getMoreLastUpdateProjects'
     }),
+    sortByUpdate(arr) {
+      return _.sortBy(
+        arr,
+        item => -+new Date(_.get(item, 'projects[0].updatedAt', ''))
+      )
+    },
     handleSwitchClass(classId) {
       this.selectedClassId = classId
       this.$router.push({ query: { classId } })
+    },
+    async initData() {
+      await this.getOrgClasses()
+      this.selectedClassId = _.defaultTo(
+        _.toNumber(this.$route.query.classId),
+        this.firstClassId
+      )
+      await this.getMoreLastUpdateProjects(this.selectedClassId)
     }
   },
   computed: {
     ...mapGetters({
-      orgClasses: 'org/teacher/orgClasses'
+      orgClasses: 'org/teacher/orgClasses',
+      moreLastUpdateProjects: 'org/teacher/moreLastUpdateProjects'
     }),
+    lastUpdateList() {
+      let studentList = _.filter(
+        this.moreLastUpdateProjects,
+        item => item.roleId & 1
+      )
+      studentList = _.map(studentList, item => {
+        const users = item.users
+        item.projects = _.map(item.projects, item => ({ ...item, user: users }))
+        return item
+      })
+      const groups = _.groupBy(studentList, item =>
+        item.projects.length ? 1 : 0
+      )
+      const SORT = [1, 0]
+      const arr = _.map(SORT, i => {
+        return this.sortByUpdate(_.get(groups, [i], []))
+      })
+      return _.flatten(arr)
+    },
     firstClassId() {
       return _.get(this.orgClasses, '[0].id', '')
     },
@@ -77,6 +114,11 @@ export default {
     &-back {
       color: #999;
       text-decoration: none;
+    }
+  }
+  &-proejcts {
+    &-item {
+      margin-bottom: 16px;
     }
   }
 }
