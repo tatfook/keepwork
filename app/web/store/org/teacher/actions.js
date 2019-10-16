@@ -63,6 +63,10 @@ const actions = {
   async commentEvaluationReport(context, params) {
     await evaluationReports.commentEvaluationReport(params)
   },
+  async updateEvaluationReport(context, params) {
+    const res = await evaluationReports.updateEvaluationReport(params)
+    return res
+  },
   async getLastUpdateProjects(
     {
       commit,

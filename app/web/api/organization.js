@@ -134,16 +134,12 @@ const evaluationReports = {
     post('evaluationReports/sendSms', { cellphone }),
   getEvaluationCommentList: async ({ classId }) =>
     get(`evaluationReports/evaluationCommentList?classId=${classId}`),
-  getClassEvaluationReport: async params =>
-    get('evaluationReports', { params }),
-  createClassEvaluationReport: async params =>
-    post('evaluationReports', params),
-  deleteClassEvaluationReport: async id =>
-    deleteMethod(`evaluationReports/${id}`),
-  getEvaluationReportDetail: async ({ reportId, params = {} }) =>
-    get(`evaluationReports/${reportId}`, { params }),
-  commentEvaluationReport: async params =>
-    post('evaluationReports/userReport', params),
+  getClassEvaluationReport: async params => get('evaluationReports', { params }),
+  createClassEvaluationReport: async params => post('evaluationReports', params),
+  deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
+  getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
+  commentEvaluationReport: async params => post('evaluationReports/userReport', params),
+  updateEvaluationReport: async ({ reportId, ...rest }) => put(`evaluationReports/${reportId}`, rest),
   getUserinfo: async () => get('evaluationReports/userInfo'),
   updateUserinfo: async userinfo => put('evaluationReports/userInfo', userinfo),
   verifyCode: async ({ cellphone, verifCode }) =>
