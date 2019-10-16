@@ -68,10 +68,10 @@
               </el-table-column>
               <el-table-column label="操作" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <el-button @click.native.prevent="toReportDetail(scope.row)" size="small">
+                  <el-button @click.native.prevent="toCommentDetail(scope.row.userReportId)" size="small">
                     详情
                   </el-button>
-                  <el-button @click.native.prevent="handleDeleteReport(scope.row.id)" size="small">
+                  <el-button @click.native.prevent="handleDeleteComment(scope.row.userReportId)" size="small">
                     删除
                   </el-button>
                 </template>
@@ -197,7 +197,8 @@ export default {
   methods: {
     ...mapActions({
       getEvaluationReportDetail: 'org/teacher/getEvaluationReportDetail',
-      updateEvaluationReport: 'org/teacher/updateEvaluationReport'
+      updateEvaluationReport: 'org/teacher/updateEvaluationReport',
+      deleteEvaluationReportComment: 'org/teacher/deleteEvaluationReportComment'
     }),
     async getReportDetail({ reportId, params = { status: 1 } }) {
       try {
@@ -268,6 +269,21 @@ export default {
           reportId: this.reportId
         }
       })
+    },
+    async handleDeleteComment(id) {
+      try {
+        this.loading = true
+        console.log(id)
+        await this.deleteEvaluationReportComment(id)
+        await this.getReportDetail({
+          reportId: this.reportId,
+          params: { status: 2 }
+        })
+      } catch (error) {
+        this.$message.error(_.get(error, 'response.data.message', '删除失败'))
+      } finally {
+        this.loading = false
+      }
     }
   }
 }

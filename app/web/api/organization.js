@@ -140,6 +140,7 @@ const evaluationReports = {
   getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
   commentEvaluationReport: async params => post('evaluationReports/userReport', params),
   updateEvaluationReport: async ({ reportId, ...rest }) => put(`evaluationReports/${reportId}`, rest),
+  deleteEvaluationReportComment: async id => deleteMethod(`evaluationReports/userReport/${id}`),
   getUserinfo: async () => get('evaluationReports/userInfo'),
   updateUserinfo: async userinfo => put('evaluationReports/userInfo', userinfo),
   verifyCode: async ({ cellphone, verifCode }) =>

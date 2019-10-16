@@ -63,6 +63,9 @@ const actions = {
   async commentEvaluationReport(context, params) {
     await evaluationReports.commentEvaluationReport(params)
   },
+  async deleteEvaluationReportComment(context, id) {
+    await evaluationReports.deleteEvaluationReportComment(id)
+  },
   async updateEvaluationReport(context, params) {
     const res = await evaluationReports.updateEvaluationReport(params)
     return res

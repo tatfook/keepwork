@@ -153,12 +153,12 @@ export default {
     realname() {
       return _.get(this.$route, 'query.realname', '')
     },
-    userId() {
-      return _.get(this.$route, 'query.userId', '')
+    studentId() {
+      return _.get(this.$route, 'query.studentId', '')
     },
     params() {
       const params = {
-        studentId: this.userId,
+        studentId: this.studentId,
         reportId: this.reportId,
         star: this.star,
         comment: this.form.comment,
@@ -187,18 +187,29 @@ export default {
         return resolve()
       })
     },
-    async handleSaveComment() {
-      try {
-        await this.validateRate()
+    async validdateAndCreateCommnet() {
+      await this.validateRate()
+      await new Promise(async (resolve, reject) => {
         this.$refs.form.validate(async valid => {
           if (valid) {
             this.loading = true
             await this.commentEvaluationReport(this.params)
+              .then(res => resolve())
+              .catch(error => reject(error))
           }
         })
+      })
+    },
+    async handleSaveComment() {
+      try {
+        this.validdateAndCreateCommnet()
+        this.$message.success('点评成功')
+        this.$router.back(-1)
       } catch (error) {
-        this.$message.error(error)
-        console.log(error)
+        const errMsg = _.isString(error)
+          ? error
+          : _.get(error, 'response.data.message', '点评失败')
+        this.$message.error(_.toString(errMsg))
       } finally {
         this.loading = false
       }
