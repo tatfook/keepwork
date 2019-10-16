@@ -137,7 +137,8 @@ const evaluationReports = {
   createClassEvaluationReport: async params => post('evaluationReports', params),
   deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
   getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
-  commentEvaluationReport: async params => post('evaluationReports/userReport', params)
+  commentEvaluationReport: async params => post('evaluationReports/userReport', params),
+  updateEvaluationReport: async ({ reportId, ...rest }) => put(`evaluationReports/${reportId}`, rest)
 }
 
 export default {

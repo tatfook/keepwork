@@ -18,7 +18,7 @@
           </div>
           <i v-show="item.id === selectedType" class="el-icon-success type-choice-item-main-checked-icon"></i>
         </div>
-        <div class="type-choice-item-preview">
+        <div v-if="showPreviewButton" class="type-choice-item-preview">
           <span @click="handleShowPreview(item.preview)">预览</span>
         </div>
       </div>
@@ -37,7 +37,11 @@ export default {
     event: 'change'
   },
   props: {
-    selectedType: Number
+    selectedType: Number,
+    showPreviewButton: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {

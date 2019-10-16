@@ -151,13 +151,13 @@ export default {
         this.loading = false
       }
     },
-    async toReportDetail({ id, reportName }) {
+    async toReportDetail({ id, ...rest }) {
       this.$router.push({
         name: 'OrgTeacherReportDetail',
         query: {
           classId: this.classId,
           reportId: id,
-          reportName
+          ...rest
         }
       })
     },

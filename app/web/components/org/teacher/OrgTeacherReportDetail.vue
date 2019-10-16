@@ -1,7 +1,7 @@
 <template>
   <div class="teacher-report-detail">
     <div class="teacher-report-detail-header">
-      <span class="teacher-report-detail-header-name">报告名称</span> <span class="teacher-report-detail-header-tag">{{reportName}}</span> <i class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
+      <span class="teacher-report-detail-header-name">报告名称</span> <span class="teacher-report-detail-header-tag">{{reportName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
     </div>
     <div class="teacher-report-detail-main">
       <el-tabs v-model="activeName" type="card">
@@ -81,14 +81,33 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <el-dialog custom-class="teacher-report-detail-dialog" :visible.sync="isShowEditDialog" width="552px">
+      <div class="teacher-report-detail-dialog-title" slot="title">
+        编辑
+      </div>
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="报告名称:" prop="name">
+          <el-input v-model.trim="form.name" placeholder="报告名称"></el-input>
+        </el-form-item>
+      </el-form>
+      <report-type :showPreviewButton="false" v-model="form.type" class="report-type-reset"></report-type>
+      <div slot="footer">
+        <el-button @click="handleCancelEditReport">取消</el-button>
+        <el-button :loading="loading" @click="handleUpdateReport" type="primary">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ReportType from './ReportType'
 import moment from 'moment'
 export default {
   name: 'OrgTeacherReportDetail',
+  components: {
+    ReportType
+  },
   filters: {
     formatTime(value) {
       return moment(value).format('YYYY/MM/DD HH:mm')
@@ -102,7 +121,17 @@ export default {
       activeName: '1',
       sendStatus: 0,
       studentName: '',
-      loading: false
+      loading: false,
+      isShowEditDialog: false,
+      rules: {
+        name: [
+          { required: true, message: '报告名称不能为空', trigger: 'change' }
+        ]
+      },
+      form: {
+        name: '',
+        type: 1
+      }
     }
   },
   async created() {
@@ -122,6 +151,28 @@ export default {
     }),
     reportName() {
       return this.$route.query.reportName
+    },
+    reportType() {
+      return _.get(this.$route, 'query.type', '')
+    },
+    reportTypeDict() {
+      return _.reduce(
+        this.reportTypeNameDict,
+        (obj, value, key) => {
+          obj[value] = _.toNumber(key)
+          return obj
+        },
+        {}
+      )
+    },
+    reportTypeNameDict() {
+      return {
+        1: '小评',
+        2: '阶段总结'
+      }
+    },
+    reportTypeId() {
+      return _.get(this.reportTypeDict, this.reportType, 1)
     },
     sendStatusDict() {
       return {
@@ -145,7 +196,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getEvaluationReportDetail: 'org/teacher/getEvaluationReportDetail'
+      getEvaluationReportDetail: 'org/teacher/getEvaluationReportDetail',
+      updateEvaluationReport: 'org/teacher/updateEvaluationReport'
     }),
     async getReportDetail({ reportId, params = { status: 1 } }) {
       try {
@@ -156,6 +208,44 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    async handleUpdateReport() {
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          try {
+            this.loading = true
+            await this.updateEvaluationReport(this.form)
+            this.$message.success('更新成功')
+            this.updateURL(this.form)
+            this.isShowEditDialog = false
+          } catch (error) {
+            this.$message.error(error)
+            console.error(error)
+          } finally {
+            this.loading = false
+          }
+        }
+      })
+    },
+    updateURL({ name, type }) {
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          reportName: name,
+          type: this.reportTypeNameDict[type]
+        }
+      })
+    },
+    handleShowEditReportDialog() {
+      this.form = {
+        name: this.reportName,
+        type: this.reportTypeId,
+        reportId: this.reportId
+      }
+      this.isShowEditDialog = true
+    },
+    handleCancelEditReport() {
+      this.isShowEditDialog = false
     },
     handleClick(tab, evt) {
       console.log(activeName)
@@ -247,6 +337,30 @@ export default {
           padding: 0 10px 0 0;
         }
       }
+    }
+  }
+
+  /deep/ &-dialog {
+    &-title {
+      text-align: center;
+      font-size: 18px;
+      color: #303133;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .el-dialog__headerbtn {
+      font-size: 22px;
+    }
+    .el-dialog__header {
+      padding: 0;
+      height: 59px;
+      line-height: 59px;
+    }
+    .el-dialog__body {
+      padding: 16px 34px 30px;
+    }
+    .report-type-reset {
+      margin-top: 34px;
+      padding: 0;
     }
   }
 }
