@@ -56,7 +56,8 @@ const getters = {
   lastUpdateProjects: state => state.lastUpdateProjects,
   moreLastUpdateProjects: state => state.moreLastUpdateProjects,
   getEvaluationCommentListByClassId: state => ({ classId }) =>
-    _.get(state.evaluationCommentList, classId, [])
+    _.get(state.evaluationCommentList, classId, []),
+  userinfo: state => state.userinfo
 }
 
 export default getters

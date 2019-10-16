@@ -31,7 +31,8 @@ const {
   GET_CLASS_PACKAGES_SUCCESS,
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
-  GET_EVALUATION_COMMENT_LIST_SUCCESS
+  GET_EVALUATION_COMMENT_LIST_SUCCESS,
+  GET_STUDENT_INFO_SUCCESS
 } = props
 
 const errMsg = {
@@ -435,8 +436,8 @@ const actions = {
     const today = Date.now()
     const organizationClasses = _.filter(
       _.get(res, 'organizationUser.organizationClasses', []),
-      item => (item.roleId & 1) > 0 && +new Date(item.end) > today
-    ) // eslint-disable-line no-bitwise
+      item => (item.roleId & 1) > 0 && +new Date(item.end) > today // eslint-disable-line no-bitwise
+    )
     const teachingLesson = _.reduce(
       organizationClasses,
       (arr, cur) => {
@@ -511,11 +512,17 @@ const actions = {
     let result = await keepwork.evaluationReports.getEvaluationCommentList({
       classId
     })
-    console.log(result)
     commit(GET_EVALUATION_COMMENT_LIST_SUCCESS, {
       classId,
       evaluationCommentList: result
     })
+  },
+  async getStudentInfo({ commit }) {
+    let userinfo = await keepwork.evaluationReports.getUserinfo()
+    commit(GET_STUDENT_INFO_SUCCESS, userinfo)
+  },
+  async updateStudentInfo(context, userinfo) {
+    return await keepwork.evaluationReports.updateUserinfo(userinfo)
   }
 }
 

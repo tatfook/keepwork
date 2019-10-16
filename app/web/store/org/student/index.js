@@ -23,7 +23,8 @@ const state = {
   classPackages: [],
   lastUpdateProjects: [],
   moreLastUpdateProjects: [],
-  evaluationCommentList: {}
+  evaluationCommentList: {},
+  userinfo: {}
 }
 
 export default {
