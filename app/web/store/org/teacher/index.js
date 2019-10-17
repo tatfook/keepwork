@@ -12,6 +12,7 @@ const state = {
   orgClassEvaluationReports: {},
   orgClassEvaluationReportCount: {},
   evaluationReportDetail: {},
+  evaluationReportCommentDetail: {},
   lastUpdateProjects: [],
   moreLastUpdateProjects: [],
   classroomCoursesData: {},

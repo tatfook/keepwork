@@ -30,7 +30,8 @@ const {
   SET_CLASS_EVALUATION_REPORT_COUNT,
   GET_EVALUATION_REPORT_DETAIL_SUCCESS,
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
-  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS
+  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 } = props
 
 const actions = {
@@ -65,6 +66,11 @@ const actions = {
   },
   async deleteEvaluationReportComment(context, id) {
     await evaluationReports.deleteEvaluationReportComment(id)
+  },
+  async getEvaluationReportCommentDetail({ commit }, params) {
+    const report = await evaluationReports.getEvaluationReportCommentDetail(params)
+    commit(GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS, report)
+    return report
   },
   async updateEvaluationReport(context, params) {
     const res = await evaluationReports.updateEvaluationReport(params)

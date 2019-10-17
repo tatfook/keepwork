@@ -15,6 +15,8 @@ const OrgTeacherReportEmpty = () => import('@/components/org/teacher/OrgTeacherR
 const OrgTeacherReportComment = () => import('@/components/org/teacher/OrgTeacherReportComment')
 const OrgTeacherReportList = () => import('@/components/org/teacher/OrgTeacherReportList')
 const OrgTeacherReportDetail = () => import('@/components/org/teacher/OrgTeacherReportDetail')
+const OrgTeacherReportCommentEdit = () => import('@/components/org/teacher/OrgTeacherReportCommentEdit')
+const OrgTeacherReportCommentDetail = () => import('@/components/org/teacher/OrgTeacherReportCommentDetail')
 const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
 const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
 const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
@@ -200,6 +202,16 @@ export default new Router({
                   path: 'detail',
                   name: 'OrgTeacherReportDetail',
                   component: OrgTeacherReportDetail
+                },
+                {
+                  path: 'commentEdit',
+                  name: 'OrgTeacherReportCommentEdit',
+                  component: OrgTeacherReportCommentEdit
+                },
+                {
+                  path: 'commentDetail',
+                  name: 'OrgTeacherReportCommentDetail',
+                  component: OrgTeacherReportCommentDetail
                 }
               ]
             },
