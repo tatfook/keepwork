@@ -22,6 +22,7 @@ const getters = {
   lastUpdateProjects: state => state.lastUpdateProjects,
   moreLastUpdateProjects: state => state.moreLastUpdateProjects,
   evaluationReportDetail: state => state.evaluationReportDetail,
+  evaluationReportCommentDetail: state => state.evaluationReportCommentDetail,
   classroomCoursesData: state => state.classroomCoursesData,
   orgClassPackagesDetail: state => state.orgClassPackagesDetail,
   orgLessonData: state => state.lessonData,

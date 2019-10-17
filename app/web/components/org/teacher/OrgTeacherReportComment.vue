@@ -4,18 +4,29 @@
       <span>
         {{reportName}}
         <i class="el-icon-arrow-right"></i>
-        点评学生
+        <template v-if="isEditMod">
+          点评内容
+        </template>
+        <template v-else>
+          点评学生
+        </template>
+        <template v-if="isEditMod">
+          <i class="el-icon-arrow-right"></i>
+          编辑
+        </template>
       </span>
       <span>
-        <el-button @click="handleCancel" size="mini">取消</el-button>
-        <el-button @click="handleSaveComment" size="mini">保存</el-button>
-        <el-button size="mini" type="primary">下一个</el-button>
+        <el-button @click="handleCancel" size="small">取消</el-button>
+        <el-button @click="handleSaveComment" size="small">保存</el-button>
+        <el-button v-if="!isEditMod" size="small" type="primary">下一个</el-button>
       </span>
     </div>
 
     <div class="teacher-report-comment-main">
-      <div class="teacher-report-comment-main-student-name">
-        学生:
+      <div class="teacher-report-comment-main-student-info">
+        <span>学生:</span>
+        <img class="student-portrait" :src="portrait | miniPic">
+        <span class="student-name">{{realname}} </span>
       </div>
       <div class="teacher-report-comment-main-overall-evaluation">
         <span class="evaluation-name">总体评价:</span>
@@ -67,6 +78,7 @@
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import AttachmentType from './AttachmentType'
+import { keepwork } from '@/api'
 import { mapActions } from 'vuex'
 export default {
   name: 'OrgTeacherReportComment',
@@ -82,10 +94,34 @@ export default {
       return `${url}&imageView2/2/w/400`
     }
   },
+  props: {
+    isEditMod: {
+      type: Boolean,
+      default: false
+    },
+    formData: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  async created() {
+    if (this.isEditMod) {
+      return this.initFormData()
+    }
+    const { portrait } = await keepwork.evaluationReports.getStudentInfo({
+      studentId: this.studentId
+    })
+    this.portrait = portrait
+  },
   data() {
     return {
       loading: false,
       defaultVideoLogo: require('@/assets/img/video_cover.jpg'),
+      defaultPortrait: require('@/assets/img/default_portrait.png'),
+      portrait: '',
+      editRealname: '',
       isMediaSkyDriveDialogShow: false,
       star: 0,
       attachmentList: [],
@@ -151,14 +187,14 @@ export default {
       return _.get(this.$route, 'query.reportId', '')
     },
     realname() {
-      return _.get(this.$route, 'query.realname', '')
+      return this.editRealname || _.get(this.$route, 'query.realname', '')
     },
-    userId() {
-      return _.get(this.$route, 'query.userId', '')
+    studentId() {
+      return _.get(this.$route, 'query.studentId', '')
     },
     params() {
       const params = {
-        studentId: this.userId,
+        studentId: this.studentId,
         reportId: this.reportId,
         star: this.star,
         comment: this.form.comment,
@@ -173,6 +209,38 @@ export default {
     ...mapActions({
       commentEvaluationReport: 'org/teacher/commentEvaluationReport'
     }),
+    initFormData() {
+      const {
+        portrait,
+        realname,
+        comment,
+        star,
+        mediaUrl,
+        spatial,
+        creative,
+        compute,
+        collaborative,
+        logical,
+        coordinate
+      } = this.formData
+      this.editRealname = realname
+      this.portrait = portrait || this.defaultPortrait
+      this.form.comment = comment
+      this.star = star
+      this.attachmentList = mediaUrl
+      const abilityDict = {
+        spatial,
+        creative,
+        compute,
+        collaborative,
+        logical,
+        coordinate
+      }
+      this.abilityListLeft.forEach(item => (item.value = abilityDict[item.key]))
+      this.abilityListRight.forEach(
+        item => (item.value = abilityDict[item.key])
+      )
+    },
     async validateRate() {
       return new Promise((resolve, reject) => {
         if (!this.star) {
@@ -187,18 +255,29 @@ export default {
         return resolve()
       })
     },
-    async handleSaveComment() {
-      try {
-        await this.validateRate()
+    async validdateAndCreateCommnet() {
+      await this.validateRate()
+      await new Promise(async (resolve, reject) => {
         this.$refs.form.validate(async valid => {
           if (valid) {
             this.loading = true
             await this.commentEvaluationReport(this.params)
+              .then(res => resolve())
+              .catch(error => reject(error))
           }
         })
+      })
+    },
+    async handleSaveComment() {
+      try {
+        await this.validdateAndCreateCommnet()
+        this.$message.success('点评成功')
+        this.$router.back(-1)
       } catch (error) {
-        this.$message.error(error)
-        console.log(error)
+        const errMsg = _.isString(error)
+          ? error
+          : _.get(error, 'response.data.message', '点评失败')
+        this.$message.error(_.toString(errMsg))
       } finally {
         this.loading = false
       }
@@ -239,6 +318,22 @@ export default {
 
   &-main {
     padding: 24px;
+    &-student-info {
+      display: flex;
+      align-items: center;
+      .student-portrait {
+        width: 42px;
+        height: 42px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-left: 14px;
+        margin-right: 14px;
+      }
+      .student-name {
+        font-size: 14px;
+        color: #666;
+      }
+    }
     &-overall-evaluation {
       margin-top: 30px;
       .evaluation-name {

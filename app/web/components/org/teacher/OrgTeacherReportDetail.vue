@@ -8,7 +8,7 @@
         <el-tab-pane label="待点评" name="1">
           <div class="teacher-report-detail-main-table">
             <el-table :data="toCommentTable" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" border="" style="width: 100%">
-              <el-table-column prop="userId" label="序号">
+              <el-table-column prop="studentId" label="序号">
               </el-table-column>
               <el-table-column prop="realname" label="学生姓名">
               </el-table-column>
@@ -45,7 +45,7 @@
             </div>
             <div class="right-side">
               <el-button size="small">打印</el-button>
-              <el-button size="small" type="primary">发送给家长</el-button>
+              <el-button @click="handleSMS" :loading="isSending" size="small" type="primary">发送给家长</el-button>
             </div>
           </div>
           <div class="teacher-report-detail-main-table">
@@ -63,15 +63,15 @@
               </el-table-column>
               <el-table-column label="发送状态" width="120">
                 <template slot-scope="scope">
-                  <span>{{scope.row.createdAt | formatSendStatus}}</span>
+                  <span>{{scope.row.isSend | formatSendStatus}}</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <el-button @click.native.prevent="toReportDetail(scope.row)" size="small">
+                  <el-button @click.native.prevent="toCommentDetail(scope.row)" size="small">
                     详情
                   </el-button>
-                  <el-button @click.native.prevent="handleDeleteReport(scope.row.id)" size="small">
+                  <el-button @click.native.prevent="handleDeleteComment(scope.row)" size="small">
                     删除
                   </el-button>
                 </template>
@@ -103,6 +103,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import ReportType from './ReportType'
 import moment from 'moment'
+import { keepwork } from '@/api'
 export default {
   name: 'OrgTeacherReportDetail',
   components: {
@@ -113,7 +114,7 @@ export default {
       return moment(value).format('YYYY/MM/DD HH:mm')
     },
     formatSendStatus(isSend) {
-      return isSend === 1 ? '已发送' : '未发送'
+      return isSend == 1 ? '已发送' : '待发送'
     }
   },
   data() {
@@ -122,7 +123,9 @@ export default {
       sendStatus: 0,
       studentName: '',
       loading: false,
+      isSending: false,
       isShowEditDialog: false,
+      selection: [],
       rules: {
         name: [
           { required: true, message: '报告名称不能为空', trigger: 'change' }
@@ -135,20 +138,34 @@ export default {
     }
   },
   async created() {
-    await this.getReportDetail({ reportId: this.reportId })
+    await this.getReportTable()
   },
   watch: {
-    async activeName(status) {
-      await this.getReportDetail({
-        reportId: this.reportId,
-        params: { status }
-      })
+    async activeName(activeName) {
+      this.studentName = ''
+      await this.getReportTable()
     }
   },
   computed: {
     ...mapGetters({
-      evaluationReportDetail: 'org/teacher/evaluationReportDetail'
+      evaluationReportDetail: 'org/teacher/evaluationReportDetail',
+      currentOrg: 'org/currentOrg'
     }),
+    orgName() {
+      return this.currentOrg.name
+    },
+    searchParams() {
+      const params = {
+        status: this.activeName
+      }
+      if (this.activeName == '2' && this.sendStatus != -1) {
+        params['isSend'] = this.sendStatus
+      }
+      if (this.studentName) {
+        params['realname'] = this.studentName
+      }
+      return params
+    },
     reportName() {
       return this.$route.query.reportName
     },
@@ -192,17 +209,24 @@ export default {
     },
     hasCommentTable() {
       return _.get(this.evaluationReportDetail, 2, [])
+    },
+    classId() {
+      return _.toNumber(this.$route.query.classId)
     }
   },
   methods: {
     ...mapActions({
       getEvaluationReportDetail: 'org/teacher/getEvaluationReportDetail',
-      updateEvaluationReport: 'org/teacher/updateEvaluationReport'
+      updateEvaluationReport: 'org/teacher/updateEvaluationReport',
+      deleteEvaluationReportComment: 'org/teacher/deleteEvaluationReportComment'
     }),
-    async getReportDetail({ reportId, params = { status: 1 } }) {
+    async getReportTable() {
       try {
         this.loading = true
-        await this.getEvaluationReportDetail({ reportId, params })
+        await this.getEvaluationReportDetail({
+          reportId: this.reportId,
+          params: this.searchParams
+        })
       } catch (error) {
         console.error(error)
       } finally {
@@ -247,17 +271,15 @@ export default {
     handleCancelEditReport() {
       this.isShowEditDialog = false
     },
-    handleClick(tab, evt) {
-      console.log(activeName)
-    },
-    handleSearchByStatus(sendStatus) {
+    async handleSearchByStatus(sendStatus) {
       this.sendStatus = sendStatus
+      await this.getReportTable()
     },
-    handleSearchByStudentName() {
-      console.log(name)
+    async handleSearchByStudentName() {
+      await this.getReportTable()
     },
     handleSelectionChange(selection) {
-      console.log(selection)
+      this.selection = selection
     },
     handleToCommnet(row) {
       this.$router.push({
@@ -268,6 +290,96 @@ export default {
           reportId: this.reportId
         }
       })
+    },
+    async handleDeleteComment({ userReportId, realname }) {
+      this.$confirm(`确定删除对${realname}的点评吗?`, '提示', {
+        type: 'warning'
+      })
+        .then(async res => {
+          try {
+            this.loading = true
+            await this.deleteEvaluationReportComment(userReportId)
+            await this.getReportTable()
+          } catch (error) {
+            this.$message.error(
+              _.get(error, 'response.data.message', '删除失败')
+            )
+          } finally {
+            this.loading = false
+          }
+        })
+        .catch(() => {})
+    },
+    toCommentDetail(row) {
+      this.$router.push({
+        name: 'OrgTeacherReportCommentDetail',
+        query: {
+          classId: this.classId,
+          reportName: this.reportName,
+          type: this.reportTypeId,
+          ...row
+        }
+      })
+    },
+    generaSMSData(arr) {
+      const dataArr = _.map(arr, item => {
+        const { parentPhoneNum, realname, star, studentId, userReportId } = item
+        return {
+          parentPhoneNum,
+          realname,
+          star,
+          studentId,
+          userReportId,
+          classId: this.classId,
+          type: this.reportTypeId,
+          baseUrl: 'www.google.com',
+          reportName: this.reportName,
+          orgName: this.orgName
+        }
+      })
+      return dataArr
+    },
+    handleSMS() {
+      const noParentPhonArr = _.reduce(
+        this.selection,
+        (arr, cur) => {
+          if (!cur.parentPhoneNum) {
+            arr.push(cur)
+          }
+          return arr
+        },
+        []
+      )
+      if (noParentPhonArr.length > 0) {
+        const studentNameStr = _.map(
+          noParentPhonArr,
+          item => item.realname
+        ).join(',')
+        this.$alert(studentNameStr, '如下学生未设置家长手机号，请先设置。', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+        return
+      }
+      this.$confirm('确定将评估报告发送给学生家长吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(async () => {
+          try {
+            this.isSending = true
+            const dataArr = this.generaSMSData(this.selection)
+            await keepwork.evaluationReports.reportToParent({ dataArr })
+            await this.getReportTable()
+          } catch (error) {
+            console.error(error)
+          } finally {
+            this.isSending = false
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }
