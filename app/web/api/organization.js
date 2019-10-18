@@ -134,16 +134,26 @@ const evaluationReports = {
     post('evaluationReports/sendSms', { cellphone }),
   getEvaluationCommentList: async ({ classId }) =>
     get(`evaluationReports/evaluationCommentList?classId=${classId}`),
-  getClassEvaluationReport: async params => get('evaluationReports', { params }),
-  createClassEvaluationReport: async params => post('evaluationReports', params),
-  deleteClassEvaluationReport: async id => deleteMethod(`evaluationReports/${id}`),
-  getEvaluationReportDetail: async ({ reportId, params = {} }) => get(`evaluationReports/${reportId}`, { params }),
-  commentEvaluationReport: async params => post('evaluationReports/userReport', params),
-  updateCommentEvaluationReport: async ({ userReportId, ...params }) => put(`evaluationReports/userReport/${userReportId}`, params),
-  updateEvaluationReport: async ({ reportId, ...params }) => put(`evaluationReports/${reportId}`, params),
-  deleteEvaluationReportComment: async id => deleteMethod(`evaluationReports/userReport/${id}`),
-  getEvaluationReportCommentDetail: async ({ userReportId, ...params }) => get(`evaluationReports/userReport/${userReportId}`, { params }),
-  reportToParent: async params => post('evaluationReports/reportToParent', params),
+  getClassEvaluationReport: async params =>
+    get('evaluationReports', { params }),
+  createClassEvaluationReport: async params =>
+    post('evaluationReports', params),
+  deleteClassEvaluationReport: async id =>
+    deleteMethod(`evaluationReports/${id}`),
+  getEvaluationReportDetail: async ({ reportId, params = {} }) =>
+    get(`evaluationReports/${reportId}`, { params }),
+  commentEvaluationReport: async params =>
+    post('evaluationReports/userReport', params),
+  updateCommentEvaluationReport: async ({ userReportId, ...params }) =>
+    put(`evaluationReports/userReport/${userReportId}`, params),
+  updateEvaluationReport: async ({ reportId, ...params }) =>
+    put(`evaluationReports/${reportId}`, params),
+  deleteEvaluationReportComment: async id =>
+    deleteMethod(`evaluationReports/userReport/${id}`),
+  getEvaluationReportCommentDetail: async ({ userReportId, ...params }) =>
+    get(`evaluationReports/userReport/${userReportId}`, { params }),
+  reportToParent: async params =>
+    post('evaluationReports/reportToParent', params),
   getStudentInfo: params => get('evaluationReports/userInfo', { params }),
   getUserinfo: async () => get('evaluationReports/userInfo'),
   updateUserinfo: async userinfo => put('evaluationReports/userInfo', userinfo),
@@ -160,7 +170,9 @@ const evaluationReports = {
       verifCode,
       newParentPhoneNum,
       newVerifCode
-    })
+    }),
+  getOrgClassReport: async ({ days }) =>
+    get(`evaluationReports/orgClassReport?days=${days}`)
 }
 
 export default {

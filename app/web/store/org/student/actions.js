@@ -32,7 +32,8 @@ const {
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_EVALUATION_COMMENT_LIST_SUCCESS,
-  GET_STUDENT_INFO_SUCCESS
+  GET_STUDENT_INFO_SUCCESS,
+  GET_ORG_CLASS_REPORT_SUCCESS
 } = props
 
 const errMsg = {
@@ -537,6 +538,10 @@ const actions = {
       newParentPhoneNum,
       newVerifCode
     })
+  },
+  async getOrgClassReport({ commit }, { days }) {
+    let result = await keepwork.evaluationReports.getOrgClassReport({ days })
+    commit(GET_ORG_CLASS_REPORT_SUCCESS, { days, result })
   }
 }
 
