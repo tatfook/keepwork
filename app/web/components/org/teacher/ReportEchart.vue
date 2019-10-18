@@ -1,6 +1,6 @@
 <template>
   <div class="report-echart">
-    
+
   </div>
 </template>
 

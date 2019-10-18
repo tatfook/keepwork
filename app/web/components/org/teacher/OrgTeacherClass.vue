@@ -9,7 +9,7 @@
         </span>
       </div>
       <div class="students-add-main">
-        <el-form ref="form" label-width="80px" :model="studentFormData">
+        <el-form ref="form" label-width="100px" :model="studentFormData">
           <el-form-item prop="name" :label="$t('org.nameLabel')" :rules="rules.name">
             <el-input v-model="studentFormData.name"></el-input>
           </el-form-item>

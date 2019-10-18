@@ -31,6 +31,9 @@
           <el-table-column prop="reportName" label="报告名称" width="120">
           </el-table-column>
           <el-table-column prop="type" label="报告类型" width="120">
+            <template slot-scope="scope">
+              <span>{{scope.row.type | formatReportType}}</span>
+            </template>
           </el-table-column>
           <el-table-column label="创建时间" width="140">
             <template slot-scope="scope">
@@ -89,17 +92,16 @@ export default {
   filters: {
     formatTime(value) {
       return moment(value).format('YYYY/MM/DD HH:mm')
+    },
+    formatReportType(type) {
+      const TYPE_DICT = {
+        1: '小评',
+        2: '阶段总结'
+      }
+      return TYPE_DICT[type]
     }
   },
   async created() {
-    if (!this.classId) {
-      this.$router.push({
-        name: 'OrgTeacherReportList',
-        query: {
-          classId: this.firstClassId
-        }
-      })
-    }
     await this.initPage()
   },
   watch: {
@@ -115,6 +117,15 @@ export default {
     }),
     async initPage() {
       try {
+        if (!this.classId) {
+          this.$router.push({
+            name: 'OrgTeacherReportList',
+            query: {
+              classId: this.firstClassId
+            }
+          })
+          return
+        }
         this.fullLoading = true
         await this.getClassEvaluationReportList({ classId: this.classId })
       } catch (error) {
@@ -151,13 +162,15 @@ export default {
         this.loading = false
       }
     },
-    async toReportDetail({ id, ...rest }) {
+    async toReportDetail(row) {
+      const { id, reportName, type, ...rest } = row
       this.$router.push({
         name: 'OrgTeacherReportDetail',
         query: {
           classId: this.classId,
           reportId: id,
-          ...rest
+          reportName,
+          type
         }
       })
     },

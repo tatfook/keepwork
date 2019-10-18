@@ -64,6 +64,9 @@ const actions = {
   async commentEvaluationReport(context, params) {
     await evaluationReports.commentEvaluationReport(params)
   },
+  async updateCommentEvaluationReport(context, params) {
+    await evaluationReports.updateCommentEvaluationReport(params)
+  },
   async deleteEvaluationReportComment(context, id) {
     await evaluationReports.deleteEvaluationReportComment(id)
   },

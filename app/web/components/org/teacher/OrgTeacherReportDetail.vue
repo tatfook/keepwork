@@ -172,25 +172,6 @@ export default {
     reportType() {
       return _.get(this.$route, 'query.type', '')
     },
-    reportTypeDict() {
-      return _.reduce(
-        this.reportTypeNameDict,
-        (obj, value, key) => {
-          obj[value] = _.toNumber(key)
-          return obj
-        },
-        {}
-      )
-    },
-    reportTypeNameDict() {
-      return {
-        1: '小评',
-        2: '阶段总结'
-      }
-    },
-    reportTypeId() {
-      return _.get(this.reportTypeDict, this.reportType, 1)
-    },
     sendStatusDict() {
       return {
         0: '待发送',
@@ -256,14 +237,14 @@ export default {
         query: {
           ...this.$route.query,
           reportName: name,
-          type: this.reportTypeNameDict[type]
+          type
         }
       })
     },
     handleShowEditReportDialog() {
       this.form = {
         name: this.reportName,
-        type: this.reportTypeId,
+        type: _.toNumber(this.reportType),
         reportId: this.reportId
       }
       this.isShowEditDialog = true
@@ -285,9 +266,8 @@ export default {
       this.$router.push({
         name: 'OrgTeacherReportComment',
         query: {
-          ...row,
-          reportName: this.reportName,
-          reportId: this.reportId
+          ...this.$route.query,
+          ...row
         }
       })
     },
@@ -314,9 +294,7 @@ export default {
       this.$router.push({
         name: 'OrgTeacherReportCommentDetail',
         query: {
-          classId: this.classId,
-          reportName: this.reportName,
-          type: this.reportTypeId,
+          ...this.$route.query,
           ...row
         }
       })
@@ -331,7 +309,7 @@ export default {
           studentId,
           userReportId,
           classId: this.classId,
-          type: this.reportTypeId,
+          type: this.reportType,
           baseUrl: 'www.google.com',
           reportName: this.reportName,
           orgName: this.orgName
@@ -340,8 +318,9 @@ export default {
       return dataArr
     },
     handleSMS() {
+      const selection = this.selection.filter(item => item.isSend === 0)
       const noParentPhonArr = _.reduce(
-        this.selection,
+        selection,
         (arr, cur) => {
           if (!cur.parentPhoneNum) {
             arr.push(cur)
@@ -367,9 +346,24 @@ export default {
       })
         .then(async () => {
           try {
+            if (selection.length === 0) {
+              return this.$message.success('发送成功')
+            }
             this.isSending = true
-            const dataArr = this.generaSMSData(this.selection)
-            await keepwork.evaluationReports.reportToParent({ dataArr })
+            const dataArr = this.generaSMSData(selection)
+            const failArr = await keepwork.evaluationReports.reportToParent({
+              dataArr
+            })
+            if (failArr.length > 0) {
+              this.$message({
+                message: `以下学生发送失败: ${failArr.join(',')}, 其余发送成功`,
+                type: 'warning',
+                showClose: true,
+                duration: 10000
+              })
+            } else {
+              this.$message.success('发送成功')
+            }
             await this.getReportTable()
           } catch (error) {
             console.error(error)
