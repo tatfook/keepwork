@@ -7,16 +7,14 @@
 import VeRing from 'v-charts/lib/ring.common'
 export default {
   name: 'AnnulusChart',
-  mounted() {
-    this.ringData = {
-      columns: ['status', 'count'],
-      rows: this.ringOriginData
+  props: {
+    annulusData: {
+      type: Array,
+      required: true
     }
-    this.isDataReady = true
   },
   data() {
     return {
-      isDataReady: false,
       ringChartSettings: {},
       labelOptions: {
         show: true,
@@ -67,89 +65,16 @@ export default {
           radius: [56, 85]
         }
       },
-      ringOriginData: [
-        {
-          status: '发送给家长',
-          count: 5,
-          classes: [
-            {
-              name: '开发班级',
-              teacherNames: '赵敏'
-            },
-            {
-              name: '逻辑班级',
-              teacherNames: 'waky'
-            },
-            {
-              name: '建模班级',
-              teacherNames: 'wivi'
-            },
-            {
-              name: '逻辑班级1',
-              teacherNames: 'waky1'
-            },
-            {
-              name: '建模班级1',
-              teacherNames: 'wivi1'
-            }
-          ]
-        },
-        {
-          status: '点评（待发送）',
-          count: 2,
-          classes: [
-            {
-              name: '逻辑班级111',
-              teacherNames: 'waky'
-            },
-            {
-              name: '建模班级111',
-              teacherNames: 'wivi'
-            }
-          ]
-        },
-        {
-          status: '未点评',
-          count: 7,
-          classes: [
-            {
-              name: '开发班级',
-              teacherNames: '赵敏'
-            },
-            {
-              name: '逻辑班级',
-              teacherNames: 'waky'
-            },
-            {
-              name: '建模班级',
-              teacherNames: 'wivi'
-            },
-            {
-              name: '逻辑班级1',
-              teacherNames: 'waky1'
-            },
-            {
-              name: '建模班级1',
-              teacherNames: 'wivi1'
-            },
-            {
-              name: '逻辑班级111',
-              teacherNames: 'waky'
-            },
-            {
-              name: '建模班级111',
-              teacherNames: 'wivi'
-            }
-          ]
-        }
-      ],
-      ringData: {}
+      ringData: {
+        columns: ['status', 'count'],
+        rows: this.annulusData
+      }
     }
   },
   methods: {
     getTooltipContent(params) {
       let tableContent = _.map(
-        this.ringOriginData[params.dataIndex].classes,
+        this.annulusData[params.dataIndex].classes,
         classDetail =>
           `<tr><td>${classDetail.name}</td><td>${classDetail.teacherNames}</td></tr>`
       )
@@ -167,6 +92,11 @@ export default {
         </table>
       `
       return content
+    }
+  },
+  watch: {
+    annulusData(value) {
+      this.ringData.rows = value
     }
   },
   components: {

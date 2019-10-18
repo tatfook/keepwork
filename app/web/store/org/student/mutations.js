@@ -25,6 +25,7 @@ const GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS =
 const GET_EVALUATION_COMMENT_LIST_SUCCESS =
   'GET_EVALUATION_COMMENT_LIST_SUCCESS'
 const GET_STUDENT_INFO_SUCCESS = 'GET_STUDENT_INFO_SUCCESS'
+const GET_ORG_CLASS_REPORT_SUCCESS = 'GET_ORG_CLASS_REPORT_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -49,7 +50,8 @@ export const props = {
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_EVALUATION_COMMENT_LIST_SUCCESS,
-  GET_STUDENT_INFO_SUCCESS
+  GET_STUDENT_INFO_SUCCESS,
+  GET_ORG_CLASS_REPORT_SUCCESS
 }
 
 const mutations = {
@@ -130,6 +132,12 @@ const mutations = {
   },
   [GET_STUDENT_INFO_SUCCESS](state, userinfo) {
     Vue.set(state, 'userinfo', userinfo)
+  },
+  [GET_ORG_CLASS_REPORT_SUCCESS](state, { days, result }) {
+    Vue.set(state, 'orgClassesReport', {
+      ...state.orgClassesReport,
+      [days]: result
+    })
   }
 }
 

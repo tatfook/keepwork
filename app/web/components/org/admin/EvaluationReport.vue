@@ -12,10 +12,10 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <annulus-chart class="evaluation-report-annulus" />
+      <annulus-chart class="evaluation-report-annulus" :annulusData="annulusData" />
     </div>
     <div class="evaluation-report-item">
-      <line-chart class="evaluation-report-line" />
+      <line-chart class="evaluation-report-line" :lineData="lineData" />
     </div>
     <div class="evaluation-report-item">
       <div class="evaluation-report-item-header">
@@ -25,7 +25,7 @@
           </el-input>
         </div>
       </div>
-      <el-table size="medium" :data="classesCommentDetail" border class="evaluation-report-item-table">
+      <el-table size="medium" :data="tableData" border class="evaluation-report-item-table">
         <el-table-column prop="name" label="班级名称"></el-table-column>
         <el-table-column prop="teacherNames" label="老师姓名" width="132"></el-table-column>
         <el-table-column prop="commentCount" label="点评（次）" width="126"></el-table-column>
@@ -42,10 +42,16 @@
 <script>
 import AnnulusChart from '@/components/org/common/AnnulusChart'
 import LineChart from '@/components/org/common/LineChart'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'EvaluationReport',
-  mounted() {
+  async mounted() {
     this.selectDayOption = this.dayOptions[0]
+    try {
+      await this.orgGetOrgClassReport({ days: this.selectDayOption.value })
+    } catch (error) {
+      console.error(error)
+    }
   },
   data() {
     return {
@@ -64,36 +70,54 @@ export default {
           text: '全部'
         }
       ],
-      selectDayOption: {},
-      classesCommentDetail: [
-        {
-          classId: 112,
-          name: '开发班级',
-          teacherNames: '赵敏',
-          sendCount: 1,
-          commentCount: 2,
-          status: '发送给家长'
-        },
-        {
-          classId: 112,
-          name: '逻辑班级',
-          teacherNames: 'waky',
-          sendCount: 1,
-          commentCount: 5,
-          status: '发送给家长'
-        },
-        {
-          classId: 112,
-          name: '建模班级',
-          teacherNames: 'wivi',
-          sendCount: 1,
-          commentCount: 3,
-          status: '发送给家长'
+      selectDayOption: {}
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getClassReportByDays: 'org/student/getClassReportByDays'
+    }),
+    classReport() {
+      let classReport =
+        this.getClassReportByDays({ days: this.selectDayOption.value }) || []
+      return _.map(classReport, report => {
+        let { commentCount, sendCount } = report
+        return {
+          ...report,
+          commentCount: commentCount || 0,
+          sendCount: sendCount || 0
         }
-      ]
+      })
+    },
+    tableData() {
+      return this.classReport
+    },
+    annulusData() {
+      let groupedByStatus = _.groupBy(this.classReport, 'status')
+      const self = this
+      return _.map(groupedByStatus, groupItem => {
+        let status = groupItem[0].status
+        let statusClasses = _.filter(self.classReport, { status }) || []
+        return {
+          status:
+            status == 1
+              ? '发送给家长'
+              : status == 2
+              ? '点评（待发送）'
+              : '未点评',
+          count: statusClasses.length,
+          classes: statusClasses
+        }
+      })
+    },
+    lineData() {
+      return this.classReport
     }
   },
   methods: {
+    ...mapActions({
+      orgGetOrgClassReport: 'org/student/getOrgClassReport'
+    }),
     goCommentDetail(detail) {
       console.log(detail)
     }

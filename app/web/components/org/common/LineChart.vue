@@ -1,22 +1,21 @@
 <template>
   <div class="line-chart">
-    <ve-line width="700px" height="300px" :data="lineData" :settings="lineChartSettings" :label="labelOptions" :extend="lineChartExtend"></ve-line>
+    <ve-line width="700px" height="300px" :data="lineChartData" :settings="lineChartSettings" :label="labelOptions" :extend="lineChartExtend"></ve-line>
   </div>
 </template>
 <script>
 import VeLine from 'v-charts/lib/line.common'
 export default {
   name: 'LineChart',
-  mounted() {
-    this.lineData = {
-      columns: ['name', 'commentCount', 'sendCount'],
-      rows: this.lineOriginData
+  props: {
+    lineData: {
+      type: Array,
+      required: true
     }
-    this.isDataReady = true
   },
+  mounted() {},
   data() {
     return {
-      isDataReady: false,
       lineChartSettings: {
         labelMap: {
           commentCount: '点评（次）',
@@ -73,7 +72,7 @@ export default {
           axisLabel: {
             margin: 16,
             align: 'right',
-            verticalAlign:'top',
+            verticalAlign: 'top',
             color: '#555',
             fontSize: 14
           }
@@ -85,50 +84,16 @@ export default {
         },
         color: ['#8158fc', '#67eec6']
       },
-      lineOriginData: [
-        {
-          name: '小1班',
-          commentCount: 2,
-          sendCount: 1
-        },
-        {
-          name: '小2班',
-          commentCount: 4,
-          sendCount: 3
-        },
-        {
-          name: '小3班',
-          commentCount: 5,
-          sendCount: 1
-        },
-        {
-          name: '小4班',
-          commentCount: 4,
-          sendCount: 2
-        },
-        {
-          name: '小5班',
-          commentCount: 2,
-          sendCount: 1
-        },
-        {
-          name: '小6班',
-          commentCount: 2,
-          sendCount: 1
-        },
-        {
-          name: '小7班',
-          commentCount: 2,
-          sendCount: 1
-        }
-      ],
-      lineData: {}
+      lineChartData: {
+        columns: ['name', 'commentCount', 'sendCount'],
+        rows: this.lineData
+      }
     }
   },
   methods: {
     getTooltipContent(params) {
       let tableContent = _.map(
-        this.lineOriginData[params.dataIndex].classes,
+        this.lineData[params.dataIndex].classes,
         classDetail =>
           `<tr><td>${classDetail.name}</td><td>${classDetail.teacherNames}</td></tr>`
       )
@@ -146,6 +111,11 @@ export default {
         </table>
       `
       return content
+    }
+  },
+  watch: {
+    lineData(value) {
+      this.lineChartData.rows = value
     }
   },
   components: {
