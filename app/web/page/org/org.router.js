@@ -6,37 +6,61 @@ const OrgNotFound = () => import('@/components/org/OrgNotFound')
 const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
-const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherStatistics = () =>
+  import('@/components/org/teacher/OrgTeacherStatistics')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
-const OrgTeacherClassLastUpdate = () => import('@/components/org/teacher/OrgTeacherClassLastUpdate')
-const OrgTeacherReports = () => import('@/components/org/teacher/OrgTeacherReports')
-const OrgTeacherReportEvaluation = () => import('@/components/org/teacher/OrgTeacherReportEvaluation')
-const OrgTeacherReportEmpty = () => import('@/components/org/teacher/OrgTeacherReportEmpty')
-const OrgTeacherReportComment = () => import('@/components/org/teacher/OrgTeacherReportComment')
-const OrgTeacherReportList = () => import('@/components/org/teacher/OrgTeacherReportList')
-const OrgTeacherReportDetail = () => import('@/components/org/teacher/OrgTeacherReportDetail')
-const OrgTeacherReportCommentEdit = () => import('@/components/org/teacher/OrgTeacherReportCommentEdit')
-const OrgTeacherReportCommentDetail = () => import('@/components/org/teacher/OrgTeacherReportCommentDetail')
-const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
-const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
-const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
-const OrgTeacherCourseware = () => import('@/components/org/teacher/OrgTeacherCourseware')
+const OrgTeacherClassLastUpdate = () =>
+  import('@/components/org/teacher/OrgTeacherClassLastUpdate')
+const OrgTeacherReports = () =>
+  import('@/components/org/teacher/OrgTeacherReports')
+const OrgTeacherReportEvaluation = () =>
+  import('@/components/org/teacher/OrgTeacherReportEvaluation')
+const OrgTeacherReportEmpty = () =>
+  import('@/components/org/teacher/OrgTeacherReportEmpty')
+const OrgTeacherReportComment = () =>
+  import('@/components/org/teacher/OrgTeacherReportComment')
+const OrgTeacherReportList = () =>
+  import('@/components/org/teacher/OrgTeacherReportList')
+const OrgTeacherReportDetail = () =>
+  import('@/components/org/teacher/OrgTeacherReportDetail')
+const OrgTeacherReportCommentEdit = () =>
+  import('@/components/org/teacher/OrgTeacherReportCommentEdit')
+const OrgTeacherReportCommentDetail = () =>
+  import('@/components/org/teacher/OrgTeacherReportCommentDetail')
+const OrgTeacherClassPackage = () =>
+  import('@/components/org/teacher/OrgTeacherClassPackage')
+const OrgTeacherClassPackageLesson = () =>
+  import('@/components/org/teacher/OrgTeacherClassPackageLesson')
+const OrgTeacherLessonPlan = () =>
+  import('@/components/org/teacher/OrgTeacherLessonPlan')
+const OrgTeacherCourseware = () =>
+  import('@/components/org/teacher/OrgTeacherCourseware')
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
-const OrgStudentClassSelect = () => import('@/components/org/student/OrgStudentClassSelect')
-const StudentEvaluations = () => import('@/components/org/student/StudentEvaluations')
+const OrgStudentClassSelect = () =>
+  import('@/components/org/student/OrgStudentClassSelect')
+const StudentEvaluations = () =>
+  import('@/components/org/student/StudentEvaluations')
 const JoinOrg = () => import('@/components/org/student/JoinOrg')
-const OrgStudentClassLastUpdate = () => import('@/components/org/student/OrgStudentClassLastUpdate')
-const OrgStudentPackage = () => import('@/components/org/student/OrgStudentPackage')
-const OrgStudentPackageLesson = () => import('@/components/org/student/OrgStudentPackageLesson')
+const OrgStudentClassLastUpdate = () =>
+  import('@/components/org/student/OrgStudentClassLastUpdate')
+const OrgStudentPackage = () =>
+  import('@/components/org/student/OrgStudentPackage')
+const OrgStudentPackageLesson = () =>
+  import('@/components/org/student/OrgStudentPackageLesson')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const PackageDetail = () => import('@/components/org/admin/PackageDetail')
-const OrgAdminCourseware = () => import('@/components/org/admin/OrgAdminCourseware')
-const OrgAdminLessonPlan = () => import('@/components/org/admin/OrgAdminLessonPlan')
-const OrgAdminPackageLesson = () => import('@/components/org/admin/OrgAdminPackageLesson')
+const OrgAdminCourseware = () =>
+  import('@/components/org/admin/OrgAdminCourseware')
+const OrgAdminLessonPlan = () =>
+  import('@/components/org/admin/OrgAdminLessonPlan')
+const OrgAdminPackageLesson = () =>
+  import('@/components/org/admin/OrgAdminPackageLesson')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
+const OrgEvaluation = () => import('@/components/org/admin/OrgEvaluation')
+const EvaluationReport = () => import('@/components/org/admin/EvaluationReport')
 const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 const ClassList = () => import('@/components/org/admin/ClassList')
 const NewClass = () => import('@/components/org/admin/NewClass')
@@ -48,11 +72,15 @@ const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
-const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
-const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitationCode')
+const NewInvitationCode = () =>
+  import('@/components/org/admin/NewInvitationCode')
+const PrintInvitationCode = () =>
+  import('@/components/org/admin/PrintInvitationCode')
 const HistoricalData = () => import('@/components/org/admin/HistoricalData')
-const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
-const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
+const OrgHistoryClassDetail = () =>
+  import('@/components/org/admin/OrgHistoryClassDetail')
+const OrgHistoryEditClass = () =>
+  import('@/components/org/admin/OrgHistoryEditClass')
 const OrgForms = () => import('@/components/org/admin/OrgForms')
 const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
@@ -181,7 +209,7 @@ export default new Router({
                 {
                   path: 'evaluation',
                   name: 'OrgTeacherReportEvaluation',
-                  component: OrgTeacherReportEvaluation,
+                  component: OrgTeacherReportEvaluation
                 },
                 {
                   path: 'empty',
@@ -228,7 +256,8 @@ export default new Router({
           component: OrgTeacherClassPackage
         },
         {
-          path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId',
+          path:
+            '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId',
           name: 'OrgTeacherClassPackageLesson',
           component: OrgTeacherClassPackageLesson,
           redirect: { name: 'OrgTeacherLessonPlan' },
@@ -339,6 +368,17 @@ export default new Router({
               path: 'student/edit',
               name: 'OrgEditStudent',
               component: EditMember
+            }
+          ]
+        },
+        {
+          path: 'evaluations',
+          component: OrgEvaluation,
+          children: [
+            {
+              path: '/',
+              name: 'EvaluationReport',
+              component: EvaluationReport
             }
           ]
         },
