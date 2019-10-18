@@ -2,7 +2,7 @@
   <div class="teacher-report-comment-detail">
     <div class="teacher-report-comment-detail-header">
       <span>
-        <span class="report-name">
+        <span class="teacher-report-comment-detail-header-report-name" @click="handleToReportDetail">
           {{reportName}}</span> <i class="el-icon-arrow-right"></i> 点评内容
       </span>
       <span>
@@ -10,7 +10,7 @@
         <el-button size="small" type="primary">打印</el-button>
       </span>
     </div>
-    <report-echart></report-echart>
+    <report-echart v-if="!loading" :reportData="evaluationReportCommentDetail"></report-echart>
   </div>
 </template>
 
@@ -22,12 +22,18 @@ export default {
   components: {
     ReportEchart
   },
-  async created() {
-    await this.getEvaluationReportCommentDetail(this.params)
+  data() {
+    return {
+      loading: true
+    }
   },
-  watch: {
-    async $route(route) {
+  async created() {
+    try {
       await this.getEvaluationReportCommentDetail(this.params)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loading = false
     }
   },
   methods: {
@@ -35,10 +41,25 @@ export default {
       getEvaluationReportCommentDetail:
         'org/teacher/getEvaluationReportCommentDetail'
     }),
+    handleToReportDetail() {
+      this.$router.push({
+        name: 'OrgTeacherReportDetail',
+        query: {
+          classId: this.classId,
+          reportName: this.reportName,
+          reportId: this.reportId,
+          type: this.reportType
+        }
+      })
+    },
     handleToCommentEdit() {
       this.$router.push({
         name: 'OrgTeacherReportCommentEdit',
-        query: { ...this.params, reportName: this.reportName }
+        query: {
+          ...this.params,
+          reportName: this.reportName,
+          reportId: this.reportId
+        }
       })
     }
   },
@@ -54,7 +75,7 @@ export default {
         studentId: this.studentId,
         userReportId: this.userReportId,
         classId: this.classId,
-        type: this.reportTypeId
+        type: this.reportType
       }
     },
     studentId() {
@@ -66,8 +87,11 @@ export default {
     classId() {
       return _.toNumber(this.$route.query.classId)
     },
-    reportTypeId() {
+    reportType() {
       return _.toNumber(this.$route.query.type)
+    },
+    reportId() {
+      return _.toNumber(this.$route.query.reportId)
     }
   }
 }
@@ -84,8 +108,9 @@ export default {
     border-top: 1px solid #e8e8e8;
     border-bottom: 1px solid #e8e8e8;
     color: #333;
-    .report-name {
+    &-report-name {
       color: #999;
+      cursor: pointer;
     }
   }
 }

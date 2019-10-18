@@ -40,7 +40,7 @@ export default {
         studentId: this.studentId,
         userReportId: this.userReportId,
         classId: this.classId,
-        type: this.reportTypeId
+        type: this.reportType
       }
     },
     studentId() {
@@ -52,7 +52,7 @@ export default {
     classId() {
       return _.toNumber(this.$route.query.classId)
     },
-    reportTypeId() {
+    reportType() {
       return _.toNumber(this.$route.query.type)
     },
     userReport() {

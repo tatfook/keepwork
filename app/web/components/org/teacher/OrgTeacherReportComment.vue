@@ -1,8 +1,10 @@
 <template>
-  <div class="teacher-report-comment">
+  <div class="teacher-report-comment" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
     <div class="teacher-report-comment-header">
       <span>
-        {{reportName}}
+        <span @click="handleToReportDetail" class="teacher-report-comment-header-report-name">
+          {{reportName}}
+        </span>
         <i class="el-icon-arrow-right"></i>
         <template v-if="isEditMod">
           点评内容
@@ -17,8 +19,8 @@
       </span>
       <span>
         <el-button @click="handleCancel" size="small">取消</el-button>
-        <el-button @click="handleSaveComment" size="small">保存</el-button>
-        <el-button v-if="!isEditMod" size="small" type="primary">下一个</el-button>
+        <el-button :loading="commentLoading" @click="handleSaveComment" size="small">保存</el-button>
+        <el-button :loading="commentLoading" :disabled="!isHasNext" @click="handleNextOne" v-if="!isEditMod" size="small" type="primary">下一个</el-button>
       </span>
     </div>
 
@@ -79,7 +81,7 @@
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import AttachmentType from './AttachmentType'
 import { keepwork } from '@/api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'OrgTeacherReportComment',
   components: {
@@ -106,18 +108,24 @@ export default {
       }
     }
   },
+  watch: {
+    async $route(rotue) {
+      if (this.isEditMod) {
+        return
+      }
+      await this.initReportCommentData()
+    }
+  },
   async created() {
     if (this.isEditMod) {
       return this.initFormData()
     }
-    const { portrait } = await keepwork.evaluationReports.getStudentInfo({
-      studentId: this.studentId
-    })
-    this.portrait = portrait
+    await this.initReportCommentData()
   },
   data() {
     return {
       loading: false,
+      commentLoading: false,
       defaultVideoLogo: require('@/assets/img/video_cover.jpg'),
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       portrait: '',
@@ -167,18 +175,18 @@ export default {
           {
             required: true,
             message: '请输入评价',
-            trigger: 'change'
+            trigger: 'blur'
           }
         ]
       }
     }
   },
   computed: {
-    isHasAppendInfo() {
-      return this.appendInfo.url
-    },
-    validType() {
-      return ['images', 'videos']
+    ...mapGetters({
+      evaluationReportDetail: 'org/teacher/evaluationReportDetail'
+    }),
+    toCommentList() {
+      return _.get(this.evaluationReportDetail, 1, [])
     },
     reportName() {
       return _.get(this.$route, 'query.reportName', '')
@@ -190,7 +198,30 @@ export default {
       return this.editRealname || _.get(this.$route, 'query.realname', '')
     },
     studentId() {
-      return _.get(this.$route, 'query.studentId', '')
+      return _.toNumber(this.$route.query.studentId)
+    },
+    reportType() {
+      return _.get(this.$route, 'query.type', '')
+    },
+    classId() {
+      return _.get(this.$route, 'query.classId', '')
+    },
+    userReportId() {
+      return _.get(this.$route, 'query.userReportId', '')
+    },
+    nextOne() {
+      const currentStudentIndex = _.findIndex(
+        this.toCommentList,
+        item => item.studentId === this.studentId
+      )
+      const nextOne = this.toCommentList[currentStudentIndex + 1]
+      if (nextOne) {
+        return nextOne
+      }
+      return {}
+    },
+    isHasNext() {
+      return Boolean(this.nextOne.studentId && this.nextOne.realname)
     },
     params() {
       const params = {
@@ -207,8 +238,83 @@ export default {
   },
   methods: {
     ...mapActions({
-      commentEvaluationReport: 'org/teacher/commentEvaluationReport'
+      getEvaluationReportDetail: 'org/teacher/getEvaluationReportDetail',
+      commentEvaluationReport: 'org/teacher/commentEvaluationReport',
+      updateCommentEvaluationReport: 'org/teacher/updateCommentEvaluationReport'
     }),
+    async initReportCommentData() {
+      try {
+        this.loading = true
+        const [studentInfo] = await Promise.all([
+          keepwork.evaluationReports.getStudentInfo({
+            studentId: this.studentId
+          }),
+          this.getEvaluationReportDetail({
+            reportId: this.reportId,
+            status: 1
+          })
+        ])
+        this.portrait = studentInfo.portrait
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.loading = false
+      }
+    },
+    handleToReportDetail() {
+      this.$router.push({
+        name: 'OrgTeacherReportDetail',
+        query: {
+          classId: this.classId,
+          reportName: this.reportName,
+          type: this.reportType,
+          reportId: this.reportId
+        }
+      })
+    },
+    toNextOnePage() {
+      this.resetFormData()
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          ...this.nextOne
+        }
+      })
+    },
+    async handleNextOne() {
+      if (this.isEditMod) {
+        return
+      }
+      try {
+        await this.validateCanNext()
+        try {
+          await this.postComment()
+          this.toNextOnePage()
+        } catch (error) {
+          console.error(error)
+        }
+      } catch (error) {
+        this.$confirm(
+          `<div>该学生的点评未完成，确定对下一个学生进行点评吗？</div>
+          <div style="color: #999">（该学生的点评内容将不会保存。）</div>`,
+          '提示',
+          {
+            type: 'warning',
+            dangerouslyUseHTMLString: true,
+            center: true
+          }
+        ).then(async () => {
+          this.toNextOnePage()
+        })
+      }
+    },
+    resetFormData() {
+      this.star = 0
+      this.form.comment = ''
+      this.attachmentList = []
+      this.abilityListLeft.forEach(item => (item.value = 0))
+      this.abilityListRight.forEach(item => (item.value = 0))
+    },
     initFormData() {
       const {
         portrait,
@@ -241,6 +347,16 @@ export default {
         item => (item.value = abilityDict[item.key])
       )
     },
+    async validateCanNext() {
+      try {
+        await this.validateRate()
+        if (!_.trim(this.form.comment)) {
+          throw Error('comment is empty')
+        }
+      } catch (err) {
+        throw Error('haha')
+      }
+    },
     async validateRate() {
       return new Promise((resolve, reject) => {
         if (!this.star) {
@@ -261,37 +377,74 @@ export default {
         this.$refs.form.validate(async valid => {
           if (valid) {
             this.loading = true
-            await this.commentEvaluationReport(this.params)
-              .then(res => resolve())
-              .catch(error => reject(error))
+            if (this.isEditMod) {
+              await this.updateCommentEvaluationReport({
+                ...this.params,
+                userReportId: this.userReportId
+              })
+                .then(res => resolve())
+                .catch(error => reject(error))
+            } else {
+              await this.commentEvaluationReport(this.params)
+                .then(res => resolve())
+                .catch(error => reject(error))
+            }
           }
         })
       })
     },
-    async handleSaveComment() {
+    async postComment() {
       try {
+        this.commentLoading = true
         await this.validdateAndCreateCommnet()
-        this.$message.success('点评成功')
-        this.$router.back(-1)
+        if (this.isEditMod) {
+          this.$message.success('更新点评成功')
+        } else {
+          this.$message.success('点评成功')
+        }
+        return Promise.resolve()
       } catch (error) {
         const errMsg = _.isString(error)
           ? error
           : _.get(error, 'response.data.message', '点评失败')
         this.$message.error(_.toString(errMsg))
+        return Promise.reject(error)
       } finally {
-        this.loading = false
+        this.commentLoading = false
+      }
+    },
+    async handleSaveComment() {
+      try {
+        await this.postComment()
+        this.$router.back(-1)
+      } catch (error) {
+        console.error(error)
       }
     },
     handleCancel() {
-      this.$router.back(-1)
+      if (this.isEditMod) {
+        this.$router.back(-1)
+        return
+      }
+      this.handleToReportDetail()
     },
     handleShowSkydriver() {
       this.isMediaSkyDriveDialogShow = true
     },
     closeSkyDriveManagerDialog(fileList) {
-      console.log(fileList)
+      const filterList = _.map(fileList, item => {
+        const { url, id, type, userId, ext, filename } = item
+        return {
+          id,
+          url,
+          type,
+          userId,
+          ext,
+          filename
+        }
+      })
       this.isMediaSkyDriveDialogShow = false
-      this.attachmentList = [...this.attachmentList, ...fileList]
+      this.attachmentList = [...this.attachmentList, ...filterList]
     },
     handleRemoveAttachment(removeIndex) {
       this.attachmentList = this.attachmentList.filter(
@@ -314,6 +467,9 @@ export default {
     height: 57px;
     border-top: 1px solid #e8e8e8;
     border-bottom: 1px solid #e8e8e8;
+    &-report-name {
+      cursor: pointer;
+    }
   }
 
   &-main {

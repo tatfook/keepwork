@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     handleRemove() {
-      console.log('remvoe', this.index)
       this.$emit('remove', this.index)
     }
   },
