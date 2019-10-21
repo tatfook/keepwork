@@ -10,17 +10,17 @@
         <el-button size="small" type="primary">打印</el-button>
       </span>
     </div>
-    <report-echart v-if="!loading" :reportData="evaluationReportCommentDetail"></report-echart>
+    <report-chart v-if="!loading" :reportData="evaluationReportCommentDetail"></report-chart>
   </div>
 </template>
 
 <script>
-import ReportEchart from './ReportEchart'
+import ReportChart from './ReportChart'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'OrgTeacherReportCommentDetail',
   components: {
-    ReportEchart
+    ReportChart
   },
   data() {
     return {
