@@ -21,7 +21,7 @@
       <div class="evaluation-report-item-header">
         班级点评详情
         <div class="evaluation-report-item-search">
-          <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="searchText">
+          <el-input placeholder="按班级名称搜索" prefix-icon="el-icon-search" v-model="searchText">
           </el-input>
         </div>
       </div>
@@ -90,7 +90,9 @@ export default {
       })
     },
     tableData() {
-      return this.classReport
+      return _.filter(this.classReport, report => {
+        return new RegExp(this.searchText).test(report.name)
+      })
     },
     annulusData() {
       let groupedByStatus = _.groupBy(this.classReport, 'status')
