@@ -24,7 +24,9 @@ const {
   TOGGLE_EXPIRATION_DIALOG,
   GET_FORMS_SUCCESS,
   GET_FEEDBACK_SUCCESS,
-  GET_LOGS_SUCCESS
+  GET_LOGS_SUCCESS,
+  GET_CLASS_EVALUATION_SUCCESS,
+  GET_CLASS_EVALUATION_LIST_SUCCESS
 } = props
 
 const actions = {
@@ -253,7 +255,15 @@ const actions = {
   },
   async createNewMember(
     context,
-    { organizationId, classId, classIds, memberName, realname, roleId, parentPhoneNum }
+    {
+      organizationId,
+      classId,
+      classIds,
+      memberName,
+      realname,
+      roleId,
+      parentPhoneNum
+    }
   ) {
     let { dispatch } = context
     let result = await keepwork.lessonOrganizationClassMembers
@@ -463,6 +473,21 @@ const actions = {
   },
   async sendSms(context, { cellphone }) {
     return await keepwork.evaluationReports.sendSms({ cellphone })
+  },
+  async getClassEvaluation({ commit }, { classId }) {
+    let result = await keepwork.evaluationReports.getClassReportByClassId({
+      classId
+    })
+    commit(GET_CLASS_EVALUATION_SUCCESS, { classId, result })
+  },
+  async getClassEvaluationList({ commit }, { classId, name, type, roleId }) {
+    let result = await keepwork.evaluationReports.getClassEvaluationReport({
+      classId,
+      name,
+      type,
+      roleId
+    })
+    commit(GET_CLASS_EVALUATION_LIST_SUCCESS, { classId, result })
   }
 }
 

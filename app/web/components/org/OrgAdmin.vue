@@ -67,7 +67,7 @@ export default {
           text: this.$t('org.classInfoManage')
         },
         {
-          pageNames: ['EvaluationReport'],
+          pageNames: ['EvaluationReport', 'ClassEvaluation'],
           indexPageName: 'EvaluationReport',
           text: '评估报告'
         },
