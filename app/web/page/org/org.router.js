@@ -61,6 +61,7 @@ const OrgAdminPackageLesson = () =>
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
 const OrgEvaluation = () => import('@/components/org/admin/OrgEvaluation')
 const EvaluationReport = () => import('@/components/org/admin/EvaluationReport')
+const ClassEvaluation = () => import('@/components/org/admin/ClassEvaluation')
 const OrgSetting = () => import('@/components/org/admin/OrgSetting')
 const ClassList = () => import('@/components/org/admin/ClassList')
 const NewClass = () => import('@/components/org/admin/NewClass')
@@ -379,6 +380,11 @@ export default new Router({
               path: '/',
               name: 'EvaluationReport',
               component: EvaluationReport
+            },
+            {
+              path: ':classId',
+              name: 'ClassEvaluation',
+              component: ClassEvaluation
             }
           ]
         },

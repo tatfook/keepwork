@@ -1,6 +1,6 @@
 <template>
   <div class="annulus-chart">
-    <ve-ring width="700px" height="170px" :data="ringData" :settings="ringChartSettings" :label="labelOptions" :extend="ringChartExtend"></ve-ring>
+    <ve-ring :width="`${width}px`" height="170px" :data="ringData" :settings="ringChartSettings" :label="labelOptions" :extend="ringChartExtend"></ve-ring>
   </div>
 </template>
 <script>
@@ -11,6 +11,17 @@ export default {
     annulusData: {
       type: Array,
       required: true
+    },
+    chartColumn: {
+      type: Array
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    isTooltipFormater: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -21,19 +32,22 @@ export default {
         position: 'inner'
       },
       ringChartExtend: {
-        tooltip: {
-          formatter: (params, ticket, callback) => {
-            let content = this.getTooltipContent(params)
-            return content
-          },
-          backgroundColor: '#fff',
-          padding: [18, 18, 24, 18],
-          textStyle: {
-            color: '#000',
-            fontSize: 14
-          }
-        },
+        tooltip: this.isTooltipFormater
+          ? {
+              formatter: (params, ticket, callback) => {
+                let content = this.getTooltipContent(params)
+                return content
+              },
+              backgroundColor: '#fff',
+              padding: [18, 18, 24, 18],
+              textStyle: {
+                color: '#000',
+                fontSize: 14
+              }
+            }
+          : {},
         legend: {
+          show: true,
           type: 'plain',
           left: 42,
           top: 'middle',
@@ -42,7 +56,7 @@ export default {
           itemGap: 6,
           itemWidth: 16,
           itemHeight: 18,
-          formatter: 'Legend {name}',
+          formatter: '{name}',
           textStyle: {
             color: '#555',
             fontSize: 14
@@ -61,12 +75,12 @@ export default {
             align: 'center',
             verticalAlign: 'middle'
           },
-          center: ['50%', '50%'],
-          radius: [56, 85]
+          center: [this.width - 80, '50%'],
+          radius: [56, 80]
         }
       },
       ringData: {
-        columns: ['status', 'count'],
+        columns: this.chartColumn || ['status', 'count'],
         rows: this.annulusData
       }
     }

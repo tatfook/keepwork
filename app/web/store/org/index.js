@@ -24,7 +24,9 @@ const state = {
   expirationDialogVisible: false,
   orgForms: {},
   formsFeedback: {},
-  orgLogs: {}
+  orgLogs: {},
+  classEvaluations: {},
+  classEvaluationList: {}
 }
 export default {
   namespaced: true,

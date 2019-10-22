@@ -172,7 +172,9 @@ const evaluationReports = {
       newVerifCode
     }),
   getOrgClassReport: async ({ days }) =>
-    get(`evaluationReports/orgClassReport?days=${days}`)
+    get(`evaluationReports/orgClassReport?days=${days}`),
+  getClassReportByClassId: async ({ classId }) =>
+    get(`evaluationReports/classReport?classId=${classId}`)
 }
 
 export default {

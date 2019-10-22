@@ -12,7 +12,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <annulus-chart class="evaluation-report-annulus" :annulusData="annulusData" />
+      <annulus-chart class="evaluation-report-annulus" :annulusData="annulusData" :isTooltipFormater="true" />
     </div>
     <div class="evaluation-report-item">
       <line-chart class="evaluation-report-line" :lineData="lineData" />

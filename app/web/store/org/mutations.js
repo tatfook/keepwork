@@ -22,6 +22,8 @@ const TOGGLE_EXPIRATION_DIALOG = 'TOGGLE_EXPIRATION_DIALOG'
 const GET_FORMS_SUCCESS = 'GET_FORMS_SUCCESS'
 const GET_FEEDBACK_SUCCESS = 'GET_FEEDBACK_SUCCESS'
 const GET_LOGS_SUCCESS = 'GET_LOGS_SUCCESS'
+const GET_CLASS_EVALUATION_SUCCESS = 'GET_CLASS_EVALUATION_SUCCESS'
+const GET_CLASS_EVALUATION_LIST_SUCCESS = 'GET_CLASS_EVALUATION_LIST_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -43,7 +45,9 @@ export const props = {
   TOGGLE_EXPIRATION_DIALOG,
   GET_FORMS_SUCCESS,
   GET_FEEDBACK_SUCCESS,
-  GET_LOGS_SUCCESS
+  GET_LOGS_SUCCESS,
+  GET_CLASS_EVALUATION_SUCCESS,
+  GET_CLASS_EVALUATION_LIST_SUCCESS
 }
 
 const mutations = {
@@ -152,6 +156,18 @@ const mutations = {
     Vue.set(state, 'orgLogs', {
       ...state.orgLogs,
       [orgId]: result
+    })
+  },
+  [GET_CLASS_EVALUATION_SUCCESS](state, { classId, result }) {
+    Vue.set(state, 'classEvaluations', {
+      ...state.classEvaluations,
+      [classId]: result
+    })
+  },
+  [GET_CLASS_EVALUATION_LIST_SUCCESS](state, { classId, result }) {
+    Vue.set(state, 'classEvaluationList', {
+      ...state.classEvaluationList,
+      [classId]: result
     })
   }
 }
