@@ -32,7 +32,7 @@
         <el-table-column prop="sendCount" label="发送给家长（次）" width="134"></el-table-column>
         <el-table-column width="110">
           <template slot-scope="scope">
-            <span @click="goCommentDetail(scope.row)">查看</span>
+            <div class="evaluation-report-item-table-btn" @click="goCommentDetail(scope.row)">查看</div>
           </template>
         </el-table-column>
       </el-table>
@@ -121,7 +121,10 @@ export default {
       orgGetOrgClassReport: 'org/student/getOrgClassReport'
     }),
     goCommentDetail(detail) {
-      console.log(detail)
+      let { classId } = detail
+      this.$router.push({
+        path: ''+classId
+      })
     }
   },
   components: {
@@ -158,6 +161,11 @@ export default {
       width: 640px;
       font-size: 14px;
       color: #555;
+      &-btn {
+        color: #2397f3;
+        cursor: pointer;
+        text-align: center;
+      }
       /deep/th {
         font-weight: normal;
         background-color: #fafafa;
