@@ -23,7 +23,7 @@
               <p>总计：{{classEvaluations.length}}次</p>
               <p>老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="totalData" :chartColumn="chartColumn" />
+            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
@@ -31,7 +31,7 @@
               <p>老师贡献度：</p>
             </div>
             <template>
-              <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="commentData" :chartColumn="chartColumn" />
+              <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="commentData" :chartColumn="chartColumn" />
             </template>
           </div>
           <div class="class-evaluation-column-item">
@@ -39,7 +39,7 @@
               <p>阶段总结：{{summaryEvaluations.length}}次</p>
               <p>老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="summaryData" :chartColumn="chartColumn" />
+            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
           </div>
         </div>
         <div class="class-evaluation-column">
@@ -49,7 +49,7 @@
               <p>总计：{{classEvaluations.length}}次</p>
               <p>老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="sendData" :chartColumn="chartColumn" />
+            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ export default {
       ],
       searchType: null,
       searchName: '',
-      chartColumn: ['realname', 'count'],
+      chartColumn: ['realnameLabel', 'count'],
       dayOptions: [
         {
           value: 30,
@@ -193,6 +193,13 @@ export default {
     }),
     formatedAnnulusData(originData, dataKey) {
       dataKey = dataKey || 'commentCount'
+      const allCount = _.reduce(
+        originData,
+        (oldResult, value) => {
+          return oldResult + value[dataKey]
+        },
+        0
+      )
       let result = []
       _.forEach(_.groupBy(originData, 'realname'), (userValues, key) => {
         let totalCount = _.reduce(
@@ -202,8 +209,11 @@ export default {
           },
           0
         )
+        let percentage =
+          allCount != 0 ? _.round((totalCount / allCount) * 100, 0) : 0
         result.push({
           realname: key,
+          realnameLabel: `${key} ${percentage}%`,
           count: totalCount
         })
       })
