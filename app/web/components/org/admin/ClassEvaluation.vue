@@ -1,20 +1,20 @@
 <template>
   <div class="class-evaluation">
-    <div class="class-evaluation-item">
-      <div class="class-evaluation-header">
-        <div class="class-evaluation-header-title">评估报告
-          <i class="el-icon-arrow-right"></i>
-          <span>{{className}}</span>
-        </div>
-        <el-dropdown class="class-evaluation-header-dropdown">
-          <span class="el-dropdown-link">
-            {{selectDayOption.text}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(dayOption, index) in dayOptions" :key="index">{{dayOptions.text}}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+    <div class="class-evaluation-header">
+      <div class="class-evaluation-header-title">评估报告
+        <i class="el-icon-arrow-right"></i>
+        <span>{{className}}</span>
       </div>
+      <el-dropdown class="class-evaluation-header-dropdown">
+        <span class="el-dropdown-link">
+          {{selectDayOption.text}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(dayOption, index) in dayOptions" :key="index">{{dayOptions.text}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+    <div class="class-evaluation-item" v-if="isClassHasReport">
       <div class="class-evaluation-charts">
         <div class="class-evaluation-column">
           <div class="class-evaluation-column-header">点评（次）</div>
@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="class-evaluation-item">
+    <div class="class-evaluation-item" v-if="isClassHasReport">
       <div class="class-evaluation-item-search">
         <div class="class-evaluation-item-search-item">
           <label for="typeDropdown">报告类型：</label>
@@ -78,6 +78,12 @@
         <el-table-column prop="waitComment" label="待点评（人）" width="110"></el-table-column>
       </el-table>
     </div>
+    <div class="class-evaluation-empty" v-if="!isClassHasReport">
+      <img src="@/assets/img/media_library_empty.png" alt="">
+      <p>
+        暂无数据
+      </p>
+    </div>
   </div>
 </template>
 <script>
@@ -99,6 +105,7 @@ export default {
   },
   data() {
     return {
+      isClassHasReport: false,
       typeOptions: [
         {
           value: null,
@@ -209,6 +216,10 @@ export default {
         type: this.searchType,
         roleId: 64
       })
+      if (!this.isClassHasReport) {
+        this.isClassHasReport =
+          this.classEvaluationList.length > 0 ? true : false
+      }
     }
   },
   components: {
@@ -218,6 +229,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .class-evaluation {
+  min-height: 100%;
+  position: relative;
   &-item {
     padding: 0 28px;
     background-color: #fff;
@@ -249,12 +262,16 @@ export default {
     }
   }
   &-header {
-    padding: 32px 0;
+    padding: 32px 28px;
     border-bottom: 1px solid #cacaca;
     font-size: 18px;
     color: #000;
     display: flex;
     justify-content: center;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    margin-bottom: -1px;
+    border-radius: 4px 4px 0 0;
     &-title {
       flex: 1;
       & > .el-icon-arrow-right {
@@ -304,6 +321,26 @@ export default {
   }
   &-table {
     margin-bottom: 36px;
+  }
+  &-empty {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid #e8e8e8;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    top: 88px;
+    & > p {
+      font-size: 14px;
+      color: #666;
+      margin: 26px 0 0;
+    }
   }
 }
 </style>

@@ -123,7 +123,10 @@ export default {
     goCommentDetail(detail) {
       let { classId } = detail
       this.$router.push({
-        path: ''+classId
+        name: 'ClassEvaluation',
+        params: {
+          classId
+        }
       })
     }
   },
