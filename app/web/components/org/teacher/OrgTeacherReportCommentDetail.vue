@@ -10,7 +10,7 @@
         <el-button size="small" type="primary">打印</el-button>
       </span>
     </div>
-    <report-chart v-if="!loading" :reportData="evaluationReportCommentDetail"></report-chart>
+    <report-chart v-if="!loading" :reportData="evaluationReportCommentDetail" :reportType="reportType"></report-chart>
   </div>
 </template>
 

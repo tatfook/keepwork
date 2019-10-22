@@ -1,15 +1,29 @@
 <template>
   <div class="report-echart">
-    <radar-chart :chartData="chartData" :settings="chartSettings" :extend="extend"></radar-chart>
+    <div class="report-echart-container">
+      <!-- <div class="report-echart-radar">
+        <report-chart-radar :reportData="reportData" radarType="thisTime"></report-chart-radar>
+      </div>
+      <div v-if="isHistory" class="report-echart-radar">
+        <report-chart-radar :reportData="reportData" radarType="history"></report-chart-radar>
+      </div> -->
+      <div v-if="isHistory" class="report-echart-line">
+        <div v-for="item in growthTrackList" :key="item.key">
+          <report-chart-line :data="item"></report-chart-line>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import RadarChart from '@/components/org/common/RadarChart'
+import ReportChartRadar from './ReportChartRadar'
+import ReportChartLine from './ReportChartLine'
 export default {
   name: 'ReportChart',
   components: {
-    RadarChart
+    ReportChartRadar,
+    ReportChartLine
   },
   props: {
     reportData: {
@@ -17,194 +31,107 @@ export default {
       default() {
         return {}
       }
-    }
-  },
-  data() {
-    return {
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
-      starIcon: require('@/assets/org/star.png')
+    },
+    reportType: {
+      type: Number,
+      default: 1
     }
   },
   computed: {
-    extend() {
-      return {
-        radar: {
-          shape: 'polygon',
-          center: ['50%', '50%'],
-          padding: [20, 20],
-          name: {
-            formatter: (value, indicator) => {
-              const { userStar, avgStar, name } = this.starGroup[value]
-              const str = [
-                `{a|${userStar}}`,
-                '{b|}',
-                `{c|(平均值: ${avgStar})}`,
-                `\n{d|${name}}`
-              ].join('')
-              return str
-            },
-            rich: {
-              a: {
-                color: '#333',
-                fontSize: 14
-              },
-              b: {
-                backgroundColor: {
-                  image: this.starIcon
-                },
-                fontSize: 18
-              },
-              c: {
-                color: '#999',
-                fontSize: 14,
-                padding: [0, 4],
-                height: 28
-              },
-              d: {
-                align: 'center',
-                padding: [7, 14],
-                fontSize: 14,
-                color: '#333',
-                backgroundColor: '#ededed',
-                borderRadius: 4
-              }
-            }
-          },
-          splitArea: {
-            show: false
-          }
-        },
-        legend: {
-          right: 0,
-          orient: 'vertical'
-        }
-      }
-    },
-    chartData() {
-      return {
-        columns: this.columns,
-        rows: [this.userStartByName, this.classmateStarByName]
-      }
-    },
-    columns() {
-      return [
-        'name',
-        'spatial',
-        'collaborative',
-        'creative',
-        'logical',
-        'compute',
-        'coordinate'
-      ]
-    },
-    chartSettings() {
-      return {
-        labelMap: this.labelMap,
-        areaStyle: {
-          opacity: 0.3
-        }
-      }
-    },
     userRepo() {
       return _.get(this.reportData, 'userRepo', {})
     },
     userRealname() {
       return _.get(this.userRepo, 'realname', '')
     },
-    userPortrait() {
-      return _.get(this.userRepo, 'portrait', this.defaultPortrait)
+    isHistory() {
+      return _.toNumber(this.reportType) === 2
     },
-    classmatesAvgStar() {
-      return _.get(this.reportData, 'classmatesAvgStar', {})
+    growthTrack() {
+      return _.get(this.reportData, 'growthTrack', {})
     },
-    mediaUrl() {
-      return _.get(this.userRepo, 'mediaUrl', [])
-    },
-    comment() {
-      return _.defaultTo(this.userRepo, 'comment', '')
-    },
-    star() {
-      return _.defaultTo(this.userRepo, 'star', 0)
-    },
-    starGroup() {
-      const starGroup = _.reduce(
-        this.labelKeyMap,
-        (temp, key) => {
-          temp[key] = {
-            key,
-            name: this.labelName[key],
-            userStar: this.userRepo[key],
-            avgStar: this.classmateStar[key]
-          }
-          return temp
-        },
-        {}
-      )
-      return starGroup
-    },
-    labelName() {
-      return {
-        spatial: '空间思维能力',
-        collaborative: '协作沟通能力',
-        creative: '创新思维能力',
-        logical: '逻辑思考能力',
-        compute: '计算思维能力',
-        coordinate: '统筹思维能力'
-      }
-    },
-    labelKeyMap() {
+    growthTrackKey() {
       return [
-        'spatial',
-        'collaborative',
-        'creative',
-        'logical',
-        'compute',
-        'coordinate'
+        {
+          key: 'spatial',
+          name: '空间思维能力'
+        },
+        {
+          key: 'creative',
+          name: '创新思维能力'
+        },
+        {
+          key: 'compute',
+          name: '计算思维能力'
+        },
+        {
+          key: 'collaborative',
+          name: '协作沟通能力'
+        },
+        {
+          key: 'logical',
+          name: '逻辑思考能力'
+        },
+        {
+          key: 'coordinate',
+          name: '统筹思维能力'
+        }
       ]
     },
-    userStar() {
-      const userStar = _.reduce(
-        this.labelKeyMap,
-        (temp, key) => {
-          temp[key] = this.userRepo[key]
-          return temp
-        },
-        {}
-      )
-      return userStar
+    classmatesHistory() {
+      return _.get(this.growthTrack, 'classmatesHistoryAvgStar2', [])
     },
-    classmateStar() {
-      const classmateStar = _.reduce(
-        this.labelKeyMap,
-        (temp, key) => {
-          const avgKey = `${key}Avg`
-          temp[key] = this.classmatesAvgStar[`${key}Avg`]
-          return temp
-        },
-        {}
-      )
-      return classmateStar
+    userHistory() {
+      return _.get(this.growthTrack, 'userHistoryStar', [])
     },
-    userStartByName() {
-      return {
-        name: this.userRealname,
-        ...this.userStar
-      }
+    starGroupArray() {
+      return _.map(this.userHistory, (item, index) => {
+        return {
+          userStar: item,
+          classmateStar: this.classmatesHistory[index]
+        }
+      })
     },
-    classmateStarByName() {
-      return {
-        name: '本班同学平均值',
-        ...this.classmateStar
-      }
+    growthTrackList() {
+      return _.map(this.growthTrackKey, growthTrack => {
+        const columns = ['次数', this.userRealname, '本班同学平均值']
+        const rows = _.map(this.starGroupArray, (item, index) => {
+          return {
+            次数: `${index + 1}`,
+            [this.userRealname]: item['userStar'][growthTrack.key],
+            本班同学平均值: item['classmateStar'][`${growthTrack.key}Avg`]
+          }
+        })
+        return {
+          ...growthTrack,
+          chartData: {
+            columns,
+            rows
+          }
+        }
+      })
     }
-  },
-  created() {
-    console.warn(this.classmateStar)
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .report-echart {
+  background: #fff;
+  padding: 50px 80px;
+  &-container {
+    background: #b1dcff;
+    padding: 29px;
+  }
+  &-radar {
+    border-radius: 20px;
+    margin-bottom: 29px;
+    background: #fff;
+  }
+  &-line {
+    border-radius: 20px;
+    margin-bottom: 29px;
+    background: #fff;
+  }
 }
 </style>
