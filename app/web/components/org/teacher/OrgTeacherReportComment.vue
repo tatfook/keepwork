@@ -376,8 +376,8 @@ export default {
       await new Promise(async (resolve, reject) => {
         this.$refs.form.validate(async valid => {
           if (valid) {
-            this.loading = true
             if (this.isEditMod) {
+              this.commentLoading = true
               await this.updateCommentEvaluationReport({
                 ...this.params,
                 userReportId: this.userReportId
@@ -385,6 +385,7 @@ export default {
                 .then(res => resolve())
                 .catch(error => reject(error))
             } else {
+              this.commentLoading = true
               await this.commentEvaluationReport(this.params)
                 .then(res => resolve())
                 .catch(error => reject(error))
@@ -395,7 +396,6 @@ export default {
     },
     async postComment() {
       try {
-        this.commentLoading = true
         await this.validdateAndCreateCommnet()
         if (this.isEditMod) {
           this.$message.success('更新点评成功')
@@ -416,7 +416,7 @@ export default {
     async handleSaveComment() {
       try {
         await this.postComment()
-        this.$router.back(-1)
+        this.handleToReportDetail()
       } catch (error) {
         console.error(error)
       }

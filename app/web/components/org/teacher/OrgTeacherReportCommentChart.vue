@@ -1,14 +1,17 @@
 <template>
   <div>
-    echart
+    <radar-echart></radar-echart>
   </div>
 </template>
 
 <script>
-import ReportEchart from './ReportEchart'
+import RadarChart from '@/components/org/common/RadarChart'
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'OrgTeacherReportCommentEchart',
+  name: 'OrgTeacherReportCommentChart',
+  components: {
+    RadarChart
+  },
   async created() {
     const res = await this.getEvaluationReportCommentDetail(this.params)
     console.log(res)
