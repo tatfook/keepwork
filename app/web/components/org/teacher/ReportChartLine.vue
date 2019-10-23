@@ -1,9 +1,12 @@
 <template>
-  <ve-line :data="chartData" :settings="settings" :extend="extend"></ve-line>
+  <div class="report-chart-line">
+    <ve-line :data="chartData" :settings="settings" :extend="extend"></ve-line>
+  </div>
 </template>
 
 <script>
 import VeLine from 'v-charts/lib/line.common'
+import 'echarts/lib/component/title'
 export default {
   name: 'ReportChartLine',
   components: {
@@ -21,10 +24,12 @@ export default {
     chartData() {
       return _.get(this.data, 'chartData', {})
     },
+    color() {
+      return _.get(this.data, 'color', [])
+    },
     settings() {
       return {
-        yAxisName: ['星星数'],
-        padding: [0, 20]
+        yAxisName: ['星星数']
       }
     },
     extend() {
@@ -34,18 +39,35 @@ export default {
           orient: 'vertical'
         },
         title: {
-          text: '对数轴示例',
-          left: 'center'
+          text: this.data.name,
+          left: 38
+        },
+        grid: {
+          right: 80,
+          left: 40
         },
         xAxis: {
           name: '第*次点评',
-          splitLine: { show: false }
-        }
+          nameLocation: 'end'
+        },
+        color: this.color
       }
     }
-  },
-  created() {
-    console.log(this.data)
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.report-chart-line {
+  &-name {
+    color: #333;
+    font-weight: bold;
+    padding-left: 40px;
+    text-align: left;
+  }
+  &-border {
+    border-bottom: 1px solid #e5e5e5;
+    margin: 0 30px 60px;
+  }
+}
+</style>

@@ -1,5 +1,6 @@
 <template>
   <ve-radar class="radar-chart" :data="chartData" :settings="settings" :height="height" :width="width" :colors="colors" :extend="extend"></ve-radar>
+  <!-- <ve-radar class="radar-chart" :data="chartData" :settings="settings" :colors="colors" :extend="extend"></ve-radar> -->
 </template>
 
 <script>
@@ -12,7 +13,7 @@ export default {
   props: {
     height: {
       type: String,
-      default: '600px'
+      default: '500px'
     },
     width: {
       type: String,

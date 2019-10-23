@@ -35,7 +35,8 @@ export default {
         radar: {
           shape: 'polygon',
           center: ['50%', '50%'],
-          padding: [20, 20],
+          radius: 146,
+          nameGap: 46,
           name: {
             formatter: (value, indicator) => {
               const { userStar, avgStar, name } = this.starGroup[value]
@@ -66,7 +67,7 @@ export default {
               },
               d: {
                 align: 'center',
-                padding: [7, 14],
+                padding: [5, 12],
                 fontSize: 14,
                 color: '#333',
                 backgroundColor: '#ededed',
@@ -79,8 +80,13 @@ export default {
           }
         },
         legend: {
-          right: 0,
+          right: 30,
           orient: 'vertical'
+        },
+        grid: {
+          bottom: 30,
+          left: 100,
+          right: '10%'
         }
       }
     },
