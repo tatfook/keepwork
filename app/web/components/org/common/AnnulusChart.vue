@@ -88,7 +88,6 @@ export default {
         },
         color: ['#8158fc', '#67eec6', '#ffc15e'],
         series: {
-          name: '11',
           hoverAnimation: false,
           startAngle: 180,
           label: {
