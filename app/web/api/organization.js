@@ -171,8 +171,8 @@ const evaluationReports = {
       newParentPhoneNum,
       newVerifCode
     }),
-  getOrgClassReport: async ({ days }) =>
-    get(`evaluationReports/orgClassReport?days=${days}`),
+  getOrgClassReport: async params =>
+    get('evaluationReports/orgClassReport', { params }),
   getClassReportByClassId: async ({ classId }) =>
     get(`evaluationReports/classReport?classId=${classId}`)
 }

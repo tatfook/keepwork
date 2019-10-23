@@ -1,18 +1,18 @@
 <template>
-  <div class="evaluation-report">
+  <div class="evaluation-report" v-loading="isLoading">
     <div class="evaluation-report-item">
       <div class="evaluation-report-header">
         <span class="evaluation-report-header-title">评估报告</span>
-        <el-dropdown class="evaluation-report-header-dropdown">
+        <el-dropdown class="evaluation-report-header-dropdown" @command="handleDayCommand">
           <span class="el-dropdown-link">
             {{selectDayOption.text}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(dayOption, index) in dayOptions" :key="index">{{dayOptions.text}}</el-dropdown-item>
+            <el-dropdown-item v-for="(option, index) in dayOptions" :key="index" :command="option">{{option.text}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <annulus-chart class="evaluation-report-annulus" :annulusData="annulusData" :isTooltipFormater="true" />
+      <annulus-chart class="evaluation-report-annulus" :annulusData="annulusData" :isTitleShow="true" :isTooltipFormater="true" />
     </div>
     <div class="evaluation-report-item">
       <line-chart class="evaluation-report-line" :lineData="lineData" />
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       searchText: '',
+      isLoading: false,
       dayOptions: [
         {
           value: 30,
@@ -97,17 +98,17 @@ export default {
     annulusData() {
       let groupedByStatus = _.groupBy(this.classReport, 'status')
       const self = this
+      const totalLength = this.classReport.length
       return _.map(groupedByStatus, groupItem => {
         let status = groupItem[0].status
         let statusClasses = _.filter(self.classReport, { status }) || []
+        let length = statusClasses.length
+        let statusText =
+          status == 1 ? '发送给家长' : status == 2 ? '点评（待发送）' : '未点评'
+        let percent = _.round((length / totalLength) * 100, 0)
         return {
-          status:
-            status == 1
-              ? '发送给家长'
-              : status == 2
-              ? '点评（待发送）'
-              : '未点评',
-          count: statusClasses.length,
+          status: `${statusText} ${percent}%`,
+          count: length,
           classes: statusClasses
         }
       })
@@ -128,6 +129,16 @@ export default {
           classId
         }
       })
+    },
+    async handleDayCommand(dayOption) {
+      this.selectDayOption = dayOption
+      this.isLoading = true
+      try {
+        await this.orgGetOrgClassReport({ days: dayOption.value })
+      } catch (error) {
+        console.log(error)
+      }
+      this.isLoading = false
     }
   },
   components: {
@@ -188,6 +199,7 @@ export default {
     }
     &-dropdown {
       font-size: 14px;
+      cursor: pointer;
     }
   }
   &-annulus {
