@@ -5,6 +5,7 @@
 </template>
 <script>
 import VeRing from 'v-charts/lib/ring.common'
+import 'echarts/lib/component/title'
 export default {
   name: 'AnnulusChart',
   props: {
@@ -22,6 +23,10 @@ export default {
     isTooltipFormater: {
       type: Boolean,
       default: false
+    },
+    isTitleShow: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -32,6 +37,25 @@ export default {
         position: 'inner'
       },
       ringChartExtend: {
+        title: this.isTitleShow
+          ? {
+              show: true,
+              text: '班级数',
+              subtext: '单位：个',
+              textAlign: 'center',
+              x: this.width - 85,
+              y: 65,
+              textStyle: {
+                color: '#ababab',
+                fontSize: 14,
+                fontWeight: 'normal'
+              },
+              subTextStyle: {
+                color: '#ababab',
+                fontSize: 14
+              }
+            }
+          : {},
         tooltip: this.isTooltipFormater
           ? {
               formatter: (params, ticket, callback) => {
@@ -64,6 +88,7 @@ export default {
         },
         color: ['#8158fc', '#67eec6', '#ffc15e'],
         series: {
+          name: '11',
           hoverAnimation: false,
           startAngle: 180,
           label: {
