@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getClassReportByDays: 'org/student/getClassReportByDays'
+      getClassReportByDays: 'org/getClassReportByDays'
     }),
     classReport() {
       let classReport =
@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      orgGetOrgClassReport: 'org/student/getOrgClassReport'
+      orgGetOrgClassReport: 'org/getOrgClassReport'
     }),
     goCommentDetail(detail) {
       let { classId } = detail

@@ -32,8 +32,7 @@ const {
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_EVALUATION_COMMENT_LIST_SUCCESS,
-  GET_STUDENT_INFO_SUCCESS,
-  GET_ORG_CLASS_REPORT_SUCCESS
+  GET_STUDENT_INFO_SUCCESS
 } = props
 
 const errMsg = {
@@ -519,29 +518,25 @@ const actions = {
     })
   },
   async getStudentInfo({ commit }) {
-    let userinfo = await keepwork.evaluationReports.getUserinfo()
+    let userinfo = await keepwork.users.getUserinfo()
     commit(GET_STUDENT_INFO_SUCCESS, userinfo)
   },
   async updateStudentInfo(context, userinfo) {
-    return await keepwork.evaluationReports.updateUserinfo(userinfo)
+    return await keepwork.users.updateUserinfo(userinfo)
   },
   async verifyCode(context, { cellphone, verifCode }) {
-    return await keepwork.evaluationReports.verifyCode({ cellphone, verifCode })
+    return await keepwork.users.verifyCode({ cellphone, verifCode })
   },
   async updateParentPhoneNum(
     context,
     { parentPhoneNum, verifCode, newParentPhoneNum, newVerifCode }
   ) {
-    return await keepwork.evaluationReports.updateParentPhoneNum({
+    return await keepwork.users.updateParentPhoneNum({
       parentPhoneNum,
       verifCode,
       newParentPhoneNum,
       newVerifCode
     })
-  },
-  async getOrgClassReport({ commit }, { days }) {
-    let result = await keepwork.evaluationReports.getOrgClassReport({ days })
-    commit(GET_ORG_CLASS_REPORT_SUCCESS, { days, result })
   }
 }
 
