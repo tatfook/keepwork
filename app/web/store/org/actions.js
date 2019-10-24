@@ -475,18 +475,23 @@ const actions = {
   async sendSms(context, { cellphone }) {
     return await keepwork.users.sendSms({ cellphone })
   },
-  async getClassEvaluation({ commit }, { classId }) {
+  async getClassEvaluation({ commit }, { classId, days }) {
     let result = await keepwork.evaluationReports.getClassReportByClassId({
-      classId
+      classId,
+      days
     })
     commit(GET_CLASS_EVALUATION_SUCCESS, { classId, result })
   },
-  async getClassEvaluationList({ commit }, { classId, name, type, roleId }) {
+  async getClassEvaluationList(
+    { commit },
+    { classId, name, type, roleId, days }
+  ) {
     let result = await keepwork.evaluationReports.getClassEvaluationReport({
       classId,
       name,
       type,
-      roleId
+      roleId,
+      days
     })
     commit(GET_CLASS_EVALUATION_LIST_SUCCESS, { classId, result })
   },
