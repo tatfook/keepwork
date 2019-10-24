@@ -100,7 +100,8 @@ const getters = {
   getClassEvaluation: state => ({ classId }) =>
     _.get(state.classEvaluations, classId),
   getClassEvaluationList: state => ({ classId }) =>
-    _.get(state.classEvaluationList, classId)
+    _.get(state.classEvaluationList, classId),
+  getClassReportByDays: state => ({ days }) => state.orgClassesReport[days]
 }
 
 export default getters

@@ -130,8 +130,6 @@ const lessonOrganizationClassMembers = {
 }
 
 const evaluationReports = {
-  sendSms: async ({ cellphone }) =>
-    post('evaluationReports/sendSms', { cellphone }),
   getEvaluationCommentList: async ({ classId }) =>
     get(`evaluationReports/evaluationCommentList?classId=${classId}`),
   getClassEvaluationReport: async params =>
@@ -154,27 +152,31 @@ const evaluationReports = {
     get(`evaluationReports/userReport/${userReportId}`, { params }),
   reportToParent: async params =>
     post('evaluationReports/reportToParent', params),
-  getStudentInfo: params => get('evaluationReports/userInfo', { params }),
-  getUserinfo: async () => get('evaluationReports/userInfo'),
-  updateUserinfo: async userinfo => put('evaluationReports/userInfo', userinfo),
+  getOrgClassReport: async params =>
+    get('evaluationReports/orgClassReport', { params }),
+  getClassReportByClassId: async ({ classId }) =>
+    get(`evaluationReports/classReport?classId=${classId}`)
+}
+
+const users = {
+  sendSms: async ({ cellphone }) => post('users/sendSms', { cellphone }),
   verifyCode: async ({ cellphone, verifCode }) =>
-    post('evaluationReports/verifyCode', { cellphone, verifCode }),
+    post('users/verifyCode', { cellphone, verifCode }),
   updateParentPhoneNum: async ({
     parentPhoneNum,
     verifCode,
     newParentPhoneNum,
     newVerifCode
   }) =>
-    put('evaluationReports/parentPhoneNum', {
+    put('users/parentPhoneNum', {
       parentPhoneNum,
       verifCode,
       newParentPhoneNum,
       newVerifCode
     }),
-  getOrgClassReport: async params =>
-    get('evaluationReports/orgClassReport', { params }),
-  getClassReportByClassId: async ({ classId }) =>
-    get(`evaluationReports/classReport?classId=${classId}`)
+  getStudentInfo: params => get('users/userInfo', { params }),
+  getUserinfo: async () => get('users/userInfo'),
+  updateUserinfo: async userinfo => put('users/userInfo', userinfo)
 }
 
 export default {
@@ -183,5 +185,6 @@ export default {
   lessonOrganizationClasses,
   lessonOrganizationClassMembers,
   lessonOrganizationForms,
+  users,
   evaluationReports
 }

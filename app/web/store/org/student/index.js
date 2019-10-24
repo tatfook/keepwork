@@ -24,8 +24,7 @@ const state = {
   lastUpdateProjects: [],
   moreLastUpdateProjects: [],
   evaluationCommentList: {},
-  userinfo: {},
-  orgClassesReport: {}
+  userinfo: {}
 }
 
 export default {

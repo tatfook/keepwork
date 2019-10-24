@@ -26,7 +26,8 @@ const state = {
   formsFeedback: {},
   orgLogs: {},
   classEvaluations: {},
-  classEvaluationList: {}
+  classEvaluationList: {},
+  orgClassesReport: {}
 }
 export default {
   namespaced: true,

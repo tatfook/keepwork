@@ -26,7 +26,8 @@ const {
   GET_FEEDBACK_SUCCESS,
   GET_LOGS_SUCCESS,
   GET_CLASS_EVALUATION_SUCCESS,
-  GET_CLASS_EVALUATION_LIST_SUCCESS
+  GET_CLASS_EVALUATION_LIST_SUCCESS,
+  GET_ORG_CLASS_REPORT_SUCCESS
 } = props
 
 const actions = {
@@ -472,7 +473,7 @@ const actions = {
     commit(GET_LOGS_SUCCESS, { orgId: currentOrgId, result })
   },
   async sendSms(context, { cellphone }) {
-    return await keepwork.evaluationReports.sendSms({ cellphone })
+    return await keepwork.users.sendSms({ cellphone })
   },
   async getClassEvaluation({ commit }, { classId }) {
     let result = await keepwork.evaluationReports.getClassReportByClassId({
@@ -488,6 +489,10 @@ const actions = {
       roleId
     })
     commit(GET_CLASS_EVALUATION_LIST_SUCCESS, { classId, result })
+  },
+  async getOrgClassReport({ commit }, { days }) {
+    let result = await keepwork.evaluationReports.getOrgClassReport({ days })
+    commit(GET_ORG_CLASS_REPORT_SUCCESS, { days, result })
   }
 }
 
