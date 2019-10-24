@@ -80,6 +80,7 @@ export default {
           itemGap: 6,
           itemWidth: 16,
           itemHeight: 18,
+          selectedMode: false,
           formatter: '{name}',
           textStyle: {
             color: '#555',
