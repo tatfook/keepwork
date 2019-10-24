@@ -38,6 +38,7 @@ export default {
           itemWidth: 16,
           itemHeight: 18,
           formatter: '{name}',
+          selectedMode: false,
           textStyle: {
             color: '#555',
             fontSize: 14
