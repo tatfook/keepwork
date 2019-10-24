@@ -20,14 +20,14 @@
           <div class="class-evaluation-column-header">点评（次）</div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>总计：{{classEvaluations.length}}次</p>
+              <p>总计：{{getKeyCount(classEvaluations)}}次</p>
               <p>老师贡献度：</p>
             </div>
             <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>小评：{{commentEvaluations.length}}次</p>
+              <p>小评：{{getKeyCount(commentEvaluations)}}次</p>
               <p>老师贡献度：</p>
             </div>
             <template>
@@ -36,7 +36,7 @@
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>阶段总结：{{summaryEvaluations.length}}次</p>
+              <p>阶段总结：{{getKeyCount(summaryEvaluations)}}次</p>
               <p>老师贡献度：</p>
             </div>
             <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
@@ -46,7 +46,7 @@
           <div class="class-evaluation-column-header">发送给家长（次）</div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>总计：{{classEvaluations.length}}次</p>
+              <p>总计：{{getKeyCount(classEvaluations, 'sendCount')}}次</p>
               <p>老师贡献度：</p>
             </div>
             <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
@@ -192,6 +192,16 @@ export default {
       orgGetClassEvaluation: 'org/getClassEvaluation',
       orgGetClassEvaluationList: 'org/getClassEvaluationList'
     }),
+    getKeyCount(originData, dataKey) {
+      dataKey = dataKey || 'commentCount'
+      return _.reduce(
+        originData,
+        (oldResult, value) => {
+          return oldResult + value[dataKey]
+        },
+        0
+      )
+    },
     formatedAnnulusData(originData, dataKey) {
       dataKey = dataKey || 'commentCount'
       const allCount = _.reduce(
