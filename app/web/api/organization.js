@@ -154,8 +154,8 @@ const evaluationReports = {
     post('evaluationReports/reportToParent', params),
   getOrgClassReport: async params =>
     get('evaluationReports/orgClassReport', { params }),
-  getClassReportByClassId: async ({ classId }) =>
-    get(`evaluationReports/classReport?classId=${classId}`)
+  getClassReportByClassId: async params =>
+    get('evaluationReports/classReport', { params })
 }
 
 const users = {

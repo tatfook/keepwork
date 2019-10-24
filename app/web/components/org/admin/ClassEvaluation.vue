@@ -5,12 +5,12 @@
         <i class="el-icon-arrow-right"></i>
         <span>{{className}}</span>
       </div>
-      <el-dropdown class="class-evaluation-header-dropdown">
+      <el-dropdown class="class-evaluation-header-dropdown" @command="handleDayCommand">
         <span class="el-dropdown-link">
           {{selectDayOption.text}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(dayOption, index) in dayOptions" :key="index">{{dayOptions.text}}</el-dropdown-item>
+          <el-dropdown-item v-for="(option, index) in dayOptions" :key="index" :command="option">{{option.text}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -98,7 +98,8 @@ export default {
       await Promise.all([
         this.getTableData(),
         this.orgGetClassEvaluation({
-          classId: this.classId
+          classId: this.classId,
+          days: this.selectDayOption.value
         })
       ])
     } catch (error) {}
@@ -219,11 +220,29 @@ export default {
       })
       return result
     },
+    async handleDayCommand(dayOption) {
+      this.selectDayOption = dayOption
+      this.isLoading = true
+      try {
+        await Promise.all([
+          this.getTableData(),
+          this.orgGetClassEvaluation({
+            classId: this.classId,
+            days: dayOption.value
+          })
+        ])
+        await this.orgGetOrgClassReport({ days: dayOption.value })
+      } catch (error) {
+        console.log(error)
+      }
+      this.isLoading = false
+    },
     async getTableData() {
       await this.orgGetClassEvaluationList({
         classId: this.classId,
         name: this.searchName,
         type: this.searchType,
+        days: this.selectDayOption.value,
         roleId: 64
       })
       if (!this.isClassHasReport) {
@@ -293,6 +312,7 @@ export default {
     }
     &-dropdown {
       font-size: 14px;
+      cursor: pointer;
     }
   }
   &-charts {
