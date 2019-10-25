@@ -1,6 +1,5 @@
 <template>
-  <ve-radar class="radar-chart" :data="chartData" :settings="settings" :height="height" :width="width" :colors="colors" :extend="extend"></ve-radar>
-  <!-- <ve-radar class="radar-chart" :data="chartData" :settings="settings" :colors="colors" :extend="extend"></ve-radar> -->
+  <ve-radar class="radar-chart" :data="chartData" :settings="settings" :height="height" :width="width" :colors="colors" :extend="extend" @ready-once="completed"></ve-radar>
 </template>
 
 <script>
@@ -42,6 +41,17 @@ export default {
       default() {
         return ['#ff7500', '#93b8d8']
       }
+    }
+  },
+  data() {
+    return {
+      timer: null
+    }
+  },
+  methods: {
+    completed(instance) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => this.$emit('completed', instance), 300)
     }
   }
 }

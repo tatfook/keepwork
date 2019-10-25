@@ -1,7 +1,5 @@
 <template>
-  <div class="report-chart-line">
-    <ve-line :data="chartData" :settings="settings" :extend="extend"></ve-line>
-  </div>
+  <ve-line :data="chartData" :settings="settings" :extend="extend" @ready-once="completed"></ve-line>
 </template>
 
 <script>
@@ -18,6 +16,17 @@ export default {
       default() {
         return {}
       }
+    }
+  },
+  data() {
+    return {
+      timer: null
+    }
+  },
+  methods: {
+    completed(instance) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => this.$emit('completed', instance), 300)
     }
   },
   computed: {
@@ -57,17 +66,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.report-chart-line {
-  &-name {
-    color: #333;
-    font-weight: bold;
-    padding-left: 40px;
-    text-align: left;
-  }
-  &-border {
-    border-bottom: 1px solid #e5e5e5;
-    margin: 0 30px 60px;
-  }
-}
-</style>

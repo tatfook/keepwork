@@ -86,21 +86,21 @@
           </el-row>
         </div>
       </div>
-      <div class="report-chart-radar">
+      <div class="report-chart-radar dont-break">
         <div class="trapezoidal-round report-chart-radar-title">
           <span class="trapezoidal-round-name">
             本次能力值分析
           </span>
         </div>
-        <report-chart-radar :reportData="reportData" radarType="thisTime"></report-chart-radar>
+        <report-chart-radar :reportData="reportData" @completed="onRadarThisTimeChartCompleted" radarType="thisTime"></report-chart-radar>
       </div>
-      <div v-if="isHistory" class="report-chart-radar">
+      <div v-if="isHistory" class="report-chart-radar dont-break">
         <div class="trapezoidal-round report-chart-radar-title">
           <span class="trapezoidal-round-name">
             历次能力值统计
           </span>
         </div>
-        <report-chart-radar :reportData="reportData" radarType="history"></report-chart-radar>
+        <report-chart-radar :reportData="reportData" radarType="history" @completed="onRadarHistoryChartCompleted"></report-chart-radar>
       </div>
       <div v-if="isHistory" class="report-chart-line">
         <div class="trapezoidal-round report-chart-line-title">
@@ -108,11 +108,17 @@
             历次点评成长轨迹
           </span>
         </div>
-        <div class="report-chart-line-item" v-for="item in growthTrackList" :key="item.key">
-          <report-chart-line :data="item" :extend="item.extend"></report-chart-line>
-        </div>
+        <template v-if="isShowHistogramChart">
+          <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="item.key">
+            <report-chart-histogram :data="item" @completed="onTrackChartCompleted"></report-chart-histogram>
+          </div>
+        </template>
+        <template v-else>
+          <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="item.key">
+            <report-chart-line :data="item" :extend="item.extend" @completed="onTrackChartCompleted"></report-chart-line>
+          </div>
+        </template>
       </div>
-
       <div class="report-chart-footer">
         <div class="report-chart-footer-date">
           <div class="report-chart-footer-date-top">{{commentDate}}</div>
@@ -129,7 +135,7 @@
             基于玩与创造的自主学习
           </div>
         </div>
-        <img v-if="QRCode" class="report-chart-footer-qrcode" :src="QRCode">
+        <img v-if="QRCode" class="report-chart-footer-qrcode" :src="QRCode | miniPic">
       </div>
     </div>
 
@@ -143,6 +149,7 @@
 <script>
 import ReportChartRadar from './ReportChartRadar'
 import ReportChartLine from './ReportChartLine'
+import ReportChartHistogram from './ReportChartHistogram'
 import videoPlayer from '@/components/common/VideoPlayer'
 import moment from 'moment'
 export default {
@@ -150,6 +157,7 @@ export default {
   components: {
     ReportChartRadar,
     ReportChartLine,
+    ReportChartHistogram,
     videoPlayer
   },
   filters: {
@@ -165,7 +173,12 @@ export default {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       playButtonIcon: require('@/assets/org/play1.png'),
       isShowDiaglog: false,
-      showItem: {}
+      showItem: {},
+      imgCount: 0,
+      loadedImgList: [],
+      radarThisTimeCompleted: false,
+      radarHistoryCompleted: false,
+      growthTrackChartCompletedCount: 0
     }
   },
   props: {
@@ -180,19 +193,78 @@ export default {
       default: 1
     }
   },
+  mounted() {
+    this.$nextTick(() => this.addImgLoadEvent())
+  },
   methods: {
     handleShowDialog(item) {
       this.isShowDiaglog = true
       this.showItem = item
+    },
+    onTrackChartCompleted(instance) {
+      this.growthTrackChartCompletedCount =
+        this.growthTrackChartCompletedCount + 1
+      this.checkCompleted()
+    },
+    onRadarThisTimeChartCompleted() {
+      this.radarThisTimeCompleted = true
+      if (!this.isHistory) {
+        this.radarHistoryCompleted = true
+      }
+      this.checkCompleted()
+    },
+    onRadarHistoryChartCompleted() {
+      this.radarHistoryCompleted = true
+      this.checkCompleted()
+    },
+    checkCompleted() {
+      if (this.isPageCompleted) {
+        this.$emit('completed', true)
+      }
+    },
+    addImgLoadEvent() {
+      const imgEle = document.querySelectorAll('.report-chart img')
+      this.imgCount = imgEle.length
+      imgEle.forEach(ele => (ele.onload = () => this.markedImg(ele)))
+    },
+    markedImg(imgEle) {
+      this.loadedImgList.push(imgEle)
+      this.checkCompleted()
     }
   },
   computed: {
+    imgLoadCompleted() {
+      return this.imgCount === this.loadedImgList.length
+    },
+    trackChartCompleted() {
+      return this.growthTrackChartCompletedCount >= 6
+    },
+    isPageCompleted() {
+      return (
+        // this.imgLoadCompleted &&
+        this.trackChartCompleted &&
+        this.isRadarChartCompleted
+      )
+    },
+    isRadarChartCompleted() {
+      return this.radarThisTimeCompleted && this.radarHistoryCompleted
+    },
+    radarCompleted() {
+      if (this.isHistory) {
+      }
+    },
     iconClasses() {
       return [
         'iconfont icon-star-',
         'iconfont icon-star-',
         'iconfont icon-star-'
       ]
+    },
+    isShowHistogramChart() {
+      return _.every(
+        this.growthTrackList,
+        item => item.chartData.rows.length === 1
+      )
     },
     userRepo() {
       return _.get(this.reportData, 'userRepo', {})
@@ -235,7 +307,7 @@ export default {
       return _.get(this.userRepo, 'mediaUrl', [])
     },
     reportTypeName() {
-      const type = _.get(this.userRepo, 'type', 1)
+      const type = _.toNumber(_.get(this.$route, 'query.type', 1))
       return type === 1 ? '课堂小评' : '阶段总结'
     },
     ablityValue() {
@@ -303,7 +375,7 @@ export default {
         {
           key: 'compute',
           name: '计算思维能力',
-          color: ['#fc656b', '#939d9f']
+          color: ['#f5c728', '#939d9f']
         },
         {
           key: 'collaborative',
@@ -329,10 +401,13 @@ export default {
       return _.get(this.growthTrack, 'userHistoryStar', [])
     },
     starGroupArray() {
-      return _.map(this.userHistory, (item, index) => {
+      return _.map(this.userHistory, (user, index) => {
         return {
-          userStar: item,
-          classmateStar: this.classmatesHistory[index]
+          userStar: user,
+          classmateStar: _.find(
+            this.classmatesHistory,
+            classmate => classmate.reportId === user.reportId
+          )
         }
       })
     },
@@ -365,8 +440,7 @@ $width: 766px;
 .report-chart {
   background: #fff;
   box-sizing: border-box;
-  padding: 41px 0;
-  margin-bottom: 40px;
+  padding: 0;
   &-type-name {
     width: $width;
     text-align: center;
@@ -651,6 +725,12 @@ $width: 766px;
     &-img {
       width: 100%;
     }
+  }
+}
+
+@media print {
+  .dont-break {
+    page-break-inside: avoid;
   }
 }
 </style>

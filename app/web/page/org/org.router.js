@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const OrgLogin = () => import('@/components/org/OrgLogin')
+const OrgPrint = () => import('@/components/org/OrgPrint')
+const OrgReport = () => import('@/components/org/OrgReport')
 const OrgContact = () => import('@/components/org/OrgContact')
 const OrgNotFound = () => import('@/components/org/OrgNotFound')
 const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
@@ -118,6 +120,16 @@ export default new Router({
       path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
       component: OrgLogin
+    },
+    {
+      path: '/:orgLoginUrl/print',
+      name: 'OrgPrint',
+      component: OrgPrint
+    },
+    {
+      path: '/:orgLoginUrl/report',
+      name: 'OrgReport',
+      component: OrgReport
     },
     {
       path: '/:orgLoginUrl/student',
