@@ -20,7 +20,8 @@ export default {
         labelMap: {
           commentCount: '点评（次）',
           sendCount: '发送给家长（次）'
-        }
+        },
+        yAxisName: ['单位：次']
       },
       labelOptions: {
         show: true,
@@ -37,6 +38,7 @@ export default {
           itemWidth: 16,
           itemHeight: 18,
           formatter: '{name}',
+          selectedMode: false,
           textStyle: {
             color: '#555',
             fontSize: 14
@@ -58,21 +60,6 @@ export default {
           axisTick: false,
           axisLabel: {
             margin: 10,
-            color: '#555',
-            fontSize: 14
-          }
-        },
-        yAxis: {
-          name: '单位：次',
-          nameLocation: 'end',
-          nameTextStyle: {
-            color: '#ababab',
-            fontSize: 14
-          },
-          axisLabel: {
-            margin: 16,
-            align: 'right',
-            verticalAlign: 'top',
             color: '#555',
             fontSize: 14
           }

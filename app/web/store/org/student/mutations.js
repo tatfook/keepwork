@@ -147,12 +147,6 @@ const mutations = {
   },
   [GET_STUDENT_INFO_SUCCESS](state, userinfo) {
     Vue.set(state, 'userinfo', userinfo)
-  },
-  [GET_ORG_CLASS_REPORT_SUCCESS](state, { days, result }) {
-    Vue.set(state, 'orgClassesReport', {
-      ...state.orgClassesReport,
-      [days]: result
-    })
   }
 }
 

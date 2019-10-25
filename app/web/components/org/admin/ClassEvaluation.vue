@@ -1,60 +1,60 @@
 <template>
   <div class="class-evaluation">
-    <div class="class-evaluation-item">
-      <div class="class-evaluation-header">
-        <div class="class-evaluation-header-title">评估报告
-          <i class="el-icon-arrow-right"></i>
-          <span>{{className}}</span>
-        </div>
-        <el-dropdown class="class-evaluation-header-dropdown">
-          <span class="el-dropdown-link">
-            {{selectDayOption.text}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(dayOption, index) in dayOptions" :key="index">{{dayOptions.text}}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+    <div class="class-evaluation-header">
+      <div class="class-evaluation-header-title">评估报告
+        <i class="el-icon-arrow-right"></i>
+        <span>{{className}}</span>
       </div>
+      <el-dropdown class="class-evaluation-header-dropdown" @command="handleDayCommand">
+        <span class="el-dropdown-link">
+          {{selectDayOption.text}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(option, index) in dayOptions" :key="index" :command="option">{{option.text}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+    <div class="class-evaluation-item" v-if="isClassHasReport">
       <div class="class-evaluation-charts">
         <div class="class-evaluation-column">
           <div class="class-evaluation-column-header">点评（次）</div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>总计：{{classEvaluations.length}}次</p>
+              <p>总计：{{getKeyCount(classEvaluations)}}次</p>
               <p>老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="totalData" :chartColumn="chartColumn" />
+            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>小评：{{commentEvaluations.length}}次</p>
+              <p>小评：{{getKeyCount(commentEvaluations)}}次</p>
               <p>老师贡献度：</p>
             </div>
             <template>
-              <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="commentData" :chartColumn="chartColumn" />
+              <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="commentData" :chartColumn="chartColumn" />
             </template>
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>阶段总结：{{summaryEvaluations.length}}次</p>
+              <p>阶段总结：{{getKeyCount(summaryEvaluations)}}次</p>
               <p>老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="summaryData" :chartColumn="chartColumn" />
+            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
           </div>
         </div>
         <div class="class-evaluation-column">
           <div class="class-evaluation-column-header">发送给家长（次）</div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
-              <p>总计：{{classEvaluations.length}}次</p>
+              <p>总计：{{getKeyCount(classEvaluations, 'sendCount')}}次</p>
               <p>老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="300" :annulusData="sendData" :chartColumn="chartColumn" />
+            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
           </div>
         </div>
       </div>
     </div>
-    <div class="class-evaluation-item">
+    <div class="class-evaluation-item" v-if="isClassHasReport">
       <div class="class-evaluation-item-search">
         <div class="class-evaluation-item-search-item">
           <label for="typeDropdown">报告类型：</label>
@@ -78,6 +78,12 @@
         <el-table-column prop="waitComment" label="待点评（人）" width="110"></el-table-column>
       </el-table>
     </div>
+    <div class="class-evaluation-empty" v-if="!isClassHasReport">
+      <img src="@/assets/img/media_library_empty.png" alt="">
+      <p>
+        暂无数据
+      </p>
+    </div>
   </div>
 </template>
 <script>
@@ -92,13 +98,15 @@ export default {
       await Promise.all([
         this.getTableData(),
         this.orgGetClassEvaluation({
-          classId: this.classId
+          classId: this.classId,
+          days: this.selectDayOption.value
         })
       ])
     } catch (error) {}
   },
   data() {
     return {
+      isClassHasReport: false,
       typeOptions: [
         {
           value: null,
@@ -115,7 +123,7 @@ export default {
       ],
       searchType: null,
       searchName: '',
-      chartColumn: ['realname', 'count'],
+      chartColumn: ['realnameLabel', 'count'],
       dayOptions: [
         {
           value: 30,
@@ -184,8 +192,25 @@ export default {
       orgGetClassEvaluation: 'org/getClassEvaluation',
       orgGetClassEvaluationList: 'org/getClassEvaluationList'
     }),
+    getKeyCount(originData, dataKey) {
+      dataKey = dataKey || 'commentCount'
+      return _.reduce(
+        originData,
+        (oldResult, value) => {
+          return oldResult + value[dataKey]
+        },
+        0
+      )
+    },
     formatedAnnulusData(originData, dataKey) {
       dataKey = dataKey || 'commentCount'
+      const allCount = _.reduce(
+        originData,
+        (oldResult, value) => {
+          return oldResult + value[dataKey]
+        },
+        0
+      )
       let result = []
       _.forEach(_.groupBy(originData, 'realname'), (userValues, key) => {
         let totalCount = _.reduce(
@@ -195,20 +220,45 @@ export default {
           },
           0
         )
+        let percentage =
+          allCount != 0 ? _.round((totalCount / allCount) * 100, 0) : 0
         result.push({
           realname: key,
+          realnameLabel: `${key} ${percentage}%`,
           count: totalCount
         })
       })
       return result
+    },
+    async handleDayCommand(dayOption) {
+      this.selectDayOption = dayOption
+      this.isLoading = true
+      try {
+        await Promise.all([
+          this.getTableData(),
+          this.orgGetClassEvaluation({
+            classId: this.classId,
+            days: dayOption.value
+          })
+        ])
+        await this.orgGetOrgClassReport({ days: dayOption.value })
+      } catch (error) {
+        console.log(error)
+      }
+      this.isLoading = false
     },
     async getTableData() {
       await this.orgGetClassEvaluationList({
         classId: this.classId,
         name: this.searchName,
         type: this.searchType,
+        days: this.selectDayOption.value,
         roleId: 64
       })
+      if (!this.isClassHasReport) {
+        this.isClassHasReport =
+          this.classEvaluationList.length > 0 ? true : false
+      }
     }
   },
   components: {
@@ -218,6 +268,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .class-evaluation {
+  min-height: 100%;
+  position: relative;
   &-item {
     padding: 0 28px;
     background-color: #fff;
@@ -249,12 +301,16 @@ export default {
     }
   }
   &-header {
-    padding: 32px 0;
+    padding: 32px 28px;
     border-bottom: 1px solid #cacaca;
     font-size: 18px;
     color: #000;
     display: flex;
     justify-content: center;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    margin-bottom: -1px;
+    border-radius: 4px 4px 0 0;
     &-title {
       flex: 1;
       & > .el-icon-arrow-right {
@@ -266,6 +322,7 @@ export default {
     }
     &-dropdown {
       font-size: 14px;
+      cursor: pointer;
     }
   }
   &-charts {
@@ -304,6 +361,26 @@ export default {
   }
   &-table {
     margin-bottom: 36px;
+  }
+  &-empty {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid #e8e8e8;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    top: 88px;
+    & > p {
+      font-size: 14px;
+      color: #666;
+      margin: 26px 0 0;
+    }
   }
 }
 </style>

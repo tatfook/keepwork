@@ -246,7 +246,7 @@ export default {
       try {
         this.loading = true
         const [studentInfo] = await Promise.all([
-          keepwork.evaluationReports.getStudentInfo({
+          keepwork.users.getStudentInfo({
             studentId: this.studentId
           }),
           this.getEvaluationReportDetail({
