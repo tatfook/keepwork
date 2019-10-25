@@ -37,14 +37,10 @@ export default {
       return DICT[type]
     }
   },
-  async mounted() {
-    await this.orgGetEvaluationCommentList({ classId: this.classId })
-  },
   computed: {
     ...mapGetters({
       getEvaluationCommentListByClassId:
-        'org/student/getEvaluationCommentListByClassId',
-      classEvaluationCommentList: 'org/student/evaluationCommentList'
+        'org/student/getEvaluationCommentListByClassId'
     }),
     classId() {
       return _.toNumber(_.get(this.$route, 'params.classId'))
@@ -64,9 +60,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      orgGetEvaluationCommentList: 'org/student/getEvaluationCommentList'
-    }),
     viewDetail({ id, type, reportName }) {
       this.$router.push({
         name: 'OrgStudentEvaluationDetail',

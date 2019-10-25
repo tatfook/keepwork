@@ -7,9 +7,12 @@
       </div>
     </div>
     <div class="student-evaluations-main">
-      <el-tabs class="student-evaluations-tabs" v-model="activeName" type="card">
+      <div v-if="isNoReport" class="no-report">
+        暂无评估报告
+      </div>
+      <el-tabs v-else class="student-evaluations-tabs" v-model="activeName" type="card">
         <el-tab-pane label="数据统计" name="statics">
-          <report-chart v-if="activeName === 'statics'" :reportData="reportData" class="student-evaluations-report" :showThisTimeRadar="false" :reportType="2" :showReportTypeName="false" :showUserInfo="false" :showComment="false" :showFooter="false"></report-chart>
+          <report-chart v-if="!loading && activeName === 'statics'" :reportData="reportData" class="student-evaluations-report" :showThisTimeRadar="false" :reportType="2" :showReportTypeName="false" :showUserInfo="false" :showComment="false" :showFooter="false"></report-chart>
         </el-tab-pane>
         <el-tab-pane label="历次点评详情" name="comments">
           <comment-list></comment-list>
@@ -33,16 +36,30 @@ export default {
   async created() {
     try {
       this.activeName = this.queryActiveName
-      await this.getEvaluationReportStatistics(this.classId)
+      await Promise.all([
+        this.orgGetEvaluationCommentList({ classId: this.classId }),
+        this.getEvaluationReportStatistics(this.classId)
+      ])
     } catch (error) {
       console.error(error)
     } finally {
       this.loading = false
     }
   },
+  watch: {
+    activeName(active) {
+      this.$router.push({
+        query: {
+          active
+        }
+      })
+    }
+  },
   methods: {
     ...mapActions({
-      getEvaluationReportStatistics: 'org/student/getEvaluationReportStatistics'
+      getEvaluationReportStatistics:
+        'org/student/getEvaluationReportStatistics',
+      orgGetEvaluationCommentList: 'org/student/getEvaluationCommentList'
     }),
     goBack() {
       this.$router.push({
@@ -55,8 +72,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      classReportStatistics: 'org/student/classReportStatistics'
+      classReportStatistics: 'org/student/classReportStatistics',
+      getEvaluationCommentListByClassId:
+        'org/student/getEvaluationCommentListByClassId'
     }),
+    evaluationCommentList() {
+      return this.getEvaluationCommentListByClassId({ classId: this.classId })
+    },
+    isNoReport() {
+      return _.get(this.evaluationCommentList, 'length', 0) === 0
+    },
     classId() {
       return _.get(this.$route, 'params.classId', '')
     },
@@ -75,9 +100,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .student-evaluations {
-  background-color: #fff;
   min-height: 420px;
   &-header {
+    background-color: #fff;
     height: 60px;
     padding: 0 24px;
     font-size: 16px;
@@ -91,6 +116,13 @@ export default {
   }
   &-main {
     padding: 24px;
+    background: #fff;
+    .no-report {
+      color: #999;
+      text-align: center;
+      height: 335px;
+      line-height: 165px;
+    }
   }
   &-report {
     margin-top: 47px;
