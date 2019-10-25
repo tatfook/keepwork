@@ -132,8 +132,8 @@ const lessonOrganizationClassMembers = {
 const evaluationReports = {
   sendSms: async ({ cellphone }) =>
     post('evaluationReports/sendSms', { cellphone }),
-  getEvaluationCommentList: async ({ classId }) =>
-    get(`evaluationReports/evaluationCommentList?classId=${classId}`),
+  getEvaluationCommentList: async params =>
+    get('evaluationReports/evaluationCommentList', { params }),
   getClassEvaluationReport: async params =>
     get('evaluationReports', { params }),
   createClassEvaluationReport: async params =>
@@ -174,7 +174,8 @@ const evaluationReports = {
   getOrgClassReport: async ({ days }) =>
     get(`evaluationReports/orgClassReport?days=${days}`),
   getClassReportByClassId: async ({ classId }) =>
-    get(`evaluationReports/classReport?classId=${classId}`)
+    get(`evaluationReports/classReport?classId=${classId}`),
+  getEvaluationReportStatistics: async params => get('evaluationReports/statistics', { params }),
 }
 
 export default {

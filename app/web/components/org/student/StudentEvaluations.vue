@@ -8,7 +8,9 @@
     </div>
     <div class="student-evaluations-main">
       <el-tabs class="student-evaluations-tabs" v-model="activeName" type="card">
-        <el-tab-pane label="数据统计" name="statics">数据统计</el-tab-pane>
+        <el-tab-pane label="数据统计" name="statics">
+          <report-chart v-if="activeName === 'statics'" :reportData="reportData" class="student-evaluations-report" :showThisTimeRadar="false" :reportType="2" :showReportTypeName="false" :showUserInfo="false" :showComment="false" :showFooter="false"></report-chart>
+        </el-tab-pane>
         <el-tab-pane label="历次点评详情" name="comments">
           <comment-list></comment-list>
         </el-tab-pane>
@@ -17,21 +19,57 @@
   </div>
 </template>
 <script>
+import ReportChart from '@/components/org/common/ReportChart'
 import CommentList from './common/CommentList'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'StudentEvaluations',
   data() {
     return {
-      activeName: 'comments'
+      activeName: 'statics',
+      loading: true
+    }
+  },
+  async created() {
+    try {
+      this.activeName = this.queryActiveName
+      await this.getEvaluationReportStatistics(this.classId)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loading = false
     }
   },
   methods: {
+    ...mapActions({
+      getEvaluationReportStatistics: 'org/student/getEvaluationReportStatistics'
+    }),
     goBack() {
-      this.$router.go(-1)
+      this.$router.push({
+        name: 'OrgStudentClassDetail',
+        params: {
+          classId: this.classId
+        }
+      })
+    }
+  },
+  computed: {
+    ...mapGetters({
+      classReportStatistics: 'org/student/classReportStatistics'
+    }),
+    classId() {
+      return _.get(this.$route, 'params.classId', '')
+    },
+    reportData() {
+      return _.get(this.classReportStatistics, [this.classId], {})
+    },
+    queryActiveName() {
+      return _.get(this.$route, 'query.active', 'statics')
     }
   },
   components: {
-    CommentList
+    CommentList,
+    ReportChart
   }
 }
 </script>
@@ -53,6 +91,12 @@ export default {
   }
   &-main {
     padding: 24px;
+  }
+  &-report {
+    margin-top: 47px;
+    /deep/.report-chart-container {
+      border-radius: 6px;
+    }
   }
 }
 </style>

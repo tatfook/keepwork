@@ -26,6 +26,9 @@ const GET_EVALUATION_COMMENT_LIST_SUCCESS =
   'GET_EVALUATION_COMMENT_LIST_SUCCESS'
 const GET_STUDENT_INFO_SUCCESS = 'GET_STUDENT_INFO_SUCCESS'
 const GET_ORG_CLASS_REPORT_SUCCESS = 'GET_ORG_CLASS_REPORT_SUCCESS'
+const GET_CLASS_REPORT_STATISTICS_SUCCESS = 'GET_CLASS_REPORT_STATISTICS_SUCCESS'
+const GET_CLASS_REPORT_COMMENT_LIST_SUCCESS = 'GET_CLASS_REPORT_COMMENT_LIST_SUCCESS'
+const GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS = 'GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS'
 
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
@@ -51,10 +54,22 @@ export const props = {
   GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_EVALUATION_COMMENT_LIST_SUCCESS,
   GET_STUDENT_INFO_SUCCESS,
-  GET_ORG_CLASS_REPORT_SUCCESS
+  GET_ORG_CLASS_REPORT_SUCCESS,
+  GET_CLASS_REPORT_STATISTICS_SUCCESS,
+  GET_CLASS_REPORT_COMMENT_LIST_SUCCESS,
+  GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 }
 
 const mutations = {
+  [GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS](state, payload) {
+    Vue.set(state, 'evaluationReportCommentDetail', payload)
+  },
+  [GET_CLASS_REPORT_STATISTICS_SUCCESS](state, { classId, report }) {
+    Vue.set(state, 'classReportStatistics', {
+      ...state.classReportStatistics,
+      [classId]: report
+    })
+  },
   [GET_ORG_CLASSES_SUCCESS](state, classes) {
     Vue.set(state, 'orgClasses', classes)
   },
@@ -125,8 +140,8 @@ const mutations = {
     state,
     { evaluationCommentList, classId }
   ) {
-    Vue.set(state, {
-      ...evaluationCommentList,
+    Vue.set(state, 'evaluationCommentList', {
+      ...state.evaluationCommentList,
       [classId]: evaluationCommentList
     })
   },

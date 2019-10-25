@@ -1,6 +1,9 @@
 import _ from 'lodash'
 
 const getters = {
+  classReportStatistics: state => state.classReportStatistics,
+  evaluationCommentList: state => state.evaluationCommentList,
+  evaluationReportCommentDetail: state => state.evaluationReportCommentDetail,
   orgClasses: state => state.orgClasses,
   orgPackages: state => state.orgPackages,
   orgPackageStatus: (state, { orgPackages }) => packageId => {

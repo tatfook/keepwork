@@ -136,7 +136,8 @@ export default {
         [
           'OrgStudentClassDetail',
           'OrgStudentClassLastUpdate',
-          'OrgStudentEvaluations'
+          'OrgStudentEvaluations',
+          'OrgStudentEvaluationDetail'
         ].includes(this.nowPageName)
       )
     },
@@ -194,7 +195,8 @@ export default {
         'OrgStudentClassSelect',
         'OrgStudentClassDetail',
         'OrgStudentClassLastUpdate',
-        'OrgStudentEvaluations'
+        'OrgStudentEvaluations',
+        'OrgStudentEvaluationDetail'
       ].includes(this.nowPageName)
     },
     userPortrait() {
@@ -268,7 +270,10 @@ export default {
     },
     toEvaluationsPage() {
       this.$router.push({
-        name: 'OrgStudentEvaluations'
+        name: 'OrgStudentEvaluations',
+        params: {
+          classId: this.currentClassID
+        }
       })
     },
     toRolePage(pageName) {
