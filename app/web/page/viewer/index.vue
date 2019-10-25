@@ -148,11 +148,6 @@ export default {
       await this.userGetProfile({ useCache: false }).catch(err => {
         console.error(err)
       })
-      await this.getAllPersonalAndContributedSite({ useCache: false }).catch(
-        err => {
-          console.error(err)
-        }
-      )
     },
     async updateActivePage() {
       if (!this.presetLoaded) return
