@@ -1,9 +1,9 @@
 <template>
   <div class="report-chart">
-    <div class="report-chart-type-name">
+    <div v-if="showReportTypeName" class="report-chart-type-name">
       {{reportTypeName}}
     </div>
-    <div class="report-chart-header">
+    <div v-if="showComment" class="report-chart-header">
       <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic" :alt="userRealname">
       <div class="report-chart-header-realname">
         {{ userRealname }}
@@ -16,77 +16,79 @@
       </div>
     </div>
     <div class="report-chart-container">
-      <div class="report-chart-star">
-        <div class="trapezoidal-round">
-          <span class="trapezoidal-round-name">
-            总体评价
-          </span>
-        </div>
-        <div class="final-star">
-          <el-rate :value="ablityValue['star'].value" disabled :icon-classes="iconClasses">
-          </el-rate>
-        </div>
-        <div class="ablity-value">
-          <div class="ablity-value-left">
-            <div class="ablity-value-item">
-              {{ablityValue['spatial'].label}} <el-rate :value="ablityValue['spatial'].value" :icon-classes="iconClasses" disabled>
-              </el-rate>
-            </div>
-            <div class="ablity-value-item">
-              {{ablityValue['creative'].label}} <el-rate :value="ablityValue['creative'].value" :icon-classes="iconClasses" disabled>
-              </el-rate>
-            </div>
-            <div class="ablity-value-item">
-              {{ablityValue['compute'].label}} <el-rate :value="ablityValue['compute'].value" :icon-classes="iconClasses" disabled>
-              </el-rate>
-            </div>
+      <template v-if="showComment">
+        <div class="report-chart-star">
+          <div class="trapezoidal-round">
+            <span class="trapezoidal-round-name">
+              总体评价
+            </span>
           </div>
-          <div class="ablity-value-divide">
-
+          <div class="final-star">
+            <el-rate :value="ablityValue['star'].value" disabled :icon-classes="iconClasses">
+            </el-rate>
           </div>
-          <div class="ablity-value-right">
-            <div class="ablity-value-item">
-              {{ablityValue['collaborative'].label}} <el-rate :value="ablityValue['collaborative'].value" :icon-classes="iconClasses" disabled>
-              </el-rate>
-            </div>
-            <div class="ablity-value-item">
-              {{ablityValue['logical'].label}} <el-rate :value="ablityValue['logical'].value" :icon-classes="iconClasses" disabled>
-              </el-rate>
-            </div>
-            <div class="ablity-value-item">
-              {{ablityValue['coordinate'].label}} <el-rate :value="ablityValue['coordinate'].value" void-icon-class="iconfont icon-star" :icon-classes="iconClasses" disabled>
-              </el-rate>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="report-chart-comment">
-        <div class="trapezoidal-round">
-          <span class="trapezoidal-round-name">
-            老师评语
-          </span>
-        </div>
-
-        <div class="report-chart-comment-text">
-          {{ comment }}
-        </div>
-
-        <div class="report-chart-comment-meida">
-          <el-row :gutter="20">
-            <el-col v-for="item in mediaUrl" :key="item.id" :span="8">
-              <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-meida-img" :src="item.url | miniPic" alt="" srcset="">
-              <div @click="handleShowDialog(item)" class="report-chart-comment-meida-video" v-else-if="item.type === 'videos'">
-                <video width="100%" height="100%" :src="item.url"></video>
-                <div class="play-masking">
-                  <img class="play-masking-button" :src="playButtonIcon">
-                </div>
+          <div class="ablity-value">
+            <div class="ablity-value-left">
+              <div class="ablity-value-item">
+                {{ablityValue['spatial'].label}} <el-rate :value="ablityValue['spatial'].value" :icon-classes="iconClasses" disabled>
+                </el-rate>
               </div>
-            </el-col>
-          </el-row>
+              <div class="ablity-value-item">
+                {{ablityValue['creative'].label}} <el-rate :value="ablityValue['creative'].value" :icon-classes="iconClasses" disabled>
+                </el-rate>
+              </div>
+              <div class="ablity-value-item">
+                {{ablityValue['compute'].label}} <el-rate :value="ablityValue['compute'].value" :icon-classes="iconClasses" disabled>
+                </el-rate>
+              </div>
+            </div>
+            <div class="ablity-value-divide">
+
+            </div>
+            <div class="ablity-value-right">
+              <div class="ablity-value-item">
+                {{ablityValue['collaborative'].label}} <el-rate :value="ablityValue['collaborative'].value" :icon-classes="iconClasses" disabled>
+                </el-rate>
+              </div>
+              <div class="ablity-value-item">
+                {{ablityValue['logical'].label}} <el-rate :value="ablityValue['logical'].value" :icon-classes="iconClasses" disabled>
+                </el-rate>
+              </div>
+              <div class="ablity-value-item">
+                {{ablityValue['coordinate'].label}} <el-rate :value="ablityValue['coordinate'].value" void-icon-class="iconfont icon-star" :icon-classes="iconClasses" disabled>
+                </el-rate>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </div>
-      <div class="report-chart-radar dont-break">
+        <div class="report-chart-comment">
+          <div class="trapezoidal-round">
+            <span class="trapezoidal-round-name">
+              老师评语
+            </span>
+          </div>
+
+          <div class="report-chart-comment-text">
+            {{ comment }}
+          </div>
+
+          <div class="report-chart-comment-meida">
+            <el-row :gutter="20">
+              <el-col v-for="item in mediaUrl" :key="item.id" :span="8">
+                <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-meida-img" :src="item.url | miniPic" alt="" srcset="">
+                <div @click="handleShowDialog(item)" class="report-chart-comment-meida-video" v-else-if="item.type === 'videos'">
+                  <video width="100%" height="100%" :src="item.url"></video>
+                  <div class="play-masking">
+                    <img class="play-masking-button" :src="playButtonIcon">
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </template>
+      <div v-if="showThisTimeRadar" class="report-chart-radar dont-break">
         <div class="trapezoidal-round report-chart-radar-title">
           <span class="trapezoidal-round-name">
             本次能力值分析
@@ -119,7 +121,7 @@
           </div>
         </template>
       </div>
-      <div class="report-chart-footer">
+      <div v-if="showFooter" class="report-chart-footer">
         <div class="report-chart-footer-date">
           <div class="report-chart-footer-date-top">{{commentDate}}</div>
           <div class="report-chart-footer-date-bottom">{{commentDay}}</div>
@@ -190,11 +192,29 @@ export default {
     },
     reportType: {
       type: Number,
-      default: 1
+      default: 2
+    },
+    showThisTimeRadar: {
+      type: Boolean,
+      default: true
+    },
+    showReportTypeName: {
+      type: Boolean,
+      default: true
+    },
+    showComment: {
+      type: Boolean,
+      default: true
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
   mounted() {
-    this.$nextTick(() => this.addImgLoadEvent())
+    if (this.showComment) {
+      this.$nextTick(() => this.addImgLoadEvent())
+    }
   },
   methods: {
     handleShowDialog(item) {
@@ -223,7 +243,7 @@ export default {
       }
     },
     addImgLoadEvent() {
-      const imgEle = document.querySelectorAll('.report-chart img')
+      const imgEle = document.querySelectorAll('.report-chart-comment img')
       this.imgCount = imgEle.length
       imgEle.forEach(ele => (ele.onload = () => this.markedImg(ele)))
     },
@@ -234,6 +254,9 @@ export default {
   },
   computed: {
     imgLoadCompleted() {
+      if (!this.showComment) {
+        return true
+      }
       return this.imgCount === this.loadedImgList.length
     },
     trackChartCompleted() {
@@ -241,7 +264,7 @@ export default {
     },
     isPageCompleted() {
       return (
-        // this.imgLoadCompleted &&
+        this.imgLoadCompleted &&
         this.trackChartCompleted &&
         this.isRadarChartCompleted
       )

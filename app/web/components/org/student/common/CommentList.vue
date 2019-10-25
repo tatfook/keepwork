@@ -9,12 +9,15 @@
       <el-table-column prop="reportName" label="报告名称" width="140">
       </el-table-column>
       <el-table-column prop="type" label="报告类型" width="140">
+        <template slot-scope="scope">
+          {{scope.row.type | reportTypeName}}
+        </template>
       </el-table-column>
       <el-table-column prop="starText" label="总体评价" width="140">
       </el-table-column>
       <el-table-column label="操作" width="140">
         <template slot-scope="scope">
-          <div class="comment-list-table-btn" @click="viewDetail(scope.row.id)">查看</div>
+          <div class="comment-list-table-btn" @click="viewDetail(scope.row)">查看</div>
         </template>
       </el-table-column>
     </el-table>
@@ -25,13 +28,23 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   name: 'CommentList',
+  filters: {
+    reportTypeName(type) {
+      const DICT = {
+        1: '小评',
+        2: '阶段总结'
+      }
+      return DICT[type]
+    }
+  },
   async mounted() {
     await this.orgGetEvaluationCommentList({ classId: this.classId })
   },
   computed: {
     ...mapGetters({
       getEvaluationCommentListByClassId:
-        'org/student/getEvaluationCommentListByClassId'
+        'org/student/getEvaluationCommentListByClassId',
+      classEvaluationCommentList: 'org/student/evaluationCommentList'
     }),
     classId() {
       return _.toNumber(_.get(this.$route, 'params.classId'))
@@ -54,8 +67,19 @@ export default {
     ...mapActions({
       orgGetEvaluationCommentList: 'org/student/getEvaluationCommentList'
     }),
-    viewDetail(id) {
-      console.log(id)
+    viewDetail({ id, type, reportName }) {
+      this.$router.push({
+        name: 'OrgStudentEvaluationDetail',
+        params: {
+          classId: this.classId
+        },
+        query: {
+          userReportId: id,
+          classId: this.classId,
+          reportName,
+          type
+        }
+      })
     }
   }
 }

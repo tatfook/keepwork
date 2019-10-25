@@ -4,7 +4,8 @@ const {
   graphql,
   lessonOrganizations,
   lessonOrganizationClassMembers,
-  lessonOrganizationClasses
+  lessonOrganizationClasses,
+  evaluationReports
 } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
@@ -32,7 +33,10 @@ const {
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
   GET_EVALUATION_COMMENT_LIST_SUCCESS,
-  GET_STUDENT_INFO_SUCCESS
+  GET_STUDENT_INFO_SUCCESS,
+  GET_ORG_CLASS_REPORT_SUCCESS,
+  GET_CLASS_REPORT_STATISTICS_SUCCESS,
+  GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 } = props
 
 const errMsg = {
@@ -47,6 +51,11 @@ const errMsg = {
 }
 
 const actions = {
+  async getEvaluationReportStatistics({ commit }, classId) {
+    const report = await evaluationReports.getEvaluationReportStatistics({ classId })
+    commit(GET_CLASS_REPORT_STATISTICS_SUCCESS, { classId, report })
+    return report
+  },
   async getMyTeacher(
     {
       commit,
@@ -507,6 +516,11 @@ const actions = {
       return res
     }
     return lessons[0]
+  },
+  async getEvaluationReportCommentDetail({ commit }, params) {
+    const report = await evaluationReports.getEvaluationReportCommentDetail(params)
+    commit(GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS, report)
+    return report
   },
   async getEvaluationCommentList({ commit }, { classId }) {
     let result = await keepwork.evaluationReports.getEvaluationCommentList({
