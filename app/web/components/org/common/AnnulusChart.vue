@@ -62,6 +62,8 @@ export default {
                 let content = this.getTooltipContent(params)
                 return content
               },
+              confine: true,
+              extraCssText: 'box-shadow: 0px 0px 4px 0px rgba(182, 182, 182, 0.4);',
               backgroundColor: '#fff',
               padding: [18, 18, 24, 18],
               textStyle: {
