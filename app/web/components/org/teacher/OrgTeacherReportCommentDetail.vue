@@ -7,15 +7,15 @@
       </span>
       <span>
         <el-button @click="handleToCommentEdit" size="small">编辑</el-button>
-        <el-button size="small" type="primary">打印</el-button>
+        <el-button @click="handleToPrint" size="small" type="primary">打印</el-button>
       </span>
     </div>
-    <report-chart v-if="!loading" :reportData="evaluationReportCommentDetail" :reportType="reportType"></report-chart>
+    <report-chart class="student-report-detail" v-if="!loading" :reportData="evaluationReportCommentDetail" :reportType="reportType"></report-chart>
   </div>
 </template>
 
 <script>
-import ReportChart from './ReportChart'
+import ReportChart from '@/components/org/common/ReportChart'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'OrgTeacherReportCommentDetail',
@@ -61,6 +61,13 @@ export default {
           reportId: this.reportId
         }
       })
+    },
+    handleToPrint() {
+      const URL = this.$router.resolve({
+        name: 'OrgPrint',
+        query: this.$route.query
+      }).href
+      window.open(URL, '_blank')
     }
   },
   computed: {
@@ -112,6 +119,10 @@ export default {
       color: #999;
       cursor: pointer;
     }
+  }
+  .student-report-detail {
+    padding: 40px 0;
+    margin-bottom: 40px;
   }
 }
 </style>

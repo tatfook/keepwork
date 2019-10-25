@@ -44,7 +44,7 @@
               </span>
             </div>
             <div class="right-side">
-              <el-button size="small">打印</el-button>
+              <el-button @click="handleToBulkPrint" size="small">打印</el-button>
               <el-button @click="handleSMS" :loading="isSending" size="small" type="primary">发送给家长</el-button>
             </div>
           </div>
@@ -124,6 +124,7 @@ export default {
       studentName: '',
       loading: false,
       isSending: false,
+      isPirnting: false,
       isShowEditDialog: false,
       selection: [],
       rules: {
@@ -310,7 +311,7 @@ export default {
           userReportId,
           classId: this.classId,
           type: this.reportType,
-          baseUrl: 'www.google.com',
+          baseUrl: window.location.origin,
           reportName: this.reportName,
           orgName: this.orgName
         }
@@ -319,6 +320,10 @@ export default {
     },
     handleSMS() {
       const selection = this.selection.filter(item => item.isSend === 0)
+      if (selection.length === 0) {
+        this.$message.error('请选择学生')
+        return
+      }
       const noParentPhonArr = _.reduce(
         selection,
         (arr, cur) => {
@@ -374,6 +379,45 @@ export default {
         .catch(err => {
           console.error(err)
         })
+    },
+    async handleToBulkPrint() {
+      if (this.selection.length === 0) {
+        return this.$message.error('请选择学生')
+      }
+      try {
+        this.isPirnting = true
+        for (let item of this.selection) {
+          const URL = this.$router.resolve({
+            name: 'OrgPrint',
+            query: {
+              reportName: this.reportName,
+              classId: this.classId,
+              type: this.reportType,
+              ...item
+            }
+          }).href
+          await this.printReport(URL)
+        }
+      } catch (error) {
+        console.error(error)
+        this.$message.error('打印出错')
+      } finally {
+        this.isPirnting = false
+      }
+    },
+    async printReport(URL) {
+      await new Promise((resolve, reject) => {
+        let a = document.createElement('a')
+        a.target = '_blank'
+        a.style.display = 'none'
+        a.href = URL
+        document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+          a.remove()
+          resolve()
+        }, 300)
+      }).catch(e => console.error(e))
     }
   }
 }

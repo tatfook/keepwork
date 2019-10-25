@@ -1,5 +1,5 @@
 <template>
-  <radar-chart :chartData="chartData" :settings="chartSettings" :extend="extend"></radar-chart>
+  <radar-chart :chartData="chartData" :settings="chartSettings" :extend="extend" @completed="completed"></radar-chart>
 </template>
 
 <script>
@@ -27,6 +27,11 @@ export default {
     return {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       starIcon: require('@/assets/org/star.png')
+    }
+  },
+  methods: {
+    completed(instance) {
+      this.$emit('completed', instance)
     }
   },
   computed: {
@@ -87,6 +92,11 @@ export default {
           bottom: 30,
           left: 100,
           right: '10%'
+        },
+        events: {
+          finished() {
+            console.log('finish')
+          }
         }
       }
     },

@@ -3,7 +3,7 @@
     <div class="org-page-main-content" id="org-page">
       <router-view />
     </div>
-    <el-footer class="org-page-footer" height="auto">
+    <el-footer v-if="!isHideFooter" class="org-page-footer" height="auto">
       <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
     <expiration-dialog :isExpirationVisible="expirationDialogVisible" @close="handleCloseExpirationDialog"></expiration-dialog>
@@ -85,7 +85,9 @@ const OrgStudentPageName = 'OrgStudent'
 const OrgContactPageName = 'OrgContact'
 const OrgNotFoundPageName = 'OrgNotFound'
 const OrgIndexPageName = 'OrgIndex'
-const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName]
+const OrgPrintPageName = 'OrgPrint'
+const OrgReportPageName = 'OrgReport'
+const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName, OrgPrintPageName, OrgReportPageName]
 
 const checkIsLogined = function(name, next, params) {
   let nowToken = Cookies.get('token')
@@ -270,6 +272,12 @@ export default {
     },
     orgId() {
       return _.get(this.currentOrg, 'id')
+    },
+    isHideFooter() {
+      return [OrgPrintPageName, OrgReportPageName].includes(this.routerName)
+    },
+    routerName() {
+      return this.$route.name
     }
   },
   methods: {
