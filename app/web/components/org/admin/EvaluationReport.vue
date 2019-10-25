@@ -99,12 +99,11 @@ export default {
       let groupedByStatus = _.groupBy(this.classReport, 'status')
       const self = this
       const totalLength = this.classReport.length
-      return _.map(groupedByStatus, groupItem => {
-        let status = groupItem[0].status
-        let statusClasses = _.filter(self.classReport, { status }) || []
-        let length = statusClasses.length
+      return _.map([1, 2, 3], status => {
         let statusText =
           status == 1 ? '发送给家长' : status == 2 ? '点评（待发送）' : '未点评'
+        let statusClasses = _.filter(this.classReport, { status }) || []
+        let length = statusClasses.length
         let percent = _.round((length / totalLength) * 100, 0)
         return {
           status: `${statusText} ${percent}%`,
