@@ -92,7 +92,7 @@ const { lessonOrganizations: orgApi } = keepwork
 import { mapActions, mapGetters } from 'vuex'
 import ProjectCell from '@/components/common/ProjectCell'
 import moment from 'moment'
-const PhoneReg = /[0-9]{11}/
+const PhoneReg = /^1(3|4|5|6|7|8|9)\d{9}$/
 
 export default {
   name: 'OrgTeacherClass',

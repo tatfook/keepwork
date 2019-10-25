@@ -13,9 +13,6 @@ export default {
   data() {
     return {
       loading: true,
-      imgCount: 0,
-      loadedImgList: [],
-      timer: null,
       currentTabVisibility: false,
       reportCompleted: false,
       printed: false
@@ -51,7 +48,7 @@ export default {
       this.currentTabVisibility = !document.hidden
     },
     completed(flag) {
-      this.reportCompleted = flag
+      this.reportCompleted = true
     },
     async printReport() {
       this.printed = true
