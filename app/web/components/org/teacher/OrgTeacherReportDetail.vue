@@ -194,6 +194,11 @@ export default {
     },
     classId() {
       return _.toNumber(this.$route.query.classId)
+    },
+    reportURL() {
+      const origin = window.location.origin
+      const { orgLoginUrl } = this.$route.params
+      return `${origin}/org/${orgLoginUrl}/report`
     }
   },
   methods: {
@@ -300,10 +305,32 @@ export default {
         }
       })
     },
+    generaURL(obj) {
+      const {
+        classId,
+        reportName,
+        type,
+        userReportId,
+        studentId,
+        realname
+      } = obj
+      const paramsObj = {
+        classId,
+        reportName,
+        type,
+        userReportId,
+        studentId,
+        realname
+      }
+      const arr = _.map(_.keys(paramsObj), key => {
+        return `${key}=${paramsObj[key]}`
+      })
+      return arr.join('&')
+    },
     generaSMSData(arr) {
       const dataArr = _.map(arr, item => {
         const { parentPhoneNum, realname, star, studentId, userReportId } = item
-        return {
+        const params = {
           parentPhoneNum,
           realname,
           star,
@@ -311,19 +338,22 @@ export default {
           userReportId,
           classId: this.classId,
           type: this.reportType,
-          baseUrl: window.location.origin,
+          baseUrl: this.reportURL,
           reportName: this.reportName,
           orgName: this.orgName
         }
+        const query = this.generaURL(params)
+        params.baseUrl = encodeURI(`${params.baseUrl}?${query}`)
+        return params
       })
       return dataArr
     },
     handleSMS() {
-      const selection = this.selection.filter(item => item.isSend === 0)
-      if (selection.length === 0) {
+      if (this.selection.length === 0) {
         this.$message.error('请选择学生')
         return
       }
+      const selection = this.selection.filter(item => item.isSend === 0)
       const noParentPhonArr = _.reduce(
         selection,
         (arr, cur) => {
@@ -371,7 +401,9 @@ export default {
             }
             await this.getReportTable()
           } catch (error) {
+            const errMsg = _.get(error, 'response.data.message', '发送失败')
             console.error(error)
+            this.$message.error(errMsg)
           } finally {
             this.isSending = false
           }
