@@ -5,32 +5,31 @@
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
       <a class="breadcrumb-item" :href="`/u/${activePageInfo.username}`">{{activePageInfo.username}}</a>
       <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
-      <el-dropdown trigger="click" class="breadcrumb-item" placement="bottom-start" @command="pushNewUrl">
+      <el-dropdown trigger="click" class="breadcrumb-item" placement="bottom-start" @command="pushNewUrl" @visible-change="getSiteList">
         <span class="page-item-content">
           {{siteDisplayName}}<i class="el-icon-arrow-down el-icon-caret-bottom"></i>
         </span>
-        <el-dropdown-menu class="breadcrumb-item-dropdown" slot="dropdown">
+        <el-dropdown-menu v-loading="isGettingSite" class="breadcrumb-item-dropdown" slot="dropdown">
           <el-dropdown-item v-for='(site,index) in siteList' :key='index' :command="site">
             <span class="list-content">{{index === 0 ? site.name : (site.displayName || site.name)}}</span>
             <i class="iconfont icon-private" v-if="site.visibility===1"></i>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div class="breadcrumb-item" v-for='(fileList, index) in breadcrumbs' :key='index'>
+      <div class="breadcrumb-item" v-for='(pathItem, index) in activePageInfo.paths' :key='index'>
         <span class="breadcrumb-separator el-icon-arrow-right" role="presentation"></span>
-        <el-dropdown trigger="click" placement="bottom-start" @command="handleBreadcrumbClick">
+        <el-dropdown trigger="click" placement="bottom-start" @command="handleBreadcrumbClick" @visible-change="getSiteFileTree">
           <span class="page-item-content">
-            {{activePageInfo.paths[index] | hideMarkdownExt}}<i class="el-icon-arrow-down el-icon-caret-bottom"></i>
+            {{pathItem | hideMarkdownExt}}<i class="el-icon-arrow-down el-icon-caret-bottom"></i>
           </span>
-          <el-dropdown-menu class="breadcrumb-item-dropdown" slot="dropdown">
-            <el-dropdown-item class="file-list-item" v-for='(file,index) in fileList' :key='index' :command="file">
+          <el-dropdown-menu v-loading="isFileDropdownLoading" class="breadcrumb-item-dropdown" slot="dropdown">
+            <el-dropdown-item class="file-list-item" v-for='(file,childIndex) in siteFileTree[index]' :key='childIndex' :command="file">
               {{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
-
     <div class="icons">
       <a :href="editorPageUrl" class="icon-item">
         <el-tooltip v-if="!isEditable()" :content="$t('editor.checkCode')">
@@ -80,8 +79,9 @@ export default {
       IS_GLOBAL_VERSION,
       starPending: false,
       breadcrumbsLoading: false,
-      siteList: [],
-      isLoginDialogShow: false
+      isLoginDialogShow: false,
+      isFileDropdownLoading: false,
+      isGettingSite: false
     }
   },
   computed: {
@@ -135,34 +135,25 @@ export default {
       })
       return breadcrumbs
     },
+    siteFileTree() {
+      let { username, sitename, paths = [] } = this.activePageInfo
+      if (paths.length <= 0) return []
+      return paths.map((path, index) => {
+        let currentPath = [username, sitename, ...paths.slice(0, index)].join(
+          '/'
+        )
+        return this.gitlabChildrenByPath(currentPath)
+      })
+    },
     locationOrigin() {
       return location.origin
     },
     editorPageUrl() {
       return `/ed${this.activePageUrl}`
-    }
-  },
-  watch: {
-    async sitePath(sitePath) {
-      if (!sitePath) return
-      this.breadcrumbsLoading = true
-      await this.gitlabGetRepositoryTree({
-        path: sitePath,
-        editorMode: false
-      }).catch(e => console.error(e))
-      this.breadcrumbsLoading = false
     },
-    activePageInfo: {
-      deep: true,
-      async handler(newActivePageInfo) {
-        let { username } = newActivePageInfo
-        if (!username) {
-          return
-        }
-        await this.getUserDetailByUsername({ username })
-        let result = this.userGetDetailByUsername(username)
-        this.siteList = result.allSiteList
-      }
+    siteList() {
+      let { username } = this.activePageInfo
+      return _.get(this.userGetDetailByUsername(username), 'allSiteList', [])
     }
   },
   methods: {
@@ -256,6 +247,27 @@ export default {
     },
     closeLoginDialog() {
       this.isLoginDialogShow = false
+    },
+    async getSiteList(visible) {
+      if (!visible) return
+      this.isGettingSite = true
+      try {
+        let { username } = this.activePageInfo
+        await this.getUserDetailByUsername({ username })
+      } catch (error) {}
+      this.isGettingSite = false
+    },
+    async getSiteFileTree(visible) {
+      let { sitepath } = this.activePageInfo
+      if (!sitepath || !visible) return
+      this.isFileDropdownLoading = true
+      try {
+        await this.gitlabGetRepositoryTree({
+          path: sitepath,
+          editorMode: false
+        })
+      } catch (error) {}
+      this.isFileDropdownLoading = false
     }
   },
   filters: {
