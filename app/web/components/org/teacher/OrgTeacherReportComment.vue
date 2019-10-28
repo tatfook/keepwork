@@ -65,11 +65,11 @@
           图片/视频:
         </div>
         <div class="teacher-report-comment-main-append-preview">
-          <attachment-type v-for="(item, index) in attachmentList" :data="item" :index="index" :key="index" @remove="handleRemoveAttachment"></attachment-type>
           <div class="teacher-report-comment-main-append-upload" @click="handleShowSkydriver">
             <i class="el-icon-circle-plus upload-icon"></i>
             <span class="upload-text">添加文件</span>
           </div>
+          <attachment-type class="teacher-report-comment-main-append-item" v-for="(item, index) in attachmentList" :data="item" :index="index" :key="index" @remove="handleRemoveAttachment"></attachment-type>
         </div>
       </div>
     </div>
@@ -554,6 +554,7 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin: 5px 14px;
         cursor: pointer;
         .upload-icon {
           color: #409eff;
@@ -569,6 +570,10 @@ export default {
         padding-top: 15px;
         display: flex;
         flex-wrap: wrap;
+        margin: 0 -14px;
+      }
+      &-item {
+        margin: 5px 14px;
       }
     }
   }
