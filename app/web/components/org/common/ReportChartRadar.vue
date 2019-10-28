@@ -1,5 +1,5 @@
 <template>
-  <radar-chart :chartData="chartData" :settings="chartSettings" :extend="extend" @completed="completed"></radar-chart>
+  <radar-chart :chartData="chartData" :height="height" :settings="chartSettings" :extend="extend" @completed="completed"></radar-chart>
 </template>
 
 <script>
@@ -23,15 +23,47 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.setZoom()
+      window.addEventListener('resize', this.monitorResize)
+    })
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.monitorResize)
+  },
   data() {
     return {
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
-      starIcon: require('@/assets/org/star.png')
+      starIcon: require('@/assets/org/star.png'),
+      height: '500px',
+      timer: null,
+      cellpphoneMod: false,
+      radiusZoom: 1,
+      nameGap: 20
     }
   },
   methods: {
     completed(instance) {
       this.$emit('completed', instance)
+    },
+    monitorResize(evt) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.setZoom()
+      }, 800)
+    },
+    setZoom() {
+      const clientWidth = document.body.clientWidth
+      if (clientWidth < 768) {
+        this.cellpphoneMod = true
+        this.radiusZoom = clientWidth < 321 ? 4.8 : 3
+        this.nameGap = clientWidth < 321 ? 10 : 14
+        this.height = clientWidth < 321 ? '230px' : '280px'
+      } else {
+        this.cellpphoneMod = false
+        this.radiusZoom = 1
+        this.height = '500px'
+      }
     }
   },
   computed: {
@@ -40,8 +72,8 @@ export default {
         radar: {
           shape: 'polygon',
           center: ['50%', '50%'],
-          radius: 146,
-          nameGap: 46,
+          radius: 146 / this.radiusZoom,
+          nameGap: this.cellpphoneMod ? this.nameGap : 46,
           name: {
             formatter: (value, indicator) => {
               const { userStar, avgStar, name } = this.starGroup[value]
@@ -56,24 +88,24 @@ export default {
             rich: {
               a: {
                 color: '#333',
-                fontSize: 14
+                fontSize: this.cellpphoneMod ? 12 : 14
               },
               b: {
                 backgroundColor: {
                   image: this.starIcon
                 },
-                fontSize: 18
+                fontSize: this.cellpphoneMod ? 12 : 18
               },
               c: {
                 color: '#999',
-                fontSize: 14,
+                fontSize: this.cellpphoneMod ? 12 : 14,
                 padding: [0, 4],
-                height: 28
+                height: this.cellpphoneMod ? 14 : 28
               },
               d: {
                 align: 'center',
-                padding: [5, 12],
-                fontSize: 14,
+                padding: this.cellpphoneMod ? [5, 5] : [5, 12],
+                fontSize: this.cellpphoneMod ? 12 : 14,
                 color: '#333',
                 backgroundColor: '#ededed',
                 borderRadius: 4
@@ -85,18 +117,10 @@ export default {
           }
         },
         legend: {
-          right: 30,
-          orient: 'vertical'
-        },
-        grid: {
-          bottom: 30,
-          left: 100,
-          right: '10%'
-        },
-        events: {
-          finished() {
-            console.log('finish')
-          }
+          [this.cellpphoneMod ? 'bottom' : 'right']: this.cellpphoneMod
+            ? 0
+            : 30,
+          orient: this.cellpphoneMod ? 'horizontal' : 'vertical'
         }
       }
     },
@@ -131,9 +155,6 @@ export default {
     },
     userRealname() {
       return _.get(this.userRepo, 'realname', '')
-    },
-    userPortrait() {
-      return _.get(this.userRepo, 'portrait', this.defaultPortrait)
     },
     classmatesAvgStar() {
       return _.get(this.reportData, 'classmatesAvgStar', {})

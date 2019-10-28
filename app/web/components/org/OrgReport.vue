@@ -13,9 +13,7 @@ export default {
   data() {
     return {
       loading: true,
-      currentTabVisibility: false,
-      reportCompleted: false,
-      printed: false
+      reportCompleted: false
     }
   },
   async mounted() {
@@ -33,7 +31,6 @@ export default {
         'org/teacher/getEvaluationReportCommentDetail'
     }),
     completed(flag) {
-      console.log('completed')
       this.reportCompleted = true
     }
   },
