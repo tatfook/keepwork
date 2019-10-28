@@ -73,11 +73,11 @@
             {{ comment }}
           </div>
 
-          <div class="report-chart-comment-meida">
-            <el-row :gutter="20">
-              <el-col v-for="item in mediaUrl" :key="item.id" :span="8">
-                <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-meida-img" :src="item.url | miniPic" alt="" srcset="">
-                <div @click="handleShowDialog(item)" class="report-chart-comment-meida-video" v-else-if="item.type === 'videos'">
+          <div class="report-chart-comment-media">
+            <el-row :gutter="10">
+              <el-col v-for="(item, index) in mediaUrl" :key="index" :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
+                <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
                   <video width="100%" height="100%" :src="item.url"></video>
                   <div class="play-masking">
                     <img class="play-masking-button" :src="playButtonIcon">
@@ -111,12 +111,12 @@
           </span>
         </div>
         <template v-if="isShowHistogramChart">
-          <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="item.key">
+          <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="`${item.key}-histogram`">
             <report-chart-histogram :data="item" @completed="onTrackChartCompleted"></report-chart-histogram>
           </div>
         </template>
         <template v-else>
-          <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="item.key">
+          <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="`${item.key}-line`">
             <report-chart-line :data="item" :extend="item.extend" @completed="onTrackChartCompleted"></report-chart-line>
           </div>
         </template>
@@ -133,15 +133,15 @@
           <div class="report-chart-footer-info-teacher-name">
             点评老师：{{teacherName}}
           </div>
-          <div class="report-chart-footer-info-slogan">
-            基于玩与创造的自主学习
+          <div v-if="propaganda" class="report-chart-footer-info-slogan">
+            {{propaganda}}
           </div>
         </div>
         <img v-if="QRCode" class="report-chart-footer-qrcode" :src="QRCode | miniPic">
       </div>
     </div>
 
-    <el-dialog width="70%" top="5vh" custom-class="show-item-dialog" :visible.sync="isShowDiaglog">
+    <el-dialog custom-class="show-item-dialog" :visible.sync="isShowDiaglog">
       <img class="show-item-dialog-img" v-if="isShowDiaglog && showItem.type === 'images'" :src="showItem.url">
       <video-player v-else-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="false" :src="showItem.url" />
     </el-dialog>
@@ -213,7 +213,9 @@ export default {
   },
   mounted() {
     if (this.showComment) {
-      this.$nextTick(() => this.addImgLoadEvent())
+      this.$nextTick(() => {
+        this.addImgLoadEvent()
+      })
     }
   },
   methods: {
@@ -300,6 +302,9 @@ export default {
     },
     QRCode() {
       return _.get(this.userRepo, 'QRCode', '')
+    },
+    propaganda() {
+      return _.get(this.userRepo, 'propaganda', '')
     },
     createdAt() {
       return _.get(this.userRepo, 'createdAt', '')
@@ -592,13 +597,13 @@ $width: 766px;
       padding: 20px 15px;
     }
 
-    &-meida {
+    &-media {
       padding: 0 20px;
       &-img {
         width: 209px;
         height: 123px;
         object-fit: cover;
-        margin-bottom: 20px;
+        margin: 0 auto 14px;
         cursor: pointer;
       }
       &-video {
@@ -606,7 +611,7 @@ $width: 766px;
         height: 123px;
         object-fit: cover;
         background: rgb(73, 73, 73);
-        margin-bottom: 20px;
+        margin: 0 auto 14px;
         cursor: pointer;
         position: relative;
         .play-masking {
@@ -688,7 +693,12 @@ $width: 766px;
     &-info {
       margin-top: 30px;
       margin-left: 200px;
+      height: 100px;
+      width: 40%;
       position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       color: #fff;
       &-org-name {
         font-size: 18px;
@@ -703,6 +713,9 @@ $width: 766px;
         font-size: 14px;
         margin-top: 18px;
         color: #ffed26;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
@@ -745,8 +758,274 @@ $width: 766px;
     }
   }
   .show-item-dialog {
+    width: 100%;
+    margin-top: 5vh;
     &-img {
       width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .report-chart {
+    &-type-name {
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
+    }
+    &-header {
+      height: 244px;
+      width: 100%;
+      background: url('../../../assets/org/report_header_mini.jpg') no-repeat
+        center bottom;
+      background-size: 100% 100%;
+      &-avatar {
+        width: 70px;
+        height: 70px;
+        margin-top: 21px;
+      }
+      &-realname {
+        font-size: 14px;
+        margin-top: 6px;
+      }
+      &-org-name {
+        font-size: 16px;
+        margin-top: 10px;
+      }
+
+      &-expression {
+        font-size: 14px;
+      }
+    }
+
+    &-container {
+      width: 100%;
+      padding: 10px;
+    }
+
+    &-star {
+      margin-top: -55px;
+      border-radius: 10px;
+      margin-bottom: 17px;
+      .final-star {
+        margin-top: 18px;
+        height: 38px;
+        line-height: 38px;
+        /deep/.el-rate__icon {
+          font-size: 38px;
+        }
+      }
+      .ablity-value {
+        display: flex;
+        font-size: 14px;
+        color: #666;
+        margin-top: 16px;
+        padding: 0 8px;
+        align-items: center;
+        justify-content: space-around;
+        &-divide {
+          width: 1px;
+          height: 70px;
+          background: #e0e4ee;
+        }
+        &-item {
+          display: flex;
+          align-items: center;
+          line-height: 28px;
+          font-size: 12px;
+        }
+        /deep/ .el-rate {
+          height: 14px;
+          margin-left: 4px;
+        }
+        /deep/ .el-rate__icon {
+          font-size: 14px;
+          margin-right: 1px;
+        }
+        /deep/ .el-icon-star-on {
+          &::before {
+            content: '\E717';
+          }
+        }
+      }
+    }
+
+    &-comment {
+      border-radius: 10px;
+      margin-bottom: 17px;
+      &-text {
+        margin: 17px;
+        padding: 16px;
+      }
+      &-media {
+        &-img {
+          width: 154px;
+          height: 86px;
+          object-fit: cover;
+          margin: 0 auto 6px;
+          cursor: pointer;
+        }
+        &-video {
+          width: 154px;
+          height: 86px;
+          object-fit: cover;
+          background: rgb(73, 73, 73);
+          margin: 0 auto 6px;
+          cursor: pointer;
+          position: relative;
+          .play-masking {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(#000, 0.4);
+            &-button {
+              width: 60px;
+              height: 60px;
+            }
+          }
+        }
+      }
+    }
+
+    &-radar {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      &-title {
+        margin-bottom: 0px;
+      }
+    }
+    &-line {
+      &-title {
+        margin-bottom: 30px;
+      }
+
+      &-item {
+        margin: 0px;
+        margin-bottom: 20px;
+      }
+    }
+
+    &-footer {
+      background: url('../../../assets/org/report_footer_mini.png') center top
+        no-repeat;
+      background-size: 100% 81px;
+      height: 81px;
+      display: flex;
+      align-items: center;
+      &-date {
+        width: 56px;
+        top: 20px;
+        left: 12px;
+        background: url('../../../assets/org/date.png') center top no-repeat;
+        background-size: 56px auto;
+        &-top {
+          height: 23px;
+          line-height: 23px;
+          font-size: 12px;
+          font-weight: bold;
+        }
+        &-bottom {
+          height: 24px;
+          line-height: 24px;
+          font-size: 18px;
+          font-weight: bold;
+        }
+      }
+
+      &-info {
+        margin-top: 0px;
+        margin-left: 80px;
+        width: 50%;
+        color: #fff;
+        &-org-name {
+          font-size: 14px;
+          line-height: 14px;
+          font-weight: bold;
+        }
+        &-teacher-name {
+          font-size: 12px;
+          margin-top: 2px;
+        }
+        &-slogan {
+          font-size: 12px;
+          margin-top: 4px;
+          color: #ffed26;
+        }
+      }
+
+      &-qrcode {
+        width: 65px;
+        height: 65px;
+        object-fit: cover;
+        margin: auto;
+        margin-right: 10px;
+      }
+    }
+    .trapezoidal-round {
+      font-size: 14px;
+      height: 28px;
+      line-height: 28px;
+      &-name {
+        &::after,
+        &::before {
+          content: '';
+          margin-right: 8px;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+
+  /deep/ .show-item-dialog {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .report-chart {
+    $fontSize: 16px;
+    &-star {
+      color: red;
+      .ablity-value {
+        display: block;
+        &-divide {
+          display: none;
+        }
+        &-item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 32px;
+          font-size: $fontSize;
+        }
+        /deep/ .el-rate {
+          height: $fontSize;
+          margin-left: 10px;
+        }
+        /deep/ .el-rate__icon {
+          font-size: $fontSize;
+        }
+      }
+    }
+
+    &-comment {
+      &-media {
+        &-img {
+          width: 125px;
+          height: 74px;
+        }
+        &-video {
+          width: 125px;
+          height: 74px;
+        }
+      }
     }
   }
 }
