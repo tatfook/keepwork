@@ -95,10 +95,10 @@ export default {
       return _.get(this.currentOrg, 'extra.admissionMsg')
     },
     orgQRCode() {
-      return _.get(this.currentOrg, 'extra.QRCode')
+      return _.get(this.currentOrg, 'QRCode')
     },
     orgPropaganda() {
-      return _.get(this.currentOrg, 'extra.propaganda')
+      return _.get(this.currentOrg, 'propaganda')
     },
     isSavable() {
       return (
@@ -120,11 +120,11 @@ export default {
         orgId: _.get(this.currentOrg, 'id'),
         orgData: {
           privilege: this.teacherPrivilege,
+          propaganda: this.propaganda,
+          QRCode: this.QRCode,
           extra: {
             ...this.originExtra,
-            admissionMsg: this.admissionMsg,
-            propaganda: this.propaganda,
-            QRCode: this.QRCode
+            admissionMsg: this.admissionMsg
           }
         }
       })
