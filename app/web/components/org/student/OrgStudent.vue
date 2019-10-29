@@ -567,6 +567,7 @@ $borderColor: #e8e8e8;
       font-size: 14px;
       &-icon {
         margin-right: 6px;
+      }
       &-username {
         cursor: pointer;
       }
