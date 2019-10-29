@@ -599,7 +599,7 @@ $width: 766px;
         width: 209px;
         height: 123px;
         object-fit: cover;
-        margin: 0 auto 14px;
+        margin-bottom: 8px;
         cursor: pointer;
       }
       &-video {
@@ -858,7 +858,7 @@ $width: 766px;
           width: 154px;
           height: 86px;
           object-fit: cover;
-          margin: 0 auto 6px;
+          margin-bottom: 6px;
           cursor: pointer;
         }
         &-video {
