@@ -65,11 +65,11 @@
           </el-select>
         </div>
         <div class="class-evaluation-item-search-item">
-          <el-input placeholder="按报告名称搜索" prefix-icon="el-icon-search" v-model.trim="searchName" @blur="getTableData">
+          <el-input placeholder="按报告名称搜索" prefix-icon="el-icon-search" v-model.trim="searchName" @input="getTableData">
           </el-input>
         </div>
       </div>
-      <el-table class="class-evaluation-table" :data="formatedTableData" border>
+      <el-table class="class-evaluation-table" :data="formatedTableData" border v-loading="isGettingTableData">
         <el-table-column prop="reportName" label="报告名称"></el-table-column>
         <el-table-column prop="typeText" label="报告类型" width="132"></el-table-column>
         <el-table-column prop="username" label="点评老师" width="86"></el-table-column>
@@ -108,6 +108,7 @@ export default {
   data() {
     return {
       isClassHasReport: false,
+      isGettingTableData: false,
       typeOptions: [
         {
           value: null,
@@ -249,17 +250,21 @@ export default {
       this.isLoading = false
     },
     async getTableData() {
-      await this.orgGetClassEvaluationList({
-        classId: this.classId,
-        name: this.searchName,
-        type: this.searchType,
-        days: this.selectDayOption.value,
-        roleId: 64
-      })
-      if (!this.isClassHasReport) {
-        this.isClassHasReport =
-          this.classEvaluationList.length > 0 ? true : false
-      }
+      this.isGettingTableData = true
+      try {
+        await this.orgGetClassEvaluationList({
+          classId: this.classId,
+          name: this.searchName,
+          type: this.searchType,
+          days: this.selectDayOption.value,
+          roleId: 64
+        })
+        if (!this.isClassHasReport) {
+          this.isClassHasReport =
+            this.classEvaluationList.length > 0 ? true : false
+        }
+      } catch (error) {}
+      this.isGettingTableData = false
     }
   },
   components: {
