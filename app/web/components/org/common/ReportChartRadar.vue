@@ -127,7 +127,7 @@ export default {
     chartData() {
       return {
         columns: this.columns,
-        rows: [this.userStartByName, this.classmateStarByName]
+        rows: [this.classmateStarByName, this.userStartByName]
       }
     },
     columns() {
