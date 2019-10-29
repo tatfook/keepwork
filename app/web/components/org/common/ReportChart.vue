@@ -112,12 +112,12 @@
         </div>
         <template v-if="isShowHistogramChart">
           <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="`${item.key}-histogram`">
-            <report-chart-histogram :data="item" @completed="onTrackChartCompleted"></report-chart-histogram>
+            <report-chart-histogram :data="item" :max="growthTrackMax" @completed="onTrackChartCompleted"></report-chart-histogram>
           </div>
         </template>
         <template v-else>
           <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="`${item.key}-line`">
-            <report-chart-line :data="item" :extend="item.extend" @completed="onTrackChartCompleted"></report-chart-line>
+            <report-chart-line :data="item" :max="growthTrackMax" :extend="item.extend" @completed="onTrackChartCompleted"></report-chart-line>
           </div>
         </template>
       </div>
@@ -141,7 +141,7 @@
       </div>
     </div>
 
-    <el-dialog custom-class="show-item-dialog" :visible.sync="isShowDiaglog">
+    <el-dialog custom-class="show-item-dialog" top="2vh" :visible.sync="isShowDiaglog">
       <img class="show-item-dialog-img" v-if="isShowDiaglog && showItem.type === 'images'" :src="showItem.url">
       <video-player v-else-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="false" :src="showItem.url" />
     </el-dialog>
@@ -286,6 +286,24 @@ export default {
         this.growthTrackList,
         item => item.chartData.rows.length === 1
       )
+    },
+    growthTrackMax() {
+      const max = _.reduce(
+        this.starGroupArray,
+        (max, cur) => {
+          const { classmateStar, userStar } = cur
+          const classmateMax = _.max(
+            _.map(this.growthTrackKey, item => classmateStar[`${item.key}Avg`])
+          )
+          const userMax = _.max(
+            _.map(this.growthTrackKey, item => userStar[item.key])
+          )
+          max = _.max([classmateMax, userMax])
+          return max
+        },
+        10
+      )
+      return max
     },
     userRepo() {
       return _.get(this.reportData, 'userRepo', {})
@@ -753,9 +771,8 @@ $width: 766px;
       }
     }
   }
-  .show-item-dialog {
-    width: 100%;
-    margin-top: 5vh;
+  /deep/.show-item-dialog {
+    width: 80%;
     &-img {
       width: 100%;
     }
@@ -977,10 +994,12 @@ $width: 766px;
         }
       }
     }
-  }
-
-  /deep/ .show-item-dialog {
-    width: 100%;
+    /deep/ .show-item-dialog {
+      width: 100%;
+      .el-dialog__body {
+        padding: 10px;
+      }
+    }
   }
 }
 
