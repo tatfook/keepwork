@@ -11,7 +11,7 @@
       <div class="report-name">
         报告名称：
       </div>
-      <el-form class="report-name-form" ref="form" :model="form" :rules="rules">
+      <el-form class="report-name-form" @submit.native.prevent ref="form" :model="form" :rules="rules">
         <el-form-item class="report-name-form-item" prop="reportName">
           <el-input class="report-name-input" placeholder="请输入" v-model="form.reportName"></el-input>
         </el-form-item>
@@ -45,7 +45,7 @@ export default {
     }
   },
   watch: {
-    selectedType(value){
+    selectedType(value) {
       console.log(value)
     }
   },

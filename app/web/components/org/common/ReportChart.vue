@@ -262,7 +262,7 @@ export default {
       return this.imgCount === this.loadedImgList.length
     },
     trackChartCompleted() {
-      return this.growthTrackChartCompletedCount >= 6
+      return this.isHistory ? this.growthTrackChartCompletedCount >= 6 : true
     },
     isPageCompleted() {
       return (
@@ -273,10 +273,6 @@ export default {
     },
     isRadarChartCompleted() {
       return this.radarThisTimeCompleted && this.radarHistoryCompleted
-    },
-    radarCompleted() {
-      if (this.isHistory) {
-      }
     },
     iconClasses() {
       return [
@@ -1031,6 +1027,9 @@ $width: 766px;
 }
 
 @media print {
+  .report-chart {
+    -webkit-print-color-adjust: exact;
+  }
   .dont-break {
     page-break-inside: avoid;
   }
