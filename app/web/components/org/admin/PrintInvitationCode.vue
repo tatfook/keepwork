@@ -303,7 +303,7 @@ export default {
           }
         }
         &-guide {
-          padding: 2px 0 18px 16px;
+          padding: 2px 0 18px 2px;
           position: relative;
           &-img {
             position: absolute;
@@ -315,7 +315,7 @@ export default {
             z-index: 99;
             position: relative;
             border-left: solid 3px #54a9ff;
-            padding: 0 0 12px 20px;
+            padding: 0 0 12px 14px;
             font-size: 12px;
             color: #000;
             margin: 0;
