@@ -1,7 +1,8 @@
 <template>
   <div class="class-evaluation">
     <div class="class-evaluation-header">
-      <div class="class-evaluation-header-title">评估报告
+      <div class="class-evaluation-header-title">
+        <router-link :to="{name: 'EvaluationReport'}">评估报告</router-link>
         <i class="el-icon-arrow-right"></i>
         <span>{{className}}</span>
       </div>
@@ -315,6 +316,13 @@ export default {
       flex: 1;
       & > .el-icon-arrow-right {
         margin-left: 18px;
+      }
+      & > a {
+        text-decoration: none;
+        color: inherit;
+        &:hover {
+          color: #409efe;
+        }
       }
       & > span {
         color: #ababab;
