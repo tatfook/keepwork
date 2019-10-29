@@ -37,6 +37,7 @@ export default {
     try {
       this.activeName = this.queryActiveName
       await Promise.all([
+        this.getStudentInfo(),
         this.orgGetEvaluationCommentList({ classId: this.classId }),
         this.getEvaluationReportStatistics(this.classId)
       ])
@@ -57,6 +58,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getStudentInfo: 'org/student/getStudentInfo',
       getEvaluationReportStatistics:
         'org/student/getEvaluationReportStatistics',
       orgGetEvaluationCommentList: 'org/student/getEvaluationCommentList'
@@ -74,7 +76,8 @@ export default {
     ...mapGetters({
       classReportStatistics: 'org/student/classReportStatistics',
       getEvaluationCommentListByClassId:
-        'org/student/getEvaluationCommentListByClassId'
+        'org/student/getEvaluationCommentListByClassId',
+      userinfo: 'org/student/userinfo'
     }),
     evaluationCommentList() {
       return this.getEvaluationCommentListByClassId({ classId: this.classId })
@@ -85,8 +88,13 @@ export default {
     classId() {
       return _.get(this.$route, 'params.classId', '')
     },
+    realname() {
+      return this.userinfo.realname
+    },
     reportData() {
-      return _.get(this.classReportStatistics, [this.classId], {})
+      const temp = _.get(this.classReportStatistics, [this.classId], {})
+      temp['userRepo'] = { realname: this.realname }
+      return temp
     },
     queryActiveName() {
       return _.get(this.$route, 'query.active', 'statics')
