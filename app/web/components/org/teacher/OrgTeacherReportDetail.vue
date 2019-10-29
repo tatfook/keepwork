@@ -1,7 +1,7 @@
 <template>
   <div class="teacher-report-detail">
     <div class="teacher-report-detail-header">
-      <span class="teacher-report-detail-header-name">报告名称</span> <span class="teacher-report-detail-header-tag">{{reportName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
+      <span class="teacher-report-detail-header-name">{{reportName}}</span> <span class="teacher-report-detail-header-tag">{{reportTypeName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
     </div>
     <div class="teacher-report-detail-main">
       <el-tabs v-model="activeName" type="card">
@@ -172,6 +172,9 @@ export default {
     },
     reportType() {
       return _.get(this.$route, 'query.type', '')
+    },
+    reportTypeName() {
+      return this.reportType === 1 ? '小评' : '阶段总结'
     },
     sendStatusDict() {
       return {
