@@ -51,7 +51,8 @@
           </div>
           <div v-if="hasTeacher" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-jiaoshi1 org-student-menu-item-icon"></i> {{item.realname}}
+              <i class="iconfont icon-jiaoshi1 org-student-menu-item-icon"></i>
+              <span @click="toUserPage(item.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -65,7 +66,8 @@
           </div>
           <div v-if="hasClassmate" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-tongxue org-student-menu-item-icon"></i> {{item.realname}}
+              <i class="iconfont icon-tongxue org-student-menu-item-icon"></i>
+              <span @click="toUserPage(item.users.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
           <div v-else class="org-student-class-empty">
@@ -275,6 +277,9 @@ export default {
           classId: this.currentClassID
         }
       })
+    },
+    toUserPage(username) {
+      window.open(`${window.location.origin}/u/${username}`)
     },
     toRolePage(pageName) {
       this.$router.push({
@@ -562,6 +567,8 @@ $borderColor: #e8e8e8;
       font-size: 14px;
       &-icon {
         margin-right: 6px;
+      &-username {
+        cursor: pointer;
       }
     }
   }
