@@ -16,6 +16,10 @@ export default {
       default() {
         return {}
       }
+    },
+    max: {
+      type: Number,
+      default: 10
     }
   },
   data() {
@@ -72,6 +76,16 @@ export default {
         yAxisName: ['星星数']
       }
     },
+    rowMax() {
+      const rowsMax = _.map(this.chartData.rows, item => {
+        const { 次数, ...rest } = item
+        return _.max(_.values(rest))
+      })
+      return _.max(rowsMax)
+    },
+    yMax() {
+      return _.max([this.rowMax, this.max])
+    },
     extend() {
       return {
         legend: {
@@ -94,6 +108,9 @@ export default {
           height: this.cellpphoneMod ? '60%' : 'auto',
           right: 80,
           left: this.cellpphoneMod ? 20 : 40
+        },
+        yAxis: {
+          max: this.yMax
         },
         xAxis: {
           name: '第*次点评',
