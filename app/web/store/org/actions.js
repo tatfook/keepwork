@@ -24,7 +24,10 @@ const {
   TOGGLE_EXPIRATION_DIALOG,
   GET_FORMS_SUCCESS,
   GET_FEEDBACK_SUCCESS,
-  GET_LOGS_SUCCESS
+  GET_LOGS_SUCCESS,
+  GET_CLASS_EVALUATION_SUCCESS,
+  GET_CLASS_EVALUATION_LIST_SUCCESS,
+  GET_ORG_CLASS_REPORT_SUCCESS
 } = props
 
 const actions = {
@@ -253,7 +256,15 @@ const actions = {
   },
   async createNewMember(
     context,
-    { organizationId, classId, classIds, memberName, realname, roleId }
+    {
+      organizationId,
+      classId,
+      classIds,
+      memberName,
+      realname,
+      roleId,
+      parentPhoneNum
+    }
   ) {
     let { dispatch } = context
     let result = await keepwork.lessonOrganizationClassMembers
@@ -262,6 +273,7 @@ const actions = {
         classId,
         classIds,
         memberName,
+        parentPhoneNum,
         realname,
         roleId
       })
@@ -459,6 +471,33 @@ const actions = {
     if (xOrder) params['x-order'] = xOrder
     let result = await keepwork.organizations.getLogs(params)
     commit(GET_LOGS_SUCCESS, { orgId: currentOrgId, result })
+  },
+  async sendSms(context, { cellphone }) {
+    return await keepwork.users.sendSms({ cellphone })
+  },
+  async getClassEvaluation({ commit }, { classId, days }) {
+    let result = await keepwork.evaluationReports.getClassReportByClassId({
+      classId,
+      days
+    })
+    commit(GET_CLASS_EVALUATION_SUCCESS, { classId, result })
+  },
+  async getClassEvaluationList(
+    { commit },
+    { classId, name, type, roleId, days }
+  ) {
+    let result = await keepwork.evaluationReports.getClassEvaluationReport({
+      classId,
+      name,
+      type,
+      roleId,
+      days
+    })
+    commit(GET_CLASS_EVALUATION_LIST_SUCCESS, { classId, result })
+  },
+  async getOrgClassReport({ commit }, { days }) {
+    let result = await keepwork.evaluationReports.getOrgClassReport({ days })
+    commit(GET_ORG_CLASS_REPORT_SUCCESS, { days, result })
   }
 }
 

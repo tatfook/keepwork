@@ -158,7 +158,7 @@ export default {
       } catch (error) {
         switch (error.status) {
           case 400:
-            if (_.includes(error.data, '成员不存在')) {
+            if (_.includes(error.data.message, '班级成员不存在')) {
               await this.userLogin(this.loginData)
               await this.setCurrentOrg({ orgDetail: this.orgDetail })
               this.$router.push({

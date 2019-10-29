@@ -1,10 +1,6 @@
 <template>
-  <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}" v-loading="loading">
-    <!-- <div v-if="!isPreview" class="lesson-page-header">
-      <common-header class="container" @callback="resetPage"></common-header>
-    </div> -->
-    <router-view v-if="!loading" class="lesson-page-main-content" id="lesson-page" />
-    <!-- <perfect-common-footer v-if="!isPreview"></perfect-common-footer> -->
+  <div class="lesson-page" :class="{'lesson-page-scroll-all': isIE && !isHeaderFooterFixed}">
+    <router-view class="lesson-page-main-content" id="lesson-page" />
   </div>
 </template>
 
@@ -18,7 +14,6 @@ import Cookies from 'js-cookie'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './lesson.router'
 import appModule from '@/store/app'
-import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import gitlabModule from '@/store/gitlab'
 import lessonModule from '@/store/lesson'
@@ -29,10 +24,6 @@ import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
 import Vhistogram from 'v-charts/lib/histogram.common'
 import VueClipboard from 'vue-clipboard2'
-import { mapActions, mapGetters } from 'vuex'
-import CommonHeader from '@/components/common/CommonHeader'
-import LessonHeader from '@/components/lesson/common/Header'
-import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
 import { broadcast } from 'vuex-iframe-sync'
@@ -46,7 +37,6 @@ Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueLazyload)
 Vue.use(VueClipboard)
-Vue.component(Vhistogram.name, Vhistogram)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,
@@ -68,17 +58,15 @@ Vue.use(ElementUI, {
 
 const store = new Vuex.Store({
   modules: {
-    skydrive: skydriveModule,
     app: appModule,
     user: userModule,
     gitlab: gitlabModule,
     lesson: lessonModule,
-    combo: comboModule,
     pbl: pblModule
   },
   plugins: [
     createPersistedState({
-      paths: ['user.webTemplateConfig', 'user.skyDrive']
+      paths: ['user.webTemplateConfig']
     }),
     broadcast('combo')
   ]
@@ -119,66 +107,14 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-const TeacherColumnActivePageNameReg = /^TeacherColumn+/
-const HIDE_ROUTE_NAMES = [
-  'SingleLessonPreview',
-  'PackagePreview',
-  'LessonPreview'
-]
 export default {
   name: 'LessonPage',
   router,
   store,
   i18n,
-  async created() {
-    await this.loadLessonPresets()
-  },
-  components: {
-    RealName,
-    LessonHeader,
-    CommonHeader,
-    LoginDialog,
-    PerfectCommonFooter
-  },
   data() {
     return {
-      isIE: !!window.ActiveXObject || 'ActiveXObject' in window,
-      loading: true
-    }
-  },
-  computed: {
-    ...mapGetters({
-      isShowLoginDialog: 'lesson/isShowLoginDialog',
-      isBeInClassroom: 'lesson/student/isBeInClassroom'
-    }),
-    nowPagename() {
-      return this.$route.name
-    },
-    isHeaderFooterFixed() {
-      return TeacherColumnActivePageNameReg.test(this.nowPagename)
-    },
-    isPreview() {
-      return HIDE_ROUTE_NAMES.includes(this.$route.name)
-    }
-  },
-  methods: {
-    ...mapActions({
-      getUserProfile: 'user/getProfile',
-      getUserDetail: 'lesson/getUserDetail',
-      toggleLoginDialog: 'lesson/toggleLoginDialog',
-      changeStatus: 'lesson/student/changeStatus',
-      uploadLearnRecords: 'lesson/student/uploadLearnRecords',
-      resumeClassData: 'lesson/resumeClassData'
-    }),
-    async loadLessonPresets() {
-      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
-        console.error(err)
-      )
-      await this.getUserDetail().catch(err => console.error(err))
-      this.loading = false
-    },
-    handleLoginDialogClose() {
-      this.toggleLoginDialog(false)
+      isIE: !!window.ActiveXObject || 'ActiveXObject' in window
     }
   }
 }

@@ -66,7 +66,11 @@ export default {
     OrgCell
   },
   async created() {
-    await this.getUserOrgList()
+    try {
+      await this.getUserOrgList()
+    } catch (error) {
+      console.error(error)
+    }
   },
   data() {
     return {

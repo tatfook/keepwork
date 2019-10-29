@@ -96,7 +96,12 @@ const getters = {
   },
   getFormFeedbackById: state => ({ id }) => state.formsFeedback[id],
   currentOrgLogs: (state, { currentOrgId }) =>
-    _.get(state.orgLogs, currentOrgId, [])
+    _.get(state.orgLogs, currentOrgId, []),
+  getClassEvaluation: state => ({ classId }) =>
+    _.get(state.classEvaluations, classId),
+  getClassEvaluationList: state => ({ classId }) =>
+    _.get(state.classEvaluationList, classId),
+  getClassReportByDays: state => ({ days }) => state.orgClassesReport[days]
 }
 
 export default getters

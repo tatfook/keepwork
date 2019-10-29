@@ -16,7 +16,6 @@
 <script>
 import LessonHeader from '@/components/org/common/OrgLessonHeader'
 import LessonWrapByGlass from './common/LessonWrapByGlass'
-import { mapActions, mapGetters } from 'vuex'
 import { lesson, keepwork } from '@/api'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
@@ -44,7 +43,7 @@ export default {
       })
       window.document.title = this.lessonName
     } catch (error) {
-      console.dir(error)
+      console.error(error)
     }
     this.isLoading = false
   },

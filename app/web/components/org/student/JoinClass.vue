@@ -2,7 +2,7 @@
   <div class="join-class-container">
     <div class="join-class-title">加入班级，请输入邀请码:</div>
     <div class="join-class-tips">
-      请联系学校老师，获得邀请码。{{orgCellphone}}
+      请联系{{admissionMsg}}，获得邀请码。
     </div>
     <div class="join-class-form">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -104,6 +104,12 @@ export default {
     },
     organizationId() {
       return _.get(this.currentOrg, 'id')
+    },
+    orgAdmissionMsg() {
+      return _.get(this.currentOrg, 'extra.admissionMsg')
+    },
+    admissionMsg() {
+      return this.orgAdmissionMsg || this.orgCellphone || '老师'
     }
   }
 }

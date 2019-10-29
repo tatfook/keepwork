@@ -135,7 +135,7 @@ import _ from 'lodash'
 import Cookies from 'js-cookie'
 import { mapActions, mapGetters } from 'vuex'
 import colI18n from '@/lib/utils/i18n/column'
-import OperateResultDialog from '@/components/lesson/common/OperateResultDialog'
+import OperateResultDialog from '@/components/study/OperateResultDialog'
 export default {
   name: 'LessonManager',
   props: {
@@ -331,10 +331,6 @@ export default {
       return pendingReviewPackageIndex === -1
     },
     isReleasable(lessonDetail) {
-      // The first version temporarily removes the release function
-      // let { packages } = lessonDetail
-      // let approvedPackageIndex = _.findIndex(packages, { state: 2 })
-      // return this.isEditable(lessonDetail) && approvedPackageIndex >= 0
       return false
     },
     isDeletable(lessonDetail) {

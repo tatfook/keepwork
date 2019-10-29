@@ -3,6 +3,7 @@ import Vue from 'vue'
 const GET_ORG_CLASSES_SUCCESS = 'GET_ORG_CLASSES_SUCCESS'
 const GET_CLASS_PACKAGES_SUCCESS = 'GET_CLASS_PACKAGES_SUCCESS'
 const GET_CLASS_STUDENTS_SUCCESS = 'GET_CLASS_STUDENTS_SUCCESS'
+const GET_CLASS_TEACHERS_SUCCESS = 'GET_CLASS_TEACHERS_SUCCESS'
 const GET_CLASS_PACKAGE_DETAIL_SUCCESS = 'GET_CLASS_PACKAGE_DETAIL_SUCCESS'
 const GET_CLASS_LESSON_CONTENT_SUCCESS = 'GET_CLASS_LESSON_CONTENT_SUCCESS'
 const SAVE_CLASS_LESSON_DETAIL = 'SAVE_CLASS_LESSON_DETAIL'
@@ -17,10 +18,19 @@ const COPY_CLASSROOM_QUIZ = 'COPY_CLASSROOM_QUIZ'
 const GET_TAUGHT_CLASSROOM_COURSES_SUCCESS = 'GET_TAUGHT_CLASSROOM_COURSES_SUCCESS'
 const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
 
+const GET_CLASS_EVALUATION_REPORTS_SUCCESS = 'GET_CLASS_EVALUATION_REPORTS_SUCCESS'
+const SET_CLASS_EVALUATION_REPORT_COUNT = 'SET_CLASS_EVALUATION_REPORT_COUNT'
+const GET_EVALUATION_REPORT_DETAIL_SUCCESS = 'GET_EVALUATION_REPORT_DETAIL_SUCCESS'
+const GET_LAST_UPDATE_PROJECTS_SUCCESS = 'GET_LAST_UPDATE_PROJECTS_SUCCESS'
+const GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS =
+  'GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS'
+const GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS = 'GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS'
+
 export const props = {
   GET_ORG_CLASSES_SUCCESS,
   GET_CLASS_PACKAGES_SUCCESS,
   GET_CLASS_STUDENTS_SUCCESS,
+  GET_CLASS_TEACHERS_SUCCESS,
   GET_CLASS_PACKAGE_DETAIL_SUCCESS,
   GET_CLASS_LESSON_CONTENT_SUCCESS,
   SAVE_CLASS_LESSON_DETAIL,
@@ -32,11 +42,44 @@ export const props = {
   LEAVE_THE_CLASSROOM,
   COPY_CLASSROOM_QUIZ,
   GET_TAUGHT_CLASSROOM_COURSES_SUCCESS,
-  GET_ORG_STUDENTS_SUCCESS
+  GET_ORG_STUDENTS_SUCCESS,
+  GET_CLASS_EVALUATION_REPORTS_SUCCESS,
+  SET_CLASS_EVALUATION_REPORT_COUNT,
+  GET_EVALUATION_REPORT_DETAIL_SUCCESS,
+  GET_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 }
 
 
 const mutations = {
+  [GET_LAST_UPDATE_PROJECTS_SUCCESS](state, payload) {
+    Vue.set(state, 'lastUpdateProjects', payload)
+  },
+  [GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS](state, payload) {
+    Vue.set(state, 'moreLastUpdateProjects', payload)
+  },
+  [GET_EVALUATION_REPORT_DETAIL_SUCCESS](state, { status, payload }) {
+    Vue.set(state, 'evaluationReportDetail', {
+      ...state.evaluationReportDetail,
+      [status]: payload
+    })
+  },
+  [SET_CLASS_EVALUATION_REPORT_COUNT](state, { classId, count }) {
+    Vue.set(state, 'orgClassEvaluationReportCount', {
+      ...state.orgClassEvaluationReportCount,
+      [classId]: count
+    })
+  },
+  [GET_CLASS_EVALUATION_REPORTS_SUCCESS](state, { classId, reports }) {
+    Vue.set(state, 'orgClassEvaluationReports', {
+      ...state.orgClassEvaluationReports,
+      [classId]: reports
+    })
+  },
+  [GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS](state, report) {
+    Vue.set(state, 'evaluationReportCommentDetail', report)
+  },
   [GET_ORG_CLASSES_SUCCESS](state, payload) {
     Vue.set(state, 'orgClasses', payload)
   },
@@ -53,6 +96,12 @@ const mutations = {
     Vue.set(state, 'orgClassStudents', {
       ...state.orgClassStudents,
       [classId]: classStudents
+    })
+  },
+  [GET_CLASS_TEACHERS_SUCCESS](state, { classId, classTeachers }) {
+    Vue.set(state, 'orgClassTeachers', {
+      ...state.orgClassTeachers,
+      [classId]: classTeachers
     })
   },
   [GET_TAUGHT_CLASSROOM_COURSES_SUCCESS](state, { classId, classroomCourses }) {

@@ -1,6 +1,12 @@
 import { props } from './mutations'
 import { keepwork, lesson } from '@/api'
-const { graphql, lessonOrganizations, lessonOrganizationClassMembers, lessonOrganizationClasses } = keepwork
+const {
+  graphql,
+  lessonOrganizations,
+  lessonOrganizationClassMembers,
+  lessonOrganizationClasses,
+  evaluationReports
+} = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
 import { Message } from 'element-ui'
@@ -25,7 +31,12 @@ const {
   GET_MY_CLASSMATE_SUCCESS,
   GET_CLASS_PACKAGES_SUCCESS,
   GET_LAST_UPDATE_PROJECTS_SUCCESS,
-  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS
+  GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS,
+  GET_EVALUATION_COMMENT_LIST_SUCCESS,
+  GET_STUDENT_INFO_SUCCESS,
+  GET_ORG_CLASS_REPORT_SUCCESS,
+  GET_CLASS_REPORT_STATISTICS_SUCCESS,
+  GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 } = props
 
 const errMsg = {
@@ -40,12 +51,38 @@ const errMsg = {
 }
 
 const actions = {
-  async getMyTeacher({ commit, rootGetters: { 'org/currentOrgId': currentOrgId } }, classId) {
-    const payload = await lessonOrganizationClassMembers.getTeachersByClassId({ organizationId: currentOrgId, classId })
+  async getEvaluationReportStatistics({ commit }, classId) {
+    const report = await evaluationReports.getEvaluationReportStatistics({ classId })
+    commit(GET_CLASS_REPORT_STATISTICS_SUCCESS, { classId, report })
+    return report
+  },
+  async getMyTeacher(
+    {
+      commit,
+      rootGetters: { 'org/currentOrgId': currentOrgId }
+    },
+    classId
+  ) {
+    const payload = await lessonOrganizationClassMembers.getTeachersByClassId({
+      organizationId: currentOrgId,
+      classId
+    })
     commit(GET_MY_TEACHER_SUCCESS, payload)
   },
-  async getMyClassmate({ commit, getters: { userInfo: { id } }, rootGetters: { 'org/currentOrgId': currentOrgId } }, classId) {
-    const res = await lessonOrganizationClassMembers.getStudentsByClassId({ organizationId: currentOrgId, classId })
+  async getMyClassmate(
+    {
+      commit,
+      getters: {
+        userInfo: { id }
+      },
+      rootGetters: { 'org/currentOrgId': currentOrgId }
+    },
+    classId
+  ) {
+    const res = await lessonOrganizationClassMembers.getStudentsByClassId({
+      organizationId: currentOrgId,
+      classId
+    })
     const list = _.get(res, 'rows', [])
     const payload = _.filter(list, item => item.memberId !== id)
     commit(GET_MY_CLASSMATE_SUCCESS, payload)
@@ -60,7 +97,13 @@ const actions = {
     const res = await lessonOrganizations.getOrgStudentPackages({ classId })
     commit(GET_CLASS_PACKAGES_SUCCESS, res)
   },
-  async getOrgClasses({ commit, getters: { orgClasses } }, { cache = false } = {}) {
+  async getOrgClasses(
+    {
+      commit,
+      getters: { orgClasses }
+    },
+    { cache = false } = {}
+  ) {
     if (!(cache && !_.isEmpty(orgClasses))) {
       const classes = await lessonOrganizations.getOrgClasses({ roleId: 1 })
       commit(GET_ORG_CLASSES_SUCCESS, classes)
@@ -68,25 +111,36 @@ const actions = {
     }
     return orgClasses
   },
-  async getLastUpdateProjects({ commit, getters: { myClassmate, userInfo: { id } } }, params) {
+  async getLastUpdateProjects(
+    {
+      commit,
+      getters: {
+        myClassmate,
+        userInfo: { id }
+      }
+    },
+    params
+  ) {
     params = params || {
       'x-order': 'updatedAt-desc',
       'x-per-page': 6,
       'x-page': 1,
-      'visibility': 0,
+      visibility: 0
     }
     const studentIDs = _.concat(_.map(myClassmate, item => item.memberId), id)
     const res = await keepwork.projects.getProjects({
       ...params,
-      'userId': {
-        '$in': studentIDs
+      userId: {
+        $in: studentIDs
       }
     })
     commit(GET_LAST_UPDATE_PROJECTS_SUCCESS, res.rows)
     return res
   },
   async getMoreLastUpdateProjects({ commit }, classId) {
-    const list = await lessonOrganizationClasses.getClassLastUpdateProjects(classId)
+    const list = await lessonOrganizationClasses.getClassLastUpdateProjects(
+      classId
+    )
     commit(GET_MORE_LAST_UPDATE_PROJECTS_SUCCESS, list)
     return list
   },
@@ -113,7 +167,13 @@ const actions = {
     const userInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userInfo)
   },
-  async getUserOrgRealName({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
+  async getUserOrgRealName({
+    commit,
+    rootGetters: {
+      'org/currentOrg': { id: organizationId },
+      'org/userinfo': { username }
+    }
+  }) {
     const res = await graphql.getQueryResult({
       query:
         'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId, realname} }}',
@@ -122,26 +182,41 @@ const actions = {
         username
       }
     })
-    const orgs = _.filter(_.get(res, 'organizationUser.organizationClassMembers', []), item => {
-      const roleId = item.roleId
-      const isStudent = (roleId & 1) > 0 // eslint-disable-line no-bitwise
-      return (isStudent && item.realname)
-    })
+    const orgs = _.filter(
+      _.get(res, 'organizationUser.organizationClassMembers', []),
+      item => {
+        const roleId = item.roleId
+        const isStudent = (roleId & 1) > 0 // eslint-disable-line no-bitwise
+        return isStudent && item.realname
+      }
+    )
     const realName = _.get(orgs, '[0].realname', '')
     commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
-  async getOrgPackages({ commit, getters: { orgPackages } }, { cache = false } = {}) {
+  async getOrgPackages(
+    {
+      commit,
+      getters: { orgPackages }
+    },
+    { cache = false } = {}
+  ) {
     if (!(cache && !_.isEmpty(orgPackages))) {
       const packages = await lessonOrganizations.getOrgStudentPackages()
       commit(GET_ORG_PACKAGES_SUCCESS, packages)
     }
   },
   async getOrgPackageDetail({ commit }, { roleId = 1, packageId }) {
-    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({ packageId, roleId })
+    const packageDetail = await lessonOrganizations.getOrgStudentPackageDetail({
+      packageId,
+      roleId
+    })
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
-  async getLessonDetail({ commit, dispatch, getters }, { packageId, lessonId }) {
+  async getLessonDetail(
+    { commit, dispatch, getters },
+    { packageId, lessonId }
+  ) {
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId }),
@@ -173,14 +248,25 @@ const actions = {
       modList
     })
   },
-  async doQuiz({ commit, getters: { orgLessonDetail } }, { key, question, result, answer }) {
+  async doQuiz(
+    {
+      commit,
+      getters: { orgLessonDetail }
+    },
+    { key, question, result, answer }
+  ) {
     let _lessonDetail = _.clone(orgLessonDetail)
     let index = _.findIndex(_lessonDetail.quiz, o => o.data.title === question)
     _lessonDetail.quiz[index].result = result
     _lessonDetail.quiz[index].answer = answer
     commit(DO_QUIZ, _lessonDetail)
   },
-  async uploadSelfLearnRecords({ getters: { learnRecordsId, learnRecords } }, { packageId, lessonId, state = 0 }) {
+  async uploadSelfLearnRecords(
+    {
+      getters: { learnRecordsId, learnRecords }
+    },
+    { packageId, lessonId, state = 0 }
+  ) {
     if (learnRecordsId) {
       await lesson.users
         .uploadSelfLearnRecords(learnRecordsId, {
@@ -192,7 +278,13 @@ const actions = {
         .catch(e => console.error(e))
     }
   },
-  async createLearnRecords({ commit, getters: { learnRecords, lessonUserId } }, { packageId, lessonId, state = 0 }) {
+  async createLearnRecords(
+    {
+      commit,
+      getters: { learnRecords, lessonUserId }
+    },
+    { packageId, lessonId, state = 0 }
+  ) {
     let res = await lesson.users
       .createLearnRecords({
         packageId,
@@ -208,7 +300,13 @@ const actions = {
   resumeLearnRecordsId({ commit }, id) {
     commit(CREATE_LEARN_RECORDS_SUCCESS, id)
   },
-  async resumeQuiz({ commit, getters: { lessonQuiz, orgLessonDetail } }, { id, learnRecords = null }) {
+  async resumeQuiz(
+    {
+      commit,
+      getters: { lessonQuiz, orgLessonDetail }
+    },
+    { id, learnRecords = null }
+  ) {
     if (!learnRecords && id) {
       learnRecords = await lesson.classrooms
         .learnRecordsById(id)
@@ -221,7 +319,10 @@ const actions = {
       let filterQuiz = _.filter(quiz, ({ answer }) => answer)
       _.forEach(_lessonDetail.modList, q => {
         if (q.cmd === 'Quiz') {
-          let quiz = _.find(filterQuiz, o => o.data.title === _.get(q, 'data.quiz.data[0].title', ''))
+          let quiz = _.find(
+            filterQuiz,
+            o => o.data.title === _.get(q, 'data.quiz.data[0].title', '')
+          )
           if (quiz) {
             q.state = { result: quiz.result, answer: quiz.answer }
           }
@@ -243,11 +344,18 @@ const actions = {
       console.error(error)
     }
   },
-  async resumeClassroom({ dispatch, getters: { orgClasses }, rootGetters: { 'org/currentOrgId': organizationId } }) {
+  async resumeClassroom({
+    dispatch,
+    getters: { orgClasses },
+    rootGetters: { 'org/currentOrgId': organizationId }
+  }) {
     try {
       const classroom = await lesson.classrooms.currentClass()
       const orgClassIds = _.map(orgClasses, cls => cls.id)
-      if (classroom.organizationId === organizationId && _.includes(orgClassIds, classroom.classId)) {
+      if (
+        classroom.organizationId === organizationId &&
+        _.includes(orgClassIds, classroom.classId)
+      ) {
         dispatch('resumeClassData', classroom)
       }
     } catch (error) {
@@ -263,7 +371,13 @@ const actions = {
       commit(RESUME_CLASSROOM, _classroom)
     }
   },
-  async uploadLearnRecords({ dispatch, getters: { classId, classroom, learnRecords } }, state = 0) {
+  async uploadLearnRecords(
+    {
+      dispatch,
+      getters: { classId, classroom, learnRecords }
+    },
+    state = 0
+  ) {
     const { username } = learnRecords
     const { userId } = classroom
     const record = {
@@ -283,7 +397,12 @@ const actions = {
       await dispatch('sendSocketMessageToTeacher', record)
     }
   },
-  async sendSocketMessageToTeacher({ getters: { classroom } }, record = {}) {
+  async sendSocketMessageToTeacher(
+    {
+      getters: { classroom }
+    },
+    record = {}
+  ) {
     const { userId = '' } = classroom
     if (userId) {
       await lessonOrganizations.sendSocketMessage({
@@ -295,25 +414,46 @@ const actions = {
       })
     }
   },
-  async leaveTheClass({ commit, dispatch, rootGetters: { 'org/userinfo': userInfo } }) {
+  async leaveTheClass({
+    commit,
+    dispatch,
+    rootGetters: { 'org/userinfo': userInfo }
+  }) {
     const { username } = userInfo
     await lesson.classrooms.leave()
-    await dispatch('sendSocketMessageToTeacher', { leaveClass: true, extra: { username } })
+    await dispatch('sendSocketMessageToTeacher', {
+      leaveClass: true,
+      extra: { username }
+    })
     commit(LEAVE_THE_CLASS)
   },
-  async getTeachingLesson({ commit, rootGetters: { 'org/currentOrg': { id: organizationId }, 'org/userinfo': { username } } }) {
+  async getTeachingLesson({
+    commit,
+    rootGetters: {
+      'org/currentOrg': { id: organizationId },
+      'org/userinfo': { username }
+    }
+  }) {
     const res = await graphql.getQueryResult({
-      query: 'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classrooms{id, key, state, packageId, lessonId, extra}} } }',
+      query:
+        'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classrooms{id, key, state, packageId, lessonId, extra}} } }',
       variables: {
         organizationId,
         username
       }
     })
     const today = Date.now()
-    const organizationClasses = _.filter(_.get(res, 'organizationUser.organizationClasses', []), item => (item.roleId & 1) > 0 && +new Date(item.end) > today) // eslint-disable-line no-bitwise
-    const teachingLesson = _.reduce(organizationClasses, (arr, cur) => {
-      return [...arr, ...cur.classrooms]
-    }, [])
+    const organizationClasses = _.filter(
+      _.get(res, 'organizationUser.organizationClasses', []),
+      item => (item.roleId & 1) > 0 && +new Date(item.end) > today // eslint-disable-line no-bitwise
+    )
+    const teachingLesson = _.reduce(
+      organizationClasses,
+      (arr, cur) => {
+        return [...arr, ...cur.classrooms]
+      },
+      []
+    )
     const result = _.map(teachingLesson, item => {
       const { extra = {}, ...reset } = item
       return {
@@ -346,14 +486,26 @@ const actions = {
       return _.get(lessons, '[0]')
     }
     const lessonsID = _.map(lessons, item => item.lessonId)
-    const filterLearnRecords = _.filter(learnRecords.rows, item => _.includes(lessonsID, item.lessonId))
+    const filterLearnRecords = _.filter(learnRecords.rows, item =>
+      _.includes(lessonsID, item.lessonId)
+    )
     const lastLearnRecord = _.get(filterLearnRecords, '[0]', {})
-    const theLesson = _.find(lessons, item => item.lessonId === lastLearnRecord.lessonId)
-    const theLessonIndex = _.findIndex(lessons, item => item.lessonId === lastLearnRecord.lessonId)
+    const theLesson = _.find(
+      lessons,
+      item => item.lessonId === lastLearnRecord.lessonId
+    )
+    const theLessonIndex = _.findIndex(
+      lessons,
+      item => item.lessonId === lastLearnRecord.lessonId
+    )
     if (lastLearnRecord.state === 0 && !theLesson.isLearned) {
       return theLesson
     }
-    if (lastLearnRecord.state === 1 && theLesson.isLearned && theLessonIndex + 1 < lessons.length) {
+    if (
+      lastLearnRecord.state === 1 &&
+      theLesson.isLearned &&
+      theLessonIndex + 1 < lessons.length
+    ) {
       const nextLesson = lessons[theLessonIndex + 1]
       if (!nextLesson.isLearned) {
         return nextLesson
@@ -364,6 +516,41 @@ const actions = {
       return res
     }
     return lessons[0]
+  },
+  async getEvaluationReportCommentDetail({ commit }, params) {
+    const report = await evaluationReports.getEvaluationReportCommentDetail(params)
+    commit(GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS, report)
+    return report
+  },
+  async getEvaluationCommentList({ commit }, { classId }) {
+    let result = await keepwork.evaluationReports.getEvaluationCommentList({
+      classId
+    })
+    commit(GET_EVALUATION_COMMENT_LIST_SUCCESS, {
+      classId,
+      evaluationCommentList: result
+    })
+  },
+  async getStudentInfo({ commit }) {
+    let userinfo = await keepwork.users.getUserinfo()
+    commit(GET_STUDENT_INFO_SUCCESS, userinfo)
+  },
+  async updateStudentInfo(context, userinfo) {
+    return await keepwork.users.updateUserinfo(userinfo)
+  },
+  async verifyCode(context, { cellphone, verifCode }) {
+    return await keepwork.users.verifyCode({ cellphone, verifCode })
+  },
+  async updateParentPhoneNum(
+    context,
+    { parentPhoneNum, verifCode, newParentPhoneNum, newVerifCode }
+  ) {
+    return await keepwork.users.updateParentPhoneNum({
+      parentPhoneNum,
+      verifCode,
+      newParentPhoneNum,
+      newVerifCode
+    })
   }
 }
 

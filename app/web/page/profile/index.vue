@@ -27,7 +27,7 @@ import router from './profile.router'
 import skydriveModule from '@/store/skydrive'
 import userModule from '@/store/user'
 import pblModule from '@/store/pbl'
-import lessonModule from '@/store/lesson'
+// import lessonModule from '@/store/lesson'
 import profileModule from '@/store/profile'
 import ElementUI from 'element-ui'
 import { messages as i18nMessages, locale } from '@/lib/utils/i18n'
@@ -72,7 +72,7 @@ const store = new Vuex.Store({
     user: userModule,
     pbl: pblModule,
     profile: profileModule,
-    lesson: lessonModule,
+    // lesson: lessonModule,
     message: messageModule
   }
 })
