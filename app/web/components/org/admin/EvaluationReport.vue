@@ -107,7 +107,7 @@ export default {
         let percent = _.round((length / totalLength) * 100, 0)
         return {
           status: `${statusText} ${percent}%`,
-          count: length,
+          count: length > 0 ? length : '-',
           classes: statusClasses
         }
       })
