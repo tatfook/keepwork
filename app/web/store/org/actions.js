@@ -235,24 +235,11 @@ const actions = {
       })
     commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers, classId })
   },
-  async getUserOrgRoleByGraphql(context, { organizationId, username }) {
-    let result = await keepwork.graphql.getQueryResult({
-      query:
-        'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, user, organizationClassMembers{classId, roleId} }}',
-      variables: {
-        organizationId,
-        username
-      }
+  async checkIsTeacherValid(context, { organizationId, username }) {
+    return await keepwork.lessonOrganizations.checkUserInValid({
+      organizationId,
+      username
     })
-    let organizationUser = result.organizationUser
-    if (!organizationUser) {
-      return Promise.reject(400)
-    }
-    let organizationClassMembers = organizationUser.organizationClassMembers
-    if (organizationClassMembers.length === 0) {
-      return Promise.resolve(organizationUser)
-    }
-    return Promise.resolve(organizationUser)
   },
   async createNewMember(
     context,
