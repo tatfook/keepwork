@@ -44,7 +44,7 @@
               <div class="org-setting-item-propaganda-label">
                 <span>(可选)</span>宣传文案
               </div>
-              <el-input type="textarea" resize="none" :rows="2" placeholder="请输入" v-model.trim="propaganda">
+              <el-input type="textarea" resize="none" :rows="2" placeholder="请输入" maxlength="30" show-word-limit v-model.trim="propaganda">
               </el-input>
             </div>
           </div>
