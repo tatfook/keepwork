@@ -105,7 +105,8 @@ const lessonOrganizationForms = {
 const organizations = {
   changePwd: async ({ classId, memberId, password }) =>
     post('organizations/changepwd', { classId, memberId, password }),
-  getLogs: async searchParams => post('organizations/log', searchParams)
+  getLogs: async searchParams => post('organizations/log', searchParams),
+  getMemberCountByOrgId: async params => get('lessonOrganizations/getMemberCountByRole', { params })
 }
 
 const lessonOrganizationClassMembers = {

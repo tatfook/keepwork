@@ -74,6 +74,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
       getClassPackages: 'org/student/getClassPackages',
       enterClassroom: 'org/student/enterClassroom',
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
@@ -94,6 +95,7 @@ export default {
       const classIDs = _.map(classes, item => item.id)
       const hasTheClass = _.includes(classIDs, classID)
       if (hasTheClass) {
+        await this.getTeacherAndClassmate(classID)
         await this.getClassPackages(classID)
         await this.getLastUpdateProjects()
         return

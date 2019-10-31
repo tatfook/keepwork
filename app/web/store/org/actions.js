@@ -74,14 +74,7 @@ const actions = {
   },
   async getOrgUserCountsByGraphql(context, { orgId }) {
     let { commit } = context
-    let result = await keepwork.graphql.getQueryResult({
-      query:
-        'query($id: Int, $name: String) {organization(id: $id, name: $name) {id, studentCount, teacherCount, count }}',
-      variables: {
-        id: orgId
-      }
-    })
-    let userCounts = _.get(result, 'organization')
+    let userCounts = await keepwork.organizations.getMemberCountByOrgId({ organizationId: orgId })
     commit(GET_ORG_COUNT_SUCCESS, { orgId, userCounts })
   },
   async getOrgDetailByLoginUrl(context, { orgLoginUrl }) {

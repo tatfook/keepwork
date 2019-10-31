@@ -12,8 +12,8 @@ const getters = {
     if (!userCounts) {
       return
     }
-    let { count, studentCount } = userCounts
-    return count - studentCount
+    let { upperLimit, studentCount } = userCounts
+    return upperLimit - studentCount
   },
   roleId: (state, { tokenInfo }) => {
     return tokenInfo.roleId
