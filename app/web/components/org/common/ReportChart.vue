@@ -730,9 +730,6 @@ $width: 766px;
         font-size: 14px;
         margin-top: 18px;
         color: #ffed26;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
     }
 
