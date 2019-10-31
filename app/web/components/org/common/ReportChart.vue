@@ -1,7 +1,7 @@
 <template>
   <div class="report-chart">
     <div v-if="showReportTypeName" class="report-chart-type-name">
-      {{reportTypeName}}
+      {{reportName}}
     </div>
     <div v-if="showComment" class="report-chart-header">
       <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic" :alt="userRealname">
@@ -351,6 +351,9 @@ export default {
     reportTypeName() {
       const type = _.toNumber(_.get(this.$route, 'query.type', 1))
       return type === 1 ? '课堂小评' : '阶段总结'
+    },
+    reportName() {
+      return _.get(this.$route, 'query.reportName', this.reportTypeName)
     },
     ablityValue() {
       const {
