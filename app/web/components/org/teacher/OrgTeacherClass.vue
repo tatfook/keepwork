@@ -149,7 +149,6 @@ export default {
       addStudentToClass: 'org/teacher/addStudentToClass',
       removeStudentFromClass: 'org/teacher/removeStudentFromClass',
       getOrgStudents: 'org/teacher/getOrgStudents',
-      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
       getLastUpdateProjects: 'org/teacher/getLastUpdateProjects'
     }),
     async initClassData() {
