@@ -22,25 +22,23 @@
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>总计：{{getKeyCount(classEvaluations)}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(classEvaluations)>0">老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
+            <annulus-chart v-if="getKeyCount(classEvaluations)>0" class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>小评：{{getKeyCount(commentEvaluations)}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(commentEvaluations)>0">老师贡献度：</p>
             </div>
-            <template>
-              <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="commentData" :chartColumn="chartColumn" />
-            </template>
+            <annulus-chart v-if="getKeyCount(commentEvaluations)>0" class="class-evaluation-annulus" :width="350" :annulusData="commentData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>阶段总结：{{getKeyCount(summaryEvaluations)}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(summaryEvaluations)>0">老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
+            <annulus-chart v-if="getKeyCount(summaryEvaluations)>0" class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
           </div>
         </div>
         <div class="class-evaluation-column">
@@ -48,9 +46,9 @@
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>总计：{{getKeyCount(classEvaluations, 'sendCount')}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(classEvaluations, 'sendCount')>0">老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
+            <annulus-chart v-if="getKeyCount(classEvaluations, 'sendCount')>0" class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
           </div>
         </div>
       </div>
