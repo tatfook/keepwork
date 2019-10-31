@@ -10,7 +10,7 @@ const {
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
-  GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS,
+  GET_ORG_PACKAGES_WITH_LESSON_SUCCESS,
   GET_ORG_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
@@ -103,32 +103,14 @@ const actions = {
     })
     commit(GET_ORG_PACKAGES_SUCCESS, { organizationId, orgPackages })
   },
-  async getOrgPackagesByGraphql(context, { organizationId }) {
-    let { commit } = context
-    let result = await keepwork.graphql.getQueryResult({
-      query:
-        'query($id: Int, $name: String) {organization(id: $id, name: $name) {id, organizationPackages {organizationId, package{id,packageName}, lessons{id,lessonName}, lessonNos } } } ',
-      variables: {
-        id: organizationId
-      }
+  async getOrgPackagesWithLessons({ commit }, { organizationId }) {
+    let result = await keepwork.lessonOrganizations.getOrgPackagesWithLessons({
+      organizationId
     })
-    let orgPackages = _.get(result, 'organization.organizationPackages')
-    // add lessonNo property
-    orgPackages = _.map(orgPackages, item => {
-      let { lessonNos, lessons, ...rest } = item
-      lessons = _.map(lessons, l => {
-        let lessonNo = _.find(lessonNos, ln => ln.lessonId === l.id)
-        return {
-          ...l,
-          ...lessonNo
-        }
-      })
-      return {
-        ...rest,
-        lessons
-      }
+    commit(GET_ORG_PACKAGES_WITH_LESSON_SUCCESS, {
+      organizationId,
+      result
     })
-    commit(GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS, { organizationId, orgPackages })
   },
   async getOrgClassPackages(context, { organizationId, classId }) {
     let classPackages = await keepwork.lessonOrganizations.getOrgClassPackages({

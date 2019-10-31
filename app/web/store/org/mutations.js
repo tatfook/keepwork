@@ -6,8 +6,8 @@ const SET_TOKEN_UPDATE_AT = 'SET_TOKEN_UPDATE_AT'
 const GET_ORG_SUCCESS = 'GET_ORG_SUCCESS'
 const SET_CURRENT_ORG = 'SET_CURRENT_ORG'
 const GET_ORG_PACKAGES_SUCCESS = 'GET_ORG_PACKAGES_SUCCESS'
-const GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS =
-  'GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS'
+const GET_ORG_PACKAGES_WITH_LESSON_SUCCESS =
+  'GET_ORG_PACKAGES_WITH_LESSON_SUCCESS'
 const GET_ORG_PACKAGE_DETAIL_SUCCESS = 'GET_ORG_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
@@ -32,7 +32,7 @@ export const props = {
   GET_ORG_SUCCESS,
   SET_CURRENT_ORG,
   GET_ORG_PACKAGES_SUCCESS,
-  GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS,
+  GET_ORG_PACKAGES_WITH_LESSON_SUCCESS,
   GET_ORG_PACKAGE_DETAIL_SUCCESS,
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
@@ -82,13 +82,13 @@ const mutations = {
       [organizationId]: orgPackages
     })
   },
-  [GET_ORG_PACKAGES_BY_GRAPHQL_SUCCESS](
+  [GET_ORG_PACKAGES_WITH_LESSON_SUCCESS](
     state,
-    { organizationId, orgPackages }
+    { organizationId, result }
   ) {
-    Vue.set(state, 'orgPackagesGraphql', {
-      ...state.orgPackagesGraphql,
-      [organizationId]: orgPackages
+    Vue.set(state, 'orgPackagesWithLesson', {
+      ...state.orgPackagesWithLesson,
+      [organizationId]: result
     })
   },
   [GET_ORG_PACKAGE_DETAIL_SUCCESS](state, { packageId, packageDetail }) {

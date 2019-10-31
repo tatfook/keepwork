@@ -46,7 +46,9 @@ const lessonOrganizations = {
   joinOrganization: async params =>
     post('lessonOrganizationActivateCodes/activate', params),
   checkUserInValid: async params =>
-    get('/lessonOrganizations/checkUserInvalid', { params }),
+    get('lessonOrganizations/checkUserInvalid', { params }),
+  getOrgPackagesWithLessons: async params =>
+    get('lessonOrganizations/getOrgPackages', { params }),
   sendSocketMessage: async params => socketMessage.post('app/msg', params)
 }
 const lessonOrganizationClasses = {
