@@ -39,7 +39,7 @@ export default {
     colors: {
       type: Array,
       default() {
-        return ['#ff7500', '#93b8d8']
+        return ['#93b8d8', '#ff7500']
       }
     }
   },
