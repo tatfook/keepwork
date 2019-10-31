@@ -410,32 +410,32 @@ export default {
         {
           key: 'spatial',
           name: '空间思维能力',
-          color: ['#409efe', '#939d9f']
+          color: ['#939d9f', '#409efe']
         },
         {
           key: 'creative',
           name: '创新思维能力',
-          color: ['#20c9d4', '#939d9f']
+          color: ['#939d9f', '#20c9d4']
         },
         {
           key: 'compute',
           name: '计算思维能力',
-          color: ['#f5c728', '#939d9f']
+          color: ['#939d9f', '#f5c728']
         },
         {
           key: 'collaborative',
           name: '协作沟通能力',
-          color: ['#5f75e4', '#939d9f']
+          color: ['#939d9f', '#5f75e4']
         },
         {
           key: 'logical',
           name: '逻辑思考能力',
-          color: ['#f89039', '#939d9f']
+          color: ['#939d9f', '#f89039']
         },
         {
           key: 'coordinate',
           name: '统筹思维能力',
-          color: ['#2cc791', '#939d9f']
+          color: ['#939d9f', '#2cc791']
         }
       ]
     },
@@ -458,12 +458,12 @@ export default {
     },
     growthTrackList() {
       return _.map(this.growthTrackKey, growthTrack => {
-        const columns = ['次数', this.userRealname, '本班同学平均值']
+        const columns = ['次数', '本班同学平均值', this.userRealname]
         const rows = _.map(this.starGroupArray, (item, index) => {
           return {
             次数: `${index + 1}`,
-            [this.userRealname]: item['userStar'][growthTrack.key],
-            本班同学平均值: item['classmateStar'][`${growthTrack.key}Avg`]
+            本班同学平均值: item['classmateStar'][`${growthTrack.key}Avg`],
+            [this.userRealname]: item['userStar'][growthTrack.key]
           }
         })
         return {
