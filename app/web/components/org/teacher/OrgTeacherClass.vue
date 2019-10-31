@@ -54,7 +54,7 @@
           </el-table-column>
           <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')">
           </el-table-column>
-          <el-table-column align="center" width="260" :label="$t('org.operationLabel')" v-if="isCanEdit">
+          <el-table-column align="center" width="280" :label="$t('org.operationLabel')" v-if="isCanEdit">
             <template slot-scope="scope">
               <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
               <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
