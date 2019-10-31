@@ -27,7 +27,7 @@
     <div class="teacher-report-comment-main">
       <div class="teacher-report-comment-main-student-info">
         <span>学生:</span>
-        <img class="student-portrait" :src="portrait | miniPic">
+        <img class="student-portrait" :src="studentPotrait">
         <span class="student-name">{{realname}} </span>
       </div>
       <div class="teacher-report-comment-main-overall-evaluation">
@@ -87,14 +87,6 @@ export default {
   components: {
     SkyDriveManagerDialog,
     AttachmentType
-  },
-  filters: {
-    miniPic(url) {
-      if (/#/.test(url)) {
-        return `${url.replace(/#.+/, '')}?imageView2/2/w/400`
-      }
-      return `${url}&imageView2/2/w/400`
-    }
   },
   props: {
     isEditMod: {
@@ -223,6 +215,12 @@ export default {
     isHasNext() {
       return Boolean(this.nextOne.studentId && this.nextOne.realname)
     },
+    studentPotrait() {
+      if (this.portrait) {
+        return this.miniPic(this.portrait)
+      }
+      return this.defaultPortrait
+    },
     params() {
       const params = {
         studentId: this.studentId,
@@ -242,6 +240,13 @@ export default {
       commentEvaluationReport: 'org/teacher/commentEvaluationReport',
       updateCommentEvaluationReport: 'org/teacher/updateCommentEvaluationReport'
     }),
+    miniPic(url) {
+      if (!url) return
+      if (/#/.test(url)) {
+        return `${url.replace(/#.+/, '')}?imageView2/2/w/400`
+      }
+      return `${url}&imageView2/2/w/400`
+    },
     async initReportCommentData() {
       try {
         this.loading = true
