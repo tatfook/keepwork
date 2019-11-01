@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="student-basic-footer">
-      <el-button size="medium">取消</el-button>
+      <el-button size="medium" @click="cancle">取消</el-button>
       <el-button :disabled="!isDataValid" size="medium" type="primary" @click="saveUserinfo">保存</el-button>
     </div>
     <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="false" :isNoMediaFileShow="false" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
@@ -119,6 +119,9 @@ export default {
         this.$message({ type: 'danger', message: '修改失败' })
       }
       this.isLoading = false
+    },
+    cancle() {
+      this.$emit('close')
     }
   },
   components: {

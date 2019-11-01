@@ -4,7 +4,7 @@
       <div class="edit-student-dialog-sidebar-item" v-for="(item, index) in filteredMenuData" :key="index" :class="{active:activeComp==item.compName}" @click="setActiveComp(item)">{{item.text}}</div>
     </div>
     <div class="edit-student-dialog-content">
-      <component :is="activeComp"></component>
+      <component :is="activeComp" @close="handleClose"></component>
     </div>
   </el-dialog>
 
