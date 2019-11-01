@@ -70,7 +70,7 @@
       <el-table class="class-evaluation-table" :data="formatedTableData" border v-loading="isGettingTableData">
         <el-table-column prop="reportName" label="报告名称"></el-table-column>
         <el-table-column prop="typeText" label="报告类型" width="132"></el-table-column>
-        <el-table-column prop="username" label="点评老师" width="86"></el-table-column>
+        <el-table-column prop="teacherName" label="点评老师" width="86"></el-table-column>
         <el-table-column prop="createdAtFormated" label="创建时间" width="140"></el-table-column>
         <el-table-column prop="sendCount" label="已发送（人）" width="110"></el-table-column>
         <el-table-column prop="commentCount" label="已点评（人）" width="110"></el-table-column>
@@ -215,7 +215,7 @@ export default {
         0
       )
       let result = []
-      _.forEach(_.groupBy(originData, 'realname'), (userValues, key) => {
+      _.forEach(_.groupBy(originData, 'teacherName'), (userValues, key) => {
         let totalCount = _.reduce(
           userValues,
           (oldResult, value) => {
