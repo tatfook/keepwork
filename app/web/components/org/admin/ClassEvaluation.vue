@@ -150,7 +150,10 @@ export default {
       return _.get(this.$route, 'params.classId')
     },
     classEvaluationList() {
-      return this.getClassEvaluationList({ classId: this.classId }) || []
+      return _.sortBy(
+        this.getClassEvaluationList({ classId: this.classId }) || [],
+        o => -new Date(o.createdAt).valueOf()
+      )
     },
     formatedTableData() {
       return _.map(this.classEvaluationList, item => {
