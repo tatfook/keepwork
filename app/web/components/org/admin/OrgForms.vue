@@ -225,7 +225,8 @@ export default {
       let targetState = state == 2 ? 1 : state + 1
       this.isLoading = true
       let isOrgExpired = false
-      if (targetState === 1) isOrgExpired = await this.checkCurrentOrgExpire()
+      if (targetState === 1)
+        isOrgExpired = await this.checkCurrentOrgExpire({ toExpire: false })
       if (isOrgExpired) {
         this.isLoading = false
         return
