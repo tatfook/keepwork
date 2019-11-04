@@ -52,12 +52,14 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getStudentInfo()
     this.form.realname = this.orgRealName
   },
   methods: {
     ...mapActions({
-      joinOrg: 'org/student/joinOrgClass'
+      joinOrg: 'org/student/joinOrgClass',
+      getStudentInfo: 'org/student/getStudentInfo'
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
