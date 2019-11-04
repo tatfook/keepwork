@@ -31,9 +31,6 @@
           <div class="package-catalogue-item-duration">{{$t('lesson.duration')}}:
             <span>{{getLessonDuration(lesson)}}</span>
           </div>
-          <el-button v-show="lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button">{{$t('lesson.viewLearnSummary')}}</el-button>
-          <el-button v-show="lesson.isLearned && isStudent" plain size="small" class="package-catalogue-item-button learn-again">{{$t('lesson.learnAgain')}}</el-button>
-          <el-button v-show="!lesson.isLearned && isStudent" type="primary" size="small" class="package-catalogue-item-button start-button">{{$t('card.startToLearn')}}</el-button>
         </div>
       </div>
     </div>
@@ -53,9 +50,6 @@ export default {
       }
     },
     actorType: String
-  },
-  mounted() {
-    console.log(this.packageDetail)
   },
   computed: {
     ...mapGetters({

@@ -3,7 +3,7 @@
     <div class="org-page-main-content" id="org-page">
       <router-view />
     </div>
-    <el-footer class="org-page-footer" height="auto">
+    <el-footer v-if="!isHideFooter" class="org-page-footer" height="auto">
       <perfect-common-footer :isNavListShow="false"></perfect-common-footer>
     </el-footer>
     <expiration-dialog :isExpirationVisible="expirationDialogVisible" @close="handleCloseExpirationDialog"></expiration-dialog>
@@ -66,7 +66,7 @@ const store = new Vuex.Store({
     skydrive: skydriveModule,
     app: appModule,
     user: userModule,
-    lesson: lessonModule,
+    // lesson: lessonModule,
     org: orgModule,
     pbl: pblModule
   },
@@ -85,7 +85,9 @@ const OrgStudentPageName = 'OrgStudent'
 const OrgContactPageName = 'OrgContact'
 const OrgNotFoundPageName = 'OrgNotFound'
 const OrgIndexPageName = 'OrgIndex'
-const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName]
+const OrgPrintPageName = 'OrgPrint'
+const OrgReportPageName = 'OrgReport'
+const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName, OrgPrintPageName, OrgReportPageName]
 
 const checkIsLogined = function(name, next, params) {
   let nowToken = Cookies.get('token')
@@ -220,20 +222,21 @@ router.beforeEach(async (to, from, next) => {
   isContinue = checkIsLogined(name, next, params)
   if (!isContinue) return
 
-  let orgLoginUrl = params.orgLoginUrl
-  result = await checkIsOrgExist(name, next, params, orgLoginUrl, nowPageRole)
-  if (!result.isContinue) return
+  if (from.params.orgLoginUrl !== to.params.orgLoginUrl) {
+    let orgLoginUrl = params.orgLoginUrl
+    result = await checkIsOrgExist(name, next, params, orgLoginUrl, nowPageRole)
+    if (!result.isContinue) return
 
-  let orgId = result.orgId
-  result = await checkIsOrgMember(name, next, params, orgId, nowPageRole)
-  if (!result.isContinue) return
-
-  let orgToken = result.orgToken
-  let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
-    jsrsasign.b64utoutf8(orgToken.split('.')[1])
-  )
-  let { roleId = 1 } = tokenParams
-  handleDifferentRole(name, next, params, roleId, nowPageRole)
+    let orgId = result.orgId
+    result = await checkIsOrgMember(name, next, params, orgId, nowPageRole)
+    if (!result.isContinue) return
+    let orgToken = result.orgToken
+    let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+      jsrsasign.b64utoutf8(orgToken.split('.')[1])
+    )
+    let { roleId = 1 } = tokenParams
+    handleDifferentRole(name, next, params, roleId, nowPageRole)
+  }
 
   next()
 })
@@ -269,6 +272,12 @@ export default {
     },
     orgId() {
       return _.get(this.currentOrg, 'id')
+    },
+    isHideFooter() {
+      return [OrgPrintPageName, OrgReportPageName].includes(this.routerName)
+    },
+    routerName() {
+      return this.$route.name
     }
   },
   methods: {

@@ -12,6 +12,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import router from './paracraft.router'
 import ba from 'vue-ba'
 import Cookies from 'js-cookie'
+import { language } from '@/lib/utils'
 
 Vue.use(Vuex)
 Vue.use(ElementUI)
@@ -29,11 +30,12 @@ export default {
 }
 
 router.beforeEach((to, from, next) => {
-  const { token = '', port = '8099' } = to.query
+  const { token = '', port = '8099', lang = '' } = to.query
   if (token) {
     Cookies.set('token', token)
   }
   Cookies.set('port', port)
+  language.switchTo(lang)
   next()
 })
 </script>

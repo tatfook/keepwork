@@ -35,30 +35,28 @@ export default {
     },
     async updateClass(updatedClassData) {
       this.isLoading = true
-      await this.orgUpdateClass({
-        organizationId: this.orgId,
-        classId: this.classDetail.id,
-        ...updatedClassData
-      })
-        .then(() => {
-          this.$message({
-            message: this.$t('org.successfullyUpdatedClass'),
-            type: 'success'
-          })
-          this.isLoading = false
-          this.toHistoryClassListPage()
+      try {
+        await this.orgUpdateClass({
+          organizationId: this.orgId,
+          classId: this.classDetail.id,
+          ...updatedClassData
         })
-        .catch(error => {
-          let message = this.$t('org.failedUpdatedClass')
-          if (error.data && error.data.code === -1) {
-            message = '该班学生人数过多，不能完成延期操作。请联系keepwork客服处理:support@paraengine.com'
-          }
-          this.$message({
-            message: message,
-            type: 'error'
-          })
-          this.isLoading = false
+        this.$message({
+          message: this.$t('org.successfullyUpdatedClass'),
+          type: 'success'
         })
+        this.toHistoryClassListPage()
+      } catch (error) {
+        let message =
+          error.status == 400
+            ? '该班学生人数过多，不能完成延期操作。请联系keepwork客服处理:support@paraengine.com'
+            : '操作失败，请重试'
+        this.$message({
+          message: message,
+          type: 'error'
+        })
+      }
+      this.isLoading = false
     }
   },
   components: {

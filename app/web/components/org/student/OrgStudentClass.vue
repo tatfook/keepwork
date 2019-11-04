@@ -1,5 +1,5 @@
 <template>
-  <div class="org-student-class" v-if="!isLoading">
+  <div class="org-student-class" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)" >
     <div class="org-student-class-header">
       <span class="join-classroom-icon"></span>
       <span class="join-classroom-title">{{$t("lesson.enterClass")}}</span>
@@ -57,28 +57,29 @@ export default {
       beInClassDialog: false
     }
   },
-  async created() {
-    try {
-      await this.getClassData(this.currentClassID)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.isLoading = false
-    }
-  },
   watch: {
-    async $route(route) {
-      const classID = _.toNumber(_.get(route, 'params.classId'))
-      await this.getClassData(classID)
+    $route: {
+      async handler(route) {
+        try {
+          this.isLoading = true
+          const classID = _.toNumber(_.get(route, 'params.classId'))
+          await this.getClassData(classID)
+        } catch (error) {
+          console.error(error)
+        } finally {
+          this.isLoading = false
+        }
+      },
+      immediate: true
     }
   },
   methods: {
     ...mapActions({
+      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
       getClassPackages: 'org/student/getClassPackages',
       enterClassroom: 'org/student/enterClassroom',
       getOrgPackageDetail: 'org/student/getOrgPackageDetail',
       getNextLesson: 'org/student/getNextLesson',
-      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
       getOrgClasses: 'org/student/getOrgClasses',
       getLastUpdateProjects: 'org/student/getLastUpdateProjects'
     }),
@@ -95,10 +96,8 @@ export default {
       const classIDs = _.map(classes, item => item.id)
       const hasTheClass = _.includes(classIDs, classID)
       if (hasTheClass) {
-        await Promise.all([
-          this.getClassPackages(classID),
-          this.getTeacherAndClassmate(classID)
-        ])
+        await this.getTeacherAndClassmate(classID)
+        await this.getClassPackages(classID)
         await this.getLastUpdateProjects()
         return
       }

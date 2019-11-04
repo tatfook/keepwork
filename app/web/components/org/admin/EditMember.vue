@@ -10,12 +10,15 @@
         <el-button v-loading="isLoading" size="medium" @click="updateMember" type="primary">{{$t('common.Save')}}</el-button>
       </div>
     </div>
-    <el-form ref="memberForm" class="edit-member-form" label-position="left" label-width="78px" :model="memberData" :hide-required-asterisk="true">
+    <el-form ref="memberForm" class="edit-member-form" label-position="left" label-width="84px" :model="memberData" :hide-required-asterisk="true">
       <el-form-item :label="memberTypeNameLabel" :rules="memberRules.realname" prop="realname">
         <el-input :placeholder="$t('org.pleaseInput')" v-model="memberData.realname"></el-input>
       </el-form-item>
       <el-form-item :label="$t('org.usernameLabel')" :rules="memberRules.memberName" prop="memberName">
         <el-input disabled :placeholder="$t('org.KeepworkUsername')" v-model="memberData.memberName"></el-input>
+      </el-form-item>
+      <el-form-item v-if="memberRoleId == 1" label="家长手机号" :rules="memberRules.parentPhoneNum" prop="parentPhoneNum">
+        <el-input placeholder="家长手机号" v-model="memberData.parentPhoneNum"></el-input>
       </el-form-item>
       <el-form-item :label="$t('org.classLabel')" :rules="memberRules.classIds" prop="classIds">
         <el-select v-model="memberData.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
@@ -55,11 +58,19 @@ export default {
         callback()
       }
     }
+    let phoneValidate = (rule, value, callback) => {
+      if (value && !/^1\d{10}$/.test(value)) {
+        callback(new Error('请输入正确的手机号'))
+      } else {
+        callback()
+      }
+    }
     return {
       isLoading: false,
       memberData: {
         realname: '',
         memberName: '',
+        parentPhoneNum: '',
         classIds: []
       },
       memberRules: {
@@ -78,6 +89,7 @@ export default {
             message: this.$t('org.usernameIsRequired')
           }
         ],
+        parentPhoneNum: [{ validator: phoneValidate, trigger: 'change' }],
         classIds: [{ validator: classIdsValidate, trigger: 'change' }]
       }
     }
@@ -111,9 +123,11 @@ export default {
       return _.get(this.$route, 'query.id')
     },
     memberRoleId() {
-      return this.isDialog
-        ? this.editingMember.roleId
-        : _.get(this.$route, 'query.roleId')
+      return _.toNumber(
+        this.isDialog
+          ? this.editingMember.roleId
+          : _.get(this.$route, 'query.roleId')
+      )
     },
     memberTypeText() {
       return this.memberRoleId === 1
@@ -159,10 +173,11 @@ export default {
       let {
         classes = [],
         users: { username: memberName },
-        realname
+        realname,
+        parentPhoneNum
       } = _.find(memberList, member => member.id == this.memberId)
       let classIds = _.map(classes, classDetail => classDetail.id)
-      return { realname, memberName, classIds }
+      return { realname, memberName, classIds, parentPhoneNum }
     },
     async getTeacherDetail() {
       await this.getOrgTeacherList({
@@ -189,12 +204,12 @@ export default {
       } else {
         detail = await this.getTeacherDetail()
       }
-      let { realname, memberName, classIds } = detail
-      this.memberData = { realname, memberName, classIds }
+      let { realname, memberName, classIds, parentPhoneNum } = detail
+      this.memberData = { realname, memberName, classIds, parentPhoneNum }
     },
     updateMember() {
       let form = this.$refs['memberForm']
-      let { realname, memberName, classIds } = this.memberData
+      let { realname, memberName, classIds, parentPhoneNum } = this.memberData
       form.validate(async valid => {
         if (valid) {
           this.isLoading = true
@@ -202,6 +217,7 @@ export default {
             organizationId: this.orgId,
             classIds,
             memberName,
+            parentPhoneNum,
             realname,
             roleId: this.memberRoleId
           })
@@ -283,7 +299,7 @@ $borderColor: #e8e8e8;
       }
     }
   }
-  &-footer{
+  &-footer {
     text-align: right;
   }
   .el-select {

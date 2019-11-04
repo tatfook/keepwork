@@ -12,8 +12,8 @@ const getters = {
     if (!userCounts) {
       return
     }
-    let { count, studentCount } = userCounts
-    return count - studentCount
+    let { upperLimit, studentCount } = userCounts
+    return upperLimit - studentCount
   },
   roleId: (state, { tokenInfo }) => {
     return tokenInfo.roleId
@@ -64,8 +64,8 @@ const getters = {
   currentOrg: state => state.currentOrg,
   currentOrgId: (state, { currentOrg }) => currentOrg.id,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
-  getOrgPackagesGraphqlById: state => ({ id }) =>
-    _.get(state.orgPackagesGraphql, id),
+  getOrgPackagesWithLessonById: state => ({ id }) =>
+    _.get(state.orgPackagesWithLesson, id),
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
   getOrgTeachersByClassId: state => ({ orgId, classId }) =>
@@ -96,7 +96,12 @@ const getters = {
   },
   getFormFeedbackById: state => ({ id }) => state.formsFeedback[id],
   currentOrgLogs: (state, { currentOrgId }) =>
-    _.get(state.orgLogs, currentOrgId, [])
+    _.get(state.orgLogs, currentOrgId, []),
+  getClassEvaluation: state => ({ classId }) =>
+    _.get(state.classEvaluations, classId),
+  getClassEvaluationList: state => ({ classId }) =>
+    _.get(state.classEvaluationList, classId),
+  getClassReportByDays: state => ({ days }) => state.orgClassesReport[days]
 }
 
 export default getters

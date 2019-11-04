@@ -3,7 +3,7 @@
     <div class="org-student-container">
       <div class="org-student-sidebar" v-if="isShowSidebar">
         <div class="org-student-sidebar-top">
-          <div class="org-student-message fix-bottom">
+          <div class="org-student-message">
             <div v-if="isJustStudent" class="org-student-role-label">{{$t("org.studentRole")}}</div>
             <el-dropdown v-else class="org-student-role-label" @command="toRolePage" trigger="click" placement="bottom">
               <span class="el-dropdown-link">
@@ -17,11 +17,12 @@
             </el-dropdown>
             <img :src="userPortrait" class="org-student-profile" />
             <div class="org-student-username">{{username}}</div>
+            <div class="org-student-edit-btn" v-if="isClassDetailPage" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
           <div class="class-select" v-if="isClassDetailPage">
             <el-dropdown v-if="isMutiClasses" class="class-select-dropdown" @command="onDropdown">
               <span class="el-dropdown-link">
-                <i class="iconfont icon-team class-select-dropdown-icon"></i>
+                <i class="iconfont icon-team class-select-dropdown-icon class-select-icon"></i>
                 <span class="class-select-dropdown-selected">
                   {{currentClassName}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -31,7 +32,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <span v-else class="class-select-onlyone">
-              <i class="iconfont icon-team icon"></i>
+              <i class="iconfont icon-team class-select-icon"></i>
               <span class="class-name">
                 {{currentClassName}}
               </span>
@@ -41,13 +42,16 @@
             <span class="class-join-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
           </div>
         </div>
+        <div v-if="isClassDetailPage" class="org-student-sidebar-bottom org-student-sidebar-evaluations" @click="toEvaluationsPage">
+          <i class="iconfont icon-pinggubaogao"></i> 我的评估报告
+        </div>
         <div class="org-student-sidebar-bottom" v-if="isClassDetailPage">
           <div class="org-student-operation">
             <span>我的老师</span>
           </div>
           <div v-if="hasTeacher" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myTeacher" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-jiaoshi1"></i>
+              <i class="iconfont icon-jiaoshi1 org-student-menu-item-icon"></i>
               <span @click="toUserPage(item.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
@@ -62,7 +66,7 @@
           </div>
           <div v-if="hasClassmate" class="org-student-menu">
             <span class="org-student-menu-item" v-for="item in myClassmate" :key="item.id" :title="item.realname">
-              <i class="iconfont icon-tongxue"></i>
+              <i class="iconfont icon-tongxue org-student-menu-item-icon"></i>
               <span @click="toUserPage(item.users.username)" class="org-student-menu-item-username">{{item.realname}}</span>
             </span>
           </div>
@@ -70,7 +74,6 @@
             暂无同学
           </div>
         </div>
-
       </div>
       <template v-if="!isLoading">
         <router-view class="org-student-main"></router-view>
@@ -87,6 +90,7 @@
     <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
+    <edit-student-dialog :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
   </div>
 </template>
 <script>
@@ -99,6 +103,7 @@ const { graphql } = keepwork
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import { locale } from '@/lib/utils/i18n'
+import EditStudentDialog from './EditStudentDialog'
 
 export default {
   name: 'OrgStudent',
@@ -110,7 +115,8 @@ export default {
       joinKey: '',
       skillsList: [],
       isLoading: true,
-      isShowJoinClassDialog: false
+      isShowJoinClassDialog: false,
+      isEditStudentVisible: false
     }
   },
   computed: {
@@ -129,9 +135,12 @@ export default {
     isClassDetailPage() {
       return (
         this.OrgIsStudent &&
-        ['OrgStudentClassDetail', 'OrgStudentClassLastUpdate'].includes(
-          this.nowPageName
-        )
+        [
+          'OrgStudentClassDetail',
+          'OrgStudentClassLastUpdate',
+          'OrgStudentEvaluations',
+          'OrgStudentEvaluationDetail'
+        ].includes(this.nowPageName)
       )
     },
     currentClassName() {
@@ -187,7 +196,9 @@ export default {
         'OrgStudentClass',
         'OrgStudentClassSelect',
         'OrgStudentClassDetail',
-        'OrgStudentClassLastUpdate'
+        'OrgStudentClassLastUpdate',
+        'OrgStudentEvaluations',
+        'OrgStudentEvaluationDetail'
       ].includes(this.nowPageName)
     },
     userPortrait() {
@@ -243,12 +254,30 @@ export default {
       this.isLoading = false
     }
   },
+  mounted() {
+    this.isClassDetailPage && this.getTeacherAndClassmate(this.currentClassID)
+  },
   methods: {
     ...mapActions({
+      getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
       getTeachingLesson: 'org/student/getTeachingLesson',
       enterClassroom: 'org/student/enterClassroom',
       getUserInfo: 'org/student/getUserInfo'
     }),
+    showEditStudentDialog() {
+      this.isEditStudentVisible = true
+    },
+    closeEditStudentDialog() {
+      this.isEditStudentVisible = false
+    },
+    toEvaluationsPage() {
+      this.$router.push({
+        name: 'OrgStudentEvaluations',
+        params: {
+          classId: this.currentClassID
+        }
+      })
+    },
     toUserPage(username) {
       window.open(`${window.location.origin}/u/${username}`)
     },
@@ -316,7 +345,8 @@ export default {
   components: {
     OrgHeader,
     JoinOrg,
-    JoinClass
+    JoinClass,
+    EditStudentDialog
   }
 }
 </script>
@@ -375,18 +405,18 @@ $borderColor: #e8e8e8;
       border-radius: 8px;
       background: #fff;
       .class-select {
-        border-top: 1px solid #e8e8e8;
-        margin: 10px;
+        margin: 0 10px 10px;
         padding: 6px 0;
         display: flex;
         justify-content: center;
         align-items: center;
+        &-icon {
+          font-size: 22px;
+          color: #030313;
+        }
         &-dropdown {
           cursor: pointer;
           font-size: 14px;
-          &-icon {
-            font-size: 26px;
-          }
           &-selected {
             color: #2397f3;
           }
@@ -418,6 +448,20 @@ $borderColor: #e8e8e8;
       margin-top: 20px;
       background: #fff;
       border-radius: 8px;
+    }
+    &-evaluations {
+      height: 82px;
+      line-height: 82px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      .iconfont {
+        font-size: 44px;
+        vertical-align: middle;
+        margin-right: 16px;
+        color: #108ee9;
+        font-weight: normal;
+      }
     }
   }
   &-main {
@@ -473,6 +517,17 @@ $borderColor: #e8e8e8;
     font-size: 20px;
     color: #333;
   }
+  &-edit-btn {
+    color: #666;
+    font-size: 14px;
+    width: 198px;
+    border: 1px solid #d8d8d8;
+    margin: 16px auto 0;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
   &-skills {
     font-size: 14px;
     color: #606266;
@@ -510,6 +565,9 @@ $borderColor: #e8e8e8;
       display: inline-block;
       color: #030313;
       font-size: 14px;
+      &-icon {
+        margin-right: 6px;
+      }
       &-username {
         cursor: pointer;
       }

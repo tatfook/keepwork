@@ -135,9 +135,9 @@ const actions = {
     const token = Cookies.get('token')
     commit(GET_PROFILE_SUCCESS, { ...profile, token })
   },
-  async getUserDetailByUsername(context, { username }) {
-    let { commit, getters: { usersDetail } } = context
-    let userDetail = usersDetail && usersDetail[username]
+  async getUserDetailByUsername(context, { username, useCache = true }) {
+    let { commit, getters: { getDetailByUsername } } = context
+    let userDetail = getDetailByUsername(username)
     if (userDetail) {
       return
     }

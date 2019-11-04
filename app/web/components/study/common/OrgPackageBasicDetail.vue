@@ -27,7 +27,6 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapGetters, mapActions } from 'vuex'
 import LoginDialog from '@/components/common/LoginDialog'
 export default {
   name: 'OrgPackageBasicDetail',

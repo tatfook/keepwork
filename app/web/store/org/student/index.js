@@ -22,7 +22,12 @@ const state = {
   myTeacher: [],
   classPackages: [],
   lastUpdateProjects: [],
-  moreLastUpdateProjects: []
+  moreLastUpdateProjects: [],
+  evaluationCommentList: {},
+  userinfo: {},
+  orgClassesReport: {},
+  classReportStatistics: {},
+  evaluationReportCommentDetail: {}
 }
 
 export default {

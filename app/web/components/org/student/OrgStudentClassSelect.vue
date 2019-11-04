@@ -39,6 +39,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'OrgStudentClassSelect',
   data() {
@@ -68,18 +69,21 @@ export default {
   computed: {
     ...mapGetters({
       orgRealName: 'org/student/orgRealName',
-      orgClasses: 'org/student/orgClasses'
+      orgClasses: 'org/student/orgClasses',
+      organizationId: 'org/currentOrgId'
     }),
     disabeldSubmitButton() {
-      return !(this.form.realname.trim() && this.form.key.trim())
+      return !_.trim(this.form.realname) || !_.trim(this.form.key)
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getStudentInfo()
     this.form.realname = this.orgRealName
   },
   methods: {
     ...mapActions({
-      joinOrgClass: 'org/student/joinOrgClass'
+      joinOrgClass: 'org/student/joinOrgClass',
+      getStudentInfo: 'org/student/getStudentInfo'
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
