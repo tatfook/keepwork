@@ -75,7 +75,7 @@ export default {
                 parentPhoneNum: phone ? phone : null,
                 verifCode: verifCode ? verifCode : null
               },
-              value => !_.isNull(value)
+              _.isNull
             )
           )
           if (classId) {
