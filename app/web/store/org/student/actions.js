@@ -39,16 +39,6 @@ const {
   GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 } = props
 
-const errMsg = {
-  0: '失败,未知错误',
-  1: '邀请码已失效',
-  2: '无效的邀请码',
-  3: '班级已结束',
-  4: '班级未开始',
-  5: '人数已达上限',
-  6: '已经是该班级的学生',
-  7: '不是该机构的邀请码'
-}
 
 const actions = {
   async getEvaluationReportStatistics({ commit }, classId) {
@@ -149,16 +139,14 @@ const actions = {
       const { refreshToken = true, ...rest } = payload
       rest.key = rest.key.replace(/ /g, '')
       const res = await lessonOrganizations.joinOrganization(rest)
-      await dispatch('org/refreshToken', {}, { root: true })
-      // await Promise.all([
-      //   dispatch('getOrgPackages'),
-      //   dispatch('getOrgClasses')
-      // ])
+      await Promise.all([
+        dispatch('org/refreshToken', {}, { root: true }),
+        dispatch('getStudentInfo')
+      ])
       Message({ type: 'success', message: '加入成功！' })
       return res
     } catch (err) {
-      const code = _.get(err, 'response.data.code', 0)
-      const message = _.get(errMsg, code, '')
+      const message = _.get(err, 'response.data.message', '失败')
       Message({ type: 'error', message })
       return false
     }
