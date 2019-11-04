@@ -121,11 +121,14 @@ export default {
       orgGetOrgClassReport: 'org/getOrgClassReport'
     }),
     goCommentDetail(detail) {
-      let { classId } = detail
+      let { classId, name } = detail
       this.$router.push({
         name: 'ClassEvaluation',
         params: {
           classId
+        },
+        query: {
+          name
         }
       })
     },
