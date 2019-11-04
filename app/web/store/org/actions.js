@@ -72,10 +72,11 @@ const actions = {
   async getCurrentOrgUserCounts({ dispatch, getters: { currentOrg } }) {
     await dispatch('getOrgUserCountsByGraphql', { orgId: currentOrg.id })
   },
-  async getOrgUserCountsByGraphql(context, { orgId }) {
-    let { commit } = context
-    let userCounts = await keepwork.organizations.getMemberCountByOrgId({ organizationId: orgId })
-    commit(GET_ORG_COUNT_SUCCESS, { orgId, userCounts })
+  async getOrgUserCountsByGraphql({ commit, getters: { currentOrgId } }) {
+    let userCounts = await keepwork.organizations.getMemberCountByOrgId({
+      organizationId: currentOrgId
+    })
+    commit(GET_ORG_COUNT_SUCCESS, { orgId: currentOrgId, userCounts })
   },
   async getOrgDetailByLoginUrl(context, { orgLoginUrl }) {
     let { commit } = context
