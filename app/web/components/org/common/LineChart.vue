@@ -61,7 +61,9 @@ export default {
           axisLabel: {
             margin: 10,
             color: '#555',
-            fontSize: 14
+            fontSize: 14,
+            interval: 0,
+            rotate: 40
           }
         },
         series: {
