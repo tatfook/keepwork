@@ -712,9 +712,9 @@ $width: 766px;
 
     &-info {
       margin-top: 30px;
-      margin-left: 170px;
+      margin-left: 200px;
       height: 100px;
-      width: 50%;
+      width: 40%;
       position: absolute;
       display: flex;
       flex-direction: column;
@@ -733,9 +733,6 @@ $width: 766px;
         font-size: 14px;
         margin-top: 18px;
         color: #ffed26;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
     }
 
@@ -934,8 +931,8 @@ $width: 766px;
     &-footer {
       background: url('../../../assets/org/report_footer_mini.png') center top
         no-repeat;
-      background-size: 100% 81px;
-      height: 81px;
+      background-size: 100% 94px;
+      height: 94px;
       display: flex;
       align-items: center;
       &-date {
@@ -1046,6 +1043,12 @@ $width: 766px;
           width: 125px;
           height: 74px;
         }
+      }
+    }
+
+    &-footer {
+      &-info {
+        width: 45%;
       }
     }
   }
