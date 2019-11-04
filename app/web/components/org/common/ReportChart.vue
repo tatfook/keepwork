@@ -4,7 +4,7 @@
       {{reportName}}
     </div>
     <div v-if="showComment" class="report-chart-header">
-      <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic" :alt="userRealname">
+      <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic">
       <div class="report-chart-header-realname">
         {{ userRealname }}
       </div>
@@ -489,6 +489,9 @@ $width: 766px;
   &-type-name {
     width: $width;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin: 0 auto;
     height: 57px;
     line-height: 57px;
@@ -709,9 +712,9 @@ $width: 766px;
 
     &-info {
       margin-top: 30px;
-      margin-left: 200px;
+      margin-left: 170px;
       height: 100px;
-      width: 40%;
+      width: 50%;
       position: absolute;
       display: flex;
       flex-direction: column;
@@ -730,6 +733,9 @@ $width: 766px;
         font-size: 14px;
         margin-top: 18px;
         color: #ffed26;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
