@@ -39,6 +39,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'OrgStudentClassSelect',
   data() {
@@ -72,7 +73,7 @@ export default {
       organizationId: 'org/currentOrgId'
     }),
     disabeldSubmitButton() {
-      return !(this.form.realname.trim() && this.form.key.trim())
+      return !_.trim(this.form.realname) || !_.trim(this.form.key)
     }
   },
   async mounted() {
