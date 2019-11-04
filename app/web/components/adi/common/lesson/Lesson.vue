@@ -1,12 +1,8 @@
 <template>
   <el-row class="index-page-lesson" wdith="1080px">
-    <el-dialog :visible.sync="dialogVisible" width="50%">
-      <video controls="" width="100%" autoplay="" name="media">
-        <source :src="lessonVideoUrl" type="video/mp4"></video>
-    </el-dialog>
     <div class="lesson-container">
       <el-row type="flex" class="mod-full-width-0-0-65">
-        <el-col class="lesson-cover" @click.native="openAnimations()">
+        <el-col class="lesson-cover">
           <img class="lesson-cover-image" :src="lessonCoverUrl">
         </el-col>
         <el-col>
@@ -40,7 +36,6 @@ export default {
   mixins: [compBaseMixin],
   data() {
     return {
-      dialogVisible: false,
       isLinked: false,
       lessonData: {}
     }
@@ -70,9 +65,6 @@ export default {
     },
     lessonExtra() {
       return this.lessonData.extra || {}
-    },
-    lessonVideoUrl() {
-      return this.lessonExtra.videoUrl
     },
     lessonCoverUrl() {
       return this.lessonExtra.coverUrl
@@ -111,9 +103,6 @@ export default {
         opacity: '0.8',
         'border-radius': '8px'
       })
-    },
-    openAnimations() {
-      this.dialogVisible = true
     }
   }
 }
@@ -239,7 +228,6 @@ export default {
   height: 340px;
   min-width: 400px;
   position: relative;
-  cursor: pointer;
   &-image {
     height: 100%;
     width: 100%;
