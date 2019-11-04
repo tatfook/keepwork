@@ -4,7 +4,7 @@
     <el-form v-show="isRegisterDialogShow" class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <h3 class="register-title">{{$t('common.register')}}</h3>
       <el-form-item prop="username" :error="usernameError">
-        <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
+        <el-popover placement="top" width="264" trigger="manual" content="" v-model="isPopoverVisible">
           <el-input slot="reference" @focus="handleUsernameInputFocus" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
           <div class="register-dialog-form-tip">
             {{$t('common.accountNoChange')}}<br>
@@ -61,6 +61,11 @@ import AccountEncrypt from '@/components/common/AccountEncrypt'
 
 export default {
   name: 'RegisterDialog',
+  props: {
+    isDialogShow: {
+      default: undefined
+    }
+  },
   mounted() {
     this.changeSvgCaptcha()
   },
@@ -182,6 +187,11 @@ export default {
   computed: {
     isCellphoneVerify() {
       return /^1\d{10}$/.test(this.ruleForm.phoneNumber)
+    },
+    isPopoverVisible() {
+      return _.isBoolean(this.isDialogShow)
+        ? this.visible && this.isDialogShow
+        : this.visible
     }
   },
   methods: {
@@ -255,7 +265,8 @@ export default {
                 code8: this.$t('common.containsSensitiveWords')
               }
               let errorMsg =
-                registerCodeMsgObj[`code${code}`] || this.$t('common.registerFailed')
+                registerCodeMsgObj[`code${code}`] ||
+                this.$t('common.registerFailed')
               this.showMessage('error', errorMsg)
               this.registerLoading = false
             })
