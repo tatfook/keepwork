@@ -168,8 +168,15 @@ export default {
     classEvaluations() {
       return this.getClassEvaluation({ classId: this.classId }) || []
     },
+    queryClassName() {
+      return _.get(this.$route, 'query.name')
+    },
     className() {
-      return _.get(this.classEvaluations[0], 'className', this.classId)
+      return (
+        _.get(this.classEvaluations[0], 'className') ||
+        this.queryClassName ||
+        this.classId
+      )
     },
     totalData() {
       return this.formatedAnnulusData(this.classEvaluations)
