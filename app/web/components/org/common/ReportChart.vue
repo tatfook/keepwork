@@ -74,7 +74,18 @@
           </div>
 
           <div class="report-chart-comment-media">
-            <el-row :gutter="10">
+            <el-row v-if="printMode" :gutter="20">
+              <el-col v-for="(item, index) in mediaUrl" :key="index" :span="8">
+                <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
+                <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
+                  <video width="100%" height="100%" :src="item.url"></video>
+                  <div class="play-masking">
+                    <img class="play-masking-button" :src="playButtonIcon">
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row v-else :gutter="20">
               <el-col v-for="(item, index) in mediaUrl" :key="index" :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                 <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
                 <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
@@ -184,6 +195,10 @@ export default {
     }
   },
   props: {
+    printMode: {
+      type: Boolean,
+      default: false
+    },
     reportData: {
       type: Object,
       default() {
@@ -623,15 +638,15 @@ $width: 766px;
         width: 209px;
         height: 123px;
         object-fit: cover;
-        margin-bottom: 8px;
         cursor: pointer;
+        margin-bottom: 3px;
       }
       &-video {
         width: 209px;
-        height: 123px;
+        height: 127px;
         object-fit: cover;
         background: rgb(73, 73, 73);
-        margin: 0 auto 14px;
+        margin: 0 auto 6px;
         cursor: pointer;
         position: relative;
         .play-masking {
@@ -877,35 +892,10 @@ $width: 766px;
         &-img {
           width: 154px;
           height: 86px;
-          object-fit: cover;
-          margin-bottom: 6px;
-          cursor: pointer;
         }
         &-video {
           width: 154px;
           height: 86px;
-          object-fit: cover;
-          background: rgb(73, 73, 73);
-          margin: 0 auto 6px;
-          cursor: pointer;
-          position: relative;
-          .play-masking {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(#000, 0.4);
-            &-button {
-              width: 60px;
-              height: 60px;
-            }
-          }
         }
       }
     }
