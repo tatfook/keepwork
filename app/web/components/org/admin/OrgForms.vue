@@ -3,7 +3,7 @@
     <div class="org-forms-header">表单管理
       <el-button v-if="isFormExist" type="primary" size="medium" @click="toNewFormPage">创建表单</el-button>
     </div>
-    <el-table v-if="isFormExist" class="org-forms-table" :data="formsList" stripe>
+    <el-table v-if="isFormExist" class="org-forms-table" :data="sortedFormsList" stripe>
       <el-table-column label="表单名称" class-name="org-forms-table-name-row">
         <template slot-scope="scope">
           <div class="org-forms-table-name">
@@ -96,7 +96,7 @@ export default {
       currentOrgId: 'org/currentOrgId'
     }),
     orgFormsList() {
-      return this.formsListGetter({ id: this.currentOrgId })
+      return this.formsListGetter({ id: this.currentOrgId }) || []
     },
     isFormExist() {
       return Boolean(this.orgFormsList && this.orgFormsList.length)
@@ -114,6 +114,9 @@ export default {
           submitCount
         }
       })
+    },
+    sortedFormsList() {
+      return _.sortBy(this.formsList, o => -new Date(o.createdAt).valueOf())
     },
     orgLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl', '')
