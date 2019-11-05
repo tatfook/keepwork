@@ -1,5 +1,5 @@
 <template>
-  <report-chart v-if="!loading" :reportData="evaluationReportCommentDetail" @completed="completed" :reportType="reportType"></report-chart>
+  <report-chart v-if="!loading" :printMode="true" :reportData="evaluationReportCommentDetail" @completed="completed" :reportType="reportType"></report-chart>
 </template>
 
 <script>
