@@ -21,52 +21,75 @@ export default {
     return {
       newsData: [
         {
+          title: '少了它，历史可能要改写',
+          desc: '不仅对中国历史影响深远，还是“帝王专业户”！',
+          date: '2019 / 10 / 30',
+          cover: require('@/assets/contests/newsImg/少了它，历史可能要改写.jpg'),
+          url: 'https://mp.weixin.qq.com/s/tF_aPTT6WM2apVidbj0nPQ'
+        },
+        {
+          title: '搭建效率低怎么办？试试这几个功能！',
+          desc: '你太慢啦！快冲鸭！',
+          date: '2019 / 10 / 16',
+          cover: require('@/assets/contests/newsImg/搭建效率低怎么办？试试这几个功能！.jpg'),
+          url: 'https://mp.weixin.qq.com/s/PBQxu64JUXm_3UVSotkUVQ'
+        },
+        {
+          title: '蔡徐坤为什么这么强大？',
+          desc: '来自蔡姓家族的神秘力量',
+          date: '2019 / 10 /14',
+          cover: require('@/assets/contests/newsImg/蔡徐坤为什么这么强大？.jpg'),
+          url: 'https://mp.weixin.qq.com/s/uHJ-4givh-yUwy7fCrtCKA'
+        },
+        {
+          title: '献礼70华诞，弘扬中华民族精神，怎能少了它',
+          desc: '它，古老而又神秘，象征着祥瑞。',
+          date: '2019 / 9 / 29',
+          cover: require('@/assets/contests/newsImg/献礼70华诞，弘扬中华民族精神，怎能少了它.jpg'),
+          url: 'https://mp.weixin.qq.com/s/espq44N5XNpnxsDNIgSwMw'
+        },
+
+        {
           title: '汉字大赛 | 作品赏析 --“无中生有”教程篇',
           desc: '“无中生有”的神操作你Get到了吗~',
           date: '2019 / 9 / 18',
           cover: require('@/assets/contests/newsImg/汉字大赛-作品赏析 --“无中生有”教程篇.jpg'),
-          url:
-            'https://mp.weixin.qq.com/s/mNGDvwW6vCxfkbCs9Ocrsw'
+          url: 'https://mp.weixin.qq.com/s/mNGDvwW6vCxfkbCs9Ocrsw'
         },
         {
           title: '汉字大赛 | 作品赏析 --“无中生有”分镜头脚本篇',
           desc: '你所理解的“无中生有”都是错的~',
           date: '2019 / 9 / 6',
           cover: require('@/assets/contests/newsImg/汉字大赛-作品赏析 --“无中生有”分镜头脚本篇.jpg'),
-          url:
-            'https://mp.weixin.qq.com/s/sJjS0KUMiiEq8OBx8rhpAA'
+          url: 'https://mp.weixin.qq.com/s/sJjS0KUMiiEq8OBx8rhpAA'
         },
         {
           title: '汉字大赛 | 作品赏析 -“李”姓',
           desc: '你想get的技能乾坤侠给你送来了，快来签收~~',
           date: '2019 / 8 / 28',
           cover: require('@/assets/contests/newsImg/1汉字大赛-作品赏析-“李”姓.jpg'),
-          url:
-            'https://mp.weixin.qq.com/s/bnCiUSxa7KQUur1RV2u-dg'
+          url: 'https://mp.weixin.qq.com/s/bnCiUSxa7KQUur1RV2u-dg'
         },
         {
           title: '作品分享 | 哪吒：我命由我不由天，唯一做不了主的竟是……',
           desc: '在这件事上，吒爷不认都不行~~~',
           date: '2019 / 8 / 21',
           cover: require('@/assets/contests/newsImg/2作品分享-哪吒：我命由我不由天，唯一做不了主的竟是…….jpg'),
-          url:
-            'https://mp.weixin.qq.com/s/FTil-A5Mi_7JCsSdWP1Ciw'
+          url: 'https://mp.weixin.qq.com/s/FTil-A5Mi_7JCsSdWP1Ciw'
         },
         {
           title: '原创编程课程走进淅川获媒体报道，楚汉文化传承焕新姿',
           desc: '科技+教育+文化跨界融合新模式',
           date: '2019 / 8 / 15',
           cover: require('@/assets/contests/newsImg/3原创编程课程走进淅川获媒体报道，楚汉文化传承焕新姿.jpg'),
-          url:
-            'https://mp.weixin.qq.com/s/akI0opgIuMjKcdDLAS6NNQ'
+          url: 'https://mp.weixin.qq.com/s/akI0opgIuMjKcdDLAS6NNQ'
         },
         {
           title: '汉字大赛 | 人物骨骼系统+关键帧=让人物动起来',
           desc: '摆pose的阶段过去了，让我们开始为演员设置动态效果吧~',
           date: '2019 / 8 / 14',
           cover: require('@/assets/contests/newsImg/4汉字大赛-人物骨骼系统+关键帧=让人物动起来.jpg'),
-          url:
-            'https://mp.weixin.qq.com/s/nzbsyjFlXmJOQaXiAFSeZQ'
+          url: 'https://mp.weixin.qq.com/s/nzbsyjFlXmJOQaXiAFSeZQ'
         },
         {
           title: '为未知而教，为未来而学',

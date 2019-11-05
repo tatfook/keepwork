@@ -21,7 +21,7 @@
         </div>
         <div class="contests-home-page-progress-item-right">
           <p class="contests-home-page-progress-item-right-title">作品征集</p>
-          <p class="contests-home-page-progress-item-right-time">2019年4月~11月30日</p>
+          <p class="contests-home-page-progress-item-right-time">2019年4月~12月20日</p>
         </div>
       </div>
       <div class="contests-home-page-progress-arrow">

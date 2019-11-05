@@ -24,6 +24,20 @@ export default {
       currentToPlayerVideo: '',
       worksData: [
         {
+          title: '蔡姓',
+          author: '墨鱼',
+          videoUrl:
+            'https://api.keepwork.com/storage/v0/siteFiles/8074/raw#蔡姓.mp4',
+          coverUrl: require('@/assets/contests/handpickWorksCover/蔡姓-墨鱼.png')
+        },
+        {
+          title: '刘姓',
+          author: '小星',
+          videoUrl:
+            'https://api.keepwork.com/storage/v0/siteFiles/8073/raw#刘姓.mp4',
+          coverUrl: require('@/assets/contests/handpickWorksCover/刘姓-小星.png')
+        },
+        {
           title: '孙姓',
           author: '墨鱼',
           videoUrl:
