@@ -896,6 +896,12 @@ $width: 766px;
         &-video {
           width: 154px;
           height: 86px;
+          .play-masking {
+            &-button {
+              width: 40px;
+              height: 40px;
+            }
+          }
         }
       }
     }
