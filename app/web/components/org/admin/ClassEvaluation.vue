@@ -92,7 +92,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ClassEvaluation',
   async mounted() {
-    this.selectDayOption = this.dayOptions[0]
+    let selectDay = _.get(this.$route, 'query.days', 30)
+    this.selectDayOption =
+      _.find(this.dayOptions, dayOption => dayOption.value == selectDay) ||
+      this.dayOptions[0]
     try {
       await Promise.all([
         this.getTableData(),
