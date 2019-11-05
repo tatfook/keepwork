@@ -1,7 +1,8 @@
 <template>
   <div class="class-evaluation">
     <div class="class-evaluation-header">
-      <div class="class-evaluation-header-title">评估报告
+      <div class="class-evaluation-header-title">
+        <router-link :to="{name: 'EvaluationReport'}">评估报告</router-link>
         <i class="el-icon-arrow-right"></i>
         <span>{{className}}</span>
       </div>
@@ -21,25 +22,23 @@
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>总计：{{getKeyCount(classEvaluations)}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(classEvaluations)>0">老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
+            <annulus-chart v-if="getKeyCount(classEvaluations)>0" class="class-evaluation-annulus" :width="350" :annulusData="totalData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>小评：{{getKeyCount(commentEvaluations)}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(commentEvaluations)>0">老师贡献度：</p>
             </div>
-            <template>
-              <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="commentData" :chartColumn="chartColumn" />
-            </template>
+            <annulus-chart v-if="getKeyCount(commentEvaluations)>0" class="class-evaluation-annulus" :width="350" :annulusData="commentData" :chartColumn="chartColumn" />
           </div>
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>阶段总结：{{getKeyCount(summaryEvaluations)}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(summaryEvaluations)>0">老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
+            <annulus-chart v-if="getKeyCount(summaryEvaluations)>0" class="class-evaluation-annulus" :width="350" :annulusData="summaryData" :chartColumn="chartColumn" />
           </div>
         </div>
         <div class="class-evaluation-column">
@@ -47,9 +46,9 @@
           <div class="class-evaluation-column-item">
             <div class="class-evaluation-column-info">
               <p>总计：{{getKeyCount(classEvaluations, 'sendCount')}}次</p>
-              <p>老师贡献度：</p>
+              <p v-if="getKeyCount(classEvaluations, 'sendCount')>0">老师贡献度：</p>
             </div>
-            <annulus-chart class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
+            <annulus-chart v-if="getKeyCount(classEvaluations, 'sendCount')>0" class="class-evaluation-annulus" :width="350" :annulusData="sendData" :chartColumn="chartColumn" />
           </div>
         </div>
       </div>
@@ -64,14 +63,14 @@
           </el-select>
         </div>
         <div class="class-evaluation-item-search-item">
-          <el-input placeholder="按报告名称搜索" prefix-icon="el-icon-search" v-model.trim="searchName" @blur="getTableData">
+          <el-input placeholder="按报告名称搜索" prefix-icon="el-icon-search" v-model.trim="searchName" @input="getTableData">
           </el-input>
         </div>
       </div>
-      <el-table class="class-evaluation-table" :data="formatedTableData" border>
+      <el-table class="class-evaluation-table" :data="formatedTableData" border v-loading="isGettingTableData">
         <el-table-column prop="reportName" label="报告名称"></el-table-column>
         <el-table-column prop="typeText" label="报告类型" width="132"></el-table-column>
-        <el-table-column prop="username" label="点评老师" width="86"></el-table-column>
+        <el-table-column prop="teacherName" label="点评老师" width="86"></el-table-column>
         <el-table-column prop="createdAtFormated" label="创建时间" width="140"></el-table-column>
         <el-table-column prop="sendCount" label="已发送（人）" width="110"></el-table-column>
         <el-table-column prop="commentCount" label="已点评（人）" width="110"></el-table-column>
@@ -107,6 +106,7 @@ export default {
   data() {
     return {
       isClassHasReport: false,
+      isGettingTableData: false,
       typeOptions: [
         {
           value: null,
@@ -150,7 +150,10 @@ export default {
       return _.get(this.$route, 'params.classId')
     },
     classEvaluationList() {
-      return this.getClassEvaluationList({ classId: this.classId }) || []
+      return _.sortBy(
+        this.getClassEvaluationList({ classId: this.classId }) || [],
+        o => -new Date(o.createdAt).valueOf()
+      )
     },
     formatedTableData() {
       return _.map(this.classEvaluationList, item => {
@@ -165,8 +168,15 @@ export default {
     classEvaluations() {
       return this.getClassEvaluation({ classId: this.classId }) || []
     },
+    queryClassName() {
+      return _.get(this.$route, 'query.name')
+    },
     className() {
-      return _.get(this.classEvaluations[0], 'className', this.classId)
+      return (
+        _.get(this.classEvaluations[0], 'className') ||
+        this.queryClassName ||
+        this.classId
+      )
     },
     totalData() {
       return this.formatedAnnulusData(this.classEvaluations)
@@ -212,7 +222,7 @@ export default {
         0
       )
       let result = []
-      _.forEach(_.groupBy(originData, 'realname'), (userValues, key) => {
+      _.forEach(_.groupBy(originData, 'teacherName'), (userValues, key) => {
         let totalCount = _.reduce(
           userValues,
           (oldResult, value) => {
@@ -248,17 +258,21 @@ export default {
       this.isLoading = false
     },
     async getTableData() {
-      await this.orgGetClassEvaluationList({
-        classId: this.classId,
-        name: this.searchName,
-        type: this.searchType,
-        days: this.selectDayOption.value,
-        roleId: 64
-      })
-      if (!this.isClassHasReport) {
-        this.isClassHasReport =
-          this.classEvaluationList.length > 0 ? true : false
-      }
+      this.isGettingTableData = true
+      try {
+        await this.orgGetClassEvaluationList({
+          classId: this.classId,
+          name: this.searchName,
+          type: this.searchType,
+          days: this.selectDayOption.value,
+          roleId: 64
+        })
+        if (!this.isClassHasReport) {
+          this.isClassHasReport =
+            this.classEvaluationList.length > 0 ? true : false
+        }
+      } catch (error) {}
+      this.isGettingTableData = false
     }
   },
   components: {
@@ -315,6 +329,13 @@ export default {
       flex: 1;
       & > .el-icon-arrow-right {
         margin-left: 18px;
+      }
+      & > a {
+        text-decoration: none;
+        color: inherit;
+        &:hover {
+          color: #409efe;
+        }
       }
       & > span {
         color: #ababab;

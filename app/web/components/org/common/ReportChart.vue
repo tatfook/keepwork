@@ -1,10 +1,10 @@
 <template>
   <div class="report-chart">
     <div v-if="showReportTypeName" class="report-chart-type-name">
-      {{reportTypeName}}
+      {{reportName}}
     </div>
     <div v-if="showComment" class="report-chart-header">
-      <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic" :alt="userRealname">
+      <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic">
       <div class="report-chart-header-realname">
         {{ userRealname }}
       </div>
@@ -112,12 +112,12 @@
         </div>
         <template v-if="isShowHistogramChart">
           <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="`${item.key}-histogram`">
-            <report-chart-histogram :data="item" @completed="onTrackChartCompleted"></report-chart-histogram>
+            <report-chart-histogram :data="item" :max="growthTrackMax" @completed="onTrackChartCompleted"></report-chart-histogram>
           </div>
         </template>
         <template v-else>
           <div class="report-chart-line-item dont-break" v-for="item in growthTrackList" :key="`${item.key}-line`">
-            <report-chart-line :data="item" :extend="item.extend" @completed="onTrackChartCompleted"></report-chart-line>
+            <report-chart-line :data="item" :max="growthTrackMax" :extend="item.extend" @completed="onTrackChartCompleted"></report-chart-line>
           </div>
         </template>
       </div>
@@ -141,7 +141,7 @@
       </div>
     </div>
 
-    <el-dialog custom-class="show-item-dialog" :visible.sync="isShowDiaglog">
+    <el-dialog custom-class="show-item-dialog" top="2vh" :visible.sync="isShowDiaglog">
       <img class="show-item-dialog-img" v-if="isShowDiaglog && showItem.type === 'images'" :src="showItem.url">
       <video-player v-else-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="false" :src="showItem.url" />
     </el-dialog>
@@ -262,7 +262,7 @@ export default {
       return this.imgCount === this.loadedImgList.length
     },
     trackChartCompleted() {
-      return this.growthTrackChartCompletedCount >= 6
+      return this.isHistory ? this.growthTrackChartCompletedCount >= 6 : true
     },
     isPageCompleted() {
       return (
@@ -273,10 +273,6 @@ export default {
     },
     isRadarChartCompleted() {
       return this.radarThisTimeCompleted && this.radarHistoryCompleted
-    },
-    radarCompleted() {
-      if (this.isHistory) {
-      }
     },
     iconClasses() {
       return [
@@ -290,6 +286,24 @@ export default {
         this.growthTrackList,
         item => item.chartData.rows.length === 1
       )
+    },
+    growthTrackMax() {
+      const max = _.reduce(
+        this.starGroupArray,
+        (max, cur) => {
+          const { classmateStar, userStar } = cur
+          const classmateMax = _.max(
+            _.map(this.growthTrackKey, item => classmateStar[`${item.key}Avg`])
+          )
+          const userMax = _.max(
+            _.map(this.growthTrackKey, item => userStar[item.key])
+          )
+          max = _.max([classmateMax, userMax])
+          return max
+        },
+        10
+      )
+      return max
     },
     userRepo() {
       return _.get(this.reportData, 'userRepo', {})
@@ -337,6 +351,9 @@ export default {
     reportTypeName() {
       const type = _.toNumber(_.get(this.$route, 'query.type', 1))
       return type === 1 ? '课堂小评' : '阶段总结'
+    },
+    reportName() {
+      return _.get(this.$route, 'query.reportName', this.reportTypeName)
     },
     ablityValue() {
       const {
@@ -393,32 +410,32 @@ export default {
         {
           key: 'spatial',
           name: '空间思维能力',
-          color: ['#409efe', '#939d9f']
+          color: ['#939d9f', '#409efe']
         },
         {
           key: 'creative',
           name: '创新思维能力',
-          color: ['#20c9d4', '#939d9f']
+          color: ['#939d9f', '#20c9d4']
         },
         {
           key: 'compute',
           name: '计算思维能力',
-          color: ['#f5c728', '#939d9f']
+          color: ['#939d9f', '#f5c728']
         },
         {
           key: 'collaborative',
           name: '协作沟通能力',
-          color: ['#5f75e4', '#939d9f']
+          color: ['#939d9f', '#5f75e4']
         },
         {
           key: 'logical',
           name: '逻辑思考能力',
-          color: ['#f89039', '#939d9f']
+          color: ['#939d9f', '#f89039']
         },
         {
           key: 'coordinate',
           name: '统筹思维能力',
-          color: ['#2cc791', '#939d9f']
+          color: ['#939d9f', '#2cc791']
         }
       ]
     },
@@ -441,12 +458,12 @@ export default {
     },
     growthTrackList() {
       return _.map(this.growthTrackKey, growthTrack => {
-        const columns = ['次数', this.userRealname, '本班同学平均值']
+        const columns = ['次数', '本班同学平均值', this.userRealname]
         const rows = _.map(this.starGroupArray, (item, index) => {
           return {
             次数: `${index + 1}`,
-            [this.userRealname]: item['userStar'][growthTrack.key],
-            本班同学平均值: item['classmateStar'][`${growthTrack.key}Avg`]
+            本班同学平均值: item['classmateStar'][`${growthTrack.key}Avg`],
+            [this.userRealname]: item['userStar'][growthTrack.key]
           }
         })
         return {
@@ -472,6 +489,9 @@ $width: 766px;
   &-type-name {
     width: $width;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin: 0 auto;
     height: 57px;
     line-height: 57px;
@@ -603,7 +623,7 @@ $width: 766px;
         width: 209px;
         height: 123px;
         object-fit: cover;
-        margin: 0 auto 14px;
+        margin-bottom: 8px;
         cursor: pointer;
       }
       &-video {
@@ -713,9 +733,6 @@ $width: 766px;
         font-size: 14px;
         margin-top: 18px;
         color: #ffed26;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
     }
 
@@ -757,9 +774,8 @@ $width: 766px;
       }
     }
   }
-  .show-item-dialog {
-    width: 100%;
-    margin-top: 5vh;
+  /deep/.show-item-dialog {
+    width: 80%;
     &-img {
       width: 100%;
     }
@@ -862,7 +878,7 @@ $width: 766px;
           width: 154px;
           height: 86px;
           object-fit: cover;
-          margin: 0 auto 6px;
+          margin-bottom: 6px;
           cursor: pointer;
         }
         &-video {
@@ -915,8 +931,8 @@ $width: 766px;
     &-footer {
       background: url('../../../assets/org/report_footer_mini.png') center top
         no-repeat;
-      background-size: 100% 81px;
-      height: 81px;
+      background-size: 100% 94px;
+      height: 94px;
       display: flex;
       align-items: center;
       &-date {
@@ -981,10 +997,12 @@ $width: 766px;
         }
       }
     }
-  }
-
-  /deep/ .show-item-dialog {
-    width: 100%;
+    /deep/ .show-item-dialog {
+      width: 100%;
+      .el-dialog__body {
+        padding: 10px;
+      }
+    }
   }
 }
 
@@ -1027,10 +1045,19 @@ $width: 766px;
         }
       }
     }
+
+    &-footer {
+      &-info {
+        width: 45%;
+      }
+    }
   }
 }
 
 @media print {
+  .report-chart {
+    -webkit-print-color-adjust: exact;
+  }
   .dont-break {
     page-break-inside: avoid;
   }

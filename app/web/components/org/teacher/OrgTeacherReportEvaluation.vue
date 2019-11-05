@@ -4,14 +4,14 @@
       <span>发起点评</span>
       <span>
         <el-button size="mini" @click="handleBack">取消</el-button>
-        <el-button size="mini" @click="hanldeToComment" type="primary">去点评</el-button>
+        <el-button :loading="loading" size="mini" @click="hanldeToComment" type="primary">去点评</el-button>
       </span>
     </div>
     <div class="teacher-evaluation-report-title">
       <div class="report-name">
         报告名称：
       </div>
-      <el-form class="report-name-form" ref="form" :model="form" :rules="rules">
+      <el-form class="report-name-form" @submit.native.prevent ref="form" :model="form" :rules="rules">
         <el-form-item class="report-name-form-item" prop="reportName">
           <el-input class="report-name-input" placeholder="请输入" v-model="form.reportName"></el-input>
         </el-form-item>
@@ -41,12 +41,8 @@ export default {
         reportName: [
           { required: true, message: '请输入报告名称', trigger: 'blur' }
         ]
-      }
-    }
-  },
-  watch: {
-    selectedType(value){
-      console.log(value)
+      },
+      loading: false
     }
   },
   computed: {
@@ -65,19 +61,33 @@ export default {
       this.$refs.form.validate(async valid => {
         if (valid) {
           try {
-            await this.createClassEvaluationReport({
+            this.loading = true
+            const res = await this.createClassEvaluationReport({
               type: this.selectedType,
               name: this.form.reportName,
               classId: this.classId
             })
+            const { classId, type, name, id } = res
             this.$message.success('创建成功')
             this.$router.push({
-              name: 'OrgTeacherReportList',
-              query: this.$route.query
+              name: 'OrgTeacherReportDetail',
+              query: {
+                classId,
+                type,
+                reportId: id,
+                reportName: name
+              }
             })
           } catch (error) {
             console.error(error)
-            this.$message.error('创建失败')
+            const errMsg = _.get(
+              this.error,
+              'response.data.message',
+              '创建失败'
+            )
+            this.$message.error(errMsg)
+          } finally {
+            this.loading = false
           }
         }
       })

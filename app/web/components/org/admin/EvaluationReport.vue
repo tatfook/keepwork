@@ -101,13 +101,13 @@ export default {
       const totalLength = this.classReport.length
       return _.map([1, 2, 3], status => {
         let statusText =
-          status == 1 ? '发送给家长' : status == 2 ? '点评（待发送）' : '未点评'
+          status == 1 ? '发送给家长' : status == 2 ? '未点评' : '点评（待发送）'
         let statusClasses = _.filter(this.classReport, { status }) || []
         let length = statusClasses.length
         let percent = _.round((length / totalLength) * 100, 0)
         return {
           status: `${statusText} ${percent}%`,
-          count: length,
+          count: length > 0 ? length : '-',
           classes: statusClasses
         }
       })
@@ -121,11 +121,14 @@ export default {
       orgGetOrgClassReport: 'org/getOrgClassReport'
     }),
     goCommentDetail(detail) {
-      let { classId } = detail
+      let { classId, name } = detail
       this.$router.push({
         name: 'ClassEvaluation',
         params: {
           classId
+        },
+        query: {
+          name
         }
       })
     },

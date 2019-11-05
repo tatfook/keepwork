@@ -1,14 +1,14 @@
 <template>
   <div class="teacher-report-detail">
     <div class="teacher-report-detail-header">
-      <span class="teacher-report-detail-header-name">报告名称</span> <span class="teacher-report-detail-header-tag">{{reportName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
+      <span class="teacher-report-detail-header-name">{{reportName}}</span> <span class="teacher-report-detail-header-tag">{{reportTypeName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
     </div>
     <div class="teacher-report-detail-main">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="待点评" name="1">
           <div class="teacher-report-detail-main-table">
             <el-table :data="toCommentTable" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" border="" style="width: 100%">
-              <el-table-column prop="studentId" label="序号">
+              <el-table-column prop="index" label="序号">
               </el-table-column>
               <el-table-column prop="realname" label="学生姓名">
               </el-table-column>
@@ -52,7 +52,7 @@
             <el-table :data="hasCommentTable" @selection-change="handleSelectionChange" border="" style="width: 100%">
               <el-table-column type="selection" width="55">
               </el-table-column>
-              <el-table-column prop="studentId" label="序号" width="120">
+              <el-table-column prop="index" label="序号" width="120">
               </el-table-column>
               <el-table-column prop="realname" label="学生姓名" width="120">
               </el-table-column>
@@ -173,6 +173,9 @@ export default {
     reportType() {
       return _.get(this.$route, 'query.type', '')
     },
+    reportTypeName() {
+      return this.reportType === 1 ? '小评' : '阶段总结'
+    },
     sendStatusDict() {
       return {
         0: '待发送',
@@ -187,10 +190,22 @@ export default {
       return this.sendStatusDict[this.sendStatus]
     },
     toCommentTable() {
-      return _.get(this.evaluationReportDetail, 1, [])
+      return _.map(
+        _.get(this.evaluationReportDetail, 1, []),
+        (item, index) => ({
+          ...item,
+          index: index + 1
+        })
+      )
     },
     hasCommentTable() {
-      return _.get(this.evaluationReportDetail, 2, [])
+      return _.map(
+        _.get(this.evaluationReportDetail, 2, []),
+        (item, index) => ({
+          ...item,
+          index: index + 1
+        })
+      )
     },
     classId() {
       return _.toNumber(this.$route.query.classId)
@@ -297,11 +312,13 @@ export default {
         .catch(() => {})
     },
     toCommentDetail(row) {
+      const { studentId, userReportId } = row
       this.$router.push({
         name: 'OrgTeacherReportCommentDetail',
         query: {
           ...this.$route.query,
-          ...row
+          studentId,
+          userReportId
         }
       })
     },

@@ -45,16 +45,16 @@
           <div> <i class="iconfont icon-xuesheng member-banner-icon"></i>学生</div>
           <div class="member-banner-count">学生数: {{selectedClassStudentsCount}}</div>
         </div>
-        <el-table :data="orgClassStudentsTable" border style="width: 100%">
+      <el-table :data="orgClassStudentsTable" border style="width: 100%">
           <el-table-column prop="realname" :label="$t('org.nameLabel')" width="120">
           </el-table-column>
           <el-table-column prop="username" :label="$t('org.usernameLabel')" width="120">
           </el-table-column>
           <el-table-column prop="parentPhoneNum" label="家长手机号" width="162">
           </el-table-column>
-          <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="162">
+          <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')">
           </el-table-column>
-          <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
+          <el-table-column align="center" width="280" :label="$t('org.operationLabel')" v-if="isCanEdit">
             <template slot-scope="scope">
               <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
               <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
@@ -149,7 +149,6 @@ export default {
       addStudentToClass: 'org/teacher/addStudentToClass',
       removeStudentFromClass: 'org/teacher/removeStudentFromClass',
       getOrgStudents: 'org/teacher/getOrgStudents',
-      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
       getLastUpdateProjects: 'org/teacher/getLastUpdateProjects'
     }),
     async initClassData() {

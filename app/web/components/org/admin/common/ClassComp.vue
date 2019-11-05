@@ -66,7 +66,7 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgPackagesGraphqlById: 'org/getOrgPackagesGraphqlById'
+      getOrgPackagesWithLessonById: 'org/getOrgPackagesWithLessonById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -105,15 +105,16 @@ export default {
       return pageText
     },
     orgAvailablePackages() {
-      return this.getOrgPackagesGraphqlById({ id: this.orgId }) || []
+      let packages = this.getOrgPackagesWithLessonById({ id: this.orgId }) || []
+      return _.uniqBy(packages, 'id')
     },
     formatedTreeData() {
       return _.map(this.orgAvailablePackages, packageData => {
-        let packageId = _.toNumber(_.get(packageData, 'package.id'))
+        let packageId = _.toNumber(packageData.id)
         return {
           id: packageId,
           packageId: packageId,
-          label: _.get(packageData, 'package.packageName'),
+          label: packageData.packageName,
           disabled: this.isDetailPage,
           children: _.map(packageData.lessons, lesson => {
             let lessonId = _.toNumber(lesson.id)
@@ -138,12 +139,12 @@ export default {
   methods: {
     ...mapActions({
       getOrgClassPackages: 'org/getOrgClassPackages',
-      getOrgPackagesByGraphql: 'org/getOrgPackagesByGraphql'
+      getOrgPackagesWithLessons: 'org/getOrgPackagesWithLessons'
     }),
-    initClassData() {
-      this.initTreeData()
+    async initClassData() {
+      await this.initTreeData()
       if (this.isDetailPage || this.isEditPage) {
-        this.initSelectedLessons()
+        await this.initSelectedLessons()
         let classDetail = this.classDetail
         this.classData = classDetail
         this.beginClassTime = classDetail.begin
@@ -157,7 +158,7 @@ export default {
     },
     async initTreeData() {
       this.isTreeLoading = true
-      await this.getOrgPackagesByGraphql({ organizationId: this.orgId })
+      await this.getOrgPackagesWithLessons({ organizationId: this.orgId })
       this.isTreeLoading = false
     },
     async initSelectedLessons() {

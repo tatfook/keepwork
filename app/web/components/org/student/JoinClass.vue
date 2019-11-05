@@ -51,14 +51,14 @@ export default {
   },
   async mounted() {
     if (this.isCurrentOrgToken) {
-      await this.getUserOrgRealName()
+      await this.getStudentInfo()
       this.form.realname = this.orgRealName
     }
   },
   methods: {
     ...mapActions({
       joinOrgClass: 'org/student/joinOrgClass',
-      getUserOrgRealName: 'org/student/getUserOrgRealName'
+      getStudentInfo: 'org/student/getStudentInfo'
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {

@@ -46,7 +46,10 @@ export default {
       return _.toNumber(_.get(this.$route, 'params.classId'))
     },
     evaluationCommentList() {
-      return this.getEvaluationCommentListByClassId({ classId: this.classId })
+      return _.sortBy(
+        this.getEvaluationCommentListByClassId({ classId: this.classId }) || [],
+        o => -new Date(o.createdAt).valueOf()
+      )
     },
     formatedListData() {
       return _.map(this.evaluationCommentList, comment => {

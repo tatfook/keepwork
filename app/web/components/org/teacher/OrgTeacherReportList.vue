@@ -220,7 +220,10 @@ export default {
       return _.get(this.orgClasses, '[0].id', '')
     },
     currentClassReports() {
-      return _.get(this.orgClassEvaluationReports, [this.classId], [])
+      return _.sortBy(
+        _.get(this.orgClassEvaluationReports, [this.classId], []),
+        o => -new Date(o.createdAt).valueOf()
+      )
     },
     reportCount() {
       return _.get(this.orgClassEvaluationReportCount, [this.classId], 0)

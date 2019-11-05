@@ -45,6 +45,10 @@ const lessonOrganizations = {
     post('lessonOrganizationActivateCodes/search', params),
   joinOrganization: async params =>
     post('lessonOrganizationActivateCodes/activate', params),
+  checkUserInValid: async params =>
+    get('lessonOrganizations/checkUserInvalid', { params }),
+  getOrgPackagesWithLessons: async params =>
+    get('lessonOrganizations/getOrgPackages', { params }),
   sendSocketMessage: async params => socketMessage.post('app/msg', params)
 }
 const lessonOrganizationClasses = {
@@ -101,7 +105,8 @@ const lessonOrganizationForms = {
 const organizations = {
   changePwd: async ({ classId, memberId, password }) =>
     post('organizations/changepwd', { classId, memberId, password }),
-  getLogs: async searchParams => post('organizations/log', searchParams)
+  getLogs: async searchParams => post('organizations/log', searchParams),
+  getMemberCountByOrgId: async params => get('lessonOrganizations/getMemberCountByRole', { params })
 }
 
 const lessonOrganizationClassMembers = {
@@ -158,7 +163,8 @@ const evaluationReports = {
     get('evaluationReports/orgClassReport', { params }),
   getClassReportByClassId: async params =>
     get('evaluationReports/classReport', { params }),
-  getEvaluationReportStatistics: async params => get('evaluationReports/statistics', { params }),
+  getEvaluationReportStatistics: async params =>
+    get('evaluationReports/statistics', { params })
 }
 
 const users = {

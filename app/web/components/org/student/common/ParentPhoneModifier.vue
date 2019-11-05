@@ -9,7 +9,7 @@
       <parent-phone-binder key="parentPhoneBinderRef2" ref="parentPhoneBinderRef2" class="parent-phone-modifier-binder" v-if="step==2" phoneLabel="新手机号" :isInfoAfterInputShow="true" :isInfoInTopShow="false"></parent-phone-binder>
     </div>
     <div class="parent-phone-modifier-footer">
-      <el-button size="medium">取消</el-button>
+      <el-button size="medium" @click="cancle">取消</el-button>
       <el-button v-if="step == 1" size="medium" type="primary" @click="toNext">下一步</el-button>
       <el-button v-else size="medium" type="primary" @click="modifyPhone">确定</el-button>
     </div>
@@ -97,6 +97,9 @@ export default {
         console.log(error)
       }
       this.isLoading = false
+    },
+    cancle() {
+      this.$emit('close')
     }
   },
   components: {

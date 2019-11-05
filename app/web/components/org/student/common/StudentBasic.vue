@@ -11,6 +11,7 @@
         <div class="student-basic-detail-item">
           <label for="userDisplayName">姓名</label>
           <el-input class="student-basic-detail-input" id="userDisplayName" v-model.trim="userInfo.realname"></el-input>
+          <span class="student-basic-detail-error">{{nameErrorInfo}}</span>
         </div>
         <parent-phone-binder v-if="!isParentPhoneExist" ref="parentPhoneBinderRef" class="student-basic-detail-binder" />
         <div v-if="isParentPhoneExist" class="student-basic-detail-item">
@@ -25,8 +26,8 @@
       </div>
     </div>
     <div class="student-basic-footer">
-      <el-button size="medium">取消</el-button>
-      <el-button size="medium" type="primary" @click="saveUserinfo">保存</el-button>
+      <el-button size="medium" @click="cancle">取消</el-button>
+      <el-button :disabled="!isDataValid" size="medium" type="primary" @click="saveUserinfo">保存</el-button>
     </div>
     <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="false" :isNoMediaFileShow="false" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
@@ -44,9 +45,11 @@ export default {
       this.userInfo = this.userinfoGetter
     } catch (error) {}
     this.isLoading = false
+    this.isMounted = true
   },
   data() {
     return {
+      isMounted: false,
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       isMediaSkyDriveDialogShow: false,
       isLoading: false,
@@ -62,6 +65,16 @@ export default {
     },
     isParentPhoneExist() {
       return Boolean(this.userinfoGetter.parentPhoneNum)
+    },
+    isPhoneDataValid() {
+      if (!this.isMounted) return
+      return _.get(this.$refs, 'parentPhoneBinderRef.isPhoneDataValid', true)
+    },
+    nameErrorInfo() {
+      return Boolean(this.userInfo.realname) ? '' : '请输入姓名'
+    },
+    isDataValid() {
+      return !Boolean(this.nameErrorInfo) && this.isPhoneDataValid
     }
   },
   methods: {
@@ -106,6 +119,9 @@ export default {
         this.$message({ type: 'danger', message: '修改失败' })
       }
       this.isLoading = false
+    },
+    cancle() {
+      this.$emit('close')
     }
   },
   components: {
@@ -162,6 +178,9 @@ export default {
         color: #999;
         margin-top: 12px;
       }
+    }
+    &-error {
+      color: #f56c6c;
     }
   }
   &-footer {

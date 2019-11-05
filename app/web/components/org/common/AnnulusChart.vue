@@ -63,7 +63,8 @@ export default {
                 return content
               },
               confine: true,
-              extraCssText: 'box-shadow: 0px 0px 4px 0px rgba(182, 182, 182, 0.4);',
+              extraCssText:
+                'box-shadow: 0px 0px 4px 0px rgba(182, 182, 182, 0.4);',
               backgroundColor: '#fff',
               padding: [18, 18, 24, 18],
               textStyle: {
@@ -93,6 +94,7 @@ export default {
         series: {
           hoverAnimation: false,
           startAngle: 180,
+          stillShowZeroSum: false,
           label: {
             show: true,
             position: 'inner',
@@ -116,9 +118,10 @@ export default {
     getTooltipContent(params) {
       let tableContent = _.map(
         this.annulusData[params.dataIndex].classes,
-        classDetail =>
-          `<tr><td>${classDetail.name}</td><td>${classDetail.teacherNames}</td></tr>`
-      )
+        classDetail => {
+          return `<tr><td>${classDetail.name}</td><td>${classDetail.teacherNames || ''}</td></tr>`
+        }
+      ).join('')
       let content = `
         <div class="tooltip-header">
           <span class="" style="background:${params.color}"></span>

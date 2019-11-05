@@ -12,8 +12,8 @@ const getters = {
     if (!userCounts) {
       return
     }
-    let { count, studentCount } = userCounts
-    return count - studentCount
+    let { upperLimit, studentCount } = userCounts
+    return upperLimit - studentCount
   },
   roleId: (state, { tokenInfo }) => {
     return tokenInfo.roleId
@@ -64,8 +64,8 @@ const getters = {
   currentOrg: state => state.currentOrg,
   currentOrgId: (state, { currentOrg }) => currentOrg.id,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
-  getOrgPackagesGraphqlById: state => ({ id }) =>
-    _.get(state.orgPackagesGraphql, id),
+  getOrgPackagesWithLessonById: state => ({ id }) =>
+    _.get(state.orgPackagesWithLesson, id),
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
   getOrgTeachersByClassId: state => ({ orgId, classId }) =>

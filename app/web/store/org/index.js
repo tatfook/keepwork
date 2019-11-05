@@ -10,7 +10,7 @@ const state = {
   orgsDetailForLoginUrl: {},
   currentOrg: {},
   orgPackages: {},
-  orgPackagesGraphql: {},
+  orgPackagesWithLesson: {},
   orgPackagesDetail: {},
   orgLessonData: {},
   orgLessonDetail: {},

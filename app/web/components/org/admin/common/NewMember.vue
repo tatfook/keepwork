@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUserOrgRoleByGraphql: 'org/getUserOrgRoleByGraphql',
+      orgCheckIsTeacherValid: 'org/checkIsTeacherValid',
       orgCreateNewMember: 'org/createNewMember'
     }),
     onLastInput(index) {
@@ -172,51 +172,36 @@ export default {
       })
     },
     async testUsername({ username, callback }) {
-      await this.getUserOrgRoleByGraphql({
-        organizationId: this.orgId,
-        username
-      })
-        .then(result => {
-          const { user, organizationClassMembers } = result
-          this.converToAccount(user)
-          let index
-          let memberLen = organizationClassMembers.length
-          for (index = 0; index < memberLen; index++) {
-            let classId = organizationClassMembers[index].classId
-            let classes = this.filterOverDueClasses
-            if (_.findIndex(classes, { id: classId }) == -1) continue
-            if (
-              (organizationClassMembers[index].roleId & this.memberTypeRoleId) >
-              0
-            )
-              break
-          }
-          if (index >= memberLen) {
-            callback()
-          } else {
-            callback(
-              new Error(
-                this.$t('org.theUsername') +
-                  `[${username}]` +
-                  this.$t('org.alreadyInList', {
-                    zhRole: this.memberType == 'student' ? '学生' : '教师',
-                    enRole: this.memberType == 'student' ? 'student' : 'teacher'
-                  })
-              )
-            )
-          }
+      try {
+        await this.orgCheckIsTeacherValid({
+          organizationId: this.orgId,
+          username
         })
-        .catch(error => {
-          if (error == 400) {
-            callback(
-              new Error(
-                this.$t('org.theUsername') +
-                  `[${username}]` +
-                  this.$t('org.wasNotFound')
-              )
-            )
-          }
-        })
+        callback()
+      } catch (error) {
+        let status = _.get(error, 'response.status')
+        let errorInfo = ''
+        switch (status) {
+          case 400:
+            errorInfo =
+              this.$t('org.theUsername') +
+              `[${username}]` +
+              this.$t('org.wasNotFound')
+            break
+          case 409:
+            errorInfo =
+              this.$t('org.theUsername') +
+              `[${username}]` +
+              this.$t('org.alreadyInList', {
+                zhRole: this.memberType == 'student' ? '学生' : '教师',
+                enRole: this.memberType == 'student' ? 'student' : 'teacher'
+              })
+            break
+          default:
+            break
+        }
+        callback(new Error(errorInfo))
+      }
     },
     converToAccount(user) {
       this.newMembers.forEach(item => {
