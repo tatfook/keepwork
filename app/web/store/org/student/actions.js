@@ -39,10 +39,11 @@ const {
   GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS
 } = props
 
-
 const actions = {
   async getEvaluationReportStatistics({ commit }, classId) {
-    const report = await evaluationReports.getEvaluationReportStatistics({ classId })
+    const report = await evaluationReports.getEvaluationReportStatistics({
+      classId
+    })
     commit(GET_CLASS_REPORT_STATISTICS_SUCCESS, { classId, report })
     return report
   },
@@ -506,7 +507,9 @@ const actions = {
     return lessons[0]
   },
   async getEvaluationReportCommentDetail({ commit }, params) {
-    const report = await evaluationReports.getEvaluationReportCommentDetail(params)
+    const report = await evaluationReports.getEvaluationReportCommentDetail(
+      params
+    )
     commit(GET_EVALUATION_REPORT_COMMENT_DETAIL_SUCCESS, report)
     return report
   },
@@ -523,8 +526,14 @@ const actions = {
     let userinfo = await keepwork.users.getUserinfo()
     commit(GET_STUDENT_INFO_SUCCESS, userinfo)
   },
-  async updateStudentInfo(context, userinfo) {
-    return await keepwork.users.updateUserinfo(userinfo)
+  async updateStudentInfo({ dispatch }, userinfo) {
+    try {
+      await keepwork.users.updateUserinfo(userinfo)
+      dispatch('user/getProfile', { useCache: false }, { root: true })
+      return Promise.resolve()
+    } catch (error) {
+      return Promise.reject(error)
+    }
   },
   async verifyCode(context, { cellphone, verifCode }) {
     return await keepwork.users.verifyCode({ cellphone, verifCode })
