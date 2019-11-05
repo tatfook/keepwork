@@ -91,8 +91,12 @@ export default {
       this.isLoading = true
       try {
         await this.orgSendSms({ cellphone: this.parentPhone.phone })
+        this.$message({ type: 'success', message: '短信发送成功。' })
       } catch (error) {
-        console.error(error)
+        this.$message({
+          type: 'error',
+          message: _.get(error, 'response.data.message', '短信发送失败')
+        })
       }
       this.isLoading = false
     }
