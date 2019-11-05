@@ -34,44 +34,44 @@ export default {
     return {
       handpickVideoData: [
         {
-          title: '宇宙快递',
-          author: 'HM',
+          title: '孙姓',
+          author: '墨鱼',
           videoUrl:
-            'https://api.keepwork.com/storage/v0/siteFiles/4607/raw#宇宙快递.mp4',
-          coverUrl: require('@/assets/contests/handpick/宇宙快递-960x551.jpg'),
+            'https://api.keepwork.com/storage/v0/siteFiles/7727/raw#视频1-孙姓.mp4',
+          coverUrl: require('@/assets/contests/handpick/1-孙姓-墨鱼.png'),
           currentIndex: 0
         },
         {
-          title: '致匠心',
-          author: '奇仔',
+          title: '蔡姓',
+          author: '墨鱼',
           videoUrl:
-            'https://api.keepwork.com/storage/v0/siteFiles/4609/raw#致匠心.mp4',
-          coverUrl: require('@/assets/contests/handpick/致匠心-960x564.jpg'),
+            'https://api.keepwork.com/storage/v0/siteFiles/8074/raw#蔡姓.mp4 ',
+          coverUrl: require('@/assets/contests/handpick/蔡姓（作者-墨鱼）.png'),
           currentIndex: 1
         },
         {
-          title: 'ToMars',
-          author: '阿杰',
+          title: '刘姓',
+          author: '小星',
           videoUrl:
-            'https://api.keepwork.com/storage/v0/siteFiles/4596/raw#ToMars.mp4',
-          coverUrl: require('@/assets/contests/handpick/火星-海报-960x579.jpg'),
+            'https://api.keepwork.com/storage/v0/siteFiles/8073/raw#刘姓.mp4',
+          coverUrl: require('@/assets/contests/handpick/刘姓（作者-小星）.png'),
           currentIndex: 2
         },
         {
-          title: '山海闻妖录',
-          author: '阿杰',
+          title: '李姓',
+          author: '小星',
           videoUrl:
-            'https://api.keepwork.com/storage/v0/siteFiles/4603/raw#山海闻录.mp4',
-          coverUrl: require('@/assets/contests/handpick/山海闻妖录-960x545.jpg'),
+            'https://api.keepwork.com/storage/v0/siteFiles/7729/raw#视频3-李姓.mp4',
+          coverUrl: require('@/assets/contests/handpick/3-李姓-小星.png'),
           currentIndex: 3
         }
       ],
       currentHandpick: {
-        title: '宇宙快递',
-        author: 'HM',
+        title: '孙姓',
+        author: '墨鱼',
         videoUrl:
-          'https://api.keepwork.com/storage/v0/siteFiles/4607/raw#宇宙快递.mp4',
-        coverUrl: require('@/assets/contests/handpick/宇宙快递-960x551.jpg'),
+          'https://api.keepwork.com/storage/v0/siteFiles/7727/raw#视频1-孙姓.mp4',
+        coverUrl: require('@/assets/contests/handpick/1-孙姓-墨鱼.png'),
         currentIndex: 0
       }
     }
