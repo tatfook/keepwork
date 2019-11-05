@@ -103,8 +103,7 @@ export default {
         confirmButtonText: '保存',
         cancelButtonText: '取消'
       }).then(async ({ value }) => {
-        this.isLoading = true
-        await this.orgCreateForm({
+        this.createForm({
           type,
           title,
           text,
@@ -112,12 +111,21 @@ export default {
           quizzes,
           name: value
         })
-        this.$message({ type: 'success', message: '创建成功' })
-        this.isLoading = false
-        this.$router.push({
-          name: 'OrgForms'
-        })
       })
+    },
+    async createForm(newFormData) {
+      this.isLoading = true
+      try {
+        let { id } = await this.orgCreateForm(newFormData)
+        this.$message({ type: 'success', message: '创建成功' })
+        this.$router.push({
+          name: 'EditForm',
+          params: {
+            id
+          }
+        })
+      } catch (error) {}
+      this.isLoading = false
     },
     toNewFormPage() {
       this.$router.push({ name: 'NewForm' })

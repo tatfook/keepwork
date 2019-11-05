@@ -360,13 +360,14 @@ const actions = {
   },
   async createForm({ dispatch, getters }, formDetail) {
     let { currentOrgId } = getters
-    await keepwork.lessonOrganizationForms.createForm({
+    let result = await keepwork.lessonOrganizationForms.createForm({
       formDetail: {
         ...formDetail,
         organizationId: currentOrgId
       }
     })
     dispatch('getForms', {})
+    return result
   },
   async getForms({ commit, getters }, { organizationId }) {
     let { currentOrgId } = getters
