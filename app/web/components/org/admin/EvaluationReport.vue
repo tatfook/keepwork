@@ -128,6 +128,7 @@ export default {
           classId
         },
         query: {
+          days: this.selectDayOption.value,
           name
         }
       })
