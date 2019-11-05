@@ -370,7 +370,7 @@ export default {
         this.$message.error('请选择学生')
         return
       }
-      const selection = this.selection.filter(item => item.isSend === 0)
+      const selection = this.selection
       const noParentPhonArr = _.reduce(
         selection,
         (arr, cur) => {
