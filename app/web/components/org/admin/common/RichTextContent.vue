@@ -92,11 +92,15 @@ export default {
     },
     closeSkyDriveManagerDialog({ file, url }) {
       this.isMediaSkyDriveDialogShow = false
-      if (url) {
-        this.formEditor.txt.append(
-          `<br/><a href="${url}" target="_blank">${file.filename}</a>`
-        )
+      if (!url) return
+      let { type, filename } = file
+      let appendStr = ''
+      if (type == 'images') {
+        appendStr = `<br/><img src="${url}" alt="${filename}" style="max-width: 100%;" />`
+      } else {
+        appendStr = `<br/><a href="${url}" target="_blank">${file.filename}</a>`
       }
+      this.formEditor.txt.append(appendStr)
     }
   },
   components: {
