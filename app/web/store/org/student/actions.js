@@ -530,6 +530,7 @@ const actions = {
     try {
       await keepwork.users.updateUserinfo(userinfo)
       dispatch('user/getProfile', { useCache: false }, { root: true })
+      dispatch('getStudentInfo')
       return Promise.resolve()
     } catch (error) {
       return Promise.reject(error)
