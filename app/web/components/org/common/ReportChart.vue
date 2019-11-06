@@ -74,19 +74,8 @@
           </div>
 
           <div class="report-chart-comment-media">
-            <el-row v-if="printMode" :gutter="20">
-              <el-col v-for="(item, index) in mediaUrl" :key="index" :span="8">
-                <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
-                <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
-                  <video width="100%" height="100%" :src="item.url"></video>
-                  <div class="play-masking">
-                    <img class="play-masking-button" :src="playButtonIcon">
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row v-else :gutter="20">
-              <el-col v-for="(item, index) in mediaUrl" :key="index" :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+            <el-row :gutter="20">
+              <el-col v-for="(item, index) in mediaUrl" :key="index" :span="span">
                 <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
                 <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
                   <video width="100%" height="100%" :src="item.url"></video>
@@ -191,7 +180,9 @@ export default {
       loadedImgList: [],
       radarThisTimeCompleted: false,
       radarHistoryCompleted: false,
-      growthTrackChartCompletedCount: 0
+      growthTrackChartCompletedCount: 0,
+      timer: null,
+      span: 8
     }
   },
   props: {
@@ -227,13 +218,30 @@ export default {
     }
   },
   mounted() {
-    if (this.showComment) {
-      this.$nextTick(() => {
+    this.$nextTick(() => {
+      this.setSpan()
+      window.addEventListener('resize', this.monitorResize)
+      if (this.showComment) {
         this.addImgLoadEvent()
-      })
-    }
+      }
+    })
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.monitorResize)
   },
   methods: {
+    monitorResize(evt) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(this.setSpan, 300)
+    },
+    setSpan() {
+      const clientWidth = document.body.clientWidth
+      if (clientWidth < 768) {
+        this.span = 12
+      } else {
+        this.span = 8
+      }
+    },
     handleShowDialog(item) {
       this.isShowDiaglog = true
       this.showItem = item
