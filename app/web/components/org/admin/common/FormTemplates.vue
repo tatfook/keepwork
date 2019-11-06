@@ -10,12 +10,12 @@
         <div class="form-templates-item-name">{{template.name}}</div>
       </div>
     </div>
-    <div class="form-templates-preview" v-if="isPreviewShow">
+    <el-dialog top=“0” :visible.sync="isPreviewDialogVisible" custom-class="form-templates-preview" :before-close="handleClosePreview">
       <img :src="selectedTemplate.preview" alt="template.name">
       <div class="form-templates-preview-button">
         <el-button type="primary" @click="showNamePrompt()">创建</el-button>
       </div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -31,11 +31,9 @@ const {
 
 export default {
   name: 'FormTemplates',
-  mounted() {
-    this.isPreviewShow && (this.selectedTemplate = this.formTemplates[0])
-  },
   data() {
     return {
+      isPreviewDialogVisible: false,
       isLoading: false,
       formTemplates: [
         {
@@ -89,8 +87,13 @@ export default {
     ...mapActions({
       orgCreateForm: 'org/createForm'
     }),
+    handleClosePreview() {
+      this.selectedTemplate = {}
+      this.isPreviewDialogVisible = false
+    },
     showPreview(template) {
       this.selectedTemplate = template
+      this.isPreviewDialogVisible = true
     },
     showNamePrompt() {
       let {
@@ -135,11 +138,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .form-templates {
-  display: flex;
   font-size: 14px;
-  &-list {
-    flex: 1;
-  }
   &-item {
     display: inline-block;
     padding: 0 8px;
@@ -185,15 +184,21 @@ export default {
       }
     }
   }
-  &-preview {
-    width: 326px;
+  /deep/ &-preview {
+    width: 800px;
+    overflow: auto;
     text-align: center;
-    border: 1px solid #e8e8e8;
+    max-height: 100vh;
+    margin: 0 auto;
     border-radius: 8px;
-    box-shadow: 0px 2px 8px 2px rgba(184, 184, 184, 0.5);
     &-button {
       border-top: 1px solid #e8e8e8;
       padding: 20px 0;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
     }
     .el-button {
       width: 100px;
@@ -205,6 +210,14 @@ export default {
     img {
       width: 100%;
       height: auto;
+    }
+    .el-dialog__header {
+      display: none;
+    }
+    .el-dialog__body {
+      padding: 0;
+      height: 100vh;
+      overflow: auto;
     }
   }
 }
