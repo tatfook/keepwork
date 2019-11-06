@@ -59,7 +59,7 @@ const haqi = axios.create({
 const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
 export const keepworks = {
-  getSvgCaptcha: async () => get('keepworks/svg_captcha'),
+  getSvgCaptcha: async () => get('keepworks/svg_captcha?png=true'),
   verifySvgCaptcha: async ({ key, captcha }) =>
     post('keepworks/svg_captcha', { key, captcha })
 }

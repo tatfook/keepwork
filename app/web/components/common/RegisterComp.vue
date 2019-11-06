@@ -22,8 +22,8 @@
           <el-col class="send-auth-code">
             <el-input v-model.trim="ruleForm.svgCaptcha" placeholder="请输入验证码"></el-input>
           </el-col>
-          <el-col class="send-auth-send-code">
-            <div v-loading="isSvgCaptchaLoading" v-html="captchaSvg.captcha" @click="changeSvgCaptcha"></div>
+          <el-col class="send-auth-send-code" @click.native="changeSvgCaptcha">
+            <img class="send-auth-captcha" v-loading="isSvgCaptchaLoading" :src="captchaSvg.captcha" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -370,7 +370,13 @@ export default {
       }
       &-send-code {
         width: 116px;
+        text-align: center;
+        background-color: #e9f4ff;
         margin-left: 8px;
+        border-radius: 4px;
+        height: 40px;
+        padding-top: 5px;
+        cursor: pointer;
         .send-code-button {
           width: 100%;
           padding: 12px 0;
@@ -449,14 +455,6 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
-    }
-    svg {
-      height: 40px;
-      background-color: #e9f4ff;
-      width: 100%;
-      border-radius: 4px;
-      cursor: pointer;
-      display: block;
     }
   }
 }
