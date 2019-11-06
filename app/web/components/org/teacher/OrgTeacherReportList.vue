@@ -86,7 +86,8 @@ export default {
       reportName: '',
       reportType: 0,
       loading: false,
-      fullLoading: true
+      fullLoading: true,
+      timer: null
     }
   },
   filters: {
@@ -108,6 +109,12 @@ export default {
     $route(route) {
       this.resetSearchParams()
       this.initPage()
+    },
+    reportName(reportName) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.handleSearchByName()
+      }, 500)
     }
   },
   methods: {
