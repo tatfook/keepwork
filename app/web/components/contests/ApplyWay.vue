@@ -11,7 +11,7 @@
     <h3 class="apply-way-title"><img src="@/assets/contests/大赛时间.png" alt=""></h3>
     <div class="apply-way-time">
       <p class="apply-way-time-part"><span class="apply-way-time-part-name">大赛时间</span><span class="apply-way-time-part-time">2019年4月-12月</span></p>
-      <p class="apply-way-time-part"><span class="apply-way-time-part-name">作品提交截止时间</span><span class="apply-way-time-part-time">2019年11月30日</span></p>
+      <p class="apply-way-time-part"><span class="apply-way-time-part-name">作品提交截止时间</span><span class="apply-way-time-part-time">2019年12月20日</span></p>
       <!-- <p class="apply-way-time-hint">◆请各位参赛者务必注意报名时间，要是不小心错过了一网乾坤可是会为你伤心的哦！</p> -->
     </div>
     <img class="apply-way-bgpic element_text_1" src="@/assets/contests/element_text_1.png" alt="">

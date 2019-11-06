@@ -74,8 +74,8 @@
           </div>
 
           <div class="report-chart-comment-media">
-            <el-row :gutter="10">
-              <el-col v-for="(item, index) in mediaUrl" :key="index" :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+            <el-row :gutter="20">
+              <el-col v-for="(item, index) in mediaUrl" :key="index" :span="span">
                 <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
                 <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
                   <video width="100%" height="100%" :src="item.url"></video>
@@ -180,10 +180,16 @@ export default {
       loadedImgList: [],
       radarThisTimeCompleted: false,
       radarHistoryCompleted: false,
-      growthTrackChartCompletedCount: 0
+      growthTrackChartCompletedCount: 0,
+      timer: null,
+      span: 8
     }
   },
   props: {
+    printMode: {
+      type: Boolean,
+      default: false
+    },
     reportData: {
       type: Object,
       default() {
@@ -212,13 +218,30 @@ export default {
     }
   },
   mounted() {
-    if (this.showComment) {
-      this.$nextTick(() => {
+    this.$nextTick(() => {
+      this.setSpan()
+      window.addEventListener('resize', this.monitorResize)
+      if (this.showComment) {
         this.addImgLoadEvent()
-      })
-    }
+      }
+    })
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.monitorResize)
   },
   methods: {
+    monitorResize(evt) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(this.setSpan, 300)
+    },
+    setSpan() {
+      const clientWidth = document.body.clientWidth
+      if (clientWidth < 768) {
+        this.span = 12
+      } else {
+        this.span = 8
+      }
+    },
     handleShowDialog(item) {
       this.isShowDiaglog = true
       this.showItem = item
@@ -623,15 +646,15 @@ $width: 766px;
         width: 209px;
         height: 123px;
         object-fit: cover;
-        margin-bottom: 8px;
         cursor: pointer;
+        margin-bottom: 3px;
       }
       &-video {
         width: 209px;
-        height: 123px;
+        height: 127px;
         object-fit: cover;
         background: rgb(73, 73, 73);
-        margin: 0 auto 14px;
+        margin: 0 auto 6px;
         cursor: pointer;
         position: relative;
         .play-masking {
@@ -877,33 +900,14 @@ $width: 766px;
         &-img {
           width: 154px;
           height: 86px;
-          object-fit: cover;
-          margin-bottom: 6px;
-          cursor: pointer;
         }
         &-video {
           width: 154px;
           height: 86px;
-          object-fit: cover;
-          background: rgb(73, 73, 73);
-          margin: 0 auto 6px;
-          cursor: pointer;
-          position: relative;
           .play-masking {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(#000, 0.4);
             &-button {
-              width: 60px;
-              height: 60px;
+              width: 40px;
+              height: 40px;
             }
           }
         }
