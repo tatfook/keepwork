@@ -75,8 +75,8 @@
 
           <div class="report-chart-comment-media">
             <el-row :gutter="10">
-              <el-col v-for="(item, index) in mediaUrl" :key="index" :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
-                <img @click="handleShowDialog(item)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
+              <el-col v-for="(item, index) in mediaUrlByImgIndex" :key="index" :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                <img @click="handleShowPhotoPreivew(item.imgIndex)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
                 <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
                   <video width="100%" height="100%" :src="item.url"></video>
                   <div class="play-masking">
@@ -140,10 +140,9 @@
         <img v-if="QRCode" class="report-chart-footer-qrcode" :src="QRCode | miniPic">
       </div>
     </div>
-
-    <el-dialog custom-class="show-item-dialog" top="2vh" :visible.sync="isShowDiaglog">
-      <img class="show-item-dialog-img" v-if="isShowDiaglog && showItem.type === 'images'" :src="showItem.url">
-      <video-player v-else-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="false" :src="showItem.url" />
+    <photo-preview v-if="showPhotoPreview" :slides="imageList" :index="imgIndex" @close="handleHidePhotoPreview"></photo-preview>
+    <el-dialog custom-class="show-item-dialog" :fullscreen="true" :visible.sync="isShowDiaglog">
+      <video-player ref="player" v-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="true" :src="showItem.url" />
     </el-dialog>
   </div>
 </template>
@@ -153,6 +152,7 @@ import ReportChartRadar from './ReportChartRadar'
 import ReportChartLine from './ReportChartLine'
 import ReportChartHistogram from './ReportChartHistogram'
 import videoPlayer from '@/components/common/VideoPlayer'
+import PhotoPreview from './PhotoPreview'
 import moment from 'moment'
 export default {
   name: 'ReportChart',
@@ -160,7 +160,8 @@ export default {
     ReportChartRadar,
     ReportChartLine,
     ReportChartHistogram,
-    videoPlayer
+    videoPlayer,
+    PhotoPreview
   },
   filters: {
     miniPic(url) {
@@ -180,7 +181,9 @@ export default {
       loadedImgList: [],
       radarThisTimeCompleted: false,
       radarHistoryCompleted: false,
-      growthTrackChartCompletedCount: 0
+      growthTrackChartCompletedCount: 0,
+      showPhotoPreview: false,
+      imgIndex: 0
     }
   },
   props: {
@@ -219,6 +222,13 @@ export default {
     }
   },
   methods: {
+    handleShowPhotoPreivew(imgIndex) {
+      this.imgIndex = imgIndex
+      this.showPhotoPreview = true
+    },
+    handleHidePhotoPreview() {
+      this.showPhotoPreview = false
+    },
     handleShowDialog(item) {
       this.isShowDiaglog = true
       this.showItem = item
@@ -245,11 +255,13 @@ export default {
       }
     },
     addImgLoadEvent() {
-      const imgEle = document.querySelectorAll('.report-chart-comment img')
+      const imgEle = document.querySelectorAll(
+        '.report-chart-comment-media-img'
+      )
       this.imgCount = imgEle.length
-      imgEle.forEach(ele => (ele.onload = () => this.markedImg(ele)))
+      imgEle.forEach(ele => (ele.onload = evt => this.markedImg(ele, evt)))
     },
-    markedImg(imgEle) {
+    markedImg(imgEle, evt) {
       this.loadedImgList.push(imgEle)
       this.checkCompleted()
     }
@@ -347,6 +359,25 @@ export default {
     },
     mediaUrl() {
       return _.get(this.userRepo, 'mediaUrl', [])
+    },
+    mediaUrlByImgIndex() {
+      let imgIndex = 0
+      return _.map(this.mediaUrl, item => {
+        if (item.type === 'images') {
+          item.imgIndex = imgIndex
+          imgIndex++
+        }
+        return item
+      })
+    },
+    imageList() {
+      const clientWidth = document.body.clientWidth
+      const images = _.filter(this.mediaUrl, item => item.type === 'images')
+      return _.map(images, item => ({
+        src: item.url,
+        h: 0,
+        w: 0
+      }))
     },
     reportTypeName() {
       const type = _.toNumber(_.get(this.$route, 'query.type', 1))
@@ -776,9 +807,6 @@ $width: 766px;
   }
   /deep/.show-item-dialog {
     width: 80%;
-    &-img {
-      width: 100%;
-    }
   }
 }
 
