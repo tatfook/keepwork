@@ -47,8 +47,8 @@ export default {
         requestWithoutToken.get(`lessons/${lessonId}/detail`),
         requestWithoutToken.get(`lessons/${lessonId}/contents`)
       ])
-      this.lessonHeaderData = detail.data
-      const _modList = Parser.buildBlockList(contents.data[type])
+      this.lessonHeaderData = detail.data.data
+      const _modList = Parser.buildBlockList(contents.data.data[type])
       this.modList = _modList.filter(item => item.cmd !== 'Lesson')
     } catch (error) {
       console.error(error)
