@@ -107,24 +107,8 @@ export default {
     gallery.listen('imageLoadComplete', (index, item) => {
       const img = item.container.lastChild
       const { naturalHeight, naturalWidth } = img
-      const { clientHeight, clientWidth } = document.body
-      const ratio = naturalWidth / naturalHeight
-      const minLength = Math.min(clientWidth, clientHeight)
-      const maxLength = Math.max(clientHeight, clientWidth)
-      const imgIsVertical = naturalHeight > naturalWidth
-      const browserIsVertical = clientHeight > clientWidth
-      if (naturalHeight < clientHeight && naturalWidth < clientWidth) {
-        item.w = naturalWidth
-        item.h = naturalHeight
-      } else {
-        if (imgIsVertical) {
-          item.w = minLength
-          item.h = minLength / ratio
-        } else {
-          item.w = maxLength
-          item.h = maxLength / ratio
-        }
-      }
+      item.w = naturalWidth
+      item.h = naturalHeight
       gallery.updateSize()
     })
 
