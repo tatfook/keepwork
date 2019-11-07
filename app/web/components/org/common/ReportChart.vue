@@ -142,7 +142,7 @@
     </div>
     <photo-preview v-if="showPhotoPreview" :slides="imageList" :index="imgIndex" @close="handleHidePhotoPreview"></photo-preview>
     <el-dialog custom-class="show-item-dialog" :visible.sync="isShowDiaglog">
-      <video-player ref="player" v-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="true" :src="showItem.url" />
+      <video-player ref="player" v-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="true" :fullscreen="true" :src="showItem.url" />
     </el-dialog>
   </div>
 </template>
