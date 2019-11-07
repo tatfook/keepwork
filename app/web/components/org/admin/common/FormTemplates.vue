@@ -11,6 +11,9 @@
       </div>
     </div>
     <el-dialog top=“0” :visible.sync="isPreviewDialogVisible" custom-class="form-templates-preview" :before-close="handleClosePreview">
+      <div class="form-templates-preview-close" @click="handleClosePreview">
+        <i class="el-icon-circle-close"></i>
+      </div>
       <img :src="selectedTemplate.preview" alt="template.name">
       <div class="form-templates-preview-button">
         <el-button type="primary" @click="showNamePrompt()">创建</el-button>
@@ -188,9 +191,17 @@ export default {
     width: 800px;
     overflow: auto;
     text-align: center;
-    max-height: 100vh;
-    margin: 0 auto;
+    height: 60vh;
+    margin: 20vh auto;
     border-radius: 8px;
+    &-close {
+      position: absolute;
+      cursor: pointer;
+      right: 24px;
+      color: #fff;
+      top: 8px;
+      font-size: 24px;
+    }
     &-button {
       border-top: 1px solid #e8e8e8;
       padding: 20px 0;
@@ -216,7 +227,9 @@ export default {
     }
     .el-dialog__body {
       padding: 0;
-      height: 100vh;
+      height: 100%;
+      padding-bottom: 73px;
+      box-sizing: border-box;
       overflow: auto;
     }
   }
