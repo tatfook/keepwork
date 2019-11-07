@@ -77,8 +77,8 @@ export default {
       if (value.length > 20) {
         return callback(new Error('用户名不能超过20位'))
       }
-      if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{1,20}$/.test(value)) {
-        return callback(new Error('用户名必须是英文字母、数字组合'))
+      if (!/^[A-Za-z\d]+$/.test(value)) {
+        return callback(new Error('用户名只能包含数字、字母'))
       }
       let isSensitive = await this.checkSensitive([value])
       if (isSensitive) {
