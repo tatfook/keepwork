@@ -4,8 +4,7 @@
       <div class="form-templates-item" :class="{'selected': template.name === selectedTemplate.name}" v-for="(template, index) in formTemplates" :key="index">
         <div class="form-templates-item-box selct-show-border">
           <img class="form-templates-item-thumb" :src="template.thumb" :alt="template.name">
-          <el-button v-if="isPreviewShow" class="form-templates-item-create select-show hover-show" type="primary" size="medium" @click="showPreview(template)">预览</el-button>
-          <el-button v-if="!isPreviewShow" class="form-templates-item-create hover-show" type="primary" size="medium" @click="toNewFormPage">创建</el-button>
+          <el-button class="form-templates-item-create select-show hover-show" type="primary" size="medium" @click="showPreview(template)">预览</el-button>
         </div>
         <div class="form-templates-item-name">{{template.name}}</div>
       </div>
@@ -78,14 +77,6 @@ export default {
       selectedTemplate: {}
     }
   },
-  computed: {
-    nowPageName() {
-      return _.get(this.$route, 'name')
-    },
-    isPreviewShow() {
-      return this.nowPageName == 'NewForm'
-    }
-  },
   methods: {
     ...mapActions({
       orgCreateForm: 'org/createForm'
@@ -132,9 +123,6 @@ export default {
         })
       } catch (error) {}
       this.isLoading = false
-    },
-    toNewFormPage() {
-      this.$router.push({ name: 'NewForm' })
     }
   }
 }
@@ -197,10 +185,15 @@ export default {
     &-close {
       position: absolute;
       cursor: pointer;
-      right: 24px;
       color: #fff;
-      top: 8px;
       font-size: 24px;
+      text-align: right;
+      padding: 8px 24px;
+      left: 0;
+      right: 0;
+      background-color: #28a1f5;
+      top: 0;
+      padding: 8px 24px;
     }
     &-button {
       border-top: 1px solid #e8e8e8;
@@ -226,9 +219,8 @@ export default {
       display: none;
     }
     .el-dialog__body {
-      padding: 0;
+      padding: 36px 0 73px;
       height: 100%;
-      padding-bottom: 73px;
       box-sizing: border-box;
       overflow: auto;
     }
