@@ -76,7 +76,7 @@ export default {
         legend: {
           show: true,
           type: 'plain',
-          left: 42,
+          right: 170,
           top: 'middle',
           orient: 'vertical',
           align: 'right',

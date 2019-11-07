@@ -185,13 +185,25 @@ export default {
       return this.formatedAnnulusData(this.classEvaluations)
     },
     commentEvaluations() {
-      return _.filter(this.classEvaluations, { type: 1 })
+      return _.map(this.classEvaluations, evaluation => {
+        let { commentCount, type } = evaluation
+        return {
+          ...evaluation,
+          commentCount: type == 1 ? commentCount : 0
+        }
+      })
     },
     commentData() {
       return this.formatedAnnulusData(this.commentEvaluations)
     },
     summaryEvaluations() {
-      return _.filter(this.classEvaluations, { type: 2 })
+      return _.map(this.classEvaluations, evaluation => {
+        let { commentCount, type } = evaluation
+        return {
+          ...evaluation,
+          commentCount: type == 2 ? commentCount : 0
+        }
+      })
     },
     summaryData() {
       return this.formatedAnnulusData(this.summaryEvaluations)
@@ -226,6 +238,13 @@ export default {
       )
       let result = []
       _.forEach(_.groupBy(originData, 'teacherName'), (userValues, key) => {
+        const lineMaxCharCount = 8
+        let formatedKey = key
+        if (key.length > lineMaxCharCount) {
+          let keyCharArr = key.split('')
+          keyCharArr.splice(lineMaxCharCount - 1, 0, '\n')
+          formatedKey = keyCharArr.join('')
+        }
         let totalCount = _.reduce(
           userValues,
           (oldResult, value) => {
@@ -237,7 +256,7 @@ export default {
           allCount != 0 ? _.round((totalCount / allCount) * 100, 0) : 0
         result.push({
           realname: key,
-          realnameLabel: `${key} ${percentage}%`,
+          realnameLabel: `${formatedKey} ${percentage}%`,
           count: totalCount
         })
       })
