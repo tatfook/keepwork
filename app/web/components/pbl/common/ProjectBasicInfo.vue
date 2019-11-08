@@ -2,7 +2,7 @@
   <div class="project-basic-info">
     <div class="project-basic-info-header">
       <p class="project-basic-info-name">
-        <name-renamer :name="tempWorldTagName" @save="renameProjectName" />
+        <name-renamer :isEditable="isLoginUserEditable" :name="tempWorldTagName" @save="renameProjectName" />
         <img class="project-basic-info-picked" :title="$t('home.selectedProjects')" v-if="originProjectDetail.choicenessNo" src="@/assets/pblImg/picked.png" alt="">
         <span class="project-basic-info-state" v-if="!isProjectStopRecruit">{{$t("explore.recruiting")}}</span>
       </p>

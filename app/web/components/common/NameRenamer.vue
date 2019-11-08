@@ -2,7 +2,7 @@
   <div class="name-renamer">
     <div v-if="!isEditing" class="name-renamer-old">
       <span>{{name}}</span>
-      <i class="name-renamer-icon-button el-icon-edit-outline" @click="toEdit"></i>
+      <i v-if="isEditable" class="name-renamer-icon-button el-icon-edit-outline" @click="toEdit"></i>
     </div>
     <div v-else class="name-renamer-editing">
       <el-input ref="nameRenamerInputRef" clearable v-model.trim="editingName" size="mini"></el-input>
@@ -15,6 +15,10 @@
 export default {
   name: 'NameRenamer',
   props: {
+    isEditable: {
+      type: Boolean,
+      default: false
+    },
     name: {
       type: String,
       required: true
