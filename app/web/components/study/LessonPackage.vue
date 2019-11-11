@@ -83,7 +83,7 @@ export default {
       await this.getPackageBySystemTags({ typeId: tab.name })
     },
     toOrganizationCooperationPage() {
-      this.$router.push({ name: 'OrganizationCooperation'})
+      this.$router.push({ name: 'OrganizationCooperation' })
     }
   },
   components: {
@@ -96,7 +96,7 @@ export default {
 .lesson-package-page {
   &-teachers {
     max-width: 1200px;
-    margin: 0 auto 24px;
+    margin: 36px auto 24px;
     min-height: 300px;
     background: url(../../assets/study/lesson_longer.png) center top no-repeat;
     &-desc {
