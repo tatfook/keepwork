@@ -18,7 +18,7 @@
         <p class="date">
           <span class="week">{{$t(`common.weekday${getWeekDay}`)}}</span><span class="week">{{creationDate}}</span><span class="print-show">{{$t('lesson.totalStudents')}}: {{totalStudent}}</span></p>
         <p class="package-text">
-          <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.extra.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
+          <span class="brief-title">{{$t('modList.lesson')}} {{currenClassInfo.lessonNo || 0}}:</span> {{currenClassInfo.extra.lessonName}}</p>
         <p class="package-text">
           <span class="brief-title">{{$t('lesson.intro')}}:</span> {{currenClassInfo.extra.lessonGoals}}</p>
         <p>
@@ -171,7 +171,7 @@ export default {
       .getClassroomById(this.$route.params.classroomId)
       .then(res => {
         this.currenClassInfo = res
-        this.lessonNo = res.extra.lessonNo || 0
+        this.lessonNo = res.lessonNo || 0
         this.lessonName = res.extra.lessonName
       })
       .catch(err => console.log(err))
@@ -429,7 +429,7 @@ export default {
           let to = value
           let subject =
             this.$t('modList.lesson') +
-            (this.currenClassInfo.extra.lessonNo || 0) +
+            (this.currenClassInfo.lessonNo || 0) +
             ':' +
             this.currenClassInfo.extra.lessonName
           let html =

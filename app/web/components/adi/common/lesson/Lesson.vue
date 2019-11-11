@@ -60,7 +60,7 @@ export default {
       return this.lessonData.goals
     },
     lessonDuration() {
-      let durationKey = _.get(this.lessonData, 'extra.duration', '45min')
+      let durationKey = this.lessonData.duration || '45min'
       return this.$t(`lesson.${durationKey}`)
     },
     lessonExtra() {

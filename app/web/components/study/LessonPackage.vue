@@ -59,7 +59,7 @@ export default {
       let packageData = _.get(data, 'tag.packages', [])
       return _.map(packageData, i => {
         return {
-          cover: i.extra.coverUrl,
+          cover: i.coverUrl,
           title: i.packageName,
           total_lessons: i.lessonCount,
           age_min: i.minAge,
