@@ -1,5 +1,6 @@
 <template>
   <div class="my-organization">
+    <div v-if="isHasOrg" class="my-organization-title">我的机构</div>
     <div v-if="isHasOrg" class="my-organization-cabinet">
       <organization-cell :organization="i" v-for="i in userOrg" :key="i.id"></organization-cell>
     </div>
@@ -44,6 +45,12 @@ export default {
 
 <style lang="scss" scoped>
 .my-organization {
+  &-title {
+    font-size: 16px;
+    max-width: 1200px;
+    font-weight: bold;
+    margin: 30px auto 0;
+  }
   &-cabinet {
     margin: 0 auto 24px;
     max-width: 1200px;

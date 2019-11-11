@@ -19,16 +19,9 @@
             <p class="study-home-region-module-box-intro-text-word">{{i.text_2}}</p>
           </div>
           <div class="study-home-region-module-box-intro-more">
-            <span class="study-home-region-module-box-intro-more-btn" @click="learnMore(i.moreLink)">了解更多</span>
+            <span class="study-home-region-module-box-intro-more-btn" @click="learnMore(i.moreLink)">{{i.moreLinkText||'了解更多'}}</span>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="study-home-region-teachers">
-      <div class="study-home-region-teachers-desc">
-        <h4 class="study-home-region-teachers-desc-title">师资团队</h4>
-        <p class="study-home-region-teachers-desc-text">我们的师资团队由拥有丰富教学经验和多年开发经验的职业程序员组成，致力于拓展编程教育愿景，希望能够帮助中国培养下一代优秀的程序员，也帮助更广大家庭的孩子们学会自主学习的方法。</p>
-        <span class="study-home-region-teachers-desc-more" @click="learnMore(teachingGroupLink)">了解更多</span>
       </div>
     </div>
   </div>
@@ -55,18 +48,19 @@ export default {
         },
         {
           imgUrl: require('@/assets/study/lesson.png'),
-          title: '在线课程',
-          text_1: '通过一流的在线课程学习编程',
-          text_2:
-            'Keepwork官方认证课程可在线进行自主学习并提供系统的学习路径。',
-          moreLink: `${window.location.origin}/s/lesson`
+          title: '在线视频',
+          text_1: '3D动画编程在线教学视频',
+          text_2: '沉浸式学习3D动画与编程语言知识点',
+          moreLink: 'https://keepwork.com/official/docs/videoguide',
+          moreLinkText: '点击进入'
         },
         {
           imgUrl: require('@/assets/study/teaching.png'),
-          title: '学校和培训机构',
-          text_1: '赋予学生创造力',
-          text_2: '为学校、培训机构提供优惠的教学资源。',
-          moreLink: 'https://biz.keepwork.com/'
+          title: '进修培训',
+          text_1: '提升逻辑思维和创造力',
+          text_2: '挑选合适的机构系统化地学习3D动画与编程',
+          moreLink: `${window.location.origin}/s/lesson/organizationCooperation`,
+          moreLinkText: '点击进入'
         }
       ],
       teachingGroupLink: `${window.location.origin}/s/teachingGroup`
@@ -78,7 +72,7 @@ export default {
         this.$router.push('/textbook')
         return
       }
-      window.open(link)
+      window.location.href = link
     }
   }
 }
@@ -87,7 +81,6 @@ export default {
 <style lang="scss" scoped>
 .study-home-region {
   &-banner {
-    margin-top: -116px;
     background: url(../../assets/study/banner.png) center top no-repeat;
     &-center {
       max-width: 1200px;
@@ -95,15 +88,13 @@ export default {
       min-height: 461px;
       border: 1px solid transparent;
       &-img {
-        width: 396px;
-        height: 120px;
-        margin: 160px auto 0;
+        text-align: center;
+        margin: 100px auto 0;
         img {
-          width: 100%;
+          max-width: 100%;
         }
       }
       &-desc {
-        max-width: 670px;
         text-align: center;
         margin: 0 auto;
         &-text {
@@ -119,10 +110,12 @@ export default {
         justify-content: center;
         &-text {
           display: inline-block;
-          padding: 9px 18px;
-          color: rgb(34, 106, 236);
-          background: #fff;
+          color: #fff;
+          background: url('http://127.0.0.1:7001/public/img/bannerTextBg.png')
+            center/contain no-repeat;
           border-radius: 20px;
+          font-size: 18px;
+          padding: 20px 70px;
           font-weight: bold;
         }
       }
@@ -182,33 +175,5 @@ export default {
       }
     }
   }
-  &-teachers {
-    max-width: 1200px;
-    margin: 0 auto 24px;
-    min-height: 300px;
-    background: url(../../assets/study/teacher.png) center top no-repeat;
-    &-desc {
-      max-width: 630px;
-      color: #fff;
-      padding: 10px 0 0 30px;
-      &-title {
-        font-size: 24px;
-      }
-      &-text {
-        font-size: 14px;
-        line-height: 36px;
-      }
-      &-more {
-        display: inline-block;
-        padding: 9px 22px;
-        border: 1px solid #fff;
-        border-radius: 18px;
-        font-size: 14px;
-        margin-top: 48px;
-        cursor: pointer;
-      }
-    }
-  }
 }
 </style>
-
