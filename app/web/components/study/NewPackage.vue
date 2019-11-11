@@ -70,14 +70,14 @@ export default {
       if (!this.isMounted || this.isPackageNameEmpty) {
         return false
       }
-      let { subjectId, minAge, maxAge, intro, rmb, extra } = this.newPackageData
+      let { subjectId, minAge, maxAge, intro, rmb, coverUrl } = this.newPackageData
       if (
         typeof subjectId !== 'number' ||
         typeof minAge !== 'number' ||
         typeof maxAge !== 'number' ||
         typeof rmb !== 'number' ||
         !intro ||
-        !extra.coverUrl
+        !coverUrl
       ) {
         return false
       }

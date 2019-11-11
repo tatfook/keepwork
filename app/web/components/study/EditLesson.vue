@@ -73,7 +73,7 @@ export default {
       return pendingReviewPackageIndex === -1
     },
     editingCoverUrl() {
-      return _.get(this.editingLessonDetail, 'extra.coverUrl')
+      return _.get(this.editingLessonDetail, 'coverUrl')
     },
     updatingSelectPackageIds() {
       return this.$refs.basicInfoComponent.belongToPackageIds
@@ -130,13 +130,11 @@ export default {
           'duration'
         ]),
         {
-          extra: {
-            duration: this.updatingMoreInfo.duration,
-            coverUrl: this.updatingCoverUrl,
-            videoUrl: this.updatingMoreInfo.videoUrl,
-            teacherVideoUrl: this.updatingMoreInfo.teacherVideoUrl,
-            studentVideoUrl: this.updatingMoreInfo.studentVideoUrl
-          }
+          duration: this.updatingMoreInfo.duration,
+          coverUrl: this.updatingCoverUrl,
+          videoUrl: this.updatingMoreInfo.videoUrl,
+          teacherVideoUrl: this.updatingMoreInfo.teacherVideoUrl,
+          studentVideoUrl: this.updatingMoreInfo.studentVideoUrl
         }
       )
     }

@@ -2,8 +2,8 @@
   <div class="edit-package" v-loading='isLoading'>
     <package-editor-header :isEditing='true' :editingPackageDetail='editingPackageDetail' :activeTab='activeTab' :isPackageNameEmpty='isPackageNameEmpty' :isEditable='isEditable' :isSubmitable='isSubmitable' :isReleasable='isReleasable' :isLearner='isLearner' :isPackageInfoComplete='isPackageInfoComplete' @changeActiveType='setActiveTab' @submitPackage='submitPackage' @savePackage='updatePackage' @releasePackage='releasePackage'></package-editor-header>
     <div class="edit-package-container">
-      <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'"  :isSubmitPressed="isSubmitPressed" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
-      <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'"  :isSubmitPressed="isSubmitPressed" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
+      <package-basic-info ref="basicInfoComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isSubmitPressed="isSubmitPressed" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail'></package-basic-info>
+      <cover-media-setter ref="coverUrlComponent" v-if="!isGettingData" v-show="activeTab === 'basic'" :isSubmitPressed="isSubmitPressed" :isEditable='isEditable' :isEditing='true' :editingPackageDetail='editingPackageDetail' class="edit-package-media-setter"></cover-media-setter>
       <catalogue-manager ref="lessonListComponent" v-if="!isGettingData" :isEditable='isEditable' v-show="activeTab === 'catalogue'" :editingPackageDetail='editingPackageDetail' :isEditing='true'></catalogue-manager>
     </div>
   </div>
@@ -84,9 +84,7 @@ export default {
     updatingPackageData() {
       return _.assign(
         this.updatingPackageBasicInfo,
-        {
-          extra: { coverUrl: this.updatingPackageCoverUrl }
-        },
+        { coverUrl: this.updatingPackageCoverUrl },
         { lessons: this.updatingPackageLessons }
       )
     },
@@ -102,14 +100,21 @@ export default {
       if (!this.isMounted || this.isPackageNameEmpty) {
         return false
       }
-      let { subjectId, minAge, maxAge, intro, rmb, extra } = this.updatingPackageData
+      let {
+        subjectId,
+        minAge,
+        maxAge,
+        intro,
+        rmb,
+        coverUrl
+      } = this.updatingPackageData
       if (
         typeof subjectId !== 'number' ||
         typeof minAge !== 'number' ||
         typeof maxAge !== 'number' ||
         typeof rmb !== 'number' ||
         !intro ||
-        !extra.coverUrl
+        !coverUrl
       ) {
         return false
       }

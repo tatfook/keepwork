@@ -48,7 +48,7 @@ export default {
       return _.get(this.packageDetail, 'lessons', []).length
     },
     packageCoverUrl() {
-      return _.get(this.packageDetail, 'extra.coverUrl', '')
+      return _.get(this.packageDetail, 'coverUrl', '')
     },
     packageId() {
       return _.get(this.packageDetail, 'id')

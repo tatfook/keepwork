@@ -46,8 +46,7 @@ export default {
     this.skillList = _.cloneDeep(this.lessonSkills)
     if (this.isEditing) {
       let editingLessonDetailProp = this.editingLessonDetailProp
-      let { goals, extra, skills } = editingLessonDetailProp
-      let { teacherVideoUrl, studentVideoUrl, duration } = extra
+      let { goals, teacherVideoUrl, studentVideoUrl, duration, skills } = editingLessonDetailProp
       let formatedSkills = this.formatSkill(skills)
       this.editingTeacherVideoUrl = teacherVideoUrl
       this.editingStudentVideoUrl = studentVideoUrl

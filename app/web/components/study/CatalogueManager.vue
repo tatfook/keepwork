@@ -13,7 +13,7 @@
           <div class="catalogue-manager-item-index">{{index + 1}}</div>
           <div class="catalogue-manager-item-cover">
             <div class="catalogue-manager-item-cover-wrap">
-              <img class="catalogue-manager-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
+              <img class="catalogue-manager-item-cover-inner" :src="lesson.coverUrl" alt="">
             </div>
           </div>
           <div class="catalogue-manager-item-name">{{lesson.lessonName}}</div>

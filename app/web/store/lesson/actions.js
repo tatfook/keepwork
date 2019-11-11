@@ -85,7 +85,7 @@ const actions = {
   },
   async getPackageBySystemTags({ commit }, { typeId }) {
     const res = await keepwork.graphql.getQueryResult({
-      query: 'query($id: Int){tag(id: $id) {id, tagname, packages{id, packageName, intro,  maxAge, minAge, extra, lessonCount} }}',
+      query: 'query($id: Int){tag(id: $id) {id, tagname, packages{id, packageName, intro,  maxAge, minAge, coverUrl, lessonCount} }}',
       variables: {
         id: Number(typeId)
       }

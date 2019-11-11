@@ -45,10 +45,10 @@ export default {
       return _.get(this.lesson, 'coursewareUrl')
     },
     teacherVideoUrl() {
-      return _.get(this.lesson, 'extra.teacherVideoUrl')
+      return _.get(this.lesson, 'teacherVideoUrl')
     },
     studentVideoUrl() {
-      return _.get(this.lesson, 'extra.studentVideoUrl')
+      return _.get(this.lesson, 'studentVideoUrl')
     },
     lessonID() {
       return _.get(this.lesson, 'id')

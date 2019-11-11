@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     coverUrl() {
-      return _.get(this.data, 'extra.coverUrl', '')
+      return _.get(this.data, 'coverUrl', '')
     },
     packageName() {
       return _.get(this.data, 'packageName', '')
