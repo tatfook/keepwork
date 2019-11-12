@@ -96,11 +96,12 @@ export default {
       let { type, filename } = file
       let appendStr = ''
       if (type == 'images') {
-        appendStr = `<br/><img src="${url}" alt="${filename}" style="max-width: 100%;" />`
+        appendStr = `<span style="display:none">hidden img text</span><br/><img src="${url}" alt="${filename}" style="max-width: 100%;" />`
       } else {
         appendStr = `<br/><a href="${url}" target="_blank">${file.filename}</a>`
       }
       this.formEditor.txt.append(appendStr)
+      this.handleChange()
     }
   },
   components: {
