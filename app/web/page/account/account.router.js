@@ -15,8 +15,6 @@ const OrderConfirm = () => import('@/components/account/OrderConfirm')
 const OrderPay = () => import('@/components/account/OrderPay')
 const OrderSuccess = () => import('@/components/account/OrderSuccess')
 
-const ExchangeMall = () => import('@/components/account/ExchangeMall')
-
 export default new Router({
   mode: 'history',
   base: '/a',
@@ -78,11 +76,6 @@ export default new Router({
       path: '/orderSuccess',
       name: 'OrderSuccess',
       component: OrderSuccess
-    },
-    {
-      path: '/exchangeMall',
-      name: 'ExchangeMall',
-      component: ExchangeMall
     }
   ]
 })
