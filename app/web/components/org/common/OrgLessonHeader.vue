@@ -1,8 +1,7 @@
 <template>
   <el-row class="lesson-header-container">
     <el-row>
-      <el-col :sm="12" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
-        <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
+      <el-col :sm="12" :xm="24" class="lesson-cover" :style="loadCover()">
       </el-col>
       <el-col :sm="12" :xm="24" class="lesson-desc">
         <div class="class-id-sign-wrap">
@@ -83,21 +82,12 @@ export default {
         'border-radius': '8px'
       })
     },
-    openAnimations() {
-      this.isHasVideo && (this.dialogVisible = true)
-    },
     classIdToFullScreen() {
       this.classIdFullScreen = true
     },
     handleExplanHaqiCode() {
       let helpUrl = 'https://keepwork.com/lesson9527/lessons/help_lessonID '
       window.open(helpUrl)
-    },
-    handleNoStatedTips() {
-      this.$message({
-        type: 'warning',
-        message: '本学期还未开始'
-      })
     }
   },
   computed: {
@@ -180,7 +170,6 @@ export default {
   .lesson-cover {
     height: 340px;
     max-width: 600px;
-    cursor: pointer;
     background: #eee;
     border-radius: 8px;
     display: flex;
