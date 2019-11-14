@@ -1,10 +1,5 @@
 <template>
   <el-row class="lesson-header-container">
-    <el-dialog class="lesson-header-container-video" :visible.sync="dialogVisible" width="50%">
-      <video v-if="dialogVisible" controls="" width="100%" autoplay="" name="media">
-        <source :src="videoUrl" type="video/mp4">
-      </video>
-    </el-dialog>
     <el-row>
       <el-col :sm="12" :xm="24" class="lesson-cover" :style="loadCover()" @click.native="openAnimations">
         <img v-if="isHasVideo" src="@/assets/lessonImg/play2.png" alt="">
@@ -129,20 +124,14 @@ export default {
       return _.get(this.lesson, 'goals', '')
     },
     lessonDuration() {
-      let durationKey = _.get(this.lesson, 'extra.duration', '45min')
+      let durationKey = this.lesson.duration || '45min'
       return this.$t(`lesson.${durationKey}`)
     },
     title() {
       return _.get(this.lesson, 'Title', '')
     },
     coverUrl() {
-      return _.get(this.lesson, 'extra.coverUrl', '')
-    },
-    isHasVideo() {
-      return Boolean(this.videoUrl)
-    },
-    videoUrl() {
-      return _.get(this.lesson, 'extra.videoUrl', '')
+      return _.get(this.lesson, 'coverUrl', '')
     },
     haqiCode() {
       const { packageId = 0, lessonId = 0 } = this.$route.params
@@ -193,14 +182,10 @@ export default {
     max-width: 600px;
     cursor: pointer;
     background: #eee;
-    opacity: 0.8;
     border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    &:hover {
-      opacity: 1 !important;
-    }
   }
 
   .lesson-desc {

@@ -3,7 +3,6 @@
     <div class="study-page-header">
       <common-header class="container"></common-header>
     </div>
-    <study-header></study-header>
     <router-view class="study-page-main-content"></router-view>
     <div class="study-page-footer">
       <perfect-common-footer></perfect-common-footer>
@@ -37,7 +36,6 @@ import CommonHeader from '@/components/common/CommonHeader'
 import PerfectCommonFooter from '@/components/common/PerfectCommonFooter'
 import LoginDialog from '@/components/common/LoginDialog'
 import '@/components/common/thirdAuth'
-import StudyHeader from '@/components/study/StudyHeader'
 import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import { lesson } from '@/api'
@@ -259,7 +257,6 @@ export default {
   components: {
     RealName,
     CommonHeader,
-    StudyHeader,
     PerfectCommonFooter,
     LoginDialog
   },

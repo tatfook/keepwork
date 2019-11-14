@@ -16,7 +16,7 @@
           </div>
           <div class="package-catalogue-item-cover">
             <div class="package-catalogue-item-cover-wrap">
-              <img class="package-catalogue-item-cover-inner" :src="lesson.extra.coverUrl" alt="">
+              <img class="package-catalogue-item-cover-inner" :src="lesson.coverUrl" alt="">
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     getLessonDuration(lesson) {
-      let durationKey = _.get(lesson, 'extra.duration', '45min')
+      let durationKey = lesson.duration || '45min'
       return this.$t(`lesson.${durationKey}`)
     }
   }

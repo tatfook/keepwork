@@ -62,8 +62,9 @@ export default {
             margin: 10,
             color: '#555',
             fontSize: 14,
-            interval: 0,
-            rotate: 40
+            formatter: function(val) {
+              return val.split('').join('\n')
+            }
           }
         },
         series: {

@@ -24,6 +24,10 @@ export default {
       type: Boolean,
       default: false
     },
+    fullscreen: {
+      type: Boolean,
+      default: false
+    },
     showRates: {
       type: Boolean,
       default: true
@@ -55,6 +59,11 @@ export default {
         return rest
       }
       return options
+    }
+  },
+  mounted() {
+    if (this.fullscreen) {
+      this.player.requestFullscreen()
     }
   }
 }

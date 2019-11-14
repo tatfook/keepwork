@@ -1,7 +1,8 @@
 <template>
   <div class="project-basic-info">
     <div class="project-basic-info-header">
-      <p class="project-basic-info-name">{{originProjectDetail.name}}
+      <p class="project-basic-info-name">
+        <name-renamer :isEditable="isLoginUserEditable" :name="tempWorldTagName" @save="renameProjectName" />
         <img class="project-basic-info-picked" :title="$t('home.selectedProjects')" v-if="originProjectDetail.choicenessNo" src="@/assets/pblImg/picked.png" alt="">
         <span class="project-basic-info-state" v-if="!isProjectStopRecruit">{{$t("explore.recruiting")}}</span>
       </p>
@@ -79,6 +80,7 @@ import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import paracraftUtil from '@/lib/utils/paracraft'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParacraftInfo from '@/components/common/ParacraftInfo'
+import NameRenamer from '@/components/common/NameRenamer'
 import WebsiteBinder from './WebsiteBinder'
 import ProjectGrade from './ProjectGrade'
 import GameEntry from './GameEntry'
@@ -124,6 +126,11 @@ export default {
       'extra.videoUrl',
       undefined
     )
+    this.tempWorldTagName = _.get(
+      this.copiedProjectDetail,
+      'extra.worldTagName',
+      this.originProjectDetail.name
+    )
     this.getWebsiteDetailBySiteId({
       siteId: this.projectSiteId
     })
@@ -151,6 +158,7 @@ export default {
       tempDesc: '',
       tempCoverUrl: '',
       tempVideoUrl: '',
+      tempWorldTagName: '',
       isLoading: false,
       isCoverZoneLoading: false,
       isMediaSkyDriveDialogShow: false,
@@ -230,7 +238,8 @@ export default {
       let originExtra = _.cloneDeep(this.originExtra)
       return _.merge(originExtra, {
         imageUrl: this.tempCoverUrl,
-        videoUrl: this.tempVideoUrl
+        videoUrl: this.tempVideoUrl,
+        worldTagName: this.tempWorldTagName
       })
     },
     updatingProjectData() {
@@ -299,6 +308,10 @@ export default {
       userGetUserPrivilege: 'user/getUserPrivilege',
       pblGetProjectDetail: 'pbl/getProjectDetail'
     }),
+    renameProjectName(newName) {
+      this.tempWorldTagName = newName
+      this.updateDescToBackend()
+    },
     async toggleIsDescEditing() {
       if (!this.isDescriptionEditing) {
         this.isDescriptionEditing = true
@@ -548,6 +561,7 @@ export default {
     SkyDriveManagerDialog,
     ParacraftInfo,
     ProjectGrade,
+    NameRenamer,
     GameEntry,
     WebsiteBinder
   }

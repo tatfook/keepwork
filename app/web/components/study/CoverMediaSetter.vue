@@ -67,7 +67,7 @@ export default {
     if (this.isEditing) {
       let editingPackageDetail = this.editingPackageDetail
       let coverUrl =
-        this.editingCoverUrl || _.get(editingPackageDetail, 'extra.coverUrl')
+        this.editingCoverUrl || _.get(editingPackageDetail, 'coverUrl')
       if (coverUrl && BigfileUrlReg.test(coverUrl)) {
         this.imageSourceType = 'bigfile'
         this.bigfileTypeUrl = coverUrl

@@ -1,5 +1,6 @@
 <template>
   <div class="activated-teacher-role">
+    <div class="activated-teacher-role-title">我创建的课程</div>
     <div class="activated-teacher-role-content">
       <div class="activated-teacher-role-content-left">
         <div class="activated-teacher-role-content-left-top">
@@ -156,6 +157,12 @@ export default {
 <style lang="scss">
 .activated-teacher-role {
   margin: 10px 0;
+  &-title {
+    margin: 30px auto 24px;
+    max-width: 1200px;
+    font-size: 16px;
+    font-weight: bold;
+  }
   &-content {
     max-width: 1200px;
     margin: 0 auto;

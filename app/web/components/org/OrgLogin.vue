@@ -21,7 +21,7 @@
       </el-form>
       <el-dialog class="org-login-dialog" :visible.sync="isRegisterForm" width="352px">
         <i class="el-icon-close org-login-dialog-close" @click="handleClose"></i>
-        <register-dialog @close="handleClose"></register-dialog>
+        <register-dialog :isDialogShow="isRegisterForm" @close="handleClose"></register-dialog>
       </el-dialog>
       <el-dialog class="org-login-dialog" :visible.sync="isShowPasswordResetForm" width="352px">
         <i class="el-icon-close org-login-dialog-close" @click="isShowPasswordResetForm = false"></i>
