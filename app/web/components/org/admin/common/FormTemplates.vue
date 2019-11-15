@@ -4,18 +4,20 @@
       <div class="form-templates-item" :class="{'selected': template.name === selectedTemplate.name}" v-for="(template, index) in formTemplates" :key="index">
         <div class="form-templates-item-box selct-show-border">
           <img class="form-templates-item-thumb" :src="template.thumb" :alt="template.name">
-          <el-button v-if="isPreviewShow" class="form-templates-item-create select-show hover-show" type="primary" size="medium" @click="showPreview(template)">预览</el-button>
-          <el-button v-if="!isPreviewShow" class="form-templates-item-create hover-show" type="primary" size="medium" @click="toNewFormPage">创建</el-button>
+          <el-button class="form-templates-item-create select-show hover-show" type="primary" size="medium" @click="showPreview(template)">预览</el-button>
         </div>
         <div class="form-templates-item-name">{{template.name}}</div>
       </div>
     </div>
-    <div class="form-templates-preview" v-if="isPreviewShow">
+    <el-dialog top=“0” :visible.sync="isPreviewDialogVisible" custom-class="form-templates-preview" :before-close="handleClosePreview">
+      <div class="form-templates-preview-close" @click="handleClosePreview">
+        <i class="el-icon-circle-close"></i>
+      </div>
       <img :src="selectedTemplate.preview" alt="template.name">
       <div class="form-templates-preview-button">
         <el-button type="primary" @click="showNamePrompt()">创建</el-button>
       </div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -31,11 +33,9 @@ const {
 
 export default {
   name: 'FormTemplates',
-  mounted() {
-    this.isPreviewShow && (this.selectedTemplate = this.formTemplates[0])
-  },
   data() {
     return {
+      isPreviewDialogVisible: false,
       isLoading: false,
       formTemplates: [
         {
@@ -77,20 +77,17 @@ export default {
       selectedTemplate: {}
     }
   },
-  computed: {
-    nowPageName() {
-      return _.get(this.$route, 'name')
-    },
-    isPreviewShow() {
-      return this.nowPageName == 'NewForm'
-    }
-  },
   methods: {
     ...mapActions({
       orgCreateForm: 'org/createForm'
     }),
+    handleClosePreview() {
+      this.selectedTemplate = {}
+      this.isPreviewDialogVisible = false
+    },
     showPreview(template) {
       this.selectedTemplate = template
+      this.isPreviewDialogVisible = true
     },
     showNamePrompt() {
       let {
@@ -103,8 +100,7 @@ export default {
         confirmButtonText: '保存',
         cancelButtonText: '取消'
       }).then(async ({ value }) => {
-        this.isLoading = true
-        await this.orgCreateForm({
+        this.createForm({
           type,
           title,
           text,
@@ -112,26 +108,28 @@ export default {
           quizzes,
           name: value
         })
-        this.$message({ type: 'success', message: '创建成功' })
-        this.isLoading = false
-        this.$router.push({
-          name: 'OrgForms'
-        })
       })
     },
-    toNewFormPage() {
-      this.$router.push({ name: 'NewForm' })
+    async createForm(newFormData) {
+      this.isLoading = true
+      try {
+        let { id } = await this.orgCreateForm(newFormData)
+        this.$message({ type: 'success', message: '创建成功' })
+        this.$router.push({
+          name: 'EditForm',
+          params: {
+            id
+          }
+        })
+      } catch (error) {}
+      this.isLoading = false
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .form-templates {
-  display: flex;
   font-size: 14px;
-  &-list {
-    flex: 1;
-  }
   &-item {
     display: inline-block;
     padding: 0 8px;
@@ -177,15 +175,34 @@ export default {
       }
     }
   }
-  &-preview {
-    width: 326px;
+  /deep/ &-preview {
+    width: 800px;
+    overflow: auto;
     text-align: center;
-    border: 1px solid #e8e8e8;
+    height: 60vh;
+    margin: 20vh auto;
     border-radius: 8px;
-    box-shadow: 0px 2px 8px 2px rgba(184, 184, 184, 0.5);
+    &-close {
+      position: absolute;
+      cursor: pointer;
+      color: #fff;
+      font-size: 24px;
+      text-align: right;
+      padding: 8px 24px;
+      left: 0;
+      right: 0;
+      background-color: #28a1f5;
+      top: 0;
+      padding: 8px 24px;
+    }
     &-button {
       border-top: 1px solid #e8e8e8;
       padding: 20px 0;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
     }
     .el-button {
       width: 100px;
@@ -197,6 +214,15 @@ export default {
     img {
       width: 100%;
       height: auto;
+    }
+    .el-dialog__header {
+      display: none;
+    }
+    .el-dialog__body {
+      padding: 36px 0 73px;
+      height: 100%;
+      box-sizing: border-box;
+      overflow: auto;
     }
   }
 }

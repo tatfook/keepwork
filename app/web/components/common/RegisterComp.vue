@@ -4,7 +4,7 @@
     <el-form v-show="isRegisterDialogShow" class="register-dialog-form" :model="ruleForm" :rules="rules" ref="ruleForm">
       <h3 class="register-title">{{$t('common.register')}}</h3>
       <el-form-item prop="username" :error="usernameError">
-        <el-popover placement="top" width="264" trigger="manual" content="" v-model="visible">
+        <el-popover placement="top" width="264" trigger="manual" content="" :value="isPopoverVisible">
           <el-input slot="reference" @focus="handleUsernameInputFocus" v-model.trim="ruleForm.username" :placeholder="$t('common.accountName')"></el-input>
           <div class="register-dialog-form-tip">
             {{$t('common.accountNoChange')}}<br>
@@ -22,8 +22,8 @@
           <el-col class="send-auth-code">
             <el-input v-model.trim="ruleForm.svgCaptcha" placeholder="请输入验证码"></el-input>
           </el-col>
-          <el-col class="send-auth-send-code">
-            <div v-loading="isSvgCaptchaLoading" v-html="captchaSvg.captcha" @click="changeSvgCaptcha"></div>
+          <el-col class="send-auth-send-code" @click.native="changeSvgCaptcha">
+            <img class="send-auth-captcha" v-loading="isSvgCaptchaLoading" :src="captchaSvg.captcha" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -61,6 +61,11 @@ import AccountEncrypt from '@/components/common/AccountEncrypt'
 
 export default {
   name: 'RegisterDialog',
+  props: {
+    isDialogShow: {
+      default: undefined
+    }
+  },
   mounted() {
     this.changeSvgCaptcha()
   },
@@ -182,6 +187,11 @@ export default {
   computed: {
     isCellphoneVerify() {
       return /^1\d{10}$/.test(this.ruleForm.phoneNumber)
+    },
+    isPopoverVisible() {
+      return _.isBoolean(this.isDialogShow)
+        ? this.visible && this.isDialogShow
+        : this.visible
     }
   },
   methods: {
@@ -255,7 +265,8 @@ export default {
                 code8: this.$t('common.containsSensitiveWords')
               }
               let errorMsg =
-                registerCodeMsgObj[`code${code}`] || this.$t('common.registerFailed')
+                registerCodeMsgObj[`code${code}`] ||
+                this.$t('common.registerFailed')
               this.showMessage('error', errorMsg)
               this.registerLoading = false
             })
@@ -359,7 +370,13 @@ export default {
       }
       &-send-code {
         width: 116px;
+        text-align: center;
+        background-color: #e9f4ff;
         margin-left: 8px;
+        border-radius: 4px;
+        height: 40px;
+        padding-top: 5px;
+        cursor: pointer;
         .send-code-button {
           width: 100%;
           padding: 12px 0;
@@ -438,14 +455,6 @@ export default {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px;
-    }
-    svg {
-      height: 40px;
-      background-color: #e9f4ff;
-      width: 100%;
-      border-radius: 4px;
-      cursor: pointer;
-      display: block;
     }
   }
 }

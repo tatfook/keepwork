@@ -16,7 +16,7 @@
         </div>
         <div class="org-teacher-statistics-packages-taught-desc">
           <h4 class="org-teacher-statistics-packages-taught-desc-title" @click="enterPackage(course)">{{$t('modList.package')}}：{{course.extra.packageName}}</h4>
-          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('modList.lesson')}}{{course.extra.lessonNo}}：</span>{{course.extra.lessonName}}</p>
+          <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('modList.lesson')}}{{course.lessonNo}}：</span>{{course.extra.lessonName}}</p>
           <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('lesson.intro')}}：</span>{{course.extra.lessonGoals}}</p>
           <p class="org-teacher-statistics-packages-taught-desc-text"><span class="org-teacher-statistics-packages-taught-desc-text-name">{{$t('lesson.duration')}}：</span>45{{$t('lesson.mins')}}</p>
           <p class="org-teacher-statistics-packages-taught-desc-time">{{course.createdAt | formatTime}}</p>

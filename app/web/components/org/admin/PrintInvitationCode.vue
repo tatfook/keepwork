@@ -14,7 +14,7 @@
     <div class="print-invitation-code-table">
       <el-table ref="codeTable" border :data="printCodeListData" tooltip-effect="dark" style="width: 90%">
         <el-table-column :label="$t('org.InvitationCode')" width="135"><template slot-scope="scope">{{scope.row.key | idPretty}}</template></el-table-column>
-        <el-table-column :label="$t('org.name')" width="135"><template slot-scope="scope">{{scope.row.extra.name}}</template></el-table-column>
+        <el-table-column :label="$t('org.name')" width="135"><template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
         <el-table-column :label="$t('org.stateLabel')" width="135"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
         <el-table-column :label="$t('org.createdTime')" width="135"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
         <el-table-column :label="$t('org.classLabel')" width="" prop="className"></el-table-column>
@@ -44,7 +44,7 @@
                 </div>
               </div>
               <div class="header-right">
-                {{i.extra.name || ''}}
+                {{i.name || ''}}
               </div>
             </div>
             <div class="print-invitation-code-print-content-box-top">

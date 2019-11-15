@@ -39,7 +39,7 @@
         <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
         <el-table-column :label="$t('org.activateTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
         <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
-        <el-table-column :label="$t('org.nameLabel')" width="125"><template slot-scope="scope">{{scope.row.realname || scope.row.extra.name}}</template></el-table-column>
+        <el-table-column :label="$t('org.nameLabel')" width="125"><template slot-scope="scope">{{scope.row.realname || scope.row.name}}</template></el-table-column>
         <el-table-column :label="$t('org.classLabel')" width="" prop="lessonOrganizationClasses.name"></el-table-column>
       </el-table>
     </div>
@@ -67,7 +67,7 @@
                 </div>
               </div>
               <div class="header-right">
-                {{i.realname || i.extra.name || ''}}
+                {{i.realname || i.name || ''}}
               </div>
             </div>
             <div class="print-invitation-code-print-content-box-top">
@@ -255,7 +255,7 @@ export default {
         const dataList = []
         _.map(this.multipleSelection, (data, index) => {
           let tempArr = []
-          let realname = data.realname || data.extra.name
+          let realname = data.realname || data.name
           tempArr.push(index + 1)
           tempArr.push(data.key)
           tempArr.push(this.stateFilter(data.state))

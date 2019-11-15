@@ -119,6 +119,7 @@ export default {
   },
   data() {
     return {
+      timer: null,
       activeName: '1',
       sendStatus: 0,
       studentName: '',
@@ -145,6 +146,12 @@ export default {
     async activeName(activeName) {
       this.studentName = ''
       await this.getReportTable()
+    },
+    studentName(studentName) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.handleSearchByStudentName()
+      }, 500)
     }
   },
   computed: {

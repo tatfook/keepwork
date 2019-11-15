@@ -31,7 +31,10 @@
               <a href="#" @click.stop.prevent="goCreativityPage"><i class="iconfont icon-folder-open"></i>{{$t("common.myProject")}}</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a :href='myOrgUrl'><i class="iconfont icon-read"></i>{{$t("common.myOrganization")}}</a>
+              <a :href='myOrgUrl'><i class="iconfont icon-jigou"></i>{{$t("common.myOrganization")}}</a>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a :href='myLessonUrl'><i class="iconfont icon-read"></i>{{$t("common.myLesson")}}</a>
             </el-dropdown-item>
             <el-dropdown-item divided>
               <a href="/u/p/userData"><i class="iconfont icon-settings1"></i>{{$t("common.settings")}}</a>
@@ -178,6 +181,9 @@ export default {
     },
     myOrgUrl() {
       return '/s/myOrganization'
+    },
+    myLessonUrl() {
+      return '/s/createPackage/lessonManager'
     },
     currentRouteName() {
       return this.$route.name

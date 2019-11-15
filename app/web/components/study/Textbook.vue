@@ -232,7 +232,8 @@ export default {
           this.purchaseMethods = [
             {
               label: '去京东购买',
-              purchaseUrl: 'https://search.jd.com/Search?keyword=%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%92%8C%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&enc=utf-8&suggest=1.his.0.0&wq=&pvid=e0e76e510d5542668feed3848715deaa'
+              purchaseUrl:
+                'https://search.jd.com/Search?keyword=%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%92%8C%E7%9B%B8%E4%BC%BC%E5%8E%9F%E7%90%86&enc=utf-8&suggest=1.his.0.0&wq=&pvid=e0e76e510d5542668feed3848715deaa'
             },
             {
               label: '去当当购买',
@@ -282,7 +283,7 @@ export default {
     background-color: #ffffff;
     border-radius: 10px;
     max-width: 1200px;
-    margin: 0 auto 20px;
+    margin: 20px auto;
     padding: 16px;
     display: flex;
     flex-wrap: wrap;

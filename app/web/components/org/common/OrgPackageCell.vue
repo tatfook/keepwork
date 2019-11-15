@@ -31,7 +31,7 @@ export default {
     packageCover() {
       return _.get(
         this.packageData,
-        'extra.coverUrl',
+        'coverUrl',
         ''
       )
     },

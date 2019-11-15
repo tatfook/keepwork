@@ -56,7 +56,7 @@
                 </div>
                 <div class="package-manager-state-popver-item">
                   <label class='package-manager-state-popver-label'>{{$t('lesson.packageManage.detailLabel')}}:</label>
-                  <div>{{scope.row.extra.message}}</div>
+                  <div>{{scope.row.refuseMsg}}</div>
                 </div>
               </div>
               <el-button class="package-manager-table-state" type="text" slot="reference">{{getStatusText(scope.row)}}</el-button>
@@ -285,7 +285,7 @@ export default {
         maxAge,
         intro,
         rmb,
-        extra
+        coverUrl
       } = this.editingPackageDetail
       if (
         typeof subjectId !== 'number' ||
@@ -293,7 +293,7 @@ export default {
         typeof maxAge !== 'number' ||
         typeof rmb !== 'number' ||
         !intro ||
-        !extra.coverUrl
+        !coverUrl
       ) {
         return false
       }

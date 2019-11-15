@@ -52,7 +52,8 @@ export default {
       const { data } = await requestWithoutToken.get(
         `packages/${packageId}/detail`
       )
-      this.packageDetail = { ...data, packageId: data.id }
+
+      this.packageDetail = { ...data.data, packageId: data.id }
     } catch (error) {
       console.error(error)
     } finally {

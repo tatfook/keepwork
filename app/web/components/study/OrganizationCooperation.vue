@@ -2,7 +2,7 @@
   <div class="organization-cooperation" v-loading="isLoading">
     <div class="organization-cooperation-breadcrumb">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ name: 'Lesson' }">课程</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'StudyHome' }">学习</el-breadcrumb-item>
         <el-breadcrumb-item>合作机构</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -79,7 +79,10 @@ export default {
   },
   computed: {
     organizationList() {
-      return _.filter(_.get(this.res, 'rows', []), item => item.visibility !== 1)
+      return _.filter(
+        _.get(this.res, 'rows', []),
+        item => item.visibility !== 1
+      )
     },
     mapToOptions(item) {
       return { value: item[0], label: item[1] }
@@ -120,9 +123,8 @@ export default {
   margin: 0 auto;
   &-breadcrumb {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 28px auto 24px;
     box-sizing: border-box;
-    margin-bottom: 32px;
   }
   .area-select {
     line-height: 48px;

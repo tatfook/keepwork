@@ -68,13 +68,13 @@
                 </el-tooltip>
               </td>
               <td colspan="1" class="lesson-manager-table-source have-tooltip">
-                <el-tooltip effect="dark" :content="lesson.extra.teacherVideoUrl" placement="top-start">
-                  <a :href="lesson.extra.teacherVideoUrl" target="_blank">{{lesson.extra.teacherVideoUrl}}</a>
+                <el-tooltip effect="dark" :content="lesson.teacherVideoUrl" placement="top-start">
+                  <a :href="lesson.teacherVideoUrl" target="_blank">{{lesson.teacherVideoUrl}}</a>
                 </el-tooltip>
               </td>
               <td colspan="1" class="lesson-manager-table-source have-tooltip">
-                <el-tooltip effect="dark" :content="lesson.extra.studentVideoUrl" placement="top-start">
-                  <a :href="lesson.extra.studentVideoUrl" target="_blank">{{lesson.extra.studentVideoUrl}}</a>
+                <el-tooltip effect="dark" :content="lesson.studentVideoUrl" placement="top-start">
+                  <a :href="lesson.studentVideoUrl" target="_blank">{{lesson.studentVideoUrl}}</a>
                 </el-tooltip>
               </td>
               <td colspan="1" class="lesson-manager-table-subject have-tooltip">
