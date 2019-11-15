@@ -41,7 +41,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import UserPortrait from '@/components/common/UserPortrait'
 import { locale } from '@/lib/utils/i18n'
 import moment from 'moment'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
