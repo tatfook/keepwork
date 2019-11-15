@@ -90,7 +90,15 @@ export default {
             fontSize: 14
           }
         },
-        color: ['#8158fc', '#67eec6', '#ffc15e'],
+        color: [
+          '#ff484a',
+          '#662af9',
+          '#fbb535',
+          '#24fae0',
+          '#e7f92c',
+          '#009587',
+          '#e219fa'
+        ],
         series: {
           hoverAnimation: false,
           startAngle: 180,
@@ -119,7 +127,9 @@ export default {
       let tableContent = _.map(
         this.annulusData[params.dataIndex].classes,
         classDetail => {
-          return `<tr><td>${classDetail.name}</td><td>${classDetail.teacherNames || ''}</td></tr>`
+          return `<tr><td>${
+            classDetail.name
+          }</td><td>${classDetail.teacherNames || ''}</td></tr>`
         }
       ).join('')
       let content = `

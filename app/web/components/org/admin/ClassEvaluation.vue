@@ -257,7 +257,7 @@ export default {
         result.push({
           realname: key,
           realnameLabel: `${formatedKey} ${percentage}%`,
-          count: totalCount
+          count: totalCount > 0 ? totalCount : '-'
         })
       })
       return result
