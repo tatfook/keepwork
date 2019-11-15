@@ -41,7 +41,10 @@
               </span>
               <el-dropdown-menu slot="dropdown" class="new-issue-assign">
                 <el-dropdown-item v-if="memberList_2.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
-                <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i><img class="member-portrait" :src="member.portrait || default_portrait" alt="">{{member.nickname || member.username}}</el-dropdown-item>
+                <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i>
+                  <user-portrait class="member-portrait" :user="member.user" :width="26"></user-portrait>
+                  {{member.nickname || member.username}}
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -51,7 +54,7 @@
 
         <div class="issue-detail-idea-box">
           <div class="issue-detail-idea-box-portrait">
-            <img :src="issue.user.portrait || default_portrait" alt="">
+            <user-portrait :user="issue.user" :width="48"></user-portrait>
           </div>
           <div class="issue-detail-idea-box-content">
             <div class="username-created-time">
@@ -87,7 +90,7 @@
 
         <div class="issue-detail-idea-box" v-for="(comment,index) in comments" :key="index">
           <div class="issue-detail-idea-box-portrait">
-            <img :src="comment.extra.portrait || default_portrait" alt="">
+            <user-portrait :user="comment.user" :width="48"></user-portrait>
           </div>
           <div class="issue-detail-idea-box-content">
             <div class="username-created-time">
@@ -123,7 +126,7 @@
       </div>
       <div v-if="isLogined && !isProhibitEdit" class="issue-detail-my-idea">
         <div class="issue-detail-my-idea-portrait">
-          <img :src="userProfile.portrait || default_portrait" alt="">
+          <user-portrait :user="userProfile" :width="48"></user-portrait>
         </div>
         <div class="issue-detail-my-idea-content">
           <div class="username">{{username}}</div>
@@ -152,6 +155,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { keepwork } from '@/api'
 import Vue from 'vue'
 import _ from 'lodash'
+import UserPortrait from '@/components/common/UserPortrait'
 
 export default {
   name: 'IssueDetail',
@@ -309,7 +313,11 @@ export default {
         checkedWords: this.currIssue.title
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
-        this.currIssue.title = _.get(sensitiveResult, '[0].word', this.currIssue.title)
+        this.currIssue.title = _.get(
+          sensitiveResult,
+          '[0].word',
+          this.currIssue.title
+        )
         this.cretateIssueLoading = false
         return
       }
@@ -331,7 +339,7 @@ export default {
         await this.updateIssueItem({ tags })
         await this.getIssueData()
         this.currIssue = _.clone(this.issueData)
-        this.dynamicTags = this.currIssue.tags.split('|').filter( x => x)
+        this.dynamicTags = this.currIssue.tags.split('|').filter(x => x)
       } else {
         this.cancelUpdateTag()
       }
@@ -399,7 +407,7 @@ export default {
       this.$emit('close')
     },
     issueTagArr(issue) {
-      if(_.get(issue, 'tags', '')){
+      if (_.get(issue, 'tags', '')) {
         return _.get(issue, 'tags', '').split('|')
       }
     },
@@ -544,6 +552,9 @@ export default {
         message: '你没有编辑权限'
       })
     }
+  },
+  components: {
+    UserPortrait
   }
 }
 </script>
@@ -696,7 +707,7 @@ export default {
           padding-right: 12px;
           display: inline-block;
         }
-        .principal-en{
+        .principal-en {
           width: 80px;
         }
         .member-portrait {
@@ -718,7 +729,7 @@ export default {
             position: relative;
             margin-top: 8px;
             &::after {
-              content: "";
+              content: '';
               height: 16px;
               width: 1px;
               background: #6e6d6d;
@@ -727,7 +738,7 @@ export default {
               top: 5px;
             }
             &::before {
-              content: "";
+              content: '';
               height: 1px;
               width: 16px;
               background: #6e6d6d;
@@ -746,11 +757,6 @@ export default {
         margin: 10px 0 18px;
         &-portrait {
           width: 60px;
-          img {
-            width: 48px;
-            height: 48px;
-            border-radius: 100%;
-          }
         }
         &-content {
           flex: 1;
@@ -818,12 +824,6 @@ export default {
       display: flex;
       &-portrait {
         width: 60px;
-        img {
-          width: 48px;
-          height: 48px;
-          border-radius: 100%;
-          object-fit: cover;
-        }
       }
       &-content {
         flex: 1;
@@ -878,11 +878,7 @@ export default {
 }
 .new-issue-assign {
   .member-portrait {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
     margin-right: 10px;
-    object-fit: cover;
   }
   .el-dropdown-menu__item {
     display: flex;

@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     portraitUrl() {
-      return _.get(this.user, 'portrait', this.defaultPortrait)
+      return _.get(this.user, 'portrait') || this.defaultPortrait
     },
     portraitStyle() {
       let borderRadius = this.isCircleMode ? '50%' : 0

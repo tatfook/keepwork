@@ -1,7 +1,7 @@
 <template>
   <div class="user-item">
     <div class="user-item-portrait">
-      <img :src="user.portrait || defaultPortrait" alt="">
+      <user-portrait :user="user" :width="56"></user-portrait>
     </div>
     <div class="user-item-info">
       <router-link class="user-item-info-name" :to="{name: 'ProfileIndexPage', params: {username: user.username}}" target="_blank">{{user.nickname || user.username}}</router-link>
@@ -13,7 +13,8 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex"
+import UserPortrait from '@/components/common/UserPortrait'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'UserItem',
   props: {
@@ -63,7 +64,11 @@ export default {
       this.isFavoriteButtonLoading = true
       let isGetRankDetailAfterFavorite = this.isGetRankDetailAfterFavorite
       if (!this.followState) {
-        await this.profileFavoriteUser({ objectId, objectType, isGetRankDetailAfterFavorite })
+        await this.profileFavoriteUser({
+          objectId,
+          objectType,
+          isGetRankDetailAfterFavorite
+        })
           .then(() => {
             this.showMessage({
               message: this.$t('project.successfullyStarred')
@@ -74,7 +79,11 @@ export default {
             this.isFavoriteButtonLoading = false
           })
       } else {
-        await this.profileUnFavoriteUser({ objectId, objectType, isGetRankDetailAfterFavorite })
+        await this.profileUnFavoriteUser({
+          objectId,
+          objectType,
+          isGetRankDetailAfterFavorite
+        })
           .then(() => {
             this.showMessage({
               message: this.$t('project.successfullyUnstarred')
@@ -98,6 +107,9 @@ export default {
     buttonClassFilter(isFollowed) {
       return isFollowed ? 'button-outline' : ''
     }
+  },
+  components: {
+    UserPortrait
   }
 }
 </script>
@@ -109,13 +121,6 @@ export default {
   &-portrait {
     margin-right: 16px;
     font-size: 0;
-    img {
-      display: inline-block;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
   }
   &-info {
     flex: 1;

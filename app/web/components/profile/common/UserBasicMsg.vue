@@ -1,7 +1,7 @@
 <template>
   <div class="user-basic-msg">
     <div class="user-basic-msg-profile">
-      <img :src='nowUserDetail.portrait || defaultPortrait' alt="">
+      <user-portrait :user="nowUserDetail"></user-portrait>
     </div>
     <div class="user-basic-msg-username-desc">
       <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>
@@ -44,6 +44,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { locale } from '@/lib/utils/i18n'
 import moment from 'moment'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
+import UserPortrait from '@/components/common/UserPortrait'
 export default {
   name: 'UserBasicMsg',
   props: {
@@ -61,7 +62,6 @@ export default {
   },
   data() {
     return {
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isPersonalCenterShow: false,
       isFavoriteButtonLoading: false
     }
@@ -139,6 +139,7 @@ export default {
     }
   },
   components: {
+    UserPortrait,
     PersonalCenterDialog
   },
   filters: {
@@ -159,12 +160,6 @@ export default {
     margin-top: 32px;
     display: inline-block;
     width: 100%;
-    img {
-      width: 96px;
-      height: 96px;
-      object-fit: cover;
-      border-radius: 50%;
-    }
   }
   &-username {
     font-size: 16px;
