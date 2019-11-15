@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { keepwork, EsAPI } from '@/api'
+import { keepwork, EsAPI, injectUserInfo } from '@/api'
 import { props } from './mutations'
 
 let {
@@ -43,18 +43,21 @@ const actions = {
   async getAllProjects({ commit }, payload) {
     try {
       const res = await EsAPI.projects.getProjects(payload)
+      res.hits = await injectUserInfo({ data: res.hits })
       commit(GET_ALL_PROJECTS, res)
     } catch (err) {
       console.error(err)
     }
   },
   async getTypeProjects({ commit }, payload) {
-    await EsAPI.projects
-      .getProjects(payload)
-      .then(res => {
-        let projects = res
-        commit(GET_TYPE_PROJECTS, { type: payload.type, projects })
-      }).catch(err => console.error(err))
+    try {
+      const projects = await EsAPI.projects
+        .getProjects(payload)
+      projects.hits = await injectUserInfo({ data: projects.hits })
+      commit(GET_TYPE_PROJECTS, { type: payload.type, projects })
+    } catch (error) {
+      console.error(error)
+    }
   },
   async getMyAllProjects({ commit }) {
     await Promise.all([
@@ -250,7 +253,8 @@ const actions = {
     }).catch(err => console.error(err))
   },
   async getAllUsers({ commit }, payload) {
-    await EsAPI.users.getUsers(payload).then(users => {
+    await EsAPI.users.getUsers(payload).then(async users => {
+      users.hits = await injectUserInfo({ data: users.hits, appendKey: false })
       commit(GET_ALL_USERS_SUCCESS, users)
     }).catch(err => console.error(err))
   },
