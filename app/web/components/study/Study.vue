@@ -4,7 +4,7 @@
       <div class="study-home-region-banner-center">
         <div class="study-home-region-banner-center-img"><img src="@/assets/study/title.png" alt="编程学习"></div>
         <div class="study-home-region-banner-center-desc">
-          <p class="study-home-region-banner-center-desc-text">你是动画爱好者？还是希望提升编程技能？<br>keepwork为各个阶段、水平的3D动画与编程学习者提供了多种多样的学习资源，从免费的教程到现场培训。</p>
+          <p class="study-home-region-banner-center-desc-text">你是动画爱好者？还是希望提升编程技能？<br>Keepwork专为各个年龄段、水平的3D动画与编程学习者提供了配套的学习资源，从编程书籍到课程学习。</p>
         </div>
         <div class="study-home-region-banner-center-go"><span class="study-home-region-banner-center-go-text">从中选择适合你的学习内容吧！</span></div>
       </div>
@@ -111,8 +111,8 @@ export default {
         &-text {
           display: inline-block;
           color: #fff;
-          background: url('http://127.0.0.1:7001/public/img/bannerTextBg.png')
-            center/contain no-repeat;
+          background: url('../../assets/study/bannerTextBg.png') center/contain
+            no-repeat;
           border-radius: 20px;
           font-size: 18px;
           padding: 20px 70px;
