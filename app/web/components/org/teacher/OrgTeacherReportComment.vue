@@ -27,7 +27,7 @@
     <div class="teacher-report-comment-main">
       <div class="teacher-report-comment-main-student-info">
         <span>学生:</span>
-        <img class="student-portrait" :src="studentPotrait">
+         <user-portrait :user="studentInfo" :width="42" class="student-portrait"></user-portrait>
         <span class="student-name">{{realname}} </span>
       </div>
       <div class="teacher-report-comment-main-overall-evaluation">
@@ -79,6 +79,7 @@
 
 <script>
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import UserPortrait from '@/components/common/UserPortrait'
 import AttachmentType from './AttachmentType'
 import { keepwork } from '@/api'
 import { mapActions, mapGetters } from 'vuex'
@@ -86,7 +87,8 @@ export default {
   name: 'OrgTeacherReportComment',
   components: {
     SkyDriveManagerDialog,
-    AttachmentType
+    AttachmentType,
+    UserPortrait
   },
   props: {
     isEditMod: {
@@ -120,7 +122,7 @@ export default {
       commentLoading: false,
       defaultVideoLogo: require('@/assets/img/video_cover.jpg'),
       defaultPortrait: require('@/assets/img/default_portrait.png'),
-      portrait: '',
+      studentInfo: {},
       editRealname: '',
       isMediaSkyDriveDialogShow: false,
       star: 0,
@@ -259,7 +261,7 @@ export default {
             status: 1
           })
         ])
-        this.portrait = studentInfo.portrait
+        this.studentInfo = studentInfo
       } catch (error) {
         console.error(error)
       } finally {
