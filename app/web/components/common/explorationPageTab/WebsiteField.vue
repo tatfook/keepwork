@@ -60,7 +60,7 @@ export default {
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
-          user: { username: i.username, portrait: i.user_portrait || '' },
+          user: i.user,
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,

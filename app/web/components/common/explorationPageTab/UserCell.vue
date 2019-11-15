@@ -3,7 +3,7 @@
     <div class="user-tab">
       <div class="user-tab-cover">
         <a :href="`/u/${user.username}`" target="_blank">
-          <img class="user-tab-cover-img" :src="user.portrait || default_portrait" alt="">
+          <user-portrait class="user-tab-cover-img" :width="96" :user="user"></user-portrait>
         </a>
       </div>
       <h5 class="user-tab-name"><a :href="`/u/${user.username}`" target="_blank">{{user.username}}</a></h5>
@@ -30,11 +30,14 @@
   </div>
 </template>
 <script>
-import default_portrait from '@/assets/img/default_portrait.png'
+import UserPortrait from '@/components/common/UserPortrait'
 import { keepwork, EsAPI } from '@/api'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'UserCell',
+  components: {
+    UserPortrait
+  },
   props: {
     user: {
       type: Object,
@@ -45,13 +48,12 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
-      default_portrait
+      isLoading: false
     }
   },
   computed: {
     ...mapGetters({
-      isLogined: 'user/isLogined',
+      isLogined: 'user/isLogined'
     })
   },
   methods: {
@@ -74,7 +76,9 @@ export default {
               message: this.$t('explore.successfullyFollowed')
             })
             this.user.isFollowed = true
-            this.user.total_fans = this.user.total_fans ? this.user.total_fans + 1 : 1
+            this.user.total_fans = this.user.total_fans
+              ? this.user.total_fans + 1
+              : 1
             this.isLoading = false
           })
           .catch(err => {
@@ -173,7 +177,7 @@ export default {
         position: relative;
       }
       .member::before {
-        content: "";
+        content: '';
         width: 1px;
         height: 20px;
         background: rgb(202, 200, 200);
@@ -182,7 +186,7 @@ export default {
         top: 32px;
       }
       .member::after {
-        content: "";
+        content: '';
         width: 1px;
         height: 20px;
         background: rgb(202, 200, 200);
