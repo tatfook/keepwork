@@ -11,10 +11,10 @@
         <el-breadcrumb-item>
           <el-dropdown @visible-change='dropdownVisibleChange' placement='bottom' trigger="click">
             <span class="el-dropdown-link">
-              {{editingProjectName}}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{projectDisplayName}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu class="project-header-dropdown" slot="dropdown" v-loading='isDropdownLoading'>
-              <el-dropdown-item @click.native="toProjectIndexPage(project)" :disabled='editingProjectName == project.name' v-for="(project, index) in userProjectList" :key="index">{{project.name}}</el-dropdown-item>
+              <el-dropdown-item @click.native="toProjectIndexPage(project)" :disabled='editingProjectName == project.name' v-for="(project, index) in userProjectList" :key="index">{{getProjectDisplayName(project)}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-breadcrumb-item>
@@ -110,6 +110,9 @@ export default {
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
     },
+    projectDisplayName() {
+      return this.getProjectDisplayName(this.projectDetail)
+    },
     editingProjectId() {
       return _.get(this.projectDetail, 'id')
     },
@@ -145,6 +148,9 @@ export default {
       unStarProject: 'pbl/unStarProject',
       toggleLoginDialog: 'pbl/toggleLoginDialog'
     }),
+    getProjectDisplayName(project) {
+      return _.get(project, 'extra.worldTagName', project.name)
+    },
     showTheCommentInput() {
       let input = document.querySelector(
         '#project-index-phone-comments .project-comments-sends-profile-input input'
@@ -254,12 +260,8 @@ export default {
       window.socialShare('.kp-social-share', {
         mode: 'prepend',
         url: this.shareUrl,
-        description: `我将${this.editingProjectUsername}的项目${
-          this.editingProjectName
-        }分享给你`,
-        title: `我将${this.editingProjectUsername}的项目${
-          this.editingProjectName
-        }分享给你`,
+        description: `我将${this.editingProjectUsername}的项目${this.editingProjectName}分享给你`,
+        title: `我将${this.editingProjectUsername}的项目${this.editingProjectName}分享给你`,
         sites: ['qq', 'qzone', 'weibo', 'wechat'],
         wechatQrcodeTitle: '', // 微信二维码提示文字
         wechatQrcodeHelper: this.$t('common.QR'),

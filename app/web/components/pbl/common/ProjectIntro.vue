@@ -1,7 +1,7 @@
 <template>
   <div class="project-website">
     <el-card class="project-website-card" shadow="never">
-      <p class="project-website-info">{{$t("project.welcomeTo")}}{{originProjectDetail.name}}</p>
+      <p class="project-website-info">{{$t("project.welcomeTo")}}{{projectDisplayName}}</p>
       <div class="project-website-operations" v-show="isLoginUserEditable || originInfoSiteData.displayName">
         <el-button @click="handleFakeButtonClick" size='small' type="primary">{{originInfoSiteData.displayName || $t("project.websiteSettingForResource")}}</el-button>
         <i v-show="isLoginUserEditable && isHaveOriginInfoSiteData" class="el-icon-edit-outline" @click='showEditInfoSiteDataDialog'></i>
@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isRealNamed: 'user/isRealNamed',
+      isRealNamed: 'user/isRealNamed'
     }),
     originInfoSiteData() {
       return _.get(this.originProjectDetail, 'extra.infoSite', {
@@ -92,6 +92,13 @@ export default {
       return _.merge(originExtra, {
         infoSite: this.tempInfoSiteData
       })
+    },
+    projectDisplayName() {
+      return _.get(
+        this.originProjectDetail,
+        'extra.worldTagName',
+        this.originProjectDetail.name
+      )
     },
     updatingProjectData() {
       return _.merge(this.copiedProjectDetail, {

@@ -4,14 +4,14 @@
     <span v-if="ranking && level>=3" class="project-cell-medal-4">{{level+1}}</span>
     <div class="project-cell-cover" @click="goProjectDetail(project)">
       <video v-if="(project.extra && project.extra.videoUrl)" class="project-cell-cover-img" controls="controls" :src="(project.extra && project.extra.videoUrl) || ''"></video>
-      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" :alt="project.name">
+      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" :alt="projectDisplayName">
       <div class="video-mask"></div>
       <span class="project-cell-cover-tag" v-if='showRate && showProjectRate'>{{projectRate}}</span>
     </div>
     <h4 class="project-cell-title" @click="goProjectDetail(project)">
       <span class="picked" title="精选" v-if="project.choicenessNo"><img src="@/assets/pblImg/picked.png" alt=""></span>
       <span class="recruitment" :title='$t("explore.recruiting")' v-if="project.privilege & 1">{{isEn ? 'R':'招'}}</span>
-      <span class="text" :title="project.name" v-html="project.name"></span>
+      <span class="text" :title="projectDisplayName" v-html="projectDisplayName"></span>
       <span class="id" v-html="`${project._id || '#' + project.id}`"></span>
       <span class="project-type">
         <el-popover popper-class="project-cell-type-popover" placement="top" :title="projectType" width="20" trigger="hover" content="">
@@ -86,6 +86,9 @@ export default {
   computed: {
     isEn() {
       return locale === 'en-US'
+    },
+    projectDisplayName() {
+      return _.get(this.project, 'extra.worldTagName', this.project.name)
     },
     updatedAtTime() {
       return (
