@@ -62,7 +62,6 @@ export default {
   },
   data() {
     return {
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isPersonalCenterShow: false,
       isFavoriteButtonLoading: false
     }
