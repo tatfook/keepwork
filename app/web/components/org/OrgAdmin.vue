@@ -15,7 +15,7 @@
               <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <img :src="orgUserinfo.portrait || defaultPortrait" class="org-admin-profile" />
+          <user-portrait :user="orgUserinfo" class="org-admin-profile"></user-portrait>
           <div class="org-admin-username">{{orgUserinfo.nickname || orgUserinfo.username}}</div>
           <div class="org-validity-date">{{$t('org.validity')}}: {{startDate}}-{{endDate}} <span v-if="currentOrgToExpire" class="expire-tips">{{$t('org.toExpire')}}</span> <span v-if="currentOrgHaveExpired" class="expire-tips">{{$t('org.haveExpired')}}</span></div>
         </div>
@@ -37,6 +37,7 @@
 </template>
 <script>
 import OrgHeader from './common/OrgHeader'
+import UserPortrait from '@/components/common/UserPortrait'
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -155,7 +156,8 @@ export default {
     }
   },
   components: {
-    OrgHeader
+    OrgHeader,
+    UserPortrait
   }
 }
 </script>

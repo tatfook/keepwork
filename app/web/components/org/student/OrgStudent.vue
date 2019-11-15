@@ -15,7 +15,7 @@
                 <el-dropdown-item class="org-student-role-label-active">{{$t("org.studentRole")}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <img :src="userPortrait" class="org-student-profile" />
+            <user-portrait :user="userinfo" class="org-student-profile"></user-portrait>
             <div class="org-student-username">{{username}}</div>
             <div class="org-student-edit-btn" v-if="isClassDetailPage" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
@@ -95,6 +95,7 @@
 </template>
 <script>
 import OrgHeader from '@/components/org/common/OrgHeader'
+import UserPortrait from '@/components/common/UserPortrait'
 import JoinOrg from './JoinOrg'
 import JoinClass from './JoinClass'
 import { mapActions, mapGetters } from 'vuex'
@@ -346,6 +347,7 @@ export default {
     OrgHeader,
     JoinOrg,
     JoinClass,
+    UserPortrait,
     EditStudentDialog
   }
 }
