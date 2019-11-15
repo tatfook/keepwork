@@ -2,10 +2,8 @@
   <div class="student-basic" v-loading="isLoading">
     <div class="student-basic-main">
       <div class="student-basic-left">
-        <div class="student-basic-profile">
-          <img :src="portrait || defaultPortrait" alt="" class="user-data-setting-profile" @click="showMediaSkyDriveDialog">
-          <p @click="showMediaSkyDriveDialog">点击修改头像</p>
-        </div>
+        <user-portrait class="student-basic-left-profile" :user="userInfo" @click.native="showMediaSkyDriveDialog"></user-portrait>
+        <p @click="showMediaSkyDriveDialog">点击修改头像</p>
       </div>
       <div class="student-basic-detail">
         <div class="student-basic-detail-item">
@@ -33,6 +31,7 @@
   </div>
 </template>
 <script>
+import UserPortrait from '@/components/common/UserPortrait'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import ParentPhoneBinder from './ParentPhoneBinder'
 import { mapActions, mapGetters } from 'vuex'
@@ -50,7 +49,6 @@ export default {
   data() {
     return {
       isMounted: false,
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isMediaSkyDriveDialogShow: false,
       isLoading: false,
       userInfo: {}
@@ -60,9 +58,6 @@ export default {
     ...mapGetters({
       userinfoGetter: 'org/student/userinfo'
     }),
-    portrait() {
-      return _.get(this.userInfo, 'portrait')
-    },
     isParentPhoneExist() {
       return Boolean(this.userinfoGetter.parentPhoneNum)
     },
@@ -126,6 +121,7 @@ export default {
   },
   components: {
     SkyDriveManagerDialog,
+    UserPortrait,
     ParentPhoneBinder
   }
 }
@@ -142,11 +138,7 @@ export default {
     text-align: center;
     margin-right: 32px;
     box-sizing: border-box;
-    img {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      object-fit: cover;
+    &-profile {
       cursor: pointer;
     }
     p {
