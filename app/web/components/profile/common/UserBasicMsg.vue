@@ -41,6 +41,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import UserPortrait from '@/components/common/UserPortrait'
 import { locale } from '@/lib/utils/i18n'
 import moment from 'moment'
 import PersonalCenterDialog from '@/components/common/PersonalCenterDialog'
@@ -73,7 +74,9 @@ export default {
       profileUserFavoriteState: 'profile/userFavoriteState'
     }),
     formatType() {
-      return locale === 'en-US' ? 'hh:mm a DD MMM. YYYY' : 'YYYY年MM月DD日 HH:mm'
+      return locale === 'en-US'
+        ? 'hh:mm a DD MMM. YYYY'
+        : 'YYYY年MM月DD日 HH:mm'
     },
     nowUserId() {
       return this.nowUserDetail.id
@@ -92,10 +95,11 @@ export default {
       profileUnFavoriteUser: 'profile/unFavoriteUser'
     }),
     async initFavoriteState() {
-      this.isLogined && await this.profileGetFavoriteState({
-        objectId: this.nowUserId,
-        objectType: 0
-      })
+      this.isLogined &&
+        (await this.profileGetFavoriteState({
+          objectId: this.nowUserId,
+          objectType: 0
+        }))
     },
     async toggleFavoriteState() {
       if (!this.isLogined) {
@@ -234,10 +238,6 @@ export default {
       margin-top: 0;
       width: auto;
       font-size: 0;
-      img {
-        width: 84px;
-        height: 84px;
-      }
     }
     &-username-desc {
       flex: 1;
