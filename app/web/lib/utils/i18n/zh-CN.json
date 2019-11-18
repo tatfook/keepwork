@@ -1197,7 +1197,7 @@
     "fullPage": "点击全屏显示",
     "classIdExplain": "{classId}是本次课堂的唯一标识，教师须向学生提供准确的课堂ID，以便学生的学习数据可以准确反馈和存储。",
     "curentClassId": "课堂ID ：",
-    "haqiIdExplain": "下载并安装哈奇或Paracraft客户端后，用户可使用该ID进入课程相关的3D世界。点击了解详情",
+    "haqiIdExplain": "下载并安装哈奇或帕拉卡(Paracraft)后，用户可使用该ID进入课程相关的3D世界。点击了解详情",
     "lessonId": "课程 ID:",
     "studentEnterClassId": "请让您的学生输入课堂ID，进入课堂。您可以在“{studentsPerformance}”菜单下，查看学生的实时状态。",
     "studentsPerformance": "学生状态",

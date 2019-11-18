@@ -78,8 +78,8 @@
             </div>
             <div class="print-invitation-code-print-content-box-guide">
               <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>
-                打开Paracraft客户端（下载地址：paracraft.keepwork.com） </p>
-              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册账号，并登录Paracraft客户端</p>
+                打开帕拉卡（Paracraft）（下载地址：paracraft.keepwork.com） </p>
+              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册账号，并登录帕拉卡（Paracraft）</p>
               <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>进入“我的学校”，输入上方邀请码</p>
               <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
             </div>
