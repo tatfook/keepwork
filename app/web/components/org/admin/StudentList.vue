@@ -49,11 +49,7 @@ export default {
     ChangePasswordDialog
   },
   async mounted() {
-    this.isLoading = true
-    await this.getOrgStudentList({
-      organizationId: this.orgId
-    }).catch(() => {})
-    this.isLoading = false
+    await this.getStudentWithClassId()
   },
   data() {
     return {
@@ -136,13 +132,17 @@ export default {
       }
       this.isChangeDialogVisible = true
     },
-    async handleChangeSelectClass() {
+    async getStudentWithClassId() {
       this.isLoading = true
       await this.getOrgStudentList({
         organizationId: this.orgId,
         classId: this.selectedClassId
       }).catch(() => {})
       this.isLoading = false
+      return
+    },
+    async handleChangeSelectClass() {
+      await this.getStudentWithClassId()
     },
     async removeStudent(studentDetail) {
       this.isLoading = true
@@ -154,9 +154,7 @@ export default {
         realname,
         roleId: 1
       }).catch(() => {})
-      await this.getOrgStudentList({
-        organizationId: this.orgId
-      }).catch(() => {})
+      await this.getStudentWithClassId()
       this.isLoading = false
     },
     confirmRemoveStudent(studentDetail) {
