@@ -16,7 +16,7 @@
       <el-menu-item class="pull-right user-menu right-icon-item" v-if="isLogin">
         <el-dropdown placement="bottom-end">
           <span class="el-dropdown-link">
-            <img class="user-profile" :src='userProfile.portrait | defaultPortrait' alt="username">
+            <user-portrait class="common-header-profile" :user="userProfile" :width="40"></user-portrait>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <div class="greeting">{{$t("common.hello")}}，{{username}}
@@ -139,6 +139,7 @@ import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import LoginDialog from '@/components/common/LoginDialog'
 import RegisterDialog from '@/components/common/RegisterComp'
 import SearchBar from './SearchBar'
+import UserPortrait from '@/components/common/UserPortrait'
 const IS_GLOBAL_VERSION = !!process.env.IS_GLOBAL_VERSION
 const CREATE_REG = /^\/create/
 const EXPLORATION_REG = /^\/explore/
@@ -378,7 +379,8 @@ export default {
     SkyDriveManagerDialog,
     LoginDialog,
     RegisterDialog,
-    SearchBar
+    SearchBar,
+    UserPortrait
   }
 }
 </script>
@@ -426,12 +428,6 @@ export default {
 }
 .menu-left {
   flex: 1;
-}
-.user-profile {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 .el-dropdown-menu__item--divided:before {
   margin: 0px;
@@ -619,6 +615,9 @@ export default {
   }
 }
 .common-header {
+  &-profile {
+    padding: 0 6px;
+  }
   .user-message-icon-container {
     display: flex;
     justify-content: center;

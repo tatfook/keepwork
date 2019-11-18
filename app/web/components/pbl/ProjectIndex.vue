@@ -4,7 +4,8 @@
       <div class="project-index-sidebar">
         <project-intro class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-intro>
         <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
-        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
+        <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait'
+        :originProjectUser='editingProjectUser' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
         <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
       </div>
       <div class="project-index-main">
@@ -15,7 +16,7 @@
     <div class="container-phone hidden-sm-and-up">
       <project-basic-info descriptionId='projectBasicInfo2' class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='originProjectUsername' :projectApplyState='projectApplyState' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='isLoginUserEditable'></project-basic-info>
       <project-tags class="project-index-sidebar-item" :originProjectDetail='pblProjectDetail' :projectId='projectId' :isLoginUserEditable='isLoginUserEditable'></project-tags>
-      <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
+      <project-joined-members-list class="project-index-sidebar-item" type='card' :projectId='projectId' :originProjectUser='editingProjectUser' :projectDetail='pblProjectDetail' :originProjectUsername='originProjectUsername'></project-joined-members-list>
       <project-boards v-if="!isProhibitView" :projectId='projectId' :projectDetail='pblProjectDetail' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></project-boards>
       <project-comments v-if='!isCommentClosed' id="project-index-phone-comments" class="project-index-comments" :projectId='projectId' :isLoginUsercommentable='isLoginUsercommentable'></project-comments>
     </div>
@@ -36,6 +37,7 @@ export default {
       type: Object,
       required: true
     },
+    editingProjectUser: Object,
     originProjectUsername: {
       type: String,
       required: true

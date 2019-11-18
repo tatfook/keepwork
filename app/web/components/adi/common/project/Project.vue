@@ -7,7 +7,7 @@
       <template v-else-if="isLoginUserVisible">
         <project-tags v-if="projectTagsShow" :originProjectDetail="pblProjectDetail" :projectId="projectId" :isLoginUserEditable='loginUserIsProjectOwner'></project-tags>
         <project-basic-info class="project-index-basic" :originProjectDetail='pblProjectDetail' :projectOwnerUsername='editingProjectUsername' :projectApplyState='projectApplyState' :projectId='projectId' :isProjectStopRecruit='isProjectStopRecruit' :isLoginUserEditable='loginUserIsProjectOwner'></project-basic-info>
-        <project-joined-members-list v-if="projectMembersShow" class="project-index-sidebar-item" type='card' :projectId='projectId' :projectOwnerPortrait='projectOwnerPortrait' :projectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername'></project-joined-members-list>
+        <project-joined-members-list v-if="projectMembersShow" class="project-index-sidebar-item" type='card' :projectId='projectId' :originProjectUser='editingProjectUser' :projectDetail='pblProjectDetail' :originProjectUsername='editingProjectUsername'></project-joined-members-list>
       </template>
       <template v-else>
         <div class="project-mod-tips">
@@ -139,9 +139,6 @@ export default {
     },
     editingProjectUsername() {
       return _.get(this.editingProjectUser, 'username', '')
-    },
-    projectOwnerPortrait() {
-      return _.get(this.editingProjectUser, 'portrait')
     },
     loginUserIsProjectOwner() {
       return this.loginUsername === this.editingProjectUsername

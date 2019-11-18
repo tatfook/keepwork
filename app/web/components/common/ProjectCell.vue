@@ -29,7 +29,7 @@
     </div>
     <div class="project-cell-author">
       <a :href="`/u/${projectUsername}`" target="_blank" class="project-cell-author-name">
-        <img :src="(project.user && project.user.portrait) || default_portrait" :alt="project.user && project.user.username">
+        <user-portrait class="project-cell-author-profile" :user="project.user || {}" :width="30"></user-portrait>
         <span class="username" :title="projectUsername">{{projectUsername}}</span>
       </a>
       <div class="project-cell-author-time">
@@ -47,7 +47,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import project_default_cover from '@/assets/pblImg/project_default_cover.png'
-import default_portrait from '@/assets/img/default_portrait.png'
+import UserPortrait from '@/components/common/UserPortrait'
 
 export default {
   name: 'ProjectCell',
@@ -79,8 +79,7 @@ export default {
   },
   data() {
     return {
-      project_default_cover: project_default_cover,
-      default_portrait: default_portrait
+      project_default_cover: project_default_cover
     }
   },
   computed: {
@@ -141,6 +140,9 @@ export default {
     toggleStickProject(project) {
       this.$emit('toggleStickProject', project)
     }
+  },
+  components: {
+    UserPortrait
   }
 }
 </script>
@@ -298,6 +300,10 @@ export default {
     line-height: 50px;
     font-size: 14px;
     padding-top: 12px;
+    &-profile {
+      padding: 0 5px;
+      height: 40px;
+    }
     &-name {
       flex: 1;
       display: flex;
@@ -308,11 +314,6 @@ export default {
         color: #2397f3;
       }
       img {
-        width: 30px;
-        height: 30px;
-        object-fit: cover;
-        overflow: hidden;
-        border-radius: 50%;
         margin-right: 8px;
       }
       .username {
