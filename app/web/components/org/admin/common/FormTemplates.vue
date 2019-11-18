@@ -13,7 +13,9 @@
       <div class="form-templates-preview-close" @click="handleClosePreview">
         <i class="el-icon-circle-close"></i>
       </div>
-      <img :src="selectedTemplate.preview" alt="template.name">
+      <el-scrollbar class="form-templates-preview-main" :native="false">
+        <img :src="selectedTemplate.preview" alt="template.name">
+      </el-scrollbar>
       <div class="form-templates-preview-button">
         <el-button type="primary" @click="showNamePrompt()">创建</el-button>
       </div>
@@ -182,6 +184,9 @@ export default {
     height: 60vh;
     margin: 20vh auto;
     border-radius: 8px;
+    &-main {
+      height: 100%;
+    }
     &-close {
       position: absolute;
       cursor: pointer;
@@ -222,6 +227,9 @@ export default {
       padding: 36px 0 73px;
       height: 100%;
       box-sizing: border-box;
+      overflow: auto;
+    }
+    /deep/.el-scrollbar__wrap {
       overflow: auto;
     }
   }
