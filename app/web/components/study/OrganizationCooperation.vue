@@ -2,7 +2,7 @@
   <div class="organization-cooperation" v-loading="isLoading">
     <div class="organization-cooperation-breadcrumb">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ name: 'Lesson' }">学习</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'StudyHome' }">学习</el-breadcrumb-item>
         <el-breadcrumb-item>合作机构</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
