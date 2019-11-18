@@ -6,6 +6,7 @@
 <script>
 import VeRing from 'v-charts/lib/ring.common'
 import 'echarts/lib/component/title'
+import 'echarts/lib/component/legendScroll'
 export default {
   name: 'AnnulusChart',
   props: {
@@ -75,7 +76,7 @@ export default {
           : {},
         legend: {
           show: true,
-          type: 'plain',
+          type: 'scroll',
           right: 170,
           top: 'middle',
           orient: 'vertical',
