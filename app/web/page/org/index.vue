@@ -264,13 +264,17 @@ export default {
     ...mapGetters({
       userIsLogined: 'user/isLogined',
       currentOrg: 'org/currentOrg',
-      expirationDialogVisible: 'org/expirationDialogVisible'
+      expirationDialogVisible: 'org/expirationDialogVisible',
+      userinfo: 'org/userinfo'
     }),
     routeLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
     },
+    loginUrl() {
+      return _.get(this.currentOrg, 'loginUrl')
+    },
     isUserLoginForOrg() {
-      let currentOrgloginUrl = _.get(this.currentOrg, 'loginUrl')
+      let currentOrgloginUrl = this.loginUrl
       return (
         this.userIsLogined &&
         currentOrgloginUrl &&
@@ -285,6 +289,9 @@ export default {
     },
     routerName() {
       return this.$route.name
+    },
+    username() {
+      return this.userinfo.username
     }
   },
   methods: {
@@ -309,12 +316,6 @@ export default {
           orgId: this.orgId
         }))
     },
-    getOrgUrl() {
-      const pathname = window.location.pathname
-      const reg = /org\/(\w+)/i
-      const orgUrl = pathname.match(reg)[1]
-      return orgUrl
-    },
     initBroadcastChannel() {
       channel.onmessage = evt => this.checkTokenWithOrgUrl(evt)
     },
@@ -326,15 +327,10 @@ export default {
       if (name !== 'org' || !token) {
         return
       }
-      let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
-        jsrsasign.b64utoutf8(token.split('.')[1])
-      )
-      const { username = '' } = tokenParams
-      const currentLoginUrl = this.getOrgUrl()
-      if (!newLoginUrl || !currentLoginUrl) {
+      if (!newLoginUrl || !this.loginUrl) {
         return
       }
-      if (newUsername !== username || currentLoginUrl !== newLoginUrl) {
+      if (newUsername !== this.username || this.loginUrl !== newLoginUrl) {
         window.location.href = `${window.location.origin}/org/${newLoginUrl}`
       }
     }
