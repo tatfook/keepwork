@@ -87,7 +87,13 @@ const OrgNotFoundPageName = 'OrgNotFound'
 const OrgIndexPageName = 'OrgIndex'
 const OrgPrintPageName = 'OrgPrint'
 const OrgReportPageName = 'OrgReport'
-const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName, OrgPrintPageName, OrgReportPageName]
+const IgnoreLoginPageNames = [
+  OrgLoginPageName,
+  OrgFormDetailPageName,
+  OrgPrintPageName,
+  OrgReportPageName
+]
+const channel = new BroadcastChannel('org')
 
 const checkIsLogined = function(name, next, params) {
   let nowToken = Cookies.get('token')
@@ -114,7 +120,7 @@ const checkIsOrgExist = async function(
 ) {
   let orgDetail = await store
     .dispatch('org/getOrgDetailByLoginUrl', { orgLoginUrl })
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
   if (orgDetail && orgDetail.id) {
     store.dispatch('org/setCurrentOrg', { orgDetail })
     return { isContinue: true, orgId: orgDetail.id }
@@ -140,7 +146,7 @@ const checkIsOrgMember = async function(
 ) {
   let orgToken = await store
     .dispatch('org/getOrgToken', { orgId })
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
   if (orgToken) {
     Cookies.set('token', orgToken)
     store.dispatch('org/setTokenUpdateAt', { orgId })
@@ -221,7 +227,6 @@ router.beforeEach(async (to, from, next) => {
 
   isContinue = checkIsLogined(name, next, params)
   if (!isContinue) return
-
   if (from.params.orgLoginUrl !== to.params.orgLoginUrl) {
     let orgLoginUrl = params.orgLoginUrl
     result = await checkIsOrgExist(name, next, params, orgLoginUrl, nowPageRole)
@@ -234,7 +239,8 @@ router.beforeEach(async (to, from, next) => {
     let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
       jsrsasign.b64utoutf8(orgToken.split('.')[1])
     )
-    let { roleId = 1 } = tokenParams
+    let { roleId = 1, loginUrl, username } = tokenParams
+    channel.postMessage({ loginUrl, username })
     handleDifferentRole(name, next, params, roleId, nowPageRole)
   }
 
@@ -252,6 +258,7 @@ export default {
   },
   async created() {
     await this.loadOrgPresets()
+    this.initBroadcastChannel()
   },
   computed: {
     ...mapGetters({
@@ -301,6 +308,35 @@ export default {
         (await this.getOrgUserCountsByGraphql({
           orgId: this.orgId
         }))
+    },
+    getOrgUrl() {
+      const pathname = window.location.pathname
+      const reg = /org\/(\w+)/i
+      const orgUrl = pathname.match(reg)[1]
+      return orgUrl
+    },
+    initBroadcastChannel() {
+      channel.onmessage = evt => this.checkTokenWithOrgUrl(evt)
+    },
+    checkTokenWithOrgUrl(evt) {
+      const name = _.get(evt, 'target.name', '')
+      const data = _.get(evt, 'data', {})
+      const { loginUrl: newLoginUrl = '', username: newUsername = '' } = data
+      const token = Cookies.get('token')
+      if (name !== 'org' || !token) {
+        return
+      }
+      let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
+        jsrsasign.b64utoutf8(token.split('.')[1])
+      )
+      const { username = '' } = tokenParams
+      const currentLoginUrl = this.getOrgUrl()
+      if (!newLoginUrl || !currentLoginUrl) {
+        return
+      }
+      if (newUsername !== username || currentLoginUrl !== newLoginUrl) {
+        window.location.href = `${window.location.origin}/org/${newLoginUrl}`
+      }
     }
   },
   components: {
