@@ -70,7 +70,16 @@ export default {
       return this.tIcons[this.tLevel - 1] || ''
     },
     tLevelStyle() {
-      let distance = 0 // wait calculate
+      if (this.badgePosition !== 'absolute') return ''
+      let badgeHeight =
+        this.size == 'small' ? 16 : this.size == 'medium' ? 20 : 24
+      let badgeWith =
+        this.size == 'small' ? 24 : this.size == 'medium' ? 30 : 36
+      let r = this.width / 2
+      let distance =
+        r -
+        badgeHeight -
+        (Math.sqrt(r * r - 2 * badgeWith * badgeHeight) * 5) / 8
       return `right: ${distance}px;`
     }
   }
