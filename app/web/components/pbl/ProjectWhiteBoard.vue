@@ -40,7 +40,7 @@
             </div>
           </div>
           <div class="project-white-board-list-asignees  hidden-sm-and-down" v-if="issue.assigns.length > 0">
-            <user-portrait class="project-white-board-list-asignees-item" v-for="player in issue.assigns" :key="player.id" :user="player" :width="24"></user-portrait>
+            <user-portrait class="project-white-board-list-asignees-item" v-for="player in issue.assigns" :key="player.id" :user="player" :width="24" badgePosition="none"></user-portrait>
           </div>
         </div>
       </div>

@@ -19,14 +19,14 @@
       <div class="new-issue-sketch-item">
         <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t('project.asignees')}}</div>
         <div class="new-issue-sketch-content new-issue-sketch-asignee">
-          <user-portrait v-for="(member,index) in assignedMembers" :key="index" class="new-issue-sketch-asignee-portrait" :user="member.user" :width="36"></user-portrait>
+          <user-portrait v-for="(member,index) in assignedMembers" :key="index" class="new-issue-sketch-asignee-portrait" :user="member.user" :width="36" badgePosition="none"></user-portrait>
           <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
             <span class="el-icon-plus"></span>
             <el-dropdown-menu slot="dropdown" class="new-issue-sketch-asignee-dropdown">
               <el-dropdown-item v-if="memberList.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
               <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId">
                 <i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i>
-                <user-portrait class="new-issue-sketch-asignee-dropdown-portrait" :user="member.user" :width="26"></user-portrait>
+                <user-portrait class="new-issue-sketch-asignee-dropdown-portrait" :user="member.user" :width="26" size="small" badgePosition="relative"></user-portrait>
                 {{member.nickname || member.username}}
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -288,11 +288,7 @@ export default {
       }
       &-dropdown {
         &-portrait {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
           margin-right: 10px;
-          object-fit: cover;
         }
         .el-dropdown-menu__item {
           display: flex;

@@ -29,7 +29,7 @@
     </div>
     <div class="project-cell-author">
       <a :href="`/u/${projectUsername}`" target="_blank" class="project-cell-author-name">
-        <user-portrait class="project-cell-author-profile" :user="project.user || {}" :width="30"></user-portrait>
+        <user-portrait class="project-cell-author-profile" :user="project.user || {}" :width="30" size="small" badgePosition="relative"></user-portrait>
         <span class="username" :title="projectUsername">{{projectUsername}}</span>
       </a>
       <div class="project-cell-author-time">
@@ -302,7 +302,7 @@ export default {
     padding-top: 12px;
     &-profile {
       padding: 0 5px;
-      height: 40px;
+      flex-shrink: 0;
     }
     &-name {
       flex: 1;
@@ -312,9 +312,6 @@ export default {
       color: #303133;
       &:hover {
         color: #2397f3;
-      }
-      img {
-        margin-right: 8px;
       }
       .username {
         display: inline-block;

@@ -16,7 +16,7 @@
       <el-menu-item class="pull-right user-menu right-icon-item" v-if="isLogin">
         <el-dropdown placement="bottom-end">
           <span class="el-dropdown-link">
-            <user-portrait class="common-header-profile" :user="userProfile" :width="40"></user-portrait>
+            <user-portrait :user="userProfile" :width="40" size="small"></user-portrait>
           </span>
           <el-dropdown-menu slot="dropdown" class="user-menu-dropdown">
             <div class="greeting">{{$t("common.hello")}}，{{username}}
@@ -365,8 +365,6 @@ export default {
     }
   },
   filters: {
-    defaultPortrait: (str = '') =>
-      (str && str.trim()) || require('@/assets/img/default_portrait.png'),
     formatDate(date) {
       const _date = moment(date)
       return _date.isSame(moment(), 'day')
@@ -615,9 +613,6 @@ export default {
   }
 }
 .common-header {
-  &-profile {
-    padding: 0 6px;
-  }
   .user-message-icon-container {
     display: flex;
     justify-content: center;

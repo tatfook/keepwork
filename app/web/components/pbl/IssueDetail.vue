@@ -42,7 +42,7 @@
               <el-dropdown-menu slot="dropdown" class="new-issue-assign">
                 <el-dropdown-item v-if="memberList_2.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
                 <el-dropdown-item v-for="member in memberList_2" :key="member.id" :command="member.userId"><i :class="['icofont',{'el-icon-check': member.haveAssigned}]"></i>
-                  <user-portrait class="member-portrait" :user="member.user" :width="26"></user-portrait>
+                  <user-portrait class="member-portrait" :user="member.user" :width="26" size="small" badgePosition="relative"></user-portrait>
                   {{member.nickname || member.username}}
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -54,7 +54,7 @@
 
         <div class="issue-detail-idea-box">
           <div class="issue-detail-idea-box-portrait">
-            <user-portrait :user="issue.user" :width="48"></user-portrait>
+            <user-portrait :user="issue.user" :width="48" size="small"></user-portrait>
           </div>
           <div class="issue-detail-idea-box-content">
             <div class="username-created-time">
@@ -226,7 +226,7 @@ export default {
       return locale === 'en-US'
     },
     memberList() {
-      return this.pblProjectMemberList({ projectId: this.projectDetail.id })
+      return this.pblProjectMemberList({ projectId: this.projectDetail.id }) || []
     },
     memberList_2() {
       let memberArr1 = _.concat(this.memberList)

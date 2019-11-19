@@ -9,7 +9,7 @@
         </div>
         <div class="comment-box">
           <div class="comment-item" v-for='comment in getCommentList' :key='comment.id'>
-            <user-portrait class="comment-item-portrait" :user="comment.user" :width="80" :isCircleMode="false"></user-portrait>
+            <user-portrait class="comment-item-portrait" :user="comment.user" :width="80"></user-portrait>
             <div class="text">
               <h4>{{ comment.extra.username }}</h4>
               <p class="info">{{ getFormatDate(comment.updatedAt) }}</p>
@@ -33,7 +33,7 @@
           <h3><img :src="getStyleOneId">{{$t(options.title)}}</h3>
           <hr>
           <div class="comment-item" v-for='comment in getCommentList' :key='comment.id'>
-            <user-portrait class="comment-item-portrait" :user="comment.user" :width="80" :isCircleMode="false"></user-portrait>
+            <user-portrait class="comment-item-portrait" :user="comment.user" :width="80"></user-portrait>
             <div class="text">
               <h4>{{ comment.extra.username }}</h4>
               <p class="info">{{ getFormatDate(comment.updatedAt) }}</p>
