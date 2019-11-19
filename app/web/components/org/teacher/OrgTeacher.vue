@@ -13,7 +13,7 @@
               <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <user-portrait :user="userinfo" class="org-teacher-profile"></user-portrait>
+          <user-portrait :user="userinfo" class="org-teacher-profile" size="large"></user-portrait>
           <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">

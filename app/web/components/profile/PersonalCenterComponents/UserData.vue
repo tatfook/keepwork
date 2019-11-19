@@ -5,7 +5,7 @@
       <el-form ref="form" :model="userInfo" label-width="80px" :rules="userInfoRules">
         <el-form-item :label='$t("card.pic")'>
           <div class="user-data-content-profile" @click="showMediaSkyDriveDialog">
-            <user-portrait class="profile" :user="userInfo" :width="120"></user-portrait>
+            <user-portrait class="profile" :user="userInfo" :width="120" size="large"></user-portrait>
             <span class="change">{{$t('user.modifyAvatar')}}</span>
           </div>
         </el-form-item>

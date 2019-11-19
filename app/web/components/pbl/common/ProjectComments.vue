@@ -5,7 +5,7 @@
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
-        <user-portrait class="hidden-xs-only" :user="userProfile" :width="48"></user-portrait>
+        <user-portrait class="hidden-xs-only" :user="userProfile" :width="48" size="small"></user-portrait>
         <el-input :disabled='!isLoginUsercommentable' :placeholder="$t('project.writeComment')" v-model='newCommenContent' maxlength="1000"></el-input>
       </div>
       <div class="project-comments-sends-operations">
@@ -15,7 +15,7 @@
     </div>
     <div class="project-comments-list" v-loading='isLoading'>
       <div class="project-comments-item" v-for="(comment, index) in commentList" :key='index'>
-        <user-portrait class="project-comments-item-profile" :user="comment.user" :width="48"></user-portrait>
+        <user-portrait class="project-comments-item-profile" :user="comment.user" :width="48" size="small"></user-portrait>
         <div class="project-comments-item-detail">
           <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
             <span class="project-comments-item-time">{{comment.createdAt | relativeTimeFilter(isEn)}}</span>
@@ -221,10 +221,9 @@ export default {
     &-profile-input {
       padding-left: 64px;
       position: relative;
-      .user-portrait{
-
-      position: absolute;
-      left: 0;
+      .user-portrait {
+        position: absolute;
+        left: 0;
       }
     }
     &-operations {

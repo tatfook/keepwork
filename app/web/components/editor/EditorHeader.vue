@@ -157,7 +157,7 @@
         <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
       </el-menu-item>
       <el-menu-item index='8' class='pull-right user-profile-box'>
-        <user-portrait :width="40" :user="userProfile"></user-portrait>
+        <user-portrait :width="40" :user="userProfile" size="small"></user-portrait>
       </el-menu-item>
       <el-menu-item v-if="!isWelcomeShow" index='9' class='switch-box'>
         <el-tooltip :content="$t('tips.ShowPreviewOnly')">

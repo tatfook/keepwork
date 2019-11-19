@@ -1,7 +1,7 @@
 <template>
   <div class="user-basic-msg">
     <div class="user-basic-msg-profile">
-      <user-portrait :user="nowUserDetail"></user-portrait>
+      <user-portrait :user="nowUserDetail" size="large"></user-portrait>
     </div>
     <div class="user-basic-msg-username-desc">
       <div class="user-basic-msg-username">{{nowUserDetail.username}}</div>

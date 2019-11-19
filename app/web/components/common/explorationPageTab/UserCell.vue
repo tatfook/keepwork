@@ -3,7 +3,7 @@
     <div class="user-tab">
       <div class="user-tab-cover">
         <a :href="`/u/${user.username}`" target="_blank">
-          <user-portrait class="user-tab-cover-img" :width="96" :user="user"></user-portrait>
+          <user-portrait class="user-tab-cover-img" :width="96" :user="user" size="large"></user-portrait>
         </a>
       </div>
       <h5 class="user-tab-name"><a :href="`/u/${user.username}`" target="_blank">{{user.username}}</a></h5>

@@ -1,7 +1,7 @@
 <template>
   <div class="user-item">
     <div class="user-item-portrait">
-      <user-portrait :user="user" :width="56"></user-portrait>
+      <user-portrait :user="user" :width="56" size="small"></user-portrait>
     </div>
     <div class="user-item-info">
       <router-link class="user-item-info-name" :to="{name: 'ProfileIndexPage', params: {username: user.username}}" target="_blank">{{user.nickname || user.username}}</router-link>
