@@ -1,6 +1,6 @@
 <template>
   <div class="teacher-report">
-    <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" :disabled="disabledTabbar" v-model="selectedClassId"></org-classes-tabbar>
+    <org-classes-tabbar :classes="orgClasses" @tab-click="handleSwitchClass" v-model="selectedClassId"></org-classes-tabbar>
     <router-view></router-view>
   </div>
 </template>
@@ -44,9 +44,6 @@ export default {
     }),
     firstClassId() {
       return _.get(this.orgClasses, '[0].id', '')
-    },
-    disabledTabbar() {
-      return ['OrgTeacherReportComment'].includes(this.$route.name)
     },
     isNeedRedirect() {
       return ['OrgTeacherReports'].includes(this.$route.name)
