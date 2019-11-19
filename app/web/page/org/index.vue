@@ -264,7 +264,8 @@ export default {
     ...mapGetters({
       userIsLogined: 'user/isLogined',
       currentOrg: 'org/currentOrg',
-      expirationDialogVisible: 'org/expirationDialogVisible'
+      expirationDialogVisible: 'org/expirationDialogVisible',
+      userinfo: 'org/userinfo'
     }),
     routeLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
@@ -285,6 +286,9 @@ export default {
     },
     routerName() {
       return this.$route.name
+    },
+    username() {
+      return this.userinfo.username
     }
   },
   methods: {
@@ -326,15 +330,11 @@ export default {
       if (name !== 'org' || !token) {
         return
       }
-      let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
-        jsrsasign.b64utoutf8(token.split('.')[1])
-      )
-      const { username = '' } = tokenParams
       const currentLoginUrl = this.getOrgUrl()
       if (!newLoginUrl || !currentLoginUrl) {
         return
       }
-      if (newUsername !== username || currentLoginUrl !== newLoginUrl) {
+      if (newUsername !== this.username || currentLoginUrl !== newLoginUrl) {
         window.location.href = `${window.location.origin}/org/${newLoginUrl}`
       }
     }
