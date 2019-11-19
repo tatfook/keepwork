@@ -270,8 +270,11 @@ export default {
     routeLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
     },
+    loginUrl() {
+      return _.get(this.currentOrg, 'loginUrl')
+    },
     isUserLoginForOrg() {
-      let currentOrgloginUrl = _.get(this.currentOrg, 'loginUrl')
+      let currentOrgloginUrl = this.loginUrl
       return (
         this.userIsLogined &&
         currentOrgloginUrl &&
@@ -313,12 +316,6 @@ export default {
           orgId: this.orgId
         }))
     },
-    getOrgUrl() {
-      const pathname = window.location.pathname
-      const reg = /org\/(\w+)/i
-      const orgUrl = pathname.match(reg)[1]
-      return orgUrl
-    },
     initBroadcastChannel() {
       channel.onmessage = evt => this.checkTokenWithOrgUrl(evt)
     },
@@ -330,11 +327,10 @@ export default {
       if (name !== 'org' || !token) {
         return
       }
-      const currentLoginUrl = this.getOrgUrl()
-      if (!newLoginUrl || !currentLoginUrl) {
+      if (!newLoginUrl || !this.loginUrl) {
         return
       }
-      if (newUsername !== this.username || currentLoginUrl !== newLoginUrl) {
+      if (newUsername !== this.username || this.loginUrl !== newLoginUrl) {
         window.location.href = `${window.location.origin}/org/${newLoginUrl}`
       }
     }
