@@ -1,8 +1,8 @@
 <template>
   <div class="user-portrait">
     <img class="user-portrait-profile" :style="portraitStyle" :src="portraitUrl" alt="">
-    <img v-if="isVip" class="user-portrait-vip" :style="vipStyle" :src="vipIcon" alt="">
-    <img v-if="isT" class="user-portrait-tLevel" :style="tLevelStyle" :src="tLevelIcon" alt="">
+    <span v-if="isVip" class="user-portrait-vip" :style="vipStyle">v</span>
+    <span v-if="isT" class="user-portrait-tLevel" :class="[`user-portrait-tLevel-${tLevel}`]" :style="tLevelStyle">T{{tLevel}}</span>
   </div>
 </template>
 <script>
@@ -76,10 +76,41 @@ export default {
   &-vip {
     position: absolute;
     top: -8px;
+    font-size: 14px;
+    background-color: #363636;
+    color: #ffd35e;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    border-radius: 2px;
   }
   &-tLevel {
     position: absolute;
     bottom: 0;
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    border-radius: 2px;
+    color: #fff;
+    letter-spacing: -1px;
+    &-1 {
+      background-color: #f9723e;
+    }
+    &-2 {
+      background-color: #f82d1d;
+    }
+    &-3 {
+      background-color: #2390f5;
+    }
+    &-4 {
+      background-color: #20ce7e;
+    }
+    &-5 {
+      background-color: #b81abd;
+    }
   }
 }
 </style>
