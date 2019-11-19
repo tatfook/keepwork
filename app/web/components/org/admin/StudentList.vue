@@ -49,11 +49,7 @@ export default {
     ChangePasswordDialog
   },
   async mounted() {
-    this.isLoading = true
-    await this.getOrgStudentList({
-      organizationId: this.orgId
-    }).catch(() => {})
-    this.isLoading = false
+    await this.getStudentWithClassId()
   },
   data() {
     return {
@@ -136,27 +132,33 @@ export default {
       }
       this.isChangeDialogVisible = true
     },
-    async handleChangeSelectClass() {
+    async getStudentWithClassId() {
       this.isLoading = true
-      await this.getOrgStudentList({
-        organizationId: this.orgId,
-        classId: this.selectedClassId
-      }).catch(() => {})
+      try {
+        await this.getOrgStudentList({
+          organizationId: this.orgId,
+          classId: this.selectedClassId
+        })
+      } catch (error) {}
       this.isLoading = false
+      return
+    },
+    handleChangeSelectClass() {
+      this.getStudentWithClassId()
     },
     async removeStudent(studentDetail) {
       this.isLoading = true
       let { users, realname } = studentDetail
-      await this.orgCreateNewMember({
-        organizationId: this.orgId,
-        classIds: [],
-        memberName: users.username,
-        realname,
-        roleId: 1
-      }).catch(() => {})
-      await this.getOrgStudentList({
-        organizationId: this.orgId
-      }).catch(() => {})
+      try {
+        await this.orgCreateNewMember({
+          organizationId: this.orgId,
+          classIds: [],
+          memberName: users.username,
+          realname,
+          roleId: 1
+        })
+        await this.getStudentWithClassId()
+      } catch (error) {}
       this.isLoading = false
     },
     confirmRemoveStudent(studentDetail) {

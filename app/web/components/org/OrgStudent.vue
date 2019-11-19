@@ -25,8 +25,8 @@ export default {
   async created() {
     try {
       await Promise.all([
-        this.getUserOrgRealName(),
         this.getUserInfo(),
+        this.getStudentInfo(),
         this.getOrgClasses()
       ])
     } catch (error) {
@@ -39,7 +39,7 @@ export default {
   methods: {
     ...mapActions({
       getUserInfo: 'org/student/getUserInfo',
-      getUserOrgRealName: 'org/student/getUserOrgRealName',
+      getStudentInfo: 'org/student/getStudentInfo',
       getOrgClasses: 'org/student/getOrgClasses'
     })
   }

@@ -2,7 +2,7 @@
   <div class="project-detail-page">
     <div v-if="isProjectExist && isLoginUserVisible">
       <project-header class="project-detail-page-header" :projectDetail="pblProjectDetail" :editingUserId='editingUserId' :editingProjectUsername='editingProjectUsername' v-if="!isFirstGettingData" :isLoginUserEditable='loginUserIsProjectOwner' :isProhibitView="isProhibitView"></project-header>
-      <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner' :projectApplyState='projectApplyState' :isLoginUsercommentable='isLoginUsercommentable' :isCommentClosed='isCommentClosed' :isProjectStopRecruit='isProjectStopRecruit' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></router-view>
+      <router-view v-if="!isFirstGettingData" :pblProjectDetail='pblProjectDetail' :projectId='projectId' :editingProjectUser="editingProjectUser" :originProjectUsername='editingProjectUsername' :projectOwnerPortrait='projectOwnerPortrait' :isLoginUserEditable='loginUserIsProjectOwner' :projectApplyState='projectApplyState' :isLoginUsercommentable='isLoginUsercommentable' :isCommentClosed='isCommentClosed' :isProjectStopRecruit='isProjectStopRecruit' :isProhibitView="isProhibitView" :isProhibitEdit="isProhibitEdit"></router-view>
     </div>
     <div class="project-detail-page-not-found" v-if="!isProjectExist || !isLoginUserVisible">
       <img src='@/assets/img/404.png' alt="">

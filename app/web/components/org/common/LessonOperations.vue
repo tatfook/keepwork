@@ -133,10 +133,15 @@ export default {
         return
       }
       if (this.isStudentRouter) {
-        this.$router.push({
+        const classId = _.get(this.$route, 'query.classId', '')
+        const param = {
           name: 'OrgStudentPackageLesson',
           params: this.nextRouteParams
-        })
+        }
+        if (classId) {
+          param['query'] = { classId }
+        }
+        this.$router.push(param)
         return
       }
     },

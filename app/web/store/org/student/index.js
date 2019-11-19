@@ -17,7 +17,6 @@ const state = {
   teachingLesson: [],
   userInfo: {},
   isShowSummary: false,
-  orgRealName: '',
   myClassmate: [],
   myTeacher: [],
   classPackages: [],

@@ -6,6 +6,7 @@ import { keepwork } from './keepwork'
 import { paracraft } from './paracraft'
 import skyDrive from './skyDrive'
 import sensitiveWord from './sensitiveWord'
+import injectUserInfo from './injectUserInfo'
 
 export {
   EsAPI,
@@ -15,5 +16,6 @@ export {
   paracraft,
   lesson,
   skyDrive,
-  sensitiveWord
+  sensitiveWord,
+  injectUserInfo
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="account-tab">
-    <img class="account-tab-avatar" :src="avatar" alt="avatar">
+    <user-portrait class="account-tab-avatar" :user="userProfile"></user-portrait>
     <div class="account-tab-username">{{ username }}</div>
     <el-button :class="['account-tab-button', {'selected': isMyAccountTab }]" @click="switchTab('MyAccount')">{{$t('account.myAccount')}}</el-button>
     <el-button :class="['account-tab-button', {'selected': isTransactionDetail }]" @click="switchTab('TransactionDetail')">{{$t('account.transactions')}}</el-button>
@@ -10,6 +10,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import UserPortrait from '@/components/common/UserPortrait'
 export default {
   name: 'AccountTab',
   data() {
@@ -38,12 +39,6 @@ export default {
     isDiscountCoupon() {
       return this.currentTab === 'DiscountCoupon'
     },
-    avatar() {
-      return (
-        this.userProfile.portrait ||
-        require('@/assets/img/default_portrait.png')
-      )
-    },
     username() {
       return this.userProfile.username
     }
@@ -55,6 +50,9 @@ export default {
     initTabSelected() {
       this.currentTab = this.$route.name
     }
+  },
+  components: {
+    UserPortrait
   }
 }
 </script>
@@ -67,10 +65,6 @@ export default {
   justify-content: center;
   background: #fff;
   &-avatar {
-    width: 96px;
-    height: 96px;
-    object-fit: cover;
-    border-radius: 50%;
     margin-top: 27px;
   }
   &-username {

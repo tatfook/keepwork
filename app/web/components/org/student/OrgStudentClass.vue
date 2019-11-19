@@ -1,5 +1,5 @@
 <template>
-  <div class="org-student-class" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)" >
+  <div class="org-student-class" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)">
     <div class="org-student-class-header">
       <span class="join-classroom-icon"></span>
       <span class="join-classroom-title">{{$t("lesson.enterClass")}}</span>
@@ -111,10 +111,15 @@ export default {
       }
     },
     handleToPackagePage(packageId) {
-      this.$router.push({
+      const classId = _.get(this.$route, 'params.classId', '')
+      const param = {
         name: 'OrgStudentPackage',
         params: { packageId }
-      })
+      }
+      if (classId) {
+        param['query'] = { classId }
+      }
+      this.$router.push(param)
     },
     async handleContinueLearn(packageId) {
       const { lessonId } = await this.getNextLesson(packageId)
