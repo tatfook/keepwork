@@ -65,6 +65,7 @@ export default {
           choicenessNo: i.recommended ? 1 : 0,
           rate: i.point || 0,
           extra: {
+            worldTagName: i['world_tag_name'],
             imageUrl: i.cover,
             videoUrl: i.video,
             rate: { count: i.point ? 8 : 0 }
