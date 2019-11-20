@@ -4,6 +4,10 @@ export const paracraftEndpoint = createEndpoint({
   baseURL: process.env.KEEPWORK_API_PREFIX
 })
 
+export const paracraftOrgEndpoint = createEndpoint({
+  baseURL: process.env.LESSON_API_PREFIX
+})
+
 const { get, post } = paracraftEndpoint
 
 export const pBlocks = {
@@ -13,8 +17,8 @@ export const pBlocks = {
 }
 
 export const org = {
-  joinOrganization: async params => post('lessonOrganizationActivateCodes/activate', params),
-  getOrganizationList: async () => get('lessonOrganizations')
+  joinOrganization: async params => paracraftOrgEndpoint.post('lessonOrganizationActivateCodes/activate', params),
+  getOrganizationList: async () => paracraftOrgEndpoint.get('lessonOrganizations')
 }
 
 export const paracraft = {
