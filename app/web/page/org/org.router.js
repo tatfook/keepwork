@@ -5,6 +5,7 @@ const OrgPrint = () => import('@/components/org/OrgPrint')
 const OrgReport = () => import('@/components/org/OrgReport')
 const OrgContact = () => import('@/components/org/OrgContact')
 const OrgNotFound = () => import('@/components/org/OrgNotFound')
+const OrgMessage = () => import('@/components/org/OrgMessage')
 const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
@@ -121,6 +122,11 @@ export default new Router({
       path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
       component: OrgLogin
+    },
+    {
+      path: '/:orgLoginUrl/message',
+      name: 'orgMessage',
+      component: OrgMessage
     },
     {
       path: '/:orgLoginUrl/print',
