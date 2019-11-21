@@ -15,6 +15,7 @@ const state = {
   orgLessonData: {},
   orgLessonDetail: {},
   orgClasses: {},
+  orgClassesWithMember: {},
   orgTeachers: {},
   orgStudents: {},
   userOrg: [],

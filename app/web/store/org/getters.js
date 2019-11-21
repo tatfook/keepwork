@@ -23,23 +23,15 @@ const getters = {
   },
   tokenInfo: (state, { token }) => {
     if (!token) return {}
-    return jsrsasign.KJUR.jws.JWS.readSafeJSONString(
-      jsrsasign.b64utoutf8(token.split('.')[1])
-    )
+    return jsrsasign.KJUR.jws.JWS.readSafeJSONString(jsrsasign.b64utoutf8(token.split('.')[1]))
   },
-  isCurrentOrgToken: (state, { currentOrgId, tokenOrgId }) =>
-    currentOrgId === tokenOrgId,
-  isOrgMember: (state, { roleId, isCurrentOrgToken }) =>
-    isCurrentOrgToken && Boolean(roleId),
-  isAdmin: (sate, { roleId, isCurrentOrgToken }) =>
-    isCurrentOrgToken && (roleId & 64) > 0, // eslint-disable-line no-bitwise
-  isTeacher: (sate, { roleId, isCurrentOrgToken }) =>
-    isCurrentOrgToken && (roleId & 2) > 0, // eslint-disable-line no-bitwise
-  isStudent: (sate, { roleId, isCurrentOrgToken }) =>
-    isCurrentOrgToken && (roleId & 1) > 0, // eslint-disable-line no-bitwise
+  isCurrentOrgToken: (state, { currentOrgId, tokenOrgId }) => currentOrgId === tokenOrgId,
+  isOrgMember: (state, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && Boolean(roleId),
+  isAdmin: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 64) > 0, // eslint-disable-line no-bitwise
+  isTeacher: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 2) > 0, // eslint-disable-line no-bitwise
+  isStudent: (sate, { roleId, isCurrentOrgToken }) => isCurrentOrgToken && (roleId & 1) > 0, // eslint-disable-line no-bitwise
   getOrgDetailById: state => ({ id }) => _.get(state.orgsDetailForId, id),
-  getOrgDetailByLoginUrl: state => ({ loginUrl }) =>
-    _.get(state.orgsDetailForLoginUrl, loginUrl),
+  getOrgDetailByLoginUrl: state => ({ loginUrl }) => _.get(state.orgsDetailForLoginUrl, loginUrl),
   currentOrgHaveExpired: (state, { endTimestamp }) => {
     return Date.now() > endTimestamp
   },
@@ -57,22 +49,19 @@ const getters = {
     const year = _endDate.getFullYear()
     const month = _endDate.getMonth() + 1
     const day = _endDate.getDate()
-    const endTime =
-      +new Date(`${year}-${month}-${day}`) + 1000 * 60 * 60 * 24 - 1000
+    const endTime = +new Date(`${year}-${month}-${day}`) + 1000 * 60 * 60 * 24 - 1000
     return endTime
   },
   currentOrg: state => state.currentOrg,
   currentOrgId: (state, { currentOrg }) => currentOrg.id,
   getOrgPackagesById: state => ({ id }) => _.get(state.orgPackages, id),
-  getOrgPackagesWithLessonById: state => ({ id }) =>
-    _.get(state.orgPackagesWithLesson, id),
+  getOrgPackagesWithLessonById: state => ({ id }) => _.get(state.orgPackagesWithLesson, id),
   getOrgClassesById: state => ({ id }) => _.get(state.orgClasses, id),
   getOrgTeachersById: state => ({ id }) => _.get(state.orgTeachers, id),
-  getOrgTeachersByClassId: state => ({ orgId, classId }) =>
-    _.get(state.orgTeachers, `${orgId}.${classId}`),
+  getOrgTeachersByClassId: state => ({ orgId, classId }) => _.get(state.orgTeachers, `${orgId}.${classId}`),
   getOrgStudentsById: state => ({ id }) => _.get(state.orgStudents, id),
-  getOrgStudentsByClassId: state => ({ orgId, classId }) =>
-    _.get(state.orgStudents, `${orgId}.${classId}`),
+  getOrgStudentsByClassId: state => ({ orgId, classId }) => _.get(state.orgStudents, `${orgId}.${classId}`),
+  allClassesWithMember: (state, { currentOrgId }) => _.get(state.orgClassesWithMember, currentOrgId),
   orgLessonDetail: state => state.orgLessonDetail,
   orgPackagesDetail: state => state.orgPackagesDetail,
   userOrg: state => state.userOrg,
@@ -84,24 +73,15 @@ const getters = {
     return !_.includes(_.get(currentOrg, 'extra.visitedList', []), id)
   },
   formsList: state => ({ id }) => _.get(state.orgForms, id),
-  getFormDetailById: (state, { formsList, currentOrgId }) => ({
-    id,
-    orgId
-  }) => {
+  getFormDetailById: (state, { formsList, currentOrgId }) => ({ id, orgId }) => {
     orgId = orgId || currentOrgId
-    return _.find(
-      formsList({ id: orgId }),
-      formDetail => _.toNumber(formDetail.id) === _.toNumber(id)
-    )
+    return _.find(formsList({ id: orgId }), formDetail => _.toNumber(formDetail.id) === _.toNumber(id))
   },
   getFormFeedbackById: state => ({ id }) => state.formsFeedback[id],
-  currentOrgLogs: (state, { currentOrgId }) =>
-    _.get(state.orgLogs, currentOrgId, []),
-  getClassEvaluation: state => ({ classId }) =>
-    _.get(state.classEvaluations, classId),
-  getClassEvaluationList: state => ({ classId }) =>
-    _.get(state.classEvaluationList, classId),
-  getClassReportByDays: state => ({ days }) => state.orgClassesReport[days]
+  currentOrgLogs: (state, { currentOrgId }) => _.get(state.orgLogs, currentOrgId, []),
+  getClassEvaluation: state => ({ classId }) => _.get(state.classEvaluations, classId),
+  getClassEvaluationList: state => ({ classId }) => _.get(state.classEvaluationList, classId),
+  getClassReportByDays: state => ({ days }) => state.orgClassesReport[days],
 }
 
 export default getters
