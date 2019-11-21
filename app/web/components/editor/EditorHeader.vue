@@ -157,7 +157,7 @@
         <!-- <span>{{ isActivePageSaved ? '' : $t('editor.unsavedTip') }}</span> -->
       </el-menu-item>
       <el-menu-item index='8' class='pull-right user-profile-box'>
-        <img class='user-profile' :src='miniPortrait' alt=''>
+        <user-portrait :width="40" :user="userProfile" size="small"></user-portrait>
       </el-menu-item>
       <el-menu-item v-if="!isWelcomeShow" index='9' class='switch-box'>
         <el-tooltip :content="$t('tips.ShowPreviewOnly')">
@@ -195,6 +195,7 @@ import { toggleLanguage, locale } from '@/lib/utils/i18n'
 import NewWebsiteDialog from '@/components/common/NewWebsiteDialog'
 import WebsiteSettingDialog from '@/components/common/WebsiteSettingDialog'
 import EditorMergePreview from './EditorMergePreview'
+import UserPortrait from '@/components/common/UserPortrait'
 
 export default {
   name: 'EditorHeader',
@@ -250,17 +251,6 @@ export default {
       updateRecentUrlList: 'updateRecentUrlList',
       isShowMergePreview: 'isShowMergePreview'
     }),
-    miniPortrait() {
-      let portrait = this.userProfile.portrait || ''
-      portrait = portrait.replace(/#.*/g, '')
-      if (
-        /^http:\/\/qiniu/.test(portrait) ||
-        /^https:\/\/qiniu/.test(portrait)
-      ) {
-        return `${portrait}&imageView2/2/w/100`
-      }
-      return `${portrait}?imageView2/2/w/100`
-    },
     isWelcomeShow() {
       return !this.activePageInfo.sitename
     },
@@ -680,6 +670,7 @@ export default {
   components: {
     NewWebsiteDialog,
     WebsiteSettingDialog,
+    UserPortrait,
     EditorMergePreview
   }
 }
@@ -746,12 +737,6 @@ export default {
 }
 .user-profile-box {
   padding-right: 0;
-}
-.user-profile {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 .input-link-copy-box {
   display: inline-block;

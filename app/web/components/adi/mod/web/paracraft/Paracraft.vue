@@ -59,8 +59,8 @@ enter:
 innerModal:
   hidden: //内部模态框隐藏与否
 paracraftInfo:
-  text: // 未安装Paracraft客户端提示文字
-  link: // 下载Paracraft客户端链接
+  text: // 未安装帕拉卡（Paracraft）提示文字
+  link: // 下载帕拉卡（Paracraft）链接
   target: // 链接从新窗口打开或本窗口打开
 
 ```

@@ -5,7 +5,7 @@
       <el-form ref="form" :model="userInfo" label-width="80px" :rules="userInfoRules">
         <el-form-item :label='$t("card.pic")'>
           <div class="user-data-content-profile" @click="showMediaSkyDriveDialog">
-            <img :src="portrait || defaultPortrait" alt="" class="profile">
+            <user-portrait class="profile" :user="userInfo" :width="120" size="large"></user-portrait>
             <span class="change">{{$t('user.modifyAvatar')}}</span>
           </div>
         </el-form-item>
@@ -64,6 +64,7 @@ import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from '@/components/common/DialogOperations'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import cityName from './CityName.js'
+import UserPortrait from '@/components/common/UserPortrait'
 
 export default {
   name: 'UserData',
@@ -89,7 +90,6 @@ export default {
       tempLocation: null,
       userInfo: { info: {} },
       copiedLoginUserProfile: {},
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isMediaSkyDriveDialogShow: false,
       userInfoRules: {
         'info.email': [
@@ -113,9 +113,6 @@ export default {
       isRealNamed: 'user/isRealNamed',
       loginUserProfile: 'user/profile'
     }),
-    portrait() {
-      return _.get(this.userInfo, 'portrait')
-    },
     originExtra() {
       return this.copiedLoginUserProfile.extra
     },
@@ -204,6 +201,7 @@ export default {
     }
   },
   components: {
+    UserPortrait,
     SkyDriveManagerDialog,
     DialogOperations
   }

@@ -13,7 +13,7 @@
               <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <img :src="userPortrait" class="org-teacher-profile" />
+          <user-portrait :user="userinfo" class="org-teacher-profile" size="large"></user-portrait>
           <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">
@@ -28,8 +28,12 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import UserPortrait from '@/components/common/UserPortrait'
 export default {
   name: 'OrgTeacher',
+  components: {
+    UserPortrait
+  },
   data() {
     return {
       defaultPortrait: require('@/assets/img/default_portrait.png'),

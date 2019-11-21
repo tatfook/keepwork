@@ -9,7 +9,7 @@
         </div>
         <div class="comment-box">
           <div class="comment-item" v-for='comment in getCommentList' :key='comment.id'>
-            <img :src="comment.extra.portrait">
+            <user-portrait class="comment-item-portrait" :user="comment.user" :width="80"></user-portrait>
             <div class="text">
               <h4>{{ comment.extra.username }}</h4>
               <p class="info">{{ getFormatDate(comment.updatedAt) }}</p>
@@ -33,7 +33,7 @@
           <h3><img :src="getStyleOneId">{{$t(options.title)}}</h3>
           <hr>
           <div class="comment-item" v-for='comment in getCommentList' :key='comment.id'>
-            <img :src="comment.extra.portrait">
+            <user-portrait class="comment-item-portrait" :user="comment.user" :width="80"></user-portrait>
             <div class="text">
               <h4>{{ comment.extra.username }}</h4>
               <p class="info">{{ getFormatDate(comment.updatedAt) }}</p>
@@ -60,6 +60,7 @@ import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
+import UserPortrait from '@/components/common/UserPortrait'
 
 export default {
   name: 'AdiComment',
@@ -187,6 +188,9 @@ export default {
     handleCurrentChange(page) {
       this.loadComments(page)
     }
+  },
+  components: {
+    UserPortrait
   }
 }
 </script>
@@ -201,10 +205,7 @@ export default {
         margin: 15px 0;
         position: relative;
 
-        & > img {
-          width: 80px;
-          height: 80px;
-          object-fit: cover;
+        &-portrait {
           float: left;
         }
 
@@ -303,10 +304,7 @@ export default {
         margin: 15px 0;
         position: relative;
 
-        & > img {
-          width: 80px;
-          height: 80px;
-          object-fit: cover;
+        &-portrait {
           float: left;
         }
 

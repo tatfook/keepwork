@@ -2,7 +2,7 @@
   <el-container class="user-data-setting" v-loading='loading' @click.stop="handleDialogClick">
     <el-row class="user-data-setting-content">
       <el-col class="user-data-setting-portrait-col">
-        <img :src="portrait || defaultPortrait" alt="" class="user-data-setting-profile" @click="showMediaSkyDriveDialog">
+        <user-portrait class="user-data-setting-profile" :user="userInfo" size="large" @click.native="showMediaSkyDriveDialog"></user-portrait>
         <div>
           <div class="user-data-setting-change-profile" @click="showMediaSkyDriveDialog">
             {{$t('user.modifyAvatar')}}
@@ -43,6 +43,7 @@ import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 import DialogOperations from './DialogOperations'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import UserPortrait from '@/components/common/UserPortrait'
 export default {
   name: 'UserData',
   mounted() {
@@ -56,7 +57,6 @@ export default {
       userInfo: {},
       tempLocation: null,
       copiedLoginUserProfile: {},
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
       isMediaSkyDriveDialogShow: false
     }
   },
@@ -65,9 +65,6 @@ export default {
       isRealNamed: 'user/isRealNamed',
       loginUserProfile: 'user/profile'
     }),
-    portrait() {
-      return _.get(this.userInfo, 'portrait')
-    },
     originExtra() {
       return this.copiedLoginUserProfile.extra
     },
@@ -139,6 +136,7 @@ export default {
   },
   components: {
     SkyDriveManagerDialog,
+    UserPortrait,
     DialogOperations
   }
 }
@@ -155,7 +153,7 @@ export default {
     width: auto;
     text-align: center;
     padding: 40px 55px 0 0;
-    .user-data-setting-profile{
+    .user-data-setting-profile {
       cursor: pointer;
     }
   }
@@ -188,10 +186,6 @@ export default {
     cursor: pointer;
   }
   &-profile {
-    width: 96px;
-    height: 96px;
-    object-fit: cover;
-    border-radius: 50%;
     margin-bottom: 13px;
   }
 }

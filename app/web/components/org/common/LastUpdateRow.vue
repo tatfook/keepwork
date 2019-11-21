@@ -1,9 +1,9 @@
 <template>
   <div class="last-update-row">
     <div class="user-info">
-      <img class="user-info-portrait" :src="portrait" :alt="realName">
+      <user-portrait :user="user" :width="125" size="large"></user-portrait>
       <span class="user-info-realname">
-        {{ realName}}
+        {{ realname}}
       </span>
     </div>
     <div class="project-list">
@@ -18,29 +18,31 @@
 
 <script>
 import ProjectCell from '@/components/common/ProjectCell'
+import UserPortrait from '@/components/common/UserPortrait'
 import _ from 'lodash'
 export default {
   name: 'LastUpdateRow',
   components: {
-    ProjectCell
+    ProjectCell,
+    UserPortrait
   },
   props: {
     userData: Object
   },
-  data() {
-    return {
-      defaultPortrait: require('@/assets/img/default_portrait.png')
-    }
-  },
   computed: {
-    realName() {
-      return _.get(this.userData, 'realname')
-    },
-    portrait() {
-      return _.get(this.userData, 'users.portrait') || this.defaultPortrait
-    },
     projects() {
-      return _.get(this.userData, 'projects', [])
+      const projects = _.get(this.userData, 'projects', [])
+      return _.map(projects, item => {
+        const user = _.get(item, 'user.0', {})
+        item.user = user
+        return item
+      })
+    },
+    user() {
+      return _.get(this.userData, 'users.0', {})
+    },
+    realname() {
+      return _.get(this.userData, 'realname', '')
     }
   }
 }

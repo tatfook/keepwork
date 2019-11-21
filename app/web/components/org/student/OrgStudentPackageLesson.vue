@@ -3,7 +3,8 @@
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgStudent' }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="classId" :to="{ name: 'OrgStudentClassDetail', params: { classId } }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-else :to="{ name: 'OrgStudent' }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ name: 'OrgStudentPackage', params: { packageId } }">{{packageName}}</el-breadcrumb-item>
           <el-breadcrumb-item>
             <el-dropdown @command="handleSelectLesson">
@@ -84,8 +85,8 @@ export default {
       }
     },
     handleSelectLesson(lessonId) {
-      const { name, params } = this.$route
-      this.$router.push({ name, params: { ...params, lessonId } })
+      const { name, params, query } = this.$route
+      this.$router.push({ name, params: { ...params, lessonId }, query })
     }
   },
   computed: {
@@ -152,6 +153,9 @@ export default {
     },
     classroomId() {
       return _.get(this.classroom, 'id', '')
+    },
+    classId() {
+      return _.get(this.$route, 'query.classId', '')
     }
   }
 }

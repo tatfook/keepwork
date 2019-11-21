@@ -3,7 +3,8 @@
     <div class="org-breadcrumb">
       <div class="org-breadcrumb-main">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ name: 'OrgStudent' }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="classId" :to="{ name: 'OrgStudentClassDetail', params: { classId } }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-else :to="{ name: 'OrgStudent' }">{{$t("org.lessonPackage")}}</el-breadcrumb-item>
           <el-breadcrumb-item>
             <el-dropdown @command="handleSelectPackage">
               <span class="el-dropdown-link">
@@ -59,8 +60,8 @@ export default {
       getOrgPackages: 'org/student/getOrgPackages'
     }),
     handleSelectPackage(packageId) {
-      const { name, params } = this.$route
-      this.$router.push({ name, params: { ...params, packageId } })
+      const { name, params, query } = this.$route
+      this.$router.push({ name, params: { ...params, packageId }, query })
     },
     async getPackageDetail() {
       const { packageId, orgLoginUrl } = this.$route.params
@@ -96,6 +97,9 @@ export default {
         ...this.currentPackageDetail,
         ...this.currentPackageDetail.package
       }
+    },
+    classId() {
+      return _.get(this.$route, 'query.classId', '')
     }
   }
 }

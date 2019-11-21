@@ -92,10 +92,13 @@ export default {
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      orgRealName: 'org/student/orgRealName',
+      userinfo: 'org/student/userinfo',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
       tokenInfo: 'org/tokenInfo'
     }),
+    orgRealName() {
+      return _.get(this.userinfo, 'realname', '')
+    },
     orgName() {
       return _.get(this.currentOrg, 'name')
     },

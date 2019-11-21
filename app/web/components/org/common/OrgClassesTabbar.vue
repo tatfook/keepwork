@@ -29,7 +29,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      dfauult: false
+      default: false
     },
     name: '',
     value: ''

@@ -4,9 +4,7 @@
     <div class="activated-teacher-role-content">
       <div class="activated-teacher-role-content-left">
         <div class="activated-teacher-role-content-left-top">
-          <div class="avatar">
-            <img :src="userProfile.portrait || avatar" alt="">
-          </div>
+          <user-portrait :user="userProfile" size="large"></user-portrait>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
             <router-link v-if="isTeacher || isAlliance" :to="{name: 'TeacherColumnApply'}" class="activated-teacher-role-identity">
@@ -31,16 +29,18 @@
 </template>
 <script>
 import moment from 'moment'
-import avatar from '@/assets/img/default_portrait.png'
+import UserPortrait from '@/components/common/UserPortrait'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'ActivatedTeacherRole',
+  components: {
+    UserPortrait
+  },
   data() {
     return {
       windowWidth: window.innerWidth,
       itmeActive: '1',
-      avatar,
       currOption: 'teaching'
     }
   },

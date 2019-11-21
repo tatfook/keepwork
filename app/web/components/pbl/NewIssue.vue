@@ -19,14 +19,14 @@
       <div class="new-issue-sketch-item">
         <div class="new-issue-sketch-label" :class="{'new-issue-sketch-label-en': isEn}">{{$t('project.asignees')}}</div>
         <div class="new-issue-sketch-content new-issue-sketch-asignee">
-          <img v-for="(member,index) in assignedMembers" :key="index" class="new-issue-sketch-asignee-portrait" :src="member.portrait || default_portrait" alt="">
+          <user-portrait v-for="(member,index) in assignedMembers" :key="index" class="new-issue-sketch-asignee-portrait" :user="member.user" :width="36" badgePosition="none"></user-portrait>
           <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
             <span class="el-icon-plus"></span>
             <el-dropdown-menu slot="dropdown" class="new-issue-sketch-asignee-dropdown">
               <el-dropdown-item v-if="memberList.length == 0">{{$t('project.noOtherMembers')}}</el-dropdown-item>
               <el-dropdown-item v-for="member in memberList" :key="member.id" :command="member.userId">
                 <i :class="['icofont',{'el-icon-check': isAssigned(member)}]"></i>
-                <img class="new-issue-sketch-asignee-dropdown-portrait" :src="member.portrait || default_portrait" alt="">
+                <user-portrait class="new-issue-sketch-asignee-dropdown-portrait" :user="member.user" :width="26" size="small" badgePosition="relative"></user-portrait>
                 {{member.nickname || member.username}}
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -49,7 +49,7 @@ import { keepwork } from '@/api'
 import _ from 'lodash'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapActions, mapGetters } from 'vuex'
-import default_portrait from '@/assets/img/default_portrait.png'
+import UserPortrait from '@/components/common/UserPortrait'
 import Vue from 'vue'
 
 export default {
@@ -68,7 +68,6 @@ export default {
       inputVisible: false,
       inputValue: '',
       descriptionText: '',
-      default_portrait: default_portrait,
       assignedMembers: [],
       cretateIssueLoading: false,
       isTagLoading: false
@@ -178,14 +177,17 @@ export default {
         return this.toggleRealName(true)
       }
       this.cretateIssueLoading = true
-      const sensitiveResult = await checkSensitiveWords({checkedWords:[
-        this.issueTitle,
-        this.descriptionText
-      ]}).catch(e => console.error(e))
+      const sensitiveResult = await checkSensitiveWords({
+        checkedWords: [this.issueTitle, this.descriptionText]
+      }).catch(e => console.error(e))
       this.cretateIssueLoading = false
       if (sensitiveResult && sensitiveResult.length > 0) {
         this.issueTitle = _.get(sensitiveResult, '[0].word', this.issueTitle)
-        this.descriptionText = _.get(sensitiveResult, '[1].word', this.descriptionText)
+        this.descriptionText = _.get(
+          sensitiveResult,
+          '[1].word',
+          this.descriptionText
+        )
         return
       }
       let payload = {
@@ -220,6 +222,9 @@ export default {
       this.assignedMembers = []
       this.descriptionText = ''
     }
+  },
+  components: {
+    UserPortrait
   }
 }
 </script>
@@ -283,11 +288,7 @@ export default {
       }
       &-dropdown {
         &-portrait {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
           margin-right: 10px;
-          object-fit: cover;
         }
         .el-dropdown-menu__item {
           display: flex;

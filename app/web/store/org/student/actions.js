@@ -26,7 +26,6 @@ const {
   GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
   SWITCH_SUMMARY,
-  GET_ORG_REAL_NAME_SUCCESS,
   GET_MY_TEACHER_SUCCESS,
   GET_MY_CLASSMATE_SUCCESS,
   GET_CLASS_PACKAGES_SUCCESS,
@@ -155,32 +154,6 @@ const actions = {
   async getUserInfo({ commit }) {
     const userInfo = await lesson.users.getUserDetail()
     commit(GET_USER_INFO_SUCCESS, userInfo)
-  },
-  async getUserOrgRealName({
-    commit,
-    rootGetters: {
-      'org/currentOrg': { id: organizationId },
-      'org/userinfo': { username }
-    }
-  }) {
-    const res = await graphql.getQueryResult({
-      query:
-        'query($organizationId: Int, $userId: Int, $username: String){ organizationUser(organizationId: $organizationId, userId: $userId, username: $username){organizationId, userId, organizationClassMembers{classId, roleId, realname} }}',
-      variables: {
-        organizationId,
-        username
-      }
-    })
-    const orgs = _.filter(
-      _.get(res, 'organizationUser.organizationClassMembers', []),
-      item => {
-        const roleId = item.roleId
-        const isStudent = (roleId & 1) > 0 // eslint-disable-line no-bitwise
-        return isStudent && item.realname
-      }
-    )
-    const realName = _.get(orgs, '[0].realname', '')
-    commit(GET_ORG_REAL_NAME_SUCCESS, realName)
   },
   async getOrgPackages(
     {

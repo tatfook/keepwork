@@ -40,7 +40,7 @@
             </div>
           </div>
           <div class="project-white-board-list-asignees  hidden-sm-and-down" v-if="issue.assigns.length > 0">
-            <img class="project-white-board-list-asignees-item" v-for="player in issue.assigns" :key="player.id" :src="player.portrait || default_portrait" alt="" :title="player.username">
+            <user-portrait class="project-white-board-list-asignees-item" v-for="player in issue.assigns" :key="player.id" :user="player" :width="24" badgePosition="none"></user-portrait>
           </div>
         </div>
       </div>
@@ -63,6 +63,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import { locale } from '@/lib/utils/i18n'
 import default_portrait from '@/assets/img/default_portrait.png'
+import UserPortrait from '@/components/common/UserPortrait'
 
 export default {
   name: 'ProjectWhiteBoard',
@@ -92,6 +93,7 @@ export default {
     }
   },
   components: {
+    UserPortrait,
     NewIssue,
     IssueDetail
   },

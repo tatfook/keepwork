@@ -60,7 +60,7 @@ export default {
           visit: i.total_view,
           star: i.total_like,
           comment: i.total_comment || 0,
-          user: { username: i.username, portrait: i.user_portrait || '' },
+          user: i.user,
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
@@ -68,6 +68,7 @@ export default {
           choicenessNo: i.recommended ? 1 : 0,
           rate: i.point || 0,
           extra: {
+            worldTagName: i['world_tag_name'],
             imageUrl: i.cover,
             videoUrl: i.video,
             rate: { count: i.point ? 8 : 0 }

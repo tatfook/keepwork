@@ -4,7 +4,7 @@
       {{reportName}}
     </div>
     <div v-if="showComment" class="report-chart-header">
-      <img class="report-chart-header-avatar" :src="uesrPortrait | miniPic">
+        <user-portrait :user="userRepo" :width="110" class="report-chart-header-avatar" size="large"></user-portrait>
       <div class="report-chart-header-realname">
         {{ userRealname }}
       </div>
@@ -152,6 +152,7 @@ import ReportChartRadar from './ReportChartRadar'
 import ReportChartLine from './ReportChartLine'
 import ReportChartHistogram from './ReportChartHistogram'
 import videoPlayer from '@/components/common/VideoPlayer'
+import UserPortrait from '@/components/common/UserPortrait'
 import PhotoPreview from './PhotoPreview'
 import moment from 'moment'
 export default {
@@ -161,7 +162,8 @@ export default {
     ReportChartLine,
     ReportChartHistogram,
     videoPlayer,
-    PhotoPreview
+    PhotoPreview,
+    UserPortrait
   },
   filters: {
     miniPic(url) {

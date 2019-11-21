@@ -68,12 +68,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      orgRealName: 'org/student/orgRealName',
+      userinfo: 'org/student/userinfo',
       orgClasses: 'org/student/orgClasses',
       organizationId: 'org/currentOrgId'
     }),
     disabeldSubmitButton() {
       return !_.trim(this.form.realname) || !_.trim(this.form.key)
+    },
+    orgRealName() {
+      return _.get(this.userinfo, 'realname', '')
     }
   },
   async mounted() {

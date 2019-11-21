@@ -5,7 +5,7 @@
     </div>
     <div class="project-comments-sends">
       <div class="project-comments-sends-profile-input">
-        <img class="hidden-xs-only project-comments-profile" :src='userPortrait || defaultPortrait' alt="">
+        <user-portrait class="hidden-xs-only" :user="userProfile" :width="48" size="small"></user-portrait>
         <el-input :disabled='!isLoginUsercommentable' :placeholder="$t('project.writeComment')" v-model='newCommenContent' maxlength="1000"></el-input>
       </div>
       <div class="project-comments-sends-operations">
@@ -15,7 +15,7 @@
     </div>
     <div class="project-comments-list" v-loading='isLoading'>
       <div class="project-comments-item" v-for="(comment, index) in commentList" :key='index'>
-        <img class="project-comments-profile project-comments-item-profile" :src="comment.extra.portrait || defaultPortrait" alt="">
+        <user-portrait class="project-comments-item-profile" :user="comment.user" :width="48" size="small"></user-portrait>
         <div class="project-comments-item-detail">
           <p class="project-comments-item-username-time">{{comment.extra.nickname || comment.extra.username}}
             <span class="project-comments-item-time">{{comment.createdAt | relativeTimeFilter(isEn)}}</span>
@@ -35,6 +35,7 @@ import { locale } from '@/lib/utils/i18n'
 import { checkSensitiveWords } from '@/lib/utils/sensitive'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
+import UserPortrait from '@/components/common/UserPortrait'
 export default {
   name: 'ProjectComments',
   props: {
@@ -54,7 +55,6 @@ export default {
       isAddingComment: false,
       isLoading: false,
       newCommenContent: '',
-      defaultPortrait: require('@/assets/img/default_portrait.png'),
       commentList: [],
       isGetAllComment: false,
       isGetCommentBtnLoading: false,
@@ -72,9 +72,6 @@ export default {
     }),
     projectCommentList() {
       return this.pblProjectCommentList({ projectId: this.projectId }) || []
-    },
-    userPortrait() {
-      return _.get(this.userProfile, 'portrait')
     }
   },
   methods: {
@@ -188,6 +185,9 @@ export default {
         })
     }
   },
+  components: {
+    UserPortrait
+  },
   filters: {
     relativeTimeFilter(date, isEn) {
       isEn ? moment.locale('en') : moment.locale('zh-cn')
@@ -199,12 +199,6 @@ export default {
 <style lang="scss">
 .project-comments {
   background-color: #fff;
-  &-profile {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
   &-header {
     font-size: 16px;
     color: #303133;
@@ -227,7 +221,7 @@ export default {
     &-profile-input {
       padding-left: 64px;
       position: relative;
-      img {
+      .user-portrait {
         position: absolute;
         left: 0;
       }
