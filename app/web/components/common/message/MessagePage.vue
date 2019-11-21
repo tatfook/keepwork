@@ -9,7 +9,7 @@
     </div>
     <div class="message-main">
       <div class="message-main-title">{{currentTabName}}</div>
-      <message-row v-for="item in systemMessages" :data="item" :key="item.id"></message-row>
+      <message-row v-for="item in currentTabMessages" :data="item" :id="`msg-${item.messageId}`" :key="item.id"></message-row>
       <div class="message-pagination" v-if="isShowPagination">
         <el-pagination background :current-page.sync="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="true" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
         </el-pagination>
@@ -68,7 +68,7 @@ export default {
     ...mapGetters({
       messages: 'message/messages'
     }),
-    systemMessages() {
+    currentTabMessages() {
       return _.filter(
         _.get(this.messages, 'rows', []),
         item => item.messages.sender === 0
@@ -82,7 +82,7 @@ export default {
     },
     currentPageUnreadMessageIDs() {
       return _.map(
-        _.filter(this.systemMessages, item => item.state === 0),
+        _.filter(this.currentTabMessages, item => item.state === 0),
         msg => msg.id
       )
     },
@@ -150,8 +150,8 @@ export default {
             scrollMode: 'if-needed',
             behavior: 'smooth'
           })
+          messageEle.classList.add('bling')
         }
-        messageEle.classList.add('bling')
       })
     }
   }
@@ -214,7 +214,7 @@ export default {
       background: #f5f5f5;
     }
     .bling {
-      animation: flash 1.5s linear 1;
+      animation: flash 2s linear 1;
     }
     @keyframes flash {
       from {

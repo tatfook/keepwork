@@ -1,6 +1,6 @@
 <template>
   <div class="message-row">
-    <div class="message-row-item" :id="`msg-${data.id}`">
+    <div class="message-row-item">
       <img class="message-avatar" :src="systemAvatar" alt="系统头像">
       <div class="message-main">
         <span class="message-main-sender">{{$t('message.system')}}</span>
