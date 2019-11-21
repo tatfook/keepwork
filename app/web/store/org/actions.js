@@ -161,24 +161,7 @@ const actions = {
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
   async getClassesWithMember({ commit, getters: { currentOrgId: organizationId } }) {
-    let classes = _.map([1, 2, 3, 4, 5], index => {
-      return {
-        className: '班级名称' + index,
-        classId: 'classId' + index,
-        teacherList: _.map([1, 2], teacherIndex => {
-          return {
-            userId: index + 'teacherUserId' + teacherIndex,
-            realname: index + 'teacherRealname' + teacherIndex,
-          }
-        }),
-        studentList: _.map([1, 2, 3, 4, 5], teacherIndex => {
-          return {
-            userId: index + 'studentUserId' + teacherIndex,
-            realname: index + 'studentRealname' + teacherIndex,
-          }
-        }),
-      }
-    })
+    let classes = await keepwork.lessonOrganizations.getClassAndMembers()
     commit(GET_CLASSES_WITH_MEMBER_SUCCESS, { classes, organizationId })
   },
   async createNewClass({ dispatch }, { organizationId, name, begin, end, packages }) {

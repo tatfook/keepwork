@@ -13,7 +13,7 @@
       <div class="new-message-item">
         <span class="new-message-item-star">*</span>
         <label class="new-message-item-label">发送对象:</label>
-        <el-button class="new-message-item-button" type="primary" @click="showMemberDialog">选择对象</el-button>
+        <el-button class="new-message-item-button" :class="{'danger': !isReceiverValid}" type="primary" @click="showMemberDialog">选择对象</el-button>
         <el-tag v-for="classItem in tagArr" :key="classItem.classId" closable effect="plain" type="info" @close="removeClass(classItem)">
           {{classItem.className}}（{{classItem.count}}人）
         </el-tag>
@@ -24,7 +24,7 @@
       <div class="new-message-item">
         <span class="new-message-item-star">*</span>
         <label class="new-message-item-label">消息内容:</label>
-        <el-input type="textarea" placeholder="请输入内容..." resize="none" v-model="messageText">
+        <el-input :class="{'danger': !isMsgValid}" type="textarea" placeholder="请输入内容..." resize="none" v-model="messageText">
         </el-input>
       </div>
     </div>
@@ -45,6 +45,8 @@ export default {
       isSendMessage: true,
       messageText: '',
       isMemberDialogShow: false,
+      // isReceiverValid: true,
+      // isMsgValid: true,
     }
   },
   computed: {
@@ -70,13 +72,22 @@ export default {
         sendSms: this.isSendMessage ? 1 : 0,
       }
     },
+    isReceiverValid() {
+      return this.selectedMembers.length > 0
+    },
+    isMsgValid() {
+      return Boolean(this.messageText)
+    },
+    isNewDataValid() {
+      return this.isMsgValid && this.isReceiverValid
+    },
   },
   methods: {
     cancel() {
       this.$emit('cancel')
     },
     saveData() {
-      this.$emit('save', this.newMessageData)
+      if (this.isNewDataValid) this.$emit('save', this.newMessageData)
     },
     showMemberDialog() {
       this.isMemberDialogShow = true
@@ -156,6 +167,10 @@ export default {
       height: 24px;
       line-height: 24px;
       padding: 0 18px;
+      &.danger {
+        background-color: #f5222d;
+        border-color: #f5222d;
+      }
     }
     &-checkbox-row {
       margin-top: 20px;
@@ -165,6 +180,10 @@ export default {
       padding-left: 80px;
       box-sizing: border-box;
       top: -20px;
+      font-size: 12px;
+      /deep/ &.danger > .el-textarea__inner {
+        border-color: #f5222d;
+      }
     }
     /deep/.el-textarea__inner {
       height: 300px;

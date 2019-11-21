@@ -25,6 +25,7 @@ const lessonOrganizations = {
       `lessonOrganizations/packages?organizationId=${organizationId}&classId=${classId}`
     ),
   getOrgClasses: async params => get('lessonOrganizationClasses', { params }),
+  getClassAndMembers: async () => get('lessonOrganizations/classAndMembers'),
   getByUrl: async ({ url }) => get(`lessonOrganizations/getByUrl?url=${url}`),
   getClassPackagesById: async params =>
     get('lessonOrganizations/packages', { params }),
