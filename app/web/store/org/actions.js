@@ -160,8 +160,8 @@ const actions = {
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
-  async getClassesWithMember({ commit, getters: { currentOrgId: organizationId } }) {
-    let classes = await keepwork.lessonOrganizations.getClassAndMembers()
+  async getClassesWithMember({ commit, getters: { currentOrgId: organizationId } }, _roleId) {
+    let classes = await keepwork.lessonOrganizations.getClassAndMembers({ _roleId })
     commit(GET_CLASSES_WITH_MEMBER_SUCCESS, { classes, organizationId })
   },
   async createNewClass({ dispatch }, { organizationId, name, begin, end, packages }) {

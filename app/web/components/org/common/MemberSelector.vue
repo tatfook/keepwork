@@ -20,7 +20,7 @@ export default {
   async mounted() {
     this.isTreeLoading = true
     try {
-      await this.getClassesWithMember()
+      await this.getClassesWithMember(this.roleId)
     } catch (error) {}
     this.isTreeLoading = false
   },
@@ -37,6 +37,13 @@ export default {
     ...mapGetters({
       allClassesWithMember: 'org/allClassesWithMember',
     }),
+    roleId() {
+      let nowPathArr = this.$route.path.split('/')
+      if (nowPathArr.length > 2) {
+        let nowRoleText = nowPathArr[2]
+        return nowRoleText == 'teacher' ? 2 : null
+      }
+    },
     classMemberData() {
       return _.map(this.allClassesWithMember, classItem => {
         let { className, classId, teacherList, studentList } = classItem
