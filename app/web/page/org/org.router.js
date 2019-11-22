@@ -62,6 +62,9 @@ const OrgAdminLessonPlan = () =>
 const OrgAdminPackageLesson = () =>
   import('@/components/org/admin/OrgAdminPackageLesson')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
+const OrgMessages = () => import('@/components/org/admin/OrgMessages')
+const MessageList = () => import('@/components/org/admin/MessageList')
+const AdminNewMessage = () => import('@/components/org/admin/AdminNewMessage')
 const OrgEvaluation = () => import('@/components/org/admin/OrgEvaluation')
 const EvaluationReport = () => import('@/components/org/admin/EvaluationReport')
 const ClassEvaluation = () => import('@/components/org/admin/ClassEvaluation')
@@ -403,6 +406,22 @@ export default new Router({
               path: ':classId',
               name: 'ClassEvaluation',
               component: ClassEvaluation
+            }
+          ]
+        },
+        {
+          path: 'messages',
+          component: OrgMessages,
+          children: [
+            {
+              path: '/',
+              name: 'MessageList',
+              component: MessageList
+            },
+            {
+              path: 'new',
+              name: 'NewMessage',
+              component: AdminNewMessage
             }
           ]
         },
