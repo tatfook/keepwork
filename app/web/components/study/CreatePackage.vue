@@ -4,7 +4,7 @@
     <div class="activated-teacher-role-content">
       <div class="activated-teacher-role-content-left">
         <div class="activated-teacher-role-content-left-top">
-          <user-portrait :user="userProfile"></user-portrait>
+          <user-portrait :user="userProfile" size="large"></user-portrait>
           <div class="nickname-wrap">
             <div class="nickname">{{username}}</div>
             <router-link v-if="isTeacher || isAlliance" :to="{name: 'TeacherColumnApply'}" class="activated-teacher-role-identity">

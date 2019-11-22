@@ -17,12 +17,12 @@
         <span class="project-joined-members-list-card-title">{{$t("project.projectMembers")}}</span>
       </div>
       <div class="project-joined-members-list-card-created">
-        <user-portrait class="project-joined-members-list-card-profile" :user="originProjectUser" :width="48" @click.native="goCreatorHome()"></user-portrait>
+        <user-portrait class="project-joined-members-list-card-profile" :user="originProjectUser" :width="48" size="small" @click.native="goCreatorHome()"></user-portrait>
         <span class="project-joined-members-list-card-username" :title="originProjectUsername">{{originProjectUsername}}</span>
         <span class="project-joined-members-list-card-label">{{$t("project.creator")}}</span>
       </div>
       <div v-if="filterOwnerMemberList && filterOwnerMemberList.length" class="project-joined-members-list-card-profiles">
-        <user-portrait  v-for="(member, index) in filterOwnerMemberList" :key="index" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :user="member.user" :width="48" @click.native="goMemberHome(member)"></user-portrait>
+        <user-portrait  v-for="(member, index) in filterOwnerMemberList" :key="index" size="small" class="project-joined-members-list-card-profile project-joined-members-list-card-profiles-item" :user="member.user" :width="48" @click.native="goMemberHome(member)"></user-portrait>
       </div>
       <div v-else class="project-joined-members-list-card-profiles-empty">{{$t("project.noOtherMembers")}}</div>
     </el-card>
@@ -189,7 +189,7 @@ export default {
     &-profiles {
       padding: 16px 8px;
       &-item {
-        padding: 8px;
+        margin: 8px;
         cursor: pointer;
       }
     }

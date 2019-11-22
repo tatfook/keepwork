@@ -118,6 +118,13 @@ export default {
       userLogin: 'user/login',
       setCurrentOrg: 'org/setCurrentOrg'
     }),
+    loginBroadcastChannel(username) {
+      const channel = new BroadcastChannel('org')
+      channel.postMessage({
+        loginUrl: this.orgLoginUrl,
+        username
+      })
+    },
     toFormDetail(form) {
       let { id } = form
       this.$router.push({
@@ -153,7 +160,8 @@ export default {
         })
         await this.setCurrentOrg({ orgDetail: this.orgDetail })
         this.isLoading = false
-        const { roleId } = userinfo
+        const { roleId, username } = userinfo
+        this.loginBroadcastChannel(username)
         return this.toRolePage({ roleId })
       } catch (error) {
         switch (error.status) {

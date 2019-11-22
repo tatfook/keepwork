@@ -2,7 +2,7 @@
   <el-container class="user-data-setting" v-loading='loading' @click.stop="handleDialogClick">
     <el-row class="user-data-setting-content">
       <el-col class="user-data-setting-portrait-col">
-        <user-portrait class="user-data-setting-profile" :user="userInfo" @click.native="showMediaSkyDriveDialog"></user-portrait>
+        <user-portrait class="user-data-setting-profile" :user="userInfo" size="large" @click.native="showMediaSkyDriveDialog"></user-portrait>
         <div>
           <div class="user-data-setting-change-profile" @click="showMediaSkyDriveDialog">
             {{$t('user.modifyAvatar')}}

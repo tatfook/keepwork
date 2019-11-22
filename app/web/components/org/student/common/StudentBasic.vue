@@ -2,7 +2,7 @@
   <div class="student-basic" v-loading="isLoading">
     <div class="student-basic-main">
       <div class="student-basic-left">
-        <user-portrait class="student-basic-left-profile" :user="userInfo" @click.native="showMediaSkyDriveDialog"></user-portrait>
+        <user-portrait class="student-basic-left-profile" :user="userInfo" size="large" @click.native="showMediaSkyDriveDialog"></user-portrait>
         <p @click="showMediaSkyDriveDialog">点击修改头像</p>
       </div>
       <div class="student-basic-detail">
