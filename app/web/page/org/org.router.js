@@ -9,6 +9,9 @@ const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
 const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherMessages = () => import('@/components/org/teacher/OrgTeacherMessages')
+const TeacherMessageList = () => import('@/components/org/teacher/TeacherMessageList')
+const TeacherNewMessage = () => import('@/components/org/teacher/TeacherNewMessage')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
 const OrgTeacherClassLastUpdate = () => import('@/components/org/teacher/OrgTeacherClassLastUpdate')
 const OrgTeacherReports = () => import('@/components/org/teacher/OrgTeacherReports')
@@ -185,6 +188,22 @@ export default new Router({
               path: 'statistics',
               name: 'OrgTeacherStatistics',
               component: OrgTeacherStatistics,
+            },
+            {
+              path: 'messages',
+              component: OrgTeacherMessages,
+              children: [
+                {
+                  path: '/',
+                  name: 'TeacherMessageList',
+                  component: TeacherMessageList,
+                },
+                {
+                  path: 'new',
+                  name: 'TeacherNewMessage',
+                  component: TeacherNewMessage,
+                },
+              ],
             },
             {
               path: 'classes',
