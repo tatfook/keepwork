@@ -95,12 +95,16 @@ const actions = {
   },
   async updateProject(context, { projectId, updatingProjectData }) {
     let { dispatch } = context
-    await keepwork.projects.updateProject({ projectId, updatingProjectData }).then(async () => {
-      await dispatch('getProjectDetail', { projectId, useCache: false })
+    try {
+      await keepwork.projects.updateProject({ projectId, updatingProjectData })
+      await Promise.all([
+        dispatch('getProjectDetail', { projectId, useCache: false }),
+        dispatch('getUserProjects', { userId: updatingProjectData.userId, useCache: false })
+      ])
       return Promise.resolve()
-    }).catch(error => {
+    } catch (error) {
       return Promise.reject(error)
-    })
+    }
   },
   async getProjectApplyList(context, { objectId, objectType, applyType }) {
     let { commit } = context
