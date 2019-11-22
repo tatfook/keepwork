@@ -89,11 +89,10 @@ export default {
     toMessageCenter() {
       this.$router.push({ name: 'orgMessage' })
     },
-    toMessageDetail(message) {
-      const { messageId } = message
+    toMessageDetail(query) {
       this.$router.push({
         name: 'orgMessage',
-        query: { orgId: this.orgId, messageId }
+        query
       })
     },
     toTeachCenter() {

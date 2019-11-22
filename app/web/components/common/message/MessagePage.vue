@@ -3,15 +3,18 @@
     <div class="message-tab-left">
       <div class="message-tab">
         <div class="message-tab-item is-title">{{$t('message.messageCenter')}}</div>
-        <div :class="['message-tab-item', { 'is-active': selectedMessageTabID === 0 }]" @click="switchMessageTab(0)">{{$t('message.system')}}</div>
-        <div :class="['message-tab-item', { 'is-active': selectedMessageTabID === org.id }]" @click="switchMessageTab(org.id)" v-for="org in myOrgList" :key="org.id">{{org.name}}</div>
+        <div :class="['message-tab-item', { 'is-active': selectedMessageTabID === org.organizationId }]" @click="switchMessageTab(org.organizationId)" v-for="org in sortedUnreadList" :key="org.organizationId">
+          <el-badge :hidden="org.unReadCount === 0" :value="org.unReadCount" :max="99" class="message-tab-item-badge">
+            {{org.organizationName}}
+          </el-badge>
+        </div>
       </div>
     </div>
     <div class="message-main">
       <div class="message-main-title">{{currentTabName}}</div>
-      <message-row v-for="item in currentTabMessages" :data="item" :id="`msg-${item.messageId}`" :key="item.id"></message-row>
+      <message-row v-for="item in currentTabMessages" :data="item" :id="`msg-${item.messages.id}`" :key="item.id"></message-row>
       <div class="message-pagination" v-if="isShowPagination">
-        <el-pagination background :current-page.sync="currentPage" @current-change="getCurrentPageMessages" :hide-on-single-page="true" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
+        <el-pagination background :current-page.sync="currentPage" @current-change="switchPage" :hide-on-single-page="true" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
         </el-pagination>
       </div>
     </div>
@@ -39,40 +42,49 @@ export default {
       currentPage: 1,
       myOrgList: [],
       selectedMessageTabID: 0,
-      loading: false
-    }
-  },
-  async created() {
-    await this.getMyOrgList()
-    const { messageId = 0, page = 0, orgId = 0 } = this.$route.query
-    if (page) {
-      this.currentPage = _.toNumber(page)
-    }
-    this.selectedMessageTabID = orgId
-    const params = { 'x-page': this.currentPage, 'x-per-page': this.perPage }
-    await this.getMessages(params)
-    // if (this.currentPageUnreadMessageIDs.length) {
-    //   await this.signMessages(this.currentPageUnreadMessageIDs)
-    //   this.getMessages(params)
-    // }
-    if (messageId) {
-      this.blingTheMessage(messageId)
+      loading: false,
+      isFirstFetch: true
     }
   },
   watch: {
-    async selectedMessageTabID(id) {
-      console.log(id)
+    $route: {
+      immediate: true,
+      async handler(route) {
+        try {
+          this.loading = true
+          if (this.isFirstFetch) {
+            await this.getUnreadList()
+            this.isFirstFetch = false
+          }
+          const { organizationId = 0, id = 0, page = 1 } = route.query
+          this.selectedMessageTabID = _.toNumber(organizationId)
+          this.currentPage = _.toNumber(page)
+          const params = {
+            'x-page': page,
+            'x-per-page': this.perPage,
+            organizationId
+          }
+          await this.getMessages(params)
+          await this.signCurrentPageMessages()
+          this.blingTheMessage(id)
+        } catch (error) {
+          console.error(error)
+        } finally {
+          this.loading = false
+        }
+      }
     }
   },
   computed: {
     ...mapGetters({
-      messages: 'message/messages'
+      messages: 'message/messages',
+      unreadList: 'message/unreadList'
     }),
+    sortedUnreadList() {
+      return _.sortBy(this.unreadList, item => item.organizationId)
+    },
     currentTabMessages() {
-      return _.filter(
-        _.get(this.messages, 'rows', []),
-        item => item.messages.sender === 0
-      )
+      return _.get(this.messages, 'rows', [])
     },
     messagesCount() {
       return _.get(this.messages, 'count', 0)
@@ -82,65 +94,56 @@ export default {
     },
     currentPageUnreadMessageIDs() {
       return _.map(
-        _.filter(this.currentTabMessages, item => item.state === 0),
+        _.filter(this.currentTabMessages, item => item.status === 0),
         msg => msg.id
       )
     },
     currentTabName() {
-      if (this.selectedMessageTabID) {
-        const org = _.find(
-          this.myOrgList,
-          item => item.id === this.selectedMessageTabID
-        )
-        return _.get(org, 'name', '')
-      }
-      return '系统消息'
+      const org = _.find(
+        this.unreadList,
+        item => item.organizationId === this.selectedMessageTabID
+      )
+      return _.get(org, 'organizationName', '')
     }
   },
   methods: {
     ...mapActions({
       getMessages: 'message/getMessages',
       signMessages: 'message/signMessages',
-      getUnreadMessages: 'message/getUnreadMessages'
+      getUnreadMessages: 'message/getUnreadMessages',
+      getUnreadList: 'message/getUnreadList'
     }),
-    switchMessageTab(id) {
+    async signCurrentPageMessages() {
+      if (this.currentPageUnreadMessageIDs.length) {
+        await this.signMessages(this.currentPageUnreadMessageIDs)
+        await this.getUnreadList()
+      }
+    },
+    async switchMessageTab(id) {
       this.selectedMessageTabID = id
       this.$router.push({
         query: {
-          tabID: id
+          organizationId: id,
+          page: 1
         }
       })
     },
-    async getMyOrgList() {
-      this.myOrgList = await keepwork.lessonOrganizations.getUserOrganizations()
-    },
-    async getCurrentPageMessages(pageIndex) {
-      try {
-        this.loading = true
-        const params = {
-          'x-page': pageIndex,
-          'x-per-page': this.perPage
-        }
-        await this.getMessages(params)
-        if (this.currentPageUnreadMessageIDs.length) {
-          await this.signMessages(this.currentPageUnreadMessageIDs)
-        }
-        this.loading = false
-        this.$router.push({ query: { page: pageIndex } })
-        this.$nextTick(() => {
-          const messageTitleEle = document.querySelector('.message-main-title')
-          if (messageTitleEle) {
-            scrollIntoView(messageTitleEle, {
-              scrollMode: 'if-needed',
-              behavior: 'smooth'
-            })
-          }
+    async scrollEle() {
+      const messageTitleEle = document.querySelector('.message-main-title')
+      if (messageTitleEle) {
+        scrollIntoView(messageTitleEle, {
+          scrollMode: 'if-needed',
+          behavior: 'smooth'
         })
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.loading = false
       }
+    },
+    async switchPage(page) {
+      this.currentPage = page
+      const { id, ...query } = this.$route.query
+      this.$router.push({
+        query: { ...query, page }
+      })
+      this.$nextTick(() => this.scrollEle())
     },
     blingTheMessage(id) {
       this.$nextTick(() => {
@@ -192,6 +195,12 @@ export default {
             top: 25%;
           }
         }
+        &-badge {
+          /deep/ .el-badge__content.is-fixed {
+            top: 18px;
+            right: 0;
+          }
+        }
       }
     }
   }
@@ -214,14 +223,13 @@ export default {
       background: #f5f5f5;
     }
     .bling {
-      animation: flash 2s linear 1;
+      animation: flash 1.2s linear 3;
     }
     @keyframes flash {
       from {
-        color: #2397f3;
+        color: #409eff;
         background: #ecf5ff;
       }
-
       to {
       }
     }

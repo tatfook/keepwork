@@ -42,9 +42,7 @@ export const socketMixin = {
       this.socketMessage = data
     },
     async msg(data) {
-      if (data.payload.type === 0) {
-        this.socketMessage = data
-      }
+      this.socketMessage = data
     }
   }
 }

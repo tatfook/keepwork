@@ -1,9 +1,9 @@
 <template>
   <el-popover popper-class="user-message-popper" placement="bottom" width="320" @show="initScroll" trigger='hover'>
     <div ref="scroll" class="user-message-main">
-      <div :class="['user-message-row', { 'is-read': item.state === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
-        <span :class="['message-pointer', { 'is-read': item.state === 1 }]"></span>
-        <span class="message-title">[{{$t('message.system')}}]</span>
+      <div :class="['user-message-row', { 'is-read': item.status === 1 }]" v-for="item in allMessages" :key="item.id" @click="toMessageDetail(item)">
+        <span :class="['message-pointer', { 'is-read': item.status === 1 }]"></span>
+        <span class="message-title">[{{formatName(item)}}]</span>
         <span class="message-content">
           {{item.content}}
         </span>
@@ -22,6 +22,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { keepwork } from '@/api'
 import moment from 'moment'
 export default {
   name: 'MessageBox',
@@ -80,6 +81,9 @@ export default {
     ...mapActions({
       loadMessages: 'message/loadMessages'
     }),
+    formatName(data) {
+      return _.get(data, 'messages.lessonOrganizations.name', '系统消息')
+    },
     async initMessageBox() {
       if (this.userIsLogined) {
         const params = { 'x-page': 1, 'x-per-page': this.perPage }
@@ -119,13 +123,19 @@ export default {
     toMessageCenter() {
       this.$emit('toMessageCenter')
     },
-    toMessageDetail(message) {
-      // const msgIndex =
-      //   _.findIndex(this.allMessages, item => item.id === id) || 1
-      // const msgPageIndex = _.ceil(_.divide(msgIndex + 1, this.perPage))
-      // const msgUrl = `${window.location.origin}/msg?id=${id}&page=${msgPageIndex}`
-      // window.location.href = msgUrl
-      this.$emit('toMessageDetail', message)
+    async toMessageDetail(message) {
+      const { id, lessonOrganizations } = message.messages
+      const organizationId = lessonOrganizations.id
+      const { data: msgIndex = 1 } = await keepwork.message.getMessageIndex({
+        id,
+        organizationId
+      })
+      const page = _.ceil(_.divide(msgIndex, this.perPage))
+      this.$emit('toMessageDetail', {
+        organizationId,
+        page,
+        id
+      })
     }
   }
 }

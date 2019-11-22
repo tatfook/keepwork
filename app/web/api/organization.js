@@ -188,6 +188,13 @@ const users = {
   updateUserinfo: async userinfo => put('users/userInfo', userinfo)
 }
 
+export const message = {
+  getMessages: async (params = {}) => get('userMessages', { params }),
+  signMessages: async ids => put('userMessages/status', { ids }),
+  getUnreadList: async () => get('userMessages/unReadCount'),
+  getMessageIndex: async params => get('userMessages/indexOfMessage', { params })
+}
+
 export default {
   organizations,
   lessonOrganizations,
@@ -195,5 +202,6 @@ export default {
   lessonOrganizationClassMembers,
   lessonOrganizationForms,
   users,
-  evaluationReports
+  evaluationReports,
+  message
 }

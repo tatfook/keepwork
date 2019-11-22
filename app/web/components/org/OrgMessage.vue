@@ -1,19 +1,19 @@
 <template>
   <div class="org-message">
     <org-header></org-header>
-    <message-container></message-container>
+    <message-page></message-page>
   </div>
 </template>
 
 
 <script>
 import OrgHeader from './common/OrgHeader'
-import MessageContainer from '@/components/common/message/MessagePage'
+import MessagePage from '@/components/common/message/MessagePage'
 export default {
   name: 'OrgMessage',
   components: {
     OrgHeader,
-    MessageContainer
+    MessagePage
   }
 }
 </script>

@@ -290,9 +290,16 @@ export default {
     toMessageCenter() {
       window.location.href = `${window.location.origin}/msg`
     },
-    toMessageDetail(message) {
-      const { messageId } = message
-      const msgUrl = `${window.location.origin}/msg?messageId=${messageId}`
+    toMessageDetail(query) {
+      const queryStr = _.reduce(
+        query,
+        (result, value, key) => {
+          result += `${key}=${value}&`
+          return result
+        },
+        ''
+      )
+      const msgUrl = `${window.location.origin}/msg?${queryStr}`
       window.location.href = msgUrl
     }
   },

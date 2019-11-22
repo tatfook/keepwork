@@ -1,9 +1,9 @@
 <template>
   <div class="message-row">
     <div class="message-row-item">
-      <img class="message-avatar" :src="systemAvatar" alt="系统头像">
+      <user-portrait class="message-avatar" :width="56" :user="user"></user-portrait>
       <div class="message-main">
-        <span class="message-main-sender">{{$t('message.system')}}</span>
+        <span class="message-main-sender">{{senderName}}</span>
         <span class="message-main-date">{{data.createdAt | formatDate}}</span>
         <div class="message-main-content" v-html="data.messages.msg.text">
         </div>
@@ -14,12 +14,16 @@
 
 <script>
 import systemAvatar from '@/assets/message/system-avatar.png'
+import UserPortrait from '@/components/common/UserPortrait'
 import scrollIntoView from 'scroll-into-view-if-needed'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'MessageRow',
+  components: {
+    UserPortrait
+  },
   props: {
     data: {
       type: Object,
@@ -37,6 +41,27 @@ export default {
     formatDate(date) {
       return date ? moment(date).format('YYYY-M-DD H:mm') : ''
     }
+  },
+  computed: {
+    senderName() {
+      return this.isSystemMessage
+        ? this.$t('message.system')
+        : _.get(this.data, 'messages.senderName')
+    },
+    senderPortrait() {
+      return this.isSystemMessage
+        ? this.systemAvatar
+        : _.get(this.data, 'messages.senderPortrait')
+    },
+    user() {
+      return {
+        portrait: this.senderPortrait
+      }
+    },
+    isSystemMessage() {
+      const msgType = _.get(this.data, 'messages.msg.type', '')
+      return msgType === 0
+    }
   }
 }
 </script>
@@ -44,7 +69,6 @@ export default {
 <style lang="scss" scoped>
 .message-row {
   background: #fff;
-
 
   &-item {
     min-height: 88px;
@@ -82,7 +106,6 @@ export default {
       }
     }
   }
-
 }
 </style>
 
