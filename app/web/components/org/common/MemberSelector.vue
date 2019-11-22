@@ -1,6 +1,6 @@
 <template>
   <div class="member-selector">
-    <el-tree ref="memberTree" class="member-selector-tree" v-loading="isTreeLoading" :data="memberData" :props="treeProps" :expand-on-click-node="false" show-checkbox accordion check-on-click-node></el-tree>
+    <el-tree ref="memberTree" class="member-selector-tree" v-loading="isTreeLoading" :data="memberData" :props="treeProps" :expand-on-click-node="false" show-checkbox accordion check-on-click-node node-key="nodeKey" :default-expanded-keys="['all']"></el-tree>
     <div class="member-selector-operate">
       <el-button @click="cancel">取消</el-button>
       <el-button type="primary" @click="confirmSelected">确认</el-button>
@@ -12,7 +12,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'MemberSelector',
   props: {
-    checkedUserIdsObj: {
+    selectedMembers: {
       type: Array,
       default: [],
     },
@@ -37,51 +37,55 @@ export default {
     ...mapGetters({
       allClassesWithMember: 'org/allClassesWithMember',
     }),
-    memberData() {
+    classMemberData() {
       return _.map(this.allClassesWithMember, classItem => {
         let { className, classId, teacherList, studentList } = classItem
-        let teacherData = _.map(teacherList, teacherItem => {
-          let userId = teacherItem.userId
-          let roleId = 2
-          return {
-            label: teacherItem.realname + '老师',
-            roleId,
-            userId,
-            nodeKey: `${roleId}-${classId}-${userId}`,
-            classId,
-            className,
-          }
-        })
-        let studentData = _.map(studentList, teacherItem => {
-          let userId = teacherItem.userId
-          let roleId = 1
-          return {
-            label: teacherItem.realname,
-            roleId,
-            userId,
-            nodeKey: `${roleId}-${classId}-${userId}`,
-            classId,
-            className,
-          }
-        })
+        let teacherData = this.formatMemberTreeData(teacherList, 2, classId, className)
+        let studentData = this.formatMemberTreeData(studentList, 1, classId, className)
         return {
           label: className,
           nodeKey: classId,
           children: _.concat(teacherData, studentData),
         }
       })
-      return this.allClassesWithMember
+    },
+    memberData() {
+      return [
+        {
+          label: '全校',
+          nodeKey: 'all',
+          children: this.classMemberData,
+        },
+      ]
     },
   },
   methods: {
     ...mapActions({
       getClassesWithMember: 'org/getClassesWithMember',
     }),
+    formatMemberTreeData(memberData, roleId, classId, className) {
+      return _.map(memberData, memberItem => {
+        let { userId, realname } = memberItem
+        return {
+          label: roleId == 2 ? `${realname}老师` : realname,
+          roleId,
+          userId,
+          nodeKey: `${roleId}-${classId}-${userId}`,
+          classId,
+          className,
+        }
+      })
+    },
     cancel() {
       this.$emit('cancel')
     },
     confirmSelected() {
       this.$emit('save', this.$refs.memberTree.getCheckedNodes(true))
+    },
+  },
+  watch: {
+    selectedMembers(selected) {
+      this.$refs.memberTree && this.$refs.memberTree.setCheckedNodes(selected)
     },
   },
 }

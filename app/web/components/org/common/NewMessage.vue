@@ -29,7 +29,7 @@
       </div>
     </div>
     <el-dialog :visible.sync="isMemberDialogShow" width="278px" center :before-close="closeMemberDialog">
-      <member-selector :checkedUserIdsObj="checkedUserIdsObj" @cancel="closeMemberDialog" @save="saveReceivers"></member-selector>
+      <member-selector :selectedMembers="selectedMembers" @cancel="closeMemberDialog" @save="saveReceivers"></member-selector>
     </el-dialog>
   </div>
 </template>
@@ -40,16 +40,16 @@ export default {
   data() {
     return {
       selectedMembers: [],
-      selectedClassArr: [],
       checkedUserIdsObj: [],
       isSendMessage: true,
       messageText: '',
       isMemberDialogShow: false,
-      // isReceiverValid: true,
-      // isMsgValid: true,
     }
   },
   computed: {
+    selectedClassArr() {
+      return _.groupBy(this.selectedMembers, 'classId')
+    },
     tagArr() {
       return _.map(this.selectedClassArr, classDetail => {
         return {
@@ -104,11 +104,10 @@ export default {
     },
     saveReceivers(receivers) {
       this.selectedMembers = receivers
-      this.selectedClassArr = _.groupBy(receivers, 'classId')
       this.closeMemberDialog()
     },
     removeClass(classItem) {
-      this.selectedClassArr = _.omit(this.selectedClassArr, classItem.classId)
+      this.selectedMembers = _.filter(this.selectedMembers, member => member.classId != classItem.classId)
     },
   },
   components: {
