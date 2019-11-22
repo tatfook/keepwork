@@ -56,6 +56,7 @@ export default {
           star: i.total_like,
           comment: i.total_comment || 0,
           user: i.user,
+          highlight: i.highlight,
           updatedAt: i.updated_at,
           createdAt: i.created_at,
           type: i.type === 'site' ? 0 : 1,
