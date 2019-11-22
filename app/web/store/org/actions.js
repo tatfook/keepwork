@@ -414,6 +414,9 @@ const actions = {
     let result = await keepwork.evaluationReports.getOrgClassReport({ days })
     commit(GET_ORG_CLASS_REPORT_SUCCESS, { days, result })
   },
+  async createNewMessage({ dispatch }, newMessageData) {
+    await keepwork.messages.createNewMessage(newMessageData)
+  },
 }
 
 export default actions

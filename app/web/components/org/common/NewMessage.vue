@@ -87,7 +87,14 @@ export default {
       this.$emit('cancel')
     },
     saveData() {
-      if (this.isNewDataValid) this.$emit('save', this.newMessageData)
+      if (!this.isNewDataValid) {
+        this.$message({
+          type: 'warning',
+          message: '发送对象及消息内容是必填项',
+        })
+        return
+      }
+      this.$emit('save', this.newMessageData)
     },
     showMemberDialog() {
       this.isMemberDialogShow = true

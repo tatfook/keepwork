@@ -1,6 +1,6 @@
 <template>
   <div class="member-selector">
-    <el-tree ref="memberTree" class="member-selector" v-loading="isTreeLoading" :data="memberData" :props="treeProps" :expand-on-click-node="false" show-checkbox accordion check-on-click-node></el-tree>
+    <el-tree ref="memberTree" class="member-selector-tree" v-loading="isTreeLoading" :data="memberData" :props="treeProps" :expand-on-click-node="false" show-checkbox accordion check-on-click-node></el-tree>
     <div class="member-selector-operate">
       <el-button @click="cancel">取消</el-button>
       <el-button type="primary" @click="confirmSelected">确认</el-button>
@@ -44,7 +44,7 @@ export default {
           let userId = teacherItem.userId
           let roleId = 2
           return {
-            label: teacherItem.realname,
+            label: teacherItem.realname + '老师',
             roleId,
             userId,
             nodeKey: `${roleId}-${classId}-${userId}`,
@@ -90,7 +90,10 @@ export default {
 .member-selector {
   position: relative;
   padding-bottom: 80px;
-  max-height: 500px;
+  &-tree {
+    max-height: 500px;
+    overflow: auto;
+  }
   &-operate {
     position: absolute;
     left: 0;
