@@ -54,32 +54,32 @@ export default {
   props: {
     isTopizable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     ranking: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showProjectRate: {
       type: Boolean,
-      default: true
+      default: true,
     },
     level: {
       type: Number,
-      default: 0
+      default: 0,
     },
     project: {
       type: Object,
       default() {
         return {
-          user: {}
+          user: {},
         }
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      project_default_cover: project_default_cover
+      project_default_cover: project_default_cover,
     }
   },
   computed: {
@@ -87,7 +87,11 @@ export default {
       return locale === 'en-US'
     },
     projectDisplayName() {
-      return _.get(this.project, 'extra.worldTagName', this.project.name)
+      return (
+        _.get(this.project, 'highlight.world_tag_name.0') ||
+        _.get(this.project, 'extra.worldTagName') ||
+        this.project.name
+      )
     },
     updatedAtTime() {
       return (
@@ -101,9 +105,7 @@ export default {
       return this.project.type == 0 ? this.$t('common.websiteB') : 'paracraft'
     },
     projectTypeIcon() {
-      return this.project.type == 0
-        ? require('@/assets/pblImg/website.png')
-        : require('@/assets/pblImg/paracraft.png')
+      return this.project.type == 0 ? require('@/assets/pblImg/website.png') : require('@/assets/pblImg/paracraft.png')
     },
     rankingIcon() {
       return this.level === 0
@@ -116,15 +118,11 @@ export default {
       return this.project.rate.toFixed(1)
     },
     showRate() {
-      return (
-        this.project.type == 1 &&
-        this.projectRate > 0 &&
-        _.get(this.project.extra.rate, 'count', 0) >= 8
-      )
+      return this.project.type == 1 && this.projectRate > 0 && _.get(this.project.extra.rate, 'count', 0) >= 8
     },
     projectUsername() {
       return _.get(this.project, 'user.username', '未命名')
-    }
+    },
   },
   methods: {
     goProjectDetail(project) {
@@ -139,11 +137,11 @@ export default {
     },
     toggleStickProject(project) {
       this.$emit('toggleStickProject', project)
-    }
+    },
   },
   components: {
-    UserPortrait
-  }
+    UserPortrait,
+  },
 }
 </script>
 
@@ -260,6 +258,9 @@ export default {
       white-space: nowrap;
       text-overflow: ellipsis;
       height: 20px;
+      & > span {
+        color: red;
+      }
     }
     .id {
       color: #909399;
