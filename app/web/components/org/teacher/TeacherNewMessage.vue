@@ -4,11 +4,11 @@
 <script>
 import NewMessage from '@/components/org/common/NewMessage'
 export default {
-  name: 'AdminNewMessage',
+  name: 'TeacherNewMessage',
   methods: {
     back() {
       this.$router.push({
-        name: 'MessageList',
+        name: 'TeacherMessageList',
       })
     },
   },

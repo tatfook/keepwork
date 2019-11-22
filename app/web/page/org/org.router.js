@@ -8,59 +8,40 @@ const OrgNotFound = () => import('@/components/org/OrgNotFound')
 const OrgTeacherContainer = () => import('@/components/org/OrgTeacher')
 const OrgTeacher = () => import('@/components/org/teacher/OrgTeacher')
 const OrgTeacherTeach = () => import('@/components/org/teacher/OrgTeacherTeach')
-const OrgTeacherStatistics = () =>
-  import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherStatistics = () => import('@/components/org/teacher/OrgTeacherStatistics')
+const OrgTeacherMessages = () => import('@/components/org/teacher/OrgTeacherMessages')
+const TeacherMessageList = () => import('@/components/org/teacher/TeacherMessageList')
+const TeacherNewMessage = () => import('@/components/org/teacher/TeacherNewMessage')
 const OrgTeacherClass = () => import('@/components/org/teacher/OrgTeacherClass')
-const OrgTeacherClassLastUpdate = () =>
-  import('@/components/org/teacher/OrgTeacherClassLastUpdate')
-const OrgTeacherReports = () =>
-  import('@/components/org/teacher/OrgTeacherReports')
-const OrgTeacherReportEvaluation = () =>
-  import('@/components/org/teacher/OrgTeacherReportEvaluation')
-const OrgTeacherReportEmpty = () =>
-  import('@/components/org/teacher/OrgTeacherReportEmpty')
-const OrgTeacherReportComment = () =>
-  import('@/components/org/teacher/OrgTeacherReportComment')
-const OrgTeacherReportList = () =>
-  import('@/components/org/teacher/OrgTeacherReportList')
-const OrgTeacherReportDetail = () =>
-  import('@/components/org/teacher/OrgTeacherReportDetail')
-const OrgTeacherReportCommentEdit = () =>
-  import('@/components/org/teacher/OrgTeacherReportCommentEdit')
-const OrgTeacherReportCommentDetail = () =>
-  import('@/components/org/teacher/OrgTeacherReportCommentDetail')
-const OrgTeacherClassPackage = () =>
-  import('@/components/org/teacher/OrgTeacherClassPackage')
-const OrgTeacherClassPackageLesson = () =>
-  import('@/components/org/teacher/OrgTeacherClassPackageLesson')
-const OrgTeacherLessonPlan = () =>
-  import('@/components/org/teacher/OrgTeacherLessonPlan')
-const OrgTeacherCourseware = () =>
-  import('@/components/org/teacher/OrgTeacherCourseware')
+const OrgTeacherClassLastUpdate = () => import('@/components/org/teacher/OrgTeacherClassLastUpdate')
+const OrgTeacherReports = () => import('@/components/org/teacher/OrgTeacherReports')
+const OrgTeacherReportEvaluation = () => import('@/components/org/teacher/OrgTeacherReportEvaluation')
+const OrgTeacherReportEmpty = () => import('@/components/org/teacher/OrgTeacherReportEmpty')
+const OrgTeacherReportComment = () => import('@/components/org/teacher/OrgTeacherReportComment')
+const OrgTeacherReportList = () => import('@/components/org/teacher/OrgTeacherReportList')
+const OrgTeacherReportDetail = () => import('@/components/org/teacher/OrgTeacherReportDetail')
+const OrgTeacherReportCommentEdit = () => import('@/components/org/teacher/OrgTeacherReportCommentEdit')
+const OrgTeacherReportCommentDetail = () => import('@/components/org/teacher/OrgTeacherReportCommentDetail')
+const OrgTeacherClassPackage = () => import('@/components/org/teacher/OrgTeacherClassPackage')
+const OrgTeacherClassPackageLesson = () => import('@/components/org/teacher/OrgTeacherClassPackageLesson')
+const OrgTeacherLessonPlan = () => import('@/components/org/teacher/OrgTeacherLessonPlan')
+const OrgTeacherCourseware = () => import('@/components/org/teacher/OrgTeacherCourseware')
 const OrgStudentContainer = () => import('@/components/org/OrgStudent')
 const OrgStudent = () => import('@/components/org/student/OrgStudent')
 const OrgStudentClass = () => import('@/components/org/student/OrgStudentClass')
-const OrgStudentClassSelect = () =>
-  import('@/components/org/student/OrgStudentClassSelect')
-const StudentEvaluations = () =>
-  import('@/components/org/student/StudentEvaluations')
+const OrgStudentClassSelect = () => import('@/components/org/student/OrgStudentClassSelect')
+const StudentEvaluations = () => import('@/components/org/student/StudentEvaluations')
 const StudentEvaluationDetail = () => import('@/components/org/student/StudentEvaluationDetail')
 const JoinOrg = () => import('@/components/org/student/JoinOrg')
-const OrgStudentClassLastUpdate = () =>
-  import('@/components/org/student/OrgStudentClassLastUpdate')
-const OrgStudentPackage = () =>
-  import('@/components/org/student/OrgStudentPackage')
-const OrgStudentPackageLesson = () =>
-  import('@/components/org/student/OrgStudentPackageLesson')
+const OrgStudentClassLastUpdate = () => import('@/components/org/student/OrgStudentClassLastUpdate')
+const OrgStudentPackage = () => import('@/components/org/student/OrgStudentPackage')
+const OrgStudentPackageLesson = () => import('@/components/org/student/OrgStudentPackageLesson')
 const OrgAdmin = () => import('@/components/org/OrgAdmin')
 const OrgPackages = () => import('@/components/org/admin/OrgPackages')
 const PackageDetail = () => import('@/components/org/admin/PackageDetail')
-const OrgAdminCourseware = () =>
-  import('@/components/org/admin/OrgAdminCourseware')
-const OrgAdminLessonPlan = () =>
-  import('@/components/org/admin/OrgAdminLessonPlan')
-const OrgAdminPackageLesson = () =>
-  import('@/components/org/admin/OrgAdminPackageLesson')
+const OrgAdminCourseware = () => import('@/components/org/admin/OrgAdminCourseware')
+const OrgAdminLessonPlan = () => import('@/components/org/admin/OrgAdminLessonPlan')
+const OrgAdminPackageLesson = () => import('@/components/org/admin/OrgAdminPackageLesson')
 const OrgClasses = () => import('@/components/org/admin/OrgClasses')
 const OrgMessages = () => import('@/components/org/admin/OrgMessages')
 const MessageList = () => import('@/components/org/admin/MessageList')
@@ -79,15 +60,11 @@ const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
-const NewInvitationCode = () =>
-  import('@/components/org/admin/NewInvitationCode')
-const PrintInvitationCode = () =>
-  import('@/components/org/admin/PrintInvitationCode')
+const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
+const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitationCode')
 const HistoricalData = () => import('@/components/org/admin/HistoricalData')
-const OrgHistoryClassDetail = () =>
-  import('@/components/org/admin/OrgHistoryClassDetail')
-const OrgHistoryEditClass = () =>
-  import('@/components/org/admin/OrgHistoryEditClass')
+const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
+const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
 const OrgForms = () => import('@/components/org/admin/OrgForms')
 const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
@@ -104,36 +81,36 @@ export default new Router({
   routes: [
     {
       path: '*',
-      component: OrgNotFound
+      component: OrgNotFound,
     },
     {
       path: '/:orgLoginUrl',
-      redirect: { name: 'OrgLogin' }
+      redirect: { name: 'OrgLogin' },
     },
     {
       path: '/:orgLoginUrl/contact',
       name: 'OrgContact',
-      component: OrgContact
+      component: OrgContact,
     },
     {
       path: '/:orgLoginUrl/notfound',
       name: 'OrgNotFound',
-      component: OrgNotFound
+      component: OrgNotFound,
     },
     {
       path: '/:orgLoginUrl/login',
       name: 'OrgLogin',
-      component: OrgLogin
+      component: OrgLogin,
     },
     {
       path: '/:orgLoginUrl/print',
       name: 'OrgPrint',
-      component: OrgPrint
+      component: OrgPrint,
     },
     {
       path: '/:orgLoginUrl/report',
       name: 'OrgReport',
-      component: OrgReport
+      component: OrgReport,
     },
     {
       path: '/:orgLoginUrl/student',
@@ -149,46 +126,46 @@ export default new Router({
             {
               path: 'OrgStudentClassSelect',
               name: 'OrgStudentClassSelect',
-              component: OrgStudentClassSelect
+              component: OrgStudentClassSelect,
             },
             {
               path: 'OrgStudentClass/:classId',
               name: 'OrgStudentClassDetail',
-              component: OrgStudentClass
+              component: OrgStudentClass,
             },
             {
               path: 'orgClassLastUpdate/:classId',
               name: 'OrgStudentClassLastUpdate',
-              component: OrgStudentClassLastUpdate
+              component: OrgStudentClassLastUpdate,
             },
             {
               path: 'evaluations/:classId',
               name: 'OrgStudentEvaluations',
-              component: StudentEvaluations
+              component: StudentEvaluations,
             },
             {
               path: 'evaluations/:classId/detail',
               name: 'OrgStudentEvaluationDetail',
-              component: StudentEvaluationDetail
+              component: StudentEvaluationDetail,
             },
             {
               path: 'joinOrg',
               name: 'JoinOrg',
-              component: JoinOrg
-            }
-          ]
+              component: JoinOrg,
+            },
+          ],
         },
         {
           path: 'package/:packageId',
           name: 'OrgStudentPackage',
-          component: OrgStudentPackage
+          component: OrgStudentPackage,
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
           name: 'OrgStudentPackageLesson',
-          component: OrgStudentPackageLesson
-        }
-      ]
+          component: OrgStudentPackageLesson,
+        },
+      ],
     },
     {
       path: '/:orgLoginUrl/teacher',
@@ -205,22 +182,38 @@ export default new Router({
             {
               path: 'teach',
               name: 'OrgTeacherTeach',
-              component: OrgTeacherTeach
+              component: OrgTeacherTeach,
             },
             {
               path: 'statistics',
               name: 'OrgTeacherStatistics',
-              component: OrgTeacherStatistics
+              component: OrgTeacherStatistics,
+            },
+            {
+              path: 'messages',
+              component: OrgTeacherMessages,
+              children: [
+                {
+                  path: '/',
+                  name: 'TeacherMessageList',
+                  component: TeacherMessageList,
+                },
+                {
+                  path: 'new',
+                  name: 'TeacherNewMessage',
+                  component: TeacherNewMessage,
+                },
+              ],
             },
             {
               path: 'classes',
               name: 'OrgTeacherClass',
-              component: OrgTeacherClass
+              component: OrgTeacherClass,
             },
             {
               path: 'lastUpdate',
               name: 'OrgTeacherLastUpdate',
-              component: OrgTeacherClassLastUpdate
+              component: OrgTeacherClassLastUpdate,
             },
             {
               path: 'reports',
@@ -231,55 +224,54 @@ export default new Router({
                 {
                   path: 'evaluation',
                   name: 'OrgTeacherReportEvaluation',
-                  component: OrgTeacherReportEvaluation
+                  component: OrgTeacherReportEvaluation,
                 },
                 {
                   path: 'empty',
                   name: 'OrgTeacherReportEmpty',
-                  component: OrgTeacherReportEmpty
+                  component: OrgTeacherReportEmpty,
                 },
                 {
                   path: 'comment',
                   name: 'OrgTeacherReportComment',
-                  component: OrgTeacherReportComment
+                  component: OrgTeacherReportComment,
                 },
                 {
                   path: 'list',
                   name: 'OrgTeacherReportList',
-                  component: OrgTeacherReportList
+                  component: OrgTeacherReportList,
                 },
                 {
                   path: 'detail',
                   name: 'OrgTeacherReportDetail',
-                  component: OrgTeacherReportDetail
+                  component: OrgTeacherReportDetail,
                 },
                 {
                   path: 'commentEdit',
                   name: 'OrgTeacherReportCommentEdit',
-                  component: OrgTeacherReportCommentEdit
+                  component: OrgTeacherReportCommentEdit,
                 },
                 {
                   path: 'commentDetail',
                   name: 'OrgTeacherReportCommentDetail',
-                  component: OrgTeacherReportCommentDetail
-                }
-              ]
+                  component: OrgTeacherReportCommentDetail,
+                },
+              ],
             },
             {
               path: 'logs',
               name: 'OrgTeacherLogs',
-              component: OrgLogs
-            }
-          ]
+              component: OrgLogs,
+            },
+          ],
         },
         {
           path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId',
           name: 'OrgTeacherClassPackage',
-          component: OrgTeacherClassPackage
+          component: OrgTeacherClassPackage,
         },
         {
-          path:
-            '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId',
+          path: '/:orgLoginUrl/teacher/teach/class/:classId/package/:packageId/lesson/:lessonId',
           name: 'OrgTeacherClassPackageLesson',
           component: OrgTeacherClassPackageLesson,
           redirect: { name: 'OrgTeacherLessonPlan' },
@@ -287,16 +279,16 @@ export default new Router({
             {
               path: 'lessonPlan',
               name: 'OrgTeacherLessonPlan',
-              component: OrgTeacherLessonPlan
+              component: OrgTeacherLessonPlan,
             },
             {
               path: 'courseware',
               name: 'OrgTeacherCourseware',
-              component: OrgTeacherCourseware
-            }
-          ]
-        }
-      ]
+              component: OrgTeacherCourseware,
+            },
+          ],
+        },
+      ],
     },
     {
       path: '/:orgLoginUrl/admin',
@@ -306,12 +298,12 @@ export default new Router({
         {
           path: 'packages',
           name: 'OrgPackages',
-          component: OrgPackages
+          component: OrgPackages,
         },
         {
           path: 'package/:packageId',
           name: 'OrgAdminPackageDetail',
-          component: PackageDetail
+          component: PackageDetail,
         },
         {
           path: 'package/:packageId/lesson/:lessonId',
@@ -322,19 +314,19 @@ export default new Router({
             {
               path: 'lessonPlan',
               name: 'OrgAdminLessonPlan',
-              component: OrgAdminLessonPlan
+              component: OrgAdminLessonPlan,
             },
             {
               path: 'courseware',
               name: 'OrgAdminCourseware',
-              component: OrgAdminCourseware
-            }
-          ]
+              component: OrgAdminCourseware,
+            },
+          ],
         },
         {
           path: 'firstView',
           name: 'OrgFirstView',
-          component: OrgFirstView
+          component: OrgFirstView,
         },
         {
           path: 'classes',
@@ -344,54 +336,54 @@ export default new Router({
             {
               path: 'class',
               name: 'OrgClassList',
-              component: ClassList
+              component: ClassList,
             },
             {
               path: 'class/new',
               name: 'OrgNewClass',
-              component: NewClass
+              component: NewClass,
             },
             {
               path: 'class/edit',
               name: 'OrgEditClass',
-              component: EditClass
+              component: EditClass,
             },
             {
               path: 'class/members',
               name: 'OrgClassMembers',
-              component: ClassMembers
+              component: ClassMembers,
             },
             {
               path: 'class/detail',
               name: 'OrgClassDetail',
-              component: ClassDetail
+              component: ClassDetail,
             },
             {
               path: 'teacher',
               name: 'OrgTeacherList',
-              component: TeacherList
+              component: TeacherList,
             },
             {
               path: 'teacher/new',
               name: 'OrgNewTeacher',
-              component: NewTeacher
+              component: NewTeacher,
             },
             {
               path: 'teacher/edit',
               name: 'OrgEditTeacher',
-              component: EditMember
+              component: EditMember,
             },
             {
               path: 'student',
               name: 'OrgStudentList',
-              component: StudentList
+              component: StudentList,
             },
             {
               path: 'student/edit',
               name: 'OrgEditStudent',
-              component: EditMember
-            }
-          ]
+              component: EditMember,
+            },
+          ],
         },
         {
           path: 'evaluations',
@@ -400,14 +392,14 @@ export default new Router({
             {
               path: '/',
               name: 'EvaluationReport',
-              component: EvaluationReport
+              component: EvaluationReport,
             },
             {
               path: ':classId',
               name: 'ClassEvaluation',
-              component: ClassEvaluation
-            }
-          ]
+              component: ClassEvaluation,
+            },
+          ],
         },
         {
           path: 'messages',
@@ -416,85 +408,85 @@ export default new Router({
             {
               path: '/',
               name: 'MessageList',
-              component: MessageList
+              component: MessageList,
             },
             {
               path: 'new',
               name: 'NewMessage',
-              component: AdminNewMessage
-            }
-          ]
+              component: AdminNewMessage,
+            },
+          ],
         },
         {
           path: 'invitationCode',
           name: 'InvitationCode',
-          component: InvitationCode
+          component: InvitationCode,
         },
         {
           path: 'newInvitationCode',
           name: 'NewInvitationCode',
-          component: NewInvitationCode
+          component: NewInvitationCode,
         },
         {
           path: 'printInvitationCode',
           name: 'PrintInvitationCode',
-          component: PrintInvitationCode
+          component: PrintInvitationCode,
         },
         {
           path: 'historicalData',
           name: 'HistoricalData',
-          component: HistoricalData
+          component: HistoricalData,
         },
         {
           path: 'orgHistoryClassDetail',
           name: 'OrgHistoryClassDetail',
-          component: OrgHistoryClassDetail
+          component: OrgHistoryClassDetail,
         },
         {
           path: 'orgHistoryEditClass',
           name: 'OrgHistoryEditClass',
-          component: OrgHistoryEditClass
+          component: OrgHistoryEditClass,
         },
         {
           path: 'forms',
           name: 'OrgForms',
-          component: OrgForms
+          component: OrgForms,
         },
         {
           path: 'forms/new',
           name: 'NewForm',
-          component: NewForm
+          component: NewForm,
         },
         {
           path: 'forms/:id/edit',
           name: 'EditForm',
-          component: EditForm
+          component: EditForm,
         },
         {
           path: 'forms/:id/feedback',
           name: 'FormFeedback',
-          component: FormFeedback
+          component: FormFeedback,
         },
         {
           path: 'setting',
           name: 'OrgSetting',
-          component: OrgSetting
+          component: OrgSetting,
         },
         {
           path: 'logs',
           name: 'OrgAdminLogs',
-          component: OrgLogs
-        }
-      ]
+          component: OrgLogs,
+        },
+      ],
     },
     {
       path: '/:orgLoginUrl/form/:id',
       name: 'OrgFormDetail',
-      component: OrgFormDetail
+      component: OrgFormDetail,
     },
     {
       path: '/:orgLoginUrl/*',
-      component: OrgNotFound
-    }
-  ]
+      component: OrgNotFound,
+    },
+  ],
 })

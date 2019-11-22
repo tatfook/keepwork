@@ -1,5 +1,5 @@
 <template>
-  <div class="new-message">
+  <div class="new-message" v-loading="isLoading">
     <div class="new-message-header">
       校园OA
       <i class="el-icon-arrow-right"></i>
@@ -34,11 +34,13 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import MemberSelector from './MemberSelector'
 export default {
   name: 'NewMessage',
   data() {
     return {
+      isLoading: false,
       selectedMembers: [],
       checkedUserIdsObj: [],
       isSendMessage: true,
@@ -83,6 +85,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      orgCreateNewMessage: 'org/createNewMessage',
+    }),
     cancel() {
       this.$emit('cancel')
     },
@@ -94,7 +99,21 @@ export default {
         })
         return
       }
-      this.$emit('save', this.newMessageData)
+      this.saveNewMessage()
+    },
+    async saveNewMessage(newMessage) {
+      this.isLoading = true
+      try {
+        await this.orgCreateNewMessage(this.newMessageData)
+        this.showMessage('success', '消息发送成功')
+        this.$emit('back')
+      } catch (error) {
+        this.showMessage('danger', '消息发送失败，请重试')
+      }
+      this.isLoading = false
+    },
+    showMessage(type, message) {
+      this.$message({ type, message })
     },
     showMemberDialog() {
       this.isMemberDialogShow = true
