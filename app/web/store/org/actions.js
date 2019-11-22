@@ -15,6 +15,7 @@ const {
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   GET_ORG_CLASSES_SUCCESS,
+  GET_CLASSES_WITH_MEMBER_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
   GET_ORG_STUDENTS_SUCCESS,
   GET_USER_ORG_SUCCESS,
@@ -27,7 +28,7 @@ const {
   GET_LOGS_SUCCESS,
   GET_CLASS_EVALUATION_SUCCESS,
   GET_CLASS_EVALUATION_LIST_SUCCESS,
-  GET_ORG_CLASS_REPORT_SUCCESS
+  GET_ORG_CLASS_REPORT_SUCCESS,
 } = props
 
 const actions = {
@@ -37,7 +38,7 @@ const actions = {
       .login({
         organizationName,
         username,
-        password
+        password,
       })
       .catch(error => {
         return Promise.reject(error.response)
@@ -47,11 +48,7 @@ const actions = {
       Cookies.set('token', token)
       dispatch('setTokenUpdateAt')
       window.localStorage.setItem('satellizer_token', token)
-      await dispatch(
-        'user/getProfile',
-        { forceLogin: false, useCache: false },
-        { root: true }
-      )
+      await dispatch('user/getProfile', { forceLogin: false, useCache: false }, { root: true })
     }
     return userinfo
   },
@@ -59,9 +56,7 @@ const actions = {
     commit(SET_TOKEN_UPDATE_AT)
   },
   async getOrgToken(context, { orgId }) {
-    let token = await keepwork.lessonOrganizations
-      .getOrgToken({ orgId })
-      .catch()
+    let token = await keepwork.lessonOrganizations.getOrgToken({ orgId }).catch()
     return token
   },
   async refreshToken({ dispatch, commit, getters: { currentOrgId } }) {
@@ -74,14 +69,14 @@ const actions = {
   },
   async getOrgUserCountsByGraphql({ commit, getters: { currentOrgId } }) {
     let userCounts = await keepwork.organizations.getMemberCountByOrgId({
-      organizationId: currentOrgId
+      organizationId: currentOrgId,
     })
     commit(GET_ORG_COUNT_SUCCESS, { orgId: currentOrgId, userCounts })
   },
   async getOrgDetailByLoginUrl(context, { orgLoginUrl }) {
     let { commit } = context
     let orgDetail = await keepwork.lessonOrganizations.getByUrl({
-      url: orgLoginUrl
+      url: orgLoginUrl,
     })
     commit(GET_ORG_SUCCESS, { orgDetail })
     return orgDetail
@@ -93,49 +88,41 @@ const actions = {
   async getOrgPackages(context, { organizationId }) {
     let { commit } = context
     let orgPackages = await keepwork.lessonOrganizations.getOrgPackages({
-      organizationId
+      organizationId,
     })
     commit(GET_ORG_PACKAGES_SUCCESS, { organizationId, orgPackages })
   },
   async getOrgPackagesWithLessons({ commit }, { organizationId }) {
     let result = await keepwork.lessonOrganizations.getOrgPackagesWithLessons({
-      organizationId
+      organizationId,
     })
     commit(GET_ORG_PACKAGES_WITH_LESSON_SUCCESS, {
       organizationId,
-      result
+      result,
     })
   },
   async getOrgClassPackages(context, { organizationId, classId }) {
     let classPackages = await keepwork.lessonOrganizations.getOrgClassPackages({
       organizationId,
-      classId
+      classId,
     })
     return classPackages
   },
-  async getOrgPackageDetail(
-    { commit },
-    { packageId, classId = 0, roleId = 64 }
-  ) {
-    const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail(
-      { packageId, classId, roleId }
-    )
+  async getOrgPackageDetail({ commit }, { packageId, classId = 0, roleId = 64 }) {
+    const packageDetail = await keepwork.lessonOrganizations.getOrgStudentPackageDetail({ packageId, classId, roleId })
     commit(GET_ORG_PACKAGE_DETAIL_SUCCESS, { packageId, packageDetail })
     return packageDetail
   },
-  async getLessonDetail(
-    { commit, dispatch, getters },
-    { packageId, lessonId }
-  ) {
+  async getLessonDetail({ commit, dispatch, getters }, { packageId, lessonId }) {
     let [res, detail] = await Promise.all([
       lesson.lessons.lessonContent({ lessonId }),
       lesson.lessons.lessonDetail({ lessonId }),
-      dispatch('getOrgPackageDetail', { packageId })
+      dispatch('getOrgPackageDetail', { packageId }),
     ])
     const { orgPackagesDetail } = getters
     const packageInfo = _.find(
       _.get(orgPackagesDetail, [packageId, 'lessons'], []),
-      item => item.lessonId === _.toNumber(lessonId)
+      item => item.lessonId === _.toNumber(lessonId),
     )
     detail.packageIndex = _.get(packageInfo, 'lessonNo', '')
     const modList = Parser.buildBlockList(res.content)
@@ -146,40 +133,38 @@ const actions = {
         key: data[0].id,
         data: data[0],
         result: null,
-        answer: null
+        answer: null,
       }))
     commit(GET_LESSON_CONTENT_SUCCESS, {
       lessonId,
-      content: res.content
+      content: res.content,
     })
     commit(SAVE_LESSON_DETAIL, {
       lessonId,
       lesson: detail,
       quiz,
       modList,
-      courseware
+      courseware,
     })
   },
   async getOrgClassList(context, { organizationId }) {
     let { commit } = context
     let orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
-      organizationId
+      organizationId,
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
-  async getCurrentOrgClassList({
-    commit,
-    getters: { currentOrgId: organizationId }
-  }) {
+  async getCurrentOrgClassList({ commit, getters: { currentOrgId: organizationId } }) {
     const orgClasses = await keepwork.lessonOrganizationClasses.getClasses({
-      organizationId
+      organizationId,
     })
     commit(GET_ORG_CLASSES_SUCCESS, { organizationId, orgClasses })
   },
-  async createNewClass(
-    { dispatch },
-    { organizationId, name, begin, end, packages }
-  ) {
+  async getClassesWithMember({ commit, getters: { currentOrgId: organizationId } }, _roleId) {
+    let classes = await keepwork.lessonOrganizations.getClassAndMembers({ _roleId })
+    commit(GET_CLASSES_WITH_MEMBER_SUCCESS, { classes, organizationId })
+  },
+  async createNewClass({ dispatch }, { organizationId, name, begin, end, packages }) {
     let result = await keepwork.lessonOrganizationClasses
       .createClasses({ organizationId, name, begin, end, packages })
       .catch(error => {
@@ -188,10 +173,7 @@ const actions = {
     await dispatch('getOrgClassList', { organizationId })
     return Promise.resolve(result)
   },
-  async updateClass(
-    { dispatch },
-    { organizationId, classId, name, begin, end, packages }
-  ) {
+  async updateClass({ dispatch }, { organizationId, classId, name, begin, end, packages }) {
     await keepwork.lessonOrganizationClasses
       .updateClass({ organizationId, classId, name, begin, end, packages })
       .catch(error => {
@@ -204,31 +186,20 @@ const actions = {
     let orgTeachers = classId
       ? await keepwork.lessonOrganizationClassMembers.getTeachersByClassId({
         organizationId,
-        classId
+        classId,
       })
       : await keepwork.lessonOrganizationClassMembers.getTeachers({
-        organizationId
+        organizationId,
       })
     commit(GET_ORG_TEACHERS_SUCCESS, { organizationId, orgTeachers, classId })
   },
   async checkIsTeacherValid(context, { organizationId, username }) {
     return await keepwork.lessonOrganizations.checkUserInValid({
       organizationId,
-      username
+      username,
     })
   },
-  async createNewMember(
-    context,
-    {
-      organizationId,
-      classId,
-      classIds,
-      memberName,
-      realname,
-      roleId,
-      parentPhoneNum
-    }
-  ) {
+  async createNewMember(context, { organizationId, classId, classIds, memberName, realname, roleId, parentPhoneNum }) {
     let { dispatch } = context
     let result = await keepwork.lessonOrganizationClassMembers
       .createClassMember({
@@ -238,28 +209,26 @@ const actions = {
         memberName,
         parentPhoneNum,
         realname,
-        roleId
+        roleId,
       })
       .catch(error => {
         return Promise.reject(error.response)
       })
     await dispatch('getOrgUserCountsByGraphql', {
-      orgId: organizationId
+      orgId: organizationId,
     })
     return Promise.resolve(result)
   },
   async removeMemberFromClass(context, { id, roleId }) {
     let {
       dispatch,
-      getters: { currentOrg }
+      getters: { currentOrg },
     } = context
-    await keepwork.lessonOrganizationClassMembers
-      .removeMemberFromClass({ id, roleId })
-      .catch(error => {
-        return Promise.reject(error.response)
-      })
+    await keepwork.lessonOrganizationClassMembers.removeMemberFromClass({ id, roleId }).catch(error => {
+      return Promise.reject(error.response)
+    })
     await dispatch('getOrgUserCountsByGraphql', {
-      orgId: currentOrg.id
+      orgId: currentOrg.id,
     })
   },
   async getOrgStudentList(context, { organizationId, classId }) {
@@ -267,10 +236,10 @@ const actions = {
     let result = classId
       ? await keepwork.lessonOrganizationClassMembers.getStudentsByClassId({
         organizationId,
-        classId
+        classId,
       })
       : await keepwork.lessonOrganizationClassMembers.getStudents({
-        organizationId
+        organizationId,
       })
     let orgStudents = result.rows
     commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents, classId })
@@ -307,13 +276,7 @@ const actions = {
         console.error(err)
       })
   },
-  async getHistoryClasses(
-    {
-      commit,
-      getters: { orgHistoricalClasses }
-    },
-    { cache = false, params } = {}
-  ) {
+  async getHistoryClasses({ commit, getters: { orgHistoricalClasses } }, { cache = false, params } = {}) {
     if (!(cache && !_.isEmpty(orgHistoricalClasses))) {
       await keepwork.lessonOrganizationClasses
         .getHistoryClasses(params)
@@ -329,16 +292,10 @@ const actions = {
     commit(TOGGLE_EXPIRATION_DIALOG, status)
   },
   checkCurrentOrgExpire(
-    {
-      dispatch,
-      getters: { currentOrgToExpire, currentOrgHaveExpired }
-    },
-    { haveExpired = true, toExpire = true } = {}
+    { dispatch, getters: { currentOrgToExpire, currentOrgHaveExpired } },
+    { haveExpired = true, toExpire = true } = {},
   ) {
-    if (
-      (haveExpired && currentOrgHaveExpired) ||
-      (toExpire && currentOrgToExpire)
-    ) {
+    if ((haveExpired && currentOrgHaveExpired) || (toExpire && currentOrgToExpire)) {
       dispatch('toggleExpirationDialogVisible', true)
       return true
     }
@@ -353,7 +310,7 @@ const actions = {
     if (isFirstView) {
       keepwork.lessonOrganizations.updateOrg({
         orgId,
-        orgData: { extra: { ...extra, visitedList: newVisitedList } }
+        orgData: { extra: { ...extra, visitedList: newVisitedList } },
       })
     }
     return isFirstView
@@ -363,8 +320,8 @@ const actions = {
     let result = await keepwork.lessonOrganizationForms.createForm({
       formDetail: {
         ...formDetail,
-        organizationId: currentOrgId
-      }
+        organizationId: currentOrgId,
+      },
     })
     dispatch('getForms', {})
     return result
@@ -373,20 +330,20 @@ const actions = {
     let { currentOrgId } = getters
     organizationId = organizationId || currentOrgId
     let forms = await keepwork.lessonOrganizationForms.getForms({
-      organizationId
+      organizationId,
     })
     commit(GET_FORMS_SUCCESS, { organizationId, forms })
   },
   async updateForm({ dispatch }, { formId, formDetail }) {
     await keepwork.lessonOrganizationForms.updateForm({
       formId,
-      formDetail
+      formDetail,
     })
     dispatch('getForms', {})
   },
   async deleteForm({ dispatch }, { formId }) {
     await keepwork.lessonOrganizationForms.deleteForm({
-      formId
+      formId,
     })
     dispatch('getForms', {})
   },
@@ -395,7 +352,7 @@ const actions = {
   },
   async getSubmitList({ commit }, { formId }) {
     let result = await keepwork.lessonOrganizationForms.getSubmitList({
-      formId
+      formId,
     })
     let submitList = result.rows
     commit(GET_FEEDBACK_SUCCESS, { formId, submitList })
@@ -404,7 +361,7 @@ const actions = {
     await keepwork.lessonOrganizationForms.updateSubmit({
       formId,
       submitId,
-      submitData
+      submitData,
     })
     dispatch('getSubmitList', { formId })
   },
@@ -419,11 +376,8 @@ const actions = {
       })
   },
   async getSearchedLogs(
-    {
-      commit,
-      getters: { currentOrgId }
-    },
-    { username, type, description, createdAt, xPage, xPerPage, xOrder }
+    { commit, getters: { currentOrgId } },
+    { username, type, description, createdAt, xPage, xPerPage, xOrder },
   ) {
     let params = {}
     if (username) params['username'] = username
@@ -442,27 +396,27 @@ const actions = {
   async getClassEvaluation({ commit }, { classId, days }) {
     let result = await keepwork.evaluationReports.getClassReportByClassId({
       classId,
-      days
+      days,
     })
     commit(GET_CLASS_EVALUATION_SUCCESS, { classId, result })
   },
-  async getClassEvaluationList(
-    { commit },
-    { classId, name, type, roleId, days }
-  ) {
+  async getClassEvaluationList({ commit }, { classId, name, type, roleId, days }) {
     let result = await keepwork.evaluationReports.getClassEvaluationReport({
       classId,
       name,
       type,
       roleId,
-      days
+      days,
     })
     commit(GET_CLASS_EVALUATION_LIST_SUCCESS, { classId, result })
   },
   async getOrgClassReport({ commit }, { days }) {
     let result = await keepwork.evaluationReports.getOrgClassReport({ days })
     commit(GET_ORG_CLASS_REPORT_SUCCESS, { days, result })
-  }
+  },
+  async createNewMessage({ dispatch }, newMessageData) {
+    await keepwork.messages.createNewMessage(newMessageData)
+  },
 }
 
 export default actions

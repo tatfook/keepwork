@@ -49,17 +49,17 @@ export default {
     await dispatch('getUnreadList')
   },
   async signMessages({ dispatch }, ids) {
-    await keepwork.message.signMessages(ids)
+    await keepwork.messages.signMessages(ids)
     dispatch('refreshMessagesBox')
   },
   async getMessagesAndFormat(context, params = {}) {
     const defaultParams = { 'x-order': 'createdAt-desc-id-desc' }
-    const messages = await keepwork.message.getMessages({ ...defaultParams, ...params })
+    const messages = await keepwork.messages.getMessages({ ...defaultParams, ...params })
     messages.rows = formatMessages(messages.rows)
     return messages
   },
   async getUnreadList({ commit }) {
-    const res = await keepwork.message.getUnreadList()
+    const res = await keepwork.messages.getUnreadList()
     commit(GET_UNREAD_LIST, res)
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="last-update-row">
     <div class="user-info">
-      <user-portrait :user="user" :width="125"></user-portrait>
+      <user-portrait :user="user" :width="125" size="large"></user-portrait>
       <span class="user-info-realname">
         {{ realname}}
       </span>

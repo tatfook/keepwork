@@ -13,7 +13,7 @@
               <el-dropdown-item command="OrgStudent">{{$t("org.studentRole")}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <user-portrait :user="userinfo" class="org-teacher-profile"></user-portrait>
+          <user-portrait :user="userinfo" class="org-teacher-profile" size="large"></user-portrait>
           <div class="org-teacher-username">{{username}}</div>
         </div>
         <ul class="org-teacher-menu">
@@ -32,7 +32,7 @@ import UserPortrait from '@/components/common/UserPortrait'
 export default {
   name: 'OrgTeacher',
   components: {
-    UserPortrait
+    UserPortrait,
   },
   data() {
     return {
@@ -42,12 +42,12 @@ export default {
           pageName: 'OrgTeacherTeach',
           text: this.$t('org.TeachLabel'),
           match: ['OrgTeacherTeach'],
-          size: 'big'
+          size: 'big',
         },
         {
           pageName: 'OrgTeacherClass',
           text: this.$t('org.MyClassLabel'),
-          match: ['OrgTeacherClass', 'OrgTeacherLastUpdate']
+          match: ['OrgTeacherClass', 'OrgTeacherLastUpdate'],
         },
         {
           pageName: 'OrgTeacherReports',
@@ -60,15 +60,20 @@ export default {
             'OrgTeacherReportList',
             'OrgTeacherReportDetail',
             'OrgTeacherReportCommentDetail',
-            'OrgTeacherReportCommentEdit'
-          ]
+            'OrgTeacherReportCommentEdit',
+          ],
+        },
+        {
+          pageName: 'TeacherMessageList',
+          text: '校园OA',
+          match: ['TeacherMessageList', 'TeacherNewMessage'],
         },
         {
           pageName: 'OrgTeacherLogs',
           text: '机构日志',
-          match: ['OrgTeacherLogs']
-        }
-      ]
+          match: ['OrgTeacherLogs'],
+        },
+      ],
     }
   },
   computed: {
@@ -77,7 +82,7 @@ export default {
       orgIsStudent: 'org/isStudent',
       classroom: 'org/teacher/classroom',
       isBeInClassroom: 'org/teacher/isBeInClassroom',
-      userinfo: 'org/userinfo'
+      userinfo: 'org/userinfo',
     }),
     nowPageName() {
       return _.get(this.$route, 'name')
@@ -87,15 +92,15 @@ export default {
     },
     username() {
       return this.userinfo.username
-    }
+    },
   },
   methods: {
     toRolePage(pageName) {
       this.$router.push({
-        name: pageName
+        name: pageName,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

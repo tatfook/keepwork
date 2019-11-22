@@ -4,7 +4,7 @@
       {{reportName}}
     </div>
     <div v-if="showComment" class="report-chart-header">
-        <user-portrait :user="userRepo" :width="110" class="report-chart-header-avatar"></user-portrait>
+        <user-portrait :user="userRepo" :width="110" class="report-chart-header-avatar" size="large"></user-portrait>
       <div class="report-chart-header-realname">
         {{ userRealname }}
       </div>

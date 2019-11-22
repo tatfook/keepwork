@@ -15,7 +15,7 @@
                 <el-dropdown-item class="org-student-role-label-active">{{$t("org.studentRole")}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <user-portrait :user="userinfo" class="org-student-profile"></user-portrait>
+            <user-portrait :user="userinfo" class="org-student-profile" size="large"></user-portrait>
             <div class="org-student-username">{{username}}</div>
             <div class="org-student-edit-btn" v-if="isClassDetailPage" @click="showEditStudentDialog">编辑个人信息</div>
           </div>

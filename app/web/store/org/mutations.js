@@ -12,6 +12,7 @@ const GET_ORG_PACKAGE_DETAIL_SUCCESS = 'GET_ORG_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
 const GET_ORG_CLASSES_SUCCESS = 'GET_ORG_CLASSES_SUCCESS'
+const GET_CLASSES_WITH_MEMBER_SUCCESS = 'GET_CLASSES_WITH_MEMBER_SUCCESS'
 const GET_ORG_TEACHERS_SUCCESS = 'GET_ORG_TEACHERS_SUCCESS'
 const GET_ORG_STUDENTS_SUCCESS = 'GET_ORG_STUDENTS_SUCCESS'
 const GET_USER_ORG_SUCCESS = 'GET_USER_ORG_SUCCESS'
@@ -37,6 +38,7 @@ export const props = {
   GET_LESSON_CONTENT_SUCCESS,
   SAVE_LESSON_DETAIL,
   GET_ORG_CLASSES_SUCCESS,
+  GET_CLASSES_WITH_MEMBER_SUCCESS,
   GET_ORG_TEACHERS_SUCCESS,
   GET_ORG_STUDENTS_SUCCESS,
   GET_USER_ORG_SUCCESS,
@@ -107,6 +109,12 @@ const mutations = {
     Vue.set(state, 'orgClasses', {
       ...state.orgClasses,
       [organizationId]: orgClasses
+    })
+  },
+  [GET_CLASSES_WITH_MEMBER_SUCCESS](state, { organizationId, classes }) {
+    Vue.set(state, 'orgClassesWithMember', {
+      ...state.orgClassesWithMember,
+      [organizationId]: classes
     })
   },
   [GET_ORG_TEACHERS_SUCCESS](state, { organizationId, orgTeachers, classId }) {

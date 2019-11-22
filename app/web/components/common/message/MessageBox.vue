@@ -126,7 +126,7 @@ export default {
     async toMessageDetail(message) {
       const { id, lessonOrganizations } = message.messages
       const organizationId = lessonOrganizations.id
-      const { data: msgIndex = 1 } = await keepwork.message.getMessageIndex({
+      const { data: msgIndex = 1 } = await keepwork.messages.getMessageIndex({
         id,
         organizationId
       })

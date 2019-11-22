@@ -18,7 +18,6 @@ export default {
   async created() {
     try {
       await this.getEvaluationReportCommentDetail(this.params)
-      console.log(this.userReport)
     } catch (error) {
       console.error(error)
     } finally {
