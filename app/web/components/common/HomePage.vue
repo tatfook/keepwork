@@ -1,13 +1,5 @@
 <template>
   <div class="home-page">
-    <div class="home-page-advertising">
-      <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
-        <i class="iconfont icon-sound-fill"></i>
-        <span class="home-page-advertising-text">{{$t('home.paracraftIsFree')}}</span>
-        <a href="/contests" class="home-page-advertising-download">{{$t('project.knowMore')}}</a>
-        <span class="close" @click="closeAd">&times;</span>
-      </div>
-    </div>
     <div class="home-page-simple-show">
       <div class="home-page-simple-show-center">
         <div class="home-page-simple-show-center-left">
@@ -671,18 +663,6 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .home-page {
-    &-advertising-head {
-      font-size: 12px;
-      height: 30px;
-      line-height: 30px;
-      .iconfont {
-        font-size: 12px;
-      }
-      .close {
-        right: 10px;
-        line-height: 30px;
-      }
-    }
     &-register-dialog {
       .el-dialog {
         width: 90%;
