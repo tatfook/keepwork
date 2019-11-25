@@ -126,8 +126,13 @@ const users = {
   updateUserinfo: async userinfo => put('users/userInfo', userinfo),
 }
 
-const messages = {
+
+export const messages = {
   createNewMessage: async newMessageData => post('messages', newMessageData),
+  getMessages: async (params = {}) => get('userMessages', { params }),
+  signMessages: async ids => put('userMessages/status', { ids }),
+  getUnreadList: async () => get('userMessages/unReadCount'),
+  getMessageIndex: async params => get('userMessages/indexOfMessage', { params })
 }
 
 export default {
