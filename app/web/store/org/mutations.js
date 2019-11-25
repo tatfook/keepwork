@@ -6,8 +6,7 @@ const SET_TOKEN_UPDATE_AT = 'SET_TOKEN_UPDATE_AT'
 const GET_ORG_SUCCESS = 'GET_ORG_SUCCESS'
 const SET_CURRENT_ORG = 'SET_CURRENT_ORG'
 const GET_ORG_PACKAGES_SUCCESS = 'GET_ORG_PACKAGES_SUCCESS'
-const GET_ORG_PACKAGES_WITH_LESSON_SUCCESS =
-  'GET_ORG_PACKAGES_WITH_LESSON_SUCCESS'
+const GET_ORG_PACKAGES_WITH_LESSON_SUCCESS = 'GET_ORG_PACKAGES_WITH_LESSON_SUCCESS'
 const GET_ORG_PACKAGE_DETAIL_SUCCESS = 'GET_ORG_PACKAGE_DETAIL_SUCCESS'
 const GET_LESSON_CONTENT_SUCCESS = 'GET_LESSON_CONTENT_SUCCESS'
 const SAVE_LESSON_DETAIL = 'SAVE_LESSON_DETAIL'
@@ -26,6 +25,7 @@ const GET_LOGS_SUCCESS = 'GET_LOGS_SUCCESS'
 const GET_CLASS_EVALUATION_SUCCESS = 'GET_CLASS_EVALUATION_SUCCESS'
 const GET_CLASS_EVALUATION_LIST_SUCCESS = 'GET_CLASS_EVALUATION_LIST_SUCCESS'
 const GET_ORG_CLASS_REPORT_SUCCESS = 'GET_ORG_CLASS_REPORT_SUCCESS'
+const GET_SENDED_MESSAGE_SUCCESS = 'GET_SENDED_MESSAGE_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -51,7 +51,8 @@ export const props = {
   GET_LOGS_SUCCESS,
   GET_CLASS_EVALUATION_SUCCESS,
   GET_CLASS_EVALUATION_LIST_SUCCESS,
-  GET_ORG_CLASS_REPORT_SUCCESS
+  GET_ORG_CLASS_REPORT_SUCCESS,
+  GET_SENDED_MESSAGE_SUCCESS,
 }
 
 const mutations = {
@@ -61,18 +62,18 @@ const mutations = {
   [GET_ORG_COUNT_SUCCESS](state, { orgId, userCounts }) {
     Vue.set(state, 'userCounts', {
       ...state.userCounts,
-      [orgId]: userCounts
+      [orgId]: userCounts,
     })
   },
   [GET_ORG_SUCCESS](state, { orgDetail }) {
     let { id, loginUrl } = orgDetail
     Vue.set(state, 'orgsDetailForId', {
       ...state.orgsDetailForId,
-      [id]: orgDetail
+      [id]: orgDetail,
     })
     Vue.set(state, 'orgsDetailForLoginUrl', {
       ...state.orgsDetailForLoginUrl,
-      [loginUrl]: orgDetail
+      [loginUrl]: orgDetail,
     })
   },
   [SET_CURRENT_ORG](state, { orgDetail }) {
@@ -81,22 +82,19 @@ const mutations = {
   [GET_ORG_PACKAGES_SUCCESS](state, { organizationId, orgPackages }) {
     Vue.set(state, 'orgPackages', {
       ...state.orgPackages,
-      [organizationId]: orgPackages
+      [organizationId]: orgPackages,
     })
   },
-  [GET_ORG_PACKAGES_WITH_LESSON_SUCCESS](
-    state,
-    { organizationId, result }
-  ) {
+  [GET_ORG_PACKAGES_WITH_LESSON_SUCCESS](state, { organizationId, result }) {
     Vue.set(state, 'orgPackagesWithLesson', {
       ...state.orgPackagesWithLesson,
-      [organizationId]: result
+      [organizationId]: result,
     })
   },
   [GET_ORG_PACKAGE_DETAIL_SUCCESS](state, { packageId, packageDetail }) {
     Vue.set(state, 'orgPackagesDetail', {
       ...state.orgPackagesDetail,
-      [packageId]: packageDetail
+      [packageId]: packageDetail,
     })
   },
   [GET_LESSON_CONTENT_SUCCESS](state, payload) {
@@ -108,13 +106,13 @@ const mutations = {
   [GET_ORG_CLASSES_SUCCESS](state, { organizationId, orgClasses }) {
     Vue.set(state, 'orgClasses', {
       ...state.orgClasses,
-      [organizationId]: orgClasses
+      [organizationId]: orgClasses,
     })
   },
   [GET_CLASSES_WITH_MEMBER_SUCCESS](state, { organizationId, classes }) {
     Vue.set(state, 'orgClassesWithMember', {
       ...state.orgClassesWithMember,
-      [organizationId]: classes
+      [organizationId]: classes,
     })
   },
   [GET_ORG_TEACHERS_SUCCESS](state, { organizationId, orgTeachers, classId }) {
@@ -122,8 +120,8 @@ const mutations = {
       ...state.orgTeachers,
       [organizationId]: {
         ..._.get(state, `orgTeachers.${organizationId}`),
-        [classId]: orgTeachers
-      }
+        [classId]: orgTeachers,
+      },
     })
   },
   [GET_ORG_STUDENTS_SUCCESS](state, { organizationId, orgStudents, classId }) {
@@ -131,8 +129,8 @@ const mutations = {
       ...state.orgStudents,
       [organizationId]: {
         ..._.get(state, `orgStudents.${organizationId}`),
-        [classId]: orgStudents
-      }
+        [classId]: orgStudents,
+      },
     })
   },
   [GET_USER_ORG_SUCCESS](state, org) {
@@ -153,39 +151,42 @@ const mutations = {
   [GET_FORMS_SUCCESS](state, { organizationId, forms }) {
     Vue.set(state, 'orgForms', {
       ...state.orgForms,
-      [organizationId]: forms
+      [organizationId]: forms,
     })
   },
   [GET_FEEDBACK_SUCCESS](state, { formId, submitList }) {
     Vue.set(state, 'formsFeedback', {
       ...state.formsFeedback,
-      [formId]: submitList
+      [formId]: submitList,
     })
   },
   [GET_LOGS_SUCCESS](state, { orgId, result }) {
     Vue.set(state, 'orgLogs', {
       ...state.orgLogs,
-      [orgId]: result
+      [orgId]: result,
     })
   },
   [GET_CLASS_EVALUATION_SUCCESS](state, { classId, result }) {
     Vue.set(state, 'classEvaluations', {
       ...state.classEvaluations,
-      [classId]: result
+      [classId]: result,
     })
   },
   [GET_CLASS_EVALUATION_LIST_SUCCESS](state, { classId, result }) {
     Vue.set(state, 'classEvaluationList', {
       ...state.classEvaluationList,
-      [classId]: result
+      [classId]: result,
     })
   },
   [GET_ORG_CLASS_REPORT_SUCCESS](state, { days, result }) {
     Vue.set(state, 'orgClassesReport', {
       ...state.orgClassesReport,
-      [days]: result
+      [days]: result,
     })
-  }
+  },
+  [GET_SENDED_MESSAGE_SUCCESS](state, messages) {
+    Vue.set(state, 'sendedMessages', messages)
+  },
 }
 
 export default mutations

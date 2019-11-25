@@ -4,11 +4,18 @@
       校园OA
       <router-link class="message-list-header-link" :to="{name:'NewMessage'}">发消息</router-link>
     </div>
+    <div class="message-list-main">
+      <message-list-comp />
+    </div>
   </div>
 </template>
 <script>
+import MessageListComp from '@/components/org/common/MessageListComp'
 export default {
-  name: 'MessageList'
+  name: 'MessageList',
+  components: {
+    MessageListComp,
+  },
 }
 </script>
 <style lang="scss" scoped>
