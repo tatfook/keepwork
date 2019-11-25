@@ -253,16 +253,16 @@ export default {
             .catch(e => {
               let code = _.get(e.response, 'data.code')
               const registerCodeMsgObj = {
-                code0: '服务器繁忙,请稍后重试…',
-                code1: '用户名或密码错误',
-                code2: this.$t('common.notValidAccount'),
-                code3: this.$t('common.existAccount'),
-                code4: this.$t('user.verificationCodeExpiration'),
-                code5: this.$t('user.verificationCodeError'),
-                code5: '创建git用户失败',
-                code8: this.$t('common.containsSensitiveWords'),
+                code0: '服务器繁忙,请稍后重试(0)',
+                code1: '用户名或密码错误(1)',
+                code2: '该用户名不可用(2)',
+                code3: '该用户名不可用(3)',
+                code4: '验证码过期，请重试(4)',
+                code5: '验证码错误，请检查(5)',
+                code5: '发生创建异常，请重试(6)',
+                code8: '该用户名不可用(8)',
               }
-              let errorMsg = registerCodeMsgObj[`code${code}`] || this.$t('common.registerFailed')
+              let errorMsg = registerCodeMsgObj[`code${code}`] || '发生了一个未知错误，请重试(-1)'
               this.showMessage('error', errorMsg)
               this.registerLoading = false
             })
