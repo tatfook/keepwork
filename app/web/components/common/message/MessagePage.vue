@@ -3,7 +3,7 @@
     <div class="message-tab-left">
       <div class="message-tab">
         <div class="message-tab-item is-title">{{$t('message.messageCenter')}}</div>
-        <div :class="['message-tab-item', { 'is-active': selectedMessageTabID === org.organizationId }]" @click="switchMessageTab(org.organizationId)" v-for="org in sortedUnreadList" :key="org.organizationId">
+        <div :class="['message-tab-item can-click', { 'is-active': selectedMessageTabID === org.organizationId }]" @click="switchMessageTab(org.organizationId)" v-for="org in sortedUnreadList" :key="org.organizationId">
           <el-badge :hidden="org.unReadCount === 0" :value="org.unReadCount" :max="99" class="message-tab-item-badge">
             {{org.organizationName}}
           </el-badge>
@@ -33,7 +33,7 @@ import _ from 'lodash'
 export default {
   name: 'MessagePage',
   components: {
-    MessageRow
+    MessageRow,
   },
   data() {
     return {
@@ -43,7 +43,7 @@ export default {
       myOrgList: [],
       selectedMessageTabID: 0,
       loading: false,
-      isFirstFetch: true
+      isFirstFetch: true,
     }
   },
   watch: {
@@ -62,7 +62,7 @@ export default {
           const params = {
             'x-page': page,
             'x-per-page': this.perPage,
-            organizationId
+            organizationId,
           }
           await this.getMessages(params)
           await this.signCurrentPageMessages()
@@ -72,13 +72,13 @@ export default {
         } finally {
           this.loading = false
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     ...mapGetters({
       messages: 'message/messages',
-      unreadList: 'message/unreadList'
+      unreadList: 'message/unreadList',
     }),
     sortedUnreadList() {
       return _.sortBy(this.unreadList, item => item.organizationId)
@@ -93,25 +93,19 @@ export default {
       return this.messagesCount > this.perPage
     },
     currentPageUnreadMessageIDs() {
-      return _.map(
-        _.filter(this.currentTabMessages, item => item.status === 0),
-        msg => msg.id
-      )
+      return _.map(_.filter(this.currentTabMessages, item => item.status === 0), msg => msg.id)
     },
     currentTabName() {
-      const org = _.find(
-        this.unreadList,
-        item => item.organizationId === this.selectedMessageTabID
-      )
+      const org = _.find(this.unreadList, item => item.organizationId === this.selectedMessageTabID)
       return _.get(org, 'organizationName', '')
-    }
+    },
   },
   methods: {
     ...mapActions({
       getMessages: 'message/getMessages',
       signMessages: 'message/signMessages',
       getUnreadMessages: 'message/getUnreadMessages',
-      getUnreadList: 'message/getUnreadList'
+      getUnreadList: 'message/getUnreadList',
     }),
     async signCurrentPageMessages() {
       if (this.currentPageUnreadMessageIDs.length) {
@@ -124,8 +118,8 @@ export default {
       this.$router.push({
         query: {
           organizationId: id,
-          page: 1
-        }
+          page: 1,
+        },
       })
     },
     async scrollEle() {
@@ -133,7 +127,7 @@ export default {
       if (messageTitleEle) {
         scrollIntoView(messageTitleEle, {
           scrollMode: 'if-needed',
-          behavior: 'smooth'
+          behavior: 'smooth',
         })
       }
     },
@@ -141,7 +135,7 @@ export default {
       this.currentPage = page
       const { id, ...query } = this.$route.query
       this.$router.push({
-        query: { ...query, page }
+        query: { ...query, page },
       })
       this.$nextTick(() => this.scrollEle())
     },
@@ -151,13 +145,13 @@ export default {
         if (messageEle) {
           scrollIntoView(messageEle, {
             scrollMode: 'if-needed',
-            behavior: 'smooth'
+            behavior: 'smooth',
           })
           messageEle.classList.add('bling')
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -180,6 +174,12 @@ export default {
         cursor: pointer;
         &.is-title {
           cursor: default;
+        }
+        &.can-click {
+          color: #999;
+          &:hover {
+            background: rgba(35, 151, 243, 0.05);
+          }
         }
         &.is-active {
           color: #2497f3;

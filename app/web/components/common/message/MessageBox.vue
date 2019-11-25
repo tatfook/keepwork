@@ -29,21 +29,19 @@ export default {
   props: {
     perPage: {
       type: Number,
-      default: 10
-    }
+      default: 10,
+    },
   },
   filters: {
     formatDate(date) {
       const _date = moment(date)
-      return _date.isSame(moment(), 'day')
-        ? _date.format('H:mm')
-        : _date.format('MM/DD')
-    }
+      return _date.isSame(moment(), 'day') ? _date.format('H:mm') : _date.format('MM/DD')
+    },
   },
   data() {
     return {
       loadingMore: false,
-      isBindEvent: false
+      isBindEvent: false,
     }
   },
   async created() {
@@ -53,7 +51,7 @@ export default {
     ...mapGetters({
       unreadMessagesCount: 'message/unreadMessagesCount',
       messagesBox: 'message/messagesBox',
-      userIsLogined: 'user/isLogined'
+      userIsLogined: 'user/isLogined',
     }),
     allMessages() {
       return _.map(_.get(this.messagesBox, 'rows', []), item => {
@@ -75,11 +73,12 @@ export default {
     },
     msgScroll() {
       return this.$refs.scroll
-    }
+    },
   },
   methods: {
     ...mapActions({
-      loadMessages: 'message/loadMessages'
+      loadMessages: 'message/loadMessages',
+      getUnreadList: 'message/getUnreadList',
     }),
     formatName(data) {
       return _.get(data, 'messages.lessonOrganizations.name', '系统消息')
@@ -88,16 +87,11 @@ export default {
       if (this.userIsLogined) {
         const params = { 'x-page': 1, 'x-per-page': this.perPage }
         await this.$nextTick()
-        await this.loadMessages(params)
+        await Promise.all([this.loadMessages(params), this.getUnreadList()])
       }
     },
     throttleScroll: _.throttle(function() {
-      const {
-        scrollHeight,
-        scrollTop,
-        offsetHeight,
-        clientHeight
-      } = this.msgScroll
+      const { scrollHeight, scrollTop, offsetHeight, clientHeight } = this.msgScroll
       const height = clientHeight || offsetHeight
       if (!this.loadingMore && height + scrollTop + 10 >= scrollHeight) {
         this.loadMoreMessages()
@@ -115,7 +109,7 @@ export default {
       if (this.allMessages.length < this.messagesCount) {
         this.loadingMore = true
         await this.loadMessages({
-          'x-per-page': _.add(this.allMessages.length, this.perPage)
+          'x-per-page': _.add(this.allMessages.length, this.perPage),
         })
         this.loadingMore = false
       }
@@ -128,16 +122,16 @@ export default {
       const organizationId = lessonOrganizations.id
       const { data: msgIndex = 1 } = await keepwork.messages.getMessageIndex({
         id,
-        organizationId
+        organizationId,
       })
       const page = _.ceil(_.divide(msgIndex, this.perPage))
       this.$emit('toMessageDetail', {
         organizationId,
         page,
-        id
+        id,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
