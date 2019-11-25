@@ -296,7 +296,7 @@ export default {
       this.$router.push(`/create`)
     },
     goExplorationPage() {
-      this.$router.push(`/explore`)
+      this.$router.push('/explore?tab=allProjects')
     },
     goStudyPage() {
       window.location.href = `${this.locationOrigin}/s`
