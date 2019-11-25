@@ -4,7 +4,7 @@
     <span v-if="ranking && level>=3" class="project-cell-medal-4">{{level+1}}</span>
     <div class="project-cell-cover" @click="goProjectDetail(project)">
       <video v-if="(project.extra && project.extra.videoUrl)" class="project-cell-cover-img" controls="controls" :src="(project.extra && project.extra.videoUrl) || ''"></video>
-      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" :alt="projectDisplayName">
+      <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" :alt="projectDisplayName" @error="showDefault">
       <div class="video-mask"></div>
       <span class="project-cell-cover-tag" v-if='showRate && showProjectRate'>{{projectRate}}</span>
     </div>
@@ -125,6 +125,11 @@ export default {
     },
   },
   methods: {
+    showDefault(e) {
+      const img = e.srcElement
+      img.src = project_default_cover
+      img.onerror = null
+    },
     goProjectDetail(project) {
       window.open(`/pbl/project/${project.id}/`)
     },
