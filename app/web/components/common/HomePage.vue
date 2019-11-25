@@ -27,7 +27,7 @@
           <div class="home-page-simple-show-center-right-kp">
             <!-- <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div> -->
             <div class="video">
-              <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4' />
+              <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/8311/raw#Paracraft_introducation_56mb.mp4' />
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
