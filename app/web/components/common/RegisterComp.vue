@@ -63,8 +63,8 @@ export default {
   name: 'RegisterDialog',
   props: {
     isDialogShow: {
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   mounted() {
     this.changeSvgCaptcha()
@@ -128,60 +128,60 @@ export default {
         username: '',
         password: '',
         phoneNumber: '',
-        authCode: ''
+        authCode: '',
       },
       rules: {
         username: [
           {
             required: true,
             message: this.$t('common.inputUsername'),
-            trigger: 'blur'
+            trigger: 'blur',
           },
           {
             validator: validateUsername,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         password: [
           {
             required: true,
             message: this.$t('common.inputPassword'),
-            trigger: 'blur'
+            trigger: 'blur',
           },
           {
             min: 6,
-            message: this.$t('common.minPassword')
+            message: this.$t('common.minPassword'),
           },
           {
             max: 24,
-            message: this.$t('common.maxPassword')
-          }
+            message: this.$t('common.maxPassword'),
+          },
         ],
         svgCaptcha: [
           {
             required: true,
             message: this.$t('user.inputVerificationCode'),
-            trigger: 'blur'
+            trigger: 'blur',
           },
           {
             validator: validateSvgCaptcha,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         phoneNumber: [
           {
             message: this.$t('user.inputPhoneNumber'),
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { len: 11, message: this.$t('user.wrongNumberFormat') }
+          { len: 11, message: this.$t('user.wrongNumberFormat') },
         ],
         authCode: [
           {
             validator: validateAuthCode,
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   computed: {
@@ -189,10 +189,8 @@ export default {
       return /^1\d{10}$/.test(this.ruleForm.phoneNumber)
     },
     isPopoverVisible() {
-      return _.isBoolean(this.isDialogShow)
-        ? this.visible && this.isDialogShow
-        : this.visible
-    }
+      return _.isBoolean(this.isDialogShow) ? this.visible && this.isDialogShow : this.visible
+    },
   },
   methods: {
     ...mapActions({
@@ -203,7 +201,7 @@ export default {
       userThirdLogin: 'user/thirdLogin',
       verifyCellphoneOne: 'user/verifyCellphoneOne',
       userRegister: 'user/register',
-      verifyCellphoneTwo: 'user/verifyCellphoneTwo'
+      verifyCellphoneTwo: 'user/verifyCellphoneTwo',
     }),
     async changeSvgCaptcha() {
       this.isSvgCaptchaLoading = true
@@ -214,7 +212,7 @@ export default {
       this.$message({
         message,
         type,
-        showClose: true
+        showClose: true,
       })
     },
     handleUsernameInputFocus() {
@@ -228,7 +226,7 @@ export default {
     async verifySvgCaptcha() {
       return await this.userVerifySvgCaptcha({
         key: this.captchaSvg.key,
-        captcha: this.ruleForm.svgCaptcha
+        captcha: this.ruleForm.svgCaptcha,
       })
     },
     showAccountEncrypt() {
@@ -244,7 +242,7 @@ export default {
             username: username.toLowerCase(),
             password: password.toLowerCase(),
             cellphone: phoneNumber ? phoneNumber : null,
-            captcha: phoneNumber ? authCode : null
+            captcha: phoneNumber ? authCode : null,
           }
           this.registerLoading = true
           await this.userRegister(payload)
@@ -262,11 +260,9 @@ export default {
                 code4: this.$t('user.verificationCodeExpiration'),
                 code5: this.$t('user.verificationCodeError'),
                 code5: '创建git用户失败',
-                code8: this.$t('common.containsSensitiveWords')
+                code8: this.$t('common.containsSensitiveWords'),
               }
-              let errorMsg =
-                registerCodeMsgObj[`code${code}`] ||
-                this.$t('common.registerFailed')
+              let errorMsg = registerCodeMsgObj[`code${code}`] || this.$t('common.registerFailed')
               this.showMessage('error', errorMsg)
               this.registerLoading = false
             })
@@ -278,7 +274,7 @@ export default {
     async sendAuthCode() {
       this.sendCodeLoading = true
       let payload = {
-        cellphone: this.ruleForm.phoneNumber
+        cellphone: this.ruleForm.phoneNumber,
       }
       try {
         let info = await this.verifyCellphoneOne(payload)
@@ -307,11 +303,11 @@ export default {
           this.sendCodeLoading = false
         }
       }
-    }
+    },
   },
   components: {
-    AccountEncrypt
-  }
+    AccountEncrypt,
+  },
 }
 </script>
 
