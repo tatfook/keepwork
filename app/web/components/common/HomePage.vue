@@ -25,7 +25,6 @@
         </div>
         <div class="home-page-simple-show-center-right hidden-sm-and-down">
           <div class="home-page-simple-show-center-right-kp">
-            <!-- <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div> -->
             <div class="video">
               <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/8311/raw#Paracraft_introducation_56mb.mp4' />
             </div>
@@ -33,11 +32,6 @@
           <div class="home-page-simple-show-center-right-board">
             <div class="title">{{$t("home.officialAnnouncements")}}</div>
             <ul class="announce-list" v-html="newsHtml"></ul>
-            <!-- <ul class="announce-list">
-              <li class="announce-list-item">
-                <a href="https://mp.weixin.qq.com/s/F64qcFRRqdAbC25AwdAIcw" target="_blank"><span>“汉字大赛”征集公告</span><span class="entry"><i class="iconfont icon-fire1"></i></span></a>
-              </li>
-            </ul> -->
           </div>
         </div>
       </div>
