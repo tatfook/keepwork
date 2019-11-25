@@ -29,6 +29,7 @@ const {
   GET_CLASS_EVALUATION_SUCCESS,
   GET_CLASS_EVALUATION_LIST_SUCCESS,
   GET_ORG_CLASS_REPORT_SUCCESS,
+  GET_SENDED_MESSAGE_SUCCESS,
 } = props
 
 const actions = {
@@ -416,6 +417,10 @@ const actions = {
   },
   async createNewMessage({ dispatch }, newMessageData) {
     await keepwork.messages.createNewMessage(newMessageData)
+  },
+  async getSendedMessage({ commit }, { roleId }) {
+    let result = await keepwork.messages.getSendedMessage({ roleId })
+    commit(GET_SENDED_MESSAGE_SUCCESS, result.rows)
   },
 }
 
