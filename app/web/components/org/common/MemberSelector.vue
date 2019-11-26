@@ -74,6 +74,7 @@ export default {
       return _.map(memberData, memberItem => {
         let { userId, realname } = memberItem
         return {
+          ...memberItem,
           label: roleId == 2 ? `${realname}老师` : realname,
           roleId,
           userId,

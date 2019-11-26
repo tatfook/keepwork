@@ -94,6 +94,15 @@ export default {
     isNewDataValid() {
       return this.isMsgValid && this.isReceiverValid
     },
+    noParentPhoneStudents() {
+      if (!this.isSendMessage) {
+        return []
+      }
+      const selectedStudents = _.filter(this.selectedMembers, member => {
+        return member.roleId == 1 && !Boolean(member.parentPhoneNum)
+      })
+      return _.uniq(_.map(selectedStudents, student => student.realname))
+    },
   },
   methods: {
     ...mapActions({
@@ -107,6 +116,14 @@ export default {
         this.$message({
           type: 'warning',
           message: '发送对象及消息内容是必填项',
+        })
+        return
+      }
+      const noParentPhoneStudents = this.noParentPhoneStudents
+      if (noParentPhoneStudents.length > 0) {
+        this.$alert(noParentPhoneStudents.join(', '), '如下学生未设置家长手机号，请先设置。', {
+          confirmButtonText: '确定',
+          type: 'warning',
         })
         return
       }
