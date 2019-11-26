@@ -2,7 +2,7 @@
   <div class="message-list-comp" v-loading="isLoading">
     <div class="message-list-comp-header">共发送{{sendedMessages.length}}条消息</div>
     <div class="message-list-comp-container">
-      <div class="message-list-comp-item" v-for="(message, index) in sendedMessages" :key="index">
+      <div class="message-list-comp-item" v-for="(message, index) in sortedMessageList" :key="index">
         <div class="message-list-comp-item-header">
           <div class="message-list-comp-time">{{message.createdAt|formatTime}}</div>
           <div class="message-list-comp-receiver" :title="message.sendTo">{{message.sendTo}}</div>
@@ -20,11 +20,17 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   name: 'MessageListComp',
+  props: {
+    roleId: {
+      type: Number,
+      required: true,
+    },
+  },
   async mounted() {
     this.isLoading = true
     try {
       await this.getSendedMessage({
-        roleId: 64,
+        roleId: this.roleId,
       })
     } catch (error) {}
     this.isLoading = false
@@ -38,6 +44,9 @@ export default {
     ...mapGetters({
       sendedMessages: 'org/getSendedMessages',
     }),
+    sortedMessageList() {
+      return _.sortBy(this.sendedMessages || [], o => -new Date(o.createdAt).valueOf())
+    },
   },
   methods: {
     ...mapActions({

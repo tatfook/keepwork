@@ -119,9 +119,11 @@ $borderColor: #e8e8e8;
     overflow: hidden;
     margin-right: 24px;
     min-width: 0;
+    flex-shrink: 0;
   }
   &-main {
     flex: 1;
+    width: 0;
   }
   &-message {
     padding: 32px 16px 48px;

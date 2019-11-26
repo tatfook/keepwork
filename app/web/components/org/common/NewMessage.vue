@@ -38,6 +38,12 @@ import { mapActions } from 'vuex'
 import MemberSelector from './MemberSelector'
 export default {
   name: 'NewMessage',
+  props: {
+    roleId: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       isLoading: false,
@@ -63,6 +69,7 @@ export default {
     },
     newMessageData() {
       return {
+        _roleId: this.roleId,
         msg: {
           type: 2,
           text: this.messageText,
