@@ -73,6 +73,11 @@ export default {
           text: '评估报告'
         },
         {
+          pageNames: ['MessageList', 'NewMessage'],
+          indexPageName: 'MessageList',
+          text: '校园OA'
+        },
+        {
           pageNames: [
             'InvitationCode',
             'NewInvitationCode',

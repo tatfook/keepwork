@@ -11,7 +11,7 @@
             <el-col :sm="8">
               <div class="project-type-item">
                 <img src="@/assets/img/create_paracraft.png" :alt='`Paracraft${$t("create.create3DGameAndAnim")}`'>
-                <div class="project-type-item-title">Paracraft</div>
+                <div class="project-type-item-title">帕拉卡(Paracraft)</div>
                 <div class="project-type-item-brief">{{$t("create.create3DGameAndAnim")}}</div>
               </div>
             </el-col>

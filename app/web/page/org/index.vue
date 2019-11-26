@@ -24,6 +24,7 @@ import createPersistedState from '@/store/createPersistedState'
 import router from './org.router'
 import appModule from '@/store/app'
 import skydriveModule from '@/store/skydrive'
+import messageModule from '@/store/message'
 import userModule from '@/store/user'
 import orgModule from '@/store/org'
 import lessonModule from '@/store/lesson'
@@ -36,12 +37,14 @@ import { keepwork } from '@/api'
 import ExpirationDialog from '@/components/org/common/ExpirationDialog'
 import ba from 'vue-ba'
 import RealName from '@/components/common/RealName'
+import { socket, socketMixin } from '@/socket'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.component(Vhistogram.name, Vhistogram)
 Vue.use(VueLazyload)
+Vue.use(socket)
 Vue.use(VueAnalytics, {
   id: process.env.GOOGLE_ANALYTICS_UA,
   router,
@@ -66,7 +69,7 @@ const store = new Vuex.Store({
     skydrive: skydriveModule,
     app: appModule,
     user: userModule,
-    // lesson: lessonModule,
+    message: messageModule,
     org: orgModule,
     pbl: pblModule
   },
@@ -256,6 +259,7 @@ export default {
       loading: true
     }
   },
+  mixins: [socketMixin],
   async created() {
     await this.loadOrgPresets()
     this.initBroadcastChannel()
@@ -343,6 +347,9 @@ export default {
   watch: {
     $route() {
       this.loadUserCounts()
+    },
+    socketMessage(value) {
+      store.dispatch('message/refreshMessagesBox')
     }
   }
 }
