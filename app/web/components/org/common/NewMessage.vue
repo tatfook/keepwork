@@ -67,6 +67,9 @@ export default {
         }
       })
     },
+    sendClassIds() {
+      return _.keys(this.selectedClassArr)
+    },
     newMessageData() {
       return {
         _roleId: this.roleId,
@@ -79,6 +82,7 @@ export default {
           return { userId, roleId }
         }),
         sendSms: this.isSendMessage ? 1 : 0,
+        sendClassIds: this.sendClassIds,
       }
     },
     isReceiverValid() {
