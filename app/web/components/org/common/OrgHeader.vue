@@ -13,13 +13,13 @@
       <el-menu-item v-if="!isLogin" index='3-1' class="pull-right" @click="toLoginPage">
         登录
       </el-menu-item>
-      <el-menu-item index='5' v-if="isLogin" class="pull-right user-message-menu-item right-icon-item">
+      <el-menu-item index='5' v-if="isLogin && isCurrentOrgToken" class="pull-right user-message-menu-item right-icon-item">
         <message-box @toMessageCenter="toMessageCenter" @toMessageDetail="toMessageDetail"></message-box>
       </el-menu-item>
       <el-menu-item index='4' class="pull-right">
         <a class="org-header-more-learn" href="/s" target="_blank">{{$t('org.moreStudy')}}</a>
       </el-menu-item>
-      <el-menu-item index='6' class="pull-right">
+      <el-menu-item v-if="isCurrentOrgToken" index='6' class="pull-right">
         <el-button @click="toTeachCenter" class="teach-center-button" type="primary">教学中心</el-button>
       </el-menu-item>
     </el-menu>
@@ -32,27 +32,28 @@ import moment from 'moment'
 export default {
   name: 'OrgHeader',
   components: {
-    MessageBox
+    MessageBox,
   },
   filters: {
     formatDate(date) {
       const _date = moment(date)
-      return _date.isSame(moment(), 'day')
-        ? _date.format('H:mm')
-        : _date.format('MM/DD')
-    }
+      return _date.isSame(moment(), 'day') ? _date.format('H:mm') : _date.format('MM/DD')
+    },
   },
   data() {
     return {
       msgScroll: null,
       perPage: 10,
-      loadingMore: false
+      loadingMore: false,
     }
   },
   computed: {
     ...mapGetters({
       getToken: 'org/getToken',
-      currentOrg: 'org/currentOrg'
+      currentOrg: 'org/currentOrg',
+      isCurrentOrgToken: 'org/isCurrentOrgToken',
+      isAdmin: 'org/isAdmin',
+      isTeacher: 'org/isTeacher',
     }),
     orgLogo() {
       return _.get(this.currentOrg, 'logo')
@@ -62,19 +63,17 @@ export default {
     },
     isLogin() {
       return Boolean(this.getToken())
-    }
+    },
   },
   methods: {
     ...mapActions({
       userLogout: 'user/logout',
-      isAdmin: 'org/isAdmin',
-      isTeacher: 'org/isTeacher'
     }),
     async logout() {
       this.$confirm(this.$t('org.logoutTips'), this.$t('org.logoutHint'), {
         confirmButtonText: this.$t('common.Sure'),
         cancelButtonText: this.$t('common.Cancel'),
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
           this.userLogout().catch()
@@ -83,16 +82,23 @@ export default {
     },
     toLoginPage() {
       this.$router.push({
-        name: 'OrgLogin'
+        name: 'OrgLogin',
       })
     },
-    toMessageCenter() {
-      this.$router.push({ name: 'orgMessage' })
+    toMessageCenter(classId) {
+      const routerName = this.$route.name
+      const query = {}
+      if (query) {
+        query['classId'] = classId
+      }
+      if (routerName !== 'orgMessage') {
+        this.$router.push({ name: 'orgMessage', query })
+      }
     },
     toMessageDetail(query) {
       this.$router.push({
         name: 'orgMessage',
-        query
+        query,
       })
     },
     toTeachCenter() {
@@ -102,9 +108,25 @@ export default {
       if (this.isTeacher) {
         return this.$router.push({ name: 'OrgTeacher' })
       }
-      this.$router.push({ name: 'OrgStudent' })
-    }
-  }
+      this.toStudentPage()
+    },
+    toStudentPage() {
+      const { classId = '' } = this.$route.query
+      if (classId) {
+        this.$router.push({
+          name: 'OrgStudentClassDetail',
+          params: {
+            classId,
+          },
+        })
+        return
+      }
+      let url = this.$router.resolve({
+        name: 'OrgStudent',
+      }).href
+      window.location.href = url
+    },
+  },
 }
 </script>
 <style lang="scss">
