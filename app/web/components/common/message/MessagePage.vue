@@ -114,12 +114,17 @@ export default {
       }
     },
     async switchMessageTab(id) {
+      const { classId = '' } = this.$route.query
       this.selectedMessageTabID = id
+      const query = {
+        organizationId: id,
+        page: 1,
+      }
+      if (classId) {
+        query['classId'] = classId
+      }
       this.$router.push({
-        query: {
-          organizationId: id,
-          page: 1,
-        },
+        query,
       })
     },
     async scrollEle() {
