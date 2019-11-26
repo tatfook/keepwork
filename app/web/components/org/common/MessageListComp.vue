@@ -20,11 +20,17 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   name: 'MessageListComp',
+  props: {
+    roleId: {
+      type: Number,
+      required: true,
+    },
+  },
   async mounted() {
     this.isLoading = true
     try {
       await this.getSendedMessage({
-        roleId: 64,
+        roleId: this.roleId,
       })
     } catch (error) {}
     this.isLoading = false
