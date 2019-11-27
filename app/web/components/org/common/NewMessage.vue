@@ -24,7 +24,7 @@
       <div class="new-message-item">
         <span class="new-message-item-star">*</span>
         <label class="new-message-item-label">消息内容:</label>
-        <el-input :class="{'danger': !isMsgValid}" type="textarea" placeholder="请输入内容..." resize="none" v-model="messageText">
+        <el-input :class="{'danger': !isMsgValid}" type="textarea" placeholder="请输入内容..." resize="none" v-model="messageText" maxlength="256" show-word-limit>
         </el-input>
       </div>
     </div>
