@@ -418,9 +418,9 @@ const actions = {
   async createNewMessage({ dispatch }, newMessageData) {
     await keepwork.messages.createNewMessage(newMessageData)
   },
-  async getSendedMessage({ commit }, { roleId }) {
-    let result = await keepwork.messages.getSendedMessage({ roleId })
-    commit(GET_SENDED_MESSAGE_SUCCESS, result.rows)
+  async getSendedMessage({ commit }, params) {
+    let result = await keepwork.messages.getSendedMessage(params)
+    commit(GET_SENDED_MESSAGE_SUCCESS, result)
   },
 }
 
