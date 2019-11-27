@@ -684,7 +684,7 @@ $width: 766px;
       }
       &-video {
         width: 209px;
-        height: 127px;
+        height: 123px;
         object-fit: cover;
         background: rgb(73, 73, 73);
         margin: 0 auto 6px;
