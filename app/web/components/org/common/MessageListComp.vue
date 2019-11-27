@@ -1,6 +1,6 @@
 <template>
   <div class="message-list-comp" v-loading="isLoading">
-    <div class="message-list-comp-header">共发送{{sendedMessages.length}}条消息</div>
+    <div class="message-list-comp-header">共发送<span class="message-list-comp-header-count">{{sendedMessages.length}}</span>条消息</div>
     <div class="message-list-comp-container">
       <div class="message-list-comp-item" v-for="(message, index) in sortedMessageList" :key="index">
         <div class="message-list-comp-item-header">
@@ -68,6 +68,10 @@ export default {
   &-header {
     padding: 16px 0;
     color: #8c8c8c;
+    &-count {
+      color: #1385ff;
+      font-weight: bold;
+    }
   }
   &-item {
     margin-bottom: 8px;
@@ -80,6 +84,9 @@ export default {
     }
     &-content {
       margin-top: 16px;
+    }
+    /deep/ .el-checkbox__input.is-disabled + span.el-checkbox__label {
+      color: #8c8c8c;
     }
   }
   &-time {
