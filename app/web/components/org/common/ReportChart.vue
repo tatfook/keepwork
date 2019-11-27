@@ -4,7 +4,7 @@
       {{reportName}}
     </div>
     <div v-if="showComment" class="report-chart-header">
-        <user-portrait :user="userRepo" :width="110" class="report-chart-header-avatar" size="large"></user-portrait>
+      <user-portrait :user="userRepo" :width="110" class="report-chart-header-avatar" size="large"></user-portrait>
       <div class="report-chart-header-realname">
         {{ userRealname }}
       </div>
@@ -76,7 +76,7 @@
           <div class="report-chart-comment-media">
             <el-row :gutter="10">
               <el-col v-for="(item, index) in mediaUrlByImgIndex" :key="index" :span="span">
-                <img @click="handleShowPhotoPreivew(item.imgIndex)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
+                <img @click="handleShowPhotoPreview(item.imgIndex)" v-if="item.type === 'images'" class="report-chart-comment-media-img" :src="item.url | miniPic" alt="" srcset="">
                 <div @click="handleShowDialog(item)" class="report-chart-comment-media-video" v-else-if="item.type === 'videos'">
                   <video width="100%" height="100%" :src="item.url"></video>
                   <div class="play-masking">
@@ -141,8 +141,8 @@
       </div>
     </div>
     <photo-preview v-if="showPhotoPreview" :slides="imageList" :index="imgIndex" @close="handleHidePhotoPreview"></photo-preview>
-    <el-dialog custom-class="show-item-dialog" :visible.sync="isShowDiaglog">
-      <video-player ref="player" v-if="isShowDiaglog && showItem.type === 'videos'" :autoplay="true" :fullscreen="true" :src="showItem.url" />
+    <el-dialog custom-class="show-item-dialog" :visible.sync="isShowDialog">
+      <video-player ref="player" v-if="isShowDialog && showItem.type === 'videos'" :autoplay="true" :fullscreen="true" :src="showItem.url" />
     </el-dialog>
   </div>
 </template>
@@ -163,7 +163,7 @@ export default {
     ReportChartHistogram,
     videoPlayer,
     PhotoPreview,
-    UserPortrait
+    UserPortrait,
   },
   filters: {
     miniPic(url) {
@@ -171,13 +171,13 @@ export default {
         return `${url.replace(/#.+/, '')}?imageView2/2/w/300`
       }
       return `${url}&imageView2/2/w/300`
-    }
+    },
   },
   data() {
     return {
       defaultPortrait: require('@/assets/img/default_portrait.png'),
       playButtonIcon: require('@/assets/org/play1.png'),
-      isShowDiaglog: false,
+      isShowDialog: false,
       showItem: {},
       imgCount: 0,
       loadedImgList: [],
@@ -187,40 +187,40 @@ export default {
       showPhotoPreview: false,
       imgIndex: 0,
       timer: null,
-      span: 8
+      span: 8,
     }
   },
   props: {
     printMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     reportData: {
       type: Object,
       default() {
         return {}
-      }
+      },
     },
     reportType: {
       type: Number,
-      default: 2
+      default: 2,
     },
     showThisTimeRadar: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showReportTypeName: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showComment: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showFooter: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -235,7 +235,7 @@ export default {
     window.removeEventListener('resize', this.monitorResize)
   },
   methods: {
-    handleShowPhotoPreivew(imgIndex) {
+    handleShowPhotoPreview(imgIndex) {
       this.imgIndex = imgIndex
       this.showPhotoPreview = true
     },
@@ -244,23 +244,23 @@ export default {
     },
     monitorResize(evt) {
       clearTimeout(this.timer)
-      this.timer = setTimeout(this.setSpan, 300)
+      this.timer = setTimeout(this.setSize, 300)
     },
-    setSpan() {
+    setSize() {
       const clientWidth = document.body.clientWidth
       if (clientWidth < 768) {
         this.span = 12
       } else {
+        this.portraitSize = 110
         this.span = 8
       }
     },
     handleShowDialog(item) {
-      this.isShowDiaglog = true
+      this.isShowDialog = true
       this.showItem = item
     },
     onTrackChartCompleted(instance) {
-      this.growthTrackChartCompletedCount =
-        this.growthTrackChartCompletedCount + 1
+      this.growthTrackChartCompletedCount = this.growthTrackChartCompletedCount + 1
       this.checkCompleted()
     },
     onRadarThisTimeChartCompleted() {
@@ -280,16 +280,14 @@ export default {
       }
     },
     addImgLoadEvent() {
-      const imgEle = document.querySelectorAll(
-        '.report-chart-comment-media-img'
-      )
+      const imgEle = document.querySelectorAll('.report-chart-comment-media-img')
       this.imgCount = imgEle.length
       imgEle.forEach(ele => (ele.onload = evt => this.markedImg(ele, evt)))
     },
     markedImg(imgEle, evt) {
       this.loadedImgList.push(imgEle)
       this.checkCompleted()
-    }
+    },
   },
   computed: {
     imgLoadCompleted() {
@@ -302,43 +300,28 @@ export default {
       return this.isHistory ? this.growthTrackChartCompletedCount >= 6 : true
     },
     isPageCompleted() {
-      return (
-        this.imgLoadCompleted &&
-        this.trackChartCompleted &&
-        this.isRadarChartCompleted
-      )
+      return this.imgLoadCompleted && this.trackChartCompleted && this.isRadarChartCompleted
     },
     isRadarChartCompleted() {
       return this.radarThisTimeCompleted && this.radarHistoryCompleted
     },
     iconClasses() {
-      return [
-        'iconfont icon-star-',
-        'iconfont icon-star-',
-        'iconfont icon-star-'
-      ]
+      return ['iconfont icon-star-', 'iconfont icon-star-', 'iconfont icon-star-']
     },
     isShowHistogramChart() {
-      return _.every(
-        this.growthTrackList,
-        item => item.chartData.rows.length === 1
-      )
+      return _.every(this.growthTrackList, item => item.chartData.rows.length === 1)
     },
     growthTrackMax() {
       const max = _.reduce(
         this.starGroupArray,
         (max, cur) => {
           const { classmateStar, userStar } = cur
-          const classmateMax = _.max(
-            _.map(this.growthTrackKey, item => classmateStar[`${item.key}Avg`])
-          )
-          const userMax = _.max(
-            _.map(this.growthTrackKey, item => userStar[item.key])
-          )
+          const classmateMax = _.max(_.map(this.growthTrackKey, item => classmateStar[`${item.key}Avg`]))
+          const userMax = _.max(_.map(this.growthTrackKey, item => userStar[item.key]))
           max = _.max([classmateMax, userMax])
           return max
         },
-        10
+        10,
       )
       return max
     },
@@ -401,7 +384,7 @@ export default {
       return _.map(images, item => ({
         src: item.url,
         h: 0,
-        w: 0
+        w: 0,
       }))
     },
     reportTypeName() {
@@ -412,44 +395,36 @@ export default {
       return _.get(this.$route, 'query.reportName', this.reportTypeName)
     },
     ablityValue() {
-      const {
-        star,
-        collaborative,
-        compute,
-        coordinate,
-        logical,
-        spatial,
-        creative
-      } = this.userRepo
+      const { star, collaborative, compute, coordinate, logical, spatial, creative } = this.userRepo
       return {
         star: {
           value: star,
-          label: '总分'
+          label: '总分',
         },
         collaborative: {
           value: collaborative,
-          label: '协作沟通能力'
+          label: '协作沟通能力',
         },
         compute: {
           value: compute,
-          label: '计算思维能力'
+          label: '计算思维能力',
         },
         coordinate: {
           value: coordinate,
-          label: '统筹思维能力'
+          label: '统筹思维能力',
         },
         logical: {
           value: logical,
-          label: '逻辑思考能力'
+          label: '逻辑思考能力',
         },
         spatial: {
           value: spatial,
-          label: '空间思维能力'
+          label: '空间思维能力',
         },
         creative: {
           value: creative,
-          label: '创新思维能力'
-        }
+          label: '创新思维能力',
+        },
       }
     },
     mediaUrl() {
@@ -466,33 +441,33 @@ export default {
         {
           key: 'spatial',
           name: '空间思维能力',
-          color: ['#939d9f', '#409efe']
+          color: ['#939d9f', '#409efe'],
         },
         {
           key: 'creative',
           name: '创新思维能力',
-          color: ['#939d9f', '#20c9d4']
+          color: ['#939d9f', '#20c9d4'],
         },
         {
           key: 'compute',
           name: '计算思维能力',
-          color: ['#939d9f', '#f5c728']
+          color: ['#939d9f', '#f5c728'],
         },
         {
           key: 'collaborative',
           name: '协作沟通能力',
-          color: ['#939d9f', '#5f75e4']
+          color: ['#939d9f', '#5f75e4'],
         },
         {
           key: 'logical',
           name: '逻辑思考能力',
-          color: ['#939d9f', '#f89039']
+          color: ['#939d9f', '#f89039'],
         },
         {
           key: 'coordinate',
           name: '统筹思维能力',
-          color: ['#939d9f', '#2cc791']
-        }
+          color: ['#939d9f', '#2cc791'],
+        },
       ]
     },
     classmatesHistory() {
@@ -505,10 +480,7 @@ export default {
       return _.map(this.userHistory, (user, index) => {
         return {
           userStar: user,
-          classmateStar: _.find(
-            this.classmatesHistory,
-            classmate => classmate.reportId === user.reportId
-          )
+          classmateStar: _.find(this.classmatesHistory, classmate => classmate.reportId === user.reportId),
         }
       })
     },
@@ -519,19 +491,19 @@ export default {
           return {
             次数: `${index + 1}`,
             本班同学平均值: item['classmateStar'][`${growthTrack.key}Avg`],
-            [this.userRealname]: item['userStar'][growthTrack.key]
+            [this.userRealname]: item['userStar'][growthTrack.key],
           }
         })
         return {
           ...growthTrack,
           chartData: {
             columns,
-            rows
-          }
+            rows,
+          },
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -565,14 +537,9 @@ $width: 766px;
     width: $width;
     box-sizing: border-box;
     margin: 0 auto;
-    background: url('../../../assets/org/report_header.jpg') no-repeat center
-      top;
+    background: url('../../../assets/org/report_header.jpg') no-repeat center top;
     text-align: center;
     &-avatar {
-      width: 110px;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 50%;
       margin-top: 34px;
     }
     &-realname {
@@ -741,8 +708,7 @@ $width: 766px;
   }
 
   &-footer {
-    background: url('../../../assets/org/report_footer.jpg') center top
-      no-repeat;
+    background: url('../../../assets/org/report_footer.jpg') center top no-repeat;
     height: 155px;
     position: relative;
     &-date {
@@ -845,12 +811,13 @@ $width: 766px;
     &-header {
       height: 244px;
       width: 100%;
-      background: url('../../../assets/org/report_header_mini.jpg') no-repeat
-        center bottom;
+      background: url('../../../assets/org/report_header_mini.jpg') no-repeat center bottom;
       background-size: 100% 100%;
       &-avatar {
-        width: 70px;
-        height: 70px;
+        /deep/.user-portrait-profile {
+          max-width: 70px;
+          max-height: 70px;
+        }
         margin-top: 21px;
       }
       &-realname {
@@ -963,8 +930,7 @@ $width: 766px;
     }
 
     &-footer {
-      background: url('../../../assets/org/report_footer_mini.png') center top
-        no-repeat;
+      background: url('../../../assets/org/report_footer_mini.png') center top no-repeat;
       background-size: 100% 94px;
       height: 94px;
       display: flex;
