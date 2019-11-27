@@ -14,7 +14,8 @@
         <span class="new-message-item-star">*</span>
         <label class="new-message-item-label">发送对象:</label>
         <el-button class="new-message-item-button" :class="{'danger': !isReceiverValid}" type="primary" @click="showMemberDialog">选择对象</el-button>
-        <el-tag v-for="classItem in tagArr" :key="classItem.classId" closable effect="plain" type="info" @close="removeClass(classItem)">
+        <el-tag v-if="isWholeSchool" closable effect="plain" type="info" @close="removeAllClass">全校</el-tag>
+        <el-tag v-else v-for="classItem in tagArr" :key="classItem.classId" closable effect="plain" type="info" @close="removeClass(classItem)">
           {{classItem.className}}（{{classItem.count}}人）
         </el-tag>
         <div class="new-message-item-checkbox-row">
@@ -34,7 +35,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import MemberSelector from './MemberSelector'
 export default {
   name: 'NewMessage',
@@ -56,6 +57,20 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      allClassesWithMember: 'org/allClassesWithMember',
+    }),
+    allMemberList() {
+      return _.flatten(
+        _.map(this.allClassesWithMember, classItem => {
+          return _.concat(classItem.teacherList, classItem.studentList)
+        }),
+      )
+    },
+    isWholeSchool() {
+      const allMemberCount = this.allMemberList.length
+      return allMemberCount > 0 && allMemberCount == this.selectedMembers.length
+    },
     selectedClassArr() {
       return _.groupBy(this.selectedMembers, 'classId')
     },
@@ -154,6 +169,9 @@ export default {
     saveReceivers(receivers) {
       this.selectedMembers = receivers
       this.closeMemberDialog()
+    },
+    removeAllClass() {
+      _.map(this.tagArr, classItem => this.removeClass(classItem))
     },
     removeClass(classItem) {
       this.selectedMembers = _.filter(this.selectedMembers, member => member.classId != classItem.classId)
