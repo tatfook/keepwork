@@ -52,6 +52,7 @@ export default {
       isSendMessage: true,
       messageText: '',
       isMemberDialogShow: false,
+      isSendedClicked: false,
     }
   },
   computed: {
@@ -86,10 +87,10 @@ export default {
       }
     },
     isReceiverValid() {
-      return this.selectedMembers.length > 0
+      return this.isSendedClicked ? this.selectedMembers.length > 0 : true
     },
     isMsgValid() {
-      return Boolean(this.messageText)
+      return this.isSendedClicked ? Boolean(this.messageText) : true
     },
     isNewDataValid() {
       return this.isMsgValid && this.isReceiverValid
@@ -112,6 +113,7 @@ export default {
       this.$emit('cancel')
     },
     saveData() {
+      this.isSendedClicked = true
       if (!this.isNewDataValid) {
         this.$message({
           type: 'warning',
