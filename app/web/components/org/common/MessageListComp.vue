@@ -1,8 +1,8 @@
 <template>
   <div class="message-list-comp" v-loading="isLoading">
-    <div class="message-list-comp-header">共发送<span class="message-list-comp-header-count">{{sendedMessages.length}}</span>条消息</div>
+    <div class="message-list-comp-header">共发送<span class="message-list-comp-header-count">{{sendedMessagesCount}}</span>条消息</div>
     <div class="message-list-comp-container">
-      <div class="message-list-comp-item" v-for="(message, index) in sortedMessageList" :key="index">
+      <div class="message-list-comp-item" v-for="(message, index) in sendedMessagesList" :key="index">
         <div class="message-list-comp-item-header">
           <div class="message-list-comp-time">{{message.createdAt|formatTime}}</div>
           <div class="message-list-comp-receiver" :title="message.sendTo">{{message.sendTo}}</div>
@@ -12,6 +12,10 @@
         </div>
         <div class="message-list-comp-item-content">{{message.msg.text}}</div>
       </div>
+    </div>
+    <div class="message-list-comp-pagination">
+      <el-pagination background :page-sizes="[10,20,40,60,80,100,200,300]" @current-change="changePage" @size-change="handleSizeChange" :current-page="nowPage" :page-size="perPage" layout="total,sizes,prev,pager,next,jumper" :total="sendedMessagesCount">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -26,32 +30,50 @@ export default {
       required: true,
     },
   },
-  async mounted() {
-    this.isLoading = true
-    try {
-      await this.getSendedMessage({
-        roleId: this.roleId,
-      })
-    } catch (error) {}
-    this.isLoading = false
+  mounted() {
+    this.toGetSendedMessage()
   },
   data() {
     return {
       isLoading: false,
+      nowPage: 1,
+      perPage: 10,
     }
   },
   computed: {
     ...mapGetters({
       sendedMessages: 'org/getSendedMessages',
     }),
-    sortedMessageList() {
-      return _.sortBy(this.sendedMessages || [], o => -new Date(o.createdAt).valueOf())
+    sendedMessagesCount() {
+      return this.sendedMessages.count
+    },
+    sendedMessagesList() {
+      return this.sendedMessages.rows
     },
   },
   methods: {
     ...mapActions({
       getSendedMessage: 'org/getSendedMessage',
     }),
+    async toGetSendedMessage() {
+      this.isLoading = true
+      try {
+        await this.getSendedMessage({
+          roleId: this.roleId,
+          'x-per-page': this.perPage,
+          'x-page': this.nowPage,
+        })
+      } catch (error) {}
+      this.isLoading = false
+    },
+    changePage(page) {
+      this.nowPage = page
+      this.toGetSendedMessage()
+    },
+    handleSizeChange(size) {
+      this.perPage = size
+      this.toGetSendedMessage()
+    },
   },
   filters: {
     formatTime(time) {
@@ -99,6 +121,10 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
     padding: 0 24px;
+  }
+  &-pagination {
+    text-align: center;
+    padding: 40px 0;
   }
 }
 </style>
