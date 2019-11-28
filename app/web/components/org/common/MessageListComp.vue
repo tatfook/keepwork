@@ -13,7 +13,7 @@
         <div class="message-list-comp-item-content">{{message.msg.text}}</div>
       </div>
     </div>
-    <div class="message-list-comp-pagination">
+    <div class="message-list-comp-pagination" v-if="sendedMessagesCount>10">
       <el-pagination background :page-sizes="[10,20,40,60,80,100,200,300]" @current-change="changePage" @size-change="handleSizeChange" :current-page="nowPage" :page-size="perPage" layout="total,sizes,prev,pager,next,jumper" :total="sendedMessagesCount">
       </el-pagination>
     </div>
@@ -62,7 +62,7 @@ export default {
           roleId: this.roleId,
           'x-per-page': this.perPage,
           'x-page': this.nowPage,
-          'x-order': 'createdAt-desc'
+          'x-order': 'createdAt-desc',
         })
       } catch (error) {}
       this.isLoading = false
