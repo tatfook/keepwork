@@ -107,6 +107,7 @@ export default {
     }
     &-content {
       margin-top: 16px;
+      word-break: break-word;
     }
     /deep/ .el-checkbox__input.is-disabled + span.el-checkbox__label {
       color: #8c8c8c;
