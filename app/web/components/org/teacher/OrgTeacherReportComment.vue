@@ -217,12 +217,6 @@ export default {
     isHasNext() {
       return Boolean(this.nextOne.studentId && this.nextOne.realname)
     },
-    studentPotrait() {
-      if (this.portrait) {
-        return this.miniPic(this.portrait)
-      }
-      return this.defaultPortrait
-    },
     params() {
       const params = {
         studentId: this.studentId,
