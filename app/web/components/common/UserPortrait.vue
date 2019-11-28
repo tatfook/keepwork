@@ -1,6 +1,6 @@
 <template>
   <div class="user-portrait">
-    <img class="user-portrait-profile" :style="portraitStyle" :src="portraitUrl" alt="" @error="showDefaultPotrait">
+    <img class="user-portrait-profile" :style="portraitStyle" :src="portraitUrl" alt="" @error="showDefaultPortrait">
     <span v-if="isVip" class="user-portrait-vip" :class="[`user-portrait-vip-${size}`, `user-portrait-vip-${badgePosition}`]" :style="vipStyle">V</span>
     <span v-if="isT" class="user-portrait-tLevel" :class="[`user-portrait-tLevel-${tLevel}`, `user-portrait-tLevel-${size}`, `user-portrait-tLevel-${badgePosition}`]" :style="tLevelStyle">T{{tLevel}}</span>
   </div>
@@ -78,7 +78,7 @@ export default {
     },
   },
   methods: {
-    showDefaultPotrait(e) {
+    showDefaultPortrait(e) {
       const img = e.srcElement
       img.src = this.defaultPortrait
       img.onerror = null
