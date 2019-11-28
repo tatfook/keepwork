@@ -62,6 +62,7 @@ export default {
           roleId: this.roleId,
           'x-per-page': this.perPage,
           'x-page': this.nowPage,
+          'x-order': 'createdAt-desc'
         })
       } catch (error) {}
       this.isLoading = false
