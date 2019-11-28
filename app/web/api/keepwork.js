@@ -438,10 +438,6 @@ export const systemTags = {
   getSystemTags: async type => get(`systemTags?classify=${type}`)
 }
 
-export const message = {
-  getMessages: async (params = {}) => get('userMessages', { params }),
-  signMessages: async ids => post('userMessages/state', { state: 1, ids })
-}
 
 export const editorSocket = {
   joinTheRoom: async params => socketMessage.post('app/join', params),
@@ -471,7 +467,6 @@ export const keepwork = {
   account,
   games,
   graphql,
-  message,
   feedbacks,
   systemTags,
   editorSocket,

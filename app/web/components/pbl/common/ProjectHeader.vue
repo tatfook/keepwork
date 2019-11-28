@@ -82,30 +82,27 @@ export default {
     editingUserId: Number,
     isLoginUserEditable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isProhibitView: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       isDropdownLoading: false,
       isFavoriteButtonLoading: false,
       isStarButtonLoading: false,
-      activePageName: this.$route.name
+      activePageName: this.$route.name,
     }
-  },
-  mounted() {
-    window.document.title = `${this.editingProjectName}`
   },
   computed: {
     ...mapGetters({
       userProjects: 'pbl/userProjects',
       projectFavoriteState: 'pbl/projectFavoriteState',
       projectStarState: 'pbl/projectStarState',
-      isLogined: 'user/isLogined'
+      isLogined: 'user/isLogined',
     }),
     editingProjectName() {
       return _.get(this.projectDetail, 'name')
@@ -122,7 +119,7 @@ export default {
     },
     isUserFavoriteProject() {
       return this.projectFavoriteState({
-        projectId: this.editingProjectId
+        projectId: this.editingProjectId,
       })
     },
     isUserStaredProject() {
@@ -137,7 +134,7 @@ export default {
     shareUrl() {
       let origin = window.location.origin
       return `${origin}/pbl/project/${this.editingProjectId}`
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -146,15 +143,13 @@ export default {
       unFavoriteProject: 'pbl/unFavoriteProject',
       starProject: 'pbl/starProject',
       unStarProject: 'pbl/unStarProject',
-      toggleLoginDialog: 'pbl/toggleLoginDialog'
+      toggleLoginDialog: 'pbl/toggleLoginDialog',
     }),
     getProjectDisplayName(project) {
       return _.get(project, 'extra.worldTagName', project.name)
     },
     showTheCommentInput() {
-      let input = document.querySelector(
-        '#project-index-phone-comments .project-comments-sends-profile-input input'
-      )
+      let input = document.querySelector('#project-index-phone-comments .project-comments-sends-profile-input input')
       input.focus()
       scrollIntoView(input)
     },
@@ -186,14 +181,14 @@ export default {
         await this.starProject({ projectId })
           .then(() => {
             this.showMessage({
-              message: this.$t('project.successfullyLiked')
+              message: this.$t('project.successfullyLiked'),
             })
             this.isStarButtonLoading = false
           })
           .catch(error => {
             this.showMessage({
               type: 'error',
-              message: '点赞失败'
+              message: '点赞失败',
             })
             this.isStarButtonLoading = false
           })
@@ -201,14 +196,14 @@ export default {
         await this.unStarProject({ projectId })
           .then(() => {
             this.showMessage({
-              message: this.$t('project.successfullyUnliked')
+              message: this.$t('project.successfullyUnliked'),
             })
             this.isStarButtonLoading = false
           })
           .catch(error => {
             this.showMessage({
               type: 'error',
-              message: '取消点赞失败'
+              message: '取消点赞失败',
             })
             this.isStarButtonLoading = false
           })
@@ -226,14 +221,14 @@ export default {
         await this.favoriteProject({ objectId, objectType })
           .then(() => {
             this.showMessage({
-              message: this.$t('project.successfullyStarred')
+              message: this.$t('project.successfullyStarred'),
             })
             this.isFavoriteButtonLoading = false
           })
           .catch(error => {
             this.showMessage({
               type: 'error',
-              message: '收藏失败'
+              message: '收藏失败',
             })
             this.isFavoriteButtonLoading = false
           })
@@ -241,14 +236,14 @@ export default {
         await this.unFavoriteProject({ objectId, objectType })
           .then(() => {
             this.showMessage({
-              message: this.$t('project.successfullyUnstarred')
+              message: this.$t('project.successfullyUnstarred'),
             })
             this.isFavoriteButtonLoading = false
           })
           .catch(error => {
             this.showMessage({
               type: 'error',
-              message: '取消收藏失败'
+              message: '取消收藏失败',
             })
             this.isFavoriteButtonLoading = false
           })
@@ -265,14 +260,22 @@ export default {
         sites: ['qq', 'qzone', 'weibo', 'wechat'],
         wechatQrcodeTitle: '', // 微信二维码提示文字
         wechatQrcodeHelper: this.$t('common.QR'),
-        image: this.coverUrl
+        image: this.coverUrl,
       })
     },
     handleTabClick(tabItem) {
       let { paneName } = tabItem
       this.$router.push({ name: paneName })
-    }
-  }
+    },
+  },
+  watch: {
+    projectDisplayName: {
+      async handler(newName) {
+        window.document.title = newName
+      },
+      immediate: true,
+    },
+  },
 }
 </script>
 

@@ -3,8 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const MessageContainer = () => import('@/components/message/MessageContainer')
-const MessageSystem = () => import('@/components/message/MessageSystem')
+const MessagePage = () => import('@/components/common/message/MessagePage')
 
 export default new Router({
   mode: 'history',
@@ -12,16 +11,11 @@ export default new Router({
   routes: [{
     path: '*',
     name: 'redirectToMessage',
-    redirect: '/message/system'
+    redirect: { name: 'MessagePage' }
   }, {
     path: '/message',
-    name: 'MessageContainer',
-    component: MessageContainer,
-    redirect: '/message/system',
-    children: [{
-      name: 'System',
-      path: 'system',
-      component: MessageSystem
-    }]
+    name: 'MessagePage',
+    component: MessagePage,
+
   }]
 })

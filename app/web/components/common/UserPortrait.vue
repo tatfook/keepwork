@@ -1,6 +1,6 @@
 <template>
   <div class="user-portrait">
-    <img class="user-portrait-profile" :style="portraitStyle" :src="portraitUrl" alt="">
+    <img class="user-portrait-profile" :style="portraitStyle" :src="portraitUrl" alt="" @error="showDefaultPortrait">
     <span v-if="isVip" class="user-portrait-vip" :class="[`user-portrait-vip-${size}`, `user-portrait-vip-${badgePosition}`]" :style="vipStyle">V</span>
     <span v-if="isT" class="user-portrait-tLevel" :class="[`user-portrait-tLevel-${tLevel}`, `user-portrait-tLevel-${size}`, `user-portrait-tLevel-${badgePosition}`]" :style="tLevelStyle">T{{tLevel}}</span>
   </div>
@@ -11,24 +11,24 @@ export default {
   props: {
     user: {
       type: Object,
-      required: true
+      required: true,
     },
     width: {
       type: Number,
-      default: 96
+      default: 96,
     },
     size: {
       default: 'medium',
       validator: function(value) {
         return ['small', 'medium', 'large'].indexOf(value) !== -1
-      }
+      },
     },
     badgePosition: {
       default: 'absolute',
       validator: function(value) {
         return ['none', 'relative', 'absolute'].indexOf(value) !== -1
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -39,8 +39,8 @@ export default {
         require('@/assets/img/T2.png'),
         require('@/assets/img/T3.png'),
         require('@/assets/img/T4.png'),
-        require('@/assets/img/T5.png')
-      ]
+        require('@/assets/img/T5.png'),
+      ],
     }
   },
   computed: {
@@ -55,8 +55,7 @@ export default {
     },
     vipStyle() {
       if (this.badgePosition !== 'absolute') return ''
-      let badgeHeight =
-        this.size == 'small' ? 16 : this.size == 'medium' ? 20 : 24
+      let badgeHeight = this.size == 'small' ? 16 : this.size == 'medium' ? 20 : 24
       let distance = (0.292 * this.width - badgeHeight) / 2
       return `top: ${distance}px;left: ${distance}px;`
     },
@@ -71,18 +70,20 @@ export default {
     },
     tLevelStyle() {
       if (this.badgePosition !== 'absolute') return ''
-      let badgeHeight =
-        this.size == 'small' ? 16 : this.size == 'medium' ? 20 : 24
-      let badgeWith =
-        this.size == 'small' ? 24 : this.size == 'medium' ? 30 : 36
+      let badgeHeight = this.size == 'small' ? 16 : this.size == 'medium' ? 20 : 24
+      let badgeWith = this.size == 'small' ? 24 : this.size == 'medium' ? 30 : 36
       let r = this.width / 2
-      let distance =
-        r -
-        badgeHeight -
-        (Math.sqrt(r * r - 2 * badgeWith * badgeHeight) * 5) / 8
+      let distance = r - badgeHeight - (Math.sqrt(r * r - 2 * badgeWith * badgeHeight) * 5) / 8
       return `right: ${distance}px;`
-    }
-  }
+    },
+  },
+  methods: {
+    showDefaultPortrait(e) {
+      const img = e.srcElement
+      img.src = this.defaultPortrait
+      img.onerror = null
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

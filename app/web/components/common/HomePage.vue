@@ -1,13 +1,5 @@
 <template>
   <div class="home-page">
-    <div class="home-page-advertising">
-      <div :class="['home-page-advertising-head',{'hidden-ad':hiddenAd}]">
-        <i class="iconfont icon-sound-fill"></i>
-        <span class="home-page-advertising-text">{{$t('home.paracraftIsFree')}}</span>
-        <a href="/contests" class="home-page-advertising-download">{{$t('project.knowMore')}}</a>
-        <span class="close" @click="closeAd">&times;</span>
-      </div>
-    </div>
     <div class="home-page-simple-show">
       <div class="home-page-simple-show-center">
         <div class="home-page-simple-show-center-left">
@@ -33,19 +25,13 @@
         </div>
         <div class="home-page-simple-show-center-right hidden-sm-and-down">
           <div class="home-page-simple-show-center-right-kp">
-            <!-- <div class="title">{{$t("home.whatCanYouDoOnKp")}}</div> -->
             <div class="video">
-              <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/770/raw#宣传视频01.mp4' />
+              <video-player width="100%" src='https://api.keepwork.com/storage/v0/siteFiles/8311/raw#Paracraft_introducation_56mb.mp4' />
             </div>
           </div>
           <div class="home-page-simple-show-center-right-board">
             <div class="title">{{$t("home.officialAnnouncements")}}</div>
             <ul class="announce-list" v-html="newsHtml"></ul>
-            <!-- <ul class="announce-list">
-              <li class="announce-list-item">
-                <a href="https://mp.weixin.qq.com/s/F64qcFRRqdAbC25AwdAIcw" target="_blank"><span>“汉字大赛”征集公告</span><span class="entry"><i class="iconfont icon-fire1"></i></span></a>
-              </li>
-            </ul> -->
           </div>
         </div>
       </div>
@@ -155,55 +141,53 @@ export default {
       briefPic: [
         {
           image: require('@/assets/pblImg/game0.png'),
-          text: this.$t('home.create3DGameAndAnim')
+          text: this.$t('home.create3DGameAndAnim'),
         },
         {
           image: require('@/assets/pblImg/game1.png'),
-          text: this.$t('home.selfLearning')
+          text: this.$t('home.selfLearning'),
         },
         {
           image: require('@/assets/pblImg/game2.png'),
-          text: this.$t('home.personalKnowledge')
+          text: this.$t('home.personalKnowledge'),
         },
         {
           image: require('@/assets/pblImg/game3.png'),
-          text: this.$t('home.haveYourOwnSite')
+          text: this.$t('home.haveYourOwnSite'),
         },
         {
           image: require('@/assets/pblImg/game4.png'),
-          text: this.$t('home.learnBasedOnProjects')
+          text: this.$t('home.learnBasedOnProjects'),
         },
         {
           image: require('@/assets/pblImg/game5.png'),
-          text: this.$t('home.learnFromProfessionalProgrammers')
-        }
+          text: this.$t('home.learnFromProfessionalProgrammers'),
+        },
       ],
       boardImgUrl: require('@/assets/pblImg/game0.png'),
       newsHtml: '',
       originHandpickProjects: [],
-      originLikesProjects: []
+      originLikesProjects: [],
     }
   },
   components: {
     ProjectCell,
     RegisterDialog,
     LessonPackageCell,
-    videoPlayer
+    videoPlayer,
   },
   async mounted() {
     this.textAnimation()
-    let [handpick, likes, news] = await Promise.all([
-      this.getHandpick(),
-      this.getLikes(),
-      this.getNews()
-    ]).catch(e => console.error(e))
+    let [handpick, likes, news] = await Promise.all([this.getHandpick(), this.getLikes(), this.getNews()]).catch(e =>
+      console.error(e),
+    )
     this.newsHtml = news
     this.originHandpickProjects = handpick
     this.originLikesProjects = likes
   },
   computed: {
     ...mapGetters({
-      isLogined: 'user/isLogined'
+      isLogined: 'user/isLogined',
     }),
     isEn() {
       return locale === 'en-US'
@@ -213,14 +197,14 @@ export default {
     },
     likesProjects() {
       return _.get(this.originLikesProjects, 'rows', [])
-    }
+    },
   },
   methods: {
     async getHandpick() {
       return keepwork.projects.getProjects({
         'x-order': 'choicenessNo-desc',
         'x-per-page': 8,
-        'x-page': 1
+        'x-page': 1,
       })
     },
     async getLikes() {
@@ -228,9 +212,9 @@ export default {
         'x-order': 'lastStar-desc-star-desc-updatedAt-desc',
         'x-per-page': 8,
         'x-page': 1,
-        'star':{
-          "$gt":2
-        }
+        star: {
+          $gt: 2,
+        },
       })
     },
     getPackageSuitableAge(lessonPackage) {
@@ -253,20 +237,13 @@ export default {
     combinedPic(item, len, n, leave) {
       clearInterval(this.timer_pic[n])
       this.timer_pic[n] = setInterval(() => {
-        let backgroundLen = Number(
-          this.$refs[`${item}_box_img`].style['backgroundPositionX'].replace(
-            /px/,
-            ''
-          )
-        )
+        let backgroundLen = Number(this.$refs[`${item}_box_img`].style['backgroundPositionX'].replace(/px/, ''))
         if (backgroundLen > len) {
           backgroundLen -= 100
-          this.$refs[`${item}_box_img`].style['backgroundPositionX'] =
-            backgroundLen + 'px'
+          this.$refs[`${item}_box_img`].style['backgroundPositionX'] = backgroundLen + 'px'
         } else {
           clearInterval(this.timer_pic[n])
-          if (leave)
-            this.$refs[`${item}_box_img`].style['backgroundPositionX'] = '0px'
+          if (leave) this.$refs[`${item}_box_img`].style['backgroundPositionX'] = '0px'
         }
       }, 50)
     },
@@ -282,8 +259,8 @@ export default {
       this.$router.push({
         name: 'ExplorationPage',
         query: {
-          tab: tabName
-        }
+          tab: tabName,
+        },
       })
     },
     goJoin() {
@@ -296,7 +273,7 @@ export default {
       this.$router.push(`/create`)
     },
     goExplorationPage() {
-      this.$router.push(`/explore`)
+      this.$router.push('/explore?tab=allProjects')
     },
     goStudyPage() {
       window.location.href = `${this.locationOrigin}/s`
@@ -313,20 +290,16 @@ export default {
       const HomePageInfo = {
         apiPrefix: 'https://api.keepwork.com/git/v0',
         projectName: 'official/keepwork',
-        newsPath: this.isEn
-          ? 'official/keepwork/news_en.md'
-          : 'official/keepwork/news.md'
+        newsPath: this.isEn ? 'official/keepwork/news_en.md' : 'official/keepwork/news.md',
       }
-      return gitlabShowRawForGuest(
-        HomePageInfo.apiPrefix,
-        HomePageInfo.projectName,
-        HomePageInfo.newsPath
-      ).catch(e => console.error(e))
-    }
+      return gitlabShowRawForGuest(HomePageInfo.apiPrefix, HomePageInfo.projectName, HomePageInfo.newsPath).catch(e =>
+        console.error(e),
+      )
+    },
   },
   beforeDestroy() {
     clearInterval(this.subtitleAnimation)
-  }
+  },
 }
 </script>
 
@@ -420,8 +393,7 @@ export default {
         flex: 1;
         height: 442px;
         position: relative;
-        background: url('../../assets/img/homepage_mainpic.png') no-repeat
-          bottom right;
+        background: url('../../assets/img/homepage_mainpic.png') no-repeat bottom right;
         &-desc {
           position: absolute;
           .title {
@@ -671,18 +643,6 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .home-page {
-    &-advertising-head {
-      font-size: 12px;
-      height: 30px;
-      line-height: 30px;
-      .iconfont {
-        font-size: 12px;
-      }
-      .close {
-        right: 10px;
-        line-height: 30px;
-      }
-    }
     &-register-dialog {
       .el-dialog {
         width: 90%;

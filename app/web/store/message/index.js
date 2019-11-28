@@ -5,7 +5,8 @@ import mutations from './mutations'
 const state = {
   messages: {},
   unreadMessagesCount: 0,
-  messagesBox: {}
+  messagesBox: {},
+  unreadList: []
 }
 export default {
   namespaced: true,

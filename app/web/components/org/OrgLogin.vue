@@ -65,27 +65,27 @@ export default {
       loginData: {
         username: '',
         password: '',
-        organizationName: ''
+        organizationName: '',
       },
       loginDataRules: {
         username: {
           required: true,
           message: this.$t('common.inputUsername'),
-          trigger: 'blur'
+          trigger: 'blur',
         },
         password: {
           required: true,
           message: this.$t('common.inputPassword'),
-          trigger: 'blur'
-        }
-      }
+          trigger: 'blur',
+        },
+      },
     }
   },
   computed: {
     ...mapGetters({
       orgFormsList: 'org/formsList',
       orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
-      isFirstView: 'org/isFirstView'
+      isFirstView: 'org/isFirstView',
     }),
     formsList() {
       return this.orgFormsList({ id: this.orgId })
@@ -108,7 +108,7 @@ export default {
     },
     orgId() {
       return _.get(this.orgDetail, 'id')
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -116,19 +116,19 @@ export default {
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
       orgLogin: 'org/login',
       userLogin: 'user/login',
-      setCurrentOrg: 'org/setCurrentOrg'
+      setCurrentOrg: 'org/setCurrentOrg',
     }),
     loginBroadcastChannel(username) {
       const channel = new BroadcastChannel('org')
       channel.postMessage({
         loginUrl: this.orgLoginUrl,
-        username
+        username,
       })
     },
     toFormDetail(form) {
       let { id } = form
       this.$router.push({
-        path: `form/${id}`
+        path: `form/${id}`,
       })
     },
     handleClose() {
@@ -137,26 +137,31 @@ export default {
     toRolePage({ roleId }) {
       let roleName = ''
       if ((roleId & 64) > 0) {
-        return this.$router.push({
-          name: 'OrgFirstView'
-        })
+        let url = this.$router.resolve({
+          name: 'OrgFirstView',
+        }).href
+        window.location.href = url
+        return
       }
       if ((roleId & 2) > 0) {
-        return this.$router.push({
-          name: 'OrgTeacherTeach'
-        })
+        let url = this.$router.resolve({
+          name: 'OrgTeacherTeach',
+        }).href
+        window.location.href = url
+        return
       }
       roleName = 'student'
-      this.$router.push({
-        name: 'OrgStudent'
-      })
+      let url = this.$router.resolve({
+        name: 'OrgStudent',
+      }).href
+      window.location.href = url
     },
     async toLogin() {
       this.isLoading = true
       try {
         const userinfo = await this.orgLogin({
           ...this.loginData,
-          username: this.loginData.username.toLowerCase()
+          username: this.loginData.username.toLowerCase(),
         })
         await this.setCurrentOrg({ orgDetail: this.orgDetail })
         this.isLoading = false
@@ -170,20 +175,20 @@ export default {
               await this.userLogin(this.loginData)
               await this.setCurrentOrg({ orgDetail: this.orgDetail })
               this.$router.push({
-                name: 'OrgStudent'
+                name: 'OrgStudent',
               })
               this.isLoading = false
               return
             }
             this.$message({
               message: this.$t('org.accountNotFound'),
-              type: 'error'
+              type: 'error',
             })
             break
           default:
             this.$message({
               message: this.$t('common.logonFailed'),
-              type: 'error'
+              type: 'error',
             })
         }
       }
@@ -200,17 +205,17 @@ export default {
     },
     setOrganizationName() {
       this.loginData.organizationName = this.orgName
-    }
+    },
   },
   components: {
     RegisterDialog,
-    PasswordResetForm
+    PasswordResetForm,
   },
   watch: {
     $route() {
       this.setOrganizationName()
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

@@ -15,6 +15,7 @@ const state = {
   orgLessonData: {},
   orgLessonDetail: {},
   orgClasses: {},
+  orgClassesWithMember: {},
   orgTeachers: {},
   orgStudents: {},
   userOrg: [],
@@ -27,7 +28,8 @@ const state = {
   orgLogs: {},
   classEvaluations: {},
   classEvaluationList: {},
-  orgClassesReport: {}
+  orgClassesReport: {},
+  sendedMessages: [],
 }
 export default {
   namespaced: true,
@@ -37,6 +39,6 @@ export default {
   mutations,
   modules: {
     teacher,
-    student
-  }
+    student,
+  },
 }
