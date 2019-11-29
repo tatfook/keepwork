@@ -2,7 +2,7 @@
   <div class="message-list">
     <div class="message-list-header">
       校园OA
-      <router-link class="message-list-header-link" :to="{name:'NewMessage'}">发消息</router-link>
+      <div class="message-list-header-link" @click="toNewMessagePage">发消息</div>
     </div>
     <div class="message-list-main">
       <message-list-comp :roleId="64" />
@@ -11,8 +11,18 @@
 </template>
 <script>
 import MessageListComp from '@/components/org/common/MessageListComp'
+import { mapActions } from 'vuex'
 export default {
   name: 'MessageList',
+  methods: {
+    ...mapActions({
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
+    }),
+    async toNewMessagePage() {
+      if (await this.checkCurrentOrgExpire({ toExpire: false })) return
+      this.$router.push({ name: 'NewMessage' })
+    },
+  },
   components: {
     MessageListComp,
   },
@@ -43,6 +53,7 @@ export default {
       border-radius: 4px;
       text-align: center;
       font-size: 14px;
+      cursor: pointer;
     }
   }
 }
