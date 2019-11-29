@@ -391,7 +391,6 @@ export default {
       padding: 21px 0;
     }
     &-info {
-      position: absolute;
       & > p {
         margin: 0;
         font-size: 14px;
