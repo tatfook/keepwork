@@ -31,7 +31,7 @@ export default {
   name: 'LessonsListDialog',
   props: {
     selectedLessonIds: Array,
-    isDialogShow: Boolean
+    isDialogShow: Boolean,
   },
   async mounted() {
     await this.getUserLessons({})
@@ -41,15 +41,32 @@ export default {
     return {
       searchName: '',
       formatType: this.$t('lesson.packageManage.formatType'),
-      lessonList: []
+      lessonList: [],
     }
   },
   computed: {
     ...mapGetters({
-      userLessons: 'lesson/teacher/userLessons'
+      userLessons: 'lesson/teacher/userLessons',
     }),
+    originSelectedLessons() {
+      return _.map(this.selectedLessonIds, id => {
+        return _.find(this.lessonList, { id })
+      })
+    },
     selectedLessons() {
       return _.filter(this.lessonList, { isSelect: true })
+    },
+    unSelectedLessons() {
+      return _.filter(this.lessonList, { isSelect: false })
+    },
+    newSelectedLessons() {
+      return _.differenceWith(this.selectedLessons, this.originSelectedLessons, _.isEqual)
+    },
+    oldSelectedLessons(){
+      return _.differenceWith(this.originSelectedLessons, this.unSelectedLessons, _.isEqual)
+    },
+    orderedSelectedLessons(){
+      return _.concat(this.oldSelectedLessons, this.newSelectedLessons)
     },
     nameFilteredLessonList() {
       let originList = this.lessonList
@@ -60,11 +77,11 @@ export default {
       return _.filter(originList, lesson => {
         return reg.test(lesson.lessonName)
       })
-    }
+    },
   },
   methods: {
     ...mapActions({
-      getUserLessons: 'lesson/teacher/getUserLessons'
+      getUserLessons: 'lesson/teacher/getUserLessons',
     }),
     initLessonIsSelect() {
       let clonedLessonList = _.cloneDeep(this.userLessons)
@@ -80,19 +97,19 @@ export default {
       this.$emit('close')
     },
     toAdd() {
-      this.$emit('save', this.selectedLessons)
-    }
+      this.$emit('save', this.orderedSelectedLessons)
+    },
   },
   watch: {
     selectedLessonIds(newVal, oldVal) {
       this.initLessonIsSelect()
-    }
+    },
   },
   filters: {
     formatDate(date, formatType) {
       return moment(date).format(formatType)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">
