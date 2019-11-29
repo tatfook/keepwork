@@ -22,47 +22,46 @@ import _ from 'lodash'
 export default {
   name: 'MessageRow',
   components: {
-    UserPortrait
+    UserPortrait,
   },
   props: {
     data: {
       type: Object,
       default() {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      systemAvatar
+      systemAvatar,
     }
   },
   filters: {
     formatDate(date) {
       return date ? moment(date).format('YYYY-M-DD H:mm') : ''
-    }
+    },
   },
   computed: {
     senderName() {
-      return this.isSystemMessage
-        ? this.$t('message.system')
-        : _.get(this.data, 'messages.senderName')
+      return this.isSystemMessage ? this.$t('message.system') : _.get(this.data, 'messages.senderName')
     },
     senderPortrait() {
-      return this.isSystemMessage
-        ? this.systemAvatar
-        : _.get(this.data, 'messages.senderPortrait')
+      return this.isSystemMessage ? this.systemAvatar : _.get(this.data, 'messages.senderPortrait')
     },
     user() {
+      const { vip = 0, tLevel = 0 } = this.data.messages
       return {
-        portrait: this.senderPortrait
+        portrait: this.senderPortrait,
+        vip,
+        tLevel,
       }
     },
     isSystemMessage() {
       const msgType = _.get(this.data, 'messages.msg.type', '')
       return msgType === 0
-    }
-  }
+    },
+  },
 }
 </script>
 

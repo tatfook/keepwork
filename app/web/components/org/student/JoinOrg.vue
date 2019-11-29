@@ -32,24 +32,24 @@ export default {
     return {
       form: {
         key: '',
-        realname: ''
+        realname: '',
       },
       rules: {
         key: [
           {
             required: true,
             message: '请输入邀请码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         realname: [
           {
             required: true,
             message: '请输入姓名',
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   async mounted() {
@@ -59,7 +59,7 @@ export default {
   methods: {
     ...mapActions({
       joinOrg: 'org/student/joinOrgClass',
-      getStudentInfo: 'org/student/getStudentInfo'
+      getStudentInfo: 'org/student/getStudentInfo',
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
@@ -73,29 +73,30 @@ export default {
                 ...this.form,
                 organizationId: this.organizationId,
                 parentPhoneNum: phone ? phone : null,
-                verifCode: verifCode ? verifCode : null
+                verifCode: verifCode ? verifCode : null,
               },
-              _.isNull
-            )
+              _.isNull,
+            ),
           )
           if (classId) {
-            this.$router.push({
+            const url = this.$router.resolve({
               name: 'OrgStudentClassDetail',
               params: {
-                classId
-              }
-            })
+                classId,
+              },
+            }).href
+            window.location.href = url
           }
         } else {
           return false
         }
       })
-    }
+    },
   },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      userinfo: 'org/student/userinfo'
+      userinfo: 'org/student/userinfo',
     }),
     orgRealName() {
       return _.get(this.userinfo, 'realname', '')
@@ -114,11 +115,11 @@ export default {
     },
     admissionMsg() {
       return this.orgAdmissionMsg || this.orgCellphone || '老师'
-    }
+    },
   },
   components: {
-    ParentPhoneBinder
-  }
+    ParentPhoneBinder,
+  },
 }
 </script>
 

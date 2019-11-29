@@ -1,5 +1,5 @@
 <template>
-  <new-message @cancel="back" @back="back"></new-message>
+  <new-message :roleId="64" @cancel="back" @back="back"></new-message>
 </template>
 <script>
 import NewMessage from '@/components/org/common/NewMessage'

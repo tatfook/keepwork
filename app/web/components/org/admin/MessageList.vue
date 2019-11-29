@@ -5,7 +5,7 @@
       <router-link class="message-list-header-link" :to="{name:'NewMessage'}">发消息</router-link>
     </div>
     <div class="message-list-main">
-      <message-list-comp />
+      <message-list-comp :roleId="64" />
     </div>
   </div>
 </template>

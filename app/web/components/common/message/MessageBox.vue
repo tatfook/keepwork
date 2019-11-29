@@ -74,6 +74,9 @@ export default {
     msgScroll() {
       return this.$refs.scroll
     },
+    classId() {
+      return _.get(this.$route, 'params.classId', '') || _.get(this.$route, 'query.classId', '')
+    },
   },
   methods: {
     ...mapActions({
@@ -115,7 +118,7 @@ export default {
       }
     },
     toMessageCenter() {
-      this.$emit('toMessageCenter')
+      this.$emit('toMessageCenter', this.classId)
     },
     async toMessageDetail(message) {
       const { id, lessonOrganizations } = message.messages
@@ -125,11 +128,15 @@ export default {
         organizationId,
       })
       const page = _.ceil(_.divide(msgIndex, this.perPage))
-      this.$emit('toMessageDetail', {
+      const query = {
         organizationId,
         page,
         id,
-      })
+      }
+      if (this.classId) {
+        query['classId'] = this.classId
+      }
+      this.$emit('toMessageDetail', query)
     },
   },
 }

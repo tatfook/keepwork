@@ -4,11 +4,18 @@
       校园OA
       <router-link class="teacher-message-list-header-link" :to="{name:'TeacherNewMessage'}">发消息</router-link>
     </div>
+    <div class="teacher-message-list-main">
+      <message-list-comp :roleId="2" />
+    </div>
   </div>
 </template>
 <script>
+import MessageListComp from '@/components/org/common/MessageListComp'
 export default {
-  name: 'TeacherMessageList'
+  name: 'TeacherMessageList',
+  components: {
+    MessageListComp,
+  },
 }
 </script>
 <style lang="scss" scoped>

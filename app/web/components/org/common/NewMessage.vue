@@ -14,7 +14,8 @@
         <span class="new-message-item-star">*</span>
         <label class="new-message-item-label">发送对象:</label>
         <el-button class="new-message-item-button" :class="{'danger': !isReceiverValid}" type="primary" @click="showMemberDialog">选择对象</el-button>
-        <el-tag v-for="classItem in tagArr" :key="classItem.classId" closable effect="plain" type="info" @close="removeClass(classItem)">
+        <el-tag v-if="isWholeSchool" closable effect="plain" type="info" @close="removeAllClass">全校</el-tag>
+        <el-tag v-else v-for="classItem in tagArr" :key="classItem.classId" closable effect="plain" type="info" @close="removeClass(classItem)">
           {{classItem.className}}（{{classItem.count}}人）
         </el-tag>
         <div class="new-message-item-checkbox-row">
@@ -24,7 +25,7 @@
       <div class="new-message-item">
         <span class="new-message-item-star">*</span>
         <label class="new-message-item-label">消息内容:</label>
-        <el-input :class="{'danger': !isMsgValid}" type="textarea" placeholder="请输入内容..." resize="none" v-model="messageText">
+        <el-input :class="{'danger': !isMsgValid}" type="textarea" placeholder="请输入内容..." resize="none" v-model="messageText" maxlength="256" show-word-limit>
         </el-input>
       </div>
     </div>
@@ -34,10 +35,16 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import MemberSelector from './MemberSelector'
 export default {
   name: 'NewMessage',
+  props: {
+    roleId: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       isLoading: false,
@@ -46,9 +53,24 @@ export default {
       isSendMessage: true,
       messageText: '',
       isMemberDialogShow: false,
+      isSendedClicked: false,
     }
   },
   computed: {
+    ...mapGetters({
+      allClassesWithMember: 'org/allClassesWithMember',
+    }),
+    allMemberList() {
+      return _.flatten(
+        _.map(this.allClassesWithMember, classItem => {
+          return _.concat(classItem.teacherList, classItem.studentList)
+        }),
+      )
+    },
+    isWholeSchool() {
+      const allMemberCount = this.allMemberList.length
+      return allMemberCount > 0 && allMemberCount == this.selectedMembers.length
+    },
     selectedClassArr() {
       return _.groupBy(this.selectedMembers, 'classId')
     },
@@ -61,8 +83,12 @@ export default {
         }
       })
     },
+    sendClassIds() {
+      return _.keys(this.selectedClassArr)
+    },
     newMessageData() {
       return {
+        _roleId: this.roleId,
         msg: {
           type: 2,
           text: this.messageText,
@@ -72,16 +98,26 @@ export default {
           return { userId, roleId }
         }),
         sendSms: this.isSendMessage ? 1 : 0,
+        sendClassIds: this.sendClassIds,
       }
     },
     isReceiverValid() {
-      return this.selectedMembers.length > 0
+      return this.isSendedClicked ? this.selectedMembers.length > 0 : true
     },
     isMsgValid() {
-      return Boolean(this.messageText)
+      return this.isSendedClicked ? Boolean(this.messageText) : true
     },
     isNewDataValid() {
       return this.isMsgValid && this.isReceiverValid
+    },
+    noParentPhoneStudents() {
+      if (!this.isSendMessage) {
+        return []
+      }
+      const selectedStudents = _.filter(this.selectedMembers, member => {
+        return member.roleId == 1 && !Boolean(member.parentPhoneNum)
+      })
+      return _.uniq(_.map(selectedStudents, student => student.realname))
     },
   },
   methods: {
@@ -92,10 +128,19 @@ export default {
       this.$emit('cancel')
     },
     saveData() {
+      this.isSendedClicked = true
       if (!this.isNewDataValid) {
         this.$message({
           type: 'warning',
           message: '发送对象及消息内容是必填项',
+        })
+        return
+      }
+      const noParentPhoneStudents = this.noParentPhoneStudents
+      if (noParentPhoneStudents.length > 0) {
+        this.$alert(noParentPhoneStudents.join(', '), '如下学生未设置家长手机号，请先设置。', {
+          confirmButtonText: '确定',
+          type: 'warning',
         })
         return
       }
@@ -124,6 +169,9 @@ export default {
     saveReceivers(receivers) {
       this.selectedMembers = receivers
       this.closeMemberDialog()
+    },
+    removeAllClass() {
+      _.map(this.tagArr, classItem => this.removeClass(classItem))
     },
     removeClass(classItem) {
       this.selectedMembers = _.filter(this.selectedMembers, member => member.classId != classItem.classId)
