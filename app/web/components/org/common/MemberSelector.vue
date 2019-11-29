@@ -49,21 +49,25 @@ export default {
         let { className, classId, teacherList, studentList } = classItem
         let teacherData = this.formatMemberTreeData(teacherList, 2, classId, className)
         let studentData = this.formatMemberTreeData(studentList, 1, classId, className)
+        let children = _.concat(teacherData, studentData) || []
         return {
           label: className,
           nodeKey: classId,
-          children: _.concat(teacherData, studentData),
+          disabled: children.length > 0 ? false : true,
+          children,
         }
       })
     },
     memberData() {
-      return [
-        {
-          label: '全校',
-          nodeKey: 'all',
-          children: this.classMemberData,
-        },
-      ]
+      return this.classMemberData.length > 0
+        ? [
+            {
+              label: '全校',
+              nodeKey: 'all',
+              children: this.classMemberData,
+            },
+          ]
+        : []
     },
   },
   methods: {
