@@ -1,6 +1,6 @@
 <template>
   <div class="creative-dec">
-    <el-dialog custom-class="creative-dec-dialog" :show-close="false" destroy-on-close :visible.sync="isDialogShow">
+    <el-dialog custom-class="creative-dec-dialog" :lock-scroll="false" :show-close="false" destroy-on-close :visible.sync="isDialogShow">
       <div class="creative-dec-container">
         <img src="@/assets/contests/creative-dec-dialog.png" alt="“汉字大赛”入选深圳第十五届“创意十二月”重点项目">
         <i class="el-icon-circle-close" @click="closeDialog"></i>
@@ -67,6 +67,23 @@ export default {
       font-size: 22px;
       cursor: pointer;
       right: 0;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .creative-dec {
+    &-fixed {
+      right: -8px;
+      top: 35%;
+      img {
+        width: 54%;
+      }
+    }
+    &-container {
+      padding: 0;
+      .el-icon-circle-close {
+        top: -28px;
+      }
     }
   }
 }
