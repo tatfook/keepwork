@@ -14,7 +14,7 @@
             </el-dropdown-menu>
           </el-dropdown>
           <user-portrait :user="userinfo" class="org-teacher-profile" size="large"></user-portrait>
-          <div class="org-teacher-username">{{username}}</div>
+          <div class="org-teacher-username">{{displayName}}</div>
         </div>
         <ul class="org-teacher-menu">
           <li class="org-teacher-menu-item" v-for="(menuItem, index) in teacherMenu" :class="{'org-teacher-menu-item-active': menuItem.match.includes(nowPageName), 'big-button': menuItem.size === 'big'}" :key="index">
@@ -90,8 +90,8 @@ export default {
     userPortrait() {
       return this.userinfo.portrait || this.defaultPortrait
     },
-    username() {
-      return this.userinfo.username
+    displayName() {
+      return this.userinfo.nickname || this.userinfo.username
     },
   },
   methods: {
