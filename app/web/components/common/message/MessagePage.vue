@@ -13,6 +13,10 @@
     <div class="message-main">
       <div class="message-main-title">{{currentTabName}}</div>
       <message-row v-for="item in currentTabMessages" :data="item" :id="`msg-${item.messages.id}`" :key="item.id"></message-row>
+      <div class="message-main-empty" v-if="currentTabMessages.length === 0">
+        <img :src="emptyImage" />
+        <div class="message-main-empty-tips">没有内容哦!</div>
+      </div>
       <div class="message-pagination" v-if="isShowPagination">
         <el-pagination background :current-page.sync="currentPage" @current-change="switchPage" :hide-on-single-page="true" :page-size="perPage" :total="messagesCount" layout="prev, pager, next">
         </el-pagination>
@@ -44,6 +48,7 @@ export default {
       selectedMessageTabID: 0,
       loading: false,
       isFirstFetch: true,
+      emptyImage: require('@/assets/message/empty.png'),
     }
   },
   watch: {
@@ -220,6 +225,19 @@ export default {
       font-size: 16px;
       padding-left: 25px;
       border-bottom: 1px solid #e8e8e8;
+    }
+    &-empty {
+      height: 550px;
+      background: #fff;
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &-tips {
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+      }
     }
     .message-pagination {
       display: flex;
