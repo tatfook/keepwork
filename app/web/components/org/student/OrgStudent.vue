@@ -16,7 +16,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <user-portrait :user="userinfo" class="org-student-profile" size="large"></user-portrait>
-            <div class="org-student-username">{{displayName}}</div>
+            <div class="org-student-username">{{username}}</div>
             <div class="org-student-edit-btn" v-if="isClassDetailPage" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
           <div class="class-select" v-if="isClassDetailPage">
@@ -183,9 +183,6 @@ export default {
     },
     username() {
       return _.get(this.userinfo, 'username', '')
-    },
-    displayName() {
-      return this.userinfo.nickname || this.userinfo.username
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
