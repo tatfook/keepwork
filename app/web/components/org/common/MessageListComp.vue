@@ -5,7 +5,7 @@
       <div class="message-list-comp-item" v-for="(message, index) in sendedMessagesList" :key="index">
         <div class="message-list-comp-item-header">
           <div class="message-list-comp-time">{{message.createdAt|formatTime}}</div>
-          <div class="message-list-comp-receiver" :title="message.sendTo">{{message.sendTo}}</div>
+          <div class="message-list-comp-receiver" :title="message.sendTo">发送对象：{{message.sendTo}}</div>
           <div class="message-list-comp-checkbox" v-if="message.sendSms>0">
             <el-checkbox :value="true" disabled>短信提醒家长</el-checkbox>
           </div>
