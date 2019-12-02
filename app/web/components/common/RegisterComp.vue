@@ -376,6 +376,8 @@ export default {
         .send-code-button {
           width: 100%;
           padding: 12px 0;
+          margin-top: -5px;
+          display: block;
         }
       }
     }
