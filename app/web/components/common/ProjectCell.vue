@@ -7,6 +7,9 @@
       <img v-else class="project-cell-cover-img" :src="(project.extra && project.extra.imageUrl) || project_default_cover" :alt="projectDisplayName" @error="showDefault">
       <div class="video-mask"></div>
       <span class="project-cell-cover-tag" v-if='showRate && showProjectRate'>{{projectRate}}</span>
+      <span class="project-cell-cover-visibility" v-if='project.visibility == 1'>
+        <i class="iconfont icon-private___"></i>
+      </span>
     </div>
     <h4 class="project-cell-title" @click="goProjectDetail(project)">
       <span class="picked" title="精选" v-if="project.choicenessNo"><img src="@/assets/pblImg/picked.png" alt=""></span>
@@ -246,6 +249,24 @@ export default {
       color: #ffa405;
       font-family: 'SourceHanSansCN-Medium';
       background: rgba(0, 0, 0, 0.1);
+    }
+    &-visibility {
+      position: absolute;
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background-color: #000;
+      border-radius: 50%;
+      line-height: 20px;
+      color: #fac746;
+      left: 6px;
+      text-align: center;
+      top: 4px;
+      .iconfont {
+        font-size: 24px;
+        position: relative;
+        left: -2px;
+      }
     }
   }
   &-title {
