@@ -11,12 +11,16 @@
           <span slot-scope="{ node, data }" class="comp-lib-tree-label" :class="{'comp-lib-tree-active': data.id === activeClassId}">{{ node.label }}</span>
         </el-tree>
       </el-col>
-      <el-col>
+      <el-col class="comp-lib-container">
         <el-row type="flex" class="comp-lib-content">
           <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in formatedSystemComps" :key="index">
             <comp-item :compDetail='comp'></comp-item>
           </el-col>
         </el-row>
+        <div class="comp-lib-pagination" v-if="totalCount>0">
+          <el-pagination background @size-change="handleSizeChange" @current-change="changePage" :current-page="nowPage" :page-size="perPage" :page-sizes="[3,30,60,90,120,180,240,300]" :total="totalCount" layout="total,sizes,prev,pager,next,jumper">
+          </el-pagination>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -27,15 +31,18 @@ import CompItem from './common/CompItem'
 import { mapActions, mapGetters } from 'vuex'
 
 const AllClassId = 'all'
+const DefaultPageSize = 60
 export default {
   name: 'CompLib',
   async created() {
     this.isLoading = true
-    await Promise.all([this.getSystemClassifies(), this.getSystemComps()])
+    await Promise.all([this.getSystemClassifies(), this.getCompList()])
     this.isLoading = false
   },
   data() {
     return {
+      perPage: DefaultPageSize,
+      nowPage: 1,
       searchWord: '',
       isLoading: false,
       allClassObj: { name: '全部', id: AllClassId },
@@ -70,6 +77,9 @@ export default {
       translator(parents, children)
       return _.concat([this.allClassObj], parents || [])
     },
+    totalCount() {
+      return this.systemComps.count || 0
+    },
     systemCompsRows() {
       return this.systemComps.rows || []
     },
@@ -84,6 +94,8 @@ export default {
     getCompListParams() {
       return _.omit(
         {
+          'x-per-page': this.perPage,
+          'x-page': this.nowPage,
           keyword: this.searchWord ? this.searchWord : null,
           pClassifyId: this.activeClassId == AllClassId ? null : this.activeClassId,
         },
@@ -96,13 +108,24 @@ export default {
       getSystemClassifies: 'paracraft/getSystemClassifies',
       getSystemComps: 'paracraft/getSystemComps',
     }),
+    handleSizeChange(val) {
+      this.perPage = val
+      this.resetNowPage()
+      this.getCompList()
+    },
+    changePage(nowPage) {
+      this.nowPage = nowPage
+      this.getCompList()
+    },
     handleNodeClick(data) {
       if (!data.children) {
         this.activeClassId = data.id
+        this.resetNowPage()
         this.getCompList()
       }
     },
     search() {
+      this.resetNowPage()
       this.activeClassId = AllClassId
       this.searchWord = this.seachContent
       this.getCompList()
@@ -113,6 +136,9 @@ export default {
         await this.getSystemComps(this.getCompListParams)
       } catch (error) {}
       this.isLoading = false
+    },
+    resetNowPage() {
+      this.nowPage = 1
     },
   },
   components: {
@@ -167,6 +193,10 @@ export default {
       font-weight: bold;
     }
   }
+  &-container {
+    padding-bottom: 48px;
+    position: relative;
+  }
   &-content {
     flex-wrap: wrap;
     padding: 16px 8px;
@@ -176,6 +206,13 @@ export default {
   &-item {
     margin-bottom: 16px;
     padding: 0 8px;
+  }
+  &-pagination {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
   }
 }
 </style>
