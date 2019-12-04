@@ -13,7 +13,7 @@
       </el-col>
       <el-col class="comp-lib-container">
         <el-row type="flex" class="comp-lib-content">
-          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in formatedSystemComps" :key="index">
+          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in systemCompsRows" :key="index">
             <comp-item :compDetail='comp'></comp-item>
           </el-col>
         </el-row>
@@ -82,14 +82,6 @@ export default {
     },
     systemCompsRows() {
       return this.systemComps.rows || []
-    },
-    formatedSystemComps() {
-      return _.map(this.systemCompsRows, compDetail => {
-        return {
-          ...compDetail,
-          formatedId: 'E' + (1000 + compDetail.id),
-        }
-      })
     },
     getCompListParams() {
       return _.omit(
