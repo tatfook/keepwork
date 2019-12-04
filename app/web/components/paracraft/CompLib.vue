@@ -43,20 +43,17 @@ export default {
       seachContent: '',
       defaultProps: {
         children: 'children',
-        label: 'name'
-      }
+        label: 'name',
+      },
     }
   },
   computed: {
     ...mapGetters({
       systemClassifies: 'paracraft/systemClassifies',
-      systemComps: 'paracraft/systemComps'
+      systemComps: 'paracraft/systemComps',
     }),
     compsClassList() {
-      const parents = _.filter(
-        this.systemClassifies,
-        item => item.parentId === 0
-      )
+      const parents = _.filter(this.systemClassifies, item => item.parentId === 0)
       const children = _.filter(this.systemClassifies, item => item.parentId)
       const translator = (parents, children) => {
         _.forEach(parents, parent => {
@@ -65,9 +62,7 @@ export default {
               const temp = JSON.parse(JSON.stringify(children))
               temp.splice(index, 1)
               translator([current], temp)
-              Array.isArray(parent.children)
-                ? parent.children.push(current)
-                : (parent.children = [current])
+              Array.isArray(parent.children) ? parent.children.push(current) : (parent.children = [current])
             }
           })
         })
@@ -79,17 +74,13 @@ export default {
       return _.keyBy(this.systemClassifies, 'id')
     },
     activeClassifyComps() {
-      return _.get(
-        this.classifiesKeyById,
-        `${this.activeClassId}.pBlockClassifies`,
-        []
-      )
+      return _.get(this.classifiesKeyById, `${this.activeClassId}.pBlockClassifies`, [])
     },
     formatedSystemComps() {
       return _.map(this.systemComps, compDetail => {
         return {
           ...compDetail,
-          formatedId: 'E' + (1000 + compDetail.id)
+          formatedId: 'E' + (1000 + compDetail.id),
         }
       })
     },
@@ -107,12 +98,12 @@ export default {
       return _.filter(this.compsList, ({ formatedId, name }) => {
         return (formatedId + name).indexOf(this.searchWord) >= 0
       })
-    }
+    },
   },
   methods: {
     ...mapActions({
       getSystemClassifies: 'paracraft/getSystemClassifies',
-      getSystemComps: 'paracraft/getSystemComps'
+      getSystemComps: 'paracraft/getSystemComps',
     }),
     handleNodeClick(data) {
       if (!data.children) {
@@ -122,11 +113,11 @@ export default {
     search() {
       this.activeClassId = AllClassId
       this.searchWord = this.seachContent
-    }
+    },
   },
   components: {
-    CompItem
-  }
+    CompItem,
+  },
 }
 </script>
 <style lang="scss" scoped>
