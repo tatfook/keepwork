@@ -1,7 +1,7 @@
 <template>
   <div class="comp-lib" v-loading="isLoading">
     <div class="comp-lib-header">
-      <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent" clearable @blur="search" @keyup.enter.native="search">
+      <el-input size="small" placeholder="请输入搜索内容..." v-model="seachContent" clearable @blur="search" @keyup.enter.native="search" @clear="search">
         <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
       </el-input>
     </div>
@@ -13,7 +13,7 @@
       </el-col>
       <el-col>
         <el-row type="flex" class="comp-lib-content">
-          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in compsListSearched" :key="index">
+          <el-col :span="8" class="comp-lib-item" v-for="(comp, index) in formatedSystemComps" :key="index">
             <comp-item :compDetail='comp'></comp-item>
           </el-col>
         </el-row>
@@ -70,34 +70,25 @@ export default {
       translator(parents, children)
       return _.concat([this.allClassObj], parents || [])
     },
-    classifiesKeyById() {
-      return _.keyBy(this.systemClassifies, 'id')
-    },
-    activeClassifyComps() {
-      return _.get(this.classifiesKeyById, `${this.activeClassId}.pBlockClassifies`, [])
+    systemCompsRows() {
+      return this.systemComps.rows || []
     },
     formatedSystemComps() {
-      return _.map(this.systemComps, compDetail => {
+      return _.map(this.systemCompsRows, compDetail => {
         return {
           ...compDetail,
           formatedId: 'E' + (1000 + compDetail.id),
         }
       })
     },
-    compsKeyById() {
-      return _.keyBy(this.formatedSystemComps, 'id')
-    },
-    compsList() {
-      return this.activeClassId === AllClassId
-        ? this.formatedSystemComps
-        : _.map(this.activeClassifyComps, ({ blockId }) => {
-            return this.compsKeyById[blockId]
-          }) || []
-    },
-    compsListSearched() {
-      return _.filter(this.compsList, ({ formatedId, name }) => {
-        return (formatedId + name).indexOf(this.searchWord) >= 0
-      })
+    getCompListParams() {
+      return _.omit(
+        {
+          keyword: this.searchWord ? this.searchWord : null,
+          pClassifyId: this.activeClassId == AllClassId ? null : this.activeClassId,
+        },
+        _.isNull,
+      )
     },
   },
   methods: {
@@ -108,11 +99,20 @@ export default {
     handleNodeClick(data) {
       if (!data.children) {
         this.activeClassId = data.id
+        this.getCompList()
       }
     },
     search() {
       this.activeClassId = AllClassId
       this.searchWord = this.seachContent
+      this.getCompList()
+    },
+    async getCompList() {
+      this.isLoading = true
+      try {
+        await this.getSystemComps(this.getCompListParams)
+      } catch (error) {}
+      this.isLoading = false
     },
   },
   components: {
