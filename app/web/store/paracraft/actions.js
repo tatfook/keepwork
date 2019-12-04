@@ -22,8 +22,8 @@ const actions = {
     let result = await paracraft.pBlocks.getClassifies()
     commit(GET_CLASSIFIES_SUCCESS, result)
   },
-  async getSystemComps({ commit }) {
-    let result = await paracraft.pBlocks.getCopms()
+  async getSystemComps({ commit }, params) {
+    let result = await paracraft.pBlocks.getCopms(params)
     commit(GET_SYSTEM_COMPS_SUCCESS, result)
   },
   async updateUsedCount(state, { id }) {

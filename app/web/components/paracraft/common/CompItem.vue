@@ -1,7 +1,7 @@
 <template>
   <div class="comp-item">
     <div class="comp-item-cover" :style="{background:bgColor}">
-      <span class="comp-item-badge">{{compDetail.formatedId}}</span>
+      <span class="comp-item-badge">{{compDetail._id}}</span>
       <img class="comp-item-preview" :src="compressedCover" alt="">
       <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
