@@ -90,7 +90,7 @@ export default {
       let { fileName, enName } = extra || {}
       const resultFileName = fileName || enName || name
       if (this.isProtocolType) {
-        window.location.href = `paracraft://127.0.0.1:${this.paracraftPort}/ajax/console?action=runcode&text=cmd("/install -ext ${filetype} -filename ${resultFileName} ${fileUrl}")`
+        window.location.href = `paracraft://cmd("/install -ext ${filetype} -filename ${resultFileName} ${fileUrl}")`
         return
       }
       this.isUseLoading = true
