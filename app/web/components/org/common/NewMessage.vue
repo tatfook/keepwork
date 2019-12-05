@@ -122,12 +122,14 @@ export default {
   },
   methods: {
     ...mapActions({
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
       orgCreateNewMessage: 'org/createNewMessage',
     }),
     cancel() {
       this.$emit('cancel')
     },
-    saveData() {
+    async saveData() {
+      if (await this.checkCurrentOrgExpire({ toExpire: false })) return
       this.isSendedClicked = true
       if (!this.isNewDataValid) {
         this.$message({

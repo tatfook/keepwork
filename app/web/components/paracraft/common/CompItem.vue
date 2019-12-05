@@ -1,7 +1,7 @@
 <template>
   <div class="comp-item">
     <div class="comp-item-cover" :style="{background:bgColor}">
-      <span class="comp-item-badge">{{compDetail.formatedId}}</span>
+      <span class="comp-item-badge">{{compDetail._id}}</span>
       <img class="comp-item-preview" :src="compressedCover" alt="">
       <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
@@ -13,7 +13,7 @@
         </div>
         <div class="comp-item-author">贡献者：{{compDetail.contributor}}</div>
       </div>
-      <el-button v-loading="isUseLoading" @click="useComp">使用</el-button>
+      <el-button v-loading="isUseLoading" :disabled="!compDetail.canUse" @click="useComp">使用</el-button>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ const BgColors = [
   '#69c0ff',
   '#85a5ff',
   '#b37feb',
-  '#ff85c0'
+  '#ff85c0',
 ]
 import { ModelGltf } from 'vue-3d-model'
 import { mapActions } from 'vuex'
@@ -40,8 +40,8 @@ export default {
   props: {
     compDetail: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -51,13 +51,16 @@ export default {
       rotation: {
         x: 0,
         y: 0,
-        z: 0
-      }
+        z: 0,
+      },
     }
   },
   computed: {
     paracraftPort() {
       return _.get(this.$route, 'query.port', '8099')
+    },
+    isProtocolType() {
+      return _.get(this.$route, 'query.type') == 'protocol'
     },
     downloadUrl() {
       return _.get(this.compDetail, 'fileUrl')
@@ -68,11 +71,11 @@ export default {
     compressedCover() {
       let gifUrl = _.get(this.compDetail, 'gifUrl')
       return gifUrl + '?imageView2/5/w/250/h/128'
-    }
+    },
   },
   methods: {
     ...mapActions({
-      useCompToParacraft: 'paracraft/useCompToParacraft'
+      useCompToParacraft: 'paracraft/useCompToParacraft',
     }),
     onLoadGltf() {
       this.isLoading = false
@@ -85,30 +88,35 @@ export default {
     async useComp() {
       let { filetype, name, fileUrl, id, extra = {} } = this.compDetail
       let { fileName, enName } = extra || {}
+      const resultFileName = fileName || enName || name
+      if (this.isProtocolType) {
+        window.location.href = `paracraft://cmd("/install -ext ${filetype} -filename ${resultFileName} ${fileUrl}")`
+        return
+      }
       this.isUseLoading = true
       await this.useCompToParacraft({
         port: this.paracraftPort,
         fileType: filetype,
-        fileName: fileName || enName || name,
+        fileName: resultFileName,
         downloadUrl: fileUrl,
-        id
+        id,
       }).catch(error => {
         this.$message({
           type: 'error',
-          message: error
+          message: error,
         })
       })
       this.isUseLoading = false
-    }
+    },
   },
   components: {
-    ModelGltf
+    ModelGltf,
   },
   watch: {
     previewUrl() {
       this.isLoading = true
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -163,6 +171,10 @@ export default {
       color: #2397f3;
       border-color: #2397f3;
       border-radius: 28px;
+      &.is-disabled {
+        color: #c0c4cc;
+        border-color: #ebeef5;
+      }
     }
   }
   &-type-name {

@@ -11,6 +11,7 @@
     </div>
     <quick-to-top></quick-to-top>
     <real-name />
+    <creative-dec />
   </div>
 </template>
 <script>
@@ -30,6 +31,7 @@ import LoginDialog from '@/components/common/LoginDialog'
 import QuickToTop from '@/components/common/QuickToTop'
 import ba from 'vue-ba'
 import RealName from '@/components/common/RealName'
+import CreativeDec from '@/components/contests/CreativeDec'
 
 Vue.use(ba, process.env.BAIDU_SITE_ID)
 Vue.use(Vuex)
@@ -38,19 +40,19 @@ Vue.use(socket)
 
 const i18n = new VueI18n({
   locale,
-  messages: i18nMessages
+  messages: i18nMessages,
 })
 
 Vue.use(ElementUI, {
-  i18n: (key, value) => i18n.t(key, value)
+  i18n: (key, value) => i18n.t(key, value),
 })
 
 const store = new Vuex.Store({
   modules: {
     user: userModule,
     message: messageModule,
-    pbl: pblModule
-  }
+    pbl: pblModule,
+  },
 })
 
 export default {
@@ -63,14 +65,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isShowLoginDialog: 'pbl/isShowLoginDialog'
-    })
+      isShowLoginDialog: 'pbl/isShowLoginDialog',
+    }),
   },
   components: {
     RealName,
     CommonHeader,
     LoginDialog,
-    QuickToTop
+    QuickToTop,
+    CreativeDec,
   },
   async mounted() {
     await this.loadUerInfo()
@@ -78,18 +81,16 @@ export default {
   methods: {
     ...mapActions({
       toggleLoginDialog: 'pbl/toggleLoginDialog',
-      getUserProfile: 'user/getProfile'
+      getUserProfile: 'user/getProfile',
     }),
     handleLoginDialogClose() {
       this.toggleLoginDialog(false)
     },
     async loadUerInfo() {
-      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
-        console.error(err)
-      )
+      await this.getUserProfile({ force: false, useCache: false }).catch(err => console.error(err))
       this.loading = false
-    }
-  }
+    },
+  },
 }
 </script>
 
