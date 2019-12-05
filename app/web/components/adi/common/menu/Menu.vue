@@ -257,7 +257,6 @@ a {
     .el-submenu {
       .el-submenu__title {
         //子菜单
-        padding: 0;
         a {
           //子菜单文字与超链接
           display: inline-block;
@@ -273,7 +272,6 @@ a {
       }
     }
     .el-menu-item {
-      padding: 0;
       a {
         display: inline-block;
         width: 100%;
@@ -392,7 +390,6 @@ a {
     }
     .el-submenu__title {
       i {
-        margin-left: -20px;
         color: #909399;
       }
     }
@@ -405,7 +402,6 @@ a {
   width: auto;
   line-height: 50px;
   border: 0;
-  padding: 0;
   height: 50px;
 }
 .comp-menu .el-menu.el-menu--horizontal {
