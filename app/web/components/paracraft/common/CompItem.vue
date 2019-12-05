@@ -59,6 +59,9 @@ export default {
     paracraftPort() {
       return _.get(this.$route, 'query.port', '8099')
     },
+    isProtocolType() {
+      return _.get(this.$route, 'query.type') == 'protocol'
+    },
     downloadUrl() {
       return _.get(this.compDetail, 'fileUrl')
     },
@@ -85,11 +88,16 @@ export default {
     async useComp() {
       let { filetype, name, fileUrl, id, extra = {} } = this.compDetail
       let { fileName, enName } = extra || {}
+      const resultFileName = fileName || enName || name
+      if (this.isProtocolType) {
+        window.location.href = `paracraft://127.0.0.1:${this.paracraftPort}/ajax/console?action=runcode&text=cmd("/install -ext ${filetype} -filename ${resultFileName} ${fileUrl}")`
+        return
+      }
       this.isUseLoading = true
       await this.useCompToParacraft({
         port: this.paracraftPort,
         fileType: filetype,
-        fileName: fileName || enName || name,
+        fileName: resultFileName,
         downloadUrl: fileUrl,
         id,
       }).catch(error => {
