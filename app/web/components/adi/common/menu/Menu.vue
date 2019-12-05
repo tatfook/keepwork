@@ -33,9 +33,7 @@ const renderTemplate = (h, m, data, parentIndex) => {
 
   function getMenuItemStyle(link) {
     let nowPageLink = window.location.href
-    return encodeURI(link) == nowPageLink
-      ? `color: ${m.options.activeFontColor};`
-      : ''
+    return encodeURI(link) == nowPageLink ? `color: ${m.options.activeFontColor};` : ''
   }
 
   return _.map(data, menuData => {
@@ -70,19 +68,11 @@ const renderTemplate = (h, m, data, parentIndex) => {
                 href={menuData.link}
                 title={m.getNameMenu(menuData)}
               >
-                <a
-                  href="javascript:void(0)"
-                  class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow"
-                />
+                <a href="javascript:void(0)" class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow" />
                 {m.getNameMenu(menuData)}
               </a>
             </template>
-            {renderTemplate(
-              h,
-              m,
-              menuData.child,
-              getIndexString(menuData.link, index)
-            )}
+            {renderTemplate(h, m, menuData.child, getIndexString(menuData.link, index))}
           </el-submenu>
         )
       } else {
@@ -93,31 +83,18 @@ const renderTemplate = (h, m, data, parentIndex) => {
             style={parentIndex == 1 && m.itemStyle}
           >
             <template slot="title">
-              <span
-                class="menu-text"
-                style={getMenuItemStyle(menuData.link)}
-                title={m.getNameMenu(menuData)}
-              >
+              <span class="menu-text" style={getMenuItemStyle(menuData.link)} title={m.getNameMenu(menuData)}>
                 <i class="el-submenu__icon-arrow el-icon-arrow-down mook-icon-arrow" />
                 {m.getNameMenu(menuData)}
               </span>
             </template>
-            {renderTemplate(
-              h,
-              m,
-              menuData.child,
-              getIndexString(menuData.link, index)
-            )}
+            {renderTemplate(h, m, menuData.child, getIndexString(menuData.link, index))}
           </el-submenu>
         )
       }
     } else if (m.options.type !== 'menu' && isItemHasChild) {
       return (
-        <div
-          index={getIndexString(menuData.link, index)}
-          style={m.options.itemStyle}
-          class={getClass()}
-        >
+        <div index={getIndexString(menuData.link, index)} style={m.options.itemStyle} class={getClass()}>
           <a
             target={m.menuTarget}
             style={m.getItemStyle(parentIndex)}
@@ -126,21 +103,12 @@ const renderTemplate = (h, m, data, parentIndex) => {
           >
             {m.getNameMenu(menuData)}
           </a>
-          {renderTemplate(
-            h,
-            m,
-            menuData.child,
-            getIndexString(menuData.link, index)
-          )}
+          {renderTemplate(h, m, menuData.child, getIndexString(menuData.link, index))}
         </div>
       )
     } else {
       return (
-        <div
-          index={getIndexString(menuData.link, index)}
-          style={m.options.itemStyle}
-          class={getClass()}
-        >
+        <div index={getIndexString(menuData.link, index)} style={m.options.itemStyle} class={getClass()}>
           <a
             target={m.menuTarget}
             style={m.getItemStyle(parentIndex)}
@@ -164,7 +132,7 @@ export default {
           class={{
             'comp-menu-vertical': this.mode === 'vertical',
             'comp-menu-default-opened': this.isDefaultOpenAll === true,
-            'comp-menu': true
+            'comp-menu': true,
           }}
         >
           <el-menu
@@ -183,10 +151,7 @@ export default {
     } else if (this.options.type === 'footer') {
       return (
         <div class="comp-footer">
-          <div
-            background-color={this.options.footerBackground}
-            style={this.optionsStyle}
-          >
+          <div background-color={this.options.footerBackground} style={this.optionsStyle}>
             {renderTemplate(h, this)}
           </div>
         </div>
@@ -198,7 +163,7 @@ export default {
     return {
       indexLinks: {},
       menuRef: 'memu' + Date.now(),
-      defaultActiveIndex: undefined
+      defaultActiveIndex: undefined,
     }
   },
   mounted() {
@@ -213,12 +178,12 @@ export default {
     },
     getItemTopStyle() {
       return this.generateStyleString({
-        'font-size': this.options.itemTop
+        'font-size': this.options.itemTop,
       })
     },
     getItemOtherStyle() {
       return this.generateStyleString({
-        'font-size': this.options.itemOther
+        'font-size': this.options.itemOther,
       })
     },
     mode() {
@@ -234,20 +199,11 @@ export default {
       return this.properties.data.length != 0 ? false : true
     },
     menuTarget() {
-      return this.properties.target
-        ? this.properties.target
-        : this.options.emptyLinkTarget
+      return this.properties.target ? this.properties.target : this.options.emptyLinkTarget
     },
     optionsStyle() {
-      return (
-        'display:' +
-        this.options.display +
-        ';' +
-        'justify-content:' +
-        this.options.justifyContent +
-        ';'
-      )
-    }
+      return 'display:' + this.options.display + ';' + 'justify-content:' + this.options.justifyContent + ';'
+    },
   },
   methods: {
     getNameMenu(menuData) {
@@ -259,9 +215,7 @@ export default {
     openAll() {
       _.forEach(this.indexLinks, (indexLinkVal, key) => {
         let parentKey = indexLinkVal && indexLinkVal.parentIndex
-        parentKey &&
-          _.split(parentKey, '-').length > 1 &&
-          this.$refs[this.menuRef].open(parentKey)
+        parentKey && _.split(parentKey, '-').length > 1 && this.$refs[this.menuRef].open(parentKey)
       })
     },
     setMenuOpend() {
@@ -276,9 +230,7 @@ export default {
         return encodeURI(indexLinkObj.link) == nowPageLink
       })
       let parentKey = findedIndexLink && findedIndexLink.parentIndex
-      parentKey &&
-        _.split(parentKey, '-').length > 1 &&
-        this.$refs[this.menuRef].open(parentKey)
+      parentKey && _.split(parentKey, '-').length > 1 && this.$refs[this.menuRef].open(parentKey)
       this.defaultActiveIndex = findedIndexLink && findedIndexLink.index
     },
     handleMenuItemClick(link) {
@@ -288,10 +240,10 @@ export default {
       this.indexLinks[key] = {
         index: key,
         parentIndex,
-        link
+        link,
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -305,7 +257,6 @@ a {
     .el-submenu {
       .el-submenu__title {
         //子菜单
-        padding: 0;
         a {
           //子菜单文字与超链接
           display: inline-block;
@@ -321,7 +272,6 @@ a {
       }
     }
     .el-menu-item {
-      padding: 0;
       a {
         display: inline-block;
         width: 100%;
@@ -440,7 +390,6 @@ a {
     }
     .el-submenu__title {
       i {
-        margin-left: -20px;
         color: #909399;
       }
     }
@@ -453,7 +402,6 @@ a {
   width: auto;
   line-height: 50px;
   border: 0;
-  padding: 0;
   height: 50px;
 }
 .comp-menu .el-menu.el-menu--horizontal {
