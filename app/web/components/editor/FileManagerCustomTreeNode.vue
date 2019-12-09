@@ -449,7 +449,7 @@ export default {
       )
     },
     isFile() {
-      return this.data.type === 'blob'
+      return this.data.isBlob
     },
     isHasOpened() {
       return (
@@ -457,7 +457,7 @@ export default {
       )
     },
     isFolder() {
-      return this.data.type === 'tree'
+      return this.data.isTree
     },
     isWebsite() {
       return this.node.level === 1

@@ -35,15 +35,16 @@ const getFileByPath = (rootGetters, path) => {
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
   repositoryTreesAllFiles: (state, { repositoryTrees = [] }) => {
-    let projects = _.values(repositoryTrees)
-    let allFiles = projects.reduce((prev, sitesMap) => {
-      let sites = _.values(sitesMap)
-      let filesInSites = sites.reduce((prev, files) => {
-        return prev.concat(files)
-      }, [])
-      return prev.concat(filesInSites)
-    }, [])
-    return allFiles
+    return repositoryTrees
+    // let projects = _.values(repositoryTrees)
+    // let allFiles = projects.reduce((prev, sitesMap) => {
+    //   let sites = _.values(sitesMap)
+    //   let filesInSites = sites.reduce((prev, files) => {
+    //     return prev.concat(files)
+    //   }, [])
+    //   return prev.concat(filesInSites)
+    // }, [])
+    // return allFiles
   },
   childNamesByPath: (
     state,

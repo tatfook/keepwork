@@ -271,7 +271,7 @@ export default {
     renderContent(h, { node, data, store }) {
       // trick codes below
       // manipulated the node in <el-tree/>
-      node.isLeaf = data.type === 'blob'
+      node.isLeaf = data.isBlob
       // restore node expand status
       let path = data.path || `${data.username}/${data.sitename}`
       node.expanded = this.filemanagerTreeNodeExpandMapByPath[path]

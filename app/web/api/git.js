@@ -3,7 +3,7 @@ import { get as _get } from 'lodash'
 import Cookies from 'js-cookie'
 
 const defaultConfig = {
-  url: process.env.GITLAB_API_PREFIX,
+  url: process.env.KEEPWORK_API_PREFIX,
   token: ' '
 }
 
@@ -38,20 +38,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
           const [projectName, path] = [_projectName, _path].map(
             encodeURIComponent
           )
-          let total = []
-          let page = 0
-          let res = {}
-          res = await instance.get(
-            `projects/${projectName}/tree/${path}?recursive=true`
+          const res = await instance.get(
+            `repos/${projectName}/tree?folderPath=${path}&recursive=true`
           )
-          total = [...total, ...res.data]
-          while (res.data.length >= 100) {
-            res = await instance.get(
-              `projects/${projectName}/tree/${path}?page=${page++}&per_page=100&recursive=${recursive}`
-            )
-            total = [...total, ...res.data]
-          }
-          return total
+          return res.data
         },
         files: {
           getFileCommitList: async ({
@@ -357,7 +347,7 @@ export class GitAPI {
 
   async upsertFile(path, options) {
     options = { ...(options || {}) }
-    const file = await this.getFile(path).catch(e => {})
+    const file = await this.getFile(path).catch(e => { })
     return file ? this.editFile(path, options) : this.createFile(path, options)
   }
 

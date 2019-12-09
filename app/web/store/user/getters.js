@@ -42,7 +42,7 @@ const getters = {
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) =>
     defaultSiteDataSource,
   gitlabConfig: (state, { token }) => ({
-    url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
+    url: process.env.KEEPWORK_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: `Bearer ${token}`
     // token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
@@ -62,6 +62,8 @@ const getters = {
 
     // use websitesMap to generate personal website list
     let websiteNames = _.keys(websitesMap)
+    console.log(websiteNames)
+    console.log(repositoryTrees)
 
     let personalSiteList = websiteNames.map(name => {
       // use siteDataSourcesMap to get projectId and lastCommitId
@@ -73,9 +75,10 @@ const getters = {
       let files = _.get(repositoryTrees, [rootPath, rootPath], []).filter(
         ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
-      let children = gitTree2NestedArray(files, rootPath).filter(
-        ({ name }) => name !== CONFIG_FOLDER_NAME
-      )
+      // let children = gitTree2NestedArray(files, rootPath).filter(
+      //   ({ name }) => name !== CONFIG_FOLDER_NAME
+      // )
+      let children = _.filter(_.get(repositoryTrees, [rootPath, rootPath], []), file => file.name !== CONFIG_FOLDER_NAME)
       let { extra, ...website } = websitesMap[name]
       return {
         projectId,
@@ -87,6 +90,8 @@ const getters = {
         ...website
       }
     })
+
+    console.log(personalSiteList)
 
     return personalSiteList
   },
