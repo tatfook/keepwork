@@ -39,7 +39,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
             encodeURIComponent
           )
           const res = await instance.get(
-            `repos/${projectName}/tree?folderPath=${path}&recursive=true`
+            `repos/${projectName}/tree?folderPath=${path}&recursive=${recursive}`
           )
           return res.data
         },
@@ -53,7 +53,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectPath = encodeURIComponent(projectPath)
             filePath = encodeURIComponent(filePath)
             let res = await instance.get(
-              `projects/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
+              `repos/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
             )
             return res
           },
@@ -61,13 +61,13 @@ const gitLabAPIGenerator = ({ url, token }) => {
             const [projectPath, path] = [projectName, filePath].map(
               encodeURIComponent
             )
-            await instance.delete(`projects/${projectPath}/files/${path}`)
+            await instance.delete(`repos/${projectPath}/files/${path}`)
             return true
           },
           async show({ projectPath, fullPath, showVersion = false, useCache }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            const url = `projects/${projectPath}/files/${fullPath}${showVersion ? '?commit=true' : ''}`
+            const url = `repos/${projectPath}/files/${fullPath}${showVersion ? '?commit=true' : ''}`
             let res = await instance.get(url).catch(error => Promise.reject(error))
             return res.data
           },
@@ -80,14 +80,14 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
             let res = await instance.get(
-              `projects/${projectPath}/files/${fullPath}?ref=${commitId}`
+              `repos/${projectPath}/files/${fullPath}?ref=${commitId}`
             )
             return res.data
           },
           async showRaw(projectId, filePath, ref) {
             const [pId, path] = [projectId, filePath].map(encodeURIComponent)
             let res = await instance.get(
-              `projects/${pId}/repository/files/${path}/raw?ref=${ref}`
+              `repos/${pId}/repository/files/${path}/raw?ref=${ref}`
             )
             return res.data
           },
@@ -96,7 +96,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.post(
-              `projects/${projectPath}/files/${path}`,
+              `repos/${projectPath}/files/${path}`,
               {
                 content: content || ''
               }
@@ -115,7 +115,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.put(
-              `projects/${projectName}/files/${path}`,
+              `repos/${projectName}/files/${path}`,
               {
                 content,
                 source_version
@@ -134,7 +134,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               _currentFilePath
             ].map(encodeURIComponent)
             let res = await instance.put(
-              `projects/${projectPath}/files/${currentFilePath}/move`,
+              `repos/${projectPath}/files/${currentFilePath}/move`,
               {
                 new_path: newFilePath,
                 content
@@ -149,7 +149,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.post(
-              `projects/${projectPath}/folders/${path}`
+              `repos/${projectPath}/folders/${path}`
             )
             return res.data
           },
@@ -158,7 +158,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.put(
-              `projects/${projectPath}/folders/${path}/move`,
+              `repos/${projectPath}/folders/${path}/move`,
               {
                 new_path: newFolderPath
               }
@@ -170,7 +170,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.delete(
-              `projects/${projectPath}/folders/${path}`
+              `repos/${projectPath}/folders/${path}`
             )
             return res.data
           }

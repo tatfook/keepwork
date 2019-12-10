@@ -62,8 +62,6 @@ const getters = {
 
     // use websitesMap to generate personal website list
     let websiteNames = _.keys(websitesMap)
-    console.log(websiteNames)
-    console.log(repositoryTrees)
 
     let personalSiteList = websiteNames.map(name => {
       // use siteDataSourcesMap to get projectId and lastCommitId
@@ -90,9 +88,6 @@ const getters = {
         ...website
       }
     })
-
-    console.log(personalSiteList)
-
     return personalSiteList
   },
   getDetailByUsername: (
