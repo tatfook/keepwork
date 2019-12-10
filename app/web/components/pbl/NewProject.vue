@@ -77,7 +77,6 @@ export default {
     ...mapGetters({
       isRealNamed: 'user/isRealNamed',
       loginUserId: 'user/userId',
-      isLogined: 'user/isLogined',
       wordLimit: 'pbl/wordLimit',
     }),
     isNameEmpty() {
