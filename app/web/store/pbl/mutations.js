@@ -20,6 +20,7 @@ const GET_GAMES_LIST = 'GET_GAMES_LIST'
 const GET_WORKS_BY_GAMEID = 'GET_WORKS_BY_GAMEID'
 const GET_PROJECT_GAMES_SUCCESS = 'GET_PROJECT_GAMES_SUCCESS'
 const GET_LEGAL_GAMES_PROJECTS = 'GET_LEGAL_GAMES_PROJECTS'
+const GET_WORD_LIMIT_SUCCESS = 'GET_WORD_LIMIT_SUCCESS'
 
 export const props = {
   TOGGLE_LOGIN_DIALOG,
@@ -41,7 +42,8 @@ export const props = {
   GET_GAMES_LIST,
   GET_WORKS_BY_GAMEID,
   GET_PROJECT_GAMES_SUCCESS,
-  GET_LEGAL_GAMES_PROJECTS
+  GET_LEGAL_GAMES_PROJECTS,
+  GET_WORD_LIMIT_SUCCESS
 }
 
 const mutations = {
@@ -169,6 +171,9 @@ const mutations = {
   },
   [GET_LEGAL_GAMES_PROJECTS](state, list) {
     Vue.set(state, 'legalGamesProjects', list)
+  },
+  [GET_WORD_LIMIT_SUCCESS](state, result) {
+    Vue.set(state, 'wordLimit', result)
   }
 }
 
