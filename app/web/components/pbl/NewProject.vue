@@ -19,7 +19,7 @@
       </div>
       <div class="new-project-warning" v-if="!isWebType && isWorldLimited">
         <p>您创建的帕拉卡(Paracraft)在线项目数量过多。</p>
-        <p>您目前可以创建的项目数量上限是{{wordLimit.world}}。</p>
+        <p>您目前可以创建的项目数量上限是：{{wordLimit.world}}个。</p>
         <p>请删除不需要的项目后再试。</p>
       </div>
     </div>
