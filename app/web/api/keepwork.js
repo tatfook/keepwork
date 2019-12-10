@@ -31,18 +31,18 @@ const encodeFunc = payload => {
 }
 
 export const keepworkEndpoint = createEndpoint({
-  baseURL: process.env.KEEPWORK_API_PREFIX
+  baseURL: process.env.KEEPWORK_API_PREFIX,
 })
 
 const socketMessage = createEndpoint({
-  baseURL: process.env.SOCKET_API_PREFIX + '/api/v0/'
+  baseURL: process.env.SOCKET_API_PREFIX + '/api/v0/',
 })
 
 const withoutParseEndpoint = createEndpoint(
   {
-    baseURL: process.env.KEEPWORK_API_PREFIX
+    baseURL: process.env.KEEPWORK_API_PREFIX,
   },
-  false
+  false,
 )
 
 // FIXME: bad
@@ -52,16 +52,15 @@ const haqi = axios.create({
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json; charset=UTF-8',
-    Authorization: 'Bearer ' + Cookies.get('token')
-  }
+    Authorization: 'Bearer ' + Cookies.get('token'),
+  },
 })
 
 const { get, post, put, delete: deleteMethod } = keepworkEndpoint
 
 export const keepworks = {
   getSvgCaptcha: async () => get('keepworks/svg_captcha?png=true'),
-  verifySvgCaptcha: async ({ key, captcha }) =>
-    post('keepworks/svg_captcha', { key, captcha })
+  verifySvgCaptcha: async ({ key, captcha }) => post('keepworks/svg_captcha', { key, captcha }),
 }
 
 export const user = {
@@ -70,31 +69,24 @@ export const user = {
   getProfile: async () => get('/users/profile'),
   getToken: async () => get('users/token'),
   getDetailById: async ({ userId }) => get(`users/${encodeFunc({ userId })}`),
-  getDetailWithRankById: async ({ userId }) =>
-    get(`users/${encodeFunc({ userId })}/detail`),
-  getDetailWithRankByUsername: async ({ username }) =>
-    get(`users/${encodeFunc({ username })}/detail`),
-  getDetailByName: async ({ username }) =>
-    get(`/users/${encodeFunc({ username })}`),
+  getDetailWithRankById: async ({ userId }) => get(`users/${encodeFunc({ userId })}/detail`),
+  getDetailWithRankByUsername: async ({ username }) => get(`users/${encodeFunc({ username })}/detail`),
+  getDetailByName: async ({ username }) => get(`/users/${encodeFunc({ username })}`),
   updateUserInfo: async (...args) => put('/users/updateUserInfo', ...args),
   update: async ({ userId, userInfo }) => put(`/users/${userId}`, userInfo),
   changepw: async (...args) => post('/user/changepw', ...args),
   changePassword: async (...args) => put('/users/pwd', ...args),
   getByEmail: async args => get(`/users?email=${args.email}`),
   getByCellphone: async args => get(`/users?cellphone=${args.cellphone}`),
-  getResetCodeByEmail: async args =>
-    get(`/users/email_captcha?email=${args.email}`),
-  getResetCodeByCellphone: async args =>
-    get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  getResetCodeByEmail: async args => get(`/users/email_captcha?email=${args.email}`),
+  getResetCodeByCellphone: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
   passwordReset: async args => post('/users/reset_password', args),
   // getUserByEmail: async args => get(`/users/?email=${args.email}`),
   verifyEmailOne: async args => get(`/users/email_captcha?email=${args.email}`),
   verifyEmailTwo: async args => post('/users/email_captcha', args),
   // verifyCellphoneOne: async (...args) => post('/user/verifyCellphoneOne', ...args),
-  verifyCellphoneOne: async args =>
-    get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
-  verifyCellphoneTwo: async (...args) =>
-    post('/users/cellphone_captcha', ...args),
+  verifyCellphoneOne: async args => get(`/users/cellphone_captcha?cellphone=${args.cellphone}`),
+  verifyCellphoneTwo: async (...args) => post('/users/cellphone_captcha', ...args),
   unbindCellphone: async args => post('/users/cellphone_captcha', args),
   unbindEmail: async args => post('/users/email_captcha', args),
   register: async args => {
@@ -102,11 +94,9 @@ export const user = {
     event('account', 'sign_up', 'keepwork', 0)
     return res
   },
-  bindThreeService: async (...args) =>
-    post(`oauth_users/${args.serviceName}`, ...args),
-  searchUsersByUsernames: async ({ username }) =>
-    post('users/search', { username }),
-  searchByField: async args => post('users/search', args)
+  bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
+  searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
+  searchByField: async args => post('users/search', args),
 }
 
 export const account = {
@@ -118,8 +108,7 @@ export const account = {
   getRechargeOrderState: async args => get(`/orders/${args.id}`),
   createTradeOrder: async args => post('/trades', args),
   getGoods: async args => get('/goods'),
-  getDigitalAccounts: async args =>
-    haqi.get('/mod/knowledgeBean/models/haqi/getUsers')
+  getDigitalAccounts: async args => haqi.get('/mod/knowledgeBean/models/haqi/getUsers'),
 }
 
 /*doc
@@ -170,19 +159,16 @@ export const website = {
   // getAllByUsername: async (...args) => post('website/getAllByUsername', ...args),
   getAllSites: async () => get('sites'),
   getSiteGroups: async ({ siteId }) => get(`sites/${siteId}/groups`),
-  createSiteGroup: async ({ siteId, groupId, level }) =>
-    post(`sites/${siteId}/groups`, { groupId, level }),
-  deleteSiteGroup: async ({ siteId, groupId }) =>
-    deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
+  createSiteGroup: async ({ siteId, groupId, level }) => post(`sites/${siteId}/groups`, { groupId, level }),
+  deleteSiteGroup: async ({ siteId, groupId }) => deleteMethod(`sites/${siteId}/groups?groupId=${groupId}`),
   getAllSitesByName: async name => get(`users/${name}/sites`),
   getSiteDetail: async ({ siteId }) => get(`sites/${siteId}`),
-  getDetailInfo: async args =>
-    get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
+  getDetailInfo: async args => get(`sites/getByName?username=${args.username}&sitename=${args.sitename}`),
   // getDetailInfo: async (...args) => post('website/getDetailInfo', ...args),
   updateByName: async (...args) => post('website/updateByName', ...args),
   updateById: async args => put(`sites/${args.id}`, args),
   getUserPrivilege: async ({ siteId }) => get(`sites/${siteId}/privilege`),
-  deleteWebsite: async ({ siteId }) => deleteMethod(`sites/${siteId}`)
+  deleteWebsite: async ({ siteId }) => deleteMethod(`sites/${siteId}`),
 }
 
 /*doc
@@ -212,18 +198,16 @@ payload: {
 export const pages = {
   star: async (...args) => post('pages/star', ...args),
   insert: async (...args) => post('pages/insert', ...args),
-  getDetail: async (...args) => post('pages/getDetail', ...args)
+  getDetail: async (...args) => post('pages/getDetail', ...args),
 }
 
 export const siteUser = {
-  getSiteListByMemberName: async (...args) =>
-    post('site_user/getSiteListByMemberName', ...args),
-  getContributeSites: async () => get('sites?owned=false&membership=true')
+  getSiteListByMemberName: async (...args) => post('site_user/getSiteListByMemberName', ...args),
+  getContributeSites: async () => get('sites?owned=false&membership=true'),
 }
 
 export const siteDataSource = {
-  getByUsername: async (...args) =>
-    post('site_data_source/getByUsername', ...args)
+  getByUsername: async (...args) => post('site_data_source/getByUsername', ...args),
 }
 
 /*doc
@@ -255,34 +239,31 @@ export const websiteComment = {
   create: async args => post('comments', args),
   getByPageUrl: async args =>
     get(
-      `comments?objectType=${args.objectType}&objectId=${args.objectId}&x-per-page=10&x-page=${args.page}&x-order=updatedAt-desc`
+      `comments?objectType=${args.objectType}&objectId=${args.objectId}&x-per-page=10&x-page=${args.page}&x-order=updatedAt-desc`,
     ),
-  deleteById: async args => deleteMethod(`comments/${args.id}`)
+  deleteById: async args => deleteMethod(`comments/${args.id}`),
 }
 
 export const sensitiveWords = {
-  query: async () => get('sensitiveWords?x-per-page=100000')
+  query: async () => get('sensitiveWords?x-per-page=100000'),
 }
 
 export const bigfile = {
   upload: async (...args) => post('bigfile/upload', ...args),
   getByUsername: async (...args) => post('bigfile/getByUsername', ...args),
-  getUserStoreInfo: async (...args) =>
-    post('bigfile/getUserStoreInfo', ...args),
+  getUserStoreInfo: async (...args) => post('bigfile/getUserStoreInfo', ...args),
   deleteById: async (...args) => post('bigfile/deleteById', ...args),
   updateById: async (...args) => post('bigfile/updateById', ...args),
   getByFilenameList: async (...args) => post('bigfile/getByFilenameList', args),
   changeFilename: async (...args) => post('bigfile/changeFilename', ...args),
-  getDownloadUrlById: async (...args) =>
-    post('bigfile/getDownloadUrlById', ...args),
-  getDownloadUrlByKey: async (...args) =>
-    post('bigfile/getDownloadUrlByKey', ...args)
+  getDownloadUrlById: async (...args) => post('bigfile/getDownloadUrlById', ...args),
+  getDownloadUrlByKey: async (...args) => post('bigfile/getDownloadUrlByKey', ...args),
 }
 
 export const qiniu = {
   uploadToken: async (...args) => post('qiniu/uploadToken', ...args),
   deleteFile: async (...args) => post('qiniu/deleteFile', ...args),
-  getUid: async (...args) => post('qiniu/getUid', ...args)
+  getUid: async (...args) => post('qiniu/getUid', ...args),
 }
 
 export const userThreeService = {
@@ -290,41 +271,28 @@ export const userThreeService = {
   // getByUsername: async (...args) => post('user_three_service/getByUsername', ...args),
   deleteById: async (...args) => post('user_three_service/deleteById', ...args),
   // unbind: async (...args) => post('user_three_service/unbind', ...args)
-  unbind: async args =>
-    deleteMethod(`oauth_users/${args.id}?password=${args.password}`)
+  unbind: async args => deleteMethod(`oauth_users/${args.id}?password=${args.password}`),
 }
 
 export const favorites = {
   existFavorite: async ({ objectId, objectType }) =>
     get(`favorites/exist?objectId=${objectId}&objectType=${objectType}`),
-  favoriteObject: async ({ objectId, objectType }) =>
-    post('favorites', { objectId, objectType }),
+  favoriteObject: async ({ objectId, objectType }) => post('favorites', { objectId, objectType }),
   unFavoriteObject: async ({ objectId, objectType }) =>
     deleteMethod(`favorites?objectId=${objectId}&objectType=${objectType}`),
-  getUserFavorites: async ({ objectType, userId }) =>
-    get('favorites', { params: { objectType, userId } }),
+  getUserFavorites: async ({ objectType, userId }) => get('favorites', { params: { objectType, userId } }),
   getUserFollows: async ({ objectType, objectId }) =>
     get(`favorites/follows?objectId=${objectId}&objectType=${objectType}`),
-  getUserSearchAllFavorites: async args => post('favorites/search', args)
+  getUserSearchAllFavorites: async args => post('favorites/search', args),
 }
 
 export const projects = {
   getProjects: async args => post('projects/search', args),
-  getProjectDetail: async ({ projectId }) =>
-    get(`projects/${projectId}/detail`),
-  updateProject: async ({ projectId, updatingProjectData }) =>
-    put(`projects/${projectId}`, updatingProjectData),
+  getProjectDetail: async ({ projectId }) => get(`projects/${projectId}/detail`),
+  updateProject: async ({ projectId, updatingProjectData }) => put(`projects/${projectId}`, updatingProjectData),
   getUserProjects: async ({ userId }) => post('projects/search', { userId }),
   getUserProjectsByName: async ({ name }) => post('projects/search', { name }),
-  createProject: async ({
-    description,
-    name,
-    privilege,
-    type,
-    visibility,
-    siteId,
-    tags
-  }) =>
+  createProject: async ({ description, name, privilege, type, visibility, siteId, tags }) =>
     post('projects', {
       description,
       name,
@@ -332,42 +300,29 @@ export const projects = {
       type,
       visibility,
       siteId,
-      tags
+      tags,
     }),
   getStarState: async ({ projectId }) => get(`projects/${projectId}/star`),
   starProject: async ({ projectId }) => post(`projects/${projectId}/star`),
   getPersonalProjects: async () => get('projects'),
-  getPersonalProjectsByUserId: async ({ userId }) =>
-    get(`projects?userId=${userId}`),
+  getPersonalProjectsByUserId: async ({ userId }) => get(`projects?userId=${userId}`),
   getContributeProjects: async () => get('projects/join'),
   getContributeProjectsByUserId: async ({ userId, exclude }) =>
     get(`projects/join?userId=${userId}&exclude=${exclude}`),
   unStarProject: async ({ projectId }) => post(`projects/${projectId}/unstar`),
   getProjectGames: async ({ projectId }) => get(`projects/${projectId}/game`),
   visitProject: async projectId => get(`projects/${projectId}/visit`),
-  deleteProject: async projectId => deleteMethod(`projects/${projectId}`)
+  deleteProject: async projectId => deleteMethod(`projects/${projectId}`),
 }
 
 export const applies = {
   getApplyList: async ({ objectId, objectType, applyType }) =>
-    get(
-      `applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`
-    ),
-  updateApplyState: async ({ id, state }) =>
-    put(`applies/${id}`, { id, state }),
+    get(`applies?objectId=${objectId}&objectType=${objectType}&applyType=${applyType}`),
+  updateApplyState: async ({ id, state }) => put(`applies/${id}`, { id, state }),
   getApplyState: async ({ objectType, objectId, applyType, applyId }) =>
-    get(
-      `applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`
-    ),
-  applyProjectMember: async ({
-    objectType,
-    objectId,
-    applyType,
-    applyId,
-    legend,
-    extra
-  }) =>
-    post('applies', { objectType, objectId, applyType, applyId, legend, extra })
+    get(`applies/state?objectType=${objectType}&objectId=${objectId}&applyId=${applyId}&applyType=${applyType}`),
+  applyProjectMember: async ({ objectType, objectId, applyType, applyId, legend, extra }) =>
+    post('applies', { objectType, objectId, applyType, applyId, legend, extra }),
 }
 
 export const members = {
@@ -375,46 +330,32 @@ export const members = {
     get(`members?objectId=${objectId}&objectType=${objectType}`),
   deleteMember: async ({ id }) => deleteMethod(`members/${id}`),
   isMemberExist: async ({ objectId, objectType, memberId }) =>
-    get(
-      `members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`
-    )
+    get(`members/exist?objectId=${objectId}&objectType=${objectType}&memberId=${memberId}`),
 }
 
 export const comments = {
-  getComments: async ({
-    objectType,
-    objectId,
-    xPage = 1,
-    xPerPage = 200,
-    xOrder = 'updatedAt-desc'
-  }) =>
+  getComments: async ({ objectType, objectId, xPage = 1, xPerPage = 200, xOrder = 'updatedAt-desc' }) =>
     get(
-      `comments?objectType=${objectType}&objectId=${objectId}&x-per-page=${xPerPage}&x-page=${xPage}&x-order=${xOrder}`
+      `comments?objectType=${objectType}&objectId=${objectId}&x-per-page=${xPerPage}&x-page=${xPage}&x-order=${xOrder}`,
     ),
-  createComment: async ({ objectType, objectId, content }) =>
-    post('comments', { objectType, objectId, content }),
+  createComment: async ({ objectType, objectId, content }) => post('comments', { objectType, objectId, content }),
   deleteComment: async ({ commentId }) => deleteMethod(`comments/${commentId}`),
-  updateComment: async ({ commentId, content }) =>
-    put(`comments/${commentId}`, { content })
+  updateComment: async ({ commentId, content }) => put(`comments/${commentId}`, { content }),
 }
 
 export const issues = {
   createIssue: async (...args) => post('issues', ...args),
   getSingleProjectIssues: async params => post('issues/search', params),
-  updateIssue: async ({ objectId, params }) =>
-    put(`issues/${objectId}`, { ...params }),
-  getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`)
+  updateIssue: async ({ objectId, params }) => put(`issues/${objectId}`, { ...params }),
+  getSingleIssue: async ({ issueId }) => get(`issues/${issueId}`),
 }
 
 export const groups = {
   getAllGroups: async () => get('groups'),
-  createGroup: async ({ groupname, members, description }) =>
-    post('groups', { groupname, members, description }),
-  updateGroup: async ({ id, members, description }) =>
-    put(`groups/${id}`, { members, description }),
+  createGroup: async ({ groupname, members, description }) => post('groups', { groupname, members, description }),
+  updateGroup: async ({ id, members, description }) => put(`groups/${id}`, { members, description }),
   deleteGroup: async ({ id }) => deleteMethod(`groups/${id}`),
-  addMemberToGroup: async ({ groupId, memberName }) =>
-    post(`groups/${groupId}/members`, { memberName })
+  addMemberToGroup: async ({ groupId, memberName }) => post(`groups/${groupId}/members`, { memberName }),
 }
 
 export const games = {
@@ -422,27 +363,25 @@ export const games = {
   getWorksByGameId: async params => post('gameWorks/search', params),
   getLegalGamesProjects: async () => get('games/projects'),
   submitGameWorks: async (...args) => post('gameWorks', ...args),
-  getGameWorksStatistics: async () => get('gameWorks/statistics')
+  getGameWorksStatistics: async () => get('gameWorks/statistics'),
 }
 
 export const graphql = {
-  getQueryResult: async ({ query, variables }) =>
-    post('graphql', { query, variables })
+  getQueryResult: async ({ query, variables }) => post('graphql', { query, variables }),
 }
 
 export const feedbacks = {
-  createFeedback: async feedbackData => post('feedbacks', feedbackData)
+  createFeedback: async feedbackData => post('feedbacks', feedbackData),
 }
 
 export const systemTags = {
-  getSystemTags: async type => get(`systemTags?classify=${type}`)
+  getSystemTags: async type => get(`systemTags?classify=${type}`),
 }
-
 
 export const editorSocket = {
   joinTheRoom: async params => socketMessage.post('app/join', params),
   leaveTheRoom: async params => socketMessage.post('app/leave', params),
-  broadcastTheRoom: async params => socketMessage.post('app/msg', params)
+  broadcastTheRoom: async params => socketMessage.post('app/msg', params),
 }
 
 export const keepwork = {
@@ -470,7 +409,7 @@ export const keepwork = {
   feedbacks,
   systemTags,
   editorSocket,
-  ...organizationAPI
+  ...organizationAPI,
 }
 
 export default keepwork
