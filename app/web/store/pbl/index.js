@@ -23,7 +23,8 @@ const state = {
   gamesList: [],
   gameWorks: {},
   joinedGames: [],
-  legalGamesProjects: []
+  legalGamesProjects: [],
+  wordLimit: {}
 }
 export default {
   namespaced: true,

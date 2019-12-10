@@ -17,11 +17,16 @@
           </div>
         </div>
       </div>
+      <div class="new-project-warning" v-if="!isWebType && isWorldLimited">
+        <p>您创建的帕拉卡(Paracraft)在线项目数量过多。</p>
+        <p>您目前可以创建的项目数量上限是{{wordLimit.world}}。</p>
+        <p>请删除不需要的项目后再试。</p>
+      </div>
     </div>
     <div class="new-project-step-1" v-show="nowStep === 1">
       <website-binder @confirmSiteId='handleConfirmSiteId'></website-binder>
     </div>
-    <el-button v-show="isFinishShow" type="primary" :disabled="isNameEmpty" @click="createNewProject">{{$t("project.createProject")}}</el-button>
+    <el-button v-show="isFinishShow" type="primary" :disabled="isNameEmpty || isWorldLimited" @click="createNewProject">{{$t("project.createProject")}}</el-button>
     <el-button v-show="isNextShow" type="primary" :disabled="isNameEmpty" @click="goNextStep">{{$t("project.next")}}</el-button>
     <el-button v-show="isPrevShow" type="primary" @click="goPrevStep">{{$t("project.prev")}}</el-button>
   </div>
@@ -45,14 +50,14 @@ export default {
           label: this.$t('common.paracraft'),
           subLabel: this.$t('project.3DGameAndAnim'),
           iconImgSrc: require('@/assets/pblImg/project_paracraft.png'),
-          activeIconImgSrc: require('@/assets/pblImg/project_paracraft_active.png')
+          activeIconImgSrc: require('@/assets/pblImg/project_paracraft_active.png'),
         },
         {
           type: 0,
           label: this.$t('create.website'),
           iconImgSrc: require('@/assets/pblImg/project_web.png'),
-          activeIconImgSrc: require('@/assets/pblImg/project_web_active.png')
-        }
+          activeIconImgSrc: require('@/assets/pblImg/project_web_active.png'),
+        },
       ],
       newProjectData: {
         name: '',
@@ -61,13 +66,19 @@ export default {
         type: 1,
         description: '',
         siteId: null,
-        tags: 'Paracraft|3D'
-      }
+        tags: 'Paracraft|3D',
+      },
     }
+  },
+  async mounted() {
+    await this.pblGetWordLimit({ userId: this.loginUserId })
   },
   computed: {
     ...mapGetters({
-      isRealNamed: 'user/isRealNamed'
+      isRealNamed: 'user/isRealNamed',
+      loginUserId: 'user/userId',
+      isLogined: 'user/isLogined',
+      wordLimit: 'pbl/wordLimit',
     }),
     isNameEmpty() {
       let { name } = this.newProjectData
@@ -84,12 +95,17 @@ export default {
     },
     isPrevShow() {
       return this.isWebType && this.nowStep === this.webFinishStepCount
-    }
+    },
+    isWorldLimited() {
+      let { world, usedWorld } = this.wordLimit
+      return world != -1 && usedWorld >= world
+    },
   },
   methods: {
     ...mapActions({
       toggleRealName: 'user/toggleRealName',
-      pblCreateNewProject: 'pbl/createNewProject'
+      pblCreateNewProject: 'pbl/createNewProject',
+      pblGetWordLimit: 'pbl/getWordLimit',
     }),
     selectProjectType(type) {
       this.newProjectData.type = type
@@ -102,7 +118,7 @@ export default {
     async checkProjectName() {
       this.isLoading = true
       let sensitiveResult = await checkSensitiveWords({
-        checkedWords: this.newProjectData.name
+        checkedWords: this.newProjectData.name,
       }).catch()
       if (sensitiveResult && sensitiveResult.length > 0) {
         this.isLoading = false
@@ -137,7 +153,7 @@ export default {
           this.isLoading = false
           this.$message({
             type: 'success',
-            message: this.$t('project.projectCreated')
+            message: this.$t('project.projectCreated'),
           })
           let projectId = projectDetail.id
           projectId && this.$router.push(`/project/${projectId}`)
@@ -165,11 +181,11 @@ export default {
         }
       }
       this.nowStep++
-    }
+    },
   },
   components: {
-    WebsiteBinder
-  }
+    WebsiteBinder,
+  },
 }
 </script>
 <style lang="scss">
@@ -254,6 +270,14 @@ export default {
   }
   &-name {
     margin-bottom: 24px;
+  }
+  &-warning {
+    font-size: 14px;
+    margin-bottom: 24px;
+    color: #ff4d4f;
+    & > p {
+      margin: 0;
+    }
   }
   .el-input {
     width: 600px;

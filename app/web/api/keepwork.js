@@ -97,6 +97,7 @@ export const user = {
   bindThreeService: async (...args) => post(`oauth_users/${args.serviceName}`, ...args),
   searchUsersByUsernames: async ({ username }) => post('users/search', { username }),
   searchByField: async args => post('users/search', args),
+  worldLimit: async ({ userId }) => get(`users/${userId}/worldLimit`),
 }
 
 export const account = {
