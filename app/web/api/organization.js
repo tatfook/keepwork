@@ -37,12 +37,10 @@ const lessonOrganizations = {
 }
 const lessonOrganizationClasses = {
   getClasses: async ({ organizationId }) => get(`lessonOrganizationClasses?organizationId=${organizationId}`),
-  createClasses: async ({ organizationId, name, begin, end, packages }) =>
+  createClasses: async ({ organizationId, name, packages }) =>
     post('lessonOrganizationClasses', {
       organizationId,
       name,
-      begin,
-      end,
       packages,
     }),
   getClassPackageDetail: async params => get('lessonOrganizations/packageDetail', { params }),

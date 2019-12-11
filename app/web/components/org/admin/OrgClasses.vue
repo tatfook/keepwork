@@ -9,14 +9,6 @@
       <div class="org-classes-reminder">
         <p class="org-classes-reminder-text">{{$t('org.viewOverdueClass')}}<span class="org-classes-reminder-text-history" @click="goToHistory"> {{$t('org.historicalData')}}</span></p>
       </div>
-      <div class="org-classes-available">{{$t('org.RemainingPlaces')}}
-        <span class="org-classes-available-warning">{{orgRestUserCount + $t('org.usersCount')}}</span>
-        <el-popover popper-class="org-classes-popover" placement="bottom" title="" width="306" trigger="hover">
-          {{$t('org.moreRemainClassContact')}}
-          <span class="org-classes-stress">support@paraengine.com</span>
-          <span slot="reference"><i class="iconfont icon-help"></i></span>
-        </el-popover>
-      </div>
     </div>
     <router-view v-if="!isLoadPreset"></router-view>
   </div>
@@ -137,30 +129,13 @@ export default {
     &-text {
       line-height: 56px;
       margin: 0;
-      text-align: center;
+      text-align: left;
       color: #999;
       font-size: 14px;
       &-history {
         color: #2397f3;
         cursor: pointer;
       }
-    }
-  }
-  &-available {
-    width: 198px;
-    padding: 0 24px;
-    font-size: 12px;
-    color: #333;
-    text-align: right;
-    &-warning {
-      color: #f4b744;
-    }
-    .icon-help {
-      color: #2397f3;
-      cursor: pointer;
-      vertical-align: text-bottom;
-      line-height: 1;
-      margin-left: 4px;
     }
   }
   &-popover {
