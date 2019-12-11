@@ -10,7 +10,7 @@
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
-import { gitTree2NestedArray } from '@/lib/utils/gitlab'
+import { sortFolder2Top } from '@/lib/utils/gitlab'
 
 export default {
   name: 'AdiPageList',
@@ -37,7 +37,7 @@ export default {
       }
     })
 
-    this.data = gitTree2NestedArray(filterFiles, this.activePageInfo.sitepath)
+    this.data = sortFolder2Top(filterFiles, this.activePageInfo.sitepath)
   },
   data() {
     return {

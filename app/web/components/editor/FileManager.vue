@@ -265,10 +265,6 @@ export default {
       return <FileManagerCustomTreeNode data={data} node={node} />
     },
     async handleNodeClick(data, node, component) {
-      console.log({
-        data,
-        node,
-      })
       // save node expand status
       let path = data.path || `${data.username}/${data.name}`
       this.updateFilemanagerTreeNodeExpandMapByPath({

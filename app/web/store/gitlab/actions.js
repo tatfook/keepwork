@@ -316,7 +316,9 @@ const actions = {
     let { username, name, options, gitlab } = await getGitlabParams(context, {
       path: currentFilePath
     })
+    console.log('before renameFile')
     await gitlab.renameFile(currentFilePath, newFilePath, options)
+    console.log('renameFIle')
     await dispatch(
       'user/renamePageFromConfig',
       { currentFilePath, newFilePath },

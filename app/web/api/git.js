@@ -105,7 +105,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
           },
           async createMultiple(_projectName, filesPayload) {
             const projectName = encodeURIComponent(_projectName)
-            let res = await instance.post(`projects/${projectName}/files`, {
+            let res = await instance.post(`repos/${projectName}/files`, {
               files: filesPayload
             })
             return res.data
@@ -127,17 +127,15 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectName,
             _currentFilePath,
             newFilePath,
-            content = ''
           ) {
             const [projectPath, currentFilePath] = [
               projectName,
               _currentFilePath
             ].map(encodeURIComponent)
-            let res = await instance.put(
-              `repos/${projectPath}/files/${currentFilePath}/move`,
+            let res = await instance.post(
+              `repos/${projectPath}/files/${currentFilePath}/rename`,
               {
-                new_path: newFilePath,
-                content
+                newFilePath
               }
             )
             return res.data
@@ -157,10 +155,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
             const [projectPath, path] = [projectName, folderPath].map(
               encodeURIComponent
             )
-            let res = await instance.put(
-              `repos/${projectPath}/folders/${path}/move`,
+            let res = await instance.post(
+              `repos/${projectPath}/folders/${path}/rename`,
               {
-                new_path: newFolderPath
+                newFolderPath
               }
             )
             return res.data
@@ -282,13 +280,12 @@ export class GitAPI {
   }
 
   async renameFile(currentFilePath, newFilePath, options) {
-    let content = (await this.getContent(currentFilePath, options)) || ''
     const projectName = currentFilePath
       .split('/')
       .splice(0, 2)
       .join('/')
     await this.client.projects.repository.files
-      .rename(projectName, currentFilePath, newFilePath, content)
+      .rename(projectName, currentFilePath, newFilePath)
       .then(data => {
         return data
       })

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import Cookies from 'js-cookie'
 import {
+  sortFolder2Top,
   gitTree2NestedArray,
   getFileFullPathByPath,
   getFileSitePathByPath,
@@ -73,10 +74,9 @@ const getters = {
       let files = _.get(repositoryTrees, [rootPath, rootPath], []).filter(
         ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
-      // let children = gitTree2NestedArray(files, rootPath).filter(
-      //   ({ name }) => name !== CONFIG_FOLDER_NAME
-      // )
-      let children = _.filter(_.get(repositoryTrees, [rootPath, rootPath], []), file => file.name !== CONFIG_FOLDER_NAME)
+      let children = sortFolder2Top(files, rootPath).filter(
+        ({ name }) => name !== CONFIG_FOLDER_NAME
+      )
       let { extra, ...website } = websitesMap[name]
       return {
         projectId,

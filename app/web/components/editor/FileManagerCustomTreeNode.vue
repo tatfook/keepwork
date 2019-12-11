@@ -63,7 +63,7 @@ export default {
   name: 'FileManagerCustomTreeNode',
   props: {
     data: Object,
-    node: Object
+    node: Object,
   },
   data() {
     return {
@@ -76,7 +76,7 @@ export default {
       isNewWebPageDialogShow: false,
       isRename: false,
       isValidator: false,
-      newName: ''
+      newName: '',
     }
   },
   methods: {
@@ -89,14 +89,13 @@ export default {
       gitlabRenameFile: 'gitlab/renameFile',
       gitlabRenameFolder: 'gitlab/renameFolder',
       gitlabRemoveFolder: 'gitlab/removeFolder',
-      updateFilemanagerTreeNodeExpandMapByPath:
-        'updateFilemanagerTreeNodeExpandMapByPath',
+      updateFilemanagerTreeNodeExpandMapByPath: 'updateFilemanagerTreeNodeExpandMapByPath',
       userGetSiteLayoutConfig: 'user/getSiteLayoutConfig',
       userDeletePagesConfig: 'user/deletePagesConfig',
       savePageByPath: 'savePageByPath',
       refreshOpenedFile: 'refreshOpenedFile',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl',
-      broadcastTheRoom: 'broadcastTheRoom'
+      broadcastTheRoom: 'broadcastTheRoom',
       //  dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
     }),
     async addFile() {
@@ -106,7 +105,7 @@ export default {
       let self = this
 
       let newFolderName = await this.newFileNamePrompt({
-        what: self.$t('editor.folder')
+        what: self.$t('editor.folder'),
       })
       if (!newFolderName) return
       let newFolderPath = `${this.currentPath}/${newFolderName}`
@@ -132,11 +131,10 @@ export default {
             let value = (str || '').trim()
             if (!value) return self.$t('editor.required')
             if (!gitFilenameValidator(value)) return self.$t('editor.nameRule')
-            if (childNames.indexOf(value) > -1)
-              return self.$t('editor.nameExist')
+            if (childNames.indexOf(value) > -1) return self.$t('editor.nameExist')
             return true
-          }
-        }
+          },
+        },
       )
 
       return newFileName && newFileName.trim()
@@ -147,7 +145,7 @@ export default {
           .split('/')
           .slice(0, -1)
           .join('/'),
-        expanded: true
+        expanded: true,
       })
     },
     removeFolder(data) {
@@ -160,11 +158,11 @@ export default {
         message: h('p', null, [
           h('span', null, this.$t('editor.deleteFolderBefore')),
           h('span', { style: 'color: #FF4342' }, ` "${data.name} "`),
-          h('span', null, this.$t('editor.deleteFolderAfter'))
+          h('span', null, this.$t('editor.deleteFolderAfter')),
         ]),
         showCancelButton: true,
         confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel')
+        cancelButtonText: this.$t('el.messagebox.cancel'),
       })
         .then(async () => {
           this.removePending = true
@@ -178,9 +176,7 @@ export default {
     },
     removeRecentOpenFolder(toRemoveFiles) {
       let toDele = _.map(toRemoveFiles, i => `/${i.replace(/\.md$/, '')}`)
-      let updateRecentUrlList = this.updateRecentUrlList.filter(
-        item => toDele.indexOf(item.path) === -1
-      )
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => toDele.indexOf(item.path) === -1)
       this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     recursion(data) {
@@ -208,7 +204,7 @@ export default {
       this.$confirm(this.$t('editor.pullServerData'), this.$t('editor.hint'), {
         confirmButtonText: this.$t('el.messagebox.confirm'),
         cancelButtonText: this.$t('el.messagebox.cancel'),
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
           this.refreshOpenedFile(this.data)
@@ -222,14 +218,11 @@ export default {
         let childrenFiles = this.recursion(this.data)
         let unSavedFiles = _.intersection(this.unSavedFiles, childrenFiles)
         if (unSavedFiles.length > 0) {
-          await this.$confirm(
-            `${unSavedFiles.length}${this.$t('editor.filesUnSaved')}`,
-            {
-              confirmButtonText: this.$t('editor.confirm'),
-              cancelButtonText: this.$t('editor.cancel'),
-              type: 'warnning'
-            }
-          )
+          await this.$confirm(`${unSavedFiles.length}${this.$t('editor.filesUnSaved')}`, {
+            confirmButtonText: this.$t('editor.confirm'),
+            cancelButtonText: this.$t('editor.cancel'),
+            type: 'warnning',
+          })
             .then(async () => {
               this.savePending = true
               let num = unSavedFiles.length
@@ -247,12 +240,12 @@ export default {
           await this.$confirm(this.$t('editor.theFileUnSaved'), {
             confirmButtonText: this.$t('el.messagebox.confirm'),
             cancelButtonText: this.$t('el.messagebox.cancel'),
-            type: 'warning'
+            type: 'warning',
           }).then(async () => {
             await this.savePageByPath(this.filePath)
             this.$message({
               type: 'success',
-              message: this.$t('editor.saveSuccess')
+              message: this.$t('editor.saveSuccess'),
             })
             this.toggleInputFocus()
           })
@@ -267,10 +260,7 @@ export default {
       this.$nextTick(() => this.$refs.input.focus())
     },
     async handleRenameConfirm() {
-      if (
-        !this.newName.trim() ||
-        this.newName.trim() === this.data.name.replace(/.md$/, '')
-      ) {
+      if (!this.newName.trim() || this.newName.trim() === this.data.name.replace(/.md$/, '')) {
         return (this.isRename = false)
       }
       await this.gitlabGetRepositoryTree({ path: this.sitePath })
@@ -278,16 +268,14 @@ export default {
         this.currentPath
           .split('/')
           .slice(0, -1)
-          .join('/')
+          .join('/'),
       )
       if (childNames.indexOf(this.newName) > -1) {
         return this.$message.error(this.$t('editor.nameExist'))
       }
       if (!gitFilenameValidator(this.newName)) {
         this.isValidator = true
-        return this.$message.error(
-          `${this.newName} ${this.$t('editor.nameRule')}`
-        )
+        return this.$message.error(`${this.newName} ${this.$t('editor.nameRule')}`)
       }
       this.renamePending = true
       if (this.isFolder) {
@@ -295,15 +283,21 @@ export default {
         await this.gitlabRenameFolder({
           currentFolderPath: this.currentPath,
           newFolderPath: `${this.parentPath}/${this.newName}`,
-          childrenFiles
+          childrenFiles,
         })
       } else {
-        let newFilePath = `${this.parentPath}/${this.newName}.md`
-        await this.gitlabRenameFile({
-          currentFilePath: this.data.path,
-          newFilePath: newFilePath
-        })
-        this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
+        console.log('is file')
+        try {
+          let newFilePath = `${this.parentPath}/${this.newName}.md`
+          await this.gitlabRenameFile({
+            currentFilePath: this.data.path,
+            newFilePath: newFilePath,
+          })
+          console.log('after rename')
+          // this.updateFilemanagerTreeNodeExpandMapByPath(newFilePath)
+        } catch (error) {
+          console.warn(error)
+        }
       }
       this.isRename = false
       this.renamePending = false
@@ -316,11 +310,7 @@ export default {
       this.newFileName = ''
     },
     delayCancel() {
-      setTimeout(
-        () =>
-          !this.isValidator && !this.renamePending && this.handleRenameCancel(),
-        250
-      )
+      setTimeout(() => !this.isValidator && !this.renamePending && this.handleRenameCancel(), 250)
     },
     removeFile() {
       if (this.isFolder) {
@@ -333,16 +323,12 @@ export default {
         title: this.$t('editor.modDelMsgTitle'),
         message: h('p', null, [
           h('span', null, this.$t('editor.delConfirm')),
-          h(
-            'span',
-            { style: 'color: #FF4342' },
-            ` "${siteName}/${fileName} " `
-          ),
-          h('span', null, '?')
+          h('span', { style: 'color: #FF4342' }, ` "${siteName}/${fileName} " `),
+          h('span', null, '?'),
         ]),
         showCancelButton: true,
         confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel')
+        cancelButtonText: this.$t('el.messagebox.cancel'),
       })
         .then(async () => {
           this.removePending = true
@@ -356,9 +342,7 @@ export default {
     },
     removeRecentOpenFile(path) {
       let delPath = `/${path.replace(/\.md$/, '')}`
-      let updateRecentUrlList = this.updateRecentUrlList.filter(
-        item => item.path !== delPath
-      )
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => item.path !== delPath)
       this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async deletePagesFromLayout({ paths = [] }) {
@@ -380,10 +364,7 @@ export default {
           return this.$router.push('/')
         }
       }
-      if (
-        currentPath &&
-        currentPath.split('.')[0] === this.$route.path.substring(1)
-      ) {
+      if (currentPath && currentPath.split('.')[0] === this.$route.path.substring(1)) {
         return this.$router.push('/')
       }
     },
@@ -395,8 +376,8 @@ export default {
         this.setActiveManagePaneComponent({
           name: 'PageSetting',
           props: {
-            pagePath: this.currentPath
-          }
+            pagePath: this.currentPath,
+          },
         })
       }
     },
@@ -411,7 +392,7 @@ export default {
     },
     closeNewWebPageDialog() {
       this.isNewWebPageDialogShow = false
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -420,7 +401,7 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       openedFiles: 'openedFiles',
       username: 'user/username',
-      updateRecentUrlList: 'updateRecentUrlList'
+      updateRecentUrlList: 'updateRecentUrlList',
     }),
     isEn() {
       return locale === 'en-US'
@@ -434,27 +415,20 @@ export default {
         this.isAddable,
         this.isAddable,
         this.isRemovable,
-        this.isSettable
+        this.isSettable,
       ]).length
       let buttonCountClass = this.isRename ? '' : `buttons-count-${count}`
       let websiteLabelClass = this.isWebsite ? ' website-node-label' : ''
       return buttonCountClass + websiteLabelClass
     },
     pending() {
-      return (
-        this.addFolderPending ||
-        this.addFilePending ||
-        this.removePending ||
-        this.renamePending
-      )
+      return this.addFolderPending || this.addFilePending || this.removePending || this.renamePending
     },
     isFile() {
       return this.data.isBlob
     },
     isHasOpened() {
-      return (
-        this.isFile && _.keys(this.openedFiles).indexOf(this.data.path) !== -1
-      )
+      return this.isFile && _.keys(this.openedFiles).indexOf(this.data.path) !== -1
     },
     isFolder() {
       return this.data.isTree
@@ -472,9 +446,7 @@ export default {
       return this.isWebsite || this.isFile
     },
     currentPath() {
-      return this.isWebsite
-        ? `${this.data.username}/${this.data.name}`
-        : this.data.path
+      return this.isWebsite ? `${this.data.username}/${this.data.name}` : this.data.path
     },
     sitePath() {
       if (this.isWebsite) return `${this.data.username}/${this.data.name}`
@@ -493,7 +465,7 @@ export default {
         .split('/')
         .slice(0, -1)
         .join('/')
-    }
+    },
   },
   filters: {
     treeNodeLableFilter(data, node) {
@@ -506,18 +478,14 @@ export default {
       let pageTypeText = isEn ? 'pageName: ' : '页面名：'
       let folderTypeText = isEn ? 'folderName: ' : '文件夹名：'
       let siteTypeText = isEn ? 'siteName: ' : '网站名：'
-      let fileTypeText = isFile
-        ? pageTypeText
-        : isFolder
-        ? folderTypeText
-        : siteTypeText
+      let fileTypeText = isFile ? pageTypeText : isFolder ? folderTypeText : siteTypeText
       return fileTypeText + name
-    }
+    },
   },
   components: {
     WebsiteSettingDialog,
-    NewWebPageDialog
-  }
+    NewWebPageDialog,
+  },
 }
 </script>
 
