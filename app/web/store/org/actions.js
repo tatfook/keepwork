@@ -166,9 +166,9 @@ const actions = {
     let classes = await keepwork.lessonOrganizations.getClassAndMembers({ _roleId })
     commit(GET_CLASSES_WITH_MEMBER_SUCCESS, { classes, organizationId })
   },
-  async createNewClass({ dispatch }, { organizationId, name, begin, end, packages }) {
+  async createNewClass({ dispatch }, { organizationId, name, packages }) {
     let result = await keepwork.lessonOrganizationClasses
-      .createClasses({ organizationId, name, begin, end, packages })
+      .createClasses({ organizationId, name, packages })
       .catch(error => {
         return Promise.reject(error.response)
       })

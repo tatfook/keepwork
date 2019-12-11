@@ -16,16 +16,6 @@
         <el-input :disabled='isDetailPage' placeholder="例如：2019级1班" v-model="classData.name"></el-input>
       </div>
       <div class="class-comp-form-item">
-        <div class="class-comp-form-label">{{$t('org.beginClassTime')}}</div>
-        <div class="class-comp-form-item-time">
-          <el-date-picker :disabled='isDetailPage' v-model="beginClassTime" type="date" :placeholder="$t('org.selectClassTime')">
-          </el-date-picker>
-          <span class="class-comp-form-item-time-to">{{$t('org.timeTo')}}</span>
-          <el-date-picker :disabled='isDetailPage' v-model="endClassTime" type="date" :placeholder="$t('org.selectClassTime')">
-          </el-date-picker>
-        </div>
-      </div>
-      <div class="class-comp-form-item">
         <div class="class-comp-form-label">{{$t('org.LessonPackagesAvailable')}}:</div>
         <el-tree ref="lessonTree" v-loading='isTreeLoading' class="class-comp-form-tree" :data='formatedTreeData' default-expand-all show-checkbox check-on-click-node :expand-on-click-node='false' node-key="id">
         </el-tree>
@@ -40,7 +30,7 @@ import moment from 'moment'
 export default {
   name: 'ClassComp',
   props: {
-    classDetail: Object
+    classDetail: Object,
   },
   mounted() {
     this.initClassData()
@@ -48,25 +38,23 @@ export default {
   watch: {
     $route() {
       this.initClassData()
-    }
+    },
   },
   data() {
     return {
-      beginClassTime: null,
-      endClassTime: null,
       isTreeLoading: false,
       classData: {
         name: '',
         begin: null,
         end: null,
-        packages: []
-      }
+        packages: [],
+      },
     }
   },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgPackagesWithLessonById: 'org/getOrgPackagesWithLessonById'
+      getOrgPackagesWithLessonById: 'org/getOrgPackagesWithLessonById',
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -125,21 +113,21 @@ export default {
               disabled: this.isDetailPage,
               label: lesson.lessonName,
               lessonId: lessonId,
-              lessonNo: lessonNo
+              lessonNo: lessonNo,
             }
-          })
+          }),
         }
       })
     },
     isClassDataValid() {
       let classData = this.classData
       return classData.name && classData.name !== ''
-    }
+    },
   },
   methods: {
     ...mapActions({
       getOrgClassPackages: 'org/getOrgClassPackages',
-      getOrgPackagesWithLessons: 'org/getOrgPackagesWithLessons'
+      getOrgPackagesWithLessons: 'org/getOrgPackagesWithLessons',
     }),
     async initClassData() {
       await this.initTreeData()
@@ -147,13 +135,6 @@ export default {
         await this.initSelectedLessons()
         let classDetail = this.classDetail
         this.classData = classDetail
-        this.beginClassTime = classDetail.begin
-        const day = moment(classDetail.end).format('YYYY MM DD')
-        this.endClassTime = new Date(day)
-      } else {
-        this.beginClassTime = this.startDate
-        const day = moment(this.endDate).format('YYYY MM DD')
-        this.endClassTime = new Date(day)
       }
     },
     async initTreeData() {
@@ -164,7 +145,7 @@ export default {
     async initSelectedLessons() {
       let classPackages = await this.getOrgClassPackages({
         organizationId: this.orgId,
-        classId: this.classDetail.id
+        classId: this.classDetail.id,
       })
       let classLessons = []
       for (let i = 0; i < classPackages.length; i++) {
@@ -182,7 +163,7 @@ export default {
     },
     toClassListPage() {
       this.$router.push({
-        name: 'OrgClassList'
+        name: 'OrgClassList',
       })
     },
     setSelectedPackages() {
@@ -195,40 +176,18 @@ export default {
           lessons: _.map(lessons, lesson => {
             return {
               lessonId: lesson.lessonId,
-              lessonNo: lesson.lessonNo
+              lessonNo: lesson.lessonNo,
             }
-          })
+          }),
         })
       })
       this.classData.packages = packages
     },
-    setSelectedTime() {
-      if (_.isNull(this.beginClassTime)) {
-        this.classData.begin = null
-      } else {
-        this.classData.begin = this.beginClassTime
-      }
-      if (_.isNull(this.endClassTime)) {
-        this.classData.end = null
-      } else {
-        let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 5000
-        this.classData.end = new Date(endTime)
-      }
-    },
     async save() {
       this.setSelectedPackages()
-      this.setSelectedTime()
-      if (
-        this.beginClassTime < this.startDate ||
-        this.endClassTime > this.endDate ||
-        this.classData.end < +new Date(this.classData.begin)
-      ) {
-        this.$message.error(this.$t('org.openingTime'))
-        return
-      }
       this.$emit('save', this.classData)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">
