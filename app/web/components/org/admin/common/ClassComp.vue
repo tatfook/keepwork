@@ -222,13 +222,6 @@ $borderColor: #e8e8e8;
     }
     &-item {
       margin-bottom: 40px;
-      &-time {
-        display: flex;
-        &-to {
-          line-height: 40px;
-          padding: 0 12px;
-        }
-      }
     }
   }
   &-tree {

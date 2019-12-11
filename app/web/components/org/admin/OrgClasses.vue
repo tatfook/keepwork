@@ -138,23 +138,6 @@ export default {
       }
     }
   }
-  &-available {
-    width: 198px;
-    padding: 0 24px;
-    font-size: 12px;
-    color: #333;
-    text-align: right;
-    &-warning {
-      color: #f4b744;
-    }
-    .icon-help {
-      color: #2397f3;
-      cursor: pointer;
-      vertical-align: text-bottom;
-      line-height: 1;
-      margin-left: 4px;
-    }
-  }
   &-popover {
     text-align: left;
   }
