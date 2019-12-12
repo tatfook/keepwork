@@ -4,7 +4,7 @@
       <common-header class="container"></common-header>
     </div>
     <div class="pbl-page-main-content">
-      <router-view id="pbl-page" />
+      <router-view v-if="isPresetLoaded" id="pbl-page" />
     </div>
     <div class="pbl-page-footer">
       <perfect-common-footer></perfect-common-footer>
@@ -93,6 +93,7 @@ export default {
   mixins: [socketMixin],
   data() {
     return {
+      isPresetLoaded: false,
       loading: true
     }
   },
@@ -103,6 +104,7 @@ export default {
   },
   async created() {
     await this.loadPblPresets()
+    this.isPresetLoaded = true
   },
   components: {
     RealName,
