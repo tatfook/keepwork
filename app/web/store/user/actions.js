@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
-import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
+import { getTemplate as gitlabShowRawForGuest } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 import Cookies from 'js-cookie'
@@ -19,7 +19,6 @@ const {
   GET_PROFILE_SUCCESS,
   SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
-  GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
@@ -204,10 +203,6 @@ const actions = {
     let { useCache = false } = payload || {}
 
     return dispatch('getAllWebsite', { useCache })
-    // return Promise.all([
-    //   dispatch('getAllWebsite', { useCache }),
-    //   dispatch('getAllSiteDataSource', { useCache })
-    // ])
   },
   async createWebsite({ dispatch }, payload) {
     await dispatch('upsertWebsite', payload)
@@ -248,20 +243,20 @@ const actions = {
 
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
-    let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
+    let { rawBaseUrl, projectName, configFullPath } = webTemplateProject
     let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configFullPath)
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
-    let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
+    let { rawBaseUrl, projectName, pageTemplateConfigFullPath } = webTemplateProject
     let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, pageTemplateConfigFullPath)
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
     await dispatch('getWebTemplateFileList', webTemplate)
     let { fileList } = webTemplate
-    let { rawBaseUrl, dataSourceUsername, projectName } = webTemplateProject
+    let { rawBaseUrl, projectName } = webTemplateProject
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
@@ -276,7 +271,7 @@ const actions = {
     let { rawBaseUrl, projectName } = webTemplateProject
     let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
     fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
-    fileList = fileList.filter(file => file.type === 'blob')
+    fileList = fileList.filter(file => file.isBlob)
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
   async upsertWebsite(context, { name, websiteSetting: {
@@ -325,17 +320,8 @@ const actions = {
     await keepwork.website.deleteWebsite({ siteId }).then(res => {
       dispatch('getAllWebsite')
     }).catch(err => {
+      console.error(err)
     })
-  },
-  async getAllSiteDataSource(context, payload) {
-    let { useCache = false } = payload || {}
-    let { commit, getters } = context
-
-    let { username, siteDataSourcesMap } = getters
-    if (useCache && !_.isEmpty(siteDataSourcesMap)) return
-
-    let list = await keepwork.siteDataSource.getByUsername({ username })
-    commit(GET_SITE_DATASOURCE_SUCCESS, { username, list })
   },
   async getAllContributedWebsite(context, payload) {
     let { useCache = false } = payload || {}

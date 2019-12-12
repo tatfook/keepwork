@@ -1,5 +1,5 @@
 import { props } from './mutations'
-import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
+import { getTemplate as gitlabShowRawForGuest } from '@/api/gitlab'
 import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 

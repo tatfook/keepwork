@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { get as _get } from 'lodash'
+import _ from 'lodash'
 import Cookies from 'js-cookie'
 
 const defaultConfig = {
-  url: process.env.GITLAB_API_PREFIX,
+  url: process.env.KEEPWORK_API_PREFIX,
   token: ' '
 }
 
@@ -19,7 +19,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
     async error => {
       const CODES = [401]
       if (
-        CODES.some(code => code === _get(error, 'response.status', '')) &&
+        CODES.some(code => code === _.get(error, 'response.status', '')) &&
         Cookies.get('token')
       ) {
         Cookies.remove('token')
@@ -38,20 +38,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
           const [projectName, path] = [_projectName, _path].map(
             encodeURIComponent
           )
-          let total = []
-          let page = 0
-          let res = {}
-          res = await instance.get(
-            `projects/${projectName}/tree/${path}?recursive=true`
+          const res = await instance.get(
+            `repos/${projectName}/tree?folderPath=${path}&recursive=${recursive}`
           )
-          total = [...total, ...res.data]
-          while (res.data.length >= 100) {
-            res = await instance.get(
-              `projects/${projectName}/tree/${path}?page=${page++}&per_page=100&recursive=${recursive}`
-            )
-            total = [...total, ...res.data]
-          }
-          return total
+          return res.data
         },
         files: {
           getFileCommitList: async ({
@@ -62,42 +52,45 @@ const gitLabAPIGenerator = ({ url, token }) => {
           }) => {
             projectPath = encodeURIComponent(projectPath)
             filePath = encodeURIComponent(filePath)
-            let res = await instance.get(
-              `projects/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
+            let { data } = await instance.get(
+              `repos/${projectPath}/files/${filePath}/history`
             )
-            return res
+            const commits = data.map((item, index) => ({ ...item, version: index + 1 }))
+            return commits
           },
           remove: async (projectName, filePath) => {
             const [projectPath, path] = [projectName, filePath].map(
               encodeURIComponent
             )
-            await instance.delete(`projects/${projectPath}/files/${path}`)
+            await instance.delete(`repos/${projectPath}/files/${path}`)
             return true
           },
           async show({ projectPath, fullPath, showVersion = false, useCache }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            const url = `projects/${projectPath}/files/${fullPath}${showVersion ? '?commit=true' : ''}`
-            let res = await instance.get(url).catch(error => Promise.reject(error))
-            return res.data
+            let { data } = await instance.get(`repos/${projectPath}/files/${fullPath}/raw`).catch(error => Promise.reject(error))
+            const content = _.isObject(data) ? JSON.stringify(data) : _.toString(data)
+            return {
+              content
+            }
           },
           async showWithCommitId({
             projectPath,
             fullPath,
-            useCache,
             commitId
           }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            let res = await instance.get(
-              `projects/${projectPath}/files/${fullPath}?ref=${commitId}`
+            let { data } = await instance.get(
+              `repos/${projectPath}/files/${fullPath}/raw`, { params: { commitId } }
             )
-            return res.data
+            const content = _.isObject(data) ? JSON.stringify(data) : _.toString(data)
+            return content
           },
           async showRaw(projectId, filePath, ref) {
             const [pId, path] = [projectId, filePath].map(encodeURIComponent)
             let res = await instance.get(
-              `projects/${pId}/repository/files/${path}/raw?ref=${ref}`
+              `repos/${pId}/repository/files/${path}/raw?ref=${ref}`
             )
             return res.data
           },
@@ -106,7 +99,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.post(
-              `projects/${projectPath}/files/${path}`,
+              `repos/${projectPath}/files/${path}`,
               {
                 content: content || ''
               }
@@ -115,7 +108,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
           },
           async createMultiple(_projectName, filesPayload) {
             const projectName = encodeURIComponent(_projectName)
-            let res = await instance.post(`projects/${projectName}/files`, {
+            let res = await instance.post(`repos/${projectName}/files`, {
               files: filesPayload
             })
             return res.data
@@ -125,7 +118,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.put(
-              `projects/${projectName}/files/${path}`,
+              `repos/${projectName}/files/${path}`,
               {
                 content,
                 source_version
@@ -137,17 +130,15 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectName,
             _currentFilePath,
             newFilePath,
-            content = ''
           ) {
             const [projectPath, currentFilePath] = [
               projectName,
               _currentFilePath
             ].map(encodeURIComponent)
-            let res = await instance.put(
-              `projects/${projectPath}/files/${currentFilePath}/move`,
+            let res = await instance.post(
+              `repos/${projectPath}/files/${currentFilePath}/rename`,
               {
-                new_path: newFilePath,
-                content
+                newFilePath
               }
             )
             return res.data
@@ -159,7 +150,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.post(
-              `projects/${projectPath}/folders/${path}`
+              `repos/${projectPath}/folders/${path}`
             )
             return res.data
           },
@@ -167,10 +158,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
             const [projectPath, path] = [projectName, folderPath].map(
               encodeURIComponent
             )
-            let res = await instance.put(
-              `projects/${projectPath}/folders/${path}/move`,
+            let res = await instance.post(
+              `repos/${projectPath}/folders/${path}/rename`,
               {
-                new_path: newFolderPath
+                newFolderPath
               }
             )
             return res.data
@@ -180,7 +171,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
               encodeURIComponent
             )
             let res = await instance.delete(
-              `projects/${projectPath}/folders/${path}`
+              `repos/${projectPath}/folders/${path}`
             )
             return res.data
           }
@@ -292,13 +283,12 @@ export class GitAPI {
   }
 
   async renameFile(currentFilePath, newFilePath, options) {
-    let content = (await this.getContent(currentFilePath, options)) || ''
     const projectName = currentFilePath
       .split('/')
       .splice(0, 2)
       .join('/')
     await this.client.projects.repository.files
-      .rename(projectName, currentFilePath, newFilePath, content)
+      .rename(projectName, currentFilePath, newFilePath)
       .then(data => {
         return data
       })
@@ -357,7 +347,7 @@ export class GitAPI {
 
   async upsertFile(path, options) {
     options = { ...(options || {}) }
-    const file = await this.getFile(path).catch(e => {})
+    const file = await this.getFile(path).catch(e => { })
     return file ? this.editFile(path, options) : this.createFile(path, options)
   }
 

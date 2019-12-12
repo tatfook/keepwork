@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { GitAPI } from '@/api'
 import {
+  sortFolder2Top,
   gitTree2NestedArray,
   getFileFullPathByPath,
   EMPTY_GIT_FOLDER_KEEPER_REGEX,
@@ -58,7 +59,7 @@ const getters = {
     return _.uniq(names)
   },
   childrenByPath: (state, { repositoryTreesAllFiles = [] }) => path => {
-    let children = gitTree2NestedArray(repositoryTreesAllFiles, path).filter(
+    let children = sortFolder2Top(repositoryTreesAllFiles, path).filter(
       ({ name, path: filePath }) =>
         name !== CONFIG_FOLDER_NAME && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
     )
@@ -66,9 +67,6 @@ const getters = {
   },
   files: state => state.files,
   getFileCommitContent: state => ({ path, commitId }) => {
-    console.log(
-      // _.get(state.filesCommitContent, `${path}.${commitId}`)
-    )
     return _.get(state.filesCommitContent, `${path}.${commitId}`)
   },
 

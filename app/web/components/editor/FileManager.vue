@@ -88,18 +88,18 @@ export default {
       toBeCloseFileName: '',
       filesTreeProps: {
         children: 'children',
-        label: 'sitename'
+        label: 'sitename',
       },
       trees: {
         isOpenedShow: true,
         isMyShow: true,
-        isContributedShow: false
+        isContributedShow: false,
       },
       openedTreesProps: {
         children: 'children',
-        label: 'label'
+        label: 'label',
       },
-      isNewWebsiteDialogShow: false
+      isNewWebsiteDialogShow: false,
     }
   },
   async mounted() {
@@ -125,7 +125,7 @@ export default {
       getOpenedFileByPath: 'getOpenedFileByPath',
       username: 'user/username',
       hasOpenedFiles: 'hasOpenedFiles',
-      updateRecentUrlList: 'updateRecentUrlList'
+      updateRecentUrlList: 'updateRecentUrlList',
     }),
     openedTreeData() {
       let clonedopenedFiles = _.clone(this.showOpenedFiles)
@@ -140,7 +140,7 @@ export default {
         let nodeData = {
           label: `${pageName}(${userName}/${siteName})`,
           path: key,
-          isModified: value && value.timestamp
+          isModified: value && value.timestamp,
         }
         treeDatas.push(nodeData)
       })
@@ -161,24 +161,19 @@ export default {
     openedFilesPathAndTime() {
       return _.map(this.showOpenedFiles, ({ path, timestamp }) => ({
         path,
-        timestamp
+        timestamp,
       }))
-    }
+    },
   },
   watch: {
     openedFilesPathAndTime(newVal, oldVal) {
       if (JSON.stringify(newVal) === JSON.stringify(oldVal)) return
       let updateRecentUrlList = this.updateRecentUrlList.concat(newVal)
-      updateRecentUrlList = updateRecentUrlList.sort(
-        (obj1, obj2) => obj1.timestamp < obj2.timestamp
-      )
-      updateRecentUrlList = _.uniqBy(
-        updateRecentUrlList,
-        obj => obj.path
-      ).slice(0, 5)
+      updateRecentUrlList = updateRecentUrlList.sort((obj1, obj2) => obj1.timestamp < obj2.timestamp)
+      updateRecentUrlList = _.uniqBy(updateRecentUrlList, obj => obj.path).slice(0, 5)
       let payload = { updateRecentUrlList }
       this.addRecentOpenedSiteUrl(payload)
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -186,14 +181,13 @@ export default {
       getAllPersonalWebsite: 'user/getAllPersonalWebsite',
       getAllContributedWebsite: 'user/getAllContributedWebsite',
       getRepositoryTree: 'gitlab/getRepositoryTree',
-      updateFilemanagerTreeNodeExpandMapByPath:
-        'updateFilemanagerTreeNodeExpandMapByPath',
+      updateFilemanagerTreeNodeExpandMapByPath: 'updateFilemanagerTreeNodeExpandMapByPath',
       savePageByPath: 'savePageByPath',
       refreshOpenedFile: 'refreshOpenedFile',
       closeOpenedFile: 'closeOpenedFile',
       gitlabRemoveFile: 'gitlab/removeFile',
       closeAllOpenedFile: 'closeAllOpenedFile',
-      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl'
+      addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl',
     }),
     async checkSitePath(checkTimes = 10, waitTime = 500) {
       // No need to jump to #/ at here
@@ -201,8 +195,7 @@ export default {
       // if (this.checkUrlSite()) {
       //   return this.$router.push('/')
       // }
-      const sleep = async () =>
-        new Promise(resolve => setTimeout(resolve, waitTime))
+      const sleep = async () => new Promise(resolve => setTimeout(resolve, waitTime))
       let { sitepath } = this.activePageInfo
       if (sitepath) return Promise.resolve()
       while (checkTimes--) {
@@ -219,13 +212,7 @@ export default {
       return !this.allSiteNameList.includes(siteName)
     },
     async initUrlExpandSelect() {
-      let {
-        username,
-        isLegal,
-        sitepath,
-        fullPath,
-        paths = []
-      } = this.activePageInfo
+      let { username, isLegal, sitepath, fullPath, paths = [] } = this.activePageInfo
       if (this.username !== username && sitepath) {
         this.$set(this.trees, 'isMyShow', false)
         this.$set(this.trees, 'isContributedShow', true)
@@ -234,7 +221,7 @@ export default {
         let closeAllFolder = this.personalSitePaths
           ? Object.keys(this.personalSitePaths).map(path => ({
               path,
-              expanded: false
+              expanded: false,
             }))
           : []
         return this.updateFilemanagerTreeNodeExpandMapByPath(closeAllFolder)
@@ -247,21 +234,18 @@ export default {
           let exapndedPath = prev.slice(-1) + '/' + current
           return prev.concat(exapndedPath)
         },
-        [sitepath]
+        [sitepath],
       )
       let expandedFolderPathsList = expandedFolderPaths.map(path => ({
         path,
-        expanded: true
+        expanded: true,
       }))
       let appendCloseFolderPathsList = this.personalSitePaths
         ? Object.keys(this.personalSitePaths)
             .filter(i => i !== sitepath)
             .map(path => ({ path, expanded: false }))
         : []
-      this.updateFilemanagerTreeNodeExpandMapByPath([
-        ...expandedFolderPathsList,
-        ...appendCloseFolderPathsList
-      ])
+      this.updateFilemanagerTreeNodeExpandMapByPath([...expandedFolderPathsList, ...appendCloseFolderPathsList])
     },
     renderOpenedFile(h, { node, data, store }) {
       let { fullPath: activePageFullPath } = this.activePageInfo
@@ -271,7 +255,7 @@ export default {
     renderContent(h, { node, data, store }) {
       // trick codes below
       // manipulated the node in <el-tree/>
-      node.isLeaf = data.type === 'blob'
+      node.isLeaf = data.isBlob
       // restore node expand status
       let path = data.path || `${data.username}/${data.sitename}`
       node.expanded = this.filemanagerTreeNodeExpandMapByPath[path]
@@ -285,11 +269,10 @@ export default {
       let path = data.path || `${data.username}/${data.name}`
       this.updateFilemanagerTreeNodeExpandMapByPath({
         path,
-        expanded: node.expanded
+        expanded: node.expanded,
       })
       // try open files list in site level
-      let repositoryIsClickedAndFileListIsEmpty =
-        node.level === 1 && _.isEmpty(data.children)
+      let repositoryIsClickedAndFileListIsEmpty = node.level === 1 && _.isEmpty(data.children)
       if (repositoryIsClickedAndFileListIsEmpty) {
         let { username, name } = data
         let path = `${username}/${name}`
@@ -299,7 +282,7 @@ export default {
       }
       // try open file
       // let isFileClicked = data.type === 'blob'
-      if (data.type === 'blob') {
+      if (data.isBlob) {
         this.$router.push('/' + data.path.replace(/\.md$/, ''))
         let url = this.$router.resolve({ path: this.$route.path }).href
         history.replaceState('', '', url)
@@ -310,14 +293,14 @@ export default {
       let path = data.path || `${data.username}/${data.name}`
       this.updateFilemanagerTreeNodeExpandMapByPath({
         path,
-        expanded: true
+        expanded: true,
       })
     },
     handleNodeCollapse(data, node, component) {
       let path = data.path || `${data.username}/${data.name}`
       this.updateFilemanagerTreeNodeExpandMapByPath({
         path,
-        expanded: false
+        expanded: false,
       })
     },
     closeAndResetFile(path) {
@@ -450,13 +433,13 @@ export default {
       isSuccess &&
         this.$message({
           message: this.$t('editor.saveSuccess'),
-          type: 'success'
+          type: 'success',
         })
       this.savePending = false
-    }
+    },
   },
   components: {
-    NewWebsiteDialog
+    NewWebsiteDialog,
   },
   filters: {
     sortBy: (list, key) =>
@@ -470,8 +453,8 @@ export default {
         } else {
           return 0
         }
-      })
-  }
+      }),
+  },
 }
 </script>
 
@@ -546,9 +529,7 @@ export default {
       display: none;
     }
   }
-  .el-tree--highlight-current
-    .el-tree-node.is-current
-    > .el-tree-node__content {
+  .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
     background-color: #ccfffc;
   }
   .el-tree-node__content:hover {

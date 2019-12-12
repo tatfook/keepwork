@@ -11,7 +11,6 @@ const SET_REAL_AUTH_PHONE_NUM = 'SET_REAL_AUTH_PHONE_NUM'
 const GET_ALL_WEBSITE_SUCCESS = 'GET_ALL_WEBSITE_SUCCESS'
 const GET_USER_DETAIL_SUCCESS = 'GET_USER_DETAIL_SUCCESS'
 const GET_USER_DETAIL_WITH_RANK_SUCCESS = 'GET_USER_DETAIL_WITH_RANK_SUCCESS'
-const GET_SITE_DATASOURCE_SUCCESS = 'GET_SITE_DATASOURCE_SUCCESS'
 const CREATE_COMMENT_SUCCESS = 'CREATE_COMMENT_SUCCESS'
 const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS'
 const GET_COMMENTS_BY_PAGE_URL_SUCCESS = 'GET_COMMENTS_BY_PAGE_URL_SUCCESS'
@@ -50,7 +49,6 @@ export const props = {
   GET_ALL_WEBSITE_SUCCESS,
   GET_USER_DETAIL_SUCCESS,
   GET_USER_DETAIL_WITH_RANK_SUCCESS,
-  GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
@@ -144,12 +142,6 @@ const mutations = {
     Vue.set(state, 'contributedWebsite', {
       // ...state.siteDataSource,
       [username]: _.keyBy(targetList, 'rootPath')
-    })
-  },
-  [GET_SITE_DATASOURCE_SUCCESS](state, { username, list }) {
-    Vue.set(state, 'siteDataSource', {
-      ...state.siteDataSource,
-      [username]: _.keyBy(list, 'sitename')
     })
   },
   [CREATE_COMMENT_SUCCESS]: doNothing,
