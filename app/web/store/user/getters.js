@@ -76,7 +76,6 @@ const getters = {
       let children = sortFolder2Top(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME
       )
-      let children = gitTree2NestedArray(files, rootPath).filter(({ name }) => name !== CONFIG_FOLDER_NAME)
       let { extra, ...website } = websitesMap[name]
       return {
         projectId,
