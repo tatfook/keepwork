@@ -256,7 +256,7 @@ const actions = {
       .getFileCommitList({ projectPath, filePath, page, perPage })
       .catch(error => {
       })
-    return result.data
+    return result
   },
   async createFolder(context, { path, refreshRepositoryTree = true }) {
     const { commit, dispatch } = context

@@ -52,13 +52,11 @@ const gitLabAPIGenerator = ({ url, token }) => {
           }) => {
             projectPath = encodeURIComponent(projectPath)
             filePath = encodeURIComponent(filePath)
-            // let res = await instance.get(
-            //   `repos/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
-            // )
-            let res = await instance.get(
+            let { data } = await instance.get(
               `repos/${projectPath}/files/${filePath}/history`
             )
-            return res
+            const commits = data.map((item, index) => ({ ...item, version: index + 1 }))
+            return commits
           },
           remove: async (projectName, filePath) => {
             const [projectPath, path] = [projectName, filePath].map(
@@ -86,7 +84,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
             let { data } = await instance.get(
               `repos/${projectPath}/files/${fullPath}/raw`, { params: { commitId } }
             )
-            const content = _.isObject(data) ? JSON.stringify(data) : data
+            const content = _.isObject(data) ? JSON.stringify(data) : _.toString(data)
             return content
           },
           async showRaw(projectId, filePath, ref) {
