@@ -9,8 +9,8 @@
       <div class="history-list-item-version">{{history.version}}
         <span class="history-list-item-version-sub">{{history.message | sourceVersionFilter}}</span>
       </div>
-      <div class="history-list-item-username" :title="history.author_name | oldNameFilter">{{history.author_name | oldNameFilter}}</div>
-      <div class="history-list-item-date">{{history.createdAt | formatTime }}</div>
+      <div class="history-list-item-username" :title="history.committer.name | oldNameFilter">{{history.committer.name | oldNameFilter}}</div>
+      <div class="history-list-item-date">{{history.date | formatTime }}</div>
     </div>
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="isBusy" infinite-scroll-distance="0"></div>
   </el-scrollbar>
@@ -54,7 +54,7 @@ export default {
           page,
           perPage
         }).catch()
-        this.historyList = _.concat(this.historyList, result.commits)
+        this.historyList = _.concat(this.historyList, result)
         if (result.total > this.historyList.length) {
           this.isBusy = false
         }
@@ -67,7 +67,7 @@ export default {
         !this.activeVersion && this.initialIndex++ && this.getHistoryContent()
         return
       }
-      let commitId = history.short_id
+      let commitId = history.commitId
       let version = history.version
       this.activeVersion = version
       this.$emit('selectHistory', { commitId, version })

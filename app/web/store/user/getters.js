@@ -219,7 +219,7 @@ const getters = {
     )[0] || defaultDataSource
     return {
       ...targetDataSource,
-      rawBaseUrl: process.env.GITLAB_API_PREFIX
+      rawBaseUrl: process.env.KEEPWORK_API_PREFIX
     }
   },
 

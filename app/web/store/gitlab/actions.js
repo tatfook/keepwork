@@ -177,7 +177,7 @@ const actions = {
       .split('/')
       .slice(0, 2)
       .join('/')
-    let file = await gitlab.getFileWithCommitId({
+    let content = await gitlab.getFileWithCommitId({
       projectPath,
       fullPath: path,
       commitId
@@ -185,7 +185,7 @@ const actions = {
     commit(GET_FILE_CONTENT_WITH_COMMITID_SUCCESS, {
       barePath,
       commitId,
-      content: file.content
+      content
     })
   },
   async readFileForGuest(context, { path, forceAsGuest = false }) {
@@ -255,7 +255,6 @@ const actions = {
     let result = await gitlab
       .getFileCommitList({ projectPath, filePath, page, perPage })
       .catch(error => {
-        console.log(error)
       })
     return result.data
   },
@@ -316,9 +315,7 @@ const actions = {
     let { username, name, options, gitlab } = await getGitlabParams(context, {
       path: currentFilePath
     })
-    console.log('before renameFile')
     await gitlab.renameFile(currentFilePath, newFilePath, options)
-    console.log('renameFIle')
     await dispatch(
       'user/renamePageFromConfig',
       { currentFilePath, newFilePath },

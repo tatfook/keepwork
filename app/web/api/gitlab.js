@@ -20,9 +20,9 @@ export const showRawForGuest = async (
   path = encodeURIComponent(path)
   let url = `${rawBaseUrl}/repos/${projectName}/files/${path}`
   let res = await axios.get(url)
-  let content = _.get(res, 'data.content', '')
+  let content = _.get(res, 'data', '')
   try {
-    return JSON.parse(content)
+    return _.isObject(content) ? JSON.stringify(content) : content
   } catch (error) {
     return content
   }

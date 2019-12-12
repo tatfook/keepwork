@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { get as _get } from 'lodash'
+import _ from 'lodash'
 import Cookies from 'js-cookie'
 
 const defaultConfig = {
@@ -19,7 +19,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
     async error => {
       const CODES = [401]
       if (
-        CODES.some(code => code === _get(error, 'response.status', '')) &&
+        CODES.some(code => code === _.get(error, 'response.status', '')) &&
         Cookies.get('token')
       ) {
         Cookies.remove('token')
@@ -52,8 +52,11 @@ const gitLabAPIGenerator = ({ url, token }) => {
           }) => {
             projectPath = encodeURIComponent(projectPath)
             filePath = encodeURIComponent(filePath)
+            // let res = await instance.get(
+            //   `repos/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
+            // )
             let res = await instance.get(
-              `repos/${projectPath}/commits/${filePath}?page=${page}&per_page=${perPage}`
+              `repos/${projectPath}/files/${filePath}/history`
             )
             return res
           },
@@ -67,22 +70,24 @@ const gitLabAPIGenerator = ({ url, token }) => {
           async show({ projectPath, fullPath, showVersion = false, useCache }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            const url = `repos/${projectPath}/files/${fullPath}${showVersion ? '?commit=true' : ''}`
-            let res = await instance.get(url).catch(error => Promise.reject(error))
-            return res.data
+            let { data } = await instance.get(`repos/${projectPath}/files/${fullPath}/raw`).catch(error => Promise.reject(error))
+            const content = _.isObject(data) ? JSON.stringify(data) : _.toString(data)
+            return {
+              content
+            }
           },
           async showWithCommitId({
             projectPath,
             fullPath,
-            useCache,
             commitId
           }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            let res = await instance.get(
-              `repos/${projectPath}/files/${fullPath}?ref=${commitId}`
+            let { data } = await instance.get(
+              `repos/${projectPath}/files/${fullPath}/raw`, { params: { commitId } }
             )
-            return res.data
+            const content = _.isObject(data) ? JSON.stringify(data) : data
+            return content
           },
           async showRaw(projectId, filePath, ref) {
             const [pId, path] = [projectId, filePath].map(encodeURIComponent)
