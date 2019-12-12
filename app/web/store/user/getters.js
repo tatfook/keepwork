@@ -42,13 +42,8 @@ const getters = {
   cellphone: (state, { profile }) => _.get(profile, 'cellphone', ''),
   defaultSiteDataSource: (state, { profile: { defaultSiteDataSource = {} } }) => defaultSiteDataSource,
   gitlabConfig: (state, { token }) => ({
-<<<<<<< HEAD
     url: process.env.KEEPWORK_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
     token: `Bearer ${token}`
-=======
-    url: process.env.GITLAB_API_PREFIX, // _.get(defaultSiteDataSource, 'rawBaseUrl'),
-    token: `Bearer ${token}`,
->>>>>>> 01dd6f244e0191841a8840d0eb80ad3997288586
     // token: _.get(defaultSiteDataSource, 'dataSourceToken')
   }),
   sendCodeInfo: state => state.sendCodeInfo,
@@ -76,14 +71,10 @@ const getters = {
       // use repositoryTrees to get the nested files list in certain personal site
       let rootPath = `${username}/${name}`
       let files = _.get(repositoryTrees, [rootPath, rootPath], []).filter(
-<<<<<<< HEAD
         ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
       )
       let children = sortFolder2Top(files, rootPath).filter(
         ({ name }) => name !== CONFIG_FOLDER_NAME
-=======
-        ({ name }) => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name),
->>>>>>> 01dd6f244e0191841a8840d0eb80ad3997288586
       )
       let children = gitTree2NestedArray(files, rootPath).filter(({ name }) => name !== CONFIG_FOLDER_NAME)
       let { extra, ...website } = websitesMap[name]
