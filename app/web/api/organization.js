@@ -135,6 +135,10 @@ export const messages = {
   getMessageIndex: async params => get('userMessages/indexOfMessage', { params }),
 }
 
+export const lessonOrganizationActivateCodes = {
+  getUsedStatus: async () => get('lessonOrganizationActivateCodes/usedStatus')
+}
+
 export default {
   organizations,
   lessonOrganizations,
@@ -144,4 +148,5 @@ export default {
   users,
   evaluationReports,
   messages,
+  lessonOrganizationActivateCodes,
 }
