@@ -1,6 +1,6 @@
 <template>
   <div class="join-class-container">
-    <div class="join-class-title">加入班级，请输入邀请码:</div>
+    <div class="join-class-title">请输入邀请码:</div>
     <div class="join-class-tips">
       请联系{{admissionMsg}}，获得邀请码。
     </div>

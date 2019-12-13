@@ -1,26 +1,8 @@
 <template>
   <div class="org-student-class-select">
-    <div class="org-student-class-select-row border-bottom">
-      <span class="org-student-class-select-row-left">
-        加入新班级，请输入：
-      </span>
-      <span class="org-student-class-select-row-right">
-        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-          <el-form-item label="邀请码" prop="key">
-            <el-input placeholder="请输入邀请码" v-model.trim="form.key"></el-input>
-          </el-form-item>
-          <el-form-item label="姓名" prop="realname">
-            <el-input placeholder="请输入姓名" v-model.trim="form.realname"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button :disabled="disabeldSubmitButton" type="primary" @click="onSubmit">提交</el-button>
-          </el-form-item>
-        </el-form>
-      </span>
-    </div>
     <div class="org-student-class-select-row">
       <span class="org-student-class-select-row-left">
-        已加入的班级：
+        选择班级进入：
       </span>
       <span class="org-student-class-select-row-right">
         <div v-for="item in orgClasses" :key="item.id">
@@ -127,12 +109,8 @@ export default {
   padding: 32px;
   &-row {
     display: flex;
-    padding-top: 32px;
-    &.border-bottom {
-      border-bottom: solid 1px #e8e8e8;
-    }
     &-left {
-      width: 200px;
+      width: 130px;
       text-align: right;
       padding-top: 8px;
     }
