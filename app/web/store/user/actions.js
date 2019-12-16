@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
-import { getTemplate as gitlabShowRawForGuest } from '@/api/gitlab'
+import { getTemplate as gitlabShowRawForGuest, getConfig, getWebPageConfig, getTemplateList, getPageTemplateContent } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 import Cookies from 'js-cookie'
@@ -233,24 +233,21 @@ const actions = {
       return { path: `${username}/${sitename}/${filename}`, content }
     })
     await dispatch('gitlab/createMultipleFile', { projectName, files }, { root: true })
-    // for (let { path, name, content } of fileList) {
-    //   let filename = path.split('/').slice(2).join('/')
-    //   await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-    // }
-    // refresh repositoryTree
     await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
 
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
-    let { rawBaseUrl, projectName, configFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configFullPath)
+    // let { rawBaseUrl, projectName, configFullPath } = webTemplateProject
+    // let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configFullPath)
+    let config = await getConfig()
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
-    let { rawBaseUrl, projectName, pageTemplateConfigFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, pageTemplateConfigFullPath)
+    // let { rawBaseUrl, projectName, pageTemplateConfigFullPath } = webTemplateProject
+    // let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, pageTemplateConfigFullPath)
+    let config = await getWebPageConfig()
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
@@ -268,9 +265,10 @@ const actions = {
   async getWebTemplateFileList({ commit }, webTemplate) {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
-    let { rawBaseUrl, projectName } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
+    // let { rawBaseUrl, projectName } = webTemplateProject
+    // let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
+    // fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true }o)
+    fileList = await getTemplateList(folder)
     fileList = fileList.filter(file => file.isBlob)
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
@@ -296,8 +294,9 @@ const actions = {
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
     let { content, contentPath } = template
     if (typeof content === 'string') return content
-    let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
-    content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
+    // let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
+    // content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
+    content = await getPageTemplateContent(contentPath)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
