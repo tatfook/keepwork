@@ -1,20 +1,62 @@
 <template>
   <div class="invitation-code" v-loading="loading">
     <div class="invitation-code-top clearfix">
-      <span class="invitation-code-top-total">{{$t('org.InvitationCode')}}：{{codesCount}}</span>
-      <div class="invitation-code-top-operation">
+      <span class="invitation-code-top-total">学生邀请码管理</span>
+      <div class="invitation-code-top-statics">
+        可生成正式邀请码数：
+        <span class="invitation-code-top-statics-item">3个月(<span>{{codeRemainderStatus.type5}}</span>个)</span>
+        <span class="invitation-code-top-statics-item">半年(<span>{{codeRemainderStatus.type6}}</span>个)</span>
+        <span class="invitation-code-top-statics-item">1年送3个月(<span>{{codeRemainderStatus.type7}}</span>个)</span>
+        <el-popover placement="top-start" width="200" trigger="hover" popper-class="invitation-code-more-code-popover">
+          <p>如需提高正式邀请码上限，请联系keepwork客服：<a href="mailto:support@paraengine.com" class="link">support@paraengine.com</a></p>
+          <i slot="reference" class="iconfont icon-help"></i>
+        </el-popover>
+      </div>
+    </div>
+    <div class="invitation-code-statics">
+      <div class="invitation-code-statics-label">已使用邀请码统计：</div>
+      <div class="invitation-code-statics-detail">
+        <div class="invitation-code-statics-item">
+          <div class="invitation-code-statics-item-label">正式邀请码</div>
+          <div class="invitation-code-statics-item-content">3个月(<span>{{codeUsedStatusData.type5}}个</span>)、半年(<span>{{codeUsedStatusData.type6}}个</span>)、1年(送3个月)(<span>{{codeUsedStatusData.type7}}个</span>)</div>
+        </div>
+        <div class="invitation-code-statics-item">
+          <div class="invitation-code-statics-item-label">试用邀请码</div>
+          <div class="invitation-code-statics-item-content">1个月(<span>{{codeUsedStatusData.type1}}个</span>)、2个月(<span>{{codeUsedStatusData.type2}}个</span>)</div>
+        </div>
+      </div>
+    </div>
+    <div class="invitation-code-operate">
+      <div class="invitation-code-operate-total">
+        邀请码列表：<span>{{codesCount}}个</span>
+      </div>
+      <div class="invitation-code-operate-buttons">
+        <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="setInvalid">设为无效</el-button>
         <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="exportData">{{$t('org.export')}}</el-button>
         <el-button class="invitation-code-top-operation-button invitation-code-top-operation-button-export" @click="toPrintCode">{{$t('org.print')}}</el-button>
         <el-button type="primary" class="invitation-code-top-operation-button" @click="createActiveCode()">{{$t('org.generateInvitationCode')}}</el-button>
       </div>
     </div>
     <div class="invitation-code-filter">
-      <el-form ref="codeFilter" :model="codeFilterData" label-width="80px">
+      <el-form ref="codeFilter" :model="codeFilterData">
+        <el-form-item label="类型">
+          <el-select v-model="codeFilterData.type" size="medium">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="正式" value="formal"></el-option>
+            <el-option label="试听" value="try"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="使用期限">
+          <el-select v-model="codeFilterData.duration" size="medium">
+            <el-option v-for="option in durationOptions" :key="option.value" :label="option.text" :value="option.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item :label="$t('org.state')">
           <el-select v-model="codeFilterData.state" size="medium">
             <el-option :label="$t('org.allState')" value=""></el-option>
             <el-option :label="$t('org.used')" value="1"></el-option>
             <el-option :label="$t('org.unused')" value="0"></el-option>
+            <el-option label="无效" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('org.class')">
@@ -32,15 +74,17 @@
     </div>
     <div class="invitation-code-table">
       <el-table ref="codeTable" border :data="codeTableData" @selection-change="handleSelectionChange" tooltip-effect="dark" style="width: 100%">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column :label="$t('org.serialNum')" width="55" type="index"></el-table-column>
-        <el-table-column :label="$t('org.InvitationCode')" width="125" prop="key"></el-table-column>
-        <el-table-column :label="$t('org.stateLabel')" width="75"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
-        <el-table-column :label="$t('org.createdTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
-        <el-table-column :label="$t('org.activateTime')" width="105"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
-        <el-table-column :label="$t('org.usernameLabel')" width="125" prop="username"></el-table-column>
-        <el-table-column :label="$t('org.nameLabel')" width="125"><template slot-scope="scope">{{scope.row.realname || scope.row.name}}</template></el-table-column>
-        <el-table-column :label="$t('org.classLabel')" width="" prop="lessonOrganizationClasses.name"></el-table-column>
+        <el-table-column type="selection" width="39"></el-table-column>
+        <el-table-column :label="$t('org.serialNum')" width="50" type="index"></el-table-column>
+        <el-table-column :label="$t('org.InvitationCode')" width="98" prop="key"></el-table-column>
+        <el-table-column label="类型" width="68"><template slot-scope="scope">{{typeFilter(scope.row.type)}}</template></el-table-column>
+        <el-table-column label="使用期限" width="80"><template slot-scope="scope">{{durationFilter(scope.row.type)}}</template></el-table-column>
+        <el-table-column :label="$t('org.stateLabel')" width="68"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
+        <el-table-column :label="$t('org.createdTime')" width="98"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
+        <el-table-column :label="$t('org.activateTime')" width="98"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
+        <el-table-column :label="$t('org.usernameLabel')" width="98" prop="username"></el-table-column>
+        <el-table-column :label="$t('org.nameLabel')"><template slot-scope="scope">{{scope.row.realname || scope.row.name}}</template></el-table-column>
+        <el-table-column :label="$t('org.classLabel')" width="98" prop="lessonOrganizationClasses.name"></el-table-column>
       </el-table>
     </div>
     <div ref="printInvitationCode" :class="['print-invitation-code-print', {'print-invitation-code-print-hidden': currentRouteName === 'InvitationCode'}]">
@@ -96,15 +140,18 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
+import { getIsFormalTypeByValue, getTypeText } from '@/lib/utils/org'
 
 export default {
   name: 'InvitationCode',
   data() {
     return {
       codeFilterData: {
+        type: '',
+        duration: '',
         state: '',
         classId: '',
-        searchBy: ''
+        searchBy: '',
       },
       multipleSelection: [],
       perPage: 10,
@@ -112,16 +159,49 @@ export default {
       loading: true,
       currentRouteName: this.$route.name,
       beginClassTime: '',
-      endClassTime: ''
+      endClassTime: '',
+      allOptionItem: [
+        {
+          text: '全部',
+          value: '',
+        },
+      ],
+      formalDurationOptions: [
+        {
+          text: '3个月',
+          value: 5,
+        },
+        {
+          text: '半年',
+          value: 6,
+        },
+        {
+          text: '1年(送3个月)',
+          value: 7,
+        },
+      ],
+      tryDurationOptions: [
+        {
+          text: '1个月',
+          value: 1,
+        },
+        {
+          text: '2个月',
+          value: 2,
+        },
+      ],
     }
   },
   async mounted() {
-    await Promise.all([
-      this.getOrgActivateCodes(this.filterData),
-      this.getOrgClassList({
-        organizationId: this.orgId
-      })
-    ])
+    try {
+      await Promise.all([
+        this.getOrgActivateCodes(this.filterData),
+        this.getOrgCodesStatus(),
+        this.getOrgClassList({
+          organizationId: this.orgId,
+        }),
+      ])
+    } catch (error) {}
     this.loading = false
   },
   computed: {
@@ -130,14 +210,27 @@ export default {
       getOrgClassesById: 'org/getOrgClassesById',
       orgActiveCodeList: 'org/orgActiveCodeList',
       currentOrgToExpire: 'org/currentOrgToExpire',
-      currentOrgHaveExpired: 'org/currentOrgHaveExpired'
+      currentOrgHaveExpired: 'org/currentOrgHaveExpired',
+      codeUsedStatus: 'org/codeUsedStatus',
     }),
-    className() {
-      return _.get(
-        this.multipleSelection[0],
-        'lessonOrganizationClasses.name',
-        ''
+    codeUsedStatusData() {
+      return this.codeUsedStatus.used || {}
+    },
+    codeRemainderStatus() {
+      return this.codeUsedStatus.remainder || {}
+    },
+    durationOptions() {
+      return _.concat(
+        this.allOptionItem,
+        this.codeFilterData.type == 'formal'
+          ? this.formalDurationOptions
+          : this.codeFilterData.type == 'try'
+          ? this.tryDurationOptions
+          : [],
       )
+    },
+    className() {
+      return _.get(this.multipleSelection[0], 'lessonOrganizationClasses.name', '')
     },
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -164,40 +257,57 @@ export default {
       return _.chunk(this.multipleSelection, 2)
     },
     filterData() {
-      let params = { 'x-page': this.page, 'x-per-page': this.perPage }
-      if (this.codeFilterData.state) {
-        params = { ...params, 'state-eq': Number(this.codeFilterData.state) }
-      }
-      if (this.codeFilterData.classId) {
-        params = {
-          ...params,
-          'classId-eq': Number(this.codeFilterData.classId)
-        }
-      }
-      if (this.codeFilterData.searchBy) {
-        params = {
-          ...params,
-          $or: [
-            { key: { $like: `%${this.codeFilterData.searchBy}%` } },
-            { username: { $like: `%${this.codeFilterData.searchBy}%` } },
-            { realname: { $like: `%${this.codeFilterData.searchBy}%` } }
-          ]
-        }
-      }
-      return params
-    }
+      const { state, classId, searchBy, type, duration } = this.codeFilterData
+      return _.omitBy(
+        {
+          'x-page': this.page,
+          'x-per-page': this.perPage,
+          'state-eq': state ? Number(this.codeFilterData.state) : null,
+          'classId-eq': classId ? Number(this.codeFilterData.classId) : null,
+          $or: searchBy
+            ? [
+                { key: { $like: `%${this.codeFilterData.searchBy}%` } },
+                { username: { $like: `%${this.codeFilterData.searchBy}%` } },
+                { realname: { $like: `%${this.codeFilterData.searchBy}%` } },
+              ]
+            : null,
+          'type-in': this.getTypeInParam(type, duration),
+        },
+        _.isNull,
+      )
+    },
   },
   watch: {
     filterData(newVal) {
       this.getOrgActivateCodes(newVal)
-    }
+    },
   },
   methods: {
     ...mapActions({
       getOrgActivateCodes: 'org/getOrgActivateCodes',
+      getOrgCodesStatus: 'org/getOrgCodesStatus',
       getOrgClassList: 'org/getOrgClassList',
-      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible'
+      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible',
+      orgSetInvalid: 'org/setInvalid',
     }),
+    getTypeInParam(type, duration) {
+      let mapOptions = []
+      if (duration) {
+        mapOptions = [
+          {
+            value: duration,
+          },
+        ]
+      } else {
+        mapOptions =
+          type == 'formal'
+            ? this.formalDurationOptions
+            : type == 'try'
+            ? this.tryDurationOptions
+            : _.concat(this.tryDurationOptions, this.formalDurationOptions)
+      }
+      return _.remove(_.map(mapOptions, option => option.value || null), value => !_.isNull(value))
+    },
     handleKey(key) {
       let tempArr = key.split('')
       let count = 0
@@ -231,10 +341,31 @@ export default {
       this.$router.push({ name: 'NewInvitationCode' })
     },
     stateFilter(state) {
-      return state === 0 ? this.$t('org.unused') : this.$t('org.used')
+      return state === 0 ? this.$t('org.unused') : state === 1 ? this.$t('org.used') : '无效'
+    },
+    typeFilter(type) {
+      return getIsFormalTypeByValue(type) ? '正式' : '试听'
+    },
+    durationFilter(type) {
+      return getTypeText(type)
     },
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD') : ''
+    },
+    async setInvalid() {
+      if (this.multipleSelection.length === 0) {
+        this.$message('请选择邀请码')
+        return
+      }
+      this.loading = true
+      try {
+        const ids = _.map(this.multipleSelection, codeDetail => codeDetail.id)
+        await this.orgSetInvalid({ ids })
+        this.$message('设置成功')
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
     },
     exportData() {
       if (this.multipleSelection.length === 0) {
@@ -250,7 +381,7 @@ export default {
           this.$t('org.activateTime'),
           this.$t('org.usernameLabel'),
           this.$t('org.nameLabel'),
-          this.$t('org.classLabel')
+          this.$t('org.classLabel'),
         ]
         const dataList = []
         _.map(this.multipleSelection, (data, index) => {
@@ -269,7 +400,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data: dataList,
-          filename: '邀请码'
+          filename: '邀请码',
         })
       })
     },
@@ -293,10 +424,10 @@ export default {
       let headHtml = document.head.innerHTML
       headHtml = headHtml.replace('screen', 'screen,print')
       newWindow.document.write(
-        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`
+        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`,
       )
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -310,30 +441,83 @@ export default {
     &-total {
       font-size: 16px;
       line-height: 56px;
-      color: #2397f3;
       font-weight: normal;
       padding-left: 26px;
     }
-    &-operation {
+    &-statics {
       float: right;
-      min-height: 56px;
       line-height: 56px;
-      &-button {
-        margin-right: 20px;
-        min-width: 112px;
-        border-radius: 4px;
-        border: solid 1px #2397f3;
-        &-export {
-          color: #2397f3;
+      font-size: 14px;
+      padding-right: 24px;
+      color: #595959;
+      &-item {
+        margin-right: 6px;
+        & > span {
+          color: #1385ff;
+        }
+      }
+    }
+    .icon-help {
+      color: #2397f3;
+      cursor: pointer;
+    }
+  }
+  &-more-code-popover {
+    .link {
+      color: #2397f3;
+      text-decoration: none;
+    }
+  }
+  &-statics {
+    margin: 0 26px;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 28px 0;
+    &-label {
+      display: inline-block;
+    }
+    &-detail {
+      display: inline-block;
+      vertical-align: top;
+      font-size: 14px;
+      color: #8c8c8c;
+    }
+    &-item {
+      margin-bottom: 18px;
+      &-label {
+        display: inline-block;
+        color: #1385ff;
+        margin-right: 16px;
+      }
+      &-content {
+        vertical-align: top;
+        display: inline-block;
+        & > span {
+          color: #262626;
         }
       }
     }
   }
+  &-operate {
+    display: flex;
+    padding: 20px 26px;
+    align-items: center;
+    &-total {
+      flex: 1;
+      & > span {
+        color: #1385ff;
+      }
+    }
+  }
   &-filter {
-    padding: 34px 0;
+    padding: 34px 26px;
     color: #909399;
     /deep/ .el-form {
       display: flex;
+      justify-content: space-between;
+      .el-form-item__content {
+        width: 88px;
+        display: inline-block;
+      }
       .el-form-item {
         .el-input.invitation-code-filter-search {
           .el-input__inner {
@@ -350,8 +534,7 @@ export default {
       }
       .invitation-code-filter-search-box {
         .el-form-item__content {
-          margin-left: 40px !important;
-          width: 250px;
+          width: 220px;
         }
       }
     }
