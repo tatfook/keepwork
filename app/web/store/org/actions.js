@@ -425,6 +425,9 @@ const actions = {
     let result = await keepwork.lessonOrganizationActivateCodes.getUsedStatus()
     commit(GET_CODES_STATUS_SUCCESS, result)
   },
+  async setInvalid(context, { ids }) {
+    await keepwork.lessonOrganizationActivateCodes.setInvalid(ids)
+  },
 }
 
 export default actions
