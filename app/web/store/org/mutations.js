@@ -26,7 +26,6 @@ const GET_CLASS_EVALUATION_SUCCESS = 'GET_CLASS_EVALUATION_SUCCESS'
 const GET_CLASS_EVALUATION_LIST_SUCCESS = 'GET_CLASS_EVALUATION_LIST_SUCCESS'
 const GET_ORG_CLASS_REPORT_SUCCESS = 'GET_ORG_CLASS_REPORT_SUCCESS'
 const GET_SENDED_MESSAGE_SUCCESS = 'GET_SENDED_MESSAGE_SUCCESS'
-const GET_CODES_STATUS_SUCCESS = 'GET_CODES_STATUS_SUCCESS'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -54,7 +53,6 @@ export const props = {
   GET_CLASS_EVALUATION_LIST_SUCCESS,
   GET_ORG_CLASS_REPORT_SUCCESS,
   GET_SENDED_MESSAGE_SUCCESS,
-  GET_CODES_STATUS_SUCCESS,
 }
 
 const mutations = {
@@ -188,9 +186,6 @@ const mutations = {
   },
   [GET_SENDED_MESSAGE_SUCCESS](state, messages) {
     Vue.set(state, 'sendedMessages', messages)
-  },
-  [GET_CODES_STATUS_SUCCESS](state, result) {
-    Vue.set(state, 'codeUsedStatus', result)
   },
 }
 
