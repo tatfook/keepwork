@@ -30,7 +30,6 @@ const state = {
   classEvaluationList: {},
   orgClassesReport: {},
   sendedMessages: [],
-  codeUsedStatus: {},
 }
 export default {
   namespaced: true,
