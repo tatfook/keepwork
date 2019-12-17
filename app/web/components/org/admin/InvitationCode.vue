@@ -84,7 +84,7 @@
         <el-table-column :label="$t('org.activateTime')" width="98"><template slot-scope="scope">{{formatTime(scope.row.activateTime)}}</template></el-table-column>
         <el-table-column :label="$t('org.usernameLabel')" width="98" prop="username"></el-table-column>
         <el-table-column :label="$t('org.nameLabel')"><template slot-scope="scope">{{scope.row.realname || scope.row.name}}</template></el-table-column>
-        <el-table-column :label="$t('org.classLabel')" width="98" prop="lessonOrganizationClasses.name"></el-table-column>
+        <el-table-column :label="$t('org.classLabel')" width="98" prop="classNameLabel"></el-table-column>
       </el-table>
     </div>
     <print-invitation-code-content ref="printInvitationCode" :isPrintContentHidden="isPrintContentHidden" :printData="printCodeListDataRow" />
@@ -205,7 +205,11 @@ export default {
     codeTableData() {
       let codeData = _.get(this.orgActiveCodeList, 'rows', [])
       return _.map(codeData, i => {
-        return { ...i, key: this.handleKey(i.key) }
+        return {
+          ...i,
+          key: this.handleKey(i.key),
+          classNameLabel: _.map(i.lessonOrganizationClasses, i => i.name).join('、'),
+        }
       })
     },
     printCodeListDataRow() {
