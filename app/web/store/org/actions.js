@@ -428,6 +428,10 @@ const actions = {
   async setInvalid(context, { ids }) {
     await keepwork.lessonOrganizationActivateCodes.setInvalid(ids)
   },
+  async endClass({ dispatch, getters: { currentOrgId } }, { classId }) {
+    await keepwork.lessonOrganizationClasses.endClass({ classId })
+    await dispatch('getOrgClassList', { organizationId: currentOrgId })
+  },
 }
 
 export default actions

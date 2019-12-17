@@ -54,6 +54,7 @@ const lessonOrganizationClasses = {
     }),
   getHistoryClasses: async params => get('lessonOrganizationClasses/history', { params }),
   getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`),
+  endClass: async ({ classId }) => put('lessonOrganizationClasses/end', { classId }),
 }
 
 const lessonOrganizationForms = {
