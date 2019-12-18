@@ -49,31 +49,6 @@ export const showRawForGuest = async (
   }
 }
 
-export const getTemplate = async (rawBaseUrl,
-  projectName,
-  path) => {
-  path = path
-    .split('/')
-    .filter(i => i)
-    .join('/')
-  projectName =
-    projectName ||
-    path
-      .split('/')
-      .splice(0, 2)
-      .join('/')
-  projectName = encodeURIComponent(projectName)
-  path = encodeURIComponent(path)
-  let url = `${rawBaseUrl}/projects/${projectName}/files/${path}`
-  let res = await axios.get(url)
-  let content = _.get(res, 'data', '')
-  try {
-    return JSON.parse(content)
-  } catch (error) {
-    return content
-  }
-}
-
 export const getConfig = async () => {
   let url = `${TEMPLATE}/files/config.json/raw`
   let res = await instance.get(url)
@@ -120,7 +95,6 @@ export const getTemplateFile = async (path) => {
 
 export default {
   showRawForGuest,
-  getTemplate,
   getConfig,
   getWebPageConfig,
   getTemplateList,
