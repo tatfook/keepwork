@@ -248,7 +248,6 @@ const actions = {
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
     await dispatch('getWebTemplateFileList', webTemplate)
     let { fileList } = webTemplate
-    let { rawBaseUrl, projectName } = webTemplateProject
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
