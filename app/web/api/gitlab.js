@@ -86,9 +86,20 @@ export const getWebPageConfig = async () => {
   return res
 }
 
+const flatten = (files, arr = []) => {
+  files.forEach(file => {
+    const { children = [], ...rest } = file
+    arr.push(rest)
+    if (children.length) {
+      flatten(children, arr)
+    }
+  })
+  return arr
+}
 export const getTemplateList = async (folder = 'basic') => {
-  let res = await instance.get(`${API}/${TEMPLATE}/tree?folderPath=templates/${folder}&recursive=true`)
-  return res
+  let files = await instance.get(`${API}/${TEMPLATE}/tree?folderPath=templates/${folder}&recursive=true`)
+  files = flatten(files)
+  return files
 }
 
 export const getPageTemplateContent = async contentPath => {
