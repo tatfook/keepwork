@@ -1,7 +1,26 @@
 import axios from 'axios'
 import _ from 'lodash'
 
-const API = 'https://api.keepwork.com/git/v0/projects'
+
+// export const webTemplateProject = {
+//   rawBaseUrl: 'https://api.keepwork.com/git/v0',
+//   dataSourceUsername: 'gitlab_rls_official',
+//   projectName: 'official/keepwork-template-v2',
+//   projectId: 36332,
+//   configFullPath: 'config.json',
+//   pageTemplateRoot: 'webpage',
+//   pageTemplateConfigFullPath: 'webpage/config.json'
+// }
+
+// const API = 'https://api.keepwork.com/git/v0/projects'
+// const TEMPLATE = 'official%2Fkeepwork-template-v2'
+const API = process.env.KEEPWORK_API_PREFIX + '/repos'
+const TEMPLATE = 'official%2Fkeepwork-template-v2'
+
+const instance = axios.create({
+  baseURL: API
+})
+instance.interceptors.response.use(response => response.data)
 
 export const showRawForGuest = async (
   rawBaseUrl,
@@ -47,7 +66,7 @@ export const getTemplate = async (rawBaseUrl,
   path = encodeURIComponent(path)
   let url = `${rawBaseUrl}/projects/${projectName}/files/${path}`
   let res = await axios.get(url)
-  let content = _.get(res, 'data.content', '')
+  let content = _.get(res, 'data', '')
   try {
     return JSON.parse(content)
   } catch (error) {
@@ -56,44 +75,36 @@ export const getTemplate = async (rawBaseUrl,
 }
 
 export const getConfig = async () => {
-  let url = `${API}/official%2Fkeepwork-template-v2/files/config.json`
-  let res = await axios.get(url)
-  let content = _.get(res, 'data.content', '')
-  try {
-    return JSON.parse(content)
-  } catch (error) {
-    return content
-  }
+  let url = `${TEMPLATE}/files/config.json/raw`
+  let res = await instance.get(url)
+  return res
 }
 
 export const getWebPageConfig = async () => {
-  let url = `${API}/official%2Fkeepwork-template-v2/files/webpage%2Fconfig.json`
-  let res = await axios.get(url)
-  let content = _.get(res, 'data.content', '')
-  try {
-    return JSON.parse(content)
-  } catch (error) {
-    return content
-  }
+  let url = `${TEMPLATE}/files/webpage%2Fconfig.json/raw`
+  let res = await instance.get(url)
+  return res
 }
 
 export const getTemplateList = async (folder = 'basic') => {
-  let res = await axios.get(`${API}/official%2Fkeepwork-template-v2/tree/templates%2F${folder}?recursive=true`)
-  try {
-    return JSON.parse(res.data)
-  } catch (error) {
-    return res.data
-  }
+  let res = await instance.get(`${API}/${TEMPLATE}/tree?folderPath=templates/${folder}&recursive=true`)
+  return res
 }
 
-export const getPageTemplateContent = async (contentPath) => {
-  const url = `${API}/official%2Fkeepwork-template-v2/files/webpage%2${contentPath}`
-  const content = await axios.get(url)
-  try {
-    return JSON.parse(content)
-  } catch (error) {
-    return content
-  }
+export const getPageTemplateContent = async contentPath => {
+  const url = `${TEMPLATE}/files/webpage%2${contentPath}/raw`
+  let res = await instance.get(url)
+  return res
+}
+
+export const getTemplateFile = async (path) => {
+  path = path
+    .split('/')
+    .filter(i => i)
+    .join('/')
+  const url = `${TEMPLATE}/files/${encodeURIComponent(`templates/basic/${path}`)}/raw`
+  let res = await instance.get(url)
+  return res
 }
 
 export default {
@@ -102,5 +113,6 @@ export default {
   getConfig,
   getWebPageConfig,
   getTemplateList,
-  getPageTemplateContent
+  getPageTemplateContent,
+  getTemplateFile
 }
