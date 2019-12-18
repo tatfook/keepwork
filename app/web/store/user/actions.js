@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
-import { getTemplate as gitlabShowRawForGuest } from '@/api/gitlab'
+import { getConfig, getWebPageConfig, getTemplateList, getPageTemplateContent, getTemplateFile } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 import Cookies from 'js-cookie'
@@ -221,36 +221,28 @@ const actions = {
     const themeJson = {
       content: JSON.stringify(ThemeHelper.defaultTheme),
       name: 'theme.json',
-      path: 'templates/basic/_config/theme.json',
-      type: 'blob'
+      path: '_config/theme.json',
+      isBlob: true
     }
     let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
     fileList = _.uniq([...fileList, themeJson], 'path')
     const projectName = `${username}/${sitename}`
     let files = _.map(fileList, ({ path, content }) => {
-      let filename = path.split('/').slice(2).join('/')
-      return { path: `${username}/${sitename}/${filename}`, content }
+      return { path: `${projectName}/${path}`, content }
     })
     await dispatch('gitlab/createMultipleFile', { projectName, files }, { root: true })
-    // for (let { path, name, content } of fileList) {
-    //   let filename = path.split('/').slice(2).join('/')
-    //   await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-    // }
-    // refresh repositoryTree
     await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
 
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
-    let { rawBaseUrl, projectName, configFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configFullPath)
+    let config = await getConfig()
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
-    let { rawBaseUrl, projectName, pageTemplateConfigFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, pageTemplateConfigFullPath)
+    let config = await getWebPageConfig()
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
@@ -260,7 +252,7 @@ const actions = {
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
-      content = await gitlabShowRawForGuest(rawBaseUrl, projectName, path)
+      content = await getTemplateFile(path)
       content = _.isString(content) ? content : JSON.stringify(content)
       commit(GET_WEB_TEMPLATE_FILE_SUCCESS, { file, content })
     }))
@@ -268,9 +260,7 @@ const actions = {
   async getWebTemplateFileList({ commit }, webTemplate) {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
-    let { rawBaseUrl, projectName } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
+    fileList = await getTemplateList(folder)
     fileList = fileList.filter(file => file.isBlob)
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
@@ -296,8 +286,7 @@ const actions = {
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
     let { content, contentPath } = template
     if (typeof content === 'string') return content
-    let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
-    content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
+    content = await getPageTemplateContent(contentPath)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
@@ -413,9 +402,10 @@ const actions = {
     let content = JSON.stringify(config, null, 2)
     let themeFilePath = ThemeHelper.themeFilePath(sitePath)
     await dispatch('gitlab/saveFile', { path: themeFilePath, content }, { root: true })
-      .catch(async () => {
-        await dispatch('gitlab/createFile', { path: themeFilePath, content, refreshRepositoryTree: false }, { root: true })
-      })
+    // TODO: 去掉保存失败新建文件这个逻辑
+    // .catch(async () => {
+    //   await dispatch('gitlab/createFile', { path: themeFilePath, content, refreshRepositoryTree: false }, { root: true })
+    // })
     commit(SAVE_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
