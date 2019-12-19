@@ -59,6 +59,7 @@ const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
+const UseFormalCode = () => import('@/components/org/admin/UseFormalCode')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
 const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
@@ -106,7 +107,7 @@ export default new Router({
     {
       path: '/:orgLoginUrl/message',
       name: 'orgMessage',
-      component: OrgMessage
+      component: OrgMessage,
     },
     {
       path: '/:orgLoginUrl/print',
@@ -388,6 +389,11 @@ export default new Router({
               path: 'student/edit',
               name: 'OrgEditStudent',
               component: EditMember,
+            },
+            {
+              path: 'student/UseFormalCode',
+              name: 'OrgUseFormalCode',
+              component: UseFormalCode,
             },
           ],
         },

@@ -78,8 +78,7 @@ const organizations = {
 const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) =>
     get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
-  getStudents: async ({ organizationId }) =>
-    get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
+  getStudents: async params => get('lessonOrganizationClassMembers/student', { params }),
   getStudentsByClassId: async ({ organizationId, classId }) =>
     get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`),
   getTeachersByClassId: async ({ organizationId, classId }) =>
@@ -88,6 +87,8 @@ const lessonOrganizationClassMembers = {
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   removeMemberFromClass: async ({ id, roleId }) =>
     deleteMethod(`lessonOrganizationClassMembers/${id}?roleId=${roleId}`),
+  toBeFormal: async params => post('lessonOrganizationClassMembers/formal', params),
+  recharge: async params => post('lessonOrganizationClassMembers/recharge', params),
 }
 
 const evaluationReports = {

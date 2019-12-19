@@ -7,7 +7,7 @@
           <img v-if="!isFormalTypeActive" src="@/assets/org/formal.png" alt="">
           <img v-else src="@/assets/org/formal_active.png" alt="">
         </div>
-        <div class="content-item type-item" :class="{'active': !isFormalTypeActive}" @click="setActiveTypeKey('try')">试听
+        <div v-if="isTryShow" class="content-item type-item" :class="{'active': !isFormalTypeActive}" @click="setActiveTypeKey('try')">试听
           <img v-if="isFormalTypeActive" src="@/assets/org/try.png" alt="">
           <img v-else src="@/assets/org/try_active.png" alt="">
         </div>
@@ -36,6 +36,12 @@ import { mapGetters, mapActions } from 'vuex'
 import { getIsFormalTypeByValue } from '@/lib/utils/org'
 export default {
   name: 'InvitationCodeTypes',
+  props: {
+    isTryShow: {
+      type: Boolean,
+      default: true,
+    },
+  },
   async mounted() {
     this.isLoading = true
     try {
@@ -153,7 +159,9 @@ export default {
       this.activeType = { key, value }
     },
     initActiveType() {
-      this.formalValidValue ? this.setActiveType('formal', this.formalValidValue) : this.setActiveType('try', 1)
+      !this.isTryShow || this.formalValidValue
+        ? this.setActiveType('formal', this.formalValidValue)
+        : this.setActiveType('try', 1)
     },
     closeWarningDialog() {
       this.isWarningVisible = false

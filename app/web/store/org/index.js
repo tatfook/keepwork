@@ -31,6 +31,7 @@ const state = {
   orgClassesReport: {},
   sendedMessages: [],
   codeUsedStatus: {},
+  useFormalCodeParams: {},
 }
 export default {
   namespaced: true,
