@@ -31,6 +31,7 @@ const {
   GET_ORG_CLASS_REPORT_SUCCESS,
   GET_SENDED_MESSAGE_SUCCESS,
   GET_CODES_STATUS_SUCCESS,
+  SET_USE_FORMAL_CODE_PARAMS,
 } = props
 
 const actions = {
@@ -231,16 +232,9 @@ const actions = {
       orgId: currentOrg.id,
     })
   },
-  async getOrgStudentList(context, { organizationId, classId }) {
-    let { commit } = context
-    let result = classId
-      ? await keepwork.lessonOrganizationClassMembers.getStudentsByClassId({
-        organizationId,
-        classId,
-      })
-      : await keepwork.lessonOrganizationClassMembers.getStudents({
-        organizationId,
-      })
+  async getOrgStudentList({ commit, getters: { currentOrgId: organizationId } }, params) {
+    const { classId } = params
+    let result = await keepwork.lessonOrganizationClassMembers.getStudents(params)
     let orgStudents = result.rows
     commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents, classId })
   },
@@ -431,6 +425,15 @@ const actions = {
   async endClass({ dispatch, getters: { currentOrgId } }, { classId }) {
     await keepwork.lessonOrganizationClasses.endClass({ classId })
     await dispatch('getOrgClassList', { organizationId: currentOrgId })
+  },
+  setUseFormalCodeParams({ commit }, params) {
+    commit(SET_USE_FORMAL_CODE_PARAMS, params)
+  },
+  async toBeFormal(context, params) {
+    await keepwork.lessonOrganizationClassMembers.toBeFormal(params)
+  },
+  async renew(context, params) {
+    await keepwork.lessonOrganizationClassMembers.recharge(params)
   },
 }
 
