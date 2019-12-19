@@ -21,13 +21,13 @@
           </div>
         </div>
 
-        <div class="org-student-renew" v-if="isClassDetailPage">
-          <div class="org-student-renew-expire">有效期: 终身VIP</div>
+        <div class="org-student-renew" v-if="isShowRenewPane">
+          <div class="org-student-renew-expire">有效期: {{studentEndTime}}</div>
           <span class="org-student-renew-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 续费</span>
         </div>
 
         <div class="org-student-class-select" v-if="isClassDetailPage">
-          <el-dropdown v-if="isMutiClasses" class="class-select-dropdown" @command="onDropdown">
+          <el-dropdown v-if="isMultiClasses" class="class-select-dropdown" @command="onDropdown">
             <span class="el-dropdown-link">
               <i class="iconfont icon-team org-student-class-select-icon"></i>
               <span class="org-student-class-select-dropdown-item">
@@ -83,14 +83,6 @@
         <router-view class="org-student-main"></router-view>
       </template>
     </div>
-    <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
-      <div class="hint">
-        <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
-        <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
-      </span>
-    </el-dialog>
     <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
@@ -109,6 +101,7 @@ import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import { locale } from '@/lib/utils/i18n'
 import EditStudentDialog from './EditStudentDialog'
+import moment from 'moment'
 
 export default {
   name: 'OrgStudent',
@@ -129,11 +122,15 @@ export default {
       orgIsAdmin: 'org/isAdmin',
       orgIsTeacher: 'org/isTeacher',
       orgClasses: 'org/student/orgClasses',
+      userinfo: 'org/student/userinfo',
       OrgIsStudent: 'org/isStudent',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
       myClassmate: 'org/student/myClassmate',
       myTeacher: 'org/student/myTeacher',
     }),
+    studentEndTime() {
+      return moment(this.userinfo.endTime).format('YYYY/MM/DD')
+    },
     isClassDetailPage() {
       return (
         this.OrgIsStudent &&
@@ -146,6 +143,9 @@ export default {
       )
     },
     isShowEditUserInfo() {
+      return !['JoinOrg'].includes(this.nowPageName)
+    },
+    isShowRenewPane() {
       return !['JoinOrg'].includes(this.nowPageName)
     },
     currentClassName() {
@@ -205,7 +205,7 @@ export default {
     isOnlyOneClass() {
       return this.orgClasses.length === 1
     },
-    isMutiClasses() {
+    isMultiClasses() {
       return this.orgClasses.length > 1
     },
     currentClassID() {
@@ -217,19 +217,21 @@ export default {
   },
   async created() {
     try {
-      if (!this.hasOrgClasses) {
+      if (!this.OrgIsStudent) {
         this.$router.push({
           name: 'JoinOrg',
         })
         return
       }
-      if (this.isNeedRedirect && this.isOnlyOneClass) {
+      if (!this.isNeedRedirect) {
+        return
+      }
+      if (this.isOnlyOneClass) {
         this.$router.push({
           name: 'OrgStudentClassDetail',
           params: { classId: this.firstClassID },
         })
-      }
-      if (this.isNeedRedirect && this.isMutiClasses) {
+      } else {
         this.$router.push({
           name: 'OrgStudentClassSelect',
         })

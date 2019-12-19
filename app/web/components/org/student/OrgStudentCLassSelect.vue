@@ -1,10 +1,16 @@
 <template>
-  <div class="org-student-class-select">
-    <div class="org-student-class-select-row">
-      <span class="org-student-class-select-row-left">
+  <div class="org-class-select">
+    <div class="org-class-select-row">
+      <span class="org-class-select-row-left">
         选择班级进入：
       </span>
-      <span class="org-student-class-select-row-right">
+      <span class="org-class-select-row-right">
+        <div v-if="noClass" class="class-empty">
+          <img class="class-empty-icon" src="../../../assets/org/nothing.png" alt="">
+          <div class="class-empty-tips">
+            您暂未加入班级，如有疑问，请向老师咨询。
+          </div>
+        </div>
         <div v-for="item in orgClasses" :key="item.id">
           <span class="class-select-option">
             <i class="iconfont icon-team class-select-option-icon"></i>
@@ -28,38 +34,41 @@ export default {
     return {
       form: {
         key: '',
-        realname: ''
+        realname: '',
       },
       rules: {
         key: [
           {
             required: true,
             message: '请输入邀请码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         realname: [
           {
             required: true,
             message: '请输入姓名',
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   computed: {
     ...mapGetters({
       userinfo: 'org/student/userinfo',
       orgClasses: 'org/student/orgClasses',
-      organizationId: 'org/currentOrgId'
+      organizationId: 'org/currentOrgId',
     }),
     disabeldSubmitButton() {
       return !_.trim(this.form.realname) || !_.trim(this.form.key)
     },
     orgRealName() {
       return _.get(this.userinfo, 'realname', '')
-    }
+    },
+    noClass() {
+      return this.orgClasses.length === 0
+    },
   },
   async mounted() {
     await this.getStudentInfo()
@@ -68,21 +77,21 @@ export default {
   methods: {
     ...mapActions({
       joinOrgClass: 'org/student/joinOrgClass',
-      getStudentInfo: 'org/student/getStudentInfo'
+      getStudentInfo: 'org/student/getStudentInfo',
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
         if (valid) {
           const { classId = '' } = await this.joinOrgClass({
             ...this.form,
-            organizationId: this.organizationId
+            organizationId: this.organizationId,
           })
           if (classId) {
             this.$router.push({
               name: 'OrgStudentClassDetail',
               params: {
-                classId
-              }
+                classId,
+              },
             })
           }
         } else {
@@ -94,16 +103,16 @@ export default {
       this.$router.push({
         name: 'OrgStudentClassDetail',
         params: {
-          classId
-        }
+          classId,
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-.org-student-class-select {
+.org-class-select {
   background: #fff;
   border-radius: 8px;
   padding: 32px;
@@ -137,6 +146,17 @@ export default {
           .enter-button {
             visibility: visible;
           }
+        }
+      }
+
+      .class-empty {
+        min-height: 318px;
+        width: 500px;
+        text-align: center;
+        &-tips {
+          color: #999;
+          font-size: 14px;
+          margin-top: 20px;
         }
       }
     }

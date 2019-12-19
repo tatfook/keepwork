@@ -29,24 +29,24 @@ export default {
     return {
       form: {
         key: '',
-        realname: ''
+        realname: '',
       },
       rules: {
         key: [
           {
             required: true,
             message: '请输入邀请码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         realname: [
           {
             required: true,
             message: '请输入姓名',
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   async mounted() {
@@ -57,29 +57,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      joinOrgClass: 'org/student/joinOrgClass',
-      getStudentInfo: 'org/student/getStudentInfo'
+      recharge: 'org/student/recharge',
+      getStudentInfo: 'org/student/getStudentInfo',
+      getOrgClasses: 'org/student/getOrgClasses',
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
         if (valid) {
-          const res = await this.joinOrgClass({
+          const classIDs = await this.recharge({
             ...this.form,
-            organizationId: this.organizationId,
-            refreshToken: false
+            organizationId: this.organizationId
           })
-          if (res === false) {
-            return
-          }
-          const { classId = '' } = res
           this.onCancel()
-          if (classId) {
-            this.$router.push({
-              name: 'OrgStudentClassDetail',
-              params: { classId }
-            })
-          }
-          return res
+          return classIDs
         } else {
           return false
         }
@@ -87,14 +77,14 @@ export default {
     },
     onCancel() {
       this.$emit('cancel')
-    }
+    },
   },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       userinfo: 'org/student/userinfo',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
-      tokenInfo: 'org/tokenInfo'
+      tokenInfo: 'org/tokenInfo',
     }),
     orgRealName() {
       return _.get(this.userinfo, 'realname', '')
@@ -113,8 +103,8 @@ export default {
     },
     admissionMsg() {
       return this.orgAdmissionMsg || this.orgCellphone || '老师'
-    }
-  }
+    },
+  },
 }
 </script>
 
