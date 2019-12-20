@@ -24,9 +24,6 @@
     </div>
     <template v-else>
       <div class="org-teacher-classes-member">
-        <!-- <div class="member-header">
-          <i class="iconfont icon-shijian"></i> 开班时间: <span class="member-header-date"> {{orgClassesDate}} </span>
-        </div> -->
         <div class="member-divide">
           班级成员
         </div>
@@ -261,10 +258,6 @@ export default {
     },
     selectedClassStudents() {
       return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], [])
-    },
-    orgClassesDate() {
-      const { begin = '', end = '' } = _.find(this.orgClasses, cls => cls.id === this.selectedClassId)
-      return `${moment(begin).format('YYYY/MM/DD')} - ${moment(end).format('YYYY/MM/DD')}`
     },
     selectedClassStudentsCount() {
       return this.selectedClassStudents.length
