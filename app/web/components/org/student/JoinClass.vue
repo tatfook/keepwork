@@ -66,8 +66,21 @@ export default {
         if (valid) {
           const classIDs = await this.recharge({
             ...this.form,
-            organizationId: this.organizationId
+            organizationId: this.organizationId,
           })
+          this.$message.success('续费成功')
+          if (this.isNeedRedirect) {
+            if (classIDs.length === 1) {
+              this.$router.push({
+                name: 'OrgStudentClassDetail',
+                classIDs: classIDs[0],
+              })
+            } else if (classIDs.length === 0 || !classIDs.includes(this.currentClassID)) {
+              this.$router.push({
+                name: 'OrgStudentClassSelect',
+              })
+            }
+          }
           this.onCancel()
           return classIDs
         } else {
@@ -103,6 +116,17 @@ export default {
     },
     admissionMsg() {
       return this.orgAdmissionMsg || this.orgCellphone || '老师'
+    },
+    isNeedRedirect() {
+      return [
+        'OrgStudentClassDetail',
+        'OrgStudentEvaluations',
+        'OrgStudentEvaluationDetail',
+        'OrgStudentClassSelect',
+      ].includes(this.$route.name)
+    },
+    currentClassID() {
+      return _.toNumber(_.get(this.$route, 'params.classId', ''))
     },
   },
 }

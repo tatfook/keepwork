@@ -159,11 +159,12 @@ const actions = {
     payload.key = payload.key.replace(/ /g, '')
     try {
 
-      await lessonOrganizationClassMembers.studentRecharge(payload)
+      const classIDs = await lessonOrganizationClassMembers.studentRecharge(payload)
       await Promise.all([
+        dispatch('getOrgClasses'),
         dispatch('getStudentInfo'),
-        dispatch('getOrgClasses')
       ])
+      return classIDs
     } catch (error) {
       console.error(error)
     }
