@@ -16,13 +16,13 @@
               </el-dropdown-menu>
             </el-dropdown>
             <user-portrait :user="userinfo" class="org-student-profile" size="large"></user-portrait>
-            <div class="org-student-username">{{username}}</div>
+            <div class="org-student-realname">{{realname}}</div>
             <div class="org-student-edit-btn" v-if="isShowEditUserInfo" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
         </div>
 
         <div class="org-student-renew" v-if="isShowRenewPane">
-          <div class="org-student-renew-expire">有效期: {{studentEndTime}}</div>
+          <div class="org-student-renew-expire">有效期至: {{studentEndTime}}</div>
           <span class="org-student-renew-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 续费</span>
         </div>
 
@@ -168,6 +168,9 @@ export default {
     },
     username() {
       return _.get(this.userinfo, 'username', '')
+    },
+    realname() {
+      return _.get(this.userinfo, 'realname', '')
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
@@ -466,7 +469,7 @@ $borderColor: #e8e8e8;
     margin-bottom: 16px;
     border-radius: 50%;
   }
-  &-username {
+  &-realname {
     font-size: 20px;
     color: #333;
   }
