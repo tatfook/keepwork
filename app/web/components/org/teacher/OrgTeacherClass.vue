@@ -47,7 +47,7 @@
           </el-table-column>
           <el-table-column prop="username" :label="$t('org.usernameLabel')" width="110">
           </el-table-column>
-          <el-table-column prop="type" label="用户类型" width="110">
+          <el-table-column prop="type" label="用户类型" width="80">
           </el-table-column>
           <el-table-column prop="parentPhoneNum" label="家长手机号" width="110">
           </el-table-column>
@@ -273,7 +273,7 @@ export default {
         ...item,
         endTime: moment(item.createdAt).format('YYYY-MM-DD'),
         username: item.users.username,
-        type: this.typeDict[item.type]
+        type: this.typeDict[item.type],
       }))
     },
     selectedClassName() {
@@ -290,11 +290,8 @@ export default {
     },
     typeDict() {
       return {
-        1: '试听一个月',
-        2: '试听两个月',
-        5: '试听三个月',
-        6: '正式六个月',
-        7: '正式一年',
+        1: '试听',
+        2: '正式',
       }
     },
   },
