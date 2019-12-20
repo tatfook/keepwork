@@ -66,7 +66,6 @@ const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode
 const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitationCode')
 const HistoricalData = () => import('@/components/org/admin/HistoricalData')
 const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
-const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
 const OrgForms = () => import('@/components/org/admin/OrgForms')
 const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
@@ -453,11 +452,6 @@ export default new Router({
           path: 'orgHistoryClassDetail',
           name: 'OrgHistoryClassDetail',
           component: OrgHistoryClassDetail,
-        },
-        {
-          path: 'orgHistoryEditClass',
-          name: 'OrgHistoryEditClass',
-          component: OrgHistoryEditClass,
         },
         {
           path: 'forms',

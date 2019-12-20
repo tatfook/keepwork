@@ -5,25 +5,11 @@
         <el-breadcrumb-item :to="{ name: 'HistoricalData' }">{{$t('org.historicalData')}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{nowPageText}}</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="historical-class-comp-header-operate">
-        <el-button v-if="!isDetailPage" size="medium" @click="toClassListPage">{{$t('common.Cancel')}}</el-button>
-        <el-button v-if="!isDetailPage" size="medium" type="primary" @click="save" :disabled="!isClassDataValid">{{$t('common.Save')}}</el-button>
-      </div>
     </div>
     <div class="historical-class-comp-form">
       <div class="historical-class-comp-form-item">
         <div class="historical-class-comp-form-label">{{$t('org.ClassNameLabel')}}</div>
-        <el-input :disabled='isDetailPage' placeholder="例如：2019级1班" v-model="classData.name"></el-input>
-      </div>
-      <div class="historical-class-comp-form-item">
-        <div class="historical-class-comp-form-label">{{$t('org.beginClassTime')}}</div>
-        <div class="historical-class-comp-form-item-time">
-          <el-date-picker :disabled='isDetailPage' v-model="beginClassTime" type="date" :placeholder="$t('org.selectClassTime')">
-          </el-date-picker>
-          <span class="historical-class-comp-form-item-time-to">{{$t('org.timeTo')}}</span>
-          <el-date-picker :disabled='isDetailPage' v-model="endClassTime" type="date" :placeholder="$t('org.selectClassTime')">
-          </el-date-picker>
-        </div>
+        <el-input disabled placeholder="例如：2019级1班" v-model="classData.name"></el-input>
       </div>
       <div class="historical-class-comp-form-item">
         <div class="historical-class-comp-form-label">{{$t('org.LessonPackagesAvailable')}}:</div>
@@ -54,25 +40,20 @@ import moment from 'moment'
 export default {
   name: 'ClassComp',
   props: {
-    classDetail: Object
+    classDetail: Object,
   },
   async created() {
-    await Promise.all([
-      this.initClassData(),
-      this.getHistoryClasses({ cache: true })
-    ])
+    await Promise.all([this.initClassData(), this.getHistoryClasses({ cache: true })])
   },
   data() {
     return {
-      beginClassTime: null,
-      endClassTime: null,
       isTreeLoading: false,
       classData: {
         name: '',
         begin: null,
         end: null,
-        packages: []
-      }
+        packages: [],
+      },
     }
   },
   computed: {
@@ -80,7 +61,7 @@ export default {
       currentOrg: 'org/currentOrg',
       getOrgPackagesWithLessonById: 'org/getOrgPackagesWithLessonById',
       orgClassStudents: 'org/teacher/orgClassStudents',
-      orgHistoricalClasses: 'org/orgHistoricalClasses'
+      orgHistoricalClasses: 'org/orgHistoricalClasses',
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -91,14 +72,8 @@ export default {
     endDate() {
       return new Date(this.currentOrg.endDate)
     },
-    isDetailPage() {
-      return _.get(this.$route, 'name') === 'OrgHistoryClassDetail'
-    },
     isNewPage() {
       return _.get(this.$route, 'name') === 'OrgNewClass'
-    },
-    isEditPage() {
-      return _.get(this.$route, 'name') === 'OrgHistoryEditClass'
     },
     nowClassName() {
       return _.get(this.classDetail, 'name')
@@ -106,7 +81,6 @@ export default {
     nowPageText() {
       let pageText = ''
       switch (this.$route.name) {
-        case 'OrgHistoryEditClass':
         case 'OrgHistoryClassDetail':
           pageText = this.nowClassName
           break
@@ -126,19 +100,19 @@ export default {
           id: packageId,
           packageId: packageId,
           label: packageData.packageName,
-          disabled: this.isDetailPage,
+          disabled: true,
           children: _.map(packageData.lessons, lesson => {
             let lessonId = _.toNumber(lesson.id)
             let lessonNo = _.toNumber(lesson.lessonNo)
             return {
               id: `${packageId}-${lessonId}`,
               packageId: packageId,
-              disabled: this.isDetailPage,
+              disabled: true,
               label: lesson.lessonName,
               lessonId: lessonId,
-              lessonNo: lessonNo
+              lessonNo: lessonNo,
             }
-          })
+          }),
         }
       })
     },
@@ -148,44 +122,25 @@ export default {
     },
     currentClassStudents() {
       let orgClassMembers = _.get(this.orgHistoricalClasses, 'rows', [])
-      let orgClassMembersByClassId = _.find(
-        orgClassMembers,
-        i => i.id === +this.classDetail.id
-      )
-      let studentList = _.get(
-        orgClassMembersByClassId,
-        'lessonOrganizationClassMembers',
-        []
-      )
+      let orgClassMembersByClassId = _.find(orgClassMembers, i => i.id === +this.classDetail.id)
+      let studentList = _.get(orgClassMembersByClassId, 'lessonOrganizationClassMembers', [])
       return _.filter(studentList, student => (student.roleId & 1) > 0)
     },
     currentClassStudentsCount() {
       return this.currentClassStudents.length
-    }
+    },
   },
   methods: {
     ...mapActions({
       getOrgClassPackages: 'org/getOrgClassPackages',
       getOrgPackagesWithLessons: 'org/getOrgPackagesWithLessons',
-      getHistoryClasses: 'org/getHistoryClasses'
+      getHistoryClasses: 'org/getHistoryClasses',
     }),
     async initClassData() {
       await this.initTreeData()
-      if (this.isDetailPage || this.isEditPage) {
-        await this.initSelectedLessons()
-        let classDetail = this.classDetail
-        this.classData = classDetail
-        this.beginClassTime = classDetail.begin
-        this.endClassTime =
-          +new Date(classDetail.end) - 24 * 60 * 60 * 1000 + 1000
-      } else {
-        this.classData = {
-          name: '',
-          begin: null,
-          end: null,
-          packages: []
-        }
-      }
+      await this.initSelectedLessons()
+      let classDetail = this.classDetail
+      this.classData = classDetail
     },
     async initTreeData() {
       this.isTreeLoading = true
@@ -195,7 +150,7 @@ export default {
     async initSelectedLessons() {
       let classPackages = await this.getOrgClassPackages({
         organizationId: this.orgId,
-        classId: this.classDetail.id
+        classId: this.classDetail.id,
       })
       let classLessons = []
       for (let i = 0; i < classPackages.length; i++) {
@@ -211,65 +166,17 @@ export default {
       }
       this.$refs.lessonTree.setCheckedKeys(classLessons)
     },
-    toClassListPage() {
-      this.$router.push({
-        name: 'HistoricalData'
-      })
-    },
-    setSelectedPackages() {
-      let selectedLessons = this.$refs.lessonTree.getCheckedNodes(true)
-      let groupedPackages = _.groupBy(selectedLessons, 'packageId')
-      let packages = []
-      _.forIn(groupedPackages, (lessons, packageId) => {
-        packages.push({
-          packageId: _.toNumber(packageId),
-          lessons: _.map(lessons, lesson => {
-            return {
-              lessonId: lesson.lessonId,
-              lessonNo: lesson.lessonNo
-            }
-          })
-        })
-      })
-      this.classData.packages = packages
-    },
-    setSelectedTime() {
-      if (_.isNull(this.beginClassTime)) {
-        this.classData.begin = null
-      } else {
-        this.classData.begin = this.beginClassTime
-      }
-      if (_.isNull(this.endClassTime)) {
-        this.classData.end = null
-      } else {
-        let endTime = +new Date(this.endClassTime) + 24 * 60 * 60 * 1000 - 1000
-        this.classData.end = endTime
-      }
-    },
-    async save() {
-      this.setSelectedPackages()
-      await this.setSelectedTime()
-      if (
-        this.beginClassTime < this.startDate ||
-        this.endClassTime > this.endDate ||
-        this.classData.end < +new Date(this.classData.begin)
-      ) {
-        this.$message.error(this.$t('org.openingTime'))
-        return
-      }
-      this.$emit('save', this.classData)
-    }
   },
   watch: {
     $route() {
       this.initClassData()
-    }
+    },
   },
   filters: {
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD HH:mm:ss') : ''
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">
@@ -282,12 +189,9 @@ $borderColor: #e8e8e8;
     border-bottom: 1px solid $borderColor;
     padding: 0 24px;
     align-items: center;
-    &-breadcrumb {
-      flex: 1;
-      font-size: 16px;
-      .el-breadcrumb__inner.is-link {
-        color: #999;
-      }
+    font-size: 16px;
+    .el-breadcrumb__inner.is-link {
+      color: #999;
     }
   }
   &-form {
@@ -305,13 +209,6 @@ $borderColor: #e8e8e8;
     }
     &-item {
       margin-bottom: 40px;
-      &-time {
-        display: flex;
-        &-to {
-          line-height: 40px;
-          padding: 0 12px;
-        }
-      }
     }
   }
   &-tree {
