@@ -114,7 +114,7 @@ const actions = {
       return
     }
 
-    let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token: ' ' })
+    let gitlab = new GitAPI({ url: process.env.KEEPWORK_API_PREFIX, token: ' ' })
 
     let children = _.get(repositoryTrees, [path, path])
     if (useCache && !_.isEmpty(children)) return
@@ -126,7 +126,7 @@ const actions = {
     commit(GET_REPOSITORY_TREE_SUCCESS, { path, list })
   },
   async getFileDetail(context, { projectPath, fullPath, useCache = false, token = ' ' }) {
-    let gitlab = new GitAPI({ url: process.env.GITLAB_API_PREFIX, token })
+    let gitlab = new GitAPI({ url: process.env.KEEPWORK_API_PREFIX, token })
     let result = await gitlab.getFile({ projectPath, fullPath, useCache })
     return result
   },
@@ -177,7 +177,7 @@ const actions = {
       .split('/')
       .slice(0, 2)
       .join('/')
-    let file = await gitlab.getFileWithCommitId({
+    let content = await gitlab.getFileWithCommitId({
       projectPath,
       fullPath: path,
       commitId
@@ -185,7 +185,7 @@ const actions = {
     commit(GET_FILE_CONTENT_WITH_COMMITID_SUCCESS, {
       barePath,
       commitId,
-      content: file.content
+      content
     })
   },
   async readFileForGuest(context, { path, forceAsGuest = false }) {
@@ -255,9 +255,8 @@ const actions = {
     let result = await gitlab
       .getFileCommitList({ projectPath, filePath, page, perPage })
       .catch(error => {
-        console.log(error)
       })
-    return result.data
+    return result
   },
   async createFolder(context, { path, refreshRepositoryTree = true }) {
     const { commit, dispatch } = context

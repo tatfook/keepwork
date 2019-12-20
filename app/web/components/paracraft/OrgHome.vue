@@ -63,7 +63,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PracraftOrg',
   components: {
-    OrgCell
+    OrgCell,
   },
   async created() {
     try {
@@ -76,25 +76,31 @@ export default {
     return {
       isLoading: false,
       name: '',
-      key: ''
+      key: '',
     }
   },
   methods: {
     ...mapActions({
       joinOrg: 'paracraft/joinOrg',
       getUserOrgList: 'paracraft/getUserOrgList',
-      openLink: 'paracraft/openLink'
+      openLink: 'paracraft/openLink',
     }),
     handleToMore(link) {
-      this.openLink(link)
+      this.openLink({
+        link,
+        isProtocolType: this.isProtocolType,
+      })
     },
     handleToOrgList() {
-      this.openLink('https://keepwork.com/s/lesson/organizationCooperation')
+      this.openLink({
+        link: 'https://keepwork.com/s/lesson/organizationCooperation',
+        isProtocolType: this.isProtocolType,
+      })
     },
     handleBack() {
       this.$notify({
         title: '返回',
-        offset: 80
+        offset: 80,
       })
     },
     async handleJoinOrg() {
@@ -102,7 +108,7 @@ export default {
         return this.$message({
           type: 'warning',
           message: '请输入姓名',
-          offset: 80
+          offset: 80,
         })
       }
       const key = this.key.replace(/ /g, '')
@@ -110,7 +116,7 @@ export default {
         return this.$message({
           type: 'warning',
           message: '请输入激活码',
-          offset: 80
+          offset: 80,
         })
       }
       this.isLoading = true
@@ -120,13 +126,16 @@ export default {
         this.name = ''
       }
       this.isLoading = false
-    }
+    },
   },
   computed: {
     ...mapGetters({
       userOrgList: 'paracraft/userOrgList',
-      paracraftPORT: 'paracraft/paracraftPORT'
+      paracraftPORT: 'paracraft/paracraftPORT',
     }),
+    isProtocolType() {
+      return _.get(this.$route, 'query.type') == 'protocol'
+    },
     isHasOrg() {
       return this.userOrgList.length > 0
     },
@@ -137,36 +146,35 @@ export default {
           title: '教材购买',
           text_1: 'Paracraft编程入门',
           text_2: '学生、家长、教师的AI与编程入门教材，适合7岁以上用户使用',
-          moreLink: `https://keepwork.com/s/textbook`
+          moreLink: `https://keepwork.com/s/textbook`,
         },
         {
           imgUrl: require('@/assets/paracraft/documentX.png'),
           title: '免费文档',
           text_1: '免费在线资料',
           text_2: '通过免费的在线资料进行学习，涵盖动画、编程、CAD',
-          moreLink: `https://keepwork.com/official/docs/index`
+          moreLink: `https://keepwork.com/official/docs/index`,
         },
         {
           imgUrl: require('@/assets/paracraft/lessonX.png'),
           title: '在线课程',
           text_1: '通过一流的在线课程学习编程',
-          text_2:
-            'Keepwork官方认证课程可在线进行自主学习并提供系统的学习路径。',
-          moreLink: `https://keepwork.com/s/lesson`
+          text_2: 'Keepwork官方认证课程可在线进行自主学习并提供系统的学习路径。',
+          moreLink: `https://keepwork.com/s/lesson`,
         },
         {
           imgUrl: require('@/assets/paracraft/teachingX.png'),
           title: '学校和培训机构',
           text_1: '赋予学生创造力',
           text_2: '为学校、培训机构提供优惠的教学资源。',
-          moreLink: 'https://biz.keepwork.com/'
-        }
+          moreLink: 'https://biz.keepwork.com/',
+        },
       ]
     },
     teamLink() {
       return 'https://keepwork.com/s/teachingGroup'
-    }
-  }
+    },
+  },
 }
 </script>
 

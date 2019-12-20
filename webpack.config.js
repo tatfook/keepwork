@@ -57,10 +57,6 @@ module.exports = {
     // serviceworker: true,
     // analyzer: true,
     dotenv,
-    uglifyJs: {
-      cache: true,
-      parallel: false,
-    },
     copy: [{
       from: path.resolve(__dirname, 'app/static'),
       to: path.resolve(__dirname, 'public')
