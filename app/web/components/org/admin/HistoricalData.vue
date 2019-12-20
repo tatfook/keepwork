@@ -1,19 +1,22 @@
 <template>
   <div class="historical-data" v-loading="loading">
+    <historical-header />
     <h4 class="historical-data-title">{{$t('org.IncludeClasses')}}{{orgHistoricalClassesLength}}</h4>
-    <el-table class="historical-data-table" border :data="orgHistoricalClassesData" header-row-class-name="historical-data-table-header">
-      <el-table-column prop="name" :label="$t('org.ClassNameLabel')">
-      </el-table-column>
-      <el-table-column prop="createdAtLabel" label="创建时间" width='160'></el-table-column>
-      <el-table-column prop="updatedAtLabel" label="关闭时间" width='160'></el-table-column>
-      <el-table-column prop="teachersName" label="教师姓名" width='130'></el-table-column>
-      <el-table-column prop="studentCount" :label="$t('org.studentCunt')" width='80'></el-table-column>
-      <el-table-column :label="$t('common.action')" width="100">
-        <template slot-scope="scope">
-          <router-link class='historical-data-table-link' :to='{name: "OrgHistoryClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="historical-data-container">
+      <el-table class="historical-data-table" border :data="orgHistoricalClassesData" header-row-class-name="historical-data-table-header">
+        <el-table-column prop="name" :label="$t('org.ClassNameLabel')">
+        </el-table-column>
+        <el-table-column prop="createdAtLabel" label="创建时间" width='160'></el-table-column>
+        <el-table-column prop="updatedAtLabel" label="关闭时间" width='160'></el-table-column>
+        <el-table-column prop="teachersName" label="教师姓名" width='130'></el-table-column>
+        <el-table-column prop="studentCount" :label="$t('org.studentCunt')" width='80'></el-table-column>
+        <el-table-column :label="$t('common.action')" width="100">
+          <template slot-scope="scope">
+            <router-link class='historical-data-table-link' :to='{name: "OrgHistoryClassDetail", query: scope.row}'>{{$t('org.Details')}}</router-link>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div class="historical-data-pages" v-if="orgHistoricalClassesLength > 0">
       <el-pagination background @size-change="handleSizeChange" @current-change="targetPage" :current-page="page" :page-size="perPage" :page-sizes="[10,20,40,60,80,100,200,300]" :total="orgHistoricalClassesLength" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
@@ -22,6 +25,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import HistoricalHeader from './common/HistoricalHeader'
 import moment from 'moment'
 export default {
   name: 'HistoricalData',
@@ -82,18 +86,24 @@ export default {
       return time ? moment(time).format('YYYY/MM/DD HH:mm') : ''
     },
   },
+  components: {
+    HistoricalHeader,
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .historical-data {
   background: #fff;
-  padding: 0 24px 26px;
   border-radius: 8px;
   &-title {
     margin: 20px 0;
     font-size: 14px;
     color: #333;
+    padding: 8px 24px 0;
+  }
+  &-container {
+    padding: 0 24px;
   }
   &-table {
     &-header {

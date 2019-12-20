@@ -32,6 +32,7 @@ const state = {
   sendedMessages: [],
   codeUsedStatus: {},
   useFormalCodeParams: {},
+  historyStudents: {},
 }
 export default {
   namespaced: true,

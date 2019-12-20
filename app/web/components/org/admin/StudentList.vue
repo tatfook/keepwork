@@ -106,18 +106,13 @@ export default {
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
-    orgStudentsWithOvertime() {
+    orgStudents() {
       return (
         this.getOrgStudentsByClassId({
           orgId: this.orgId,
           classId: this.selectedClassId,
         }) || []
       )
-    },
-    orgStudents() {
-      return _.filter(this.orgStudentsWithOvertime, student => {
-        return student.lessonOrganizationClasses && student.lessonOrganizationClasses.length > 0
-      })
     },
     orgStudentsCount() {
       return _.get(this.getOrgUserCountById({ id: this.orgId }), 'studentCount', 0)
