@@ -91,7 +91,6 @@ export default {
           pageNames: [
             'HistoricalData',
             'OrgHistoryClassDetail',
-            'OrgHistoryEditClass'
           ],
           indexPageName: 'HistoricalData',
           text: this.$t('org.historicalData')
