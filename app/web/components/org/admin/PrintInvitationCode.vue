@@ -20,82 +20,29 @@
         <el-table-column :label="$t('org.classLabel')" width="" prop="className"></el-table-column>
       </el-table>
     </div>
-    <div ref="printContent" :class="['print-invitation-code-print', {'print-invitation-code-print-hidden': currentRouteName === 'PrintInvitationCode'}]">
-      <div class="print-invitation-code-print-header">
-        <div class="print-invitation-code-print-header-left">
-          <img v-if="orgLogo" class="print-invitation-code-print-header-left-brand" :src="orgLogo" alt="KeepWork">
-          <span class="print-invitation-code-print-header-left-name">{{currentOrg.name}}</span>
-        </div>
-        <div class="print-invitation-code-print-header-right">
-          <p class="print-invitation-code-print-header-right-classname">{{className}}</p>
-          <p class="print-invitation-code-print-header-right-time">{{$t('org.beginClassTime')}}:{{formatTime(beginClassTime)}}-{{formatTime(endClassTime)}}</p>
-        </div>
-      </div>
-      <div class="print-invitation-code-print-content">
-        <div class="print-invitation-code-print-row" v-for="(item,index) in printCodeListDataRow" :key="index">
-          <div class="print-invitation-code-print-content-box" v-for="(i) in item" :key="i.key">
-            <div class="print-invitation-code-print-content-box-header">
-              <div class="header-left">
-                <div class="header-left-org">
-                  {{currentOrg.name}}
-                </div>
-                <div class="header-left-class">
-                  {{className}}
-                </div>
-              </div>
-              <div class="header-right">
-                {{i.name || ''}}
-              </div>
-            </div>
-            <div class="print-invitation-code-print-content-box-top">
-              <p class="print-invitation-code-print-content-box-top-key">邀请码：{{i.key | idPretty}}</p>
-              <img class="print-invitation-code-print-content-box-top-left" src="@/assets/org/invite_code.png" alt="">
-              <img class="print-invitation-code-print-content-box-top-center" src="@/assets/org/stripe.png" alt="">
-              <img class="print-invitation-code-print-content-box-top-right" src="@/assets/org/shining.png" alt="">
-            </div>
-            <div class="print-invitation-code-print-content-box-guide">
-              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">1</span>
-                打开帕拉卡（Paracraft）（下载地址：paracraft.keepwork.com） </p>
-              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">2</span>注册账号，并登录帕拉卡（Paracraft）</p>
-              <p class="print-invitation-code-print-content-box-guide-step"><span class="print-invitation-code-print-content-box-guide-step-num">3</span>进入“我的学校”，输入上方邀请码</p>
-              <img class="print-invitation-code-print-content-box-guide-img" src="@/assets/org/para-icon.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <print-invitation-code-content ref="printContent" :isPrintContentHidden="isPrintContentHidden" :printData="printCodeListDataRow" />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import _ from 'lodash'
+import PrintInvitationCodeContent from './common/PrintInvitationCodeContent'
 
 export default {
   name: 'PrintInvitationCode',
-  data() {
-    return {
-      beginClassTime: this.$route.query.begin,
-      endClassTime: this.$route.query.end,
-      currentRouteName: this.$route.name
-    }
-  },
   computed: {
     ...mapGetters({
       printCodeList: 'org/printCodeList',
-      currentOrg: 'org/currentOrg'
     }),
-    orgLogo() {
-      return _.get(this.currentOrg, 'logo')
-    },
-    orgLoginUrl() {
-      return _.get(this.currentOrg, 'loginUrl')
+    isPrintContentHidden() {
+      return this.$route.name === 'PrintInvitationCode'
     },
     printCodeListData() {
       return _.map(this.printCodeList, i => {
         return {
           ...i,
-          className: this.className
+          className: this.className,
         }
       })
     },
@@ -104,16 +51,16 @@ export default {
     },
     className() {
       return this.$route.query.className || ''
-    }
+    },
   },
   methods: {
     toPrintCode() {
       const newWindow = window.open('', '标题')
-      const bodyHtml = this.$refs.printContent.innerHTML
+      const bodyHtml = this.$refs.printContent.$el.innerHTML
       let headHtml = document.head.innerHTML
       headHtml = headHtml.replace('screen', 'screen,print')
       newWindow.document.write(
-        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`
+        `<html>${headHtml}<body>${bodyHtml}<script>setTimeout(function() {window.print(); window.close();}, 500)<\/script><\/body><\/html>`,
       )
     },
     stateFilter(state) {
@@ -121,15 +68,16 @@ export default {
     },
     formatTime(time) {
       return time ? moment(time).format('YYYY/MM/DD') : ''
-    }
+    },
   },
   filters: {
     idPretty(value) {
-      return _.map(_.chunk(value.toString().split(''), 4), i =>
-        i.join('')
-      ).join(' ')
-    }
-  }
+      return _.map(_.chunk(value.toString().split(''), 4), i => i.join('')).join(' ')
+    },
+  },
+  components: {
+    PrintInvitationCodeContent,
+  },
 }
 </script>
 
@@ -191,157 +139,6 @@ export default {
 }
 .clearfix {
   zoom: 1;
-}
-.print-invitation-code {
-  &-print {
-    max-width: 660px;
-    margin: 0 auto;
-    &-header {
-      max-width: 660px;
-      margin: 0 auto;
-      display: flex;
-      &-left {
-        flex: 1;
-        display: flex;
-        &-brand {
-          width: 128px;
-          height: 46px;
-          border: solid 1px #c5c5c5;
-          object-fit: cover;
-        }
-        &-name {
-          display: inline-block;
-          line-height: 46px;
-          font-size: 14px;
-          font-weight: bold;
-          padding-left: 16px;
-          color: #333;
-        }
-      }
-      &-right {
-        flex: 1;
-        text-align: right;
-        &-classname,
-        &-time {
-          margin: 2px 14px;
-        }
-        &-classname {
-          font-weight: bold;
-          color: #333;
-          font-size: 13px;
-        }
-        &-time {
-          color: #999;
-          font-size: 11px;
-        }
-      }
-    }
-    &-content {
-      max-width: 660px;
-      margin: 12px auto 0;
-      &-row {
-        page-break-inside: avoid;
-      }
-      &-box {
-        border: 1px dashed #999;
-        box-sizing: border-box;
-        display: inline-block;
-        width: 50%;
-        padding: 12px 12px 0;
-        &-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          padding: 0 5px 10px;
-          .header-left {
-            &-org {
-              font-weight: bold;
-              font-size: 14px;
-            }
-            &-class {
-              font-size: 12px;
-              margin-top: 5px;
-            }
-          }
-          .header-right {
-            font-size: 14px;
-          }
-        }
-        &-top {
-          min-height: 56px;
-          position: relative;
-          &-key {
-            line-height: 52px;
-            margin: 0;
-            text-align: center;
-            font-size: 13px;
-            // color: #fff;
-            padding-top: 6px;
-            font-weight: bold;
-            z-index: 999;
-            position: relative;
-          }
-          &-left {
-            position: absolute;
-            left: 0;
-            top: 2px;
-            z-index: 10;
-          }
-          &-center {
-            position: absolute;
-            top: 15px;
-            left: 30px;
-            z-index: 0;
-            height: 30px;
-            widows: 90%;
-          }
-          &-right {
-            position: absolute;
-            right: 0;
-            top: 2px;
-            z-index: 10;
-          }
-        }
-        &-guide {
-          padding: 2px 0 18px 2px;
-          position: relative;
-          &-img {
-            position: absolute;
-            bottom: 1px;
-            right: 0;
-            z-index: 0;
-          }
-          &-step {
-            z-index: 99;
-            position: relative;
-            border-left: solid 3px #54a9ff;
-            padding: 0 0 12px 14px;
-            font-size: 12px;
-            color: #000;
-            margin: 0;
-            font-weight: bold;
-            &:nth-last-of-type(1) {
-              padding-bottom: 0;
-            }
-            &-num {
-              width: 16px;
-              height: 16px;
-              background-color: #54a8ff;
-              border: solid 2px #3677b9;
-              color: #fff;
-              border-radius: 50%;
-              display: inline-block;
-              text-align: center;
-              line-height: 16px;
-              position: absolute;
-              left: -10px;
-              top: 0px;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 </style>
 

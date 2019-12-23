@@ -84,6 +84,8 @@ const getters = {
   getClassReportByDays: state => ({ days }) => state.orgClassesReport[days],
   getSendedMessages: state => state.sendedMessages || [],
   codeUsedStatus: state => state.codeUsedStatus || {},
+  useFormalCodeParams: state => state.useFormalCodeParams,
+  historyStudents: state => state.historyStudents,
 }
 
 export default getters

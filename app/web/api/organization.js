@@ -54,6 +54,7 @@ const lessonOrganizationClasses = {
     }),
   getHistoryClasses: async params => get('lessonOrganizationClasses/history', { params }),
   getClassLastUpdateProjects: async classId => get(`lessonOrganizationClasses/${classId}/project`),
+  endClass: async ({ classId }) => put('lessonOrganizationClasses/end', { classId }),
 }
 
 const lessonOrganizationForms = {
@@ -77,8 +78,7 @@ const organizations = {
 const lessonOrganizationClassMembers = {
   getTeachers: async ({ organizationId }) =>
     get(`lessonOrganizationClassMembers/teacher?organizationId=${organizationId}`),
-  getStudents: async ({ organizationId }) =>
-    get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}`),
+  getStudents: async params => get('lessonOrganizationClassMembers/student', { params }),
   getStudentsByClassId: async ({ organizationId, classId }) =>
     get(`lessonOrganizationClassMembers/student?organizationId=${organizationId}&classId=${classId}`),
   getTeachersByClassId: async ({ organizationId, classId }) =>
@@ -87,8 +87,11 @@ const lessonOrganizationClassMembers = {
   getClassStudentsById: async params => get('lessonOrganizationClassMembers/student', { params }),
   removeMemberFromClass: async ({ id, roleId }) =>
     deleteMethod(`lessonOrganizationClassMembers/${id}?roleId=${roleId}`),
-  studentRecharge: async params => post('lessonOrganizationActivateCodes/stuRecharge', params)
+  studentRecharge: async params => post('lessonOrganizationActivateCodes/stuRecharge', params),
 
+  toBeFormal: async params => post('lessonOrganizationClassMembers/formal', params),
+  recharge: async params => post('lessonOrganizationClassMembers/recharge', params),
+  historyStudents: async params => get('lessonOrganizationClassMembers/historyStudents', { params }),
 }
 
 const evaluationReports = {

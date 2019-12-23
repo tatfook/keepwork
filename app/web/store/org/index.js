@@ -31,6 +31,8 @@ const state = {
   orgClassesReport: {},
   sendedMessages: [],
   codeUsedStatus: {},
+  useFormalCodeParams: {},
+  historyStudents: {},
 }
 export default {
   namespaced: true,
