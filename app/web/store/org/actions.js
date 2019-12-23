@@ -32,6 +32,7 @@ const {
   GET_SENDED_MESSAGE_SUCCESS,
   GET_CODES_STATUS_SUCCESS,
   SET_USE_FORMAL_CODE_PARAMS,
+  GET_HISTORY_STUDENTS_SUCCESS,
 } = props
 
 const actions = {
@@ -434,6 +435,10 @@ const actions = {
   },
   async renew(context, params) {
     await keepwork.lessonOrganizationClassMembers.recharge(params)
+  },
+  async getHistoryStudents({ commit }, params) {
+    let result = await keepwork.lessonOrganizationClassMembers.historyStudents(params)
+    commit(GET_HISTORY_STUDENTS_SUCCESS, result)
   },
 }
 
