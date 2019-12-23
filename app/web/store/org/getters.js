@@ -85,6 +85,7 @@ const getters = {
   getSendedMessages: state => state.sendedMessages || [],
   codeUsedStatus: state => state.codeUsedStatus || {},
   useFormalCodeParams: state => state.useFormalCodeParams,
+  reActivatedParams: state => state.reActivatedParams,
   historyStudents: state => state.historyStudents,
 }
 

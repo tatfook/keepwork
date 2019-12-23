@@ -60,6 +60,7 @@ const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
 const UseFormalCode = () => import('@/components/org/admin/UseFormalCode')
+const ActiveStudent = () => import('@/components/org/admin/ActiveStudent')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
 const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
@@ -443,6 +444,11 @@ export default new Router({
           path: 'printInvitationCode',
           name: 'PrintInvitationCode',
           component: PrintInvitationCode,
+        },
+        {
+          path: 'reActivate',
+          name: 'ReActivate',
+          component: ActiveStudent,
         },
         {
           path: 'historicalData',

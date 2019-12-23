@@ -32,6 +32,7 @@ const state = {
   sendedMessages: [],
   codeUsedStatus: {},
   useFormalCodeParams: {},
+  reActivatedParams: {},
   historyStudents: {},
 }
 export default {

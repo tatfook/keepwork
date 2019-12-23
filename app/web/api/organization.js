@@ -88,7 +88,7 @@ const lessonOrganizationClassMembers = {
   removeMemberFromClass: async ({ id, roleId }) =>
     deleteMethod(`lessonOrganizationClassMembers/${id}?roleId=${roleId}`),
   studentRecharge: async params => post('lessonOrganizationActivateCodes/stuRecharge', params),
-
+  reactivate: async params => post('lessonOrganizationClassMembers/reactivate', params),
   toBeFormal: async params => post('lessonOrganizationClassMembers/formal', params),
   recharge: async params => post('lessonOrganizationClassMembers/recharge', params),
   historyStudents: async params => get('lessonOrganizationClassMembers/historyStudents', { params }),

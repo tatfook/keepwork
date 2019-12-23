@@ -32,6 +32,7 @@ const {
   GET_SENDED_MESSAGE_SUCCESS,
   GET_CODES_STATUS_SUCCESS,
   SET_USE_FORMAL_CODE_PARAMS,
+  SET_RE_ACTIVATED_PARAMS,
   GET_HISTORY_STUDENTS_SUCCESS,
 } = props
 
@@ -430,11 +431,17 @@ const actions = {
   setUseFormalCodeParams({ commit }, params) {
     commit(SET_USE_FORMAL_CODE_PARAMS, params)
   },
+  setReactivateParams({ commit }, params) {
+    commit(SET_RE_ACTIVATED_PARAMS, params)
+  },
   async toBeFormal(context, params) {
     await keepwork.lessonOrganizationClassMembers.toBeFormal(params)
   },
   async renew(context, params) {
     await keepwork.lessonOrganizationClassMembers.recharge(params)
+  },
+  async reactivate(context, params) {
+    await keepwork.lessonOrganizationClassMembers.reactivate(params)
   },
   async getHistoryStudents({ commit }, params) {
     let result = await keepwork.lessonOrganizationClassMembers.historyStudents(params)
