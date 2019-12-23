@@ -30,18 +30,14 @@
         <i class="iconfont icon-xuesheng"></i>学生
       </div>
       <el-table border :data="studentList">
-        <el-table-column prop="realname" :label="$t('org.nameLabel')" width="135">
+        <el-table-column prop="realname" :label="$t('org.nameLabel')" width="240">
         </el-table-column>
         <el-table-column :label="$t('org.usernameLabel')">
           <template slot-scope="scope">{{scope.row.users.username}}</template>
         </el-table-column>
-        <el-table-column prop="typeText" label="用户类型" width="135">
+        <el-table-column prop="parentPhoneNum" label="家长手机号" width="200">
         </el-table-column>
-        <el-table-column prop="parentPhoneNum" label="家长手机号" width="135">
-        </el-table-column>
-        <el-table-column prop="endTimeText" label="到期时间" width="135">
-        </el-table-column>
-        <el-table-column prop="id" :label="$t('org.operationLabel')">
+        <el-table-column prop="id" :label="$t('org.operationLabel')" width="160">
           <template slot-scope="scope">
             <div class="class-members-table-operations">
               <remove-member class="class-members-table-button" :memberDetail="scope.row" :classId="classId" :roleId="1" @finish="initData" />
@@ -60,7 +56,6 @@ import NewTeacherDialog from './common/NewTeacherDialog'
 import ChangePasswordDialog from './common/ChangePasswordDialog'
 import RemoveMember from './common/RemoveMember'
 import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment'
 export default {
   name: 'ClassMembers',
   mounted() {
@@ -72,14 +67,14 @@ export default {
       editingMember: {},
       changingMember: {},
       isNewDialogVisible: false,
-      isLoading: false,
+      isLoading: false
     }
   },
   computed: {
     ...mapGetters({
       currentOrgId: 'org/currentOrgId',
       getOrgTeachersByClassId: 'org/getOrgTeachersByClassId',
-      getOrgStudentsByClassId: 'org/getOrgStudentsByClassId',
+      getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
     }),
     classId() {
       return _.toNumber(_.get(this.$route, 'query.id'))
@@ -90,30 +85,20 @@ export default {
     teacherList() {
       return this.getOrgTeachersByClassId({
         orgId: this.currentOrgId,
-        classId: this.classId,
+        classId: this.classId
       })
     },
     studentList() {
-      return _.map(
-        this.getOrgStudentsByClassId({
-          orgId: this.currentOrgId,
-          classId: this.classId,
-        }),
-        studentDetail => {
-          const { type, endTime } = studentDetail
-          return {
-            ...studentDetail,
-            typeText: type == 2 ? '正式' : '试听',
-            endTimeText: moment(endTime).format('YYYY/MM/DD'),
-          }
-        },
-      )
-    },
+      return this.getOrgStudentsByClassId({
+        orgId: this.currentOrgId,
+        classId: this.classId
+      })
+    }
   },
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      getOrgStudentList: 'org/getOrgStudentList',
+      getOrgStudentList: 'org/getOrgStudentList'
     }),
     async initData() {
       this.isLoading = true
@@ -121,7 +106,7 @@ export default {
       let classId = this.classId
       await Promise.all([
         this.getOrgTeacherList({ organizationId, classId }),
-        this.getOrgStudentList({ organizationId, classId }),
+        this.getOrgStudentList({ organizationId, classId })
       ])
       this.isLoading = false
     },
@@ -130,22 +115,22 @@ export default {
         realname,
         users: { username: memberName },
         classId,
-        memberId,
+        memberId
       } = studentDetail
       this.changingMember = {
         realname,
         memberName,
         classId,
-        memberId,
+        memberId
       }
       this.isChangeDialogVisible = true
-    },
+    }
   },
   components: {
     NewTeacherDialog,
     ChangePasswordDialog,
-    RemoveMember,
-  },
+    RemoveMember
+  }
 }
 </script>
 <style lang="scss" scoped>

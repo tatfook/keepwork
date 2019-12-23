@@ -21,9 +21,9 @@
         <el-input placeholder="家长手机号" v-model="memberData.parentPhoneNum"></el-input>
       </el-form-item>
       <el-form-item :label="$t('org.classLabel')" :rules="memberRules.classIds" prop="classIds">
-        <el-select clearable v-model="memberData.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
+        <el-select v-model="memberData.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
           <span :title="memberData.classIds | idToTextFilter(orgClasses)" class="edit-member-form-selected" :class="{'edit-member-form-selected-empty': memberData.classIds.length == 0}" slot="prefix">{{memberData.classIds | idToTextFilter(orgClasses, $t('org.pleaseSelect'))}}</span>
-          <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
+          <el-option v-for="(classItem, index) in filterOverDueClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -51,6 +51,13 @@ export default {
   },
   data() {
     let memberRoleId = _.get(this.$route, 'query.roleId')
+    let classIdsValidate = (rule, value, callback) => {
+      if (this.memberRoleId === 1 && value.length == 0) {
+        callback(new Error(this.$t('org.pleaseSelectClasses')))
+      } else {
+        callback()
+      }
+    }
     let phoneValidate = (rule, value, callback) => {
       if (value && !/^1\d{10}$/.test(value)) {
         callback(new Error('请输入正确的手机号'))
@@ -83,6 +90,7 @@ export default {
           }
         ],
         parentPhoneNum: [{ validator: phoneValidate, trigger: 'change' }],
+        classIds: [{ validator: classIdsValidate, trigger: 'change' }]
       }
     }
   },
@@ -102,6 +110,14 @@ export default {
     },
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    filterOverDueClasses() {
+      let nowDate = new Date().valueOf()
+      return _.filter(this.orgClasses, classDetail => {
+        let classBegin = new Date(classDetail.begin).valueOf()
+        let classEnd = new Date(classDetail.end).valueOf()
+        return classEnd >= nowDate
+      })
     },
     memberId() {
       return _.get(this.$route, 'query.id')

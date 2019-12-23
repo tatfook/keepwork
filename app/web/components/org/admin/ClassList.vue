@@ -1,5 +1,5 @@
 <template>
-  <div class="class-list" v-loading="isLoading">
+  <div class="class-list">
     <div class="class-list-header" v-if="orgClassesLength > 0">
       <div class="class-list-header-count">{{$t('org.IncludeClasses') + orgClasses.length + $t('org.classesCountUnit')}}</div>
       <router-link class="class-list-header-new" :to="{name: 'OrgNewClass'}">
@@ -7,14 +7,13 @@
       </router-link>
     </div>
     <el-table v-if="orgClassesLength > 0" class="class-list-table" border :data="orgClasses" header-row-class-name="class-list-table-header">
-      <el-table-column prop="name" :label="$t('org.ClassNameLabel')">
+      <el-table-column prop="name" :label="$t('org.ClassNameLabel')" width="240">
       </el-table-column>
-      <el-table-column label="创建时间" width="240"><template slot-scope="scope">{{scope.row.createdAt | formatTime}}</template></el-table-column>
-      <el-table-column :label="$t('common.action')" width="252">
+      <el-table-column :label="$t('org.beginClassTime')" width="240"><template slot-scope="scope">{{scope.row.begin | formatTime}} - {{scope.row.end | formatTime}}</template></el-table-column>
+      <el-table-column :label="$t('common.action')">
         <template slot-scope="scope">
           <router-link class='class-list-table-link' :to='{name: "OrgEditClass", query: scope.row}'>课程</router-link>
           <router-link class='class-list-table-link' :to='{name: "OrgClassMembers", query: {id:scope.row.id, className: scope.row.name}}'>成员</router-link>
-          <el-button class='class-list-table-link' @click="showWarningDialog(scope.row)">关闭班级</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -23,14 +22,6 @@
       <p class="class-list-empty-info">{{$t('org.getStarted')}} <router-link :to="{name: 'OrgNewClass'}" class="class-list-empty-cursor">{{$t('org.addFirstClass')}}</router-link>
       </p>
     </div>
-    <el-dialog custom-class="class-list-warning" :visible.sync="isCloseWarningVisible" width="524px" center>
-      <div class="class-list-warning-title">确定关闭该班级吗？</div>
-      <div class="class-list-warning-info">（关闭后，该班级的学生将不能继续学习班级下的课程，且班级关闭后不能重新开启，请谨慎操作）</div>
-      <span slot="footer" class="class-list-warning-footer">
-        <el-button @click="isCloseWarningVisible = false">取 消</el-button>
-        <el-button type="primary" @click="closeClass">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -39,59 +30,34 @@ import moment from 'moment'
 
 export default {
   name: 'ClassList',
-  data() {
-    return {
-      isCloseWarningVisible: false,
-      isLoading: false,
-      closingClass: {},
-    }
-  },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgClassesById: 'org/getOrgClassesById',
+      getOrgClassesById: 'org/getOrgClassesById'
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
-    orgClasses() {
+    orgClassesWithOvertime() {
       return this.getOrgClassesById({ id: this.orgId }) || []
+    },
+    orgClasses() {
+      let nowDate = new Date().valueOf()
+      return _.filter(this.orgClassesWithOvertime, classDetail => {
+        let classBegin = new Date(classDetail.begin).valueOf()
+        let classEnd = new Date(classDetail.end).valueOf()
+        return !classEnd || classEnd >= nowDate
+      })
     },
     orgClassesLength() {
       return this.orgClasses.length
-    },
-  },
-  methods: {
-    ...mapActions({
-      endClass: 'org/endClass',
-    }),
-    showWarningDialog(classDetail) {
-      this.isCloseWarningVisible = true
-      this.closingClass = classDetail
-    },
-    async closeClass() {
-      this.isCloseWarningVisible = false
-      this.isLoading = true
-      try {
-        await this.endClass({ classId: this.closingClass.id })
-        this.$message({
-          type: 'success',
-          message: '关闭成功',
-        })
-      } catch (error) {
-        this.$message({
-          type: 'error',
-          message: '关闭失败',
-        })
-      }
-      this.isLoading = false
-    },
+    }
   },
   filters: {
     formatTime(time) {
-      return time ? moment(time).format('YYYY/MM/DD HH:mm') : ''
-    },
-  },
+      return time ? moment(time).format('YYYY/MM/DD') : ''
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -119,20 +85,10 @@ export default {
       color: #2397f3;
       border-radius: 4px;
       border: solid 1px #2397f3;
-      padding: 0;
+      padding: 1px 14px;
       text-decoration: none;
-      width: 64px;
-      display: inline-block;
-      text-align: center;
-      font-size: 12px;
-      height: 20px;
-      line-height: 18px;
-      margin-right: 4px;
-      box-sizing: border-box;
-      &:last-child {
-        margin-right: 0;
-        background-color: #2397f3;
-        color: #fff;
+      &:nth-child(1) {
+        margin-right: 20px;
       }
     }
   }
@@ -155,22 +111,6 @@ export default {
       color: #409efe;
       cursor: pointer;
       text-decoration: none;
-    }
-  }
-  /deep/ &-warning {
-    &-info {
-      color: #2397f3;
-      margin-top: 18px;
-    }
-    .el-button {
-      width: 120px;
-      height: 36px;
-      padding: 0;
-    }
-    .el-dialog__body {
-      text-align: center;
-      font-size: 16px;
-      color: #303133;
     }
   }
 }
