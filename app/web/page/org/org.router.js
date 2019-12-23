@@ -59,13 +59,14 @@ const ClassDetail = () => import('@/components/org/admin/ClassDetail')
 const NewTeacher = () => import('@/components/org/admin/NewTeacher')
 const TeacherList = () => import('@/components/org/admin/TeacherList')
 const StudentList = () => import('@/components/org/admin/StudentList')
+const UseFormalCode = () => import('@/components/org/admin/UseFormalCode')
 const EditMember = () => import('@/components/org/admin/EditMember')
 const InvitationCode = () => import('@/components/org/admin/InvitationCode')
 const NewInvitationCode = () => import('@/components/org/admin/NewInvitationCode')
 const PrintInvitationCode = () => import('@/components/org/admin/PrintInvitationCode')
 const HistoricalData = () => import('@/components/org/admin/HistoricalData')
+const HistoricalMember = () => import('@/components/org/admin/HistoricalMember')
 const OrgHistoryClassDetail = () => import('@/components/org/admin/OrgHistoryClassDetail')
-const OrgHistoryEditClass = () => import('@/components/org/admin/OrgHistoryEditClass')
 const OrgForms = () => import('@/components/org/admin/OrgForms')
 const NewForm = () => import('@/components/org/admin/NewForm')
 const EditForm = () => import('@/components/org/admin/EditForm')
@@ -106,7 +107,7 @@ export default new Router({
     {
       path: '/:orgLoginUrl/message',
       name: 'orgMessage',
-      component: OrgMessage
+      component: OrgMessage,
     },
     {
       path: '/:orgLoginUrl/print',
@@ -389,6 +390,11 @@ export default new Router({
               name: 'OrgEditStudent',
               component: EditMember,
             },
+            {
+              path: 'student/UseFormalCode',
+              name: 'OrgUseFormalCode',
+              component: UseFormalCode,
+            },
           ],
         },
         {
@@ -444,14 +450,14 @@ export default new Router({
           component: HistoricalData,
         },
         {
+          path: 'HistoricalMember',
+          name: 'HistoricalMember',
+          component: HistoricalMember,
+        },
+        {
           path: 'orgHistoryClassDetail',
           name: 'OrgHistoryClassDetail',
           component: OrgHistoryClassDetail,
-        },
-        {
-          path: 'orgHistoryEditClass',
-          name: 'OrgHistoryEditClass',
-          component: OrgHistoryEditClass,
         },
         {
           path: 'forms',

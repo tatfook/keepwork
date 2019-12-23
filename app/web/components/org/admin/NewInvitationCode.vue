@@ -14,9 +14,17 @@
     </div>
     <div class="new-invitation-code-content">
       <el-form ref="form" :model="codeAssociateInfo" :rules="codeAssociateInfoRules" label-width="120px" :hide-required-asterisk="true">
-        <el-form-item :label="$t('org.classLabel')" prop="classId">
-          <el-select v-model="codeAssociateInfo.classId" :placeholder="$t('org.pleaseSelect')" size="medium">
-            <el-option v-for="(classItem, index) in orgClassesFilter" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
+        <el-form-item prop="classIds">
+          <template slot="label">
+            <div><span class="new-invitation-code-label-info">(可选)</span>{{$t('org.classLabel')}}</div>
+            <el-popover placement="top-start" width="200" trigger="hover">
+              <p>选择班级后，使用这些邀请码激活的用户，可学习对应班级的课程。</p>
+              <p>若不选择班级，则不能学习班级课程。</p>
+              <i slot="reference" class="iconfont icon-help"></i>
+            </el-popover>
+          </template>
+          <el-select multiple collapse-tags v-model="codeAssociateInfo.classIds" :placeholder="$t('org.pleaseSelect')" size="medium">
+            <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="quantity">
@@ -100,10 +108,6 @@ export default {
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
     },
-    orgClassesFilter() {
-      const today = +new Date()
-      return _.filter(this.orgClasses, item => +new Date(item.end) > today)
-    }
   },
   methods: {
     ...mapActions({
