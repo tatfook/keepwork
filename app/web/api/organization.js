@@ -90,6 +90,7 @@ const lessonOrganizationClassMembers = {
   toBeFormal: async params => post('lessonOrganizationClassMembers/formal', params),
   recharge: async params => post('lessonOrganizationClassMembers/recharge', params),
   historyStudents: async params => get('lessonOrganizationClassMembers/historyStudents', { params }),
+  studentRecharge: async params => post('lessonOrganizationActivateCodes/stuRecharge', params),
 }
 
 const evaluationReports = {
@@ -136,11 +137,6 @@ export const messages = {
   getMessageIndex: async params => get('userMessages/indexOfMessage', { params }),
 }
 
-export const lessonOrganizationActivateCodes = {
-  getUsedStatus: async () => get('lessonOrganizationActivateCodes/usedStatus'),
-  setInvalid: async ids => put('lessonOrganizationActivateCodes/invalid', { ids }),
-}
-
 export default {
   organizations,
   lessonOrganizations,
@@ -150,5 +146,4 @@ export default {
   users,
   evaluationReports,
   messages,
-  lessonOrganizationActivateCodes,
 }

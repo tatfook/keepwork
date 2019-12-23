@@ -106,12 +106,11 @@ const gitLabAPIGenerator = ({ url, token }) => {
             )
             return res.data
           },
-          async createMultiple(_projectName, filesPayload) {
-            const projectName = encodeURIComponent(_projectName)
-            let res = await instance.post(`repos/${projectName}/files`, {
-              files: filesPayload
-            })
-            return res.data
+          async createMultiple(projectName, files) {
+            for (let item of files) {
+              await this.create(projectName, item.path, item.content)
+            }
+
           },
           async edit(_projectName, filePath, content, source_version) {
             const [projectName, path] = [_projectName, filePath].map(

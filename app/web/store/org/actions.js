@@ -125,7 +125,10 @@ const actions = {
     ])
     const { orgPackagesDetail } = getters
     const lessons = _.sortBy(_.get(orgPackagesDetail, [packageId, 'lessons'], []), item => item.lessonNo)
-    const lessonNo = _.findIndex(lessons, item => item.lessonId === _.toNumber(lessonId))
+    const lessonNo = _.findIndex(
+      lessons,
+      item => item.lessonId === _.toNumber(lessonId),
+    )
     detail.packageIndex = lessonNo + 1
     const modList = Parser.buildBlockList(res.content)
     const courseware = Parser.buildBlockList(res.courseware)
