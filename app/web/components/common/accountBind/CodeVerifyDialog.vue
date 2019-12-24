@@ -194,7 +194,7 @@ export default {
                 message = '验证码发送过于频繁'
                 break
               case 20:
-                message = '短信验证码超过当日限制(5次)'
+                message = '您今日的短信次数已达上限，请明日再试'
                 break
               default:
                 break
