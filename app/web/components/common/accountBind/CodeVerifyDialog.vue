@@ -178,20 +178,30 @@ export default {
           break
         case 'cellphone':
           this.isSendingCode = true
-          await this.userVerifyCellphoneOne({
-            bind: this.codeDialogDatas.bind,
-            cellphone: this.codeDialogDatas.value,
-          })
-            .then(() => {
-              this.isSendingCode = false
-              this.isCodeSent = true
-              this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
-              this.startTimer()
+          try {
+            await this.userVerifyCellphoneOne({
+              bind: this.codeDialogDatas.bind,
+              cellphone: this.codeDialogDatas.value,
             })
-            .catch(() => {
-              this.codeError = this.$t('user.smsCodeSentFailed')
-              this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-            })
+            this.isCodeSent = true
+            this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
+            this.startTimer()
+          } catch (error) {
+            let errorType = _.get(error, 'response.data.code')
+            let message = this.$t('user.smsCodeSentFailed')
+            switch (errorType) {
+              case 19:
+                message = '验证码发送过于频繁'
+                break
+              case 20:
+                message = '短信验证码超过当日限制(5次)'
+                break
+              default:
+                break
+            }
+            this.codeError = message
+            this.showMessage('error', message)
+          }
           this.isSendingCode = false
           break
         default:
