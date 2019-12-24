@@ -7,7 +7,7 @@
     <div class="count-row">
       学生数：{{tableData.length}}
       <div class="operates">
-        <el-button size="small">激活用户</el-button>
+        <el-button size="small" @click="toReactivate">激活用户</el-button>
       </div>
     </div>
     <div class="container">
@@ -55,12 +55,44 @@ export default {
   methods: {
     ...mapActions({
       orgGetHistoryStudents: 'org/getHistoryStudents',
+      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
+      setReactivateParams: 'org/setReactivateParams',
     }),
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
     async getHistoryStudents(params) {
       await this.orgGetHistoryStudents(params)
+    },
+    async testIsValid() {
+      if (await this.checkCurrentOrgExpire({ toExpire: false })) return false
+      const count = this.multipleSelection.length
+      if (count === 0) {
+        this.$message({
+          type: 'error',
+          message: '请选择学生',
+        })
+        return false
+      }
+      return true
+    },
+    async toReactivate() {
+      const isValid = await this.testIsValid()
+      if (!isValid) return
+      this.setReactivateParams({
+        students: _.map(this.multipleSelection, item => {
+          return {
+            ...item,
+            id: item.memberId,
+            users: {
+              username: item.username,
+            },
+          }
+        }),
+      })
+      this.$router.push({
+        name: 'ReActivate',
+      })
     },
   },
   components: {
