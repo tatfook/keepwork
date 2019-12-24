@@ -172,7 +172,7 @@ export default {
     },
     selectAll() {
       let selected = this.isAllSelected ? false : true
-      _.forEach(this.fileListFilteredSearched, row => {
+      _.forEach(this.tableDataWithUploading, row => {
         this.$refs.skyDriveTable.toggleRowSelection(row, selected)
       })
     },
