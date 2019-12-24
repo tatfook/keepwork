@@ -75,7 +75,7 @@ import FileListEmpty from './FileListEmpty'
 import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {
-  lazyComponent: true
+  lazyComponent: true,
 })
 import InfiniteLoading from 'vue-infinite-loading'
 export default {
@@ -85,7 +85,7 @@ export default {
     fileListFilteredSearched: Array,
     isInsertable: Boolean,
     uploadText: String,
-    mediaFilterType: String
+    mediaFilterType: String,
   },
   data() {
     return {
@@ -97,36 +97,29 @@ export default {
       perPage: 15,
       loading: false,
       searchWord: '',
-      multipleSelectionResults: []
+      multipleSelectionResults: [],
     }
   },
   computed: {
     ...mapGetters({
       userSiteFileBySitePathAndFileId: 'user/siteFileBySitePathAndFileId',
-      activePageInfo: 'activePageInfo'
+      activePageInfo: 'activePageInfo',
     }),
     approvedMultipleSelectionResults() {
-      return (
-        this.multipleSelectionResults.filter(
-          ({ checked }) => Number(checked) === 1
-        ) || []
-      )
+      return this.multipleSelectionResults.filter(({ checked }) => Number(checked) === 1) || []
     },
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
-      return (
-        selectedCount > 0 &&
-        selectedCount == this.fileListFilteredSearched.length
-      )
+      return selectedCount > 0 && selectedCount == this.fileListFilteredSearched.length
     },
     tableDataWithUploading() {
       return _.concat(this.uploadingFiles, this.tableData)
-    }
+    },
   },
   methods: {
     ...mapActions({
       skydriveRemoveFromUploadQue: 'skydrive/removeFromUploadQue',
-      userUseFileInSite: 'user/useFileInSite'
+      userUseFileInSite: 'user/useFileInSite',
     }),
     handleSortChange({ prop, order }) {
       this.initData(prop, order)
@@ -155,10 +148,7 @@ export default {
       this.load()
     },
     load($state) {
-      this.tableData = _.concat(
-        this.tableData,
-        this.fileListChunk[this.nowPage]
-      ).filter(fileDetail => {
+      this.tableData = _.concat(this.tableData, this.fileListChunk[this.nowPage]).filter(fileDetail => {
         return Boolean(fileDetail)
       })
       this.nowPage++
@@ -172,7 +162,7 @@ export default {
     },
     selectAll() {
       let selected = this.isAllSelected ? false : true
-      _.forEach(this.fileListFilteredSearched, row => {
+      _.forEach(this.tableDataWithUploading, row => {
         this.$refs.skyDriveTable.toggleRowSelection(row, selected)
       })
     },
@@ -188,7 +178,7 @@ export default {
     },
     getRowKey(row) {
       return row.state ? row.filename + row.state : row.filename + uuidV1()
-    }
+    },
   },
   filters: {
     formatDate(date) {
@@ -198,7 +188,7 @@ export default {
       (bite / (1024 * 1024 * 1024))
         .toFixed(2)
         .toString()
-        .replace(/\.*0*$/, '')
+        .replace(/\.*0*$/, ''),
   },
   watch: {
     isAllSelected(val) {
@@ -206,7 +196,7 @@ export default {
     },
     fileListFilteredSearched() {
       this.initData()
-    }
+    },
   },
   components: {
     InfiniteLoading,
@@ -214,8 +204,8 @@ export default {
     FileDownloader,
     FileDeleter,
     FileRenamer,
-    FileUrlGetter
-  }
+    FileUrlGetter,
+  },
 }
 </script>
 <style lang="scss">
