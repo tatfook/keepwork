@@ -24,7 +24,6 @@ export default {
     },
     async download(file) {
       let downloadUrl = file.downloadUrl
-      console.log(file.filename, downloadUrl)
       if (!downloadUrl) return
       let { filename } = file
       let a = document.createElement('a')
