@@ -51,7 +51,7 @@
           </el-table-column>
           <el-table-column prop="parentPhoneNum" label="家长手机号" width="110">
           </el-table-column>
-          <el-table-column prop="endTime" label="结束时间" width="110">
+          <el-table-column prop="endTime" label="到期时间" width="110">
           </el-table-column>
           <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
             <template slot-scope="scope">
