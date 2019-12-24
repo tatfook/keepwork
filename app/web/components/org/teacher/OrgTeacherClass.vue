@@ -271,7 +271,7 @@ export default {
     orgClassStudentsTable() {
       return _.map(this.selectedClassStudents, item => ({
         ...item,
-        endTime: moment(item.createdAt).format('YYYY-MM-DD'),
+        endTime: moment(item.endTime).format('YYYY-MM-DD'),
         username: item.users.username,
         type: this.typeDict[item.type],
       }))
