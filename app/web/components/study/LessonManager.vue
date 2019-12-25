@@ -122,7 +122,7 @@
             </tr>
           </template>
           <tr class="lesson-manager-table-empty" v-show="filteredLessonList.length == 0">
-            <td colspan="5">{{$t('lesson.noData')}}</td>
+            <td colspan="9">{{$t('lesson.noData')}}</td>
           </tr>
         </tbody>
       </table>
