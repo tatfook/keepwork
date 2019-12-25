@@ -16,7 +16,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <user-portrait :user="userinfo" class="org-student-profile" size="large"></user-portrait>
-            <div class="org-student-realname">{{realname}}</div>
+            <div class="org-student-username">{{username}}</div>
             <div class="org-student-edit-btn" v-if="isShowEditUserInfo" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
         </div>
@@ -122,14 +122,14 @@ export default {
       orgIsAdmin: 'org/isAdmin',
       orgIsTeacher: 'org/isTeacher',
       orgClasses: 'org/student/orgClasses',
-      userinfo: 'org/student/userinfo',
+      studentUserinfo: 'org/student/userinfo',
       OrgIsStudent: 'org/isStudent',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
       myClassmate: 'org/student/myClassmate',
       myTeacher: 'org/student/myTeacher',
     }),
     studentEndTime() {
-      return moment(this.userinfo.endTime).format('YYYY/MM/DD')
+      return moment(this.studentUserinfo.endTime).format('YYYY/MM/DD')
     },
     isClassDetailPage() {
       return (
@@ -170,7 +170,7 @@ export default {
       return _.get(this.userinfo, 'username', '')
     },
     realname() {
-      return _.get(this.userinfo, 'realname', '')
+      return _.get(this.studentUserinfo, 'realname', '')
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
@@ -469,7 +469,7 @@ $borderColor: #e8e8e8;
     margin-bottom: 16px;
     border-radius: 50%;
   }
-  &-realname {
+  &-username {
     font-size: 20px;
     color: #333;
   }
