@@ -65,7 +65,7 @@ export default {
       addSubscription: 'skydrive/addSubscription',
       userUploadFileToSkyDrive: 'user/uploadFileToSkyDrive'
     }),
-    handleUploadFile(file) {
+    async handleUploadFile(file) {
       let supportedExt = _.split(this.acceptTypes, ',')
       let fileExt = '.' + getFileExt(file.raw)
       let uploadType = this.uploadType
@@ -75,6 +75,7 @@ export default {
         uploadType != 'all' &&
         _.findIndex(supportedExt, ext => ext == fileExt) == -1
       ) {
+        await waitForMilliSeconds(Math.random() * 100)
         this.$message.error(
           uploadType == 'image'
             ? '请选择jpg、jpeg、gif、png格式图片上传'
