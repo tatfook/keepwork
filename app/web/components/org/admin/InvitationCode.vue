@@ -311,14 +311,20 @@ export default {
     },
     async setInvalid() {
       if (this.multipleSelection.length === 0) {
-        this.$message('请选择邀请码')
+        this.$message({ type: 'error', message: '请选择邀请码' })
+        return
+      }
+      if (_.findIndex(this.multipleSelection, item => item.state == 1) != -1) {
+        this.$message({ type: 'error', message: '选中的邀请码包含已使用邀请码，不能进行该操作，请确认' })
         return
       }
       this.loading = true
       try {
+        await this.$confirm('确定将所选邀请码设为无效吗？')
         const ids = _.map(this.multipleSelection, codeDetail => codeDetail.id)
         await this.orgSetInvalid({ ids })
         this.$message('设置成功')
+        await this.getOrgActivateCodes(this.filterData)
       } catch (error) {
         console.log(error)
       }
