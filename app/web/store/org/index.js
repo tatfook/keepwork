@@ -30,6 +30,10 @@ const state = {
   classEvaluationList: {},
   orgClassesReport: {},
   sendedMessages: [],
+  codeUsedStatus: {},
+  useFormalCodeParams: {},
+  reActivatedParams: {},
+  historyStudents: {},
 }
 export default {
   namespaced: true,

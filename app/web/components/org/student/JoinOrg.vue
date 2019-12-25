@@ -67,7 +67,7 @@ export default {
         let isPhoneDataValid = parentPhoneBinderRef.isPhoneDataValid
         if (valid && isPhoneDataValid) {
           let { phone, verifCode } = parentPhoneBinderRef.parentPhone
-          const { classId = '' } = await this.joinOrg(
+          const classIDs = await this.joinOrg(
             _.omitBy(
               {
                 ...this.form,
@@ -78,12 +78,17 @@ export default {
               _.isNull,
             ),
           )
-          if (classId) {
+          if (classIDs.length === 1) {
             const url = this.$router.resolve({
               name: 'OrgStudentClassDetail',
               params: {
-                classId,
+                classId: classIDs[0],
               },
+            }).href
+            window.location.href = url
+          } else {
+            const url = this.$router.resolve({
+              name: 'OrgStudentClassSelect',
             }).href
             window.location.href = url
           }

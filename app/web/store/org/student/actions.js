@@ -5,7 +5,7 @@ const {
   lessonOrganizations,
   lessonOrganizationClassMembers,
   lessonOrganizationClasses,
-  evaluationReports
+  evaluationReports,
 } = keepwork
 import _ from 'lodash'
 import Parser from '@/lib/mod/parser'
@@ -141,14 +141,32 @@ const actions = {
       const res = await lessonOrganizations.joinOrganization(rest)
       await Promise.all([
         dispatch('org/refreshToken', {}, { root: true }),
-        dispatch('getStudentInfo')
+        dispatch('getStudentInfo'),
+        dispatch('getOrgClasses')
       ])
       Message({ type: 'success', message: '加入成功！' })
       return res
     } catch (err) {
-      const message = _.get(err, 'response.data.message', '失败')
-      Message({ type: 'error', message })
+      let data = _.get(err, 'response.data', { message: '失败' })
+      if (_.isString(data)) {
+        data = JSON.parse(data)
+      }
+      Message({ type: 'error', message: data.message })
       return false
+    }
+  },
+  async recharge({ dispatch }, payload) {
+    payload.key = payload.key.replace(/ /g, '')
+    try {
+
+      const classIDs = await lessonOrganizationClassMembers.studentRecharge(payload)
+      await Promise.all([
+        dispatch('getOrgClasses'),
+        dispatch('getStudentInfo'),
+      ])
+      return classIDs
+    } catch (error) {
+      console.error(error)
     }
   },
   async getUserInfo({ commit }) {
