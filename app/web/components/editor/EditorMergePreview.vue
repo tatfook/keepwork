@@ -109,12 +109,12 @@ export default {
       return this.activePageLatestVersion.content
     },
     updateUsername() {
-      return _.get(this.activePageLatestVersion, 'commit.author_name')
+      return _.get(this.activePageLatestVersion, 'author_name')
     },
     updateAt() {
       const updateAt = _.get(
         this.activePageLatestVersion,
-        'commit.createdAt',
+        'timestamp',
         ''
       )
       return moment(updateAt).format('YYYY-MM-DD H:mm')

@@ -161,7 +161,7 @@ const actions = {
   },
   async savePageByPath(
     {
-      getters: { getOpenedFileByPath },
+      getters: { getOpenedFileByPath, 'user/username': username },
       dispatch
     },
     path
@@ -169,20 +169,23 @@ const actions = {
     if (!path) return
     let { content, saved } = getOpenedFileByPath(path)
     if (!saved) {
-      const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
+      await dispatch('gitlab/saveFile', { content, path }, { root: true })
+      const timestamp = Date.now()
+      const commit = { username, timestamp, content, author_name: username }
       dispatch('updateOpenedFile', { saved: true, path, ...commit })
       dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
-      dispatch('broadcastTheRoom', { path, type: 'update', content, commit })
+      dispatch('broadcastTheRoom', { path, type: 'update', ...commit })
     }
   },
-  async saveMergedPage({ dispatch, getters: { activePageUrl } }, { content, path }) {
+  async saveMergedPage({ dispatch, getters: { activePageUrl, 'user/username': username } }, { content, path }) {
     path = path || activePageUrl
     path = getFileFullPathByPath(path)
-    const { commit } = await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    await dispatch('gitlab/saveFile', { content, path }, { root: true })
+    const commit = { username, timestamp: Date.now(), content, author_name: username }
     dispatch('updateMarkDown', { code: content })
     dispatch('updateOpenedFile', { saved: true, path, ...commit })
     dispatch('updateOpenedWebsites', { saved: true, path, ...commit })
-    dispatch('broadcastTheRoom', { path, type: 'merge', content, commit })
+    dispatch('broadcastTheRoom', { path, type: 'merge', ...commit })
   },
 
   // siteSetting
