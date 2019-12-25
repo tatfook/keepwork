@@ -210,7 +210,7 @@ export default {
       toBeCloseFileName: '',
       toBeCloseFilePath: '',
       gConst,
-      nowOrigin: document.location.origin
+      nowOrigin: document.location.origin,
     }
   },
   mounted() {
@@ -249,7 +249,7 @@ export default {
       getSiteLayoutConfigBySitePath: 'user/siteLayoutConfigBySitePath',
       showAngle: 'showAngle',
       updateRecentUrlList: 'updateRecentUrlList',
-      isShowMergePreview: 'isShowMergePreview'
+      isShowMergePreview: 'isShowMergePreview',
     }),
     isWelcomeShow() {
       return !this.activePageInfo.sitename
@@ -285,22 +285,13 @@ export default {
       return _.map(this.unSavedOpenedFiles, ({ path }) => `${path}.md`.slice(1))
     },
     showingType() {
-      if (
-        this.showingCol.isCodeShow === false &&
-        this.showingCol.isPreviewShow === true
-      ) {
+      if (this.showingCol.isCodeShow === false && this.showingCol.isPreviewShow === true) {
         return this.$t('editor.preview')
       }
-      if (
-        this.showingCol.isCodeShow === true &&
-        this.showingCol.isPreviewShow === false
-      ) {
+      if (this.showingCol.isCodeShow === true && this.showingCol.isPreviewShow === false) {
         return this.$t('editor.code')
       }
-      if (
-        this.showingCol.isCodeShow === true &&
-        this.showingCol.isPreviewShow === true
-      ) {
+      if (this.showingCol.isCodeShow === true && this.showingCol.isPreviewShow === true) {
         return this.$t('editor.splitScreen')
       }
     },
@@ -312,7 +303,7 @@ export default {
     isActivePageSaved() {
       let { saved } = this.activeAreaFile || {}
       return saved === false ? false : true
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -332,7 +323,7 @@ export default {
       toggleFileHistoryVisibility: 'toggleFileHistoryVisibility',
       toggleAngles: 'toggleAngles',
       addRecentOpenedSiteUrl: 'addRecentOpenedSiteUrl',
-      toggleMergePreview: 'toggleMergePreview'
+      toggleMergePreview: 'toggleMergePreview',
     }),
     onOpenMergePreview() {
       this.toggleMergePreview(true)
@@ -348,7 +339,7 @@ export default {
       }
 
       this.resetShowingCol({
-        isZenMode: true
+        isZenMode: true,
       })
 
       this.$fullscreen.toggle(dom, {
@@ -357,34 +348,34 @@ export default {
         callback: state => {
           if (!state) {
             this.resetShowingCol({
-              isZenMode: false
+              isZenMode: false,
             })
             const vscroolbar = dom.querySelector('.CodeMirror-vscrollbar')
             // Is very strange. when I set display none, scroolbar is normally
             vscroolbar.style.display = 'none'
           }
-        }
+        },
       })
     },
     toggleBoth() {
       this.resetShowingCol({
         isPreviewShow: true,
         isCodeShow: true,
-        isManagerShow: true
+        isManagerShow: true,
       })
     },
     toggleCodeWin() {
       this.resetShowingCol({
         isPreviewShow: false,
         isCodeShow: true,
-        isManagerShow: true
+        isManagerShow: true,
       })
     },
     togglePreviewWin() {
       this.resetShowingCol({
         isPreviewShow: true,
         isCodeShow: false,
-        isManagerShow: true
+        isManagerShow: true,
       })
 
       // we should improve performance
@@ -416,7 +407,7 @@ export default {
             this.$message({
               showClose: true,
               message: self.$t('editor.saveSuccess'),
-              type: 'success'
+              type: 'success',
             })
           })
           .catch(e => {
@@ -424,7 +415,7 @@ export default {
             this.$message({
               showClose: true,
               message: self.$t('editor.saveFail'),
-              type: 'error'
+              type: 'error',
             })
           })
         this.savePending = false
@@ -446,8 +437,8 @@ export default {
       this.setActiveManagePaneComponent({
         name: 'PageSetting',
         props: {
-          pagePath: this.currentPagePath
-        }
+          pagePath: this.currentPagePath,
+        },
       })
     },
     removeCurrentPage(path) {
@@ -460,11 +451,11 @@ export default {
         message: h('p', null, [
           h('span', null, `${this.$t('editor.delConfirm')}`),
           h('span', { style: 'color: #FF4342' }, ` "${siteName}/${pageName}" `),
-          h('span', null, `${this.$t('editor.page')}?`)
+          h('span', null, `${this.$t('editor.page')}?`),
         ]),
         showCancelButton: true,
         confirmButtonText: this.$t('el.messagebox.confirm'),
-        cancelButtonText: this.$t('el.messagebox.cancel')
+        cancelButtonText: this.$t('el.messagebox.cancel'),
       })
         .then(async () => {
           this.deletePending = true
@@ -490,9 +481,7 @@ export default {
     },
     removeRecentOpenFile(path) {
       let delPath = `/${path.replace(/\.md$/, '')}`
-      let updateRecentUrlList = this.updateRecentUrlList.filter(
-        item => item.path !== delPath
-      )
+      let updateRecentUrlList = this.updateRecentUrlList.filter(item => item.path !== delPath)
       this.addRecentOpenedSiteUrl({ updateRecentUrlList })
     },
     async saveAllOpenedFiles() {
@@ -510,7 +499,7 @@ export default {
       isSuccess &&
         this.$message({
           message: this.$t('editor.saveSuccess'),
-          type: 'success'
+          type: 'success',
         })
       this.savePending = false
     },
@@ -577,14 +566,10 @@ export default {
         })
     },
     handleClose() {
-      return this.closeOneFile
-        ? this.handleCloseOpenedFile()
-        : this.handleCloseOpenedFileAndNext()
+      return this.closeOneFile ? this.handleCloseOpenedFile() : this.handleCloseOpenedFileAndNext()
     },
     saveHandleClose() {
-      return this.closeOneFile
-        ? this.saveAndCloseOpenedFile()
-        : this.saveAndCloseOpenedFileAndNext()
+      return this.closeOneFile ? this.saveAndCloseOpenedFile() : this.saveAndCloseOpenedFileAndNext()
     },
     closeAndResetFile(path) {
       let _path = Object.keys(this.openedFiles).filter(name => name !== path)
@@ -613,7 +598,7 @@ export default {
           that.$message({
             showClose: true,
             message: that.$t('editor.copySuccess'),
-            type: 'success'
+            type: 'success',
           })
         },
         function(e) {
@@ -621,9 +606,9 @@ export default {
           that.$message({
             showClose: true,
             message: that.$t('editor.copyFail'),
-            type: 'error'
+            type: 'error',
           })
-        }
+        },
       )
     },
     handleCloseDialog() {
@@ -644,9 +629,7 @@ export default {
       if (this.$route.path.slice(1) !== path.replace(/\.md$/, '')) return
       _path.length === 0
         ? this.$router.push('/')
-        : this.$nextTick(() =>
-            this.$router.push({ path: `/${_path[0].replace(/\.md$/, '')}` })
-          )
+        : this.$nextTick(() => this.$router.push({ path: `/${_path[0].replace(/\.md$/, '')}` }))
     },
     changeView(type) {
       this.setActiveManagePaneComponent(type)
@@ -659,20 +642,17 @@ export default {
       window.location.href = this.nowOrigin
     },
     resetPage(currentPath = null) {
-      if (
-        currentPath &&
-        currentPath.replace(/\.md$/, '') === this.$route.path.substring(1)
-      ) {
+      if (currentPath && currentPath.replace(/\.md$/, '') === this.$route.path.substring(1)) {
         return this.$router.push('/')
       }
-    }
+    },
   },
   components: {
     NewWebsiteDialog,
     WebsiteSettingDialog,
     UserPortrait,
-    EditorMergePreview
-  }
+    EditorMergePreview,
+  },
 }
 </script>
 
