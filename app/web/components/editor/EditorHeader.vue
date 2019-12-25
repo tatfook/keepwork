@@ -402,22 +402,32 @@ export default {
       }
       if (!this.savePending) {
         this.savePending = true
-        await this.saveActivePage()
-          .then(() => {
-            this.$message({
-              showClose: true,
-              message: self.$t('editor.saveSuccess'),
-              type: 'success',
-            })
+        try {
+          await this.saveActivePage()
+          this.$message({
+            showClose: true,
+            message: self.$t('editor.saveSuccess'),
+            type: 'success',
           })
-          .catch(e => {
-            console.log(e)
-            this.$message({
-              showClose: true,
-              message: self.$t('editor.saveFail'),
-              type: 'error',
+        } catch (error) {
+          let httpCode = _.get(error, 'response.status')
+          if (httpCode == 404) {
+            this.$confirm('页面文件已删除，是否关闭？', '', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning',
             })
+              .then(() => {
+                window.location.href = '/ed'
+              })
+              .catch(() => {})
+          }
+          this.$message({
+            showClose: true,
+            message: self.$t('editor.saveFail'),
+            type: 'error',
           })
+        }
         this.savePending = false
       }
     },
