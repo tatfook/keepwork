@@ -339,6 +339,8 @@ export default {
         const tHeader = [
           this.$t('org.serialNum'),
           this.$t('org.InvitationCode'),
+          '类型',
+          '使用期限',
           this.$t('org.stateLabel'),
           this.$t('org.createdTime'),
           this.$t('org.activateTime'),
@@ -352,6 +354,8 @@ export default {
           let realname = data.realname || data.name
           tempArr.push(index + 1)
           tempArr.push(data.key)
+          tempArr.push(this.typeFilter(data.type))
+          tempArr.push(this.durationFilter(data.type))
           tempArr.push(this.stateFilter(data.state))
           tempArr.push(this.formatTime(data.createdAt))
           tempArr.push(this.formatTime(data.activateTime))
