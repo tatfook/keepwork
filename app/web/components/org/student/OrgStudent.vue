@@ -86,7 +86,7 @@
     <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
-    <edit-student-dialog :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
+    <edit-student-dialog v-if="isEditStudentVisible" :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
   </div>
 </template>
 <script>
