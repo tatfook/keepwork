@@ -76,8 +76,8 @@
       <el-table ref="codeTable" border :data="codeTableData" @selection-change="handleSelectionChange" tooltip-effect="dark" style="width: 100%">
         <el-table-column type="selection" width="39"></el-table-column>
         <el-table-column :label="$t('org.serialNum')" width="50" type="index"></el-table-column>
-        <el-table-column :label="$t('org.InvitationCode')" width="98" prop="key"></el-table-column>
-        <el-table-column label="类型" width="68"><template slot-scope="scope">{{typeFilter(scope.row.type)}}</template></el-table-column>
+        <el-table-column :label="$t('org.InvitationCode')" width="90" prop="key"></el-table-column>
+        <el-table-column label="类型" width="58"><template slot-scope="scope">{{typeFilter(scope.row.type)}}</template></el-table-column>
         <el-table-column label="使用期限" width="80"><template slot-scope="scope">{{durationFilter(scope.row.type)}}</template></el-table-column>
         <el-table-column :label="$t('org.stateLabel')" width="68"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
         <el-table-column :label="$t('org.createdTime')" width="98"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
@@ -484,6 +484,7 @@ export default {
             border: 0px solid transparent;
             border-bottom: 1px solid #aaa;
             border-radius: 0;
+            padding-left: 0;
           }
           .el-input__suffix {
             cursor: pointer;
