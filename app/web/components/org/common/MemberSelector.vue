@@ -62,7 +62,7 @@ export default {
       return this.classMemberData.length > 0
         ? [
             {
-              label: '全校',
+              label: this.roleId == 2 ? '全选' : '全校',
               nodeKey: 'all',
               children: this.classMemberData,
             },
