@@ -110,7 +110,7 @@ export default {
     },
     isAllSelected() {
       let selectedCount = this.approvedMultipleSelectionResults.length
-      return selectedCount > 0 && selectedCount == this.fileListFilteredSearched.length
+      return selectedCount > 0 && selectedCount == this.tableDataWithUploading.length
     },
     tableDataWithUploading() {
       return _.concat(this.uploadingFiles, this.tableData)
