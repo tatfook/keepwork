@@ -93,16 +93,14 @@ export default {
   name: 'ClassEvaluation',
   async mounted() {
     let selectDay = _.get(this.$route, 'query.days', 30)
-    this.selectDayOption =
-      _.find(this.dayOptions, dayOption => dayOption.value == selectDay) ||
-      this.dayOptions[0]
+    this.selectDayOption = _.find(this.dayOptions, dayOption => dayOption.value == selectDay) || this.dayOptions[0]
     try {
       await Promise.all([
         this.getTableData(),
         this.orgGetClassEvaluation({
           classId: this.classId,
-          days: this.selectDayOption.value
-        })
+          days: this.selectDayOption.value,
+        }),
       ])
     } catch (error) {}
   },
@@ -113,16 +111,16 @@ export default {
       typeOptions: [
         {
           value: null,
-          text: '全部'
+          text: '全部',
         },
         {
           value: 1,
-          text: '小评'
+          text: '小评',
         },
         {
           value: 2,
-          text: '阶段总结'
-        }
+          text: '阶段总结',
+        },
       ],
       searchType: null,
       searchName: '',
@@ -130,24 +128,24 @@ export default {
       dayOptions: [
         {
           value: 30,
-          text: '近30天'
+          text: '近30天',
         },
         {
           value: 7,
-          text: '近7天'
+          text: '近7天',
         },
         {
           value: null,
-          text: '全部'
-        }
+          text: '全部',
+        },
       ],
-      selectDayOption: {}
+      selectDayOption: {},
     }
   },
   computed: {
     ...mapGetters({
       getClassEvaluation: 'org/getClassEvaluation',
-      getClassEvaluationList: 'org/getClassEvaluationList'
+      getClassEvaluationList: 'org/getClassEvaluationList',
     }),
     classId() {
       return _.get(this.$route, 'params.classId')
@@ -155,7 +153,7 @@ export default {
     classEvaluationList() {
       return _.sortBy(
         this.getClassEvaluationList({ classId: this.classId }) || [],
-        o => -new Date(o.createdAt).valueOf()
+        o => -new Date(o.createdAt).valueOf(),
       )
     },
     formatedTableData() {
@@ -164,7 +162,7 @@ export default {
         return {
           ...item,
           typeText: type == 1 ? '小评' : '阶段总结',
-          createdAtFormated: moment(createdAt).format('YYYY/MM/DD')
+          createdAtFormated: moment(createdAt).format('YYYY/MM/DD'),
         }
       })
     },
@@ -175,11 +173,7 @@ export default {
       return _.get(this.$route, 'query.name')
     },
     className() {
-      return (
-        _.get(this.classEvaluations[0], 'className') ||
-        this.queryClassName ||
-        this.classId
-      )
+      return _.get(this.classEvaluations[0], 'className') || this.queryClassName || this.classId
     },
     totalData() {
       return this.formatedAnnulusData(this.classEvaluations)
@@ -189,7 +183,7 @@ export default {
         let { commentCount, type } = evaluation
         return {
           ...evaluation,
-          commentCount: type == 1 ? commentCount : 0
+          commentCount: type == 1 ? commentCount : 0,
         }
       })
     },
@@ -201,7 +195,7 @@ export default {
         let { commentCount, type } = evaluation
         return {
           ...evaluation,
-          commentCount: type == 2 ? commentCount : 0
+          commentCount: type == 2 ? commentCount : 0,
         }
       })
     },
@@ -210,12 +204,12 @@ export default {
     },
     sendData() {
       return this.formatedAnnulusData(this.classEvaluations, 'sendCount')
-    }
+    },
   },
   methods: {
     ...mapActions({
       orgGetClassEvaluation: 'org/getClassEvaluation',
-      orgGetClassEvaluationList: 'org/getClassEvaluationList'
+      orgGetClassEvaluationList: 'org/getClassEvaluationList',
     }),
     getKeyCount(originData, dataKey) {
       dataKey = dataKey || 'commentCount'
@@ -224,7 +218,7 @@ export default {
         (oldResult, value) => {
           return oldResult + value[dataKey]
         },
-        0
+        0,
       )
     },
     formatedAnnulusData(originData, dataKey) {
@@ -234,7 +228,7 @@ export default {
         (oldResult, value) => {
           return oldResult + value[dataKey]
         },
-        0
+        0,
       )
       let result = []
       _.forEach(_.groupBy(originData, 'teacherName'), (userValues, key) => {
@@ -250,14 +244,13 @@ export default {
           (oldResult, value) => {
             return oldResult + value[dataKey]
           },
-          0
+          0,
         )
-        let percentage =
-          allCount != 0 ? _.round((totalCount / allCount) * 100, 0) : 0
+        let percentage = allCount != 0 ? _.round((totalCount / allCount) * 100, 0) : 0
         result.push({
           realname: key,
           realnameLabel: `${formatedKey} ${percentage}%`,
-          count: totalCount > 0 ? totalCount : '-'
+          count: totalCount > 0 ? totalCount : '-',
         })
       })
       return result
@@ -270,8 +263,8 @@ export default {
           this.getTableData(),
           this.orgGetClassEvaluation({
             classId: this.classId,
-            days: dayOption.value
-          })
+            days: dayOption.value,
+          }),
         ])
         await this.orgGetOrgClassReport({ days: dayOption.value })
       } catch (error) {
@@ -287,19 +280,18 @@ export default {
           name: this.searchName,
           type: this.searchType,
           days: this.selectDayOption.value,
-          roleId: 64
+          roleId: 64,
         })
         if (!this.isClassHasReport) {
-          this.isClassHasReport =
-            this.classEvaluationList.length > 0 ? true : false
+          this.isClassHasReport = this.classEvaluationList.length > 0 ? true : false
         }
       } catch (error) {}
       this.isGettingTableData = false
-    }
+    },
   },
   components: {
-    AnnulusChart
-  }
+    AnnulusChart,
+  },
 }
 </script>
 <style lang="scss" scoped>
