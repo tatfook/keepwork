@@ -279,38 +279,6 @@ const actions = {
   toggleLessonHint({ commit }) {
     commit(TOGGLE_LESSON_HINT)
   },
-  async beginTheClass(
-    {
-      dispatch,
-      commit,
-      rootGetters: { 'org/currentOrgId': organizationId }
-    },
-    payload
-  ) {
-    const classroom = await lesson.classrooms.begin({
-      payload: { ...payload, organizationId }
-    })
-    commit(BEGIN_THE_CLASS_SUCCESS, classroom)
-    dispatch('broadcastBeginClass')
-  },
-  async dismissTheClass(
-    {
-      dispatch,
-      commit,
-      getters: { classroom, classId }
-    },
-    payload
-  ) {
-    let flag = await lesson.classrooms.dismiss({
-      classId
-    })
-    if (flag) {
-      let _classroom = _.clone(classroom)
-      _classroom.state = 2
-      commit(DISMISS_THE_CLASS_SUCCESS, _classroom)
-      dispatch('broadcastClassOver')
-    }
-  },
   async updateLearnRecords(
     {
       commit,
@@ -387,23 +355,6 @@ const actions = {
     if (isBeInClass && !isClassIsOver) {
       commit(COPY_CLASSROOM_QUIZ, _.get(orgLessonDetail, 'quiz', []))
     }
-  },
-  async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
-    isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
-  },
-  async broadcastBeginClass({ dispatch }, payload) {
-    const userIds = await dispatch('getStudentIDs')
-    await dispatch('sendSocketMessage', {
-      userIds,
-      msg: { type: 1, beginClass: true, ...payload }
-    })
-  },
-  async broadcastClassOver({ dispatch }, payload) {
-    const userIds = await dispatch('getStudentIDs')
-    await dispatch('sendSocketMessage', {
-      userIds,
-      msg: { type: 1, classOver: true, ...payload }
-    })
   },
   async sendSocketMessage(context, payload) {
     await lessonOrganizations.sendSocketMessage(payload)

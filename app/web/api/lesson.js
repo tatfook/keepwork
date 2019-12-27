@@ -156,25 +156,6 @@ export const classrooms = {
   getClassroomInfo: async key => get(`classrooms/getByKey?key=${key}`)
 }
 
-export const visitor = {
-  uploadLearnRecords: ({ token, classId, learnRecords, state }) => {
-    let instance = axios.create({
-      baseURL: process.env.LESSON_API_PREFIX
-    })
-    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    return instance.put(`learnRecords/${classId}`, {
-      extra: learnRecords,
-      state
-    })
-  },
-  learnRecordsById: (id, token) => {
-    let instance = axios.create({
-      baseURL: process.env.LESSON_API_PREFIX
-    })
-    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    return instance.get(`learnRecords/${id}`)
-  }
-}
 
 export const subjects = {
   getAllSubjects: () => get('subjects')
@@ -196,7 +177,6 @@ export const lesson = {
   users,
   packages,
   lessons,
-  visitor,
   admin,
   classrooms,
   emails,

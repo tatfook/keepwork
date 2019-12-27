@@ -34,7 +34,6 @@ const getters = {
     _.filter(lessonQuiz, ({ answer }) => !!answer).length,
   isShowSummary: state => state.isShowSummary,
   enterClassInfo: state => state.enterClassInfo,
-  teachingLesson: state => state.teachingLesson,
   enterClassId: (state, { classroom }) => classroom.key,
   learnRecordsId: state => state.learnRecordsId,
   userInfo: state => state.userInfo,

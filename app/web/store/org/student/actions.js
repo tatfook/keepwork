@@ -22,8 +22,6 @@ const {
   RESUME_QUIZ,
   ENTER_CLASSROOM,
   RESUME_CLASSROOM,
-  LEAVE_THE_CLASS,
-  GET_TEACHING_LESSON_SUCCESS,
   GET_USER_INFO_SUCCESS,
   SWITCH_SUMMARY,
   GET_MY_TEACHER_SUCCESS,
@@ -352,32 +350,6 @@ const actions = {
       commit(RESUME_CLASSROOM, _classroom)
     }
   },
-  async uploadLearnRecords(
-    {
-      dispatch,
-      getters: { classId, classroom, learnRecords }
-    },
-    state = 0
-  ) {
-    const { username } = learnRecords
-    const { userId } = classroom
-    const record = {
-      classId,
-      ...classroom,
-      extra: {
-        ...learnRecords
-      },
-      state
-    }
-    if (username) {
-      await lesson.classrooms.uploadLearnRecords({
-        classId,
-        learnRecords,
-        state
-      })
-      await dispatch('sendSocketMessageToTeacher', record)
-    }
-  },
   async sendSocketMessageToTeacher(
     {
       getters: { classroom }
@@ -395,62 +367,7 @@ const actions = {
       })
     }
   },
-  async leaveTheClass({
-    commit,
-    dispatch,
-    rootGetters: { 'org/userinfo': userInfo }
-  }) {
-    const { username } = userInfo
-    await lesson.classrooms.leave()
-    await dispatch('sendSocketMessageToTeacher', {
-      leaveClass: true,
-      extra: { username }
-    })
-    commit(LEAVE_THE_CLASS)
-  },
-  async getTeachingLesson({
-    commit,
-    rootGetters: {
-      'org/currentOrg': { id: organizationId },
-      'org/userinfo': { username }
-    }
-  }) {
-    const res = await graphql.getQueryResult({
-      query:
-        'query($organizationId: Int, $userId: Int, $username: String){organizationUser(organizationId: $organizationId, userId: $userId, username: $username) {userId, organizationId, classroom{id, state}, organizationClasses{id,end,roleId, classrooms{id, key, state, packageId, lessonId, extra}} } }',
-      variables: {
-        organizationId,
-        username
-      }
-    })
-    const today = Date.now()
-    const organizationClasses = _.filter(
-      _.get(res, 'organizationUser.organizationClasses', []),
-      item => (item.roleId & 1) > 0 && +new Date(item.end) > today // eslint-disable-line no-bitwise
-    )
-    const teachingLesson = _.reduce(
-      organizationClasses,
-      (arr, cur) => {
-        return [...arr, ...cur.classrooms]
-      },
-      []
-    )
-    const result = _.map(teachingLesson, item => {
-      const { extra = {}, ...reset } = item
-      return {
-        id: item.id,
-        ...extra,
-        ...reset
-      }
-    })
-    commit(GET_TEACHING_LESSON_SUCCESS, result)
-  },
-  async checkClassroom({ commit, dispatch }) {
-    await lesson.classrooms.currentClass().catch(e => {
-      commit(LEAVE_THE_CLASS)
-      return Promise.reject(e)
-    })
-  },
+
   switchSummary({ commit }, flag) {
     commit(SWITCH_SUMMARY, flag)
   },

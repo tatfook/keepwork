@@ -96,14 +96,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      doQuiz: 'org/student/doQuiz',
-      uploadLearnRecords: 'org/student/uploadLearnRecords',
-      createLearnRecords: 'org/student/createLearnRecords',
-      uploadSelfLearnRecords: 'org/student/uploadSelfLearnRecords',
-      uploadVisitorLearnRecords: 'org/student/uploadVisitorLearnRecords',
-      switchSummary: 'org/student/switchSummary'
-    }),
     checkAnswer() {
       this.isSingleChoice && this.checkSingleChoice()
       this.isMutipleChoice && this.checkMutipleChoice()
@@ -146,31 +138,6 @@ export default {
       this.isError = !result
       this.isRight = result
       this.isDone = true
-      // this.submit(result, answer)
-    },
-    async submit(result, answer) {
-      this.doQuiz({ key: this.key, question: this.question, result, answer })
-      if (this.isBeInClassroom) {
-        const state = this.lessonIsDone ? 1 : 0
-        await this.uploadLearnRecords(state).catch(e => console.error(e))
-        return
-      }
-      // 一次只能自学一个页面
-      let lastLearnRecords = await lesson.lessons
-        .getLastLearnRecords()
-        .catch(e => console.error(e))
-      lastLearnRecords = _.get(lastLearnRecords, 'rows.[0]', [])
-      if (this.learnRecordsId !== lastLearnRecords.id) {
-        return this.$router.push({ name: 'OrgStudentClass' })
-      }
-
-      const { packageId, lessonId } = this.$route.params
-      // 首次需要先创建学习记录
-      await this.uploadSelfLearnRecords({
-        packageId: Number(packageId),
-        lessonId: Number(lessonId),
-        state: this.lessonIsDone ? 1 : 0
-      })
     },
     checkQuiz(quizzes) {
       const quiz = _.find(
