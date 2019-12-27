@@ -158,7 +158,6 @@ const actions = {
   async recharge({ dispatch }, payload) {
     payload.key = payload.key.replace(/ /g, '')
     try {
-
       const classIDs = await lessonOrganizationClassMembers.studentRecharge(payload)
       await Promise.all([
         dispatch('getOrgClasses'),
@@ -166,8 +165,9 @@ const actions = {
       ])
       return classIDs
     } catch (error) {
-      console.error(error)
+      return Promise.reject(error)
     }
+
   },
   async getUserInfo({ commit }) {
     const userInfo = await lesson.users.getUserDetail()
