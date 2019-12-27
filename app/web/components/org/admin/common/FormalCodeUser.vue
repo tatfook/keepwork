@@ -53,7 +53,6 @@ export default {
     },
     tryingTypeStudentStr() {
       return _.map(this.tryingTypeStudents, item => {
-        console.log(item.users)
         return `${item.realname}(${item.users.username})`
       }).join('、')
     },
