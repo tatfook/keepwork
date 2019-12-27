@@ -1,7 +1,14 @@
 <template>
   <div class="formal-code-user">
-    <el-button @click="toUseFormalCode">{{btnText}}</el-button>
+    <el-button class="default-button" @click="toUseFormalCode">{{btnText}}</el-button>
     <invitation-code-warning :type="warningType" :isDialogVisible="isWarningVisible" @close="isWarningVisible = false" />
+    <el-dialog class="formal-code-user-warning" :visible="isStudentWarningVisible" width="556px" :before-close="closeStudentWarning">
+      <div class="title">以下学生是正式用户，不需要进行“试听转正式”操作</div>
+      <div class="students">{{tryingTypeStudentStr}}</div>
+      <div class="operate">
+        <el-button class="confirm-button" type="primary" @click="closeStudentWarning">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -23,6 +30,7 @@ export default {
   },
   data() {
     return {
+      isStudentWarningVisible: false,
       isWarningVisible: false,
       warningType: undefined,
     }
@@ -40,12 +48,24 @@ export default {
     btnText() {
       return this.type == 'renew' ? '续费' : '试听转正式'
     },
+    tryingTypeStudents() {
+      return _.filter(this.students, item => item.type == 2)
+    },
+    tryingTypeStudentStr() {
+      return _.map(this.tryingTypeStudents, item => {
+        console.log(item.users)
+        return `${item.realname}(${item.users.username})`
+      }).join('、')
+    },
   },
   methods: {
     ...mapActions({
       setUseFormalCodeParams: 'org/setUseFormalCodeParams',
       checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
     }),
+    closeStudentWarning() {
+      this.isStudentWarningVisible = false
+    },
     async testIsValid() {
       if (await this.checkCurrentOrgExpire({ toExpire: false })) return false
       const count = this.students.length
@@ -54,6 +74,10 @@ export default {
           type: 'error',
           message: '请选择学生',
         })
+        return false
+      }
+      if (this.type == 'beFormal' && this.tryingTypeStudents.length > 0) {
+        this.isStudentWarningVisible = true
         return false
       }
       if (this.formalMaxCount === 0) {
@@ -85,9 +109,29 @@ export default {
 <style lang="scss" scoped>
 .formal-code-user {
   display: inline-block;
-  .el-button {
+  .default-button {
     padding: 10px 16px;
     font-size: 12px;
+  }
+  &-warning {
+    /deep/.el-dialog__body {
+      font-size: 16px;
+      color: #303133;
+    }
+    .students {
+      color: #2397f3;
+    }
+    .operate {
+      text-align: center;
+    }
+    .confirm-button {
+      width: 120px;
+      height: 36px;
+      line-height: 36px;
+      font-size: 14px;
+      padding: 0;
+      margin-top: 30px;
+    }
   }
 }
 </style>
