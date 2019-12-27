@@ -37,6 +37,7 @@ export default {
         this.toStudentListPage()
       } catch (error) {
         console.log(error)
+        this.$message({ type: 'error', message: '操作失败，请重试' })
       }
       this.isLoading = false
     },

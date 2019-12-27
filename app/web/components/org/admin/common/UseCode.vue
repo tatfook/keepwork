@@ -37,7 +37,13 @@
       <div class="header">生成邀请码：</div>
       <div class="container">
         <div class="item">
-          <div class="label"><span class="info">(可选)</span>班级</div>
+          <div class="label"><span class="info">(可选)</span>班级
+            <el-popover width="200" trigger="hover">
+              <p>选择班级后，使用这些邀请码激活的用户，可学习对应班级的课程。</p>
+              <p>若不选择班级，则不能学习班级课程。</p>
+              <i slot="reference" class="iconfont icon-help"></i>
+            </el-popover>
+          </div>
           <div class="content">{{selectedClassStr}}</div>
         </div>
         <invitation-code-types ref="codeTypesRef" :isTryShow="isTryShow" />
@@ -108,7 +114,7 @@ export default {
     confirmOperate() {
       const params = {
         type: this.$refs.codeTypesRef.activeTypeValue,
-        userIds: _.map(this.waitingStudents, student => student.id),
+        userIds: _.map(this.waitingStudents, student => student.memberId),
         classIds: this.classIds,
       }
       this.$emit('save', params)
@@ -280,6 +286,15 @@ export default {
       padding-right: 16px;
       text-align: right;
       box-sizing: border-box;
+      position: relative;
+      padding-bottom: 24px;
+    }
+    .icon-help {
+      position: absolute;
+      right: 21px;
+      bottom: 0;
+      color: #2397f3;
+      cursor: pointer;
     }
     .content {
       display: inline-block;
