@@ -28,8 +28,6 @@
       <div class="student-list-count-operates">
         <formal-code-user type="beFormal" :students="multipleSelection" />
         <formal-code-user type="renew" :students="multipleSelection" />
-        <!-- <el-button @click="toUseFormalCode('beFormal')">试听转正式</el-button>
-        <el-button @click="toUseFormalCode('renew')">续费</el-button> -->
       </div>
     </div>
     <el-table v-if="orgStudentsCount > 0" class="student-list-table" border @selection-change="handleSelectionChange" :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
