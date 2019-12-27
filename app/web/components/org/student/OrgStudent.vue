@@ -38,9 +38,9 @@
               <el-dropdown-item v-for="item in orgClasses" :key="item.id" :command="item.id">{{item.name}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span v-else class="org-student-class-onlyone">
-            <i class="iconfont icon-team org-student-class-onlyone-icon"></i>
-            <span class="org-student-class-onlyone-class-name">
+          <span v-else class="org-student-class-select-onlyone">
+            <i class="iconfont icon-team org-student-class-select-onlyone-icon"></i>
+            <span class="org-student-class-select-onlyone-class-name">
               {{currentClassName}}
             </span>
           </span>
@@ -96,7 +96,6 @@ import JoinOrg from './JoinOrg'
 import JoinClass from './JoinClass'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork, lesson } from '@/api'
-const { graphql } = keepwork
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import { locale } from '@/lib/utils/i18n'
@@ -149,6 +148,9 @@ export default {
       return !['JoinOrg'].includes(this.nowPageName)
     },
     currentClassName() {
+      if (this.orgClasses.length === 1) {
+        return _.get(this.orgClasses, '0.name', '')
+      }
       return _.get(_.find(this.orgClasses, item => item.id === this.currentClassID), 'name', '')
     },
     isJustStudent() {
