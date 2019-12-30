@@ -61,25 +61,20 @@ export default {
     theme: Object,
     editMode: Boolean,
     active: Boolean,
-    renderMode: Boolean
+    renderMode: Boolean,
   },
   render(h) {
     const styleID = this.modData.styleID || 0
     const style = this.conf.styles[styleID]
 
-    const templateID =
-      (style && typeof style.templateID === 'number' && style.templateID) || 0
+    const templateID = (style && typeof style.templateID === 'number' && style.templateID) || 0
     const template = this.conf.templates[templateID]
 
     let isShowMod = false
     let getIsModDataShow = function(modData) {
       let isModDataShow = false
       _.forIn(modData, (val, key) => {
-        if (
-          val &&
-          typeof val === 'object' &&
-          (typeof val.hidden === 'undefined' || val.hidden === false)
-        ) {
+        if (val && typeof val === 'object' && (typeof val.hidden === 'undefined' || val.hidden === false)) {
           isModDataShow = true
           return false
         }
@@ -119,12 +114,7 @@ export default {
       )
     } else {
       if (!this.renderMode && this.editMode) {
-        return (
-          <CompHide
-            compHideName={this.mod.modType}
-            compHideData={this.mod.data}
-          />
-        )
+        return <CompHide compHideName={this.mod.modType} compHideData={this.mod.data} />
       }
     }
   },
@@ -137,17 +127,12 @@ export default {
         return ''
       }
 
-      if (
-        !this.conf ||
-        !this.conf.components ||
-        !this.conf.components[property]
-      ) {
+      if (!this.conf || !this.conf.components || !this.conf.components[property]) {
         return ''
       }
 
       if (Array.isArray(this.conf.components[property])) {
-        let componentID =
-          (this.style && this.style.componentID && this.style.componentID) || 0
+        let componentID = (this.style && this.style.componentID && this.style.componentID) || 0
 
         return this.conf.components[property][componentID]
       } else {
@@ -200,18 +185,14 @@ export default {
     },
     themeClass(name) {
       if (this.convertColorStyle(name) || this.convertFontStyle(name)) {
-        return this.theme.sheet.classes[
-          this.convertColorStyle(name) || this.convertFontStyle(name)
-        ]
+        return this.theme.sheet.classes[this.convertColorStyle(name) || this.convertFontStyle(name)]
       } else {
         return this.theme.sheet.classes[name]
       }
     },
     themeData(name) {
       if (this.convertColorStyle(name)) {
-        return this.theme.data[
-          this.convertColorStyle(name) || this.convertFontStyle(name)
-        ]
+        return this.theme.data[this.convertColorStyle(name) || this.convertFontStyle(name)]
       } else {
         return this.theme.data[name]
       }
@@ -293,10 +274,10 @@ export default {
       let options = {}
 
       options = _.merge(options, this.generateOptionsStyle(name), {
-        enableScript: this.mod.enableScript
+        enableScript: this.mod.enableScript,
       })
       return options
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -304,7 +285,7 @@ export default {
       activeMod: 'activeMod',
       activeSubMod: 'activeSubMod',
       themeConf: 'themeConf',
-      userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath'
+      userSiteThemeConfigBySitePath: 'user/siteThemeConfigBySitePath',
     }),
     modData() {
       // use basic data as default to make sure the mod data is correct
@@ -313,6 +294,6 @@ export default {
           return srcValue
         }
       })
-    }
-  }
+    },
+  },
 }
