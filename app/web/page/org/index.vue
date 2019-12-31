@@ -51,17 +51,17 @@ Vue.use(VueAnalytics, {
   batch: {
     enabled: true, // enable/disable
     amount: 2, // amount of events fired
-    delay: 500 // delay in milliseconds
-  }
+    delay: 500, // delay in milliseconds
+  },
 })
 
 const i18n = new VueI18n({
   locale,
-  messages: i18nMessages
+  messages: i18nMessages,
 })
 
 Vue.use(ElementUI, {
-  i18n: (key, value) => i18n.t(key, value)
+  i18n: (key, value) => i18n.t(key, value),
 })
 
 const store = new Vuex.Store({
@@ -71,13 +71,13 @@ const store = new Vuex.Store({
     user: userModule,
     message: messageModule,
     org: orgModule,
-    pbl: pblModule
+    pbl: pblModule,
   },
   plugins: [
     createPersistedState({
-      paths: ['org.currentOrg', 'org.userinfo']
-    })
-  ]
+      paths: ['org.currentOrg', 'org.userinfo'],
+    }),
+  ],
 })
 
 const OrgLoginPageName = 'OrgLogin'
@@ -90,40 +90,26 @@ const OrgNotFoundPageName = 'OrgNotFound'
 const OrgIndexPageName = 'OrgIndex'
 const OrgPrintPageName = 'OrgPrint'
 const OrgReportPageName = 'OrgReport'
-const IgnoreLoginPageNames = [
-  OrgLoginPageName,
-  OrgFormDetailPageName,
-  OrgPrintPageName,
-  OrgReportPageName
-]
+const IgnoreLoginPageNames = [OrgLoginPageName, OrgFormDetailPageName, OrgPrintPageName, OrgReportPageName]
 const channel = new BroadcastChannel('org')
 
 const checkIsLogined = function(name, next, params) {
   let nowToken = Cookies.get('token')
   if (nowToken) return true
-  let isIgnoreLoginPage =
-    _.findIndex(IgnoreLoginPageNames, pagename => pagename == name) != -1
+  let isIgnoreLoginPage = _.findIndex(IgnoreLoginPageNames, pagename => pagename == name) != -1
   if (isIgnoreLoginPage) {
     next()
     return false
   }
   next({
     name: OrgLoginPageName,
-    params
+    params,
   })
   return false
 }
 
-const checkIsOrgExist = async function(
-  name,
-  next,
-  params,
-  orgLoginUrl,
-  nowPageRole
-) {
-  let orgDetail = await store
-    .dispatch('org/getOrgDetailByLoginUrl', { orgLoginUrl })
-    .catch(err => console.error(err))
+const checkIsOrgExist = async function(name, next, params, orgLoginUrl, nowPageRole) {
+  let orgDetail = await store.dispatch('org/getOrgDetailByLoginUrl', { orgLoginUrl }).catch(err => console.error(err))
   if (orgDetail && orgDetail.id) {
     store.dispatch('org/setCurrentOrg', { orgDetail })
     return { isContinue: true, orgId: orgDetail.id }
@@ -131,7 +117,7 @@ const checkIsOrgExist = async function(
   if (nowPageRole != 'notfound') {
     next({
       name: OrgNotFoundPageName,
-      params
+      params,
     })
     return { isContinue: false }
   } else {
@@ -140,28 +126,21 @@ const checkIsOrgExist = async function(
   }
 }
 
-const checkIsOrgMember = async function(
-  name,
-  next,
-  params,
-  orgId,
-  nowPageRole
-) {
-  let orgToken = await store
-    .dispatch('org/getOrgToken', { orgId })
-    .catch(err => console.error(err))
+const checkIsOrgMember = async function(name, next, params, orgId, nowPageRole) {
+  let orgToken = await store.dispatch('org/getOrgToken', { orgId }).catch(err => console.error(err))
   if (orgToken) {
     Cookies.set('token', orgToken)
     store.dispatch('org/setTokenUpdateAt', { orgId })
     return { isContinue: true, orgToken }
   }
   if (!orgToken && checkIsIgnore(name, next, params)) {
+    next({ name: 'JoinOrg', params })
     return { isContinue: false }
   }
   if (nowPageRole != 'contact') {
     next({
       name: OrgContactPageName,
-      params
+      params,
     })
     return false
   } else {
@@ -178,35 +157,31 @@ const handleDifferentRole = function(name, next, params, roleId, nowPageRole) {
   if (nowPageRole == 'student' && !isStudent) {
     return next({
       name: isAdmin ? OrgAdminPageName : OrgTeacherPageName,
-      params
+      params,
     })
   }
   if (nowPageRole == 'teacher' && !isTeacher) {
     return next({
       name: isAdmin ? OrgAdminPageName : OrgStudentPageName,
-      params
+      params,
     })
   }
   if (nowPageRole == 'admin' && !isAdmin) {
     return next({
       name: isTeacher ? OrgTeacherPageName : OrgStudentPageName,
-      params
+      params,
     })
   }
   if (_.isUndefined(roleId) && nowPageRole != 'contact') {
     return next({
       name: OrgContactPageName,
-      params
+      params,
     })
   }
   if (nowPageRole == 'login') {
     return next({
-      name: isAdmin
-        ? OrgAdminPageName
-        : isTeacher
-        ? OrgTeacherPageName
-        : OrgStudentPageName,
-      params
+      name: isAdmin ? OrgAdminPageName : isTeacher ? OrgTeacherPageName : OrgStudentPageName,
+      params,
     })
   }
   next()
@@ -239,9 +214,7 @@ router.beforeEach(async (to, from, next) => {
     result = await checkIsOrgMember(name, next, params, orgId, nowPageRole)
     if (!result.isContinue) return
     let orgToken = result.orgToken
-    let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(
-      jsrsasign.b64utoutf8(orgToken.split('.')[1])
-    )
+    let tokenParams = jsrsasign.KJUR.jws.JWS.readSafeJSONString(jsrsasign.b64utoutf8(orgToken.split('.')[1]))
     let { roleId = 1, loginUrl, username } = tokenParams
     channel.postMessage({ loginUrl, username })
     handleDifferentRole(name, next, params, roleId, nowPageRole)
@@ -256,7 +229,7 @@ export default {
   i18n,
   data() {
     return {
-      loading: true
+      loading: true,
     }
   },
   mixins: [socketMixin],
@@ -269,7 +242,7 @@ export default {
       userIsLogined: 'user/isLogined',
       currentOrg: 'org/currentOrg',
       expirationDialogVisible: 'org/expirationDialogVisible',
-      userinfo: 'org/userinfo'
+      userinfo: 'org/userinfo',
     }),
     routeLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
@@ -279,11 +252,7 @@ export default {
     },
     isUserLoginForOrg() {
       let currentOrgloginUrl = this.loginUrl
-      return (
-        this.userIsLogined &&
-        currentOrgloginUrl &&
-        currentOrgloginUrl === this.routeLoginUrl
-      )
+      return this.userIsLogined && currentOrgloginUrl && currentOrgloginUrl === this.routeLoginUrl
     },
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -296,28 +265,26 @@ export default {
     },
     username() {
       return this.userinfo.username
-    }
+    },
   },
   methods: {
     ...mapActions({
       getOrgUserCountsByGraphql: 'org/getOrgUserCountsByGraphql',
       getUserProfile: 'user/getProfile',
-      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible'
+      toggleExpirationDialogVisible: 'org/toggleExpirationDialogVisible',
     }),
     handleCloseExpirationDialog() {
       this.toggleExpirationDialogVisible(false)
     },
     async loadOrgPresets() {
-      await this.getUserProfile({ force: false, useCache: false }).catch(err =>
-        console.error(err)
-      )
+      await this.getUserProfile({ force: false, useCache: false }).catch(err => console.error(err))
       this.loadUserCounts()
       this.loading = false
     },
     async loadUserCounts() {
       this.orgId &&
         (await this.getOrgUserCountsByGraphql({
-          orgId: this.orgId
+          orgId: this.orgId,
         }))
     },
     initBroadcastChannel() {
@@ -337,12 +304,12 @@ export default {
       if (newUsername !== this.username || this.loginUrl !== newLoginUrl) {
         window.location.href = `${window.location.origin}/org/${newLoginUrl}`
       }
-    }
+    },
   },
   components: {
     RealName,
     PerfectCommonFooter,
-    ExpirationDialog
+    ExpirationDialog,
   },
   watch: {
     $route() {
@@ -350,8 +317,8 @@ export default {
     },
     socketMessage(value) {
       store.dispatch('message/refreshMessagesBox')
-    }
-  }
+    },
+  },
 }
 </script>
 
