@@ -134,6 +134,7 @@ const checkIsOrgMember = async function(name, next, params, orgId, nowPageRole) 
     return { isContinue: true, orgToken }
   }
   if (!orgToken && checkIsIgnore(name, next, params)) {
+    next({ name: 'JoinOrg', params })
     return { isContinue: false }
   }
   if (nowPageRole != 'contact') {
