@@ -17,7 +17,7 @@ export default {
   name: 'AdiList',
   mixins: [compBaseMixin],
   components: {
-    ModCompLoader
+    ModCompLoader,
   },
   async created() {
     let data = await AsyncModLoader.load(this.options.modType)
@@ -34,16 +34,16 @@ export default {
         data: _.merge({}, this.options.modSettings, source),
         isSub: true,
         property: this.property,
-        index
+        index,
       }
-    }
+    },
   },
   computed: {
     collectionWithIndex() {
       return _.map(this.properties.collection, (value, index) => {
         return {
           ...value,
-          index
+          index,
         }
       })
     },
@@ -59,7 +59,7 @@ export default {
           const hiddenCompCount = _.filter(collectionItem, (value, key) => {
             return value && value.hidden === true
           }).length
-          const modTotalpropertiesCount = _.filter(this.modProperties, (val,key)=>key!='styleID').length
+          const modTotalpropertiesCount = _.filter(this.modProperties, (val, key) => key != 'styleID').length
           let isCollectHaveComp = modTotalpropertiesCount > 0
           let isCollectHaveCompShow = hiddenCompCount < modTotalpropertiesCount
           if (!isCollectHaveCompShow && isCollectHaveComp) {
@@ -74,8 +74,8 @@ export default {
         return 24 / this.options.colSize
       }
       return 24
-    }
-  }
+    },
+  },
 }
 </script>
 
