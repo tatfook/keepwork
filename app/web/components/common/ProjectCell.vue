@@ -17,7 +17,7 @@
       <span class="text" :title="projectDisplayName" v-html="projectDisplayName"></span>
       <span class="id" v-html="`${project._id || '#' + project.id}`"></span>
       <span class="project-type">
-        <el-popover popper-class="project-cell-type-popover" placement="top" :title="projectType" width="20" trigger="hover" content="">
+        <el-popover popper-class="project-cell-type-popover" placement="top" :title="projectType" trigger="hover" content="">
           <img slot="reference" :src="projectTypeIcon" alt="">
         </el-popover>
       </span>
@@ -368,11 +368,9 @@ export default {
   }
 }
 .project-cell-type-popover.el-popper.el-popover {
-  width: 50px !important;
-  min-width: 50px !important;
+  min-width: unset;
   padding: 6px;
   .el-popover__title {
-    width: 50px;
     font-size: 12px;
     text-align: center;
     margin: 0;
