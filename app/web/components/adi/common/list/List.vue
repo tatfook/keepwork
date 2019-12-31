@@ -11,12 +11,22 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import ModCompLoader from '@/components/adi/utils/ModCompLoader'
+import AsyncModLoader from '@/components/adi/mod/index.async'
 
 export default {
   name: 'AdiList',
   mixins: [compBaseMixin],
   components: {
     ModCompLoader
+  },
+  async created() {
+    let data = await AsyncModLoader.load(this.options.modType)
+    this.modConf = data.default
+  },
+  data() {
+    return {
+      modConf: {},
+    }
   },
   methods: {
     modWithExtraConf(source, index) {
@@ -37,23 +47,21 @@ export default {
         }
       })
     },
+    modProperties() {
+      return this.modConf.properties
+    },
     filteredCollection() {
       return _.filter(this.collectionWithIndex, collectionItem => {
         let isCollectShow = true
         if (collectionItem.hidden) {
           isCollectShow = false
         } else {
-          let isCollectHaveCompShow = false
-          let isCollectHaveComp = false
-          _.forIn(collectionItem, val => {
-            if (val && typeof val === 'object') {
-              isCollectHaveComp = true
-              if (typeof val.hidden === 'undefined' || val.hidden === false) {
-                isCollectHaveCompShow = true
-                return false
-              }
-            }
-          })
+          const hiddenCompCount = _.filter(collectionItem, (value, key) => {
+            return value && value.hidden === true
+          }).length
+          const modTotalpropertiesCount = _.filter(this.modProperties, (val,key)=>key!='styleID').length
+          let isCollectHaveComp = modTotalpropertiesCount > 0
+          let isCollectHaveCompShow = hiddenCompCount < modTotalpropertiesCount
           if (!isCollectHaveCompShow && isCollectHaveComp) {
             isCollectShow = false
           }
