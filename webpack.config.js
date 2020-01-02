@@ -11,7 +11,7 @@ module.exports = {
     '@': 'app/web',
     asset: 'app/web/assets',
     component: 'app/web/components',
-    framework: 'app/web/framework'
+    framework: 'app/web/framework',
   },
   compile: {
     thread: false,
@@ -21,14 +21,26 @@ module.exports = {
     {
       name: 'base', // easywebpack will automatically create a common chunk for all pages, and will crush if we create common lib here.
       lib: [
-        'vue', 'axios', 'vue-router', 'vuex', 'vuex-router-sync',
-        'vue-i18n', 'lodash', 'js-cookie', 'babel-polyfill',
-        'moment', 'qiniu-js', 'blueimp-md5', 'filesize', 'html2canvas', 'js-base64'
-      ]
+        'vue',
+        'axios',
+        'vue-router',
+        'vuex',
+        'vuex-router-sync',
+        'vue-i18n',
+        'lodash',
+        'js-cookie',
+        'babel-polyfill',
+        'moment',
+        'qiniu-js',
+        'blueimp-md5',
+        'filesize',
+        'html2canvas',
+        'js-base64',
+      ],
     },
     {
       name: 'charts',
-      lib: ['echarts', 'v-charts']
+      lib: ['echarts', 'v-charts'],
     },
     // fix el-tooltip not visible
     // {
@@ -37,19 +49,19 @@ module.exports = {
     // },
     {
       name: 'markdown',
-      lib: ['vue-markdown']
-    }
+      lib: ['vue-markdown'],
+    },
   ],
   devtool: 'cheap-module-eval-source-map',
   loaders: {
     scss: true,
     md: {
       test: /\.md$/,
-      loader: 'raw-loader'
+      loader: 'raw-loader',
     },
     babel: {
-      exclude: /node_modules(?!(\/|\\)vue-socket.io)/
-    }
+      exclude: /node_modules(?!(\/|\\)vue-socket.io)/,
+    },
   },
   plugins: {
     imagemini: false,
@@ -57,13 +69,15 @@ module.exports = {
     // serviceworker: true,
     // analyzer: true,
     dotenv,
-    copy: [{
-      from: path.resolve(__dirname, 'app/static'),
-      to: path.resolve(__dirname, 'public')
-    }]
+    copy: [
+      {
+        from: path.resolve(__dirname, 'app/static'),
+        to: path.resolve(__dirname, 'public'),
+      },
+    ],
   },
   node: {
-    console: true
+    console: true,
   },
-  optimization: {}
+  optimization: {},
 }
