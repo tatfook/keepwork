@@ -529,7 +529,6 @@ export default {
         cursor: pointer;
         /deep/.el-dropdown-link {
           width: 110px;
-          display: inline-block;
           display: inline-flex;
           align-items: center;
           justify-content: space-between;
