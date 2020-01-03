@@ -258,10 +258,6 @@ export default {
       height: 100%;
       object-fit: contain;
     }
-    .vue-cropper {
-      width: 340px;
-      height: 220px;
-    }
   }
   &-operations {
     width: 120px;

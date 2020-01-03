@@ -3,7 +3,6 @@
     <div class="comp-item-cover" :style="{background:bgColor}">
       <span class="comp-item-badge">{{compDetail._id}}</span>
       <img class="comp-item-preview" :src="compressedCover" alt="">
-      <!-- <model-gltf :key="previewUrl" class="comp-item-gltf" v-loading="isLoading" :rotation="rotation" :src="previewUrl" :backgroundColor="bgColor" @on-load="onLoadGltf"></model-gltf> -->
     </div>
     <div class="comp-item-info">
       <div class="comp-item-info-left">
@@ -33,7 +32,6 @@ const BgColors = [
   '#b37feb',
   '#ff85c0',
 ]
-import { ModelGltf } from 'vue-3d-model'
 import { mapActions } from 'vuex'
 export default {
   name: 'CompItem',
@@ -108,9 +106,6 @@ export default {
       })
       this.isUseLoading = false
     },
-  },
-  components: {
-    ModelGltf,
   },
   watch: {
     previewUrl() {
