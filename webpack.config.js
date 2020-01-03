@@ -7,6 +7,9 @@ const dotenv = new Dotenv()
 module.exports = {
   egg: true,
   framework: 'vue',
+  resolve: {
+    modules: [path.resolve(__dirname, 'node_modules')],
+  },
   alias: {
     '@': 'app/web',
     asset: 'app/web/assets',
