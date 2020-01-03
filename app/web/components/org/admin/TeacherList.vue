@@ -34,19 +34,19 @@ export default {
   async mounted() {
     this.isLoading = true
     await this.getOrgTeacherList({
-      organizationId: this.orgId
+      organizationId: this.orgId,
     }).catch(() => {})
     this.isLoading = false
   },
   data() {
     return {
-      isLoading: false
+      isLoading: false,
     }
   },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
-      getOrgTeachersByClassId: 'org/getOrgTeachersByClassId'
+      getOrgTeachersByClassId: 'org/getOrgTeachersByClassId',
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
@@ -55,7 +55,7 @@ export default {
       return (
         this.getOrgTeachersByClassId({
           orgId: this.orgId,
-          classId: undefined
+          classId: undefined,
         }) || []
       )
     },
@@ -69,12 +69,12 @@ export default {
         teacher.classesString = _.join(classNameArr, '、')
         return teacher
       })
-    }
+    },
   },
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      removeMemberFromOrg: 'org/removeMemberFromOrg'
+      removeMemberFromOrg: 'org/removeMemberFromOrg',
     }),
     toNewTeacherPage() {
       this.$router.push({ name: 'OrgNewTeacher' })
@@ -85,23 +85,18 @@ export default {
       try {
         await this.removeMemberFromOrg({ memberId, roleId: 2 })
         await this.getOrgTeacherList({
-          organizationId: this.orgId
+          organizationId: this.orgId,
         })
-      } catch (error) {
-      }
+      } catch (error) {}
       this.isLoading = false
     },
     confirmRemoveTeacher(teacherDetail) {
       let { realname } = teacherDetail
-      this.$confirm(
-        `${this.$t('org.delConfirm')} ${realname}?`,
-        this.$t('org.deleteWarining'),
-        {
-          confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel'),
-          type: 'warning'
-        }
-      ).then(() => {
+      this.$confirm(`${this.$t('org.delConfirm')} ${realname}?`, this.$t('org.deleteWarining'), {
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel'),
+        type: 'warning',
+      }).then(() => {
         this.removeTeacher(teacherDetail)
       })
     },
@@ -110,11 +105,11 @@ export default {
         name: 'OrgEditTeacher',
         query: {
           roleId: 2,
-          id: teacherDetail.id
-        }
+          id: teacherDetail.id,
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
