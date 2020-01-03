@@ -234,6 +234,9 @@ const actions = {
       orgId: currentOrg.id,
     })
   },
+  async removeMemberFromOrg(context, { memberId, roleId }) {
+    await keepwork.lessonOrganizationClassMembers.clearRoleFromOrg({ memberId, _roleId: roleId })
+  },
   async getOrgStudentList({ commit, getters: { currentOrgId: organizationId } }, params) {
     const { classId } = params
     let result = await keepwork.lessonOrganizationClassMembers.getStudents(params)

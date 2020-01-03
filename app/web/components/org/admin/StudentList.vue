@@ -131,7 +131,7 @@ export default {
   methods: {
     ...mapActions({
       getOrgStudentList: 'org/getOrgStudentList',
-      orgCreateNewMember: 'org/createNewMember',
+      removeMemberFromOrg: 'org/removeMemberFromOrg',
       getOrgCodesStatus: 'org/getOrgCodesStatus',
     }),
     handleSelectionChange(val) {
@@ -166,15 +166,9 @@ export default {
     },
     async removeStudent(studentDetail) {
       this.isLoading = true
-      let { users, realname } = studentDetail
+      let { memberId } = studentDetail
       try {
-        await this.orgCreateNewMember({
-          organizationId: this.orgId,
-          classIds: [],
-          memberName: users.username,
-          realname,
-          roleId: 1,
-        })
+        await this.removeMemberFromOrg({ memberId, roleId: 1 })
         await this.getStudentWithClassId()
       } catch (error) {}
       this.isLoading = false

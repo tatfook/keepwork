@@ -74,24 +74,21 @@ export default {
   methods: {
     ...mapActions({
       getOrgTeacherList: 'org/getOrgTeacherList',
-      orgCreateNewMember: 'org/createNewMember'
+      removeMemberFromOrg: 'org/removeMemberFromOrg'
     }),
     toNewTeacherPage() {
       this.$router.push({ name: 'OrgNewTeacher' })
     },
     async removeTeacher(teacherDetail) {
       this.isLoading = true
-      let { username, realname } = teacherDetail
-      await this.orgCreateNewMember({
-        organizationId: this.orgId,
-        classIds: [],
-        memberName: username,
-        realname,
-        roleId: 2
-      }).catch(() => {})
-      await this.getOrgTeacherList({
-        organizationId: this.orgId
-      }).catch(() => {})
+      let { memberId } = teacherDetail
+      try {
+        await this.removeMemberFromOrg({ memberId, roleId: 2 })
+        await this.getOrgTeacherList({
+          organizationId: this.orgId
+        })
+      } catch (error) {
+      }
       this.isLoading = false
     },
     confirmRemoveTeacher(teacherDetail) {
