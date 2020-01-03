@@ -57,7 +57,7 @@ const actions = {
   async openLink({ dispatch }, { link, isProtocolType }) {
     const cmd = `/open ${link}`
     if (isProtocolType) {
-      window.location.href = `paracraft://cmd(${cmd})`
+      window.location.href = `paracraft://cmd("${cmd}")`
       return
     }
     await dispatch('runParacraftCMD', cmd)
