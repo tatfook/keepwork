@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import uuid from '@/lib/utils/uuid'
-import { Base64 } from 'js-base64'
 import { GitAPI } from '@/api'
 import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
 import { props } from './mutations'
