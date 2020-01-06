@@ -62,6 +62,7 @@ export default {
             'OrgNewTeacher',
             'OrgEditTeacher',
             'OrgStudentList',
+            'OrgUseFormalCode',
             'OrgEditStudent'
           ],
           indexPageName: 'OrgClassList',
@@ -89,8 +90,9 @@ export default {
         {
           pageNames: [
             'HistoricalData',
+            'HistoricalMember',
+            'ReActivate',
             'OrgHistoryClassDetail',
-            'OrgHistoryEditClass'
           ],
           indexPageName: 'HistoricalData',
           text: this.$t('org.historicalData')

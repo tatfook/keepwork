@@ -1,6 +1,6 @@
 <template>
   <div class="join-class-container">
-    <div class="join-class-title">加入班级，请输入邀请码:</div>
+    <div class="join-class-title">请输入邀请码:</div>
     <div class="join-class-tips">
       请联系{{admissionMsg}}，获得邀请码。
     </div>
@@ -29,24 +29,24 @@ export default {
     return {
       form: {
         key: '',
-        realname: ''
+        realname: '',
       },
       rules: {
         key: [
           {
             required: true,
             message: '请输入邀请码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         realname: [
           {
             required: true,
             message: '请输入姓名',
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   async mounted() {
@@ -57,29 +57,37 @@ export default {
   },
   methods: {
     ...mapActions({
-      joinOrgClass: 'org/student/joinOrgClass',
-      getStudentInfo: 'org/student/getStudentInfo'
+      recharge: 'org/student/recharge',
+      getStudentInfo: 'org/student/getStudentInfo',
+      getOrgClasses: 'org/student/getOrgClasses',
     }),
     onSubmit() {
       this.$refs['form'].validate(async valid => {
         if (valid) {
-          const res = await this.joinOrgClass({
-            ...this.form,
-            organizationId: this.organizationId,
-            refreshToken: false
-          })
-          if (res === false) {
-            return
-          }
-          const { classId = '' } = res
-          this.onCancel()
-          if (classId) {
-            this.$router.push({
-              name: 'OrgStudentClassDetail',
-              params: { classId }
+          try {
+            const classIDs = await this.recharge({
+              ...this.form,
+              organizationId: this.organizationId,
             })
+            this.$message.success('续费成功')
+            if (this.isNeedRedirect) {
+              if (classIDs.length === 1) {
+                this.$router.push({
+                  name: 'OrgStudentClassDetail',
+                  classIDs: classIDs[0],
+                })
+              } else if (classIDs.length === 0 || !classIDs.includes(this.currentClassID)) {
+                this.$router.push({
+                  name: 'OrgStudentClassSelect',
+                })
+              }
+            }
+            this.onCancel()
+            return classIDs
+          } catch (error) {
+            const message = JSON.parse(_.get(error, 'response.data')).message
+            this.$message.error(message)
           }
-          return res
         } else {
           return false
         }
@@ -87,14 +95,14 @@ export default {
     },
     onCancel() {
       this.$emit('cancel')
-    }
+    },
   },
   computed: {
     ...mapGetters({
       currentOrg: 'org/currentOrg',
       userinfo: 'org/student/userinfo',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
-      tokenInfo: 'org/tokenInfo'
+      tokenInfo: 'org/tokenInfo',
     }),
     orgRealName() {
       return _.get(this.userinfo, 'realname', '')
@@ -113,8 +121,19 @@ export default {
     },
     admissionMsg() {
       return this.orgAdmissionMsg || this.orgCellphone || '老师'
-    }
-  }
+    },
+    isNeedRedirect() {
+      return [
+        'OrgStudentClassDetail',
+        'OrgStudentEvaluations',
+        'OrgStudentEvaluationDetail',
+        'OrgStudentClassSelect',
+      ].includes(this.$route.name)
+    },
+    currentClassID() {
+      return _.toNumber(_.get(this.$route, 'params.classId', ''))
+    },
+  },
 }
 </script>
 

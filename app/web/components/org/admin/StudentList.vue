@@ -3,25 +3,46 @@
     <div class="student-list-header" v-if="orgStudentsCount > 0">
       <div class="student-list-header-selector">
         {{$t('org.classSelector')}}
-        <el-select v-model="selectedClassId">
+        <el-select v-model="selectedClassId" @change="getStudentWithClassId">
           <el-option :label="$t('org.all')" :value="undefined">
           </el-option>
           <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id">
           </el-option>
         </el-select>
       </div>
+      <div class="student-list-header-selector">
+        用户类型：
+        <el-select v-model="selectedType" @change="getStudentWithClassId">
+          <el-option :label="$t('org.all')" :value="undefined">
+          </el-option>
+          <el-option label="试听" :value="1"></el-option>
+          <el-option label="正式" :value="2"></el-option>
+        </el-select>
+      </div>
+      <div class="student-list-header-search">
+        <el-input placeholder="按学生姓名、用户名搜索" clearable suffix-icon="el-icon-search" v-model.trim="searchedUsername" @change="getStudentWithClassId">
+        </el-input>
+      </div>
     </div>
-    <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}</div>
-    <el-table v-if="orgStudentsCount > 0" class="student-list-table" border :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
-      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="124">
+    <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}
+      <div class="student-list-count-operates">
+        <formal-code-user type="beFormal" :students="multipleSelection" />
+        <formal-code-user type="renew" :students="multipleSelection" />
+      </div>
+    </div>
+    <el-table v-if="orgStudentsCount > 0" class="student-list-table" border @selection-change="handleSelectionChange" :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
+      <el-table-column type="selection" width="39"></el-table-column>
+      <el-table-column prop="realname" :label="$t('org.nameLabel')" width="64">
       </el-table-column>
-      <el-table-column prop="users.username" :label="$t('org.usernameLabel')">
+      <el-table-column prop="users.username" :label="$t('org.usernameLabel')" width="100">
       </el-table-column>
-      <el-table-column prop="parentPhoneNum" label="家长手机号" width="122">
+      <el-table-column prop="typeText" label="用户类型" width="90">
       </el-table-column>
-      <el-table-column prop="classesString" :label="$t('org.classLabel')" width="122" :show-overflow-tooltip="true">
+      <el-table-column prop="parentPhoneNum" label="家长手机号" width="110">
       </el-table-column>
-      <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')" width="129" :show-overflow-tooltip="true">
+      <el-table-column prop="classesString" :label="$t('org.classLabel')" :show-overflow-tooltip="true">
+      </el-table-column>
+      <el-table-column prop="endTimeText" label="到期时间" width="129" :show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column prop="id" :label="$t('org.operationLabel')" width="244">
         <template slot-scope="scope">
@@ -43,20 +64,25 @@
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import ChangePasswordDialog from '@/components/org/admin/common/ChangePasswordDialog'
+import FormalCodeUser from './common/FormalCodeUser'
 export default {
   name: 'StudentList',
   components: {
-    ChangePasswordDialog
+    ChangePasswordDialog,
+    FormalCodeUser,
   },
   async mounted() {
-    await this.getStudentWithClassId()
+    await Promise.all([this.getStudentWithClassId(), this.getOrgCodesStatus()])
   },
   data() {
     return {
+      multipleSelection: [],
       selectedClassId: undefined,
+      selectedType: undefined,
+      searchedUsername: '',
       isLoading: false,
       isChangeDialogVisible: false,
-      changingMember: {}
+      changingMember: {},
     }
   },
   computed: {
@@ -64,71 +90,65 @@ export default {
       currentOrg: 'org/currentOrg',
       getOrgUserCountById: 'org/getOrgUserCountById',
       getOrgClassesById: 'org/getOrgClassesById',
-      getOrgStudentsByClassId: 'org/getOrgStudentsByClassId'
+      getOrgStudentsByClassId: 'org/getOrgStudentsByClassId',
     }),
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
-    orgStudentsWithOvertime() {
+    orgStudents() {
       return (
         this.getOrgStudentsByClassId({
           orgId: this.orgId,
-          classId: this.selectedClassId
+          classId: this.selectedClassId,
         }) || []
       )
     },
-    orgStudents() {
-      return _.filter(this.orgStudentsWithOvertime, student => {
-        return (
-          student.lessonOrganizationClasses &&
-          student.lessonOrganizationClasses.length > 0
-        )
-      })
-    },
     orgStudentsCount() {
-      return _.get(
-        this.getOrgUserCountById({ id: this.orgId }),
-        'studentCount',
-        0
-      )
+      return _.get(this.getOrgUserCountById({ id: this.orgId }), 'studentCount', 0)
     },
     orgStudentsWithClassesString() {
       return _.map(this.orgStudents, student => {
-        let classes = student.lessonOrganizationClasses
-        let classNameArr = _.map(classes, classDetail => classDetail.name)
-        student.classesString = _.join(classNameArr, '、')
-        student.createdAt = moment(student.createdAt).format('YYYY-MM-DD HH:mm')
-        return student
+        const { type, endTime, lessonOrganizationClasses } = student
+        const classNameArr = _.map(lessonOrganizationClasses, classDetail => classDetail.name)
+        return {
+          ...student,
+          classesString: _.join(classNameArr, '、'),
+          endTimeText: moment(endTime).format('YYYY/MM/DD'),
+          typeText: type == 2 ? '正式' : '试听',
+        }
       })
     },
     orgClasses() {
-      const today = Date.now()
-      const theClass = this.getOrgClassesById({ id: this.orgId }) || []
-      return _.filter(theClass, cls => +new Date(cls.end) > today)
+      return this.getOrgClassesById({ id: this.orgId }) || []
     },
-    selectedClassName() {
-      return this.selectedClassId
-        ? _.find(this.orgClasses, { id: this.selectedClassId }).name
-        : this.$t('org.all')
-    }
+    selectedFormalStudents() {
+      return _.filter(this.multipleSelection, student => student.type == 2)
+    },
+    selectedTryStudents() {
+      return _.filter(this.multipleSelection, student => student.type != 2)
+    },
   },
   methods: {
     ...mapActions({
       getOrgStudentList: 'org/getOrgStudentList',
-      orgCreateNewMember: 'org/createNewMember'
+      removeMemberFromOrg: 'org/removeMemberFromOrg',
+      getOrgCodesStatus: 'org/getOrgCodesStatus',
     }),
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
     showChangeDialog(studentDetail) {
       let {
         realname,
         users: { username: memberName },
         classId,
-        memberId
+        memberId,
       } = studentDetail
       this.changingMember = {
         realname,
         memberName,
         classId,
-        memberId
+        memberId,
       }
       this.isChangeDialogVisible = true
     },
@@ -136,42 +156,30 @@ export default {
       this.isLoading = true
       try {
         await this.getOrgStudentList({
-          organizationId: this.orgId,
-          classId: this.selectedClassId
+          classId: this.selectedClassId,
+          type: this.selectedType,
+          username: this.searchedUsername ? this.searchedUsername : undefined,
         })
       } catch (error) {}
       this.isLoading = false
       return
     },
-    handleChangeSelectClass() {
-      this.getStudentWithClassId()
-    },
     async removeStudent(studentDetail) {
       this.isLoading = true
-      let { users, realname } = studentDetail
+      let { memberId } = studentDetail
       try {
-        await this.orgCreateNewMember({
-          organizationId: this.orgId,
-          classIds: [],
-          memberName: users.username,
-          realname,
-          roleId: 1
-        })
+        await this.removeMemberFromOrg({ memberId, roleId: 1 })
         await this.getStudentWithClassId()
       } catch (error) {}
       this.isLoading = false
     },
     confirmRemoveStudent(studentDetail) {
       let { realname } = studentDetail
-      this.$confirm(
-        `${this.$t('org.delConfirm')} ${realname}?`,
-        this.$t('org.deleteWarining'),
-        {
-          confirmButtonText: this.$t('common.Sure'),
-          cancelButtonText: this.$t('common.Cancel'),
-          type: 'warning'
-        }
-      ).then(() => {
+      this.$confirm(`${this.$t('org.delConfirm')} ${realname}?`, this.$t('org.deleteWarining'), {
+        confirmButtonText: this.$t('common.Sure'),
+        cancelButtonText: this.$t('common.Cancel'),
+        type: 'warning',
+      }).then(() => {
         this.removeStudent(studentDetail)
       })
     },
@@ -180,16 +188,11 @@ export default {
         name: 'OrgEditStudent',
         query: {
           roleId: 1,
-          id: studentDetail.id
-        }
+          id: studentDetail.id,
+        },
       })
-    }
+    },
   },
-  watch: {
-    selectedClassId() {
-      this.handleChangeSelectClass()
-    }
-  }
 }
 </script>
 <style lang="scss" scoped>
@@ -201,10 +204,23 @@ export default {
     padding-bottom: 16px;
     border-bottom: 1px solid #e8e8e8;
     &-selector {
-      flex: 1;
       font-size: 14px;
+      margin-right: 40px;
       .el-select {
         width: 120px;
+      }
+    }
+    &-search {
+      flex: 1;
+      text-align: right;
+      .el-input {
+        width: 250px;
+      }
+      /deep/.el-input__inner {
+        border: none;
+        border-bottom: 1px solid #aaa;
+        border-radius: 0;
+        padding-left: 0;
       }
     }
     &-new {
@@ -215,6 +231,14 @@ export default {
   &-count {
     font-size: 14px;
     padding: 28px 0 16px;
+    position: relative;
+    height: 34px;
+    line-height: 34px;
+    &-operates {
+      position: absolute;
+      right: 0;
+      top: 28px;
+    }
   }
   &-table {
     &-header {

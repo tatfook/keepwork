@@ -63,7 +63,7 @@ const buildBlockList = mdText => {
   return blockList
 }
 
-const updateBlockList = (blockList, newBlockList) => {
+const updateBlockList = (blockList = [], newBlockList) => {
   if (newBlockList.length === 0) {
     blockList.splice(0, blockList.length)
     return
@@ -242,7 +242,7 @@ const moveBlock = (blockList, oldIndex, newIndex) => {
   tryToMergeBlock(blockList, oldIndex - 1)
 }
 
-const addBlockAfterIndex = (blockList, index, newBlock) => {
+const addBlockAfterIndex = (blockList = [], index, newBlock) => {
   let preBlock = blockList[index]
   let beginLine = 1
   if (preBlock) {
@@ -261,7 +261,7 @@ const addBlockAfterIndex = (blockList, index, newBlock) => {
   return newBlock
 }
 
-const addBlockByKey = (blockList, key, newBlock, position) => {
+const addBlockByKey = (blockList = [], key, newBlock, position) => {
   let index = -1
   if (key) index = blockList.map(el => el.key).indexOf(key)
   if (position === gConst.POSITION_BEFORE) index = index - 1

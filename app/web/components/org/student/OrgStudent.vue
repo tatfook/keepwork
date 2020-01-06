@@ -17,31 +17,35 @@
             </el-dropdown>
             <user-portrait :user="userinfo" class="org-student-profile" size="large"></user-portrait>
             <div class="org-student-username">{{username}}</div>
-            <div class="org-student-edit-btn" v-if="isClassDetailPage" @click="showEditStudentDialog">编辑个人信息</div>
-          </div>
-          <div class="class-select" v-if="isClassDetailPage">
-            <el-dropdown v-if="isMutiClasses" class="class-select-dropdown" @command="onDropdown">
-              <span class="el-dropdown-link">
-                <i class="iconfont icon-team class-select-dropdown-icon class-select-icon"></i>
-                <span class="class-select-dropdown-selected">
-                  {{currentClassName}}<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in orgClasses" :key="item.id" :command="item.id">{{item.name}}</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <span v-else class="class-select-onlyone">
-              <i class="iconfont icon-team class-select-icon"></i>
-              <span class="class-name">
-                {{currentClassName}}
-              </span>
-            </span>
-          </div>
-          <div class="class-join" v-if="isClassDetailPage">
-            <span class="class-join-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 加入班级</span>
+            <div class="org-student-edit-btn" v-if="isShowEditUserInfo" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
         </div>
+
+        <div class="org-student-renew" v-if="isShowRenewPane">
+          <div class="org-student-renew-expire">有效期至: {{studentEndTime}}</div>
+          <span class="org-student-renew-button" @click="() => isShowJoinClassDialog = true"><i class="el-icon-circle-plus-outline"></i> 续费</span>
+        </div>
+
+        <div class="org-student-class-select" v-if="isClassDetailPage">
+          <el-dropdown v-if="isMultiClasses" class="class-select-dropdown" @command="onDropdown">
+            <span class="el-dropdown-link">
+              <i class="iconfont icon-team org-student-class-select-icon"></i>
+              <span class="org-student-class-select-dropdown-item">
+                {{currentClassName}}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="item in orgClasses" :key="item.id" :command="item.id">{{item.name}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <span v-else class="org-student-class-select-onlyone">
+            <i class="iconfont icon-team org-student-class-select-onlyone-icon"></i>
+            <span class="org-student-class-select-onlyone-class-name">
+              {{currentClassName}}
+            </span>
+          </span>
+        </div>
+
         <div v-if="isClassDetailPage" class="org-student-sidebar-bottom org-student-sidebar-evaluations" @click="toEvaluationsPage">
           <i class="iconfont icon-pinggubaogao"></i> 我的评估报告
         </div>
@@ -79,18 +83,10 @@
         <router-view class="org-student-main"></router-view>
       </template>
     </div>
-    <el-dialog title="" center :visible.sync="beInClassDialog" width="30%">
-      <div class="hint">
-        <i class="el-icon-warning redIcon"></i>{{$t('lesson.beInClass')}}</div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="backCurrentClass">{{$t('lesson.resumeOldClass')}}</el-button>
-        <el-button type="primary" @click="enterNewClass">{{$t('lesson.enterNewClass')}}</el-button>
-      </span>
-    </el-dialog>
     <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
-    <edit-student-dialog :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
+    <edit-student-dialog v-if="isEditStudentVisible" :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
   </div>
 </template>
 <script>
@@ -100,11 +96,11 @@ import JoinOrg from './JoinOrg'
 import JoinClass from './JoinClass'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork, lesson } from '@/api'
-const { graphql } = keepwork
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import { locale } from '@/lib/utils/i18n'
 import EditStudentDialog from './EditStudentDialog'
+import moment from 'moment'
 
 export default {
   name: 'OrgStudent',
@@ -114,10 +110,9 @@ export default {
       selectedClassId: '',
       beInClassDialog: false,
       joinKey: '',
-      skillsList: [],
       isLoading: true,
       isShowJoinClassDialog: false,
-      isEditStudentVisible: false
+      isEditStudentVisible: false,
     }
   },
   computed: {
@@ -126,13 +121,15 @@ export default {
       orgIsAdmin: 'org/isAdmin',
       orgIsTeacher: 'org/isTeacher',
       orgClasses: 'org/student/orgClasses',
-      classroom: 'org/student/classroom',
-      teachingLesson: 'org/student/teachingLesson',
+      studentUserinfo: 'org/student/userinfo',
       OrgIsStudent: 'org/isStudent',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
       myClassmate: 'org/student/myClassmate',
-      myTeacher: 'org/student/myTeacher'
+      myTeacher: 'org/student/myTeacher',
     }),
+    studentEndTime() {
+      return moment(this.studentUserinfo.endTime).format('YYYY/MM/DD')
+    },
     isClassDetailPage() {
       return (
         this.OrgIsStudent &&
@@ -140,16 +137,21 @@ export default {
           'OrgStudentClassDetail',
           'OrgStudentClassLastUpdate',
           'OrgStudentEvaluations',
-          'OrgStudentEvaluationDetail'
+          'OrgStudentEvaluationDetail',
         ].includes(this.nowPageName)
       )
     },
+    isShowEditUserInfo() {
+      return !['JoinOrg'].includes(this.nowPageName)
+    },
+    isShowRenewPane() {
+      return !['JoinOrg'].includes(this.nowPageName)
+    },
     currentClassName() {
-      return _.get(
-        _.find(this.orgClasses, item => item.id === this.currentClassID),
-        'name',
-        ''
-      )
+      if (this.orgClasses.length === 1) {
+        return _.get(this.orgClasses, '0.name', '')
+      }
+      return _.get(_.find(this.orgClasses, item => item.id === this.currentClassID), 'name', '')
     },
     isJustStudent() {
       return !this.orgIsAdmin && !this.orgIsTeacher
@@ -166,23 +168,11 @@ export default {
     isEn() {
       return locale === 'en-US' ? true : false
     },
-    currentClassroomLessonName() {
-      return _.get(this.classroom, 'extra.lessonName', '')
-    },
-    classroomKey() {
-      return _.get(this.classroom, 'key', '')
-    },
-    skillpointsCount() {
-      let sum = 0
-      if (this.skillsList.length === 0) {
-        sum = 0
-      } else {
-        this.skillsList.every(skill => (sum += skill.score * 1))
-      }
-      return sum
-    },
     username() {
       return _.get(this.userinfo, 'username', '')
+    },
+    realname() {
+      return _.get(this.studentUserinfo, 'realname', '')
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
@@ -199,7 +189,7 @@ export default {
         'OrgStudentClassDetail',
         'OrgStudentClassLastUpdate',
         'OrgStudentEvaluations',
-        'OrgStudentEvaluationDetail'
+        'OrgStudentEvaluationDetail',
       ].includes(this.nowPageName)
     },
     userPortrait() {
@@ -220,7 +210,7 @@ export default {
     isOnlyOneClass() {
       return this.orgClasses.length === 1
     },
-    isMutiClasses() {
+    isMultiClasses() {
       return this.orgClasses.length > 1
     },
     currentClassID() {
@@ -228,26 +218,31 @@ export default {
     },
     firstClassID() {
       return _.get(this.orgClasses, '[0].id')
-    }
+    },
   },
   async created() {
     try {
-      if (!this.hasOrgClasses) {
+      if (!this.OrgIsStudent) {
         this.$router.push({
-          name: 'JoinOrg'
+          name: 'JoinOrg',
         })
         return
       }
-      if (this.isNeedRedirect && this.isOnlyOneClass) {
+      if (!this.isNeedRedirect) {
+        return
+      }
+      if (this.isOnlyOneClass) {
         this.$router.push({
           name: 'OrgStudentClassDetail',
-          params: { classId: this.firstClassID }
+          params: { classId: this.firstClassID },
+        })
+      } else {
+        this.$router.push({
+          name: 'OrgStudentClassSelect',
         })
       }
-      if (this.isNeedRedirect && this.isMutiClasses) {
-        this.$router.push({
-          name: 'OrgStudentClassSelect'
-        })
+      if (this.isClassDetailPage) {
+        this.getTeacherAndClassmate(this.currentClassID)
       }
     } catch (error) {
       console.error(error)
@@ -255,15 +250,11 @@ export default {
       this.isLoading = false
     }
   },
-  mounted() {
-    this.isClassDetailPage && this.getTeacherAndClassmate(this.currentClassID)
-  },
   methods: {
     ...mapActions({
       getTeacherAndClassmate: 'org/student/getTeacherAndClassmate',
-      getTeachingLesson: 'org/student/getTeachingLesson',
       enterClassroom: 'org/student/enterClassroom',
-      getUserInfo: 'org/student/getUserInfo'
+      getUserInfo: 'org/student/getUserInfo',
     }),
     showEditStudentDialog() {
       this.isEditStudentVisible = true
@@ -275,8 +266,8 @@ export default {
       this.$router.push({
         name: 'OrgStudentEvaluations',
         params: {
-          classId: this.currentClassID
-        }
+          classId: this.currentClassID,
+        },
       })
     },
     toUserPage(username) {
@@ -284,48 +275,15 @@ export default {
     },
     toRolePage(pageName) {
       this.$router.push({
-        name: pageName
+        name: pageName,
       })
     },
     onDropdown(classId) {
       this.$router.push({
         name: 'OrgStudentClassDetail',
         params: {
-          classId
-        }
-      })
-    },
-    async handleJoinClassroom({ key, packageId, lessonId }) {
-      try {
-        if (this.classroomKey && key !== this.classroomKey) {
-          this.beInClassDialog = true
-          this.joinKey = key
-        } else if (this.classroomKey && key == this.classroomKey) {
-          if (packageId && lessonId) {
-            this.$router.push({
-              name: 'OrgStudentPackageLesson',
-              params: { packageId, lessonId }
-            })
-          }
-        } else {
-          const classInfo = await this.enterClassroom({ key })
-          const { packageId, lessonId } = classInfo
-          if (packageId && lessonId) {
-            this.$router.push({
-              name: 'OrgStudentPackageLesson',
-              params: { packageId, lessonId }
-            })
-          }
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    },
-    backCurrentClass() {
-      const { packageId, lessonId } = this.classroom
-      this.$router.push({
-        name: 'OrgStudentPackageLesson',
-        params: { packageId, lessonId }
+          classId,
+        },
       })
     },
     async enterNewClass() {
@@ -334,22 +292,22 @@ export default {
       if (packageId && lessonId) {
         this.$router.push({
           name: 'OrgStudentPackageLesson',
-          params: { packageId, lessonId }
+          params: { packageId, lessonId },
         })
       }
       this.beInClassDialog = false
     },
     onHideJoinClassDialog() {
       this.isShowJoinClassDialog = false
-    }
+    },
   },
   components: {
     OrgHeader,
     JoinOrg,
     JoinClass,
     UserPortrait,
-    EditStudentDialog
-  }
+    EditStudentDialog,
+  },
 }
 </script>
 <style lang="scss">
@@ -406,46 +364,8 @@ $borderColor: #e8e8e8;
     &-top {
       border-radius: 8px;
       background: #fff;
-      .class-select {
-        margin: 0 10px 10px;
-        padding: 6px 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        &-icon {
-          font-size: 22px;
-          color: #030313;
-        }
-        &-dropdown {
-          cursor: pointer;
-          font-size: 14px;
-          &-selected {
-            color: #2397f3;
-          }
-        }
-        &-onlyone {
-          margin-top: 10px;
-          font-size: 14px;
-          .icon {
-            font-size: 26px;
-          }
-          .class-name {
-            color: #2397f3;
-          }
-        }
-      }
-      .class-join {
-        border-top: 1px solid #e8e8e8;
-        text-align: center;
-        height: 34px;
-        line-height: 34px;
-        font-size: 14px;
-        color: #2397f3;
-        &-button {
-          cursor: pointer;
-        }
-      }
     }
+
     &-bottom {
       margin-top: 20px;
       background: #fff;
@@ -470,26 +390,62 @@ $borderColor: #e8e8e8;
     flex: 1;
   }
   &-message {
-    padding: 32px 16px 0;
+    padding: 32px 16px 16px;
     position: relative;
     text-align: center;
+    margin-bottom: 20px;
     &.fix-bottom {
       padding-bottom: 10px;
     }
   }
-  &-skill {
+  &-renew {
+    background: #fff;
+    margin-bottom: 20px;
+    border-radius: 4px;
     text-align: center;
     font-size: 14px;
-    &-detail {
-      color: #409eff;
+    color: #2397f3;
+    &-expire {
+      border-bottom: 1px solid #e8e8e8;
+      height: 60px;
+      line-height: 60px;
+      color: #8c8c8c;
+      font-size: 12px;
+    }
+    &-button {
+      height: 46px;
+      line-height: 46px;
       cursor: pointer;
-      padding-left: 6px;
-      .el-icon-back {
-        transform: rotate(180deg);
-        margin-left: 3px;
+    }
+  }
+  &-class-select {
+    display: flex;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    height: 68px;
+    background: #fff;
+    &-icon {
+      font-size: 26px;
+      color: #606266;
+    }
+    &-dropdown-item {
+      cursor: pointer;
+      font-size: 14px;
+      color: #2397f3;
+    }
+    &-onlyone {
+      margin-top: 10px;
+      font-size: 14px;
+      &-icon {
+        font-size: 26px;
+      }
+      &-class-name {
+        color: #2397f3;
       }
     }
   }
+
   &-role-label {
     position: absolute;
     left: 8px;
@@ -528,11 +484,6 @@ $borderColor: #e8e8e8;
     height: 32px;
     line-height: 32px;
     border-radius: 4px;
-    cursor: pointer;
-  }
-  &-skills {
-    font-size: 14px;
-    color: #606266;
     cursor: pointer;
   }
 
@@ -581,72 +532,6 @@ $borderColor: #e8e8e8;
     line-height: 60px;
     font-size: 14px;
     color: #999;
-  }
-  &-skill-dialog {
-    /deep/ .el-dialog {
-      width: 396px;
-      max-width: 100%;
-    }
-    /deep/ .el-dialog__header {
-      padding: 0;
-      text-align: center;
-      height: 40px;
-      line-height: 40px;
-      background-color: #309efe;
-    }
-    /deep/ .el-dialog__title {
-      color: #fff;
-      font-size: 16px;
-    }
-    /deep/ .el-dialog__headerbtn {
-      top: 14px;
-      right: 16px;
-    }
-    /deep/ .el-dialog__headerbtn .el-dialog__close {
-      color: #fff;
-      font-weight: bold;
-    }
-    /deep/ .el-dialog__body {
-      padding: 24px 42px 36px 42px;
-    }
-    &-skills {
-      &-count {
-        color: #303133;
-      }
-    }
-    &-info {
-      font-size: 14px;
-      color: #777;
-      margin-bottom: 16px;
-    }
-    ul {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    li {
-      list-style: none;
-      width: 145px;
-      border-bottom: 1px solid #ececec;
-      font-size: 14px;
-      color: #818181;
-      height: 32px;
-      line-height: 32px;
-      &:nth-child(1),
-      &:nth-child(2) {
-        border-top: 1px solid #ececec;
-      }
-    }
-    &-en {
-      .el-dialog {
-        width: 566px;
-      }
-      li {
-        width: 230px;
-      }
-    }
   }
 }
 </style>

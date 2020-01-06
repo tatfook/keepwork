@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { keepwork, GitAPI, skyDrive } from '@/api'
 import { props } from './mutations'
 import { getFileFullPathByPath, getFileSitePathByPath, webTemplateProject } from '@/lib/utils/gitlab'
-import { showRawForGuest as gitlabShowRawForGuest } from '@/api/gitlab'
+import { getConfig, getWebPageConfig, getTemplateList, getPageTemplateContent, getTemplateFile } from '@/api/gitlab'
 import LayoutHelper from '@/lib/mod/layout'
 import ThemeHelper from '@/lib/theme'
 import Cookies from 'js-cookie'
@@ -19,7 +19,6 @@ const {
   GET_PROFILE_SUCCESS,
   SET_REAL_AUTH_PHONE_NUM,
   GET_ALL_WEBSITE_SUCCESS,
-  GET_SITE_DATASOURCE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
   GET_COMMENTS_BY_PAGE_URL_SUCCESS,
@@ -204,10 +203,6 @@ const actions = {
     let { useCache = false } = payload || {}
 
     return dispatch('getAllWebsite', { useCache })
-    // return Promise.all([
-    //   dispatch('getAllWebsite', { useCache }),
-    //   dispatch('getAllSiteDataSource', { useCache })
-    // ])
   },
   async createWebsite({ dispatch }, payload) {
     await dispatch('upsertWebsite', payload)
@@ -226,46 +221,37 @@ const actions = {
     const themeJson = {
       content: JSON.stringify(ThemeHelper.defaultTheme),
       name: 'theme.json',
-      path: 'templates/basic/_config/theme.json',
-      type: 'blob'
+      path: '_config/theme.json',
+      isBlob: true
     }
     let ignoreFiles = ['layoutSolutionDataStructure.md', 'config.json', 'menu.md']
     fileList = fileList.filter(file => !ignoreFiles.includes(file.name))
     fileList = _.uniq([...fileList, themeJson], 'path')
     const projectName = `${username}/${sitename}`
     let files = _.map(fileList, ({ path, content }) => {
-      let filename = path.split('/').slice(2).join('/')
-      return { path: `${username}/${sitename}/${filename}`, content }
+      return { path: `${projectName}/${path}`, content }
     })
     await dispatch('gitlab/createMultipleFile', { projectName, files }, { root: true })
-    // for (let { path, name, content } of fileList) {
-    //   let filename = path.split('/').slice(2).join('/')
-    //   await dispatch('gitlab/createFile', { projectName, path: `${username}/${sitename}/${filename}`, content, refreshRepositoryTree: false }, { root: true })
-    // }
-    // refresh repositoryTree
     await dispatch('gitlab/getRepositoryTree', { projectName, path: `${username}/${name}`, useCache: false }, { root: true })
   },
 
   async getWebTemplateConfig({ commit, dispatch, getters: { webTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webTemplateConfig)) return
-    let { rawBaseUrl, dataSourceUsername, projectName, configFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, configFullPath)
+    let config = await getConfig()
     commit(GET_WEB_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebPageTemplateConfig({ commit, dispatch, getters: { webPageTemplateConfig, getWebTemplate } }) {
     if (!_.isEmpty(webPageTemplateConfig)) return
-    let { rawBaseUrl, dataSourceUsername, projectName, pageTemplateConfigFullPath } = webTemplateProject
-    let config = await gitlabShowRawForGuest(rawBaseUrl, projectName, pageTemplateConfigFullPath)
+    let config = await getWebPageConfig()
     commit(GET_WEBPAGE_TEMPLATE_CONFIG_SUCCESS, { config })
   },
   async getWebTemplateFiles({ commit, dispatch }, webTemplate) {
     await dispatch('getWebTemplateFileList', webTemplate)
     let { fileList } = webTemplate
-    let { rawBaseUrl, dataSourceUsername, projectName } = webTemplateProject
     await Promise.all(fileList.map(async file => {
       let { path, content } = file
       if (!_.isEmpty(content)) return
-      content = await gitlabShowRawForGuest(rawBaseUrl, projectName, path)
+      content = await getTemplateFile(path)
       content = _.isString(content) ? content : JSON.stringify(content)
       commit(GET_WEB_TEMPLATE_FILE_SUCCESS, { file, content })
     }))
@@ -273,10 +259,8 @@ const actions = {
   async getWebTemplateFileList({ commit }, webTemplate) {
     let { folder, fileList } = webTemplate
     if (!_.isEmpty(fileList)) return
-    let { rawBaseUrl, projectName } = webTemplateProject
-    let gitlabForGuest = new GitAPI({ url: rawBaseUrl, token: ' ' })
-    fileList = await gitlabForGuest.getTree({ projectName, path: `templates/${folder}`, recursive: true })
-    fileList = fileList.filter(file => file.type === 'blob')
+    fileList = await getTemplateList(folder)
+    fileList = fileList.filter(file => file.isBlob)
     commit(GET_WEB_TEMPLATE_FILELIST_SUCCESS, { webTemplate, fileList })
   },
   async upsertWebsite(context, { name, websiteSetting: {
@@ -301,8 +285,7 @@ const actions = {
   async getContentOfWebPageTemplate({ dispatch, commit }, { template }) {
     let { content, contentPath } = template
     if (typeof content === 'string') return content
-    let { rawBaseUrl, dataSourceUsername, pageTemplateRoot, projectName } = webTemplateProject
-    content = await gitlabShowRawForGuest(rawBaseUrl, projectName, `${pageTemplateRoot}/${contentPath}`)
+    content = await getPageTemplateContent(contentPath)
     commit(GET_WEBPAGE_TEMPLATE_CONTENT_SUCCESS, { template, content })
 
     return content
@@ -325,17 +308,8 @@ const actions = {
     await keepwork.website.deleteWebsite({ siteId }).then(res => {
       dispatch('getAllWebsite')
     }).catch(err => {
+      console.error(err)
     })
-  },
-  async getAllSiteDataSource(context, payload) {
-    let { useCache = false } = payload || {}
-    let { commit, getters } = context
-
-    let { username, siteDataSourcesMap } = getters
-    if (useCache && !_.isEmpty(siteDataSourcesMap)) return
-
-    let list = await keepwork.siteDataSource.getByUsername({ username })
-    commit(GET_SITE_DATASOURCE_SUCCESS, { username, list })
   },
   async getAllContributedWebsite(context, payload) {
     let { useCache = false } = payload || {}
@@ -344,7 +318,6 @@ const actions = {
     let { username } = getters
     if (useCache) return
     let list = await keepwork.siteUser.getContributeSites()
-    // let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
     list = _.values(list).filter(({ sitename, username } = {}) => sitename && username)
 
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
@@ -513,7 +486,6 @@ const actions = {
   },
   async saveSiteBasicSetting(context, { newBasicMessage }) {
     let { commit } = context
-    // await keepwork.website.updateByName(newBasicMessage)
     await keepwork.website.updateById(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
   },
@@ -566,13 +538,10 @@ const actions = {
     return membersDetail
   },
   async createComment(context, { url: path, content }) {
-    let { dispatch, commit, getters, rootGetters } = context
+    let { dispatch, commit } = context
     let fullPath = getFileFullPathByPath(path)
     await dispatch('getProfile')
-    let { userId } = getters
     await dispatch('getWebsiteDetailInfoByPath', { path })
-    let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
-
     let payload = { objectType: 2, objectId: fullPath, content }
     let { commentList } = await keepwork.websiteComment.create(payload)
 

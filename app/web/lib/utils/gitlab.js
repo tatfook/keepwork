@@ -27,6 +27,32 @@ export const webTemplateProject = {
 //   pageTemplateConfigFullPath: 'webpage/config.json'
 // }
 
+const sortFile = (folder, rootPath) => {
+  _.forEach(folder.children, item => {
+    item.path = `${rootPath}/${item.path}`
+    if (item.children && item.children.length) {
+      sortFile(item, rootPath)
+    }
+  })
+  const trees = _.filter(folder.children, file => file.isTree)
+  const blobs = _.filter(folder.children, file => file.isBlob)
+  folder.children = [...trees, ...blobs]
+  folder.children = _.filter(folder.children, file => !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(file.name))
+}
+
+export const sortFolder2Top = (files, rootPath) => {
+  const trees = _.filter(files, file => file.isTree)
+  const blobs = _.filter(files, file => file.isBlob && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(file.name))
+  files = [...trees, ...blobs]
+  _.forEach(files, item => {
+    item.path = `${rootPath}/${item.path}`
+    if (item.children && item.children.length) {
+      sortFile(item, rootPath)
+    }
+  })
+  return files
+}
+
 /*doc
   # gitTree2NestedArray
 
@@ -182,5 +208,6 @@ export default {
   getRelativePathByPath,
   getPageInfoByPath,
   getFilenameWithExt,
-  gitFilenameValidator
+  gitFilenameValidator,
+  sortFolder2Top
 }

@@ -30,6 +30,10 @@ const {
   GET_CLASS_EVALUATION_LIST_SUCCESS,
   GET_ORG_CLASS_REPORT_SUCCESS,
   GET_SENDED_MESSAGE_SUCCESS,
+  GET_CODES_STATUS_SUCCESS,
+  SET_USE_FORMAL_CODE_PARAMS,
+  SET_RE_ACTIVATED_PARAMS,
+  GET_HISTORY_STUDENTS_SUCCESS,
 } = props
 
 const actions = {
@@ -122,10 +126,7 @@ const actions = {
     ])
     const { orgPackagesDetail } = getters
     const lessons = _.sortBy(_.get(orgPackagesDetail, [packageId, 'lessons'], []), item => item.lessonNo)
-    const lessonNo = _.findIndex(
-      lessons,
-      item => item.lessonId === _.toNumber(lessonId),
-    )
+    const lessonNo = _.findIndex(lessons, item => item.lessonId === _.toNumber(lessonId))
     detail.packageIndex = lessonNo + 1
     const modList = Parser.buildBlockList(res.content)
     const courseware = Parser.buildBlockList(res.courseware)
@@ -166,9 +167,9 @@ const actions = {
     let classes = await keepwork.lessonOrganizations.getClassAndMembers({ _roleId })
     commit(GET_CLASSES_WITH_MEMBER_SUCCESS, { classes, organizationId })
   },
-  async createNewClass({ dispatch }, { organizationId, name, begin, end, packages }) {
+  async createNewClass({ dispatch }, { organizationId, name, packages }) {
     let result = await keepwork.lessonOrganizationClasses
-      .createClasses({ organizationId, name, begin, end, packages })
+      .createClasses({ organizationId, name, packages })
       .catch(error => {
         return Promise.reject(error.response)
       })
@@ -233,16 +234,12 @@ const actions = {
       orgId: currentOrg.id,
     })
   },
-  async getOrgStudentList(context, { organizationId, classId }) {
-    let { commit } = context
-    let result = classId
-      ? await keepwork.lessonOrganizationClassMembers.getStudentsByClassId({
-        organizationId,
-        classId,
-      })
-      : await keepwork.lessonOrganizationClassMembers.getStudents({
-        organizationId,
-      })
+  async removeMemberFromOrg(context, { memberId, roleId }) {
+    await keepwork.lessonOrganizationClassMembers.clearRoleFromOrg({ memberId, _roleId: roleId })
+  },
+  async getOrgStudentList({ commit, getters: { currentOrgId: organizationId } }, params) {
+    const { classId } = params
+    let result = await keepwork.lessonOrganizationClassMembers.getStudents(params)
     let orgStudents = result.rows
     commit(GET_ORG_STUDENTS_SUCCESS, { organizationId, orgStudents, classId })
   },
@@ -422,6 +419,36 @@ const actions = {
   async getSendedMessage({ commit }, params) {
     let result = await keepwork.messages.getSendedMessage(params)
     commit(GET_SENDED_MESSAGE_SUCCESS, result)
+  },
+  async getOrgCodesStatus({ commit }) {
+    let result = await keepwork.lessonOrganizationActivateCodes.getUsedStatus()
+    commit(GET_CODES_STATUS_SUCCESS, result)
+  },
+  async setInvalid(context, { ids }) {
+    await keepwork.lessonOrganizationActivateCodes.setInvalid(ids)
+  },
+  async endClass({ dispatch, getters: { currentOrgId } }, { classId }) {
+    await keepwork.lessonOrganizationClasses.endClass({ classId })
+    await dispatch('getOrgClassList', { organizationId: currentOrgId })
+  },
+  setUseFormalCodeParams({ commit }, params) {
+    commit(SET_USE_FORMAL_CODE_PARAMS, params)
+  },
+  setReactivateParams({ commit }, params) {
+    commit(SET_RE_ACTIVATED_PARAMS, params)
+  },
+  async toBeFormal(context, params) {
+    await keepwork.lessonOrganizationClassMembers.toBeFormal(params)
+  },
+  async renew(context, params) {
+    await keepwork.lessonOrganizationClassMembers.recharge(params)
+  },
+  async reactivate(context, params) {
+    await keepwork.lessonOrganizationClassMembers.reactivate(params)
+  },
+  async getHistoryStudents({ commit }, params) {
+    let result = await keepwork.lessonOrganizationClassMembers.historyStudents(params)
+    commit(GET_HISTORY_STUDENTS_SUCCESS, result)
   },
 }
 

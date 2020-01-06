@@ -20,18 +20,24 @@ import { mapActions } from 'vuex'
 export default {
   name: 'OrgCell',
   props: {
-    orgData: {}
+    orgData: {},
   },
   methods: {
     ...mapActions({
-       openLink: 'paracraft/openLink'
+      openLink: 'paracraft/openLink',
     }),
     handleOpenLink() {
       const link = `https://keepwork.com/org/${this.loginUrl}`
-      this.openLink(link)
-    }
+      this.openLink({
+        link,
+        isProtocolType: this.isProtocolType,
+      })
+    },
   },
   computed: {
+    isProtocolType() {
+      return _.get(this.$route, 'query.type') == 'protocol'
+    },
     orgLogo() {
       return this.orgData.logo || require('@/assets/paracraft/default-logo.png')
     },
@@ -46,8 +52,8 @@ export default {
     },
     loginUrl() {
       return this.orgData.loginUrl
-    }
-  }
+    },
+  },
 }
 </script>
 

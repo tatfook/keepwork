@@ -14,7 +14,7 @@ const errMsg = {
   4: '班级未开始',
   5: '人数已达上限',
   6: '已经是该班级的学生',
-  7: '不是该机构的邀请码'
+  7: '不是该机构的邀请码',
 }
 
 const actions = {
@@ -29,10 +29,7 @@ const actions = {
   async updateUsedCount(state, { id }) {
     await paracraft.pBlocks.updateUsedCount({ id })
   },
-  async useCompToParacraft(
-    { dispatch },
-    { port, fileType, fileName, downloadUrl, id }
-  ) {
+  async useCompToParacraft({ dispatch }, { port, fileType, fileName, downloadUrl, id }) {
     fileType = _.lowerCase(fileType)
     let paracraftBaseUrl = `http://127.0.0.1:${port}/ajax/console?action=runcode&text=cmd("/install -ext ${fileType} -filename ${fileName} ${downloadUrl}")`
     await axios
@@ -52,14 +49,17 @@ const actions = {
     const paracraftBaseUrl = `http://127.0.0.1:${paracraftPORT}/ajax/console?action=runcode`
     await axios
       .post(paracraftBaseUrl, { text: `cmd("${cmd}")` })
-      .then(() => {
-      })
+      .then(() => {})
       .catch(error => {
         return Promise.reject(error)
       })
   },
-  async openLink({ dispatch }, link) {
+  async openLink({ dispatch }, { link, isProtocolType }) {
     const cmd = `/open ${link}`
+    if (isProtocolType) {
+      window.location.href = `paracraft://cmd("${cmd}")`
+      return
+    }
     await dispatch('runParacraftCMD', cmd)
   },
   async joinOrg({ dispatch }, params) {
@@ -74,7 +74,7 @@ const actions = {
       Message({ type: 'error', message, offset: 80 })
       return false
     }
-  }
+  },
 }
 
 export default actions

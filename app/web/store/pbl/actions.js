@@ -23,6 +23,7 @@ let {
   GET_WORKS_BY_GAMEID,
   GET_PROJECT_GAMES_SUCCESS,
   GET_LEGAL_GAMES_PROJECTS,
+  GET_WORD_LIMIT_SUCCESS,
 } = props
 
 const actions = {
@@ -374,6 +375,10 @@ const actions = {
   async getGameWorksStatistics({ commit }) {
     const data = await keepwork.games.getGameWorksStatistics()
     return data
+  },
+  async getWordLimit({ commit }, { userId }) {
+    let result = await keepwork.user.worldLimit({ userId })
+    commit(GET_WORD_LIMIT_SUCCESS, result)
   },
 }
 

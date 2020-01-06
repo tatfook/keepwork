@@ -24,9 +24,6 @@
     </div>
     <template v-else>
       <div class="org-teacher-classes-member">
-        <div class="member-header">
-          <i class="iconfont icon-shijian"></i> 开班时间: <span class="member-header-date"> {{orgClassesDate}} </span>
-        </div>
         <div class="member-divide">
           班级成员
         </div>
@@ -45,16 +42,18 @@
           <div> <i class="iconfont icon-xuesheng member-banner-icon"></i>学生</div>
           <div class="member-banner-count">学生数: {{selectedClassStudentsCount}}</div>
         </div>
-      <el-table :data="orgClassStudentsTable" border style="width: 100%">
-          <el-table-column prop="realname" :label="$t('org.nameLabel')" width="120">
+        <el-table :data="orgClassStudentsTable" border style="width: 100%">
+          <el-table-column prop="realname" :label="$t('org.nameLabel')" width="110">
           </el-table-column>
-          <el-table-column prop="username" :label="$t('org.usernameLabel')" width="120">
+          <el-table-column prop="username" :label="$t('org.usernameLabel')" width="110">
           </el-table-column>
-          <el-table-column prop="parentPhoneNum" label="家长手机号" width="162">
+          <el-table-column prop="type" label="用户类型" width="80">
           </el-table-column>
-          <el-table-column prop="createdAt" :label="$t('org.AddedAtLabel')">
+          <el-table-column prop="parentPhoneNum" label="家长手机号" width="110">
           </el-table-column>
-          <el-table-column align="center" width="280" :label="$t('org.operationLabel')" v-if="isCanEdit">
+          <el-table-column prop="endTime" label="到期时间" width="110">
+          </el-table-column>
+          <el-table-column align="center" :label="$t('org.operationLabel')" v-if="isCanEdit">
             <template slot-scope="scope">
               <el-button @click="handleEditStudent(scope)" size="mini">{{$t("org.Edit")}}</el-button>
               <el-button @click="handleRemoveStudent(scope)" size="mini">{{$t("org.Remove")}}</el-button>
@@ -99,7 +98,7 @@ export default {
   components: {
     OrgClassesTabbar,
     ChangePasswordDialog,
-    ProjectCell
+    ProjectCell,
   },
   data() {
     let phoneValidater = (rule, value, callback) => {
@@ -119,17 +118,17 @@ export default {
         name: [
           {
             required: true,
-            message: '请输入学生姓名'
-          }
+            message: '请输入学生姓名',
+          },
         ],
         parentPhoneNum: [
           {
             validator: phoneValidater,
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
-      studentFormData: {}
+      studentFormData: {},
     }
   },
   async created() {
@@ -138,7 +137,7 @@ export default {
   watch: {
     async $route(rotue) {
       this.initClassData()
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -149,40 +148,31 @@ export default {
       addStudentToClass: 'org/teacher/addStudentToClass',
       removeStudentFromClass: 'org/teacher/removeStudentFromClass',
       getOrgStudents: 'org/teacher/getOrgStudents',
-      getLastUpdateProjects: 'org/teacher/getLastUpdateProjects'
+      getLastUpdateProjects: 'org/teacher/getLastUpdateProjects',
     }),
     async initClassData() {
-      await Promise.all([
-        this.getOrgClasses({ cache: true }),
-        this.getOrgStudents()
-      ])
-      const classId = _.defaultTo(
-        _.toNumber(this.$route.query.classId),
-        this.firstOrgClassId
-      )
+      await Promise.all([this.getOrgClasses({ cache: true }), this.getOrgStudents()])
+      const classId = _.defaultTo(_.toNumber(this.$route.query.classId), this.firstOrgClassId)
       await this.getClassMembers(classId)
       await this.getLastUpdateProjects({ classId })
       this.selectedClassId = classId
       this.isLoading = false
     },
     async getClassMembers(classId) {
-      await Promise.all([
-        this.getOrgClassStudentsById({ classId }),
-        this.getOrgClassTeachersById({ classId })
-      ])
+      await Promise.all([this.getOrgClassStudentsById({ classId }), this.getOrgClassTeachersById({ classId })])
     },
     showChangeDialog(studentDetail) {
       let {
         realname,
         users: { username: memberName },
         classId,
-        memberId
+        memberId,
       } = studentDetail
       this.changingMember = {
         realname,
         memberName,
         classId,
-        memberId
+        memberId,
       }
       this.isChangeDialogVisible = true
     },
@@ -200,7 +190,7 @@ export default {
       this.studentFormData = {
         name: row.realname,
         account: row.username,
-        parentPhoneNum: row.parentPhoneNum
+        parentPhoneNum: row.parentPhoneNum,
       }
     },
     async handleRemoveStudent({ row }) {
@@ -208,7 +198,7 @@ export default {
       this.$confirm(`${this.$t('org.delConfirm')} ${realname}?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       }).then(() => {
         this.toRemoveStudent({ row })
       })
@@ -217,11 +207,11 @@ export default {
       try {
         await this.removeStudentFromClass({
           classId: this.selectedClassId,
-          studentId: row.id
+          studentId: row.id,
         })
         this.$message({
           type: 'success',
-          message: this.$t('org.removeSuccessfully')
+          message: this.$t('org.removeSuccessfully'),
         })
       } catch (error) {
         this.$message.error(error)
@@ -237,13 +227,10 @@ export default {
           try {
             await this.addStudentToClass({
               currentClassId: this.selectedClassId,
-              classIds: [
-                ..._.get(this.orgStudents, [this.studentFormData.account], []),
-                this.selectedClassId
-              ],
+              classIds: [..._.get(this.orgStudents, [this.studentFormData.account], []), this.selectedClassId],
               memberName: this.studentFormData.account,
               realname: this.studentFormData.name,
-              parentPhoneNum: this.studentFormData.parentPhoneNum
+              parentPhoneNum: this.studentFormData.parentPhoneNum,
             })
             this.isShowAddStudentForm = false
           } catch (error) {
@@ -252,7 +239,7 @@ export default {
           }
         }
       })
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -261,7 +248,7 @@ export default {
       orgClassTeachers: 'org/teacher/orgClassTeachers',
       currentOrg: 'org/currentOrg',
       orgStudents: 'org/teacher/orgStudents',
-      lastUpdateProjects: 'org/teacher/lastUpdateProjects'
+      lastUpdateProjects: 'org/teacher/lastUpdateProjects',
     }),
     firstOrgClassId() {
       return _.get(this.orgClasses, '[0].id', '')
@@ -271,15 +258,6 @@ export default {
     },
     selectedClassStudents() {
       return _.get(this.orgClassStudents, [this.selectedClassId, 'rows'], [])
-    },
-    orgClassesDate() {
-      const { begin = '', end = '' } = _.find(
-        this.orgClasses,
-        cls => cls.id === this.selectedClassId
-      )
-      return `${moment(begin).format('YYYY/MM/DD')} - ${moment(end).format(
-        'YYYY/MM/DD'
-      )}`
     },
     selectedClassStudentsCount() {
       return this.selectedClassStudents.length
@@ -293,16 +271,13 @@ export default {
     orgClassStudentsTable() {
       return _.map(this.selectedClassStudents, item => ({
         ...item,
-        createdAt: moment(item.createdAt).format('YYYY-MM-DD HH:mm'),
-        username: item.users.username
+        endTime: moment(item.endTime).format('YYYY-MM-DD'),
+        username: item.users.username,
+        type: this.typeDict[item.type],
       }))
     },
     selectedClassName() {
-      return _.get(
-        _.find(this.orgClasses, item => item.id === this.selectedClassId),
-        'name',
-        ''
-      )
+      return _.get(_.find(this.orgClasses, item => item.id === this.selectedClassId), 'name', '')
     },
     currentOrgPrivilege() {
       return _.get(this.currentOrg, 'privilege', 0)
@@ -312,8 +287,14 @@ export default {
     },
     orgId() {
       return _.get(this.currentOrg, 'id')
-    }
-  }
+    },
+    typeDict() {
+      return {
+        1: '试听',
+        2: '正式',
+      }
+    },
+  },
 }
 </script>
 

@@ -66,13 +66,6 @@ const actions = {
       modList
     })
   },
-  async beginTheClass(context, payload) {
-    const { commit } = context
-    let classroom = await lesson.classrooms.begin({
-      payload
-    })
-    commit(BEGIN_THE_CLASS_SUCCESS, classroom)
-  },
   async dismissTheClass(context, payload) {
     const {
       commit,
@@ -113,9 +106,6 @@ const actions = {
     if (isBeInClass && !isClassIsOver) {
       commit(COPY_CLASSROOM_QUIZ, _.get(lessonDetail, 'quiz', []))
     }
-  },
-  async leaveTheClassroom({ commit, getters: { isBeInClass, isClassIsOver } }) {
-    isBeInClass && isClassIsOver && commit(LEAVE_THE_CLASSROOM)
   },
   async getUserPackages(context, { useCache = true }) {
     let {
