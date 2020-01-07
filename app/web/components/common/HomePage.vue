@@ -288,7 +288,7 @@ export default {
     },
     async getNews() {
       const HomePageInfo = {
-        apiPrefix: 'https://api.keepwork.com/git/v0',
+        apiPrefix: process.env.KEEPWORK_API_PREFIX,
         projectName: 'official/keepwork',
         newsPath: this.isEn ? 'official/keepwork/news_en.md' : 'official/keepwork/news.md',
       }

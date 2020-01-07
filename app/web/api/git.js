@@ -1,6 +1,9 @@
 import axios from 'axios'
 import _ from 'lodash'
 import Cookies from 'js-cookie'
+import {
+  sortFolder2Top
+} from '@/lib/utils/gitlab'
 
 const defaultConfig = {
   url: process.env.KEEPWORK_API_PREFIX,
@@ -41,7 +44,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
           const res = await instance.get(
             `repos/${projectName}/tree?folderPath=${path}&recursive=${recursive}`
           )
-          return res.data
+          return sortFolder2Top(res.data, _projectName)
         },
         files: {
           getFileCommitList: async ({
