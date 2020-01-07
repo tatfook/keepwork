@@ -63,6 +63,7 @@ export default {
   name: 'UseCode',
   props: {
     nowPageText: String,
+    confirmText: String,
     selectedStudents: Array,
     isTryShow: {
       type: Boolean,
@@ -111,13 +112,16 @@ export default {
     toStudentListPage() {
       this.$emit('cancel')
     },
-    confirmOperate() {
-      const params = {
-        type: this.$refs.codeTypesRef.activeTypeValue,
-        userIds: _.map(this.waitingStudents, student => student.memberId),
-        classIds: this.classIds,
-      }
-      this.$emit('save', params)
+    async confirmOperate() {
+      try {
+        await this.$confirm(this.confirmText, '', { center: true })
+        const params = {
+          type: this.$refs.codeTypesRef.activeTypeValue,
+          userIds: _.map(this.waitingStudents, student => student.memberId),
+          classIds: this.classIds,
+        }
+        this.$emit('save', params)
+      } catch (error) {}
     },
     removeStudent(student) {
       if (this.waitingStudents.length === 1) {
