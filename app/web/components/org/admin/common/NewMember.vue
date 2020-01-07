@@ -21,7 +21,7 @@
         <el-form-item class="new-member-item-form-item" :label="$t('org.classLabel')" :rules="newMemberRules.classIds" prop="classIds">
           <el-select v-model="newMemberItem.classIds" :placeholder="$t('org.pleaseSelect')" multiple>
             <span :title="newMemberItem.classIds | idToTextFilter(orgClasses)" class="new-member-item-form-item-selected" :class="{'new-member-item-form-item-selected-empty': newMemberItem.classIds.length == 0}" slot="prefix">{{newMemberItem.classIds | idToTextFilter(orgClasses, $t('org.pleaseSelect'))}}</span>
-            <el-option v-for="(classItem, index) in filterOverDueClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
+            <el-option v-for="(classItem, index) in orgClasses" :key="index" :label="classItem.name" :value="classItem.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="new-member-item-form-item new-member-item-remove">
@@ -105,14 +105,6 @@ export default {
     orgClasses() {
       return this.getOrgClassesById({ id: this.orgId }) || []
     },
-    filterOverDueClasses() {
-      let nowDate = new Date().valueOf()
-      return _.filter(this.orgClasses, classDetail => {
-        let classBegin = new Date(classDetail.begin).valueOf()
-        let classEnd = new Date(classDetail.end).valueOf()
-        return classEnd >= nowDate
-      })
-    },
     orgRestUserCount() {
       return this.getOrgRestCount({ id: this.orgId })
     },
@@ -160,7 +152,7 @@ export default {
         realname: '',
         memberName: '',
         classIds:
-          this.memberType == 'student' ? [this.filterOverDueClasses[0].id] : []
+          this.memberType == 'student' ? [this.orgClasses[0].id] : []
       })
     },
     removeNewMember(index) {
