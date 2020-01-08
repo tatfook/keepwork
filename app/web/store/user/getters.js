@@ -158,6 +158,7 @@ const getters = {
 
     return contributedSiteList
   },
+  contributedWebsiteNames: (state, { contributedSiteList }) => contributedSiteList.map(i => i.rootPath),
   contributedSiteList: (state, { username, getContributedSiteListByUsername }) =>
     getContributedSiteListByUsername(username),
   contributedSitePathMap: (state, { contributedSiteList }) =>
