@@ -208,13 +208,9 @@ export default {
       })
     },
     async getLikes() {
-      return keepwork.projects.getProjects({
-        'x-order': 'lastStar-desc-star-desc-updatedAt-desc',
+      return keepwork.projects.mostStar({
         'x-per-page': 8,
-        'x-page': 1,
-        star: {
-          $gt: 2,
-        },
+        'x-page': 1
       })
     },
     getPackageSuitableAge(lessonPackage) {

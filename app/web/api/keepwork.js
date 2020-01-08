@@ -314,6 +314,7 @@ export const projects = {
   getProjectGames: async ({ projectId }) => get(`projects/${projectId}/game`),
   visitProject: async projectId => get(`projects/${projectId}/visit`),
   deleteProject: async projectId => deleteMethod(`projects/${projectId}`),
+  mostStar: async params => get('projects/mostStar', { params })
 }
 
 export const applies = {
