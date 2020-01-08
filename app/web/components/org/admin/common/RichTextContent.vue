@@ -31,7 +31,7 @@ export default {
       'quote', // 引用
       'emoticon', // 表情
       'undo', // 撤销
-      'redo' // 重复
+      'redo', // 重复
     ]
     editor.customConfig.colors = this.colors
     editor.customConfig.onchange = this.handleChange
@@ -44,14 +44,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getFormDetailById: 'org/getFormDetailById'
+      getFormDetailById: 'org/getFormDetailById',
     }),
     formId() {
       return _.get(this.$route, 'params.id')
     },
     formDetail() {
       return this.getFormDetailById({ id: this.formId }) || {}
-    }
+    },
   },
   data() {
     return {
@@ -73,8 +73,8 @@ export default {
         '#46acc8',
         '#f36823',
         '#f9963b',
-        '#ffffff'
-      ]
+        '#ffffff',
+      ],
     }
   },
   methods: {
@@ -102,11 +102,11 @@ export default {
       }
       this.formEditor.txt.append(appendStr)
       this.handleChange()
-    }
+    },
   },
   components: {
-    SkyDriveManagerDialog
-  }
+    SkyDriveManagerDialog,
+  },
 }
 </script>
 <style lang="scss" scoped>

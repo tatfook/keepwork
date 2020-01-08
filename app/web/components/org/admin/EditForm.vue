@@ -58,12 +58,12 @@ export default {
       isLoading: false,
       isDialogVisible: false,
       isLoadPerset: true,
-      formDetailData: {}
+      formDetailData: {},
     }
   },
   computed: {
     ...mapGetters({
-      getFormDetailById: 'org/getFormDetailById'
+      getFormDetailById: 'org/getFormDetailById',
     }),
     formId() {
       return _.get(this.$route, 'params.id')
@@ -85,13 +85,13 @@ export default {
       if (!title) return false
       if (this.formType == 3) return quizzes.length > 0
       return Boolean(plainText)
-    }
+    },
   },
   methods: {
     ...mapActions({
       checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
       orgUpdateForm: 'org/updateForm',
-      orgGetForms: 'org/getForms'
+      orgGetForms: 'org/getForms',
     }),
     showPreview() {
       this.setFormContent()
@@ -118,7 +118,7 @@ export default {
     showSuccessInfo(message) {
       this.$message({
         type: 'success',
-        message
+        message,
       })
     },
     async saveForm() {
@@ -127,7 +127,7 @@ export default {
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, text, quizzes }
+        formDetail: { title, description, text, quizzes },
       })
       this.isLoading = false
       this.showSuccessInfo('保存成功')
@@ -139,23 +139,23 @@ export default {
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, text, quizzes, state: 1 }
+        formDetail: { title, description, text, quizzes, state: 1 },
       })
       this.isLoading = false
       this.showSuccessInfo('发布成功')
       this.$router.push({ name: 'OrgForms' })
-    }
+    },
   },
   components: {
     QuizzesContent,
     FormPreview,
-    RichTextContent
+    RichTextContent,
   },
   watch: {
     formDetail(detail) {
       this.formDetailData = _.cloneDeep(detail)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

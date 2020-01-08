@@ -22,12 +22,12 @@ export default {
     quizzes: Array,
     isAnswerMode: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   components: {
-    QuizzesContent
-  }
+    QuizzesContent,
+  },
 }
 </script>
 <style lang="scss" scoped>
