@@ -16,7 +16,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <user-portrait :user="userinfo" class="org-student-profile" size="large"></user-portrait>
-            <div class="org-student-realname">{{realname}}</div>
+            <div class="org-student-username">{{username}}</div>
             <div class="org-student-edit-btn" v-if="isShowEditUserInfo" @click="showEditStudentDialog">编辑个人信息</div>
           </div>
         </div>
@@ -38,9 +38,9 @@
               <el-dropdown-item v-for="item in orgClasses" :key="item.id" :command="item.id">{{item.name}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span v-else class="org-student-class-onlyone">
-            <i class="iconfont icon-team org-student-class-onlyone-icon"></i>
-            <span class="org-student-class-onlyone-class-name">
+          <span v-else class="org-student-class-select-onlyone">
+            <i class="iconfont icon-team org-student-class-select-onlyone-icon"></i>
+            <span class="org-student-class-select-onlyone-class-name">
               {{currentClassName}}
             </span>
           </span>
@@ -86,7 +86,7 @@
     <el-dialog class="org-student-join-class-dialog" width="500px" :visible.sync="isShowJoinClassDialog">
       <join-class v-if="isShowJoinClassDialog" @cancel="onHideJoinClassDialog"></join-class>
     </el-dialog>
-    <edit-student-dialog :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
+    <edit-student-dialog v-if="isEditStudentVisible" :isDialogVisible="isEditStudentVisible" @close="closeEditStudentDialog" />
   </div>
 </template>
 <script>
@@ -96,7 +96,6 @@ import JoinOrg from './JoinOrg'
 import JoinClass from './JoinClass'
 import { mapActions, mapGetters } from 'vuex'
 import { keepwork, lesson } from '@/api'
-const { graphql } = keepwork
 import _ from 'lodash'
 import colI18n from '@/lib/utils/i18n/column'
 import { locale } from '@/lib/utils/i18n'
@@ -122,14 +121,14 @@ export default {
       orgIsAdmin: 'org/isAdmin',
       orgIsTeacher: 'org/isTeacher',
       orgClasses: 'org/student/orgClasses',
-      userinfo: 'org/student/userinfo',
+      studentUserinfo: 'org/student/userinfo',
       OrgIsStudent: 'org/isStudent',
       isCurrentOrgToken: 'org/isCurrentOrgToken',
       myClassmate: 'org/student/myClassmate',
       myTeacher: 'org/student/myTeacher',
     }),
     studentEndTime() {
-      return moment(this.userinfo.endTime).format('YYYY/MM/DD')
+      return moment(this.studentUserinfo.endTime).format('YYYY/MM/DD')
     },
     isClassDetailPage() {
       return (
@@ -149,6 +148,9 @@ export default {
       return !['JoinOrg'].includes(this.nowPageName)
     },
     currentClassName() {
+      if (this.orgClasses.length === 1) {
+        return _.get(this.orgClasses, '0.name', '')
+      }
       return _.get(_.find(this.orgClasses, item => item.id === this.currentClassID), 'name', '')
     },
     isJustStudent() {
@@ -170,7 +172,7 @@ export default {
       return _.get(this.userinfo, 'username', '')
     },
     realname() {
-      return _.get(this.userinfo, 'realname', '')
+      return _.get(this.studentUserinfo, 'realname', '')
     },
     userId() {
       return _.get(this.userinfo, 'id', '')
@@ -469,7 +471,7 @@ $borderColor: #e8e8e8;
     margin-bottom: 16px;
     border-radius: 50%;
   }
-  &-realname {
+  &-username {
     font-size: 20px;
     color: #333;
   }

@@ -25,7 +25,7 @@ export default {
   props: {
     codeDialogDatas: Object,
     isCodeDialogVisible: Boolean,
-    codeType: String
+    codeType: String,
   },
   computed: {
     dialogTitle() {
@@ -61,7 +61,7 @@ export default {
     },
     isVerifyCodeAvailable() {
       return !this.isCodeSent || !this.code
-    }
+    },
   },
   data() {
     return {
@@ -71,7 +71,7 @@ export default {
       code: '',
       isCodeSent: false,
       smsId: '',
-      isSendingCode: false
+      isSendingCode: false,
     }
   },
   methods: {
@@ -79,13 +79,13 @@ export default {
       userVerifyEmailOne: 'user/verifyEmailOne',
       userVerifyEmailTwo: 'user/verifyEmailTwo',
       userVerifyCellphoneOne: 'user/verifyCellphoneOne',
-      userVerifyCellphoneTwo: 'user/verifyCellphoneTwo'
+      userVerifyCellphoneTwo: 'user/verifyCellphoneTwo',
     }),
     showMessage(type, message) {
       this.$message({
         message,
         type,
-        showClose: true
+        showClose: true,
       })
     },
     handleClose() {
@@ -122,17 +122,13 @@ export default {
       await this.userVerifyEmailTwo({
         captcha: this.code,
         email: this.codeDialogDatas.value,
-        isBind: this.codeDialogDatas.bind
+        isBind: this.codeDialogDatas.bind,
       })
         .then(() => {
           result = true
           this.showMessage(
             'success',
-            `${
-              this.codeDialogDatas.bind
-                ? this.$t('user.bindingSuccess')
-                : this.$t('user.unbundingSuccess')
-            }`
+            `${this.codeDialogDatas.bind ? this.$t('user.bindingSuccess') : this.$t('user.unbundingSuccess')}`,
           )
         })
         .catch(() => {
@@ -150,23 +146,17 @@ export default {
       await this.userVerifyCellphoneTwo({
         isBind: this.codeDialogDatas.bind,
         captcha: this.code,
-        cellphone: this.codeDialogDatas.value
+        cellphone: this.codeDialogDatas.value,
       })
         .then(() => {
           this.showMessage(
             'success',
-            `${
-              this.codeDialogDatas.bind
-                ? this.$t('user.bindingSuccess')
-                : this.$t('user.unbundingSuccess')
-            }`
+            `${this.codeDialogDatas.bind ? this.$t('user.bindingSuccess') : this.$t('user.unbundingSuccess')}`,
           )
           result = true
         })
         .catch(error => {
-          let message = this.codeDialogDatas.bind
-            ? this.$t('user.bindingFailed')
-            : this.$t('user.unBundingFailure')
+          let message = this.codeDialogDatas.bind ? this.$t('user.bindingFailed') : this.$t('user.unBundingFailure')
           this.codeError = message
           this.showMessage('error', message)
           result = false
@@ -179,7 +169,7 @@ export default {
         case 'email':
           this.isSendingCode = true
           let result = await this.userVerifyEmailOne({
-            email: this.codeDialogDatas.value
+            email: this.codeDialogDatas.value,
           })
           this.isSendingCode = false
           this.isCodeSent = true
@@ -188,20 +178,30 @@ export default {
           break
         case 'cellphone':
           this.isSendingCode = true
-          await this.userVerifyCellphoneOne({
-            bind: this.codeDialogDatas.bind,
-            cellphone: this.codeDialogDatas.value
-          })
-            .then(() => {
-              this.isSendingCode = false
-              this.isCodeSent = true
-              this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
-              this.startTimer()
+          try {
+            await this.userVerifyCellphoneOne({
+              bind: this.codeDialogDatas.bind,
+              cellphone: this.codeDialogDatas.value,
             })
-            .catch(() => {
-              this.codeError = this.$t('user.smsCodeSentFailed')
-              this.showMessage('error', this.$t('user.smsCodeSentFailed'))
-            })
+            this.isCodeSent = true
+            this.showMessage('success', this.$t('user.smsCodeSentSuccess'))
+            this.startTimer()
+          } catch (error) {
+            let errorType = _.get(error, 'response.data.code')
+            let message = this.$t('user.smsCodeSentFailed')
+            switch (errorType) {
+              case 19:
+                message = '验证码发送过于频繁'
+                break
+              case 20:
+                message = '您今日的短信次数已达上限，请明日再试'
+                break
+              default:
+                break
+            }
+            this.codeError = message
+            this.showMessage('error', message)
+          }
           this.isSendingCode = false
           break
         default:
@@ -213,8 +213,8 @@ export default {
       this.countDownTimer = setInterval(() => {
         this.countDown--
       }, 1000)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

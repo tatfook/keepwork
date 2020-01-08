@@ -78,7 +78,7 @@ export const getTemplateList = async (folder = 'basic') => {
 }
 
 export const getPageTemplateContent = async contentPath => {
-  const url = `${TEMPLATE}/files/webpage%2${contentPath}/raw`
+  const url = `${TEMPLATE}/files/webpage%2F${encodeURIComponent(contentPath)}/raw`
   let res = await instance.get(url)
   return res
 }

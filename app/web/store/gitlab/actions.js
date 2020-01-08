@@ -152,7 +152,6 @@ const actions = {
     let markdownExtraLineToCheck404 = /\.md$/.test(path) ? '\n' : ''
     let payload = {
       path,
-      // file: { ...file, content: Base64.decode(file.content) + markdownExtraLineToCheck404 }
       file: { ...file, content: file.content + markdownExtraLineToCheck404 }
     }
     commit(GET_FILE_CONTENT_SUCCESS, payload)
@@ -171,7 +170,6 @@ const actions = {
     let { gitlab, path, options } = await getGitlabFileParams(context, {
       path: inputPath
     })
-    // let file = await gitlab.getFile(path, options)
     const projectPath = path
       .split('/')
       .slice(0, 2)
@@ -451,8 +449,6 @@ const actions = {
     let gitlab = getGitlabAPI()
     try {
       await gitlab.createFile(path, options)
-      // let projectName = path.split('/').splice(0, 2).join('/')
-      // return `${projectName}/raw/master/${path}}`
       return `${rawBaseUrl}/${dataSourceUsername}/${projectName}/raw/master${path}`
     } catch (e) {
       console.error(e)

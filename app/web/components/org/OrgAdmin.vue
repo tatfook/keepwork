@@ -90,6 +90,8 @@ export default {
         {
           pageNames: [
             'HistoricalData',
+            'HistoricalMember',
+            'ReActivate',
             'OrgHistoryClassDetail',
           ],
           indexPageName: 'HistoricalData',
