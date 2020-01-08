@@ -759,8 +759,11 @@ const actions = {
     dispatch('closeOpenedFile', { path })
     dispatch('refreshTree', { path })
   },
-  disposeUpdate({ commit, dispatch, getters: { openedFiles, openedWebsites } }, payload) {
+  disposeUpdate({ commit, dispatch, getters: { openedFiles, openedWebsites }, rootGetters: { 'user/contributedWebsiteNames': contributedWebsiteNames, 'user/personalWebsiteNames': personalWebsiteNames } }, payload) {
     const { websiteName, path, username, notify = true, ...updated } = payload
+    if (![...contributedWebsiteNames, ...personalWebsiteNames].includes(websiteName)) {
+      return
+    }
     const fullPath = getFileFullPathByPath(path)
     const localFile = openedFiles[fullPath]
     if (localFile) {
