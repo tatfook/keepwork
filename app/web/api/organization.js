@@ -92,6 +92,8 @@ const lessonOrganizationClassMembers = {
   toBeFormal: async params => post('lessonOrganizationClassMembers/formal', params),
   recharge: async params => post('lessonOrganizationClassMembers/recharge', params),
   historyStudents: async params => get('lessonOrganizationClassMembers/historyStudents', { params }),
+  clearRoleFromOrg: async params => post('lessonOrganizationClassMembers/clearRoleFromOrg', params),
+  clearRoleFromClass: async params => post('lessonOrganizationClassMembers/clearRoleFromClass', params),
 }
 
 const evaluationReports = {

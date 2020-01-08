@@ -222,17 +222,11 @@ const actions = {
     })
     return Promise.resolve(result)
   },
-  async removeMemberFromClass(context, { id, roleId }) {
-    let {
-      dispatch,
-      getters: { currentOrg },
-    } = context
-    await keepwork.lessonOrganizationClassMembers.removeMemberFromClass({ id, roleId }).catch(error => {
-      return Promise.reject(error.response)
-    })
-    await dispatch('getOrgUserCountsByGraphql', {
-      orgId: currentOrg.id,
-    })
+  async removeMemberFromClass(context, { memberId, roleId, classId }) {
+    await keepwork.lessonOrganizationClassMembers.clearRoleFromClass({ memberId, _roleId: roleId, classId })
+  },
+  async removeMemberFromOrg(context, { memberId, roleId }) {
+    await keepwork.lessonOrganizationClassMembers.clearRoleFromOrg({ memberId, _roleId: roleId })
   },
   async getOrgStudentList({ commit, getters: { currentOrgId: organizationId } }, params) {
     const { classId } = params

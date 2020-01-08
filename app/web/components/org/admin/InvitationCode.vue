@@ -76,8 +76,8 @@
       <el-table ref="codeTable" border :data="codeTableData" @selection-change="handleSelectionChange" tooltip-effect="dark" style="width: 100%">
         <el-table-column type="selection" width="39"></el-table-column>
         <el-table-column :label="$t('org.serialNum')" width="50" type="index"></el-table-column>
-        <el-table-column :label="$t('org.InvitationCode')" width="98" prop="key"></el-table-column>
-        <el-table-column label="类型" width="68"><template slot-scope="scope">{{typeFilter(scope.row.type)}}</template></el-table-column>
+        <el-table-column :label="$t('org.InvitationCode')" width="90" prop="key"></el-table-column>
+        <el-table-column label="类型" width="58"><template slot-scope="scope">{{typeFilter(scope.row.type)}}</template></el-table-column>
         <el-table-column label="使用期限" width="80"><template slot-scope="scope">{{durationFilter(scope.row.type)}}</template></el-table-column>
         <el-table-column :label="$t('org.stateLabel')" width="68"><template slot-scope="scope">{{stateFilter(scope.row.state)}}</template></el-table-column>
         <el-table-column :label="$t('org.createdTime')" width="98"><template slot-scope="scope">{{formatTime(scope.row.createdAt)}}</template></el-table-column>
@@ -311,14 +311,20 @@ export default {
     },
     async setInvalid() {
       if (this.multipleSelection.length === 0) {
-        this.$message('请选择邀请码')
+        this.$message({ type: 'error', message: '请选择邀请码' })
+        return
+      }
+      if (_.findIndex(this.multipleSelection, item => item.state == 1) != -1) {
+        this.$message({ type: 'error', message: '选中的邀请码包含已使用邀请码，不能进行该操作，请确认' })
         return
       }
       this.loading = true
       try {
+        await this.$confirm('确定将所选邀请码设为无效吗？')
         const ids = _.map(this.multipleSelection, codeDetail => codeDetail.id)
         await this.orgSetInvalid({ ids })
         this.$message('设置成功')
+        await this.getOrgActivateCodes(this.filterData)
       } catch (error) {
         console.log(error)
       }
@@ -333,6 +339,8 @@ export default {
         const tHeader = [
           this.$t('org.serialNum'),
           this.$t('org.InvitationCode'),
+          '类型',
+          '使用期限',
           this.$t('org.stateLabel'),
           this.$t('org.createdTime'),
           this.$t('org.activateTime'),
@@ -346,6 +354,8 @@ export default {
           let realname = data.realname || data.name
           tempArr.push(index + 1)
           tempArr.push(data.key)
+          tempArr.push(this.typeFilter(data.type))
+          tempArr.push(this.durationFilter(data.type))
           tempArr.push(this.stateFilter(data.state))
           tempArr.push(this.formatTime(data.createdAt))
           tempArr.push(this.formatTime(data.activateTime))
@@ -474,6 +484,7 @@ export default {
             border: 0px solid transparent;
             border-bottom: 1px solid #aaa;
             border-radius: 0;
+            padding-left: 0;
           }
           .el-input__suffix {
             cursor: pointer;

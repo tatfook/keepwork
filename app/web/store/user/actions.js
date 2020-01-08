@@ -318,7 +318,6 @@ const actions = {
     let { username } = getters
     if (useCache) return
     let list = await keepwork.siteUser.getContributeSites()
-    // let list = await keepwork.siteUser.getSiteListByMemberName({ memberName: username })
     list = _.values(list).filter(({ sitename, username } = {}) => sitename && username)
 
     commit(GET_CONTRIBUTED_WEBSITE_SUCCESS, { username, list })
@@ -401,10 +400,9 @@ const actions = {
     let content = JSON.stringify(config, null, 2)
     let themeFilePath = ThemeHelper.themeFilePath(sitePath)
     await dispatch('gitlab/saveFile', { path: themeFilePath, content }, { root: true })
-    // TODO: 去掉保存失败新建文件这个逻辑
-    // .catch(async () => {
-    //   await dispatch('gitlab/createFile', { path: themeFilePath, content, refreshRepositoryTree: false }, { root: true })
-    // })
+      .catch(async () => {
+        await dispatch('gitlab/createFile', { path: themeFilePath, content, refreshRepositoryTree: false }, { root: true })
+      })
     commit(SAVE_SITE_THEME_CONFIG_SUCCESS, { sitePath, config })
     dispatch('refreshSiteSettings', { sitePath }, { root: true })
   },
@@ -488,7 +486,6 @@ const actions = {
   },
   async saveSiteBasicSetting(context, { newBasicMessage }) {
     let { commit } = context
-    // await keepwork.website.updateByName(newBasicMessage)
     await keepwork.website.updateById(newBasicMessage)
     commit(UPDATE_SITE_MSG_SUCCESS, { newBasicMessage })
   },
@@ -541,13 +538,10 @@ const actions = {
     return membersDetail
   },
   async createComment(context, { url: path, content }) {
-    let { dispatch, commit, getters, rootGetters } = context
+    let { dispatch, commit } = context
     let fullPath = getFileFullPathByPath(path)
     await dispatch('getProfile')
-    let { userId } = getters
     await dispatch('getWebsiteDetailInfoByPath', { path })
-    let { siteinfo: { _id: websiteId } } = rootGetters['user/getSiteDetailInfoByPath'](path)
-
     let payload = { objectType: 2, objectId: fullPath, content }
     let { commentList } = await keepwork.websiteComment.create(payload)
 

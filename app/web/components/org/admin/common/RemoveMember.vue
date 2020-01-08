@@ -35,9 +35,12 @@ export default {
     }),
     async removeMemberFromClass() {
       await this.orgRemoveMemberFromClass({
-        id: this.memberDetail.id,
-        roleId: this.roleId
-      }).catch(() => {})
+        memberId: this.memberDetail.memberId,
+        roleId: this.roleId,
+        classId: this.classId
+      }).catch(() => {
+        this.$message({ type:'error', message:'移除失败，请重试' })
+      })
     },
     async removeMemberFromAllClass() {
       let memberDetail = this.memberDetail
