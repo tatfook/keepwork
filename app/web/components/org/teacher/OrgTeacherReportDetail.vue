@@ -17,7 +17,7 @@
               </el-table-column>
               <el-table-column label="作品数">
                 <template slot-scope="scope">
-                  <el-link :underline="false" type="primary" target="_blank" :href="getUserHomeURL(scope.username)">{{scope.count || 0}}</el-link>
+                  <el-link :underline="false" type="primary" target="_blank" :href="getUserProjectURL(scope.row.username)">{{scope.row.projectCount}}</el-link>
                 </template>
               </el-table-column>
               <el-table-column prop="reportName" label="操作" header-align="center" align="center">
@@ -66,7 +66,7 @@
               </el-table-column>
               <el-table-column label="作品数" width="80">
                 <template slot-scope="scope">
-                  <el-link :underline="false" type="primary" target="_blank" :href="getUserHomeURL(scope.username)">{{scope.count || 0}}</el-link>
+                  <el-link :underline="false" type="primary" target="_blank" :href="getUserProjectURL(scope.row.username)">{{scope.row.projectCount}}</el-link>
                 </template>
               </el-table-column>
               <el-table-column label="点评时间" width="180">
@@ -234,8 +234,8 @@ export default {
       updateEvaluationReport: 'org/teacher/updateEvaluationReport',
       deleteEvaluationReportComment: 'org/teacher/deleteEvaluationReportComment',
     }),
-    getUserHomeURL(username) {
-      return `${window.location.origin}/u/${username}`
+    getUserProjectURL(username) {
+      return `${window.location.origin}/u/${username}/project`
     },
     onBackToList() {
       const { classId } = this.$route.query
