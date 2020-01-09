@@ -15,6 +15,8 @@
               </el-table-column>
               <el-table-column prop="realname" label="学生姓名">
               </el-table-column>
+              <el-table-column prop="username" label="用户名">
+              </el-table-column>
               <el-table-column label="作品数">
                 <template slot-scope="scope">
                   <el-link :underline="false" type="primary" target="_blank" :href="getUserProjectURL(scope.row.username)">{{scope.row.projectCount}}</el-link>
@@ -60,9 +62,11 @@
             <el-table :data="hasCommentTable" @selection-change="handleSelectionChange" border="" style="width: 100%">
               <el-table-column type="selection" width="55">
               </el-table-column>
-              <el-table-column prop="index" label="序号" width="120">
+              <el-table-column prop="index" label="序号" width="80">
               </el-table-column>
-              <el-table-column prop="realname" label="学生姓名" width="120">
+              <el-table-column prop="realname" label="学生姓名" width="100">
+              </el-table-column>
+              <el-table-column prop="username" label="用户名" width="100">
               </el-table-column>
               <el-table-column label="作品数" width="80">
                 <template slot-scope="scope">
@@ -74,7 +78,7 @@
                   <span>{{scope.row.createdAt | formatTime}}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="发送状态" width="120">
+              <el-table-column label="发送状态" width="80">
                 <template slot-scope="scope">
                   <span>{{scope.row.isSend | formatSendStatus}}</span>
                 </template>
