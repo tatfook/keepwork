@@ -33,6 +33,17 @@ const getFileByPath = (rootGetters, path) => {
   return file
 }
 
+const flatten = (files, arr = []) => {
+  files.forEach(file => {
+    const { children = [], ...rest } = file
+    arr.push(rest)
+    if (children.length) {
+      flatten(children, arr)
+    }
+  })
+  return arr
+}
+
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
   repositoryTreesAllFiles: (state, { repositoryTrees = [] }) => {
@@ -44,7 +55,7 @@ const getters = {
       }, [])
       return prev.concat(filesInSites)
     }, [])
-    return allFiles
+    return flatten(allFiles)
   },
   childNamesByPath: (
     state,

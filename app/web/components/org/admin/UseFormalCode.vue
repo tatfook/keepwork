@@ -1,5 +1,5 @@
 <template>
-  <use-code v-loading="isLoading" :selectedStudents="selectedStudents" :nowPageText="nowPageText" :isTryShow="false" @save="toBeFormal" @cancel="toStudentListPage" />
+  <use-code v-loading="isLoading" :selectedStudents="selectedStudents" :nowPageText="nowPageText" :isTryShow="false" :confirmText="confirmText" @save="toBeFormal" @cancel="toStudentListPage" />
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -24,6 +24,9 @@ export default {
     nowPageText() {
       return this.type == 'renew' ? '续费' : '试听转正式'
     },
+    confirmText() {
+      return this.type == 'renew' ? '确定为学生续费吗？' : '确定将试听学生转为正式用户吗？'
+    },
   },
   methods: {
     ...mapActions({
@@ -37,6 +40,7 @@ export default {
         this.toStudentListPage()
       } catch (error) {
         console.log(error)
+        this.$message({ type: 'error', message: '操作失败，请重试' })
       }
       this.isLoading = false
     },

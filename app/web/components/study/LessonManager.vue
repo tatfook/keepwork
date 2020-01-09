@@ -122,7 +122,7 @@
             </tr>
           </template>
           <tr class="lesson-manager-table-empty" v-show="filteredLessonList.length == 0">
-            <td colspan="5">{{$t('lesson.noData')}}</td>
+            <td colspan="9">{{$t('lesson.noData')}}</td>
           </tr>
         </tbody>
       </table>
@@ -139,15 +139,11 @@ import OperateResultDialog from '@/components/study/OperateResultDialog'
 export default {
   name: 'LessonManager',
   props: {
-    windowWidth: Number
+    windowWidth: Number,
   },
   async mounted() {
     this.isTableLoading = true
-    await Promise.all([
-      this.lessonGetUserPackages({}),
-      this.lessonGetUserLessons({}),
-      this.lessonGetAllSubjects({})
-    ])
+    await Promise.all([this.lessonGetUserPackages({}), this.lessonGetUserLessons({}), this.lessonGetAllSubjects({})])
     this.isTableLoading = false
     this.initLessonPackageShowData()
   },
@@ -156,7 +152,7 @@ export default {
       searchParams: {
         name: '',
         subjectId: null,
-        packageId: null
+        packageId: null,
       },
       lessonPackagesShow: [],
       isTableLoading: false,
@@ -165,32 +161,32 @@ export default {
         paras: [],
         type: '', // danger or default
         iconType: '', // submit or delete or release or revoca
-        continueFnNameAfterEnsure: ''
+        continueFnNameAfterEnsure: '',
       },
       editingLessonId: null,
       expandRowKeys: [],
       statesArray: [
         {
           id: 0,
-          value: this.$t('lesson.notSubmitted')
+          value: this.$t('lesson.notSubmitted'),
         },
         {
           id: 1,
-          value: this.$t('lesson.pendingReview')
+          value: this.$t('lesson.pendingReview'),
         },
         {
           id: 2,
-          value: this.$t('lesson.approved')
+          value: this.$t('lesson.approved'),
         },
         {
           id: 3,
-          value: this.$t('lesson.rejected')
+          value: this.$t('lesson.rejected'),
         },
         {
           id: 4,
-          value: this.$t('lesson.disabled')
-        }
-      ]
+          value: this.$t('lesson.disabled'),
+        },
+      ],
     }
   },
   computed: {
@@ -200,43 +196,38 @@ export default {
       lessonUserPackages: 'lesson/teacher/userPackages',
       lessonUserLessons: 'lesson/teacher/userLessons',
       lessonPackageLessons: 'lesson/teacher/packageLessons',
-      lessonSubjects: 'lesson/subjects'
+      lessonSubjects: 'lesson/subjects',
     }),
     username() {
       return _.get(this.userProfile, 'username')
     },
     filteredLessonList() {
-      let subjectfilteredLessonList = this.getSubjectFilteredPackageList(
-        this.lessonUserLessons
-      )
-      let packageFilteredLessonList = this.getPackageFilteredLessonList(
-        subjectfilteredLessonList
-      )
-      let namefilteredLessonList = this.getNamefilteredLessonList(
-        packageFilteredLessonList
-      )
+      let subjectfilteredLessonList = this.getSubjectFilteredPackageList(this.lessonUserLessons)
+      let packageFilteredLessonList = this.getPackageFilteredLessonList(subjectfilteredLessonList)
+      let namefilteredLessonList = this.getNamefilteredLessonList(packageFilteredLessonList)
       let searchedPackageId = this.searchParams.packageId
       let isSearchingPackage = typeof searchedPackageId === 'number'
       this.expandRowKeys = []
-      let containSubjectNamePackageList = _.map(
-        namefilteredLessonList,
-        (obj, index) => {
-          if (isSearchingPackage) {
-            this.expandRowKeys.push(obj.id)
-          }
-          let subjectId = obj.subjectId
-          if (!subjectId) {
-            return obj
-          }
-          let targetSubject = _.find(this.lessonSubjects, { id: subjectId })
-          obj.subjectDetail = targetSubject
-          let packageShowData = _.find(this.lessonPackagesShow, { id: obj.id })
-          return {
-            ...obj,
-            isPackageShow: _.get(packageShowData, 'isPackageShow', false)
-          }
+      let containSubjectNamePackageList = _.map(namefilteredLessonList, (obj, index) => {
+        if (isSearchingPackage) {
+          this.expandRowKeys.push(obj.id)
         }
-      )
+        let subjectId = obj.subjectId
+        if (!subjectId) {
+          return obj
+        }
+        let targetSubject = _.find(this.lessonSubjects, { id: subjectId })
+        obj.subjectDetail = targetSubject
+        let packageShowData = _.find(this.lessonPackagesShow, { id: obj.id })
+        console.log(obj.packages)
+        return {
+          ...obj,
+          isPackageShow: _.get(packageShowData, 'isPackageShow', false),
+          packages: _.filter(obj.packages, packageItem => {
+            return Boolean(packageItem)
+          }),
+        }
+      })
       return containSubjectNamePackageList
     },
     hostname() {
@@ -247,13 +238,13 @@ export default {
     },
     editinglessonDetail() {
       let lessonDetail = _.find(this.filteredLessonList, {
-        id: this.editingLessonId
+        id: this.editingLessonId,
       })
       return lessonDetail
     },
     isPhoneSize() {
       return this.windowWidth < 768
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -262,25 +253,23 @@ export default {
       lessonGetUserLessons: 'lesson/teacher/getUserLessons',
       lessonGetAllSubjects: 'lesson/getAllSubjects',
       lessonDeleteLesson: 'lesson/teacher/deleteLesson',
-      gitlabGetFileDetail: 'gitlab/getFileDetail'
+      gitlabGetFileDetail: 'gitlab/getFileDetail',
     }),
     initLessonPackageShowData() {
       this.lessonPackagesShow = []
       _.map(this.filteredLessonList, lesson => {
         this.lessonPackagesShow.push({
           ...lesson,
-          isPackageShow: false
+          isPackageShow: false,
         })
       })
     },
     toggleLessonPackageShow(lessonId) {
       let packageShowIndex = _.findIndex(this.lessonPackagesShow, {
-        id: lessonId
+        id: lessonId,
       })
       let packageShowData = this.lessonPackagesShow[packageShowIndex]
-      this.lessonPackagesShow[
-        packageShowIndex
-      ].isPackageShow = !packageShowData.isPackageShow
+      this.lessonPackagesShow[packageShowIndex].isPackageShow = !packageShowData.isPackageShow
     },
     getRowClass({ row, rowIndex }) {
       let { packages } = row
@@ -296,7 +285,7 @@ export default {
       let searchedSubjectId = this.searchParams.subjectId
       if (searchedSubjectId) {
         return _.filter(originList, {
-          subjectId: searchedSubjectId
+          subjectId: searchedSubjectId,
         })
       } else {
         return originList
@@ -306,10 +295,7 @@ export default {
       let searchedPackageId = this.searchParams.packageId
       if (typeof searchedPackageId === 'number') {
         return _.filter(originList, lessonDetail => {
-          return (
-            _.find(lessonDetail.packages, { id: searchedPackageId }) !==
-            undefined
-          )
+          return _.find(lessonDetail.packages, { id: searchedPackageId }) !== undefined
         })
       } else {
         return originList
@@ -380,7 +366,7 @@ export default {
         confirmButtonText: this.$t('common.Yes'),
         cancelButtonText: this.$t('common.No'),
         center: true,
-        customClass: 'lesson-manager-confirm-dialog'
+        customClass: 'lesson-manager-confirm-dialog',
       })
         .then(() => {
           this.toEditorPage(url)
@@ -397,7 +383,7 @@ export default {
       let result = await this.gitlabGetFileDetail({
         projectPath: `${username}/${sitename}`,
         fullPath: `${username}/${removedPrefixUrl}.md`,
-        token: 'Bearer ' + Cookies.get('token')
+        token: 'Bearer ' + Cookies.get('token'),
       })
         .then(() => {
           return Promise.resolve()
@@ -410,15 +396,12 @@ export default {
     async confirmDelete(lessonDetail) {
       this.editingLessonId = lessonDetail.id
       this.infoDialogData = {
-        paras: [
-          this.$t('lesson.lessonManage.deleteLessonConfirm'),
-          this.$t('lesson.lessonManage.deleteLessonInfo')
-        ],
+        paras: [this.$t('lesson.lessonManage.deleteLessonConfirm'), this.$t('lesson.lessonManage.deleteLessonInfo')],
         iconType: 'delete',
         type: 'danger',
         continueButtonText: this.$t('lesson.deleteDialogYes'),
         cancelButtonText: this.$t('lesson.deleteDialogNo'),
-        continueFnNameAfterEnsure: 'toDelete'
+        continueFnNameAfterEnsure: 'toDelete',
       }
       this.isInfoDialogVisible = true
     },
@@ -435,21 +418,21 @@ export default {
     },
     subjectName(subject) {
       return colI18n.getLangValue(subject, 'subjectName')
-    }
+    },
   },
   filters: {
     transformStateValue(stateId, statesArray) {
       return _.find(statesArray, { id: stateId }).value
-    }
+    },
   },
   watch: {
     lessonUserLessons() {
       this.initLessonPackageShowData()
-    }
+    },
   },
   components: {
-    OperateResultDialog
-  }
+    OperateResultDialog,
+  },
 }
 </script>
 <style lang="scss">

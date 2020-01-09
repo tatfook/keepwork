@@ -11,12 +11,12 @@ export default {
   props: {
     selectedFiles: {
       type: Array,
-      default: []
+      default: [],
     },
     isTextShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   methods: {
     downloadFiles() {
@@ -26,21 +26,15 @@ export default {
       let downloadUrl = file.downloadUrl
       if (!downloadUrl) return
       let { filename } = file
-      await new Promise((resolve, reject) => {
-        let a = document.createElement('a')
-        a.target = '_blank'
-        a.style.display = 'none'
-        a.href = `${downloadUrl}&attname=${filename}`
-        a.download = filename || ''
-        document.body.appendChild(a)
-        a.click()
-        setTimeout(() => {
-          a.remove()
-          resolve()
-        }, 300)
-      }).catch(e => console.error(e))
-    }
-  }
+      let a = document.createElement('a')
+      a.target = '_blank'
+      a.style.display = 'none'
+      a.href = `${downloadUrl}&attname=${filename}`
+      a.download = filename || ''
+      document.body.appendChild(a)
+      a.click()
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

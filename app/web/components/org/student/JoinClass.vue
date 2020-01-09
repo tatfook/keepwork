@@ -64,25 +64,30 @@ export default {
     onSubmit() {
       this.$refs['form'].validate(async valid => {
         if (valid) {
-          const classIDs = await this.recharge({
-            ...this.form,
-            organizationId: this.organizationId,
-          })
-          this.$message.success('续费成功')
-          if (this.isNeedRedirect) {
-            if (classIDs.length === 1) {
-              this.$router.push({
-                name: 'OrgStudentClassDetail',
-                classIDs: classIDs[0],
-              })
-            } else if (classIDs.length === 0 || !classIDs.includes(this.currentClassID)) {
-              this.$router.push({
-                name: 'OrgStudentClassSelect',
-              })
+          try {
+            const classIDs = await this.recharge({
+              ...this.form,
+              organizationId: this.organizationId,
+            })
+            this.$message.success('续费成功')
+            if (this.isNeedRedirect) {
+              if (classIDs.length === 1) {
+                this.$router.push({
+                  name: 'OrgStudentClassDetail',
+                  classIDs: classIDs[0],
+                })
+              } else if (classIDs.length === 0 || !classIDs.includes(this.currentClassID)) {
+                this.$router.push({
+                  name: 'OrgStudentClassSelect',
+                })
+              }
             }
+            this.onCancel()
+            return classIDs
+          } catch (error) {
+            const message = JSON.parse(_.get(error, 'response.data')).message
+            this.$message.error(message)
           }
-          this.onCancel()
-          return classIDs
         } else {
           return false
         }

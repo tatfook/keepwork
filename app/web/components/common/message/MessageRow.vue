@@ -15,7 +15,6 @@
 <script>
 import systemAvatar from '@/assets/message/system-avatar.png'
 import UserPortrait from '@/components/common/UserPortrait'
-import scrollIntoView from 'scroll-into-view-if-needed'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'

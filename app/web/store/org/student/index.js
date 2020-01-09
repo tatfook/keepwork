@@ -14,7 +14,6 @@ const state = {
   learnRecordsId: '',
   lessonDetail: {},
   lessonQuiz: {},
-  teachingLesson: [],
   userInfo: {},
   isShowSummary: false,
   myClassmate: [],

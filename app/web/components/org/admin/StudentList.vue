@@ -26,8 +26,8 @@
     </div>
     <div v-if="orgStudentsCount > 0" class="student-list-count">{{$t('org.IncludeStudents') + orgStudents.length + $t('org.studentCountUnit')}}
       <div class="student-list-count-operates">
-        <el-button @click="toUseFormalCode('beFormal')">试听转正式</el-button>
-        <el-button @click="toUseFormalCode('renew')">续费</el-button>
+        <formal-code-user type="beFormal" :students="multipleSelection" />
+        <formal-code-user type="renew" :students="multipleSelection" />
       </div>
     </div>
     <el-table v-if="orgStudentsCount > 0" class="student-list-table" border @selection-change="handleSelectionChange" :data="orgStudentsWithClassesString" header-row-class-name="student-list-table-header">
@@ -58,34 +58,30 @@
       <p class="student-list-empty-info">{{$t('org.noStudents')}}</p>
     </div>
     <change-password-dialog :isChangeDialogVisible="isChangeDialogVisible" :changingMember="changingMember" @close="isChangeDialogVisible = false" />
-    <invitation-code-warning :type="warningType" :isDialogVisible="isWarningVisible" @close="isWarningVisible = false" />
   </div>
 </template>
 <script>
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import ChangePasswordDialog from '@/components/org/admin/common/ChangePasswordDialog'
-import InvitationCodeWarning from './common/InvitationCodeWarning'
+import FormalCodeUser from './common/FormalCodeUser'
 export default {
   name: 'StudentList',
   components: {
     ChangePasswordDialog,
-    InvitationCodeWarning,
+    FormalCodeUser,
   },
   async mounted() {
     await Promise.all([this.getStudentWithClassId(), this.getOrgCodesStatus()])
   },
   data() {
     return {
-      waitngType: undefined,
       multipleSelection: [],
       selectedClassId: undefined,
       selectedType: undefined,
       searchedUsername: '',
       isLoading: false,
       isChangeDialogVisible: false,
-      isWarningVisible: false,
-      warningType: undefined,
       changingMember: {},
     }
   },
@@ -95,14 +91,7 @@ export default {
       getOrgUserCountById: 'org/getOrgUserCountById',
       getOrgClassesById: 'org/getOrgClassesById',
       getOrgStudentsByClassId: 'org/getOrgStudentsByClassId',
-      codeUsedStatus: 'org/codeUsedStatus',
     }),
-    remainder() {
-      return _.get(this.codeUsedStatus, 'remainder')
-    },
-    formalMaxCount() {
-      return _.max(_.values(this.remainder)) || 0
-    },
     orgId() {
       return _.get(this.currentOrg, 'id')
     },
@@ -141,10 +130,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
       getOrgStudentList: 'org/getOrgStudentList',
-      orgCreateNewMember: 'org/createNewMember',
-      setUseFormalCodeParams: 'org/setUseFormalCodeParams',
+      removeMemberFromOrg: 'org/removeMemberFromOrg',
       getOrgCodesStatus: 'org/getOrgCodesStatus',
     }),
     handleSelectionChange(val) {
@@ -179,15 +166,9 @@ export default {
     },
     async removeStudent(studentDetail) {
       this.isLoading = true
-      let { users, realname } = studentDetail
+      let { memberId } = studentDetail
       try {
-        await this.orgCreateNewMember({
-          organizationId: this.orgId,
-          classIds: [],
-          memberName: users.username,
-          realname,
-          roleId: 1,
-        })
+        await this.removeMemberFromOrg({ memberId, roleId: 1 })
         await this.getStudentWithClassId()
       } catch (error) {}
       this.isLoading = false
@@ -209,36 +190,6 @@ export default {
           roleId: 1,
           id: studentDetail.id,
         },
-      })
-    },
-    async testIsValid() {
-      if (await this.checkCurrentOrgExpire({ toExpire: false })) return false
-      const count = this.multipleSelection.length
-      if (count === 0) {
-        this.$message({
-          type: 'error',
-          message: '请选择学生',
-        })
-        return false
-      }
-      if (this.formalMaxCount === 0) {
-        this.isWarningVisible = true
-        this.warningType = 'disable'
-        return false
-      }
-      if (this.formalMaxCount < count) {
-        this.isWarningVisible = true
-        this.warningType = 'maxNotEnough'
-        return false
-      }
-      return true
-    },
-    async toUseFormalCode(type) {
-      const isValid = await this.testIsValid()
-      if (!isValid) return
-      this.setUseFormalCodeParams({ type, students: this.multipleSelection })
-      this.$router.push({
-        name: 'OrgUseFormalCode',
       })
     },
   },
@@ -287,10 +238,6 @@ export default {
       position: absolute;
       right: 0;
       top: 28px;
-    }
-    .el-button {
-      padding: 10px 16px;
-      font-size: 12px;
     }
   }
   &-table {
