@@ -1,5 +1,5 @@
 <template>
-  <use-code class="active-student" v-loading="isLoading" :selectedStudents="selectedStudents" nowPageText="激活用户" @save="reActive" @cancel="toHistoryStudentListPage" />
+  <use-code class="active-student" v-loading="isLoading" :selectedStudents="selectedStudents" nowPageText="激活用户" confirmText="确定激活学生吗？" @save="reActive" @cancel="toHistoryStudentListPage" />
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -27,7 +27,7 @@ export default {
       this.isLoading = true
       try {
         await this.orgReactivate(params)
-        this.toStudentListPage()
+        this.toHistoryStudentListPage()
         this.$message({ type: 'success', message: '激活成功' })
       } catch (error) {
         console.log(error)

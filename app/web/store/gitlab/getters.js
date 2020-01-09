@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { GitAPI } from '@/api'
 import {
-  sortFolder2Top,
   gitTree2NestedArray,
   getFileFullPathByPath,
   EMPTY_GIT_FOLDER_KEEPER_REGEX,
@@ -33,17 +32,6 @@ const getFileByPath = (rootGetters, path) => {
   return file
 }
 
-const flatten = (files, arr = []) => {
-  files.forEach(file => {
-    const { children = [], ...rest } = file
-    arr.push(rest)
-    if (children.length) {
-      flatten(children, arr)
-    }
-  })
-  return arr
-}
-
 const getters = {
   repositoryTrees: state => state.repositoryTrees,
   repositoryTreesAllFiles: (state, { repositoryTrees = [] }) => {
@@ -55,7 +43,7 @@ const getters = {
       }, [])
       return prev.concat(filesInSites)
     }, [])
-    return flatten(allFiles)
+    return allFiles
   },
   childNamesByPath: (
     state,
@@ -70,7 +58,7 @@ const getters = {
     return _.uniq(names)
   },
   childrenByPath: (state, { repositoryTreesAllFiles = [] }) => path => {
-    let children = sortFolder2Top(repositoryTreesAllFiles, path).filter(
+    let children = repositoryTreesAllFiles.filter(
       ({ name, path: filePath }) =>
         name !== CONFIG_FOLDER_NAME && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
     )
