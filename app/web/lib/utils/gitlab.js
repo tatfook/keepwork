@@ -5,7 +5,7 @@ export const EMPTY_GIT_FOLDER_KEEPER_REGEX = /^\.(git|keep|gitignore)/ // for .g
 export const CONFIG_FOLDER_NAME = '_config'
 
 export const webTemplateProject = {
-  rawBaseUrl: 'https://api.keepwork.com/git/v0',
+  rawBaseUrl: 'https://api.keepwork.com/core/v0',
   dataSourceUsername: 'gitlab_rls_official',
   projectName: 'official/keepwork-template-v2',
   projectId: 36332,

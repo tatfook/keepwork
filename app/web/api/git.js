@@ -72,7 +72,7 @@ const gitLabAPIGenerator = ({ url, token }) => {
           async show({ projectPath, fullPath, showVersion = false, useCache }) {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
-            let { data } = await instance.get(`repos/${projectPath}/files/${fullPath}/raw`).catch(error => Promise.reject(error))
+            let { data } = await instance.get(`repos/${projectPath}/files/${fullPath}`).catch(error => Promise.reject(error))
             const content = _.isObject(data) ? JSON.stringify(data) : _.toString(data)
             return {
               content
@@ -86,17 +86,10 @@ const gitLabAPIGenerator = ({ url, token }) => {
             projectPath = encodeURIComponent(projectPath)
             fullPath = encodeURIComponent(fullPath)
             let { data } = await instance.get(
-              `repos/${projectPath}/files/${fullPath}/raw`, { params: { commitId } }
+              `repos/${projectPath}/files/${fullPath}`, { params: { commitId } }
             )
             const content = _.isObject(data) ? JSON.stringify(data) : _.toString(data)
             return content
-          },
-          async showRaw(projectId, filePath, ref) {
-            const [pId, path] = [projectId, filePath].map(encodeURIComponent)
-            let res = await instance.get(
-              `repos/${pId}/repository/files/${path}/raw?ref=${ref}`
-            )
-            return res.data
           },
           async create(projectName, filePath, content) {
             const [projectPath, path] = [projectName, filePath].map(

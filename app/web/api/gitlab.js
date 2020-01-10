@@ -39,7 +39,7 @@ export const showRawForGuest = async (
       .join('/')
   projectName = encodeURIComponent(projectName)
   path = encodeURIComponent(path)
-  let url = `${rawBaseUrl}/repos/${projectName}/files/${path}/raw`
+  let url = `${rawBaseUrl}/repos/${projectName}/files/${path}`
   let res = await axios.get(url)
   let content = _.get(res, 'data', '')
   try {
@@ -50,13 +50,13 @@ export const showRawForGuest = async (
 }
 
 export const getConfig = async () => {
-  let url = `${TEMPLATE}/files/config.json/raw`
+  let url = `${TEMPLATE}/files/config.json`
   let res = await instance.get(url)
   return res
 }
 
 export const getWebPageConfig = async () => {
-  let url = `${TEMPLATE}/files/webpage%2Fconfig.json/raw`
+  let url = `${TEMPLATE}/files/webpage%2Fconfig.json`
   let res = await instance.get(url)
   return res
 }
@@ -78,7 +78,7 @@ export const getTemplateList = async (folder = 'basic') => {
 }
 
 export const getPageTemplateContent = async contentPath => {
-  const url = `${TEMPLATE}/files/webpage%2F${encodeURIComponent(contentPath)}/raw`
+  const url = `${TEMPLATE}/files/webpage%2F${encodeURIComponent(contentPath)}`
   let res = await instance.get(url)
   return res
 }
@@ -88,7 +88,7 @@ export const getTemplateFile = async (path) => {
     .split('/')
     .filter(i => i)
     .join('/')
-  const url = `${TEMPLATE}/files/${encodeURIComponent(`templates/basic/${path}`)}/raw`
+  const url = `${TEMPLATE}/files/${encodeURIComponent(`templates/basic/${path}`)}`
   let res = await instance.get(url)
   return res
 }
