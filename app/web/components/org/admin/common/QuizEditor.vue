@@ -1,12 +1,11 @@
 <template>
-  <el-dialog custom-class="quiz-editor" title="添加内容项" :visible.sync="isDialogVisible" width="640" :before-close="handleClose">
+  <el-dialog custom-class="quiz-editor" :title="title" :visible.sync="isDialogVisible" width="640" :before-close="handleClose">
     <div class="quiz-editor-content">
-      <div class="quiz-editor-item">
+      <div class="quiz-editor-item" v-show="quizData.type!=2">
         <label class="quiz-editor-item-label quiz-editor-item-label-short"><span class="quiz-editor-star">*</span>类型：</label>
         <el-radio-group v-model="quizData.type">
           <el-radio :label="0">单选</el-radio>
           <el-radio :label="1">多选</el-radio>
-          <el-radio :label="2">问答</el-radio>
         </el-radio-group>
       </div>
       <div class="quiz-editor-item">
@@ -48,16 +47,16 @@
 export default {
   name: 'QuizEditor',
   props: {
+    title: String,
     originQuiz: Object,
     isVisible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   mounted() {
     this.isDialogVisible = this.isVisible
     if (this.originQuiz) {
-      console.log(this.originQuiz)
       this.quizData = _.cloneDeep(this.originQuiz)
     }
   },
@@ -69,8 +68,8 @@ export default {
         isRequired: true,
         title: '',
         remark: '',
-        options: []
-      }
+        options: [],
+      },
     }
   },
   computed: {
@@ -88,14 +87,11 @@ export default {
         else return false
       }
       return true
-    }
+    },
   },
   methods: {
     handleClose(isSaved) {
-      this.$emit(
-        'close',
-        isSaved === true && this.isDataValid ? this.quizData : undefined
-      )
+      this.$emit('close', isSaved === true && this.isDataValid ? this.quizData : undefined)
       this.initData()
     },
     addOption() {
@@ -105,7 +101,7 @@ export default {
       this.quizData.options.splice(index, 1)
     },
     initData() {
-      let quiz = this.originQuiz
+      let quiz = _.cloneDeep(this.originQuiz)
       if (quiz) {
         this.quizData = quiz
       } else {
@@ -114,10 +110,10 @@ export default {
           isRequired: true,
           title: '',
           remark: '',
-          options: []
+          options: [],
         }
       }
-    }
+    },
   },
   watch: {
     originQuiz() {
@@ -125,8 +121,8 @@ export default {
     },
     isVisible(val) {
       this.isDialogVisible = this.isVisible
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

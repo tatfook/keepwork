@@ -12,45 +12,33 @@
         <el-button size="medium" type="primary" :disabled="!isFormDataValid" @click="publishForm">发布</el-button>
       </div>
     </div>
-    <div class="edit-form-content" v-if="formState == 0">
-      <div class="edit-form-item">
-        <label for="title">
-          <span>*</span>名称:
-        </label>
-        <el-input id="title" v-model="formDetailData.title" placeholder="请输入..."></el-input>
+    <div class="edit-form-container" v-if="formState == 0">
+      <div class="edit-form-preview-zone">
+        <form-preview :formDetail="formDetailData" />
       </div>
-      <div class="edit-form-item">
-        <label for="desc">描述:</label>
-        <el-input id="desc" v-model="formDetailData.description" placeholder="请输入..."></el-input>
-      </div>
-      <div class="edit-form-item" v-if="!isLoadPerset">
-        <label>
-          <span>*</span>正文:
-        </label>
-        <quizzes-content class="edit-form-quizzes" v-if="formType === 3" ref="quizzesRef" @change="setFormContent"></quizzes-content>
-        <rich-text-content v-else ref="richTextRef" @change="setFormContent"></rich-text-content>
+      <div class="edit-form-toolbar-zone">
+        <edit-form-toolbar />
       </div>
     </div>
     <div class="edit-form-empty" v-if="formState != 0">
       该表单已经发布过，不能编辑
     </div>
     <el-dialog v-if="isDialogVisible" custom-class="edit-form-preview" fullscreen visible :before-close="handlePreviewClose">
-      <form-preview :type="formType" :title="formDetailData.title" :description="formDetailData.description" :text="formDetailData.text" :quizzes="formDetailData.quizzes"></form-preview>
+      <form-preview :formDetail="formDetail" :type="formType" :title="formDetailData.title" :description="formDetailData.description" :text="formDetailData.text" :quizzes="formDetailData.quizzes"></form-preview>
     </el-dialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import RichTextContent from './common/RichTextContent'
-import QuizzesContent from '../common/QuizzesContent'
 import FormPreview from '../common/FormPreview'
+import EditFormToolbar from './common/EditFormToolbar'
 export default {
   name: 'EditForm',
   async mounted() {
     this.isLoading = true
     await this.orgGetForms({})
     this.isLoading = false
-    this.formDetailData = _.cloneDeep(this.formDetail)
+    this.formDetailData = { ...this.formDetail, quizzes: this.formDetail.quizzes || [] }
     this.isLoadPerset = false
   },
   data() {
@@ -81,10 +69,9 @@ export default {
       return _.get(this.formDetail, 'state')
     },
     isFormDataValid() {
-      let { title, plainText, quizzes } = this.formDetailData
+      let { title, quizzes } = this.formDetailData
       if (!title) return false
-      if (this.formType == 3) return quizzes.length > 0
-      return Boolean(plainText)
+      return quizzes.length > 0
     },
   },
   methods: {
@@ -147,9 +134,8 @@ export default {
     },
   },
   components: {
-    QuizzesContent,
     FormPreview,
-    RichTextContent,
+    EditFormToolbar,
   },
   watch: {
     formDetail(detail) {
@@ -197,32 +183,18 @@ export default {
       margin-left: 16px;
     }
   }
-  &-content {
-    padding: 24px;
-    color: #303133;
+  &-container {
+    display: flex;
+    padding: 32px 20px;
   }
-  &-item {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-    label {
-      font-size: 14px;
-      display: inline-block;
-      margin-bottom: 8px;
-      & > span {
-        color: #e21b45;
-        margin-right: 3px;
-        font-size: 16px;
-        display: inline-block;
-        vertical-align: sub;
-      }
-    }
-  }
-  &-quizzes {
-    background-color: #f5f5f5;
-    padding: 20px;
+  &-preview-zone {
+    flex: 1;
+    border: 1px solid #e8e8e8;
     border-radius: 8px;
+  }
+  &-toolbar-zone {
+    width: 228px;
+    margin-left: 20px;
   }
   &-empty {
     text-align: center;

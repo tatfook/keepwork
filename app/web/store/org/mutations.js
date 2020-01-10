@@ -30,6 +30,7 @@ const GET_CODES_STATUS_SUCCESS = 'GET_CODES_STATUS_SUCCESS'
 const SET_USE_FORMAL_CODE_PARAMS = 'SET_USE_FORMAL_CODE_PARAMS'
 const SET_RE_ACTIVATED_PARAMS = 'SET_RE_ACTIVATED_PARAMS'
 const GET_HISTORY_STUDENTS_SUCCESS = 'GET_HISTORY_STUDENTS_SUCCESS'
+const SET_EDITING_QIUZZES = 'SET_EDITING_QIUZZES'
 
 export const props = {
   GET_ORG_COUNT_SUCCESS,
@@ -61,6 +62,7 @@ export const props = {
   SET_USE_FORMAL_CODE_PARAMS,
   SET_RE_ACTIVATED_PARAMS,
   GET_HISTORY_STUDENTS_SUCCESS,
+  SET_EDITING_QIUZZES,
 }
 
 const mutations = {
@@ -206,6 +208,9 @@ const mutations = {
   },
   [GET_HISTORY_STUDENTS_SUCCESS](state, historyStudents) {
     Vue.set(state, 'historyStudents', historyStudents)
+  },
+  [SET_EDITING_QIUZZES](state, quizzes) {
+    Vue.set(state, 'editingFormQuizzes', quizzes)
   },
 }
 

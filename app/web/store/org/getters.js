@@ -87,6 +87,7 @@ const getters = {
   useFormalCodeParams: state => state.useFormalCodeParams,
   reActivatedParams: state => state.reActivatedParams,
   historyStudents: state => state.historyStudents,
+  editingFormQuizzes: state => state.editingFormQuizzes,
 }
 
 export default getters

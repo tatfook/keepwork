@@ -4,29 +4,84 @@
       <h1 :title="title">{{title}}</h1>
       <p :title="description">{{description}}</p>
     </div>
-    <div v-if="type == 3" class="form-preview-content">
-      <quizzes-content :originQuizzes="quizzes" :isEditMode="false" :isAnswerMode="isAnswerMode"></quizzes-content>
+    <div class="form-preview-content">
+      <component class="form-preview-item" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index"></component>
     </div>
-    <div v-else class="form-preview-content" v-html="text"></div>
+    <div class="form-preview-submit">
+      <el-button type="primary">提交</el-button>
+    </div>
   </div>
 </template>
 <script>
-import QuizzesContent from '../common/QuizzesContent'
+import { getCompByType } from './FormComps/compMap.sync'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'FormPreview',
   props: {
-    type: Number,
-    title: String,
-    description: String,
-    text: String,
-    quizzes: Array,
+    formDetail: {
+      type: Object,
+      default: {},
+    },
     isAnswerMode: {
       type: Boolean,
       default: false,
     },
+    isEditMode: {
+      type: Boolean,
+      default: false,
+    },
   },
-  components: {
-    QuizzesContent,
+  data() {
+    return {
+      quizzesWithComp: [],
+    }
+  },
+  computed: {
+    ...mapGetters({
+      editingFormQuizzes: 'org/editingFormQuizzes',
+    }),
+    title() {
+      return this.formDetail.title
+    },
+    description() {
+      return this.formDetail.description
+    },
+    text() {
+      return this.formDetail.text
+    },
+    quizzes() {
+      return this.formDetail.quizzes || []
+    },
+  },
+  methods: {
+    ...mapActions({ setEditingQuizzes: 'org/setEditingQuizzes' }),
+    async setQuizzesWithComp() {
+      const quizzes = this.editingFormQuizzes
+      let result = []
+      for (let index = 0; index < quizzes.length; index++) {
+        const element = quizzes[index]
+        const { type } = element
+        const data = await getCompByType(type)
+        const compDefault = data.default
+        result.push({
+          ...element,
+          answer: type == 0 ? element.options[0].value : type == 1 ? [] : '',
+          comp: compDefault,
+        })
+      }
+      this.quizzesWithComp = result
+    },
+  },
+  watch: {
+    quizzes: {
+      immediate: true,
+      handler(values) {
+        this.setEditingQuizzes(values)
+      },
+    },
+    editingFormQuizzes() {
+      this.setQuizzesWithComp()
+    },
   },
 }
 </script>
@@ -68,8 +123,28 @@ export default {
       -webkit-box-orient: vertical;
     }
   }
+  &-item {
+    font-size: 14px;
+    padding: 0 40px;
+    color: #303133;
+    border: 1px dashed transparent;
+    &:hover {
+      border-color: #ccc;
+    }
+  }
   &-content {
-    padding: 32px 56px;
+    padding: 12px 0 8px;
+  }
+  &-submit {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #e8e8e8;
+    .el-button {
+      width: 100px;
+      height: 32px;
+      line-height: 32px;
+      padding: 0;
+    }
   }
 }
 @media screen and (max-width: 768px) {

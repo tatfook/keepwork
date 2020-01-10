@@ -1,20 +1,21 @@
 <template>
   <div class="rich-text-content">
-    <div id="jsFormDescription">
+    <div :id="timeId">
     </div>
-    <el-button type="primary" class="rich-text-insert" @click="showSkydrive">插入文件</el-button>
-    <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="false" :isNoMediaFileShow="true" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 
 <script>
-import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 import { mapGetters } from 'vuex'
 import E from 'wangeditor'
 export default {
   name: 'RichTextContent',
+  props: {
+    content: String,
+    timeId: String,
+  },
   mounted() {
-    let editor = new E('#jsFormDescription')
+    let editor = new E(`#${this.timeId}`)
     editor.customConfig.menus = [
       'head', // 标题
       'bold', // 粗体
@@ -37,25 +38,18 @@ export default {
     editor.customConfig.onchange = this.handleChange
     editor.customConfig.zIndex = 100
     editor.create()
-    this.originContent = _.get(this.formDetail, 'text', [])
+    this.originContent = this.content
     editor.txt.html(this.originContent)
     this.formEditor = editor
     this.handleChange()
   },
   computed: {
-    ...mapGetters({
-      getFormDetailById: 'org/getFormDetailById',
-    }),
     formId() {
       return _.get(this.$route, 'params.id')
-    },
-    formDetail() {
-      return this.getFormDetailById({ id: this.formId }) || {}
     },
   },
   data() {
     return {
-      isMediaSkyDriveDialogShow: false,
       formEditor: undefined,
       originContent: '',
       colors: [
@@ -78,9 +72,6 @@ export default {
     }
   },
   methods: {
-    showSkydrive() {
-      this.isMediaSkyDriveDialogShow = true
-    },
     handleChange() {
       this.$emit('change')
     },
@@ -90,22 +81,6 @@ export default {
     getTextStr() {
       return this.formEditor.txt.text()
     },
-    closeSkyDriveManagerDialog({ file, url }) {
-      this.isMediaSkyDriveDialogShow = false
-      if (!url) return
-      let { type, filename } = file
-      let appendStr = ''
-      if (type == 'images') {
-        appendStr = `<span style="display:none">hidden img text</span><br/><img src="${url}" alt="${filename}" style="max-width: 100%;" />`
-      } else {
-        appendStr = `<br/><a href="${url}" target="_blank">${file.filename}</a>`
-      }
-      this.formEditor.txt.append(appendStr)
-      this.handleChange()
-    },
-  },
-  components: {
-    SkyDriveManagerDialog,
   },
 }
 </script>
