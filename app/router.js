@@ -33,7 +33,12 @@ module.exports = app => {
   router.get(/^\/a\//, controller.account.index) // account
   router.get('/vip', controller.vip.index)
   router.get('/wiki/pay', controller.wiki.index)
+
+  // FIXME: should put these apis in a reasonable group
   router.post('/es/parser', controller.parser.parser)
+  router.post('/es/buildBlocks', controller.parser.buildBlocks)
+  router.post('/es/buildContent', controller.parser.buildContent)
+
   router.get('/p', controller.paracraft.index)
   router.get(/^\/p\//, controller.paracraft.index)
   router.redirect('/wiki/login', '/u/r/login', 302)
