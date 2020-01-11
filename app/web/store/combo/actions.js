@@ -4,7 +4,7 @@ import Parser from '@/lib/mod/parser'
 import _ from 'lodash'
 
 const { GET_WEBSITE_CONTENT_SUCCESS, GET_WEBSITE_CONFIG_SUCCESS } = props
-const API_URL = 'https://api.keepwork.com/git/v0'
+const API_URL = 'https://api.keepwork.com/core/v0'
 
 const actions = {
   async getContent(

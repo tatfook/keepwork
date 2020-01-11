@@ -10,7 +10,6 @@
 import compBaseMixin from '../comp.base.mixin'
 import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
-import { sortFolder2Top } from '@/lib/utils/gitlab'
 
 export default {
   name: 'AdiPageList',
@@ -37,7 +36,7 @@ export default {
       }
     })
 
-    this.data = sortFolder2Top(filterFiles, this.activePageInfo.sitepath)
+    this.data = filterFiles
   },
   data() {
     return {
