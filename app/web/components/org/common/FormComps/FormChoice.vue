@@ -6,10 +6,10 @@
         {{itemData.title}}
       </div>
       <div class="remark" v-if="itemData.remark">{{itemData.remark}}</div>
-      <el-radio-group v-if="itemData.type === 0" v-model="itemData.answer">
+      <el-radio-group v-if="itemData.type === 0" :disabled="isEditable" v-model="itemData.answer">
         <el-radio v-for="(option, index) in itemData.options" :key="index" :label="option.value"></el-radio>
       </el-radio-group>
-      <el-checkbox-group v-else v-model="itemData.answer">
+      <el-checkbox-group v-else v-model="itemData.answer" :disabled="isEditable">
         <el-checkbox v-for="(option, index) in itemData.options" :key="index" :label="option.value"></el-checkbox>
       </el-checkbox-group>
     </div>

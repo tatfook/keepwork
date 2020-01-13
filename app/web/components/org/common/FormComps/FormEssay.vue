@@ -3,7 +3,7 @@
     <div class="content">
       <div class="title"><span v-if="itemData.isRequired" class="is-required">(必选)</span>{{itemData.title}}</div>
       <div class="info" v-if="itemData.remark">{{itemData.remark}}</div>
-      <el-input type="textarea" v-model="itemData.answer"></el-input>
+      <el-input type="textarea" v-model="itemData.answer" :disabled="isEditable"></el-input>
     </div>
     <div class="operates" v-if="isEditable">
       <i class="iconfont icon-edit--" @click="editComp"></i>
