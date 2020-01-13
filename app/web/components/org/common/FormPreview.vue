@@ -5,7 +5,9 @@
       <p :title="description">{{description}}</p>
     </div>
     <div class="form-preview-content">
-      <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
+      <vue-draggable v-model="quizzesWithComp" :disabled="!isEditable">
+        <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
+      </vue-draggable>
     </div>
     <div class="form-preview-submit">
       <el-button type="primary">提交</el-button>
@@ -13,6 +15,7 @@
   </div>
 </template>
 <script>
+import VueDraggable from 'vuedraggable'
 import { getCompByType } from './FormComps/compMap.sync'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -83,6 +86,9 @@ export default {
     editingFormQuizzes() {
       this.setQuizzesWithComp()
     },
+  },
+  components: {
+    VueDraggable,
   },
 }
 </script>
