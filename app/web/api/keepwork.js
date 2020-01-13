@@ -378,6 +378,7 @@ export const feedbacks = {
 
 export const systemTags = {
   getSystemTags: async type => get(`systemTags?classify=${type}`),
+  getPackageBySystemTags: async params => get('tags/packages', params)
 }
 
 export const editorSocket = {

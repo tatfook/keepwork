@@ -38,9 +38,6 @@ export default {
     draggable,
     videoPlayer
   },
-  props: {
-    orginValue: Array
-  },
   filters: {
     miniPic(url) {
       if (/#/.test(url)) {
