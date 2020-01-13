@@ -51,6 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      editingFormQuizzes: 'org/editingFormQuizzes',
       getFormDetailById: 'org/getFormDetailById',
     }),
     formId() {
@@ -69,8 +70,8 @@ export default {
       return _.get(this.formDetail, 'state')
     },
     isFormDataValid() {
-      let { title, quizzes } = this.formDetailData
-      if (!title) return false
+      if (!_.get(this.formDetailData, 'title')) return false
+      const quizzes = this.editingFormQuizzes
       return quizzes && quizzes.length > 0
     },
   },
@@ -93,11 +94,11 @@ export default {
       })
     },
     async saveForm() {
-      let { title, description, text, quizzes } = this.formDetailData
+      let { title, description, text } = this.formDetailData
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, text, quizzes },
+        formDetail: { title, description, text, quizzes: this.editingFormQuizzes },
       })
       this.isLoading = false
       this.showSuccessInfo('保存成功')
