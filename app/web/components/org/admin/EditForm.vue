@@ -14,7 +14,7 @@
     </div>
     <div class="edit-form-container" v-if="formState == 0">
       <div class="edit-form-preview-zone">
-        <form-preview :formDetail="formDetailData" />
+        <form-preview :formDetail="formDetailData" :isEditable="true" />
       </div>
       <div class="edit-form-toolbar-zone">
         <edit-form-toolbar />
@@ -24,7 +24,7 @@
       该表单已经发布过，不能编辑
     </div>
     <el-dialog v-if="isDialogVisible" custom-class="edit-form-preview" fullscreen visible :before-close="handlePreviewClose">
-      <form-preview :formDetail="formDetail" :type="formType" :title="formDetailData.title" :description="formDetailData.description" :text="formDetailData.text" :quizzes="formDetailData.quizzes"></form-preview>
+      <form-preview :formDetail="formDetailData"></form-preview>
     </el-dialog>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
     isFormDataValid() {
       let { title, quizzes } = this.formDetailData
       if (!title) return false
-      return quizzes.length > 0
+      return quizzes && quizzes.length > 0
     },
   },
   methods: {
@@ -81,26 +81,10 @@ export default {
       orgGetForms: 'org/getForms',
     }),
     showPreview() {
-      this.setFormContent()
       this.isDialogVisible = true
     },
     handlePreviewClose() {
       this.isDialogVisible = false
-    },
-    setFormContent() {
-      if (this.formType == 3) return this.setFormQuizzes()
-      return this.setFormText()
-    },
-    setFormText() {
-      let richTextRef = this.$refs.richTextRef
-      let htmlStr = richTextRef.getHtmlStr()
-      let textStr = richTextRef.getTextStr()
-      this.$set(this.formDetailData, 'plainText', textStr)
-      this.formDetailData.text = htmlStr
-    },
-    setFormQuizzes() {
-      let quizzes = this.$refs.quizzesRef.quizzes
-      this.formDetailData.quizzes = quizzes
     },
     showSuccessInfo(message) {
       this.$message({
@@ -109,7 +93,6 @@ export default {
       })
     },
     async saveForm() {
-      this.setFormContent()
       let { title, description, text, quizzes } = this.formDetailData
       this.isLoading = true
       await this.orgUpdateForm({

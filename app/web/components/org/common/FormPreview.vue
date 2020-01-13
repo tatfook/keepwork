@@ -5,7 +5,7 @@
       <p :title="description">{{description}}</p>
     </div>
     <div class="form-preview-content">
-      <component class="form-preview-item" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index"></component>
+      <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
     </div>
     <div class="form-preview-submit">
       <el-button type="primary">提交</el-button>
@@ -26,7 +26,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isEditMode: {
+    isEditable: {
       type: Boolean,
       default: false,
     },
@@ -77,6 +77,7 @@ export default {
       immediate: true,
       handler(values) {
         this.setEditingQuizzes(values)
+        this.setQuizzesWithComp()
       },
     },
     editingFormQuizzes() {
@@ -128,7 +129,7 @@ export default {
     padding: 0 40px;
     color: #303133;
     border: 1px dashed transparent;
-    &:hover {
+    &.is-hoverable:hover {
       border-color: #ccc;
     }
   }

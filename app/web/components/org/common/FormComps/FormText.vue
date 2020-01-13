@@ -1,11 +1,11 @@
 <template>
   <div class="form-text">
     <div class="content" v-html="content"></div>
-    <div class="operates">
+    <div class="operates" v-if="isEditable">
       <i class="iconfont icon-edit--" @click="editComp"></i>
       <i class="iconfont icon-delete" @click="deleteComp"></i>
     </div>
-    <el-dialog title="文本" :visible.sync="isEditDialogShow" :before-close="handleEditorClose">
+    <el-dialog v-if="isEditable" title="文本" :visible.sync="isEditDialogShow" :before-close="handleEditorClose">
       <rich-text-content ref="richTextEditor" :content="content" :timeId="timeId" />
       <div slot="footer">
         <el-button @click="handleEditorClose">取消</el-button>
@@ -28,6 +28,7 @@ export default {
       type: Number,
       required: true,
     },
+    isEditable: Boolean
   },
   data() {
     return {

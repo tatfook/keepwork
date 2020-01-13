@@ -2,7 +2,7 @@
   <div class="org-form-detail" v-loading="isLoading">
     <org-header class="org-form-detail-header"></org-header>
     <div class="org-form-detail-container">
-      <form-preview class="org-form-detail-form" :type="type" :title="title" :description="description" :text="text" :quizzes="quizzes" :isAnswerMode="true"></form-preview>
+      <form-preview class="org-form-detail-form" :formDetail="formDetail"></form-preview>
       <div class="org-form-detail-qrcode">
         <div class="org-form-detail-qrcode-main">
           <qrcode-vue :value="nowPageLink" :size="60" level="L" className="org-form-detail-qrcode-box"></qrcode-vue>
@@ -46,23 +46,8 @@ export default {
       return _.get(this.$route, 'params.id')
     },
     formDetail() {
-      return this.getFormDetailById({ id: this.formId, orgId: this.orgId })
+      return this.getFormDetailById({ id: this.formId, orgId: this.orgId }) || {}
     },
-    title() {
-      return _.get(this.formDetail, 'title')
-    },
-    type() {
-      return _.get(this.formDetail, 'type')
-    },
-    description() {
-      return _.get(this.formDetail, 'description')
-    },
-    text() {
-      return _.get(this.formDetail, 'text')
-    },
-    quizzes() {
-      return _.get(this.formDetail, 'quizzes')
-    }
   },
   data() {
     return {

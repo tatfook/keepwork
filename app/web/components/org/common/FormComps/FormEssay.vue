@@ -5,11 +5,11 @@
       <div class="info" v-if="itemData.remark">{{itemData.remark}}</div>
       <el-input type="textarea" v-model="itemData.answer"></el-input>
     </div>
-    <div class="operates">
+    <div class="operates" v-if="isEditable">
       <i class="iconfont icon-edit--" @click="editComp"></i>
       <i class="iconfont icon-delete" @click="deleteComp"></i>
     </div>
-    <quiz-editor :originQuiz="itemData" :isVisible='isEditDialogShow' title="问答题" @close="handleEditorClose" />
+    <quiz-editor v-if="isEditable" :originQuiz="itemData" :isVisible='isEditDialogShow' title="问答题" @close="handleEditorClose" />
   </div>
 </template>
 <script>
@@ -26,6 +26,7 @@ export default {
       type: Number,
       required: true,
     },
+    isEditable: Boolean,
   },
   data() {
     return {

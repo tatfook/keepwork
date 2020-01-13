@@ -13,11 +13,11 @@
         <el-checkbox v-for="(option, index) in itemData.options" :key="index" :label="option.value"></el-checkbox>
       </el-checkbox-group>
     </div>
-    <div class="operates">
+    <div class="operates" v-if="isEditable">
       <i class="iconfont icon-edit--" @click="editComp"></i>
       <i class="iconfont icon-delete" @click="deleteComp"></i>
     </div>
-    <quiz-editor :originQuiz="itemData" :isVisible='isEditDialogShow' title="选择题" @close="handleEditorClose" />
+    <quiz-editor v-if="isEditable" :originQuiz="itemData" :isVisible='isEditDialogShow' title="选择题" @close="handleEditorClose" />
   </div>
 </template>
 <script>
@@ -34,6 +34,7 @@ export default {
       type: Number,
       required: true,
     },
+    isEditable: Boolean,
   },
   data() {
     return {
