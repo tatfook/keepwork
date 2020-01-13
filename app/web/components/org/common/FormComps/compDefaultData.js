@@ -19,13 +19,22 @@ const compDefaultData = {
   },
   4: {
     type: 4,
+    fileType: undefined,
     url: undefined,
+    filename: undefined,
   },
 }
 
-export const getDefaultDataByType = function({ type, url }) {
+export const getDefaultDataByType = function({ type, fileType, url, filename }) {
   let data = compDefaultData[type]
-  if (type === 4) data.url = url
+  if (type === 4) {
+    data = {
+      ...data,
+      fileType,
+      url,
+      filename,
+    }
+  }
   return data
 }
 

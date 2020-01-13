@@ -15,11 +15,13 @@
         <div class="comp-item" v-for="item in componentsSettings" :key="item.key" @click="addNewComp(item.type)">{{item.label}}</div>
       </div>
     </div>
+    <sky-drive-manager-dialog :isApplicable='true' :isVideoShow="false" :isNoMediaFileShow="true" :show='isMediaSkyDriveDialogShow' @close='closeSkyDriveManagerDialog'></sky-drive-manager-dialog>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { getDefaultDataByType } from '../../common/FormComps/compDefaultData'
+import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
 export default {
   name: 'EditFormToolbar',
   data() {
@@ -29,8 +31,9 @@ export default {
         { label: '文本', type: 3 },
         { label: '问答题', type: 2 },
         { label: '选择题', type: 0 },
-        // { label: '文件展示', type: 4 },
+        { label: '文件展示', type: 4 },
       ],
+      isMediaSkyDriveDialogShow: false,
     }
   },
   computed: {
@@ -42,13 +45,30 @@ export default {
     ...mapActions({
       setEditingQuizzes: 'org/setEditingQuizzes',
     }),
+    showSkydrive() {
+      this.isMediaSkyDriveDialogShow = true
+    },
+    closeSkyDriveManagerDialog({ file, url }) {
+      this.isMediaSkyDriveDialogShow = false
+      if (!url) return
+      let { type: fileType, filename } = file
+      this.pushNewQuiz({ type: 4, fileType, url, filename })
+    },
     addNewComp(type) {
+      if (type === 4) {
+        return this.showSkydrive()
+      }
+      this.pushNewQuiz({ type })
+    },
+    pushNewQuiz({ type, fileType, url, filename }) {
       let quizzes = this.editingFormQuizzes
-      let newQuiz = getDefaultDataByType({ type })
+      let newQuiz = getDefaultDataByType({ type, fileType, url, filename })
       quizzes.push(newQuiz)
       this.setEditingQuizzes(quizzes)
-      // this.$emit('newComp', { type })
     },
+  },
+  components: {
+    SkyDriveManagerDialog,
   },
 }
 </script>
