@@ -118,7 +118,6 @@ const actions = {
     let children = _.get(repositoryTrees, [path, path])
     if (useCache && !_.isEmpty(children)) return
     let list = await gitlab.getTree({
-      // projectId,
       path,
       recursive
     })

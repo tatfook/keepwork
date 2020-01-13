@@ -1,12 +1,21 @@
 import _ from 'lodash'
 import { GitAPI } from '@/api'
 import {
-  gitTree2NestedArray,
   getFileFullPathByPath,
   EMPTY_GIT_FOLDER_KEEPER_REGEX,
   CONFIG_FOLDER_NAME
 } from '@/lib/utils/gitlab'
 
+
+const flatten = (files, arr = []) => {
+  files.forEach(file => {
+    arr.push(file)
+    if (file.isTree && file.children && file.children.length) {
+      flatten(file.children, arr)
+    }
+  })
+  return arr
+}
 const gitlabAPICache = {}
 const getGitlabAPI = config => {
   let cacheKey = JSON.stringify(config)
@@ -57,12 +66,19 @@ const getters = {
       .map(name => name.replace(/\.md$/, ''))
     return _.uniq(names)
   },
-  childrenByPath: (state, { repositoryTreesAllFiles = [] }) => path => {
+  childrenByPath: (state, { repositoryTreesAllFiles = [], flattenTree = [] }) => path => {
     let children = repositoryTreesAllFiles.filter(
       ({ name, path: filePath }) =>
         name !== CONFIG_FOLDER_NAME && !EMPTY_GIT_FOLDER_KEEPER_REGEX.test(name)
     )
+    if (path) {
+      const parentFolder = _.find(flattenTree, file => file.path === path)
+      return _.get(parentFolder, 'children', [])
+    }
     return children
+  },
+  flattenTree: (state, { repositoryTreesAllFiles = [] }) => {
+    return flatten(repositoryTreesAllFiles)
   },
   files: state => state.files,
   getFileCommitContent: state => ({ path, commitId }) => {
