@@ -67,8 +67,10 @@ export default {
         })
         this.addPic(fileList)
       } else if (this.changePageIndex > 0) {
-        fileList['downloadUrl'] = fileList['url']
-        this.changePic(fileList, this.changePageIndex)
+        if (fileList['url']) {
+          fileList['downloadUrl'] = fileList['url']
+          this.changePic(fileList, this.changePageIndex)
+        }
       }
       this.isMediaSkyDriveDialogShow = false
     },
