@@ -5,7 +5,7 @@
       <p :title="description">{{description}}</p>
     </div>
     <div class="form-preview-content">
-      <vue-draggable v-model="quizzesWithComp" :disabled="!isEditable">
+      <vue-draggable v-model="quizzesWithComp" @change="sortComps" :disabled="!isEditable">
         <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
       </vue-draggable>
     </div>
@@ -73,6 +73,9 @@ export default {
         })
       }
       this.quizzesWithComp = result
+    },
+    sortComps() {
+      this.setEditingQuizzes(this.quizzesWithComp)
     },
   },
   watch: {
