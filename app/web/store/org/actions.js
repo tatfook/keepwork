@@ -34,7 +34,7 @@ const {
   SET_USE_FORMAL_CODE_PARAMS,
   SET_RE_ACTIVATED_PARAMS,
   GET_HISTORY_STUDENTS_SUCCESS,
-  SET_EDITING_QIUZZES,
+  SET_EDITING_FORM,
 } = props
 
 const actions = {
@@ -442,8 +442,11 @@ const actions = {
     let result = await keepwork.lessonOrganizationClassMembers.historyStudents(params)
     commit(GET_HISTORY_STUDENTS_SUCCESS, result)
   },
-  setEditingQuizzes({ commit }, quizzes) {
-    commit(SET_EDITING_QIUZZES, quizzes)
+  setEditingForm({ commit }, formDetail) {
+    commit(SET_EDITING_FORM, formDetail)
+  },
+  setEditingQuizzes({ dispatch, getters: { editingForm } }, quizzes) {
+    dispatch('setEditingForm', { ...editingForm, quizzes })
   },
 }
 

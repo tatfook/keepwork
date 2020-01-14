@@ -14,7 +14,7 @@
     </div>
     <div class="edit-form-container" v-if="formState == 0">
       <div class="edit-form-preview-zone">
-        <form-preview :formDetail="formDetailData" :isEditable="true" />
+        <form-preview :formDetail="editingForm" :isEditable="true" />
       </div>
       <div class="edit-form-toolbar-zone">
         <edit-form-toolbar />
@@ -24,7 +24,7 @@
       该表单已经发布过，不能编辑
     </div>
     <el-dialog v-if="isDialogVisible" custom-class="edit-form-preview" fullscreen visible :before-close="handlePreviewClose">
-      <form-preview :formDetail="formDetailData"></form-preview>
+      <form-preview :formDetail="editingForm"></form-preview>
     </el-dialog>
   </div>
 </template>
@@ -38,7 +38,6 @@ export default {
     this.isLoading = true
     await this.orgGetForms({})
     this.isLoading = false
-    this.formDetailData = { ...this.formDetail, quizzes: this.formDetail.quizzes || [] }
     this.isLoadPerset = false
   },
   data() {
@@ -46,11 +45,11 @@ export default {
       isLoading: false,
       isDialogVisible: false,
       isLoadPerset: true,
-      formDetailData: {},
     }
   },
   computed: {
     ...mapGetters({
+      editingForm: 'org/editingForm',
       editingFormQuizzes: 'org/editingFormQuizzes',
       getFormDetailById: 'org/getFormDetailById',
     }),
@@ -70,7 +69,7 @@ export default {
       return _.get(this.formDetail, 'state')
     },
     isFormDataValid() {
-      if (!_.get(this.formDetailData, 'title')) return false
+      if (!_.get(this.editingForm, 'title')) return false
       const quizzes = this.editingFormQuizzes
       return quizzes && quizzes.length > 0
     },
@@ -80,6 +79,7 @@ export default {
       checkCurrentOrgExpire: 'org/checkCurrentOrgExpire',
       orgUpdateForm: 'org/updateForm',
       orgGetForms: 'org/getForms',
+      setEditingForm: 'org/setEditingForm',
     }),
     showPreview() {
       this.isDialogVisible = true
@@ -94,11 +94,11 @@ export default {
       })
     },
     async saveForm() {
-      let { title, description, text } = this.formDetailData
+      let { title, description } = this.editingForm
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, text, quizzes: this.editingFormQuizzes },
+        formDetail: { title, description, quizzes: this.editingFormQuizzes },
       })
       this.isLoading = false
       this.showSuccessInfo('保存成功')
@@ -106,11 +106,11 @@ export default {
     },
     async publishForm() {
       if (await this.checkCurrentOrgExpire()) return
-      let { title, description, text, quizzes } = this.formDetailData
+      let { title, description, quizzes } = this.editingForm
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, text, quizzes, state: 1 },
+        formDetail: { title, description, quizzes, state: 1 },
       })
       this.isLoading = false
       this.showSuccessInfo('发布成功')
@@ -122,8 +122,12 @@ export default {
     EditFormToolbar,
   },
   watch: {
-    formDetail(detail) {
-      this.formDetailData = _.cloneDeep(detail)
+    formDetail: {
+      deep: true,
+      immediate: true,
+      handler(formDetail) {
+        this.setEditingForm(formDetail)
+      },
     },
   },
 }

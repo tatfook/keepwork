@@ -1,9 +1,6 @@
 <template>
   <div class="form-preview">
-    <div class="form-preview-header">
-      <h1 :title="title">{{title}}</h1>
-      <p :title="description">{{description}}</p>
-    </div>
+    <form-header :headerData="headerData" :isEditable="isEditable" />
     <div class="form-preview-content">
       <vue-draggable v-model="quizzesWithComp" @change="sortComps" :disabled="!isEditable">
         <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
@@ -18,6 +15,7 @@
 import VueDraggable from 'vuedraggable'
 import { getCompByType } from './FormComps/compMap.sync'
 import { mapGetters, mapActions } from 'vuex'
+import FormHeader from './FormComps/FormHeader'
 export default {
   name: 'FormPreview',
   props: {
@@ -41,25 +39,22 @@ export default {
   },
   computed: {
     ...mapGetters({
+      editingForm: 'org/editingForm',
       editingFormQuizzes: 'org/editingFormQuizzes',
     }),
-    title() {
-      return this.formDetail.title
-    },
-    description() {
-      return this.formDetail.description
-    },
-    text() {
-      return this.formDetail.text
-    },
     quizzes() {
       return this.formDetail.quizzes || []
     },
+    headerData() {
+      return this.isEditable ? this.editingForm : this.formDetail
+    },
   },
   methods: {
-    ...mapActions({ setEditingQuizzes: 'org/setEditingQuizzes' }),
+    ...mapActions({
+      setEditingQuizzes: 'org/setEditingQuizzes',
+    }),
     async setQuizzesWithComp() {
-      const quizzes = this.editingFormQuizzes
+      const quizzes = this.isEditable ? this.editingFormQuizzes : this.quizzes
       let result = []
       for (let index = 0; index < quizzes.length; index++) {
         const element = quizzes[index]
@@ -75,14 +70,14 @@ export default {
       this.quizzesWithComp = result
     },
     sortComps() {
-      this.setEditingQuizzes(this.quizzesWithComp)
+      this.setEditingQuizzes(_.map(this.quizzesWithComp, quiz => _.omit(quiz, 'comp')))
     },
   },
   watch: {
-    quizzes: {
+    formDetail: {
+      deep: true,
       immediate: true,
-      handler(values) {
-        this.setEditingQuizzes(values)
+      handler() {
         this.setQuizzesWithComp()
       },
     },
@@ -92,6 +87,7 @@ export default {
   },
   components: {
     VueDraggable,
+    FormHeader,
   },
 }
 </script>
@@ -102,37 +98,6 @@ export default {
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
-  &-header {
-    background-color: #2397f3;
-    height: 116px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    h1 {
-      font-size: 24px;
-      color: #fff;
-      margin: 0;
-      font-weight: normal;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: 100%;
-    }
-    p {
-      font-size: 14px;
-      color: #5bf5ff;
-      max-width: 468px;
-      text-align: center;
-      margin: 8px 0 0 0;
-      line-clamp: 2;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-    }
-  }
   &-item {
     font-size: 14px;
     padding: 0 40px;
