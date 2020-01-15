@@ -25,13 +25,7 @@
 <script>
 import { mapActions } from 'vuex'
 import formTemplates from '@/lib/formTemplates'
-const {
-  empty,
-  admissionNotice,
-  workSubmitNotice,
-  applicationForm,
-  selectedNotice
-} = formTemplates
+const { empty, admissionNotice, workSubmitNotice, applicationForm, selectedNotice } = formTemplates
 
 export default {
   name: 'FormTemplates',
@@ -45,43 +39,43 @@ export default {
           thumb: require('@/assets/org/form_template1.png'),
           preview: require('@/assets/org/form_template1_preview.png'),
           name: '空白模板',
-          templateParam: empty
+          templateParam: empty,
         },
         {
           type: 1,
           thumb: require('@/assets/org/form_template2.png'),
           preview: require('@/assets/org/form_template2_preview.png'),
           name: '招生通知',
-          templateParam: admissionNotice
+          templateParam: admissionNotice,
         },
         {
           type: 2,
           thumb: require('@/assets/org/form_template3.png'),
           preview: require('@/assets/org/form_template3_preview.png'),
           name: '入学作品提交通知',
-          templateParam: workSubmitNotice
+          templateParam: workSubmitNotice,
         },
         {
           type: 3,
           thumb: require('@/assets/org/form_template4.png'),
           preview: require('@/assets/org/form_template4_preview.png'),
           name: '报名表',
-          templateParam: applicationForm
+          templateParam: applicationForm,
         },
         {
           type: 4,
           thumb: require('@/assets/org/form_template5.png'),
           preview: require('@/assets/org/form_template5_preview.png'),
           name: '入选学员通知',
-          templateParam: selectedNotice
-        }
+          templateParam: selectedNotice,
+        },
       ],
-      selectedTemplate: {}
+      selectedTemplate: {},
     }
   },
   methods: {
     ...mapActions({
-      orgCreateForm: 'org/createForm'
+      orgCreateForm: 'org/createForm',
     }),
     handleClosePreview() {
       this.selectedTemplate = {}
@@ -94,22 +88,22 @@ export default {
     showNamePrompt() {
       let {
         type,
-        templateParam: { title, description, quizzes, bottomButton }
+        templateParam: { title, description, quizzes, bottomButton },
       } = this.selectedTemplate
       this.$prompt('名称', '创建表单', {
         inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
         inputErrorMessage: '表单名称不能为空',
         confirmButtonText: '保存',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
       }).then(async ({ value }) => {
         this.createForm({
           type,
           title,
           bottomButton,
           description,
-          backGroundImg:{},
+          backGroundImg: {},
           quizzes,
-          name: value
+          name: value,
         })
       })
     },
@@ -121,13 +115,13 @@ export default {
         this.$router.push({
           name: 'EditForm',
           params: {
-            id
-          }
+            id,
+          },
         })
       } catch (error) {}
       this.isLoading = false
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
