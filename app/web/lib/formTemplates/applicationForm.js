@@ -49,5 +49,9 @@ export default {
       options: [],
       index: 6
     }
-  ]
+  ],
+  bottomButton: {
+    isShow: true,
+    content: '提交',
+  },
 }

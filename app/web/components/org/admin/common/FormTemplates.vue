@@ -94,7 +94,7 @@ export default {
     showNamePrompt() {
       let {
         type,
-        templateParam: { title, description, text, quizzes }
+        templateParam: { title, description, quizzes, bottomButton }
       } = this.selectedTemplate
       this.$prompt('名称', '创建表单', {
         inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
@@ -105,8 +105,9 @@ export default {
         this.createForm({
           type,
           title,
-          text,
+          bottomButton,
           description,
+          backGroundImg:{},
           quizzes,
           name: value
         })
