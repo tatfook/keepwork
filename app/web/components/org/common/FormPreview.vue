@@ -1,7 +1,7 @@
 <template>
   <div class="form-preview">
     <form-header :headerData="headerData" :isEditable="isEditable" />
-    <div class="form-preview-content">
+    <div class="form-preview-content" :style="bgStyle">
       <vue-draggable v-model="quizzesWithComp" @change="sortComps" :disabled="!isEditable">
         <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
       </vue-draggable>
@@ -49,6 +49,12 @@ export default {
     },
     footerData() {
       return this.isEditable ? this.editingForm.bottomButton : this.formDetail.bottomButton
+    },
+    bgUrl() {
+      return _.get(this.editingForm, 'backGroundImg.page')
+    },
+    bgStyle() {
+      return this.bgUrl ? `background:url(${this.bgUrl}) no-repeat center / cover` : ''
     },
   },
   methods: {
