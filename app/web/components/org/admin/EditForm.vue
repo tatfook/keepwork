@@ -94,11 +94,11 @@ export default {
       })
     },
     async saveForm() {
-      let { title, description } = this.editingForm
+      let { title, description, quizzes, bottomButton } = this.editingForm
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, quizzes: this.editingFormQuizzes },
+        formDetail: { title, description, quizzes, bottomButton },
       })
       this.isLoading = false
       this.showSuccessInfo('保存成功')
@@ -106,11 +106,11 @@ export default {
     },
     async publishForm() {
       if (await this.checkCurrentOrgExpire()) return
-      let { title, description, quizzes } = this.editingForm
+      let { title, description, quizzes, bottomButton } = this.editingForm
       this.isLoading = true
       await this.orgUpdateForm({
         formId: this.formId,
-        formDetail: { title, description, quizzes, state: 1 },
+        formDetail: { title, description, quizzes, state: 1, bottomButton },
       })
       this.isLoading = false
       this.showSuccessInfo('发布成功')

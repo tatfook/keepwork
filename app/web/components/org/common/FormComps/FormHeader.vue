@@ -28,7 +28,9 @@ export default {
   props: {
     headerData: {
       type: Object,
-      default: {},
+      default: () => {
+        return {}
+      },
     },
     isEditable: Boolean,
   },

@@ -6,9 +6,7 @@
         <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
       </vue-draggable>
     </div>
-    <div class="form-preview-submit">
-      <el-button type="primary">提交</el-button>
-    </div>
+    <form-footer :footerData="footerData" :isEditable="isEditable" />
   </div>
 </template>
 <script>
@@ -16,6 +14,7 @@ import VueDraggable from 'vuedraggable'
 import { getCompByType } from './FormComps/compMap.sync'
 import { mapGetters, mapActions } from 'vuex'
 import FormHeader from './FormComps/FormHeader'
+import FormFooter from './FormComps/FormFooter'
 export default {
   name: 'FormPreview',
   props: {
@@ -47,6 +46,9 @@ export default {
     },
     headerData() {
       return this.isEditable ? this.editingForm : this.formDetail
+    },
+    footerData() {
+      return this.isEditable ? this.editingForm.bottomButton : this.formDetail.bottomButton
     },
   },
   methods: {
@@ -88,6 +90,7 @@ export default {
   components: {
     VueDraggable,
     FormHeader,
+    FormFooter,
   },
 }
 </script>
@@ -109,17 +112,6 @@ export default {
   }
   &-content {
     padding: 12px 0 8px;
-  }
-  &-submit {
-    text-align: center;
-    padding: 20px 0;
-    border-top: 1px solid #e8e8e8;
-    .el-button {
-      width: 100px;
-      height: 32px;
-      line-height: 32px;
-      padding: 0;
-    }
   }
 }
 @media screen and (max-width: 768px) {
