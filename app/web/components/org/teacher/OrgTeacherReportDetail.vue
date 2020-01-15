@@ -1,7 +1,10 @@
 <template>
   <div class="teacher-report-detail">
     <div class="teacher-report-detail-header">
-      <span class="teacher-report-detail-header-name">{{reportName}}</span> <span class="teacher-report-detail-header-tag">{{reportTypeName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
+      <span>
+        <span class="teacher-report-detail-header-name">{{reportName}}</span> <span class="teacher-report-detail-header-tag">{{reportTypeName}}</span> <i @click="handleShowEditReportDialog" class="iconfont icon-edit1 teacher-report-detail-header-edit"></i>
+      </span>
+      <el-button type="text" @click="onBackToList">返回列表</el-button>
     </div>
     <div class="teacher-report-detail-main">
       <el-tabs v-model="activeName" type="card">
@@ -12,9 +15,16 @@
               </el-table-column>
               <el-table-column prop="realname" label="学生姓名">
               </el-table-column>
+              <el-table-column prop="username" label="用户名">
+              </el-table-column>
+              <el-table-column label="作品数">
+                <template slot-scope="scope">
+                  <el-link :underline="false" type="primary" target="_blank" :href="getUserProjectURL(scope.row.username)">{{scope.row.projectCount}}</el-link>
+                </template>
+              </el-table-column>
               <el-table-column prop="reportName" label="操作" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <el-button size="small" @click="handleToCommnet(scope.row)">点评</el-button>
+                  <el-button size="small" @click="handleToComment(scope.row)">点评</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -52,16 +62,23 @@
             <el-table :data="hasCommentTable" @selection-change="handleSelectionChange" border="" style="width: 100%">
               <el-table-column type="selection" width="55">
               </el-table-column>
-              <el-table-column prop="index" label="序号" width="120">
+              <el-table-column prop="index" label="序号" width="80">
               </el-table-column>
-              <el-table-column prop="realname" label="学生姓名" width="120">
+              <el-table-column prop="realname" label="学生姓名" width="100">
+              </el-table-column>
+              <el-table-column prop="username" label="用户名" width="100">
+              </el-table-column>
+              <el-table-column label="作品数" width="80">
+                <template slot-scope="scope">
+                  <el-link :underline="false" type="primary" target="_blank" :href="getUserProjectURL(scope.row.username)">{{scope.row.projectCount}}</el-link>
+                </template>
               </el-table-column>
               <el-table-column label="点评时间" width="180">
                 <template slot-scope="scope">
                   <span>{{scope.row.createdAt | formatTime}}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="发送状态" width="120">
+              <el-table-column label="发送状态" width="80">
                 <template slot-scope="scope">
                   <span>{{scope.row.isSend | formatSendStatus}}</span>
                 </template>
@@ -107,7 +124,7 @@ import { keepwork } from '@/api'
 export default {
   name: 'OrgTeacherReportDetail',
   components: {
-    ReportType
+    ReportType,
   },
   filters: {
     formatTime(value) {
@@ -115,7 +132,7 @@ export default {
     },
     formatSendStatus(isSend) {
       return isSend == 1 ? '已发送' : '待发送'
-    }
+    },
   },
   data() {
     return {
@@ -125,18 +142,16 @@ export default {
       studentName: '',
       loading: false,
       isSending: false,
-      isPirnting: false,
+      isPrinting: false,
       isShowEditDialog: false,
       selection: [],
       rules: {
-        name: [
-          { required: true, message: '报告名称不能为空', trigger: 'change' }
-        ]
+        name: [{ required: true, message: '报告名称不能为空', trigger: 'change' }],
       },
       form: {
         name: '',
-        type: 1
-      }
+        type: 1,
+      },
     }
   },
   async created() {
@@ -152,19 +167,19 @@ export default {
       this.timer = setTimeout(() => {
         this.handleSearchByStudentName()
       }, 500)
-    }
+    },
   },
   computed: {
     ...mapGetters({
       evaluationReportDetail: 'org/teacher/evaluationReportDetail',
-      currentOrg: 'org/currentOrg'
+      currentOrg: 'org/currentOrg',
     }),
     orgName() {
       return this.currentOrg.name
     },
     searchParams() {
       const params = {
-        status: this.activeName
+        status: this.activeName,
       }
       if (this.activeName == '2' && this.sendStatus != -1) {
         params['isSend'] = this.sendStatus
@@ -187,7 +202,7 @@ export default {
       return {
         0: '待发送',
         1: '已发送',
-        '-1': '全部'
+        '-1': '全部',
       }
     },
     reportId() {
@@ -197,22 +212,16 @@ export default {
       return this.sendStatusDict[this.sendStatus]
     },
     toCommentTable() {
-      return _.map(
-        _.get(this.evaluationReportDetail, 1, []),
-        (item, index) => ({
-          ...item,
-          index: index + 1
-        })
-      )
+      return _.map(_.get(this.evaluationReportDetail, 1, []), (item, index) => ({
+        ...item,
+        index: index + 1,
+      }))
     },
     hasCommentTable() {
-      return _.map(
-        _.get(this.evaluationReportDetail, 2, []),
-        (item, index) => ({
-          ...item,
-          index: index + 1
-        })
-      )
+      return _.map(_.get(this.evaluationReportDetail, 2, []), (item, index) => ({
+        ...item,
+        index: index + 1,
+      }))
     },
     classId() {
       return _.toNumber(this.$route.query.classId)
@@ -221,20 +230,32 @@ export default {
       const origin = window.location.origin
       const { orgLoginUrl } = this.$route.params
       return `${origin}/org/${orgLoginUrl}/report`
-    }
+    },
   },
   methods: {
     ...mapActions({
       getEvaluationReportDetail: 'org/teacher/getEvaluationReportDetail',
       updateEvaluationReport: 'org/teacher/updateEvaluationReport',
-      deleteEvaluationReportComment: 'org/teacher/deleteEvaluationReportComment'
+      deleteEvaluationReportComment: 'org/teacher/deleteEvaluationReportComment',
     }),
+    getUserProjectURL(username) {
+      return `${window.location.origin}/u/${username}/project`
+    },
+    onBackToList() {
+      const { classId } = this.$route.query
+      this.$router.push({
+        name: 'OrgTeacherReportList',
+        query: {
+          classId,
+        },
+      })
+    },
     async getReportTable() {
       try {
         this.loading = true
         await this.getEvaluationReportDetail({
           reportId: this.reportId,
-          params: this.searchParams
+          params: this.searchParams,
         })
       } catch (error) {
         console.error(error)
@@ -265,15 +286,15 @@ export default {
         query: {
           ...this.$route.query,
           reportName: name,
-          type
-        }
+          type,
+        },
       })
     },
     handleShowEditReportDialog() {
       this.form = {
         name: this.reportName,
         type: _.toNumber(this.reportType),
-        reportId: this.reportId
+        reportId: this.reportId,
       }
       this.isShowEditDialog = true
     },
@@ -290,18 +311,18 @@ export default {
     handleSelectionChange(selection) {
       this.selection = selection
     },
-    handleToCommnet(row) {
+    handleToComment(row) {
       this.$router.push({
         name: 'OrgTeacherReportComment',
         query: {
           ...this.$route.query,
-          ...row
-        }
+          ...row,
+        },
       })
     },
     async handleDeleteComment({ userReportId, realname }) {
       this.$confirm(`确定删除对${realname}的点评吗?`, '提示', {
-        type: 'warning'
+        type: 'warning',
       })
         .then(async res => {
           try {
@@ -309,9 +330,7 @@ export default {
             await this.deleteEvaluationReportComment(userReportId)
             await this.getReportTable()
           } catch (error) {
-            this.$message.error(
-              _.get(error, 'response.data.message', '删除失败')
-            )
+            this.$message.error(_.get(error, 'response.data.message', '删除失败'))
           } finally {
             this.loading = false
           }
@@ -325,26 +344,19 @@ export default {
         query: {
           ...this.$route.query,
           studentId,
-          userReportId
-        }
+          userReportId,
+        },
       })
     },
     generaURL(obj) {
-      const {
-        classId,
-        reportName,
-        type,
-        userReportId,
-        studentId,
-        realname
-      } = obj
+      const { classId, reportName, type, userReportId, studentId, realname } = obj
       const paramsObj = {
         classId,
         reportName,
         type,
         userReportId,
         studentId,
-        realname
+        realname,
       }
       const arr = _.map(_.keys(paramsObj), key => {
         return `${key}=${paramsObj[key]}`
@@ -364,7 +376,7 @@ export default {
           type: this.reportType,
           baseUrl: this.reportURL,
           reportName: this.reportName,
-          orgName: this.orgName
+          orgName: this.orgName,
         }
         const query = this.generaURL(params)
         params.baseUrl = encodeURI(`${params.baseUrl}?${query}`)
@@ -386,22 +398,19 @@ export default {
           }
           return arr
         },
-        []
+        [],
       )
       if (noParentPhonArr.length > 0) {
-        const studentNameStr = _.map(
-          noParentPhonArr,
-          item => item.realname
-        ).join(',')
+        const studentNameStr = _.map(noParentPhonArr, item => item.realname).join(',')
         this.$alert(studentNameStr, '如下学生未设置家长手机号，请先设置。', {
           confirmButtonText: '确定',
-          type: 'warning'
+          type: 'warning',
         })
         return
       }
       this.$confirm('确定将评估报告发送给学生家长吗？', '提示', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
       })
         .then(async () => {
           try {
@@ -411,14 +420,14 @@ export default {
             this.isSending = true
             const dataArr = this.generaSMSData(selection)
             const failArr = await keepwork.evaluationReports.reportToParent({
-              dataArr
+              dataArr,
             })
             if (failArr.length > 0) {
               this.$message({
                 message: `以下学生发送失败: ${failArr.join(',')}, 其余发送成功`,
                 type: 'warning',
                 showClose: true,
-                duration: 10000
+                duration: 10000,
               })
             } else {
               this.$message.success('发送成功')
@@ -441,7 +450,7 @@ export default {
         return this.$message.error('请选择学生')
       }
       try {
-        this.isPirnting = true
+        this.isPrinting = true
         for (let item of this.selection) {
           const URL = this.$router.resolve({
             name: 'OrgPrint',
@@ -449,8 +458,8 @@ export default {
               reportName: this.reportName,
               classId: this.classId,
               type: this.reportType,
-              ...item
-            }
+              ...item,
+            },
           }).href
           await this.printReport(URL)
         }
@@ -458,7 +467,7 @@ export default {
         console.error(error)
         this.$message.error('打印出错')
       } finally {
-        this.isPirnting = false
+        this.isPrinting = false
       }
     },
     async printReport(URL) {
@@ -474,8 +483,8 @@ export default {
           resolve()
         }, 300)
       }).catch(e => console.error(e))
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -489,6 +498,9 @@ export default {
     border-top: 1px solid #e8e8e8;
     border-bottom: 1px solid #e8e8e8;
     color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     &-tag {
       font-size: 14px;
       border-radius: 4px;
@@ -521,7 +533,6 @@ export default {
         cursor: pointer;
         /deep/.el-dropdown-link {
           width: 110px;
-          display: inline-block;
           display: inline-flex;
           align-items: center;
           justify-content: space-between;

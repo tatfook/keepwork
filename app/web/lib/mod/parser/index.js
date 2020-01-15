@@ -332,5 +332,6 @@ module.exports = {
   addBlockToMarkdownWithoutHeadAndTail,
   getCmd,
   getActiveBlock,
-  getBlockByCursorLine
+  getBlockByCursorLine,
+  BlockHelper
 }

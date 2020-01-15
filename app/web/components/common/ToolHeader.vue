@@ -24,7 +24,7 @@
           </span>
           <el-dropdown-menu v-loading="isFileDropdownLoading" class="breadcrumb-item-dropdown" slot="dropdown">
             <el-dropdown-item class="file-list-item" v-for='(file,childIndex) in siteFileTree[index]' :key='childIndex' :command="file">
-              {{file.type == 'tree' ? `${file.name}/` : file.name | hideMarkdownExt}}
+              {{file.isTree ? `${file.name}/` : file.name | hideMarkdownExt}}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -138,12 +138,17 @@ export default {
     siteFileTree() {
       let { username, sitename, paths = [] } = this.activePageInfo
       if (paths.length <= 0) return []
-      return paths.map((path, index) => {
+      const siteFileTree = paths.map((path, index) => {
+        if (index === 0) {
+          return this.gitlabChildrenByPath()
+        }
         let currentPath = [username, sitename, ...paths.slice(0, index)].join(
           '/'
         )
-        return this.gitlabChildrenByPath(currentPath)
+        const data =  this.gitlabChildrenByPath(currentPath)
+        return data
       })
+      return siteFileTree
     },
     locationOrigin() {
       return location.origin
@@ -229,12 +234,11 @@ export default {
     },
     handleBreadcrumbClick(file) {
       let targetFile = file
-
-      if (file.type === 'tree') {
-        let children = this.gitlabChildrenByPath(file.path)
+      if (file.isTree) {
+        let children = file.children
         let indexChild = children.filter(file => file.name === 'index.md')[0]
         let firstFileTypeChild = children.filter(
-          file => file.type === 'blob'
+          file => file.isBlob
         )[0]
         targetFile =
           indexChild || firstFileTypeChild || children[0] || targetFile

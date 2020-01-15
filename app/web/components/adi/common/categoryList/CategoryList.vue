@@ -43,7 +43,6 @@
 <script>
 import { search } from '@/api/esGateway'
 import _ from 'lodash'
-import { Base64 } from 'js-base64'
 import compBaseMixin from '../comp.base.mixin'
 import { mapActions, mapGetters } from 'vuex'
 
