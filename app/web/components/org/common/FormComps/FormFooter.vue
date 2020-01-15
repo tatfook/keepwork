@@ -1,6 +1,6 @@
 <template>
   <div class="form-footer">
-    <el-button type="primary" v-if="footerData.isShow">{{footerData.content}}</el-button>
+    <el-button type="primary" v-if="footerData.isShow" :disabled="!isFormDataValid || isEditable" @click="submitFormData">{{footerData.content}}</el-button>
     <div v-else class="empty">提交按钮已隐藏，点击<i class="iconfont icon-edit--" @click="showHeaderEditor"></i>调整</div>
     <div class="operates" v-if="isEditable">
       <i class="iconfont icon-edit--" @click="showHeaderEditor"></i>
@@ -31,11 +31,12 @@ export default {
   props: {
     footerData: {
       type: Object,
-      default: () => {
+      default() {
         return { content: '提交', isShow: true }
       },
     },
     isEditable: Boolean,
+    isFormDataValid: Boolean,
   },
   data() {
     return {
@@ -68,6 +69,9 @@ export default {
       let { isShow, content } = this.formData
       this.setEditingForm({ ...this.editingForm, bottomButton: { isShow, content } })
       this.handleEditorClose()
+    },
+    async submitFormData() {
+      this.$emit('submit')
     },
   },
 }

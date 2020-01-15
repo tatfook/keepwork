@@ -6,7 +6,7 @@
         <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
       </vue-draggable>
     </div>
-    <form-footer :footerData="footerData" :isEditable="isEditable" />
+    <form-footer :footerData="footerData" :isAnswerMode="isAnswerMode" :isEditable="isEditable" :isFormDataValid="isFormDataValid" @submit="submitFormData" />
   </div>
 </template>
 <script>
@@ -48,7 +48,7 @@ export default {
       return this.isEditable ? this.editingForm : this.formDetail
     },
     footerData() {
-      return this.isEditable ? this.editingForm.bottomButton : this.formDetail.bottomButton
+      return (this.isEditable ? this.editingForm.bottomButton : this.formDetail.bottomButton) || undefined
     },
     bgUrl() {
       let formDetail = this.isEditable ? this.editingForm : this.formDetail
@@ -57,10 +57,23 @@ export default {
     bgStyle() {
       return this.bgUrl ? `background:url(${this.bgUrl}) no-repeat center / cover` : ''
     },
+    formState() {
+      return _.get(this.formDetail, 'state')
+    },
+    formId() {
+      return _.get(this.$route, 'params.id')
+    },
+    unAnsweredQuizzes() {
+      return _.filter(this.quizzesWithComp, quiz => Boolean(quiz.isRequired && !_.trim(quiz.answer, ' '))) || []
+    },
+    isFormDataValid() {
+      return this.unAnsweredQuizzes.length == 0
+    },
   },
   methods: {
     ...mapActions({
       setEditingQuizzes: 'org/setEditingQuizzes',
+      orgSubmitForm: 'org/submitForm',
     }),
     async setQuizzesWithComp() {
       const quizzes = this.isEditable ? this.editingFormQuizzes : this.quizzes
@@ -80,6 +93,24 @@ export default {
     },
     sortComps() {
       this.setEditingQuizzes(_.map(this.quizzesWithComp, quiz => _.omit(quiz, 'comp')))
+    },
+    async submitFormData() {
+      if (this.formState === 2) {
+        this.$message.error('该表单已停止收集。')
+        return
+      }
+      if (this.formState != 1) return
+      this.isLoading = true
+      await this.orgSubmitForm({
+        formId: this.formId,
+        quizzes: _.map(this.quizzesWithComp, quiz => _.omit(quiz, 'comp')),
+      })
+      this.isLoading = false
+      this.$message({
+        type: 'success',
+        message: '提交成功',
+      })
+      this.$router.push({ name: 'OrgLogin' })
     },
   },
   watch: {
