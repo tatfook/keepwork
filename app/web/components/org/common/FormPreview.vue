@@ -51,7 +51,8 @@ export default {
       return this.isEditable ? this.editingForm.bottomButton : this.formDetail.bottomButton
     },
     bgUrl() {
-      return _.get(this.editingForm, 'backGroundImg.page')
+      let formDetail = this.isEditable ? this.editingForm : this.formDetail
+      return _.get(formDetail, 'backGroundImg.page')
     },
     bgStyle() {
       return this.bgUrl ? `background:url(${this.bgUrl}) no-repeat center / cover` : ''
