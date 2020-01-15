@@ -3,10 +3,7 @@
     <div class="item">
       <div class="header">外观</div>
       <div class="aspect-content">
-        <div class="aspect-item" v-for="item in aspectSettings" :key="item.key">
-          <label>{{item.label}}</label>
-          <div class="upload-button">上传图片</div>
-        </div>
+        <form-bg class="aspect-item" v-for="item in aspectSettings" :key="item.key" :itemLabel="item.label" :itemKey="item.key" />
       </div>
     </div>
     <div class="item">
@@ -22,11 +19,15 @@
 import { mapActions, mapGetters } from 'vuex'
 import { getDefaultDataByType } from '../../common/FormComps/compDefaultData'
 import SkyDriveManagerDialog from '@/components/common/SkyDriveManagerDialog'
+import FormBg from '../../common/FormComps/FormBg'
 export default {
   name: 'EditFormToolbar',
   data() {
     return {
-      aspectSettings: [{ label: '表头背景图', key: 'header' }, { label: '页面背景图', key: 'page' }],
+      aspectSettings: [
+        { label: '表头背景图', key: 'header' },
+        { label: '页面背景图', key: 'page' },
+      ],
       componentsSettings: [
         { label: '文本', type: 3 },
         { label: '问答题', type: 2 },
@@ -69,6 +70,7 @@ export default {
   },
   components: {
     SkyDriveManagerDialog,
+    FormBg,
   },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-header">
+  <div class="form-header" :style="bgStyle">
     <h1 :title="title">{{title}}</h1>
     <p :title="description">{{description}}</p>
     <div class="operates" v-if="isEditable">
@@ -53,6 +53,12 @@ export default {
     description() {
       return this.headerData.description
     },
+    bgUrl() {
+      return _.get(this.editingForm, 'backGroundImg.header')
+    },
+    bgStyle() {
+      return this.bgUrl ? `background:url(${this.bgUrl}) no-repeat center / cover` : ''
+    },
   },
   methods: {
     ...mapActions({
@@ -98,6 +104,7 @@ export default {
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 100%;
+    text-shadow: 1px 1px 1px #444;
   }
   p {
     font-size: 14px;
