@@ -105,9 +105,16 @@ export default {
           type: 'success'
         })
       } else {
-        let defaultErrorMessage =
-          this.$t('user.bindingFailed')
-        let failureMessage = _.get(result, 'data.message', defaultErrorMessage)
+        let failureMessage=''
+        let code = _.get(result, 'response.data.code')
+        switch (code) {
+          case 21:
+            failureMessage="该账号已被绑定"
+            break;
+          default:
+            failureMessage=this.$t('user.bindingFailed')
+            break;
+        }
         this.$message({
           message: failureMessage,
           type: 'error'
