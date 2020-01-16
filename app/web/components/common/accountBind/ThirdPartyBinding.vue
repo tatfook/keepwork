@@ -17,22 +17,22 @@ export default {
     await this.getUserThreeServiceByUsername({ username: this.username })
   },
   props: {
-    type: String
+    type: String,
   },
   data() {
     return {
       isLoading: false,
       pwdDialogData: {
         type: '',
-        value: ''
+        value: '',
       },
-      isPwdDialogVisible: false
+      isPwdDialogVisible: false,
     }
   },
   computed: {
     ...mapGetters({
       username: 'user/username',
-      getThreeService: 'user/getThreeService'
+      getThreeService: 'user/getThreeService',
     }),
     iconType() {
       let _icon = ''
@@ -88,36 +88,36 @@ export default {
           break
       }
       return label
-    }
+    },
   },
   methods: {
     ...mapActions({
       getUserThreeServiceByUsername: 'user/getUserThreeServiceByUsername',
-      threeServiceDeleteById: 'user/threeServiceDeleteById'
+      threeServiceDeleteById: 'user/threeServiceDeleteById',
     }),
     async handleBingdingResult(result) {
       if (result && result.data && result.data.token) {
         await this.getUserThreeServiceByUsername({
-          username: this.username
+          username: this.username,
         })
         this.$message({
           message: this.$t('user.bindingSuccess'),
-          type: 'success'
+          type: 'success',
         })
       } else {
-        let failureMessage=''
+        let failureMessage = ''
         let code = _.get(result, 'response.data.code')
         switch (code) {
           case 21:
-            failureMessage="该账号已被绑定"
-            break;
+            failureMessage = '该账号已被绑定'
+            break
           default:
-            failureMessage=this.$t('user.bindingFailed')
-            break;
+            failureMessage = this.$t('user.bindingFailed')
+            break
         }
         this.$message({
           message: failureMessage,
-          type: 'error'
+          type: 'error',
         })
       }
       this.isLoading = false
@@ -126,10 +126,7 @@ export default {
       let newestUserInfo = await keepwork.user.getProfile().catch(e => {
         window.location.reload()
       })
-      if (
-        newestUserInfo.username !== this.username ||
-        !newestUserInfo
-      ) {
+      if (newestUserInfo.username !== this.username || !newestUserInfo) {
         window.location.reload()
       }
       if (this.isUserBindService) {
@@ -137,7 +134,7 @@ export default {
           type: 'threeService',
           value: this.bindServiceUsername,
           username: this.username,
-          serviceId: this.bindServiceId
+          serviceId: this.bindServiceId,
         }
         this.isPwdDialogVisible = true
         return
@@ -157,11 +154,11 @@ export default {
     },
     handlePwdDialogClose() {
       this.isPwdDialogVisible = false
-    }
+    },
   },
   components: {
-    PasswordVerifyDialog
-  }
+    PasswordVerifyDialog,
+  },
 }
 </script>
 <style lang="scss" scoped>
