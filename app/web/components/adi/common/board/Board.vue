@@ -1,6 +1,7 @@
 <script>
 import _ from 'lodash'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 import compBaseMixin from '../comp.base.mixin'
 import boardProptypes from './board.proptypes'
 import { mapGetters, mapActions } from 'vuex'
@@ -17,7 +18,7 @@ const initPreview = (data, callback) => {
   let bundle =
     window.mxResources.getDefaultBundle(window.RESOURCE_BASE, window.mxLanguage) ||
     window.mxResources.getSpecialBundle(window.RESOURCE_BASE, window.mxLanguage)
-  
+
   window.mxUtils.getAll([bundle, window.STYLE_PATH + '/default.xml'], function(
     xhr
   ) {
@@ -200,13 +201,13 @@ export default {
     },
     async getSvgData() {
       let svg = this.properties.svg || ''
-      let response = await axios.get(svg + '?bust' + Date.now())
+      let response = await axios.get(svg + '?bust' + Date.now(), {
+        headers: {
+          Authorization: 'Bearer ' + Cookies.get('token')
+        }
+      })
 
-      if (svg && svg.match('git/v')) {
-        this.svgData = (response && response.data.content) || ''
-      } else {
-        this.svgData = (response && response.data) || ''
-      }
+      this.svgData = (response && response.data) || ''
     }
   },
   mixins: [compBaseMixin],
