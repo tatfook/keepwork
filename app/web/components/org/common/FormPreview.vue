@@ -1,33 +1,135 @@
 <template>
   <div class="form-preview">
-    <div class="form-preview-header">
-      <h1 :title="title">{{title}}</h1>
-      <p :title="description">{{description}}</p>
+    <form-header :headerData="headerData" :isEditable="isEditable" />
+    <div class="form-preview-content" :style="bgStyle">
+      <vue-draggable v-model="quizzesWithComp" @change="sortComps" :disabled="!isEditable">
+        <component class="form-preview-item" :class="{'is-hoverable': isEditable}" v-for="(quizItem, index) in quizzesWithComp" :key="index" :is="quizItem.comp" :itemData="quizItem" :itemIndex="index" :isEditable="isEditable"></component>
+      </vue-draggable>
     </div>
-    <div v-if="type == 3" class="form-preview-content">
-      <quizzes-content :originQuizzes="quizzes" :isEditMode="false" :isAnswerMode="isAnswerMode"></quizzes-content>
-    </div>
-    <div v-else class="form-preview-content" v-html="text"></div>
+    <form-footer :footerData="footerData" :isAnswerMode="isAnswerMode" :isEditable="isEditable" :isFormDataValid="isFormDataValid" @submit="submitFormData" />
   </div>
 </template>
 <script>
-import QuizzesContent from '../common/QuizzesContent'
+import VueDraggable from 'vuedraggable'
+import { getCompByType } from './FormComps/compMap.sync'
+import { mapGetters, mapActions } from 'vuex'
+import FormHeader from './FormComps/FormHeader'
+import FormFooter from './FormComps/FormFooter'
 export default {
   name: 'FormPreview',
   props: {
-    type: Number,
-    title: String,
-    description: String,
-    text: String,
-    quizzes: Array,
+    formDetail: {
+      type: Object,
+      default: {},
+    },
     isAnswerMode: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    isEditable: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      quizzesWithComp: [],
     }
   },
+  computed: {
+    ...mapGetters({
+      editingForm: 'org/editingForm',
+      editingFormQuizzes: 'org/editingFormQuizzes',
+    }),
+    quizzes() {
+      return this.formDetail.quizzes || []
+    },
+    headerData() {
+      return this.isEditable ? this.editingForm : this.formDetail
+    },
+    footerData() {
+      return (this.isEditable ? this.editingForm.bottomButton : this.formDetail.bottomButton) || undefined
+    },
+    bgUrl() {
+      let formDetail = this.isEditable ? this.editingForm : this.formDetail
+      return _.get(formDetail, 'backGroundImg.page')
+    },
+    bgStyle() {
+      return this.bgUrl ? `background:url(${this.bgUrl}) no-repeat center / cover` : ''
+    },
+    formState() {
+      return _.get(this.formDetail, 'state')
+    },
+    formId() {
+      return _.get(this.$route, 'params.id')
+    },
+    unAnsweredQuizzes() {
+      return _.filter(this.quizzesWithComp, quiz => Boolean(quiz.isRequired && !_.trim(quiz.answer, ' '))) || []
+    },
+    isFormDataValid() {
+      return this.unAnsweredQuizzes.length == 0
+    },
+  },
+  methods: {
+    ...mapActions({
+      setEditingQuizzes: 'org/setEditingQuizzes',
+      orgSubmitForm: 'org/submitForm',
+    }),
+    async setQuizzesWithComp() {
+      const quizzes = this.isEditable ? this.editingFormQuizzes : this.quizzes
+      let result = []
+      for (let index = 0; index < quizzes.length; index++) {
+        const element = quizzes[index]
+        const { type } = element
+        const data = await getCompByType(type)
+        const compDefault = data.default
+        result.push({
+          ...element,
+          answer: type == 0 ? element.options[0].value : type == 1 ? [] : '',
+          comp: compDefault,
+        })
+      }
+      this.quizzesWithComp = result
+    },
+    sortComps() {
+      this.setEditingQuizzes(_.map(this.quizzesWithComp, quiz => _.omit(quiz, 'comp')))
+    },
+    async submitFormData() {
+      if (this.formState === 2) {
+        this.$message.error('该表单已停止收集。')
+        return
+      }
+      if (this.formState != 1) return
+      this.isLoading = true
+      await this.orgSubmitForm({
+        formId: this.formId,
+        quizzes: _.map(this.quizzesWithComp, quiz => _.omit(quiz, 'comp')),
+      })
+      this.isLoading = false
+      this.$message({
+        type: 'success',
+        message: '提交成功',
+      })
+      this.$router.push({ name: 'OrgLogin' })
+    },
+  },
+  watch: {
+    formDetail: {
+      deep: true,
+      immediate: true,
+      handler() {
+        this.setQuizzesWithComp()
+      },
+    },
+    editingFormQuizzes() {
+      this.setQuizzesWithComp()
+    },
+  },
   components: {
-    QuizzesContent
-  }
+    VueDraggable,
+    FormHeader,
+    FormFooter,
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -37,39 +139,17 @@ export default {
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
-  &-header {
-    background-color: #2397f3;
-    height: 116px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    h1 {
-      font-size: 24px;
-      color: #fff;
-      margin: 0;
-      font-weight: normal;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: 100%;
-    }
-    p {
-      font-size: 14px;
-      color: #5bf5ff;
-      max-width: 468px;
-      text-align: center;
-      margin: 8px 0 0 0;
-      line-clamp: 2;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
+  &-item {
+    font-size: 14px;
+    padding: 0 40px;
+    color: #303133;
+    border: 1px dashed transparent;
+    &.is-hoverable:hover {
+      border-color: #ccc;
     }
   }
   &-content {
-    padding: 32px 56px;
+    padding: 12px 0 8px;
   }
 }
 @media screen and (max-width: 768px) {

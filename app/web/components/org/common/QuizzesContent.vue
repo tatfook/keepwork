@@ -44,12 +44,12 @@ export default {
     originQuizzes: Array,
     isAnswerMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isEditMode: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   async mounted() {
     await this.getOrgDetailByLoginUrl({ orgLoginUrl: this.orgLoginUrl })
@@ -64,7 +64,7 @@ export default {
   computed: {
     ...mapGetters({
       orgGetOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
-      getFormDetailById: 'org/getFormDetailById'
+      getFormDetailById: 'org/getFormDetailById',
     }),
     orgLoginUrl() {
       return _.get(this.$route, 'params.orgLoginUrl')
@@ -79,9 +79,7 @@ export default {
       return _.get(this.$route, 'params.id')
     },
     formDetail() {
-      return (
-        this.getFormDetailById({ id: this.formId, orgId: this.orgId }) || {}
-      )
+      return this.getFormDetailById({ id: this.formId, orgId: this.orgId }) || {}
     },
     formState() {
       return _.get(this.formDetail, 'state')
@@ -90,15 +88,11 @@ export default {
       return _.get(this.formDetail, 'quizzes', [])
     },
     unAnsweredQuizzes() {
-      return (
-        _.filter(this.quizzes, quiz =>
-          Boolean(quiz.isRequired && !_.trim(quiz.answer, ' '))
-        ) || []
-      )
+      return _.filter(this.quizzes, quiz => Boolean(quiz.isRequired && !_.trim(quiz.answer, ' '))) || []
     },
     isFormDataValid() {
       return this.unAnsweredQuizzes.length == 0
-    }
+    },
   },
   data() {
     return {
@@ -106,20 +100,20 @@ export default {
       insertIndex: undefined,
       editingQuiz: undefined,
       isDialogVisible: false,
-      quizzes: []
+      quizzes: [],
     }
   },
   methods: {
     ...mapActions({
       getOrgDetailByLoginUrl: 'org/getOrgDetailByLoginUrl',
-      orgSubmitForm: 'org/submitForm'
+      orgSubmitForm: 'org/submitForm',
     }),
     formatFormWithAnswer(quizzes) {
       return _.map(quizzes, quiz => {
         let { type } = quiz
         return {
           ...quiz,
-          answer: type == 0 ? quiz.options[0].value : type == 1 ? [] : ''
+          answer: type == 0 ? quiz.options[0].value : type == 1 ? [] : '',
         }
       })
     },
@@ -127,7 +121,7 @@ export default {
       if (this.formState === 2) {
         this.$alert('该表单已停止收集。', '提醒', {
           confirmButtonText: '确定',
-          type: 'warning'
+          type: 'warning',
         })
       }
     },
@@ -136,9 +130,7 @@ export default {
     },
     handleQuizEditorClose(quiz) {
       this.isDialogVisible = false
-      let insertIndex = _.isNumber(this.insertIndex)
-        ? this.insertIndex
-        : this.quizzes.length
+      let insertIndex = _.isNumber(this.insertIndex) ? this.insertIndex : this.quizzes.length
       this.insertIndex = undefined
       if (!quiz) {
         this.editingQuiz = undefined
@@ -155,7 +147,7 @@ export default {
     editQuiz(quiz, index) {
       this.editingQuiz = {
         ...quiz,
-        index
+        index,
       }
       this.isDialogVisible = true
     },
@@ -192,19 +184,19 @@ export default {
       this.isLoading = true
       await this.orgSubmitForm({
         formId: this.formId,
-        quizzes: this.quizzes
+        quizzes: this.quizzes,
       })
       this.isLoading = false
       this.$message({
         type: 'success',
-        message: '提交成功'
+        message: '提交成功',
       })
       this.$router.push({ name: 'OrgLogin' })
-    }
+    },
   },
   components: {
-    QuizEditor
-  }
+    QuizEditor,
+  },
 }
 </script>
 <style lang="scss" scoped>

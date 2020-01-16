@@ -34,6 +34,7 @@ const state = {
   useFormalCodeParams: {},
   reActivatedParams: {},
   historyStudents: {},
+  editingForm: {},
 }
 export default {
   namespaced: true,

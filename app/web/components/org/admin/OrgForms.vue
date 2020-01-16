@@ -62,7 +62,7 @@
         <el-button type="primary" @click="openPreview">打开</el-button>
       </span>
     </el-dialog>
-    <form-preview v-show="false" ref="formPreviewRef" :type="activeForm.type" :title="activeForm.title" :description="activeForm.description" :text="activeForm.text" :quizzes="activeForm.quizzes"></form-preview>
+    <form-preview v-show="false" ref="formPreviewRef" :formDetail="activeForm"></form-preview>
   </div>
 </template>
 <script>
