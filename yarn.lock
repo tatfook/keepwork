@@ -829,11 +829,6 @@ amdefine@>=0.0.4:
   resolved "http://registry.npm.taobao.org/amdefine/download/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
-animejs@^2.2.0:
-  version "2.2.0"
-  resolved "http://registry.npm.taobao.org/animejs/download/animejs-2.2.0.tgz#35eefdfc535b81949c9cb06f0b3e60c02e6fdc80"
-  integrity sha1-Ne79/FNbgZScnLBvCz5gwC5v3IA=
-
 ansi-align@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/ansi-align/download/ansi-align-2.0.0.tgz#c36aeccba563b89ceb556f3690f0b1d9e3547f7f"
@@ -5881,11 +5876,6 @@ execa@^1.0.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-exif-js@^2.3.0:
-  version "2.3.0"
-  resolved "http://registry.npm.taobao.org/exif-js/download/exif-js-2.3.0.tgz#9d10819bf571f873813e7640241255ab9ce1a814"
-  integrity sha1-nRCBm/Vx+HOBPnZAJBJVq5zhqBQ=
-
 exit-on-epipe@~1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/exit-on-epipe/download/exit-on-epipe-1.0.1.tgz#0bdd92e87d5285d267daa8171d0eb06159689692"
@@ -6003,7 +5993,7 @@ extend2@^1.0.0:
   resolved "http://registry.npm.taobao.org/extend2/download/extend2-1.0.0.tgz#0425a989b4dac2a486a32257f5140103756a7a3c"
   integrity sha1-BCWpibTawqSGoyJX9RQBA3Vqejw=
 
-extend@^3.0.1, extend@~3.0.0, extend@~3.0.2:
+extend@^3.0.1, extend@~3.0.2:
   version "3.0.2"
   resolved "http://registry.npm.taobao.org/extend/download/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha1-+LETa0Bx+9jrFAr/hYsQGewpFfo=
@@ -12833,7 +12823,7 @@ script-loader@^0.7.2:
   dependencies:
     raw-loader "~0.5.1"
 
-scroll-into-view-if-needed@2.2.20, scroll-into-view-if-needed@^2.2.16:
+scroll-into-view-if-needed@^2.2.16:
   version "2.2.20"
   resolved "http://registry.npm.taobao.org/scroll-into-view-if-needed/download/scroll-into-view-if-needed-2.2.20.tgz#3a46847a72233a3af9770e55df450f2a7f2e2a0e"
   integrity sha1-OkaEenIjOjr5dw5V30UPKn8uKg4=
@@ -13139,13 +13129,6 @@ smart-buffer@^1.0.13:
   version "1.1.15"
   resolved "http://registry.npm.taobao.org/smart-buffer/download/smart-buffer-1.1.15.tgz#7f114b5b65fab3e2a35aa775bb12f0d1c649bf16"
   integrity sha1-fxFLW2X6s+KjWqd1uxLw0cZJvxY=
-
-smooth-scroll-into-view-if-needed@^1.1.10:
-  version "1.1.23"
-  resolved "http://registry.npm.taobao.org/smooth-scroll-into-view-if-needed/download/smooth-scroll-into-view-if-needed-1.1.23.tgz#e2a3073e5f90deab0aca23f9316beb41230371a4"
-  integrity sha1-4qMHPl+Q3qsKyiP5MWvrQSMDcaQ=
-  dependencies:
-    scroll-into-view-if-needed "2.2.20"
 
 snabbdom-virtualize@leopoldchen/snabbdom-virtualize:
   version "0.7.0"
@@ -13953,11 +13936,6 @@ thread-loader@^1.1.5:
     loader-runner "^2.3.0"
     loader-utils "^1.1.0"
 
-three@^0.105.2:
-  version "0.105.2"
-  resolved "https://registry.npm.taobao.org/three/download/three-0.105.2.tgz#d135f1549bdcf5a9acd904ba3dbf9198a0268984"
-  integrity sha1-0TXxVJvc9ams2QS6Pb+RmKAmiYQ=
-
 throat@^4.0.0:
   version "4.1.0"
   resolved "http://registry.npm.taobao.org/throat/download/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
@@ -14716,13 +14694,6 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-3d-model@^1.1.0-aplha.0:
-  version "1.1.0-aplha.0"
-  resolved "https://registry.npm.taobao.org/vue-3d-model/download/vue-3d-model-1.1.0-aplha.0.tgz#ca46368742e77e78621e9dfce2b04fd9e4064907"
-  integrity sha1-ykY2h0LnfnhiHp384rBP2eQGSQc=
-  dependencies:
-    three "^0.105.2"
-
 vue-analytics@^5.16.0:
   version "5.16.4"
   resolved "http://registry.npm.taobao.org/vue-analytics/download/vue-analytics-5.16.4.tgz#7f9e197cbc64afac96884a05214b17efaf8e9d09"
@@ -14763,13 +14734,6 @@ vue-codemirror@^4.0.4:
   dependencies:
     codemirror "^5.41.0"
     diff-match-patch "^1.0.0"
-
-vue-cropper@^0.2.9:
-  version "0.2.9"
-  resolved "http://registry.npm.taobao.org/vue-cropper/download/vue-cropper-0.2.9.tgz#5c91ce2474788ad4d0e9bdac0b6032005dcb7898"
-  integrity sha1-XJHOJHR4itTQ6b2sC2AyAF3LeJg=
-  dependencies:
-    exif-js "^2.3.0"
 
 vue-entry-loader@^1.1.2:
   version "1.1.2"

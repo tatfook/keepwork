@@ -8,9 +8,7 @@
 
 <script>
 import compBaseMixin from '../comp.base.mixin'
-import { Base64 } from 'js-base64'
 import jss from 'jss'
-import preset from 'jss-preset-default'
 
 export default {
   name: 'AdiLabel',

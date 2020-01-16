@@ -8,7 +8,6 @@
 import VueMarkdown from 'vue-markdown'
 import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
-import preset from 'jss-preset-default'
 
 export default {
   name: 'AdiMarkdown',

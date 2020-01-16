@@ -168,11 +168,6 @@ export default {
     .el-radio {
       color: #333;
     }
-    .vue-cropper {
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
   }
   &-operations-col {
     width: 120px;

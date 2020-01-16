@@ -36,7 +36,6 @@
 import compBaseMixin from '../comp.base.mixin'
 import { setTimeout } from 'timers'
 import jss from 'jss'
-import preset from 'jss-preset-default'
 import videoPlayer from '@/components/common/VideoPlayer'
 
 export default {

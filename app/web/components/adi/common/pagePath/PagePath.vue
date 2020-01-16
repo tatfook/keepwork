@@ -22,7 +22,6 @@
 <script>
 import compBaseMixin from '../comp.base.mixin'
 import jss from 'jss'
-import preset from 'jss-preset-default'
 import { search } from '@/api/esGateway'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'

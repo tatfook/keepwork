@@ -17,7 +17,7 @@ export default {
   props: {
     showList: {
       type: Array,
-      defautl() {
+      default() {
         return []
       }
     },

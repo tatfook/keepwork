@@ -71,6 +71,7 @@ const flatten = (files, arr = []) => {
   })
   return arr
 }
+
 export const getTemplateList = async (folder = 'basic') => {
   let files = await instance.get(`${API}/${TEMPLATE}/tree?folderPath=templates/${folder}&recursive=true`)
   files = flatten(files)
@@ -99,5 +100,5 @@ export default {
   getWebPageConfig,
   getTemplateList,
   getPageTemplateContent,
-  getTemplateFile
+  getTemplateFile,
 }
